@@ -1,83 +1,26 @@
-# Model S ?? ???
+# Model S 최종 보고서
 
-## ??
+## 개요
 
-Model S? NSR / CHF / ARR / AFF ? ?? ECG class? ???? ?? ??? ?? SNN-inspired RTL classifier???. ??? software classifier? ???, 1 kSPS signed 12-bit ECG stream? ?? ???? low-resource FPGA/SoC-friendly RTL classifier???.
+Model S는 ECG stream을 직접 처리하는 SNN-inspired 4-class RTL classifier입니다. 입력은 1 kSPS signed 12-bit `adc_data`이며, QRS LIF detector와 여러 spike feature를 거쳐 NSR, CHF, ARR, AFF 중 하나를 선택합니다.
 
-## ?? ??
+최종 모델은 Model A+에 EERG를 추가한 구조입니다.
 
-```text
+~~~text
 Model S = Model A+ + EERG
-Model A+ = Model A + RBBB QRS Delay Bank(repeat_th=5)
-```
+Model A+ = Model A + RBBB QRS Delay Bank
+~~~
 
-Model A?? ?? feature? ?????.
-
-- QRS LIF detector
-- pNN125 rhythm predictor
-- RDM variability feature
-- DSCR slope sign-change feature
-- RAM R-peak amplitude feature
-- ECP ectopic compensatory pair feature
-- QRS MAF morphology abnormal feature
-- direct spike-to-class local membrane WTA ??
-
-Model A+? RBBB QRS Delay Bank? ????, Model S? EERG readout logic? ??? ?? ?????.
-
-## Classifier ??
-
-```text
-adc_data
--> ecg_event_encoder
--> qrs_lif_detector
--> beat_spike
--> feature spike generation
--> 60? local class membrane
--> segment membrane accumulation
--> RBBB/EERG readout correction
--> WTA comparator
--> pred_class
-```
-
-Class decision? NSR, CHF, ARR, AFF ? ? signed class membrane?? ??????. Feature event? ??? ??? fixed signed weight? ????? ???, `segment_done`?? ?? ? membrane? WTA? ?????.
-
-## ?? ??
+## 최종 성능
 
 | split | segment accuracy | record accuracy | macro-F1 | balanced accuracy |
 |---|---:|---:|---:|---:|
-| train | 313/400 = 78.25% | 41/50 = 82.00% | 78.22% | 78.25% |
-| validation | 136/160 = 85.00% | 18/20 = 90.00% | 84.91% | 85.00% |
-| test | 131/160 = 81.88% | 18/19 = 94.74% | 81.93% | 81.88% |
+| train | 78.25% | 82.00% | 78.19% | 78.25% |
+| validation | 85.00% | 90.00% | 84.91% | 85.00% |
+| test | 81.88% | 94.74% | 81.93% | 81.88% |
 
-Test segment confusion matrix:
+## 해석
 
-| actual | pred NSR | pred CHF | pred ARR | pred AFF |
-|---|---:|---:|---:|---:|
-| NSR | 31 | 0 | 9 | 0 |
-| CHF | 0 | 37 | 3 | 0 |
-| ARR | 6 | 0 | 28 | 6 |
-| AFF | 0 | 3 | 2 | 35 |
+초기 segment random split 성능이 아니라, record-wise holdout 기준 성능을 최종 기준으로 사용합니다. 같은 record에서 나온 segment가 train, validation, test에 동시에 들어가지 않도록 하여 leakage를 줄였습니다.
 
-Test record confusion matrix:
-
-| actual | pred NSR | pred CHF | pred ARR | pred AFF |
-|---|---:|---:|---:|---:|
-| NSR | 3 | 0 | 0 | 0 |
-| CHF | 0 | 3 | 0 | 0 |
-| ARR | 0 | 0 | 8 | 1 |
-| AFF | 0 | 0 | 0 | 4 |
-
-## ??
-
-Segment-level ??? ?? ECG window ?? ?????. Record-level ??? ?? record?? ?? ?? segment score? ??? ??/record ?? ?????. ??? Model S? single short segment diagnosis??? multi-window record-level ECG classifier? ???? ?? ????.
-
-## ?? ???
-
-Core-only ?? ??? ??? ????.
-
-- LUT: 5309 / 63400 = 8.37%
-- FF: 1250 / 126800 = 0.99%
-- BRAM: 0%
-- DSP: 0%
-
-? ??? Model S? multiplier-free, BRAM-free classifier core?? ??? ??????.
+ARR class는 RBBB-like conduction delay, PVC-heavy ventricular ectopic, episodic ectopic 형태가 섞인 heterogenous class입니다. 따라서 Model S는 rhythm feature만으로 ARR을 판단하지 않고 RBBB evidence와 EERG를 함께 사용합니다.

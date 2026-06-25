@@ -1,67 +1,33 @@
-# ?? ??
+# RTL Architecture
 
-## ?? ?????
+## 전체 경로
 
-Digital core? ?? ??? ????.
-
-- `clk`
-- `rst`
-- `sample_valid`
-- `rhythm_tick`
-- `segment_start`
-- `segment_done`
-- `signed [11:0] adc_data`
-
-ECG stream? 1 kSPS, signed 12-bit, zero-centered ?????.
-
-## Event Encoder
-
-Event encoder? ?? sample? ?? sample? delta? ???? slope event? ?????.
-
-- `strong_event`: QRS LIF detector? ???? ? ?? event
-- `up_event`: ?? slope event
-- `down_event`: ?? slope event
-- `slope_valid`: slope threshold? ??? ?? slope event
-
-## QRS LIF Detector
-
-Strong event? ???? QRS membrane? ????, ? sample?? leak???. Membrane? threshold? ???? `beat_spike`? 1 clock ?????. ?? refractory counter? ??? ??? QRS complex ??? ?? ???? ??? ????.
-
-## Feature Spike Layer
-
-?? active feature set? ?????.
-
-- pNN125
-- RDM
-- DSCR
-- RAM
-- ECP
-- QRS MAF
-- RBBB QRS Delay Bank
-- EERG readout gate
-
-Feature ?? floating-point scalar? ???? ????. ? feature? spike event? fixed-weight membrane update? ?????.
+~~~text
+ECG adc_data stream
+-> event encoder
+-> QRS LIF detector
+-> feature spike generation
+-> local class neuron membrane
+-> segment-level class membrane
+-> RBBB/EERG readout
+-> WTA
+-> pred_class
+~~~
 
 ## Local / Segment Membrane
 
-Model S? ? ?? membrane ??? ?????.
+60초 local window 동안 feature spike가 class neuron membrane에 직접 누적됩니다. window가 끝나면 local membrane 값을 segment-level membrane에 누적하고 local membrane은 초기화합니다.
 
-```text
-feature spikes
--> 60? local class membrane
--> segment-level accumulated class membrane
--> readout correction
--> WTA
-```
+이 방식은 긴 segment에서 단순 count가 계속 커지는 문제를 줄이고, 60초 단위 evidence를 안정적으로 모으기 위한 구조입니다.
 
-60? local window? segment ??? ?? raw count bias? ????. ??? window? 60??? ??? partial scale? ??? segment membrane? ?????.
+## WTA
 
-## WTA Readout
+segment_done 시점에서 NSR, CHF, ARR, AFF class membrane 중 가장 큰 값을 갖는 class가 winner가 됩니다. 이 비교기는 SNN class neuron의 readout이며 STDP 학습이 아닙니다.
 
-`segment_done` ???? ?? class score? ?????.
+## 구현 원칙
 
-```text
-pred_class = argmax(NSR_mem, CHF_mem, ARR_mem, AFF_mem)
-```
-
-? readout? signed comparator ?? hardware WTA?? softmax? ????.
+- fixed signed synaptic weight
+- counter, comparator, shift/add 중심 구현
+- floating point 없음
+- DSP multiplier 없음
+- backpropagation/STDP 없음
