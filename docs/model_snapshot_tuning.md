@@ -32,21 +32,20 @@ C01~C32 후보는 feature 제거 실험이 아니라, 최종 Model Snapshot feat
 
 1. validation macro-F1 최대화
 2. validation balanced accuracy 최대화
-3. validation ARR recall 유지 또는 개선
-4. validation record accuracy 유지 또는 개선
-5. NSR/CHF/AFF recall이 과도하게 무너지지 않을 것
+3. class 간 성능 균형 유지
+4. 특정 class가 과도하게 무너지지 않을 것
 
 이 기준 때문에 test 성능이 아닌 validation 성능으로 C24를 선택했다.
 
 ## Validation Ranking
 
-| rank | candidate | val acc | val macro-F1 | val balanced | val record | NSR | CHF | ARR | AFF |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | C24 | 91.25% | 91.18% | 91.34% | 100.00% | 93.75% | 87.50% | 94.44% | 89.66% |
-| 2 | C09 | 90.42% | 90.29% | 90.35% | 100.00% | 92.19% | 89.06% | 87.04% | 93.10% |
-| 3 | C07 | 90.00% | 89.93% | 89.99% | 100.00% | 90.62% | 89.06% | 88.89% | 91.38% |
-| 4 | C20 | 89.58% | 89.54% | 89.71% | 95.24% | 92.19% | 82.81% | 90.74% | 93.10% |
-| 5 | C16 | 88.75% | 88.62% | 88.89% | 100.00% | 93.75% | 79.69% | 90.74% | 91.38% |
+| rank | candidate | val acc | val macro-F1 | val balanced |
+|---:|---|---:|---:|---:|
+| 1 | C24 | 91.25% | 91.18% | 91.34% |
+| 2 | C09 | 90.42% | 90.29% | 90.35% |
+| 3 | C07 | 90.00% | 89.93% | 89.99% |
+| 4 | C20 | 89.58% | 89.54% | 89.71% |
+| 5 | C16 | 88.75% | 88.62% | 88.89% |
 
 ## C24 최종 Parameter
 
@@ -69,7 +68,7 @@ C01~C32 후보는 feature 제거 실험이 아니라, 최종 Model Snapshot feat
 
 ## C24 선택 이유
 
-C24는 validation 기준으로 segment accuracy, macro-F1, balanced accuracy가 모두 1위였고, validation record accuracy도 100%였다. 특히 validation ARR recall이 51/54 = 94.44%로 높으면서 NSR, CHF, AFF recall이 동시에 유지됐다.
+C24는 validation 기준으로 segment accuracy, macro-F1, balanced accuracy가 모두 1위였다. 동시에 특정 class로 과도하게 몰리는 후보가 아니었기 때문에 최종 Model Snapshot parameter로 선택했다.
 
 RBBB QRS Delay Bank는 ARR이 NSR로 넘어가는 문제를 줄이기 위한 feature지만, boost를 과도하게 키우면 NSR을 ARR로 끌고 올 수 있다. C24는 RBBB 조건을 더 엄격하게 두고 boost를 100000으로 제한해 ARR rescue와 NSR 오염 사이의 trade-off를 맞춘 후보이다.
 

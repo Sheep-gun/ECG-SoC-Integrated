@@ -4,6 +4,14 @@
 
 Model Snapshot은 AFE+ADC 이후의 ECG stream을 60초 단위로 입력받아 NSR / CHF / ARR / AFF 중 하나를 선택하는 SNN-inspired RTL classifier이다. 이 모델은 장시간 환자 record 전체를 직접 진단하는 구조가 아니라, 60초 snapshot 단위의 class evidence를 안정적으로 산출하는 것을 목표로 한다.
 
+## 왜 60초 Snapshot 구조인가
+
+기존 60~180초 variable-length 판단 모델은 segment 길이가 바뀔 때 feature evidence 누적량과 abnormal event 희석 정도가 함께 바뀌었다. Rate 기반 feature를 도입하더라도, class membrane readout 단계에서 긴 segment의 정상 구간이 abnormal evidence를 희석하거나 특정 class evidence를 과도하게 누적하는 문제가 남았다.
+
+또한 record label이 모든 임의 segment label과 항상 같은 것은 아니다. ARR record 안에도 정상처럼 보이는 60초 구간이 있을 수 있고, AFF/ARR처럼 rhythm abnormality가 시간에 따라 달라지는 class는 짧은 구간 하나만으로 전체 환자 상태를 단정하기 어렵다. 따라서 최종 구조는 임의 길이 segment 하나를 최종 진단 단위로 보지 않고, 고정 길이 60초 snapshot을 반복 평가하는 방향으로 정리했다.
+
+이 방향은 Holter-style ECG monitoring과 맞닿아 있다. Holter monitor는 보통 24~48시간 동안 ECG를 연속 기록해 짧은 ECG에서 포착되지 않는 rhythm abnormality를 확인하는 검사 흐름이다. Model Snapshot은 이 긴 ECG stream을 60초 단위로 읽어 class evidence를 만드는 저전력 digital front-end classifier 역할을 맡는다.
+
 ## Top-Level Signal Flow
 
 ```text
@@ -75,6 +83,20 @@ pred_class = argmax(
 
 이 WTA는 SNN class neuron들의 경쟁 결과를 읽어내는 readout이다. STDP, backpropagation, floating point 학습은 사용하지 않는다. weight와 threshold는 train/validation 기반 탐색으로 미리 고정된다.
 
+## 장시간 Record 처리 방향
+
+최종 patient-level 시스템은 24~48시간 ECG record를 한 번에 하나의 거대한 segment로 넣지 않는다. 대신 60초 snapshot을 순차적으로 입력하고, 각 snapshot의 `pred_class`, class membrane, abnormal feature evidence를 장시간 aggregation layer에 전달한다.
+
+```text
+24~48h ECG stream
+-> repeated 60s Model Snapshot inference
+-> snapshot-level class membrane pattern
+-> long-term aggregation layer
+-> patient-level class decision
+```
+
+이 방식은 긴 record 안에서 일시적으로 나타나는 abnormal event를 보존하면서도, 모든 ECG 구간을 같은 60초 기준으로 평가한다. 향후 aggregation layer는 class vote, membrane 평균, abnormal-priority rule, event persistence rule 등을 비교해 설계한다.
+
 ## Hardware Implementation Notes
 
 Model Snapshot은 FPGA-friendly RTL 구조를 목표로 한다.
@@ -86,3 +108,5 @@ Model Snapshot은 FPGA-friendly RTL 구조를 목표로 한다.
 - class readout은 signed integer membrane comparison으로 수행한다.
 
 이 구조의 핵심은 ECG feature를 “숫자 하나”로 계산하는 것이 아니라, feature evidence spike가 class membrane에 반복적으로 들어가면서 최종 class 경쟁을 형성한다는 점이다.
+
+궁극적인 시스템 지향점은 wearable ECG device에 들어갈 수 있는 저전력 neuromorphic SNN-inspired classifier이다. 따라서 Model Snapshot은 Galaxy Watch와 같은 wearable platform을 염두에 두고, 지속 monitoring에 적합한 event-driven low-power RTL 구조를 유지한다.
