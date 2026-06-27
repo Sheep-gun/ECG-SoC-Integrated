@@ -101,6 +101,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/../../SNN_ECG.srcs/sources_1/new/ecg_event_encoder_adaptive.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/../../SNN_ECG.srcs/sources_1/new/snn_ecg_input_normalizer.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>

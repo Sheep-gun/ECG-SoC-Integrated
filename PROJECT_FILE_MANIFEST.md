@@ -79,6 +79,7 @@
 - `rtl/core/class_score_neurons.v`
 - `rtl/core/dscr_spike_counter.v`
 - `rtl/core/ecg_event_encoder.v`
+- `rtl/core/ecg_event_encoder_adaptive.v`
 - `rtl/core/ectopic_pair_neuron.v`
 - `rtl/core/pnn_rhythm_predictor.v`
 - `rtl/core/qrs_lif_detector.v`
@@ -119,6 +120,7 @@
 - `SNN_ECG.srcs/sources_1/new/class_score_neurons.v`
 - `SNN_ECG.srcs/sources_1/new/dscr_spike_counter.v`
 - `SNN_ECG.srcs/sources_1/new/ecg_event_encoder.v`
+- `SNN_ECG.srcs/sources_1/new/ecg_event_encoder_adaptive.v`
 - `SNN_ECG.srcs/sources_1/new/ectopic_pair_neuron.v`
 - `SNN_ECG.srcs/sources_1/new/pnn_rhythm_predictor.v`
 - `SNN_ECG.srcs/sources_1/new/qrs_lif_detector.v`

@@ -12,8 +12,8 @@
 
 | resource | used | available | util |
 |---|---:|---:|---:|
-| Slice LUTs* | 5309 | 63400 | 8.37% |
-| Slice Registers | 1250 | 126800 | 0.99% |
+| Slice LUTs* | 20243 | 63400 | 31.93% |
+| Slice Registers | 2047 | 126800 | 1.61% |
 | Block RAM Tile | 0 | 135 | 0.00% |
 | DSPs | 0 | 240 | 0.00% |
 | Bonded IOB | 21 | 210 | 10.00% |
@@ -24,7 +24,7 @@
 - DSP usage is 0, so the restored Model S path remains multiplier/DSP-free after synthesis.
 - BRAM usage is 0. QRS pre-window history is mapped to distributed shift-register LUT resources.
 - This is synthesis-only timing without an XDC constraint file. Timing warnings below are expected until board-level clock/input/output constraints are added.
-- no_clock pins reported: 1286
-- unconstrained internal endpoints reported: 3215
+- no_clock pins reported: 2083
+- unconstrained internal endpoints reported: 4923
 - no_input_delay ports reported: 17
 - no_output_delay ports reported: 3

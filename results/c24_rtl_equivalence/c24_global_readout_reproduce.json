@@ -1,0 +1,55 @@
+{
+  "qrs_tag": "e5w8t16l0r280a1b1c2000tc100_c24",
+  "profile": "compact",
+  "count_scale": 10.0,
+  "base_scale": 25000.0,
+  "l2": 1000.0,
+  "boosts": {
+    "0": 1.1,
+    "1": 1.8,
+    "2": 1.8,
+    "3": 1.0
+  },
+  "Q": 100000000,
+  "metrics": {
+    "train": {
+      "segment_correct": 434,
+      "segment_total": 480,
+      "segment_accuracy": 0.9041666666666667,
+      "class_correct": {
+        "NSR": 116,
+        "CHF": 117,
+        "ARR": 88,
+        "AFF": 113
+      },
+      "float_vs_fixed_pred_mismatch": 0,
+      "fixed_vs_spike_pred_mismatch": 0
+    },
+    "val": {
+      "segment_correct": 219,
+      "segment_total": 240,
+      "segment_accuracy": 0.9125,
+      "class_correct": {
+        "NSR": 60,
+        "CHF": 56,
+        "ARR": 51,
+        "AFF": 52
+      },
+      "float_vs_fixed_pred_mismatch": 0,
+      "fixed_vs_spike_pred_mismatch": 0
+    },
+    "test": {
+      "segment_correct": 193,
+      "segment_total": 240,
+      "segment_accuracy": 0.8041666666666667,
+      "class_correct": {
+        "NSR": 50,
+        "CHF": 56,
+        "ARR": 34,
+        "AFF": 53
+      },
+      "float_vs_fixed_pred_mismatch": 0,
+      "fixed_vs_spike_pred_mismatch": 0
+    }
+  }
+}

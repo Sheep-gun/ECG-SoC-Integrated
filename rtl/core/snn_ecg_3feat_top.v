@@ -6,13 +6,25 @@ module snn_ecg_3feat_top #(
 
     parameter ADC_WIDTH   = 12,
 
-    parameter EVENT_TH    = 8,
+    parameter EVENT_TH    = 5,
 
     parameter SLOPE_TH    = 4,
 
     parameter ENABLE_AMP_EVENT = 0,
 
     parameter AMP_EVENT_TH = 4,
+
+    parameter ENABLE_ADAPTIVE_QRS_EVENT = 1,
+
+    parameter ADAPT_QRS_USE_BANK = 1,
+
+    parameter ADAPT_QRS_CALIB_SAMPLES = 2000,
+
+    parameter ADAPT_QRS_MIN_EVENT_TH = 4,
+
+    parameter ADAPT_QRS_PCT_TARGET = 1900,
+
+    parameter ADAPT_QRS_TARGET_EVENT_COUNT = 100,
 
     parameter ENABLE_INPUT_NORMALIZER = 0,
 
@@ -38,7 +50,7 @@ module snn_ecg_3feat_top #(
 
     parameter QRS_TH      = 16,
 
-    parameter QRS_REF     = 220,
+    parameter QRS_REF     = 280,
 
     parameter NUM_HYP     = 46,
 
@@ -256,7 +268,7 @@ module snn_ecg_3feat_top #(
 
     parameter RBBB_QRS_ACTIVITY_MODE = 1,
 
-    parameter RBBB_QRS_LOW_SLOPE_TH = 4,
+    parameter RBBB_QRS_LOW_SLOPE_TH = 5,
 
     parameter RBBB_QRS_ONSET_REF = 200,
 
@@ -268,9 +280,9 @@ module snn_ecg_3feat_top #(
 
     parameter RBBB_QRS_TERMINAL_END = 170,
 
-    parameter RBBB_QRS_WIDE_TH = 110,
+    parameter RBBB_QRS_WIDE_TH = 120,
 
-    parameter RBBB_QRS_TERMINAL_TH = 3,
+    parameter RBBB_QRS_TERMINAL_TH = 4,
 
     parameter RBBB_QRS_REPEAT_TH = 5,
 
@@ -288,9 +300,9 @@ module snn_ecg_3feat_top #(
 
     parameter ENABLE_RBBB_QRS_DELAY_GATE = 1,
 
-    parameter W_RBBB_DELAY_NSR_INH = 150000,
+    parameter W_RBBB_DELAY_NSR_INH = 100000,
 
-    parameter W_RBBB_DELAY_ARR_BOOST = 150000,
+    parameter W_RBBB_DELAY_ARR_BOOST = 100000,
 
     parameter T_RBBB_DELAY_CHF_BLOCK_MARGIN = 0,
 
@@ -299,6 +311,16 @@ module snn_ecg_3feat_top #(
     parameter ENABLE_EERG_GATE = 1,
 
     parameter W_EERG_ARR_BOOST = 25000,
+
+    parameter EERG_PRE_QRS_BUMP_TH = 1,
+
+    parameter EERG_EARLY_TH = 10,
+
+    parameter EERG_ECP_TH = 3,
+
+    parameter EERG_PNN_MIS_PCT_TH = 15,
+
+    parameter EERG_RDM_AVG_TH = 5,
 
     parameter W_ETMC_NSR = 0,
 
@@ -706,6 +728,10 @@ module snn_ecg_3feat_top #(
 
     wire sample_seen;
 
+    wire adaptive_event_ready;
+
+    wire [7:0] adaptive_event_th;
+
     wire [QRS_MEM_W-1:0] qrs_mem;
 
     wire [QRS_REF_W-1:0] refractory_cnt;
@@ -938,16 +964,23 @@ module snn_ecg_3feat_top #(
             rdm_rr_valid_delay <= beat_spike && token_active;
     end
 
-    ecg_event_encoder #(
+    ecg_event_encoder_adaptive #(
         .ADC_WIDTH(ADC_WIDTH),
         .T_EVENT(EVENT_TH),
         .T_SLOPE(SLOPE_TH),
         .ENABLE_AMP_EVENT(ENABLE_AMP_EVENT),
-        .T_AMP_EVENT(AMP_EVENT_TH)
+        .T_AMP_EVENT(AMP_EVENT_TH),
+        .ENABLE_ADAPTIVE(ENABLE_ADAPTIVE_QRS_EVENT),
+        .ADAPT_USE_BANK(ADAPT_QRS_USE_BANK),
+        .ADAPT_CALIB_SAMPLES(ADAPT_QRS_CALIB_SAMPLES),
+        .ADAPT_MIN_EVENT_TH(ADAPT_QRS_MIN_EVENT_TH),
+        .ADAPT_PCT_TARGET(ADAPT_QRS_PCT_TARGET),
+        .ADAPT_TARGET_EVENT_COUNT(ADAPT_QRS_TARGET_EVENT_COUNT)
     ) u_event_encoder (
         .clk(clk),
         .rst(rst),
         .sample_valid(sample_valid),
+        .segment_start(segment_start),
         .adc_data(adc_frontend),
         .prev_sample(prev_sample),
         .delta(delta),
@@ -956,7 +989,9 @@ module snn_ecg_3feat_top #(
         .strong_event(strong_event),
         .up_event(up_event),
         .down_event(down_event),
-        .slope_valid(slope_valid)
+        .slope_valid(slope_valid),
+        .adaptive_ready(adaptive_event_ready),
+        .adaptive_event_th(adaptive_event_th)
     );
 
     qrs_lif_detector #(
@@ -1742,7 +1777,17 @@ module snn_ecg_3feat_top #(
 
         .ENABLE_EERG_GATE(ENABLE_EERG_GATE),
 
-        .W_EERG_ARR_BOOST(W_EERG_ARR_BOOST)
+        .W_EERG_ARR_BOOST(W_EERG_ARR_BOOST),
+
+        .EERG_PRE_QRS_BUMP_TH(EERG_PRE_QRS_BUMP_TH),
+
+        .EERG_EARLY_TH(EERG_EARLY_TH),
+
+        .EERG_ECP_TH(EERG_ECP_TH),
+
+        .EERG_PNN_MIS_PCT_TH(EERG_PNN_MIS_PCT_TH),
+
+        .EERG_RDM_AVG_TH(EERG_RDM_AVG_TH)
 
     ) u_class (
 
@@ -1755,6 +1800,18 @@ module snn_ecg_3feat_top #(
         .rhythm_tick(rhythm_tick),
 
         .segment_done(segment_done),
+
+        .beat_spike(beat_spike),
+
+        .qrs_maf_valid_spike(qrs_maf_valid_spike),
+
+        .rbbb_qrs_valid_spike(rbbb_qrs_valid_spike),
+
+        .rbbb_qrs_wide_spike(rbbb_qrs_wide_spike),
+
+        .rbbb_qrs_terminal_spike(rbbb_qrs_terminal_spike),
+
+        .rbbb_qrs_like_beat_spike(rbbb_qrs_like_beat_spike),
 
         .pnn_match_spike(pnn_match_spike),
 

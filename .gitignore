@@ -17,7 +17,13 @@ webtalk/
 
 # Large/generated ECG datasets
 person_data_record_split_strict_varlen/**/mem/
+datasets/afe_output_xmodelmatch_curated_v2_50_25_25/
 *.pwl
+
+# Local verification workdirs
+results/c24_rtl_equivalence/xsim_work/
+results/c24_rtl_equivalence/xsim_*_manifest.txt
+vivado_project/SNN_ECG_ModelS_Restore/
 
 # Python
 __pycache__/
