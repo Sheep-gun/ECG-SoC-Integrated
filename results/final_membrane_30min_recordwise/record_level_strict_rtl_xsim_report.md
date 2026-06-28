@@ -31,6 +31,13 @@
 | val | 29 / 32 | 90.62% | 90.28% | 90.62% | 0 |
 | test | 30 / 36 | 83.33% | 83.11% | 83.33% | 0 |
 
+Repository cleanup recheck:
+
+- After pruning unused files, the test split was rerun with RTL/XSim.
+- Recheck result: 30 / 36 = 83.33%.
+- Recheck Python-vs-XSim prediction mismatch: 0 / 36.
+- The combined compare file was regenerated from train/val preserved outputs plus the fresh test output: 136 rows, 0 prediction mismatches.
+
 ## Test Per-Class Metrics
 
 | Class | Precision | Recall | F1 | Support |
