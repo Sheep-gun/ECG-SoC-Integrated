@@ -1,155 +1,122 @@
-# SNN ECG Snapshot C24 With Record-Level Final Membrane
+# SNN ECG 4-Class Classifier
 
-This repository contains the cleaned final implementation of the SNN-inspired
-ECG 4-class classifier.
+본 저장소는 AFE+ADC를 거친 ECG stream을 입력으로 받아 NSR / CHF / ARR / AFF를
+분류하는 SNN-inspired RTL classifier의 최종 정리본이다.
 
-The current final system is:
+자세한 연구 배경, Holter 방식의 의학적 동기, 데이터셋 구성, AFE+ADC 변환,
+Snapshot C24 구조, C01-C32 후보 탐색, Final Membrane Layer 설계, Python 등가모델,
+RTL/XSim 검증, 합성 자원, 전력 산출 상태는 아래 최종 보고서에 정리했다.
 
 ```text
-1 kSPS signed 12-bit AFE+ADC ECG stream
--> fixed Snapshot C24 RTL core
--> 60 s timer-neuron snapshot boundary
--> 30 min chunk vote membrane
--> record-level final membrane
--> NSR / CHF / ARR / AFF prediction
+FINAL_REPORT_KR.md
 ```
 
-No floating point, divider, or DSP multiplier is used in the RTL final layer.
-The final layer is implemented with counters, signed accumulators, threshold
-logic, saturation-compatible integer arithmetic, and WTA comparison.
+## 최종 시스템 개요
 
-## Kept Dataset
+```text
+full-record ECG
+-> AFE+ADC signed 12-bit stream
+-> 60초 Snapshot C24 classifier
+-> 30분 chunk-level snapshot vote membrane
+-> record-level Final Membrane Layer
+-> NSR / CHF / ARR / AFF 최종 판정
+```
 
-The final verification dataset is:
+이 모델은 60초 ECG 하나를 환자 진단으로 단정하는 구조가 아니다. Holter ECG처럼 긴
+ECG stream에서 반복적으로 발생하는 snapshot-level class evidence를 누적해 최종
+class를 결정하는 계층형 SNN-inspired classifier이다.
+
+## 핵심 결과
+
+| 항목 | 결과 |
+| --- | ---: |
+| 60초 Snapshot C24 test accuracy | 193 / 240 = 80.42% |
+| Final Membrane Python test accuracy | 30 / 36 = 83.33% |
+| Final Membrane RTL/XSim test accuracy | 30 / 36 = 83.33% |
+| Python-vs-XSim prediction mismatch | 0 / 136 |
+| full RTL top resource | 20,256 LUT / 2,259 FF / DSP 0 / BRAM 0 |
+| final membrane chain resource | 163 LUT / 157 FF / DSP 0 / BRAM 0 |
+
+정량 전력 소모량은 아직 최종 측정하지 않았다. 현재 저장소에는 synthesis resource
+결과만 남아 있으며, mW 단위 전력 보고는 Vivado implementation, clock constraint,
+switching activity 기반 `report_power`가 추가로 필요하다.
+
+## 최종 데이터셋
+
+최종 검증 데이터셋:
 
 ```text
 fullrec_afe_30min_annotation_valid_balanced/
 ```
 
-It contains annotation-valid, record-wise holdout 30 minute AFE+ADC chunks:
+구성:
 
 | Split | NSR | CHF | ARR | AFF | Total |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | train | 17 | 17 | 17 | 17 | 68 |
 | val | 8 | 8 | 8 | 8 | 32 |
 | test | 9 | 9 | 9 | 9 | 36 |
+| all | 34 | 34 | 34 | 34 | 136 |
 
-Manifest:
+원천 DB:
 
-```text
-fullrec_afe_30min_annotation_valid_balanced/annotation_valid_balanced_30min_manifest.csv
-```
+| Class | Source DB |
+| --- | --- |
+| NSR | MIT-BIH Normal Sinus Rhythm Database |
+| CHF | BIDMC Congestive Heart Failure Database |
+| ARR | MIT-BIH Arrhythmia Database |
+| AFF | MIT-BIH Atrial Fibrillation Database |
 
-## Main RTL Files
-
-```text
-rtl/core/*.v
-rtl/final_membrane_layer.v
-rtl/record_level_final_membrane_layer.v
-rtl/snn_ecg_30min_final_top.v
-sim/tb_snn_ecg_30min_record_level_dataset.v
-```
-
-`rtl/final_membrane_layer.v` counts raw Snapshot C24 prediction spikes inside
-one 30 minute chunk. `rtl/record_level_final_membrane_layer.v` accumulates those
-chunk vote membranes across all chunks of the same record and applies the final
-ARR rescue rule.
-
-Selected record-level rule:
+## 주요 파일
 
 ```text
-base score = accumulated Snapshot pred counts
-if accumulated ARR count >= 5:
-    ARR score += 16
-WTA tie order = NSR, CHF, ARR, AFF
-```
+FINAL_REPORT_KR.md
 
-## Python Equivalent And Search
+rtl/
+  final_membrane_layer.v
+  record_level_final_membrane_layer.v
+  snn_ecg_30min_final_top.v
+  core/*.v
 
-Key scripts:
+sim/
+  tb_snn_ecg_30min_record_level_dataset.v
 
-```text
-scripts/snapshot_c24_rtl_exact.py
-scripts/final_membrane_30min_recordwise_pipeline.py
-scripts/search_final_membrane_30min_recordwise.py
-scripts/search_final_membrane_30min_recordwise_recordlevel.py
-scripts/search_final_membrane_30min_recordwise_recordlevel_strict.py
-scripts/run_record_level_strict_xsim.py
-```
+scripts/
+  snapshot_c24_rtl_exact.py
+  final_membrane_30min_recordwise_pipeline.py
+  search_final_membrane_30min_recordwise.py
+  search_final_membrane_30min_recordwise_recordlevel.py
+  search_final_membrane_30min_recordwise_recordlevel_strict.py
+  run_record_level_strict_xsim.py
 
-Final selected Python results and reports are under:
-
-```text
 results/final_membrane_30min_recordwise/
+  no_oracle_record_level_strict_selected_params.json
+  xsim_record_level_strict_*_metrics.json
+  xsim_record_level_strict_*_predictions.csv
+  python_vs_xsim_record_level_strict_compare.csv
+  record_level_strict_rtl_xsim_report.md
+  synth/final_membrane_resource_report.md
 ```
 
-The strict selected parameter file is:
+## XSim 재검증
 
-```text
-results/final_membrane_30min_recordwise/no_oracle_record_level_strict_selected_params.json
-```
-
-## Run XSim Verification
-
-Run one split:
+test split 실행:
 
 ```powershell
 python scripts/run_record_level_strict_xsim.py --split test
 ```
 
-Run all splits:
+전체 split 실행:
 
 ```powershell
 python scripts/run_record_level_strict_xsim.py --split all
 ```
 
-The script streams the actual `.mem` chunks into RTL/XSim, emits final
-record-level predictions, writes metrics, and compares Python predictions with
-XSim predictions.
-
-## Verified Performance
-
-Full XSim verification results:
-
-| Split | Correct / Total | Accuracy | Macro-F1 | Python-vs-XSim pred mismatch |
-| --- | ---: | ---: | ---: | ---: |
-| train | 55 / 68 | 80.88% | 80.19% | 0 |
-| val | 29 / 32 | 90.62% | 90.28% | 0 |
-| test | 30 / 36 | 83.33% | 83.11% | 0 |
-
-After repository cleanup, the test split was rerun through RTL/XSim and matched
-the same result:
+정리 후 test split을 다시 실행했으며 결과는 다음과 같았다.
 
 ```text
 test: 30 / 36 = 83.33%
-Python-vs-XSim pred mismatch: 0 / 36
+Python-vs-XSim mismatch: 0 / 36
 ```
 
-Test confusion matrix, rows=true and columns=pred, class order
-NSR/CHF/ARR/AFF:
-
-```text
-[[8, 1, 0, 0],
- [0, 6, 0, 3],
- [2, 0, 7, 0],
- [0, 0, 0, 9]]
-```
-
-## Resource Summary
-
-Vivado 2020.2 synthesis summary for the final chain:
-
-| Design | LUTs | FFs | DSP | BRAM |
-| --- | ---: | ---: | ---: | ---: |
-| final membrane chain | 163 | 157 | 0 | 0 |
-| full 30 min top with record final membrane | 20,256 | 2,259 | 0 | 0 |
-
-Adding the record-level final membrane to the 30 minute Snapshot C24 top costs
-approximately:
-
-```text
-+109 LUT
-+130 FF
-+0 DSP
-+0 BRAM
-```
+전체 보존 결과 기준 combined compare는 136 rows, mismatch 0이다.
