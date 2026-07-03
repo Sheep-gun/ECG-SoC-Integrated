@@ -11,7 +11,7 @@ module snn_ecg_30min_final_top #(
     parameter ADC_WIDTH = 12,
     parameter SNAPSHOT_SAMPLES = 60000,
     parameter SNAPSHOTS_PER_CHUNK = 30,
-    parameter POST_DONE_TICKS = 34,
+    parameter POST_DONE_TICKS = 36,
     parameter PROFILE_EN = 1,
     parameter PROF_COUNTER_W = 64
 )(

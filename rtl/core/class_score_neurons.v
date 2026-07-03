@@ -1162,6 +1162,14 @@ module class_score_neurons #(
 
     reg c24_gate_second_reg;
 
+    reg c24_gate_rbbb_late_capture_reg;
+
+    reg c24_gate_rbbb_delay_capture_reg;
+
+    reg c24_gate_rbbb_segment_capture_reg;
+
+    reg c24_gate_second_capture_reg;
+
     reg c24_gate_delta_pending;
 
     reg signed [63:0] c24_apply_delta_nsr;
@@ -1615,6 +1623,77 @@ module class_score_neurons #(
     reg finalize_window;
 
     reg arr_high_irregular_spike;
+
+    reg arr_high_irregular_eval_pending;
+
+    reg arr_high_irregular_compare_pending;
+
+    reg arr_high_irregular_ready_eval_reg;
+
+    reg arr_high_irregular_ready_compare_reg;
+
+    reg [16:0] arr_high_irregular_pnn_decision_reg;
+
+    reg [31:0] arr_high_irregular_pnn_mis_x100_reg;
+
+    reg [31:0] arr_high_irregular_pnn_decision_x12_reg;
+
+    reg [31:0] arr_high_irregular_pnn_decision_x65_reg;
+
+    reg [15:0] arr_high_irregular_rdm_valid_reg;
+
+    reg [31:0] arr_high_irregular_rdm_sum_reg;
+
+    reg [31:0] arr_high_irregular_rdm_valid_x5_reg;
+
+    reg [31:0] arr_high_irregular_rdm_valid_x12_reg;
+
+    reg [31:0] arr_high_irregular_rdm_valid_x4_reg;
+
+    reg [31:0] arr_high_irregular_rdm_valid_x35_reg;
+
+    reg [15:0] arr_high_irregular_ram_count_reg;
+
+    reg [31:0] arr_high_irregular_ram_sum_reg;
+
+    reg [31:0] arr_high_irregular_ram_count_x12_reg;
+
+    reg [31:0] arr_high_irregular_ecp_x100_reg;
+
+    reg arr_high_irregular_pnn_nonzero_reg;
+
+    reg arr_high_irregular_pnn_ge12_reg;
+
+    reg arr_high_irregular_pnn_le65_reg;
+
+    reg arr_high_irregular_rdm_nonzero_reg;
+
+    reg arr_high_irregular_rdm_ge5_reg;
+
+    reg arr_high_irregular_rdm_le12_reg;
+
+    reg arr_high_irregular_ram_nonzero_reg;
+
+    reg arr_high_irregular_ram_ge12_reg;
+
+    reg arr_high_irregular_ecp_ge4_reg;
+
+    reg arr_high_irregular_ecp_le35_reg;
+
+    wire arr_high_irregular_final = arr_high_irregular_compare_pending &&
+                                    arr_high_irregular_pnn_nonzero_reg &&
+                                    arr_high_irregular_pnn_ge12_reg &&
+                                    arr_high_irregular_pnn_le65_reg &&
+                                    arr_high_irregular_rdm_nonzero_reg &&
+                                    arr_high_irregular_rdm_ge5_reg &&
+                                    arr_high_irregular_rdm_le12_reg &&
+                                    arr_high_irregular_ram_nonzero_reg &&
+                                    arr_high_irregular_ram_ge12_reg &&
+                                    arr_high_irregular_ecp_ge4_reg &&
+                                    arr_high_irregular_ecp_le35_reg;
+
+    wire c24_gate_arr_high_irregular_delayed = arr_high_irregular_final &&
+                                               arr_high_irregular_ready_compare_reg;
 
     reg nsr_top_before_suppress;
 
@@ -4265,6 +4344,62 @@ module class_score_neurons #(
 
             score_finalize_pending <= 1'b0;
 
+            arr_high_irregular_eval_pending <= 1'b0;
+
+            arr_high_irregular_compare_pending <= 1'b0;
+
+            arr_high_irregular_ready_eval_reg <= 1'b0;
+
+            arr_high_irregular_ready_compare_reg <= 1'b0;
+
+            arr_high_irregular_pnn_decision_reg <= 17'd0;
+
+            arr_high_irregular_pnn_mis_x100_reg <= 32'd0;
+
+            arr_high_irregular_pnn_decision_x12_reg <= 32'd0;
+
+            arr_high_irregular_pnn_decision_x65_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_reg <= 16'd0;
+
+            arr_high_irregular_rdm_sum_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x5_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x12_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x4_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x35_reg <= 32'd0;
+
+            arr_high_irregular_ram_count_reg <= 16'd0;
+
+            arr_high_irregular_ram_sum_reg <= 32'd0;
+
+            arr_high_irregular_ram_count_x12_reg <= 32'd0;
+
+            arr_high_irregular_ecp_x100_reg <= 32'd0;
+
+            arr_high_irregular_pnn_nonzero_reg <= 1'b0;
+
+            arr_high_irregular_pnn_ge12_reg <= 1'b0;
+
+            arr_high_irregular_pnn_le65_reg <= 1'b0;
+
+            arr_high_irregular_rdm_nonzero_reg <= 1'b0;
+
+            arr_high_irregular_rdm_ge5_reg <= 1'b0;
+
+            arr_high_irregular_rdm_le12_reg <= 1'b0;
+
+            arr_high_irregular_ram_nonzero_reg <= 1'b0;
+
+            arr_high_irregular_ram_ge12_reg <= 1'b0;
+
+            arr_high_irregular_ecp_ge4_reg <= 1'b0;
+
+            arr_high_irregular_ecp_le35_reg <= 1'b0;
+
             c24_mem_nsr <= C24_MEM_INIT_NSR;
 
             c24_mem_chf <= C24_MEM_INIT_CHF;
@@ -4318,6 +4453,14 @@ module class_score_neurons #(
             c24_gate_rbbb_segment_reg <= 1'b0;
 
             c24_gate_second_reg <= 1'b0;
+
+            c24_gate_rbbb_late_capture_reg <= 1'b0;
+
+            c24_gate_rbbb_delay_capture_reg <= 1'b0;
+
+            c24_gate_rbbb_segment_capture_reg <= 1'b0;
+
+            c24_gate_second_capture_reg <= 1'b0;
 
             c24_gate_delta_pending <= 1'b0;
 
@@ -4683,6 +4826,62 @@ module class_score_neurons #(
 
             score_finalize_pending <= 1'b0;
 
+            arr_high_irregular_eval_pending <= 1'b0;
+
+            arr_high_irregular_compare_pending <= 1'b0;
+
+            arr_high_irregular_ready_eval_reg <= 1'b0;
+
+            arr_high_irregular_ready_compare_reg <= 1'b0;
+
+            arr_high_irregular_pnn_decision_reg <= 17'd0;
+
+            arr_high_irregular_pnn_mis_x100_reg <= 32'd0;
+
+            arr_high_irregular_pnn_decision_x12_reg <= 32'd0;
+
+            arr_high_irregular_pnn_decision_x65_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_reg <= 16'd0;
+
+            arr_high_irregular_rdm_sum_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x5_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x12_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x4_reg <= 32'd0;
+
+            arr_high_irregular_rdm_valid_x35_reg <= 32'd0;
+
+            arr_high_irregular_ram_count_reg <= 16'd0;
+
+            arr_high_irregular_ram_sum_reg <= 32'd0;
+
+            arr_high_irregular_ram_count_x12_reg <= 32'd0;
+
+            arr_high_irregular_ecp_x100_reg <= 32'd0;
+
+            arr_high_irregular_pnn_nonzero_reg <= 1'b0;
+
+            arr_high_irregular_pnn_ge12_reg <= 1'b0;
+
+            arr_high_irregular_pnn_le65_reg <= 1'b0;
+
+            arr_high_irregular_rdm_nonzero_reg <= 1'b0;
+
+            arr_high_irregular_rdm_ge5_reg <= 1'b0;
+
+            arr_high_irregular_rdm_le12_reg <= 1'b0;
+
+            arr_high_irregular_ram_nonzero_reg <= 1'b0;
+
+            arr_high_irregular_ram_ge12_reg <= 1'b0;
+
+            arr_high_irregular_ecp_ge4_reg <= 1'b0;
+
+            arr_high_irregular_ecp_le35_reg <= 1'b0;
+
             c24_mem_nsr <= C24_MEM_INIT_NSR;
 
             c24_mem_chf <= C24_MEM_INIT_CHF;
@@ -4736,6 +4935,14 @@ module class_score_neurons #(
             c24_gate_rbbb_segment_reg <= 1'b0;
 
             c24_gate_second_reg <= 1'b0;
+
+            c24_gate_rbbb_late_capture_reg <= 1'b0;
+
+            c24_gate_rbbb_delay_capture_reg <= 1'b0;
+
+            c24_gate_rbbb_segment_capture_reg <= 1'b0;
+
+            c24_gate_second_capture_reg <= 1'b0;
 
             c24_gate_delta_pending <= 1'b0;
 
@@ -5079,54 +5286,179 @@ module class_score_neurons #(
 
             score_scaled_pending <= score_adjust_pending;
 
-            score_adjust_nsr_reg <= score_finalize_pending ?
+            score_adjust_nsr_reg <= arr_high_irregular_compare_pending ?
                                     (score_finalize_nsr_reg +
                                      (score_finalize_second_reg ? W_SEC_NSR : 32'sd0) -
                                      BIAS_NSR) :
                                     32'sd0;
 
-            score_adjust_chf_reg <= score_finalize_pending ?
+            score_adjust_chf_reg <= arr_high_irregular_compare_pending ?
                                     (score_finalize_chf_reg +
                                      (score_finalize_second_reg ? W_SEC_CHF : 32'sd0) -
                                      BIAS_CHF) :
                                     32'sd0;
 
-            score_adjust_arr_reg <= score_finalize_pending ?
+            score_adjust_arr_reg <= arr_high_irregular_compare_pending ?
                                     (score_finalize_arr_reg +
                                      (score_finalize_second_reg ? W_SEC_ARR : 32'sd0) -
                                      BIAS_ARR) :
                                     32'sd0;
 
-            score_adjust_aff_reg <= score_finalize_pending ?
+            score_adjust_aff_reg <= arr_high_irregular_compare_pending ?
                                     (score_finalize_aff_reg +
                                      (score_finalize_second_reg ? W_SEC_AFF : 32'sd0) -
                                      BIAS_AFF) :
                                     32'sd0;
 
-            score_adjust_scale_q4_reg <= score_finalize_pending ?
-                                         score_finalize_scale_q4_reg :
-                                         5'd0;
+            score_adjust_scale_q4_reg <= arr_high_irregular_compare_pending ?
+                                          score_finalize_scale_q4_reg :
+                                          5'd0;
 
-            score_adjust_arr_high_irregular_reg <= score_finalize_pending &&
-                                                   score_finalize_arr_high_irregular_reg;
+            score_adjust_arr_high_irregular_reg <= arr_high_irregular_final;
 
-            score_adjust_pending <= score_finalize_pending;
+            score_adjust_pending <= arr_high_irregular_compare_pending;
 
-            score_finalize_nsr_reg <= finalize_window ? score_finalize_base_nsr : 32'sd0;
+            score_finalize_nsr_reg <= finalize_window ? score_finalize_base_nsr :
+                                      (score_finalize_pending ||
+                                       arr_high_irregular_eval_pending ||
+                                       arr_high_irregular_compare_pending) ?
+                                      score_finalize_nsr_reg : 32'sd0;
 
-            score_finalize_chf_reg <= finalize_window ? score_finalize_base_chf : 32'sd0;
+            score_finalize_chf_reg <= finalize_window ? score_finalize_base_chf :
+                                      (score_finalize_pending ||
+                                       arr_high_irregular_eval_pending ||
+                                       arr_high_irregular_compare_pending) ?
+                                      score_finalize_chf_reg : 32'sd0;
 
-            score_finalize_arr_reg <= finalize_window ? score_finalize_base_arr : 32'sd0;
+            score_finalize_arr_reg <= finalize_window ? score_finalize_base_arr :
+                                      (score_finalize_pending ||
+                                       arr_high_irregular_eval_pending ||
+                                       arr_high_irregular_compare_pending) ?
+                                      score_finalize_arr_reg : 32'sd0;
 
-            score_finalize_aff_reg <= finalize_window ? score_finalize_base_aff : 32'sd0;
+            score_finalize_aff_reg <= finalize_window ? score_finalize_base_aff :
+                                      (score_finalize_pending ||
+                                       arr_high_irregular_eval_pending ||
+                                       arr_high_irregular_compare_pending) ?
+                                      score_finalize_aff_reg : 32'sd0;
 
-            score_finalize_scale_q4_reg <= finalize_window ? window_scale_q4 : 5'd0;
+            score_finalize_scale_q4_reg <= finalize_window ? window_scale_q4 :
+                                           (score_finalize_pending ||
+                                            arr_high_irregular_eval_pending ||
+                                            arr_high_irregular_compare_pending) ?
+                                           score_finalize_scale_q4_reg : 5'd0;
 
-            score_finalize_arr_high_irregular_reg <= finalize_window && arr_high_irregular_spike;
+            score_finalize_arr_high_irregular_reg <= arr_high_irregular_final;
 
-            score_finalize_second_reg <= finalize_window && second_tick;
+            score_finalize_second_reg <= finalize_window ? second_tick :
+                                         (score_finalize_pending ||
+                                          arr_high_irregular_eval_pending ||
+                                          arr_high_irregular_compare_pending) ?
+                                         score_finalize_second_reg : 1'b0;
 
             score_finalize_pending <= finalize_window;
+
+            arr_high_irregular_eval_pending <= finalize_window;
+
+            arr_high_irregular_ready_eval_reg <= finalize_window && !c24_readout_busy;
+
+            arr_high_irregular_pnn_decision_reg <= finalize_window ?
+                                                   pnn_decision_win_count :
+                                                   17'd0;
+
+            arr_high_irregular_pnn_mis_x100_reg <= finalize_window ?
+                                                   pnn_mis_x100 :
+                                                   32'd0;
+
+            arr_high_irregular_pnn_decision_x12_reg <= finalize_window ?
+                                                       pnn_decision_x12 :
+                                                       32'd0;
+
+            arr_high_irregular_pnn_decision_x65_reg <= finalize_window ?
+                                                       pnn_decision_x65 :
+                                                       32'd0;
+
+            arr_high_irregular_rdm_valid_reg <= finalize_window ?
+                                                rdm_valid_win_count_next :
+                                                16'd0;
+
+            arr_high_irregular_rdm_sum_reg <= finalize_window ?
+                                              {12'd0, rdm_code_win_sum_next} :
+                                              32'd0;
+
+            arr_high_irregular_rdm_valid_x5_reg <= finalize_window ?
+                                                   rdm_valid_x5 :
+                                                   32'd0;
+
+            arr_high_irregular_rdm_valid_x12_reg <= finalize_window ?
+                                                    rdm_valid_x12 :
+                                                    32'd0;
+
+            arr_high_irregular_rdm_valid_x4_reg <= finalize_window ?
+                                                   rdm_valid_x4 :
+                                                   32'd0;
+
+            arr_high_irregular_rdm_valid_x35_reg <= finalize_window ?
+                                                    rdm_valid_x35 :
+                                                    32'd0;
+
+            arr_high_irregular_ram_count_reg <= finalize_window ?
+                                                ram_count_win_next :
+                                                16'd0;
+
+            arr_high_irregular_ram_sum_reg <= finalize_window ?
+                                              {10'd0, ram_code_win_sum_next} :
+                                              32'd0;
+
+            arr_high_irregular_ram_count_x12_reg <= finalize_window ?
+                                                    ram_count_x12 :
+                                                    32'd0;
+
+            arr_high_irregular_ecp_x100_reg <= finalize_window ?
+                                               ectopic_pair_x100 :
+                                               32'd0;
+
+            arr_high_irregular_compare_pending <= arr_high_irregular_eval_pending;
+
+            arr_high_irregular_ready_compare_reg <= arr_high_irregular_eval_pending &&
+                                                    arr_high_irregular_ready_eval_reg;
+
+            arr_high_irregular_pnn_nonzero_reg <= arr_high_irregular_eval_pending &&
+                                                  (arr_high_irregular_pnn_decision_reg != 17'd0);
+
+            arr_high_irregular_pnn_ge12_reg <= arr_high_irregular_eval_pending &&
+                                               (arr_high_irregular_pnn_mis_x100_reg >=
+                                                arr_high_irregular_pnn_decision_x12_reg);
+
+            arr_high_irregular_pnn_le65_reg <= arr_high_irregular_eval_pending &&
+                                               (arr_high_irregular_pnn_mis_x100_reg <=
+                                                arr_high_irregular_pnn_decision_x65_reg);
+
+            arr_high_irregular_rdm_nonzero_reg <= arr_high_irregular_eval_pending &&
+                                                  (arr_high_irregular_rdm_valid_reg != 16'd0);
+
+            arr_high_irregular_rdm_ge5_reg <= arr_high_irregular_eval_pending &&
+                                              (arr_high_irregular_rdm_sum_reg >=
+                                               arr_high_irregular_rdm_valid_x5_reg);
+
+            arr_high_irregular_rdm_le12_reg <= arr_high_irregular_eval_pending &&
+                                               (arr_high_irregular_rdm_sum_reg <=
+                                                arr_high_irregular_rdm_valid_x12_reg);
+
+            arr_high_irregular_ram_nonzero_reg <= arr_high_irregular_eval_pending &&
+                                                  (arr_high_irregular_ram_count_reg != 16'd0);
+
+            arr_high_irregular_ram_ge12_reg <= arr_high_irregular_eval_pending &&
+                                               (arr_high_irregular_ram_sum_reg >=
+                                                arr_high_irregular_ram_count_x12_reg);
+
+            arr_high_irregular_ecp_ge4_reg <= arr_high_irregular_eval_pending &&
+                                              (arr_high_irregular_ecp_x100_reg >=
+                                               arr_high_irregular_rdm_valid_x4_reg);
+
+            arr_high_irregular_ecp_le35_reg <= arr_high_irregular_eval_pending &&
+                                               (arr_high_irregular_ecp_x100_reg <=
+                                                arr_high_irregular_rdm_valid_x35_reg);
 
             c24_event_core_delta_nsr_reg <= c24_event_core_delta_nsr;
 
@@ -5167,22 +5499,33 @@ module class_score_neurons #(
 
             c24_event_delta_pending <= c24_event_delta_active;
 
-            c24_gate_arr_high_irregular_reg <= arr_high_irregular_spike;
+            c24_gate_rbbb_late_capture_reg <= !c24_readout_busy &&
+                                              rbbb_lateslope_applied;
 
-            c24_gate_rbbb_late_reg <= rbbb_lateslope_applied;
+            c24_gate_rbbb_delay_capture_reg <= !c24_readout_busy &&
+                                               rbbb_qrs_delay_applied;
 
-            c24_gate_rbbb_delay_reg <= rbbb_qrs_delay_applied;
+            c24_gate_rbbb_segment_capture_reg <= !c24_readout_busy &&
+                                                 rbbb_qrs_delay_segment_spike;
 
-            c24_gate_rbbb_segment_reg <= rbbb_qrs_delay_segment_spike;
+            c24_gate_second_capture_reg <= !c24_readout_busy &&
+                                           rhythm_tick && (ms_count == 10'd999);
 
-            c24_gate_second_reg <= rhythm_tick && (ms_count == 10'd999);
+            c24_gate_arr_high_irregular_reg <= c24_gate_arr_high_irregular_delayed;
 
-            c24_gate_delta_pending <= !c24_readout_busy &&
-                                      (arr_high_irregular_spike ||
-                                       rbbb_lateslope_applied ||
-                                       rbbb_qrs_delay_applied ||
-                                       rbbb_qrs_delay_segment_spike ||
-                                       (rhythm_tick && (ms_count == 10'd999)));
+            c24_gate_rbbb_late_reg <= c24_gate_rbbb_late_capture_reg;
+
+            c24_gate_rbbb_delay_reg <= c24_gate_rbbb_delay_capture_reg;
+
+            c24_gate_rbbb_segment_reg <= c24_gate_rbbb_segment_capture_reg;
+
+            c24_gate_second_reg <= c24_gate_second_capture_reg;
+
+            c24_gate_delta_pending <= c24_gate_arr_high_irregular_delayed ||
+                                      c24_gate_rbbb_late_capture_reg ||
+                                      c24_gate_rbbb_delay_capture_reg ||
+                                      c24_gate_rbbb_segment_capture_reg ||
+                                      c24_gate_second_capture_reg;
 
             if (finalize_window || segment_done) begin
 

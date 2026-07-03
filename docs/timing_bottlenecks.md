@@ -27,9 +27,11 @@ This note records the profiling-driven RTL timing work for the SNN ECG 4-class c
 - Pipelined QRS MAF pre-window scan using timestamp FIFO state instead of a 120-bit combinational scan.
 - Reworked DSCR clear/reset arithmetic to avoid data-dependent reset-port timing paths.
 - Registered PNN predictor center and changed `hyp_center` to a case lookup.
-- Added a top-level snapshot prediction latch and increased post-segment flush budget to `POST_DONE_TICKS=34`.
+- Added a top-level snapshot prediction latch and increased post-segment flush budget to `POST_DONE_TICKS=36`.
 - Split final membrane post-score margin/WTA into pairwise stages.
 - Split the ARR score scale/commit path with a registered `score_scaled_*` stage and aligned RBBB gate evaluation by one extra cycle.
+- Split the C24 gate pending path so raw gate events no longer feed `c24_gate_delta_pending` in the same cycle.
+- Split the ARR high-irregular final-window predicate into product, compare, and final-AND stages so the pNN ratio carry chain no longer terminates at score/C24 pending registers.
 - Hardened `scripts/synth_profile_overhead.py` and made it regenerate an explicit `rdm_to_pred_class_timing.rpt`.
 
 ## Current OOC Result
@@ -44,14 +46,14 @@ Latest resource/timing summary:
 
 | PROFILE_EN | LUT | FF | Setup WNS ns | Hold WHS ns |
 |---:|---:|---:|---:|---:|
-| 0 | 10357 | 4740 | 0.023 | 0.190 |
-| 1 | 10415 | 5448 | 0.023 | 0.190 |
+| 0 | 10418 | 5011 | 0.133 | 0.190 |
+| 1 | 10458 | 5719 | 0.133 | 0.190 |
 
 PROFILE overhead:
 
 | Resource | Delta |
 |---|---:|
-| LUT | +58 |
+| LUT | +40 |
 | FF | +708 |
 | BRAM | 0 |
 | DSP | 0 |
@@ -60,7 +62,7 @@ Largest remaining hierarchy blocks with `PROFILE_EN=0`:
 
 | Instance | Module | LUT | FF |
 |---|---|---:|---:|
-| `u_class` | `class_score_neurons` | 6924 | 2153 |
+| `u_class` | `class_score_neurons` | 6991 | 2428 |
 | `u_final` | `final_membrane_layer` | 1606 | 1323 |
 | `u_qrs_maf` | `qrs_maf_neuron` | 391 | 308 |
 
@@ -72,13 +74,15 @@ No timing paths found.
 
 ## Final Timing State
 
-OOC 10 ns synth timing is met. The current worst setup path is no longer a violation:
+OOC 10 ns synth timing is met. The former thin/failing setup paths are gone:
 
-- Source: `u_snapshot/u_class/pnn_match_win_count_reg[1]/C`
-- Destination: `u_snapshot/u_class/c24_gate_delta_pending_reg/D`
-- Slack: `0.023 ns`
-- Data path delay: `9.937 ns`
-- Logic levels: `15`, including `8` CARRY4s
+- Former thin path: `pnn_match_win_count_reg[1]/C -> c24_gate_delta_pending_reg/D`
+- Intermediate exposed path: `pnn_match_win_count_reg[1]/C -> score_finalize_arr_high_irregular_reg/D`
+- Current worst path:
+  - Source: `u_snapshot/u_class/c24_gate_delta_pending_reg_rep__1/C`
+  - Destination: `u_snapshot/u_class/c24_mem_chf_reg[63]/D`
+  - Slack: `0.133 ns`
+  - Logic levels: `23`, including `17` CARRY4s
 
 The original RDM-to-prediction path is gone, and the remaining reported setup/hold checks are met.
 
@@ -87,14 +91,14 @@ The original RDM-to-prediction path is gone, and the remaining reported setup/ho
 Latest RTL-vs-Python checks:
 
 - `python scripts\run_final_membrane_v2_xsim.py --profile-smoke`
-  - enabled: `total_cycles=98`, `run_cycles=16`, `accepted_samples=16`, `windows=2`, `decisions=1`, `max_window_latency=45`
+  - enabled: `total_cycles=102`, `run_cycles=16`, `accepted_samples=16`, `windows=2`, `decisions=1`, `max_window_latency=47`
   - disabled: all profile outputs remain `0`
 - `python scripts\run_final_membrane_v2_xsim.py --split all --max-cases 2`
   - train: `pred_mismatch=0`, `mem_mismatch=0`
   - val: `pred_mismatch=0`, `mem_mismatch=0`
   - test: `pred_mismatch=0`, `mem_mismatch=0`
-  - profiling: `accepted_samples=1800000`, `windows=30`, `decisions=1`, `input_wait=0`, `cycles/sample=1.000683`
+  - profiling: `accepted_samples=1800000`, `windows=30`, `decisions=1`, `input_wait=0`, `cycles/sample=1.000717`, `max_window_latency=60039`
 - Non-NSR test case 9:
   - selected class: `CHF`
   - `pred_mismatch=0`, `mem_mismatch=0`
-  - profiling: `accepted_samples=1800000`, `windows=30`, `decisions=1`, `input_wait=0`
+  - profiling: `accepted_samples=1800000`, `windows=30`, `decisions=1`, `input_wait=0`, `cycles/sample=1.000717`, `max_window_latency=60039`

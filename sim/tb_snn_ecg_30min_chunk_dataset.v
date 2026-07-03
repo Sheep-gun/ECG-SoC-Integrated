@@ -6,7 +6,7 @@ module tb_snn_ecg_30min_chunk_dataset #(
     parameter RESULT_CSV = "",
     parameter DUT_SNAPSHOT_SAMPLES = 60000,
     parameter DUT_SNAPSHOTS_PER_CHUNK = 30,
-    parameter DUT_POST_DONE_TICKS = 34,
+    parameter DUT_POST_DONE_TICKS = 36,
     parameter DUT_PROFILE_EN = 1
 )();
     reg clk;
