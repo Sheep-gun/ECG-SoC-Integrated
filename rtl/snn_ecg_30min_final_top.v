@@ -11,7 +11,9 @@ module snn_ecg_30min_final_top #(
     parameter ADC_WIDTH = 12,
     parameter SNAPSHOT_SAMPLES = 60000,
     parameter SNAPSHOTS_PER_CHUNK = 30,
-    parameter POST_DONE_TICKS = 9
+    parameter POST_DONE_TICKS = 34,
+    parameter PROFILE_EN = 1,
+    parameter PROF_COUNTER_W = 64
 )(
     input clk,
     input rst,
@@ -26,7 +28,17 @@ module snn_ecg_30min_final_top #(
     output signed [31:0] final_mem_chf,
     output signed [31:0] final_mem_arr,
     output signed [31:0] final_mem_aff,
-    output [5:0] snapshot_index_dbg
+    output [5:0] snapshot_index_dbg,
+    output reg [PROF_COUNTER_W-1:0] prof_total_cycle_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_busy_cycle_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_run_cycle_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_input_wait_cycle_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_accepted_sample_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_window_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_decision_counter,
+    output reg [PROF_COUNTER_W-1:0] prof_last_window_latency,
+    output reg [PROF_COUNTER_W-1:0] prof_max_window_latency,
+    output reg [PROF_COUNTER_W-1:0] prof_last_decision_latency
 );
 
     localparam ST_IDLE       = 4'd0;
@@ -40,9 +52,14 @@ module snn_ecg_30min_final_top #(
 
     reg [3:0] state;
     reg [3:0] reset_count;
-    reg [3:0] flush_count;
+    reg [7:0] flush_count;
     reg [31:0] timer_mem;
     reg [5:0] snapshot_index;
+    reg final_snapshot_done_d;
+    reg final_chunk_done_d;
+    reg profile_active;
+    reg profile_window_active;
+    reg [PROF_COUNTER_W-1:0] profile_window_cycle_counter;
 
     wire core_rst = rst || (state == ST_CORE_RESET);
     wire core_segment_start = (state == ST_SEG_START);
@@ -54,6 +71,12 @@ module snn_ecg_30min_final_top #(
     wire final_clear = (state == ST_SEG_START) && (snapshot_index == 6'd0);
     wire final_snapshot_done = (state == ST_COMMIT);
     wire final_chunk_done = (state == ST_COMMIT) && (snapshot_index == (SNAPSHOTS_PER_CHUNK - 1));
+    wire profile_start_accept = (state == ST_IDLE) && start;
+    wire profile_window_commit_pulse = final_snapshot_done && !final_snapshot_done_d;
+    wire profile_decision_commit_pulse = final_chunk_done && !final_chunk_done_d;
+    wire [PROF_COUNTER_W-1:0] profile_one = {{(PROF_COUNTER_W-1){1'b0}}, 1'b1};
+    wire [PROF_COUNTER_W-1:0] profile_total_cycle_next = prof_total_cycle_counter + profile_one;
+    wire [PROF_COUNTER_W-1:0] profile_window_cycle_next = profile_window_cycle_counter + profile_one;
 
     assign sample_ready = (state == ST_RUN);
     assign busy = (state != ST_IDLE) && (state != ST_DONE);
@@ -79,6 +102,10 @@ module snn_ecg_30min_final_top #(
     wire rbbb_qrs_delay_applied;
     wire [1:0] snapshot_pred_class;
     wire snapshot_pred_valid;
+    reg [1:0] snapshot_pred_class_latched;
+    reg snapshot_pred_seen;
+    wire final_pred_valid = snapshot_pred_valid || snapshot_pred_seen;
+    wire [1:0] final_pred_class_for_commit = snapshot_pred_valid ? snapshot_pred_class : snapshot_pred_class_latched;
     wire signed [63:0] c24_mem_nsr;
     wire signed [63:0] c24_mem_chf;
     wire signed [63:0] c24_mem_arr;
@@ -220,8 +247,8 @@ module snn_ecg_30min_final_top #(
         .clear(final_clear),
         .snapshot_done(final_snapshot_done),
         .chunk_done(final_chunk_done),
-        .pred_valid(snapshot_pred_valid),
-        .pred_class(snapshot_pred_class),
+        .pred_valid(final_pred_valid),
+        .pred_class(final_pred_class_for_commit),
         .class_mem_nsr(c24_mem_nsr),
         .class_mem_chf(c24_mem_chf),
         .class_mem_arr(c24_mem_arr),
@@ -259,16 +286,24 @@ module snn_ecg_30min_final_top #(
         if (rst) begin
             state <= ST_IDLE;
             reset_count <= 4'd0;
-            flush_count <= 4'd0;
+            flush_count <= 8'd0;
             timer_mem <= 32'd0;
             snapshot_index <= 6'd0;
+            snapshot_pred_class_latched <= 2'd0;
+            snapshot_pred_seen <= 1'b0;
         end else begin
+            if (snapshot_pred_valid) begin
+                snapshot_pred_class_latched <= snapshot_pred_class;
+                snapshot_pred_seen <= 1'b1;
+            end
             case (state)
                 ST_IDLE: begin
                     if (start) begin
                         state <= ST_CORE_RESET;
                         reset_count <= 4'd0;
                         snapshot_index <= 6'd0;
+                        snapshot_pred_class_latched <= 2'd0;
+                        snapshot_pred_seen <= 1'b0;
                     end
                 end
                 ST_CORE_RESET: begin
@@ -280,6 +315,8 @@ module snn_ecg_30min_final_top #(
                     end
                 end
                 ST_SEG_START: begin
+                    snapshot_pred_class_latched <= 2'd0;
+                    snapshot_pred_seen <= 1'b0;
                     timer_mem <= 32'd0;
                     state <= ST_RUN;
                 end
@@ -294,15 +331,15 @@ module snn_ecg_30min_final_top #(
                     end
                 end
                 ST_SEG_DONE: begin
-                    flush_count <= 4'd0;
+                    flush_count <= 8'd0;
                     state <= ST_FLUSH;
                 end
                 ST_FLUSH: begin
                     if (flush_count == (POST_DONE_TICKS - 1)) begin
-                        flush_count <= 4'd0;
+                        flush_count <= 8'd0;
                         state <= ST_COMMIT;
                     end else begin
-                        flush_count <= flush_count + 4'd1;
+                        flush_count <= flush_count + 8'd1;
                     end
                 end
                 ST_COMMIT: begin
@@ -382,6 +419,98 @@ module snn_ecg_30min_final_top #(
                 rbbb_delay_applied_count <= rbbb_delay_applied_count + 32'd1;
             if (pre_qrs_bump_spike)
                 pre_qrs_bump_count <= pre_qrs_bump_count + 32'd1;
+        end
+    end
+
+    // Profiling counters observe existing FSM/handshake events only.
+    always @(posedge clk) begin
+        if (!PROFILE_EN) begin
+            final_snapshot_done_d <= 1'b0;
+            final_chunk_done_d <= 1'b0;
+            profile_active <= 1'b0;
+            profile_window_active <= 1'b0;
+            profile_window_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_total_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_busy_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_run_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_input_wait_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_accepted_sample_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_window_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_decision_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_last_window_latency <= {PROF_COUNTER_W{1'b0}};
+            prof_max_window_latency <= {PROF_COUNTER_W{1'b0}};
+            prof_last_decision_latency <= {PROF_COUNTER_W{1'b0}};
+        end else if (rst) begin
+            final_snapshot_done_d <= 1'b0;
+            final_chunk_done_d <= 1'b0;
+            profile_active <= 1'b0;
+            profile_window_active <= 1'b0;
+            profile_window_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_total_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_busy_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_run_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_input_wait_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_accepted_sample_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_window_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_decision_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_last_window_latency <= {PROF_COUNTER_W{1'b0}};
+            prof_max_window_latency <= {PROF_COUNTER_W{1'b0}};
+            prof_last_decision_latency <= {PROF_COUNTER_W{1'b0}};
+        end else if (profile_start_accept) begin
+            final_snapshot_done_d <= 1'b0;
+            final_chunk_done_d <= 1'b0;
+            profile_active <= 1'b1;
+            profile_window_active <= 1'b0;
+            profile_window_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_total_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_busy_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_run_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_input_wait_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_accepted_sample_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_window_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_decision_counter <= {PROF_COUNTER_W{1'b0}};
+            prof_last_window_latency <= {PROF_COUNTER_W{1'b0}};
+            prof_max_window_latency <= {PROF_COUNTER_W{1'b0}};
+            prof_last_decision_latency <= {PROF_COUNTER_W{1'b0}};
+        end else begin
+            final_snapshot_done_d <= final_snapshot_done;
+            final_chunk_done_d <= final_chunk_done;
+
+            if (profile_active) begin
+                prof_total_cycle_counter <= profile_total_cycle_next;
+
+                if (busy)
+                    prof_busy_cycle_counter <= prof_busy_cycle_counter + profile_one;
+                if (state == ST_RUN)
+                    prof_run_cycle_counter <= prof_run_cycle_counter + profile_one;
+                if ((state == ST_RUN) && sample_ready && !sample_valid)
+                    prof_input_wait_cycle_counter <= prof_input_wait_cycle_counter + profile_one;
+                if (core_sample_valid)
+                    prof_accepted_sample_counter <= prof_accepted_sample_counter + profile_one;
+
+                if (profile_window_active)
+                    profile_window_cycle_counter <= profile_window_cycle_next;
+
+                if (core_segment_start) begin
+                    profile_window_active <= 1'b1;
+                    profile_window_cycle_counter <= profile_one;
+                end
+
+                if (profile_window_commit_pulse) begin
+                    prof_window_counter <= prof_window_counter + profile_one;
+                    prof_last_window_latency <= profile_window_cycle_next;
+                    if (profile_window_cycle_next > prof_max_window_latency)
+                        prof_max_window_latency <= profile_window_cycle_next;
+                    profile_window_active <= 1'b0;
+                    profile_window_cycle_counter <= {PROF_COUNTER_W{1'b0}};
+                end
+
+                if (profile_decision_commit_pulse) begin
+                    prof_decision_counter <= prof_decision_counter + profile_one;
+                    prof_last_decision_latency <= profile_total_cycle_next;
+                    profile_active <= 1'b0;
+                end
+            end
         end
     end
 

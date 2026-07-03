@@ -56,6 +56,16 @@ module final_membrane_layer(
     localparam [1:0] CLS_ARR = 2'd2;
     localparam [1:0] CLS_AFF = 2'd3;
 
+    localparam [3:0] FM_IDLE      = 4'd0;
+    localparam [3:0] FM_BASE      = 4'd1;
+    localparam [3:0] FM_LOCAL     = 4'd2;
+    localparam [3:0] FM_LOCAL_WTA = 4'd3;
+    localparam [3:0] FM_POST      = 4'd4;
+    localparam [3:0] FM_POST_PAIR = 4'd5;
+    localparam [3:0] FM_POST_WTA  = 4'd6;
+    localparam [3:0] FM_FINAL     = 4'd7;
+    localparam [3:0] FM_FINAL_WTA = 4'd8;
+
     reg [5:0] pred_count_nsr;
     reg [5:0] pred_count_chf;
     reg [5:0] pred_count_arr;
@@ -72,6 +82,24 @@ module final_membrane_layer(
     reg [31:0] sum_rdm_valid;
     reg [31:0] sum_rdm_code;
 
+    reg [3:0] final_pipe_stage;
+    reg final_pipe_chunk;
+
+    reg [5:0] dec_count_nsr;
+    reg [5:0] dec_count_chf;
+    reg [5:0] dec_count_arr;
+    reg [5:0] dec_count_aff;
+    reg [31:0] dec_pnn_mismatch;
+    reg [31:0] dec_ectopic_pair;
+    reg [31:0] dec_qrs_maf;
+    reg [31:0] dec_rbbb_like;
+    reg [31:0] dec_pre_qrs;
+    reg [31:0] dec_abnormal;
+    reg [31:0] dec_rhythm;
+    reg [31:0] dec_morphology;
+    reg [31:0] dec_rdm_valid;
+    reg [31:0] dec_rdm_code;
+
     wire [5:0] count_nsr_next = pred_count_nsr + ((pred_valid && (pred_class == CLS_NSR)) ? 6'd1 : 6'd0);
     wire [5:0] count_chf_next = pred_count_chf + ((pred_valid && (pred_class == CLS_CHF)) ? 6'd1 : 6'd0);
     wire [5:0] count_arr_next = pred_count_arr + ((pred_valid && (pred_class == CLS_ARR)) ? 6'd1 : 6'd0);
@@ -87,9 +115,6 @@ module final_membrane_layer(
     wire [31:0] morphology_next = sum_morphology + morphology_evidence_count;
     wire [31:0] rdm_valid_next = sum_rdm_valid + rdm_valid_count;
     wire [31:0] rdm_code_next = sum_rdm_code + rdm_code_sum;
-    wire [35:0] rdm_valid_next_ext = {4'd0, rdm_valid_next};
-    wire [35:0] rdm_code_next_ext = {4'd0, rdm_code_next};
-    wire [35:0] rdm_valid_times10 = (rdm_valid_next_ext << 3) + (rdm_valid_next_ext << 1);
 
     function [1:0] argmax_count4;
         input [5:0] a;
@@ -138,232 +163,335 @@ module final_membrane_layer(
         end
     endfunction
 
-    reg [1:0] base_pred;
-    reg [1:0] local_pred;
-    reg [1:0] arr_focus_pred;
-    reg [1:0] final_pred_calc;
+    reg [1:0] s1_base_pred;
+    reg signed [31:0] s1_nsr_arr_margin;
+    reg signed [31:0] s1_chf_aff_margin;
+    reg signed [31:0] s1_arr_aff_margin;
+    reg signed [31:0] s1_base_nsr;
+    reg signed [31:0] s1_base_chf;
+    reg signed [31:0] s1_base_arr;
+    reg signed [31:0] s1_base_aff;
+    reg [35:0] s1_rdm_code_ext;
+    reg [35:0] s1_rdm_valid_times10;
 
-    reg signed [31:0] local_nsr;
-    reg signed [31:0] local_chf;
-    reg signed [31:0] local_arr;
-    reg signed [31:0] local_aff;
-    reg signed [31:0] post_nsr;
-    reg signed [31:0] post_chf;
-    reg signed [31:0] post_arr;
-    reg signed [31:0] post_aff;
-    reg signed [31:0] calc_nsr;
-    reg signed [31:0] calc_chf;
-    reg signed [31:0] calc_arr;
-    reg signed [31:0] calc_aff;
+    reg [1:0] p1_base_pred;
+    reg signed [31:0] p1_nsr_arr_margin;
+    reg signed [31:0] p1_chf_aff_margin;
+    reg signed [31:0] p1_arr_aff_margin;
+    reg signed [31:0] p1_base_nsr;
+    reg signed [31:0] p1_base_chf;
+    reg signed [31:0] p1_base_arr;
+    reg signed [31:0] p1_base_aff;
+    reg [35:0] p1_rdm_code_ext;
+    reg [35:0] p1_rdm_valid_times10;
 
-    reg signed [31:0] nsr_arr_margin;
-    reg signed [31:0] chf_aff_margin;
-    reg signed [31:0] arr_aff_margin;
-    reg signed [31:0] arr_focus_margin;
+    reg signed [31:0] s2_local_nsr;
+    reg signed [31:0] s2_local_chf;
+    reg signed [31:0] s2_local_arr;
+    reg signed [31:0] s2_local_aff;
+    reg [1:0] s2_local_wta_pred;
+    reg s2_aff_low_rescue;
+    reg s2_nsr_from_chf_rescue;
+    reg s2_chf_from_aff_rescue;
+    reg s2_strong_chf;
+    reg s2_arr_rescue;
+    reg s2_arr_over_aff;
+    reg s2_aff_rescue;
+    reg s2_arr_low_rescue;
+    reg s2_arr_silent_rescue;
 
-    reg aff_low_rescue;
-    reg nsr_from_chf_rescue;
-    reg chf_from_aff_rescue;
-    reg strong_chf;
-    reg arr_rescue;
-    reg arr_over_aff;
-    reg aff_rescue;
-    reg arr_low_rescue;
-    reg arr_silent_rescue;
-    reg arr_from_nsr;
-    reg arr_from_chf;
-    reg arr_from_aff;
-    reg margin_evidence_rescue;
+    reg signed [31:0] p2_local_nsr;
+    reg signed [31:0] p2_local_chf;
+    reg signed [31:0] p2_local_arr;
+    reg signed [31:0] p2_local_aff;
+    reg [1:0] p2_local_pred;
+
+    reg signed [31:0] s3_post_nsr;
+    reg signed [31:0] s3_post_chf;
+    reg signed [31:0] s3_post_arr;
+    reg signed [31:0] s3_post_aff;
+    reg [1:0] s3_arr_focus_pred;
+    reg signed [31:0] s3_arr_focus_margin;
+    reg s3_arr_from_nsr;
+    reg s3_arr_from_chf;
+    reg s3_arr_from_aff;
+    reg signed [31:0] s3_nsr_chf_best_score;
+    reg signed [31:0] s3_nsr_chf_second_score;
+    reg signed [31:0] s3_arr_aff_best_score;
+    reg signed [31:0] s3_arr_aff_second_score;
+    reg [1:0] s3_nsr_chf_best_class;
+    reg [1:0] s3_arr_aff_best_class;
+
+    reg signed [31:0] p3_post_nsr;
+    reg signed [31:0] p3_post_chf;
+    reg signed [31:0] p3_post_arr;
+    reg signed [31:0] p3_post_aff;
+    reg signed [31:0] p3_nsr_chf_best_score;
+    reg signed [31:0] p3_nsr_chf_second_score;
+    reg signed [31:0] p3_arr_aff_best_score;
+    reg signed [31:0] p3_arr_aff_second_score;
+    reg [1:0] p3_nsr_chf_best_class;
+    reg [1:0] p3_arr_aff_best_class;
+    reg [1:0] p3_arr_focus_pred;
+    reg signed [31:0] p3_arr_focus_margin;
+
+    reg signed [31:0] s4_calc_nsr;
+    reg signed [31:0] s4_calc_chf;
+    reg signed [31:0] s4_calc_arr;
+    reg signed [31:0] s4_calc_aff;
+    reg [1:0] s4_final_pred_calc;
+    reg s4_margin_evidence_rescue;
+    reg signed [31:0] p4_final_nsr;
+    reg signed [31:0] p4_final_chf;
+    reg signed [31:0] p4_final_arr;
+    reg signed [31:0] p4_final_aff;
 
     always @(*) begin
-        base_pred = argmax_count4(count_nsr_next, count_chf_next, count_arr_next, count_aff_next);
-        nsr_arr_margin = $signed({26'd0, count_nsr_next}) - $signed({26'd0, count_arr_next});
-        chf_aff_margin = $signed({26'd0, count_chf_next}) - $signed({26'd0, count_aff_next});
-        arr_aff_margin = $signed({26'd0, count_arr_next}) - $signed({26'd0, count_aff_next});
+        s1_base_pred = argmax_count4(dec_count_nsr, dec_count_chf, dec_count_arr, dec_count_aff);
+        s1_nsr_arr_margin = $signed({26'd0, dec_count_nsr}) - $signed({26'd0, dec_count_arr});
+        s1_chf_aff_margin = $signed({26'd0, dec_count_chf}) - $signed({26'd0, dec_count_aff});
+        s1_arr_aff_margin = $signed({26'd0, dec_count_arr}) - $signed({26'd0, dec_count_aff});
 
-        local_nsr = $signed({26'd0, count_nsr_next}) + 32'sd2;
-        local_chf = $signed({26'd0, count_chf_next});
-        local_arr = $signed({26'd0, count_arr_next});
-        local_aff = $signed({26'd0, count_aff_next});
+        s1_base_nsr = $signed({26'd0, dec_count_nsr}) + 32'sd2;
+        s1_base_chf = $signed({26'd0, dec_count_chf});
+        s1_base_arr = $signed({26'd0, dec_count_arr});
+        s1_base_aff = $signed({26'd0, dec_count_aff});
 
-        aff_low_rescue = (base_pred == CLS_CHF) &&
-                         (abnormal_next <= 32'd50) &&
-                         (morphology_next <= 32'd20) &&
-                         (rbbb_like_next <= 32'd0) &&
-                         (((rdm_valid_next > 32'd0) && (rdm_code_next_ext >= rdm_valid_times10)) ||
-                          ((rdm_valid_next == 32'd0) && (rdm_code_next == 32'd0) &&
-                           (rhythm_next <= 32'd256) && (qrs_maf_next <= 32'd8) && (pre_qrs_next <= 32'd8))) &&
-                         (count_chf_next >= 6'd18);
-        if (aff_low_rescue) begin
-            local_aff = local_aff + 32'sd60;
-            local_chf = local_chf - 32'sd20;
+        s1_rdm_code_ext = {4'd0, dec_rdm_code};
+        s1_rdm_valid_times10 = ({4'd0, dec_rdm_valid} << 3) + ({4'd0, dec_rdm_valid} << 1);
+    end
+
+    always @(*) begin
+        s2_local_nsr = p1_base_nsr;
+        s2_local_chf = p1_base_chf;
+        s2_local_arr = p1_base_arr;
+        s2_local_aff = p1_base_aff;
+
+        s2_aff_low_rescue = (p1_base_pred == CLS_CHF) &&
+                            (dec_abnormal <= 32'd50) &&
+                            (dec_morphology <= 32'd20) &&
+                            (dec_rbbb_like <= 32'd0) &&
+                            (((dec_rdm_valid > 32'd0) && (p1_rdm_code_ext >= p1_rdm_valid_times10)) ||
+                             ((dec_rdm_valid == 32'd0) && (dec_rdm_code == 32'd0) &&
+                              (dec_rhythm <= 32'd256) && (dec_qrs_maf <= 32'd8) && (dec_pre_qrs <= 32'd8))) &&
+                            (dec_count_chf >= 6'd18);
+        if (s2_aff_low_rescue) begin
+            s2_local_aff = s2_local_aff + 32'sd60;
+            s2_local_chf = s2_local_chf - 32'sd20;
         end
 
-        nsr_from_chf_rescue = (base_pred == CLS_CHF) &&
-                              (count_nsr_next >= 6'd3) &&
-                              (abnormal_next <= 32'd150) &&
-                              (qrs_maf_next <= 32'd64) &&
-                              (rbbb_like_next <= 32'd1) &&
-                              (morphology_next <= 32'd1500);
-        if (nsr_from_chf_rescue) begin
-            local_nsr = local_nsr + 32'sd10;
-            local_chf = local_chf - 32'sd30;
+        s2_nsr_from_chf_rescue = (p1_base_pred == CLS_CHF) &&
+                                 (dec_count_nsr >= 6'd3) &&
+                                 (dec_abnormal <= 32'd150) &&
+                                 (dec_qrs_maf <= 32'd64) &&
+                                 (dec_rbbb_like <= 32'd1) &&
+                                 (dec_morphology <= 32'd1500);
+        if (s2_nsr_from_chf_rescue) begin
+            s2_local_nsr = s2_local_nsr + 32'sd10;
+            s2_local_chf = s2_local_chf - 32'sd30;
         end
 
-        chf_from_aff_rescue = (base_pred == CLS_AFF) &&
-                              (count_chf_next >= 6'd5) &&
-                              (morphology_next <= 32'd100) &&
-                              (qrs_maf_next <= 32'd32) &&
-                              (rbbb_like_next <= 32'd2);
-        if (chf_from_aff_rescue) begin
-            local_chf = local_chf + 32'sd20;
-            local_aff = local_aff - 32'sd10;
+        s2_chf_from_aff_rescue = (p1_base_pred == CLS_AFF) &&
+                                 (dec_count_chf >= 6'd5) &&
+                                 (dec_morphology <= 32'd100) &&
+                                 (dec_qrs_maf <= 32'd32) &&
+                                 (dec_rbbb_like <= 32'd2);
+        if (s2_chf_from_aff_rescue) begin
+            s2_local_chf = s2_local_chf + 32'sd20;
+            s2_local_aff = s2_local_aff - 32'sd10;
         end
 
-        strong_chf = (base_pred == CLS_CHF) &&
-                     ((count_chf_next >= 6'd30) || (chf_aff_margin >= 32'sd24));
+        s2_strong_chf = (p1_base_pred == CLS_CHF) &&
+                        ((dec_count_chf >= 6'd30) || (p1_chf_aff_margin >= 32'sd24));
 
-        arr_rescue = ((base_pred == CLS_NSR) || (base_pred == CLS_CHF) || (base_pred == CLS_AFF)) &&
-                     (count_arr_next >= 6'd12) &&
-                     (count_aff_next <= 6'd10) &&
-                     (nsr_arr_margin <= 32'sd24) &&
-                     (morphology_next >= 32'd180) &&
-                     (qrs_maf_next >= 32'd40) &&
-                     (rbbb_like_next >= 32'd8) &&
-                     (pre_qrs_next >= 32'd1800);
-        if (arr_rescue) begin
-            local_arr = local_arr + 32'sd50;
-            local_nsr = local_nsr - 32'sd30;
-            local_chf = local_chf - 32'sd10;
-            local_aff = local_aff - 32'sd5;
+        s2_arr_rescue = ((p1_base_pred == CLS_NSR) || (p1_base_pred == CLS_CHF) || (p1_base_pred == CLS_AFF)) &&
+                        (dec_count_arr >= 6'd12) &&
+                        (dec_count_aff <= 6'd10) &&
+                        (p1_nsr_arr_margin <= 32'sd24) &&
+                        (dec_morphology >= 32'd180) &&
+                        (dec_qrs_maf >= 32'd40) &&
+                        (dec_rbbb_like >= 32'd8) &&
+                        (dec_pre_qrs >= 32'd1800);
+        if (s2_arr_rescue) begin
+            s2_local_arr = s2_local_arr + 32'sd50;
+            s2_local_nsr = s2_local_nsr - 32'sd30;
+            s2_local_chf = s2_local_chf - 32'sd10;
+            s2_local_aff = s2_local_aff - 32'sd5;
         end
 
-        arr_over_aff = (base_pred == CLS_AFF) &&
-                       (count_arr_next >= 6'd8) &&
-                       (qrs_maf_next >= 32'd1000) &&
-                       (morphology_next >= 32'd1500);
-        if (arr_over_aff) begin
-            local_arr = local_arr + 32'sd20;
-            local_aff = local_aff - 32'sd10;
+        s2_arr_over_aff = (p1_base_pred == CLS_AFF) &&
+                          (dec_count_arr >= 6'd8) &&
+                          (dec_qrs_maf >= 32'd1000) &&
+                          (dec_morphology >= 32'd1500);
+        if (s2_arr_over_aff) begin
+            s2_local_arr = s2_local_arr + 32'sd20;
+            s2_local_aff = s2_local_aff - 32'sd10;
         end
 
-        aff_rescue = ((base_pred == CLS_CHF) || (base_pred == CLS_ARR)) &&
-                     !strong_chf &&
-                     (count_arr_next < 6'd15) &&
-                     (count_aff_next >= 6'd6) &&
-                     (chf_aff_margin <= 32'sd14) &&
-                     (rhythm_next >= 32'd1800) &&
-                     (ectopic_pair_next <= 32'd100);
-        if (aff_rescue) begin
-            local_aff = local_aff + 32'sd25;
-            local_chf = local_chf - 32'sd15;
+        s2_aff_rescue = ((p1_base_pred == CLS_CHF) || (p1_base_pred == CLS_ARR)) &&
+                        !s2_strong_chf &&
+                        (dec_count_arr < 6'd15) &&
+                        (dec_count_aff >= 6'd6) &&
+                        (p1_chf_aff_margin <= 32'sd14) &&
+                        (dec_rhythm >= 32'd1800) &&
+                        (dec_ectopic_pair <= 32'd100);
+        if (s2_aff_rescue) begin
+            s2_local_aff = s2_local_aff + 32'sd25;
+            s2_local_chf = s2_local_chf - 32'sd15;
         end
 
-        if (strong_chf) begin
-            local_aff = local_aff - 32'sd4;
+        if (s2_strong_chf) begin
+            s2_local_aff = s2_local_aff - 32'sd4;
         end
 
-        arr_low_rescue = ((base_pred == CLS_NSR) || (base_pred == CLS_CHF) || (base_pred == CLS_AFF)) &&
-                         (count_arr_next >= 6'd4) &&
-                         (count_aff_next <= 6'd3) &&
-                         (pre_qrs_next >= 32'd3000) &&
-                         (qrs_maf_next >= 32'd40) &&
-                         (rbbb_like_next >= 32'd8) &&
-                         (morphology_next >= 32'd350);
-        if (arr_low_rescue) begin
-            local_arr = local_arr + 32'sd30;
-            local_chf = local_chf - 32'sd10;
-            local_aff = local_aff - 32'sd10;
+        s2_arr_low_rescue = ((p1_base_pred == CLS_NSR) || (p1_base_pred == CLS_CHF) || (p1_base_pred == CLS_AFF)) &&
+                            (dec_count_arr >= 6'd4) &&
+                            (dec_count_aff <= 6'd3) &&
+                            (dec_pre_qrs >= 32'd3000) &&
+                            (dec_qrs_maf >= 32'd40) &&
+                            (dec_rbbb_like >= 32'd8) &&
+                            (dec_morphology >= 32'd350);
+        if (s2_arr_low_rescue) begin
+            s2_local_arr = s2_local_arr + 32'sd30;
+            s2_local_chf = s2_local_chf - 32'sd10;
+            s2_local_aff = s2_local_aff - 32'sd10;
         end
 
-        arr_silent_rescue = (base_pred == CLS_NSR) &&
-                            (count_nsr_next >= 6'd18) &&
-                            (count_arr_next <= 6'd5) &&
-                            (abnormal_next >= 32'd100) &&
-                            (abnormal_next <= 32'd350) &&
-                            (morphology_next >= 32'd1500) &&
-                            (morphology_next <= 32'd6500) &&
-                            (qrs_maf_next <= 32'd20) &&
-                            (rbbb_like_next <= 32'd2) &&
-                            (pnn_mismatch_next >= 32'd32) &&
-                            (ectopic_pair_next >= 32'd8) &&
-                            (rdm_code_next >= 32'd1500) &&
-                            (rdm_code_next <= 32'd7000);
-        if (arr_silent_rescue) begin
-            local_arr = local_arr + 32'sd30;
-            local_nsr = local_nsr - 32'sd50;
+        s2_arr_silent_rescue = (p1_base_pred == CLS_NSR) &&
+                               (dec_count_nsr >= 6'd18) &&
+                               (dec_count_arr <= 6'd5) &&
+                               (dec_abnormal >= 32'd100) &&
+                               (dec_abnormal <= 32'd350) &&
+                               (dec_morphology >= 32'd1500) &&
+                               (dec_morphology <= 32'd6500) &&
+                               (dec_qrs_maf <= 32'd20) &&
+                               (dec_rbbb_like <= 32'd2) &&
+                               (dec_pnn_mismatch >= 32'd32) &&
+                               (dec_ectopic_pair >= 32'd8) &&
+                               (dec_rdm_code >= 32'd1500) &&
+                               (dec_rdm_code <= 32'd7000);
+        if (s2_arr_silent_rescue) begin
+            s2_local_arr = s2_local_arr + 32'sd30;
+            s2_local_nsr = s2_local_nsr - 32'sd50;
         end
 
-        local_pred = argmax_score4(local_nsr, local_chf, local_arr, local_aff);
-        post_nsr = local_nsr;
-        post_chf = local_chf;
-        post_arr = local_arr;
-        post_aff = local_aff;
+    end
 
-        arr_from_nsr = (local_pred == CLS_NSR) &&
-                       (count_nsr_next >= 6'd18) &&
-                       (count_arr_next >= 6'd4) &&
-                       (count_aff_next <= 6'd10) &&
-                       ((count_nsr_next - count_arr_next) <= 6'd30) &&
-                       (morphology_next >= 32'd5500) &&
-                       (rdm_code_next >= 32'd6500) &&
-                       (pnn_mismatch_next >= 32'd64) &&
-                       (ectopic_pair_next >= 32'd50) &&
-                       (qrs_maf_next <= 32'd256) &&
-                       (rbbb_like_next <= 32'd32);
-        if (arr_from_nsr) begin
-            post_arr = post_arr + 32'sd16;
-            post_nsr = post_nsr - 32'sd12;
-            post_aff = post_aff - 32'sd4;
+    always @(*) begin
+        s2_local_wta_pred = argmax_score4(p2_local_nsr, p2_local_chf, p2_local_arr, p2_local_aff);
+    end
+
+    always @(*) begin
+        s3_post_nsr = p2_local_nsr;
+        s3_post_chf = p2_local_chf;
+        s3_post_arr = p2_local_arr;
+        s3_post_aff = p2_local_aff;
+
+        s3_arr_from_nsr = (p2_local_pred == CLS_NSR) &&
+                          (dec_count_nsr >= 6'd18) &&
+                          (dec_count_arr >= 6'd4) &&
+                          (dec_count_aff <= 6'd10) &&
+                          ((dec_count_nsr - dec_count_arr) <= 6'd30) &&
+                          (dec_morphology >= 32'd5500) &&
+                          (dec_rdm_code >= 32'd6500) &&
+                          (dec_pnn_mismatch >= 32'd64) &&
+                          (dec_ectopic_pair >= 32'd50) &&
+                          (dec_qrs_maf <= 32'd256) &&
+                          (dec_rbbb_like <= 32'd32);
+        if (s3_arr_from_nsr) begin
+            s3_post_arr = s3_post_arr + 32'sd16;
+            s3_post_nsr = s3_post_nsr - 32'sd12;
+            s3_post_aff = s3_post_aff - 32'sd4;
         end
 
-        arr_from_chf = (local_pred == CLS_CHF) &&
-                       (count_arr_next >= 6'd9) &&
-                       (($signed({26'd0, count_chf_next}) - $signed({26'd0, count_arr_next})) <= 32'sd15) &&
-                       (morphology_next >= 32'd650) &&
-                       (qrs_maf_next >= 32'd64) &&
-                       (rbbb_like_next >= 32'd12) &&
-                       (rdm_code_next >= 32'd9500) &&
-                       (ectopic_pair_next >= 32'd64);
-        if (arr_from_chf) begin
-            post_arr = post_arr + 32'sd32;
-            post_chf = post_chf - 32'sd20;
+        s3_arr_from_chf = (p2_local_pred == CLS_CHF) &&
+                          (dec_count_arr >= 6'd9) &&
+                          (($signed({26'd0, dec_count_chf}) - $signed({26'd0, dec_count_arr})) <= 32'sd15) &&
+                          (dec_morphology >= 32'd650) &&
+                          (dec_qrs_maf >= 32'd64) &&
+                          (dec_rbbb_like >= 32'd12) &&
+                          (dec_rdm_code >= 32'd9500) &&
+                          (dec_ectopic_pair >= 32'd64);
+        if (s3_arr_from_chf) begin
+            s3_post_arr = s3_post_arr + 32'sd32;
+            s3_post_chf = s3_post_chf - 32'sd20;
         end
 
-        arr_from_aff = (local_pred == CLS_AFF) &&
-                       (count_arr_next >= 6'd5) &&
-                       (($signed({26'd0, count_aff_next}) - $signed({26'd0, count_arr_next})) <= 32'sd20) &&
-                       (morphology_next >= 32'd1000) &&
-                       (rdm_code_next >= 32'd20000) &&
-                       (pnn_mismatch_next >= 32'd256) &&
-                       (ectopic_pair_next >= 32'd64) &&
-                       (qrs_maf_next <= 32'd512) &&
-                       (rbbb_like_next <= 32'd10);
-        if (arr_from_aff) begin
-            post_arr = post_arr + 32'sd24;
-            post_aff = post_aff - 32'sd8;
+        s3_arr_from_aff = (p2_local_pred == CLS_AFF) &&
+                          (dec_count_arr >= 6'd5) &&
+                          (($signed({26'd0, dec_count_aff}) - $signed({26'd0, dec_count_arr})) <= 32'sd20) &&
+                          (dec_morphology >= 32'd1000) &&
+                          (dec_rdm_code >= 32'd20000) &&
+                          (dec_pnn_mismatch >= 32'd256) &&
+                          (dec_ectopic_pair >= 32'd64) &&
+                          (dec_qrs_maf <= 32'd512) &&
+                          (dec_rbbb_like <= 32'd10);
+        if (s3_arr_from_aff) begin
+            s3_post_arr = s3_post_arr + 32'sd24;
+            s3_post_aff = s3_post_aff - 32'sd8;
         end
 
-        arr_focus_pred = argmax_score4(post_nsr, post_chf, post_arr, post_aff);
-        arr_focus_margin = margin_score4(post_nsr, post_chf, post_arr, post_aff);
-        calc_nsr = post_nsr;
-        calc_chf = post_chf;
-        calc_arr = post_arr;
-        calc_aff = post_aff;
+    end
 
-        margin_evidence_rescue = (arr_focus_pred == CLS_AFF) &&
-                                 (arr_focus_margin <= 32'sd12) &&
-                                 (count_arr_next >= 6'd3) &&
-                                 (rdm_code_next >= 32'd512) &&
-                                 (pnn_mismatch_next >= 32'd800) &&
-                                 (ectopic_pair_next >= 32'd256) &&
-                                 (abnormal_next >= 32'd256);
-        if (margin_evidence_rescue) begin
-            calc_arr = calc_arr + 32'sd4;
-            calc_aff = calc_aff - 32'sd16;
+    always @(*) begin
+        if (p3_post_chf > p3_post_nsr) begin
+            s3_nsr_chf_best_score = p3_post_chf;
+            s3_nsr_chf_second_score = p3_post_nsr;
+            s3_nsr_chf_best_class = CLS_CHF;
+        end else begin
+            s3_nsr_chf_best_score = p3_post_nsr;
+            s3_nsr_chf_second_score = p3_post_chf;
+            s3_nsr_chf_best_class = CLS_NSR;
         end
 
-        final_pred_calc = argmax_score4(calc_nsr, calc_chf, calc_arr, calc_aff);
+        if (p3_post_aff > p3_post_arr) begin
+            s3_arr_aff_best_score = p3_post_aff;
+            s3_arr_aff_second_score = p3_post_arr;
+            s3_arr_aff_best_class = CLS_AFF;
+        end else begin
+            s3_arr_aff_best_score = p3_post_arr;
+            s3_arr_aff_second_score = p3_post_aff;
+            s3_arr_aff_best_class = CLS_ARR;
+        end
+    end
+
+    always @(*) begin
+        if (p3_arr_aff_best_score > p3_nsr_chf_best_score) begin
+            s3_arr_focus_pred = p3_arr_aff_best_class;
+            if (p3_nsr_chf_best_score > p3_arr_aff_second_score)
+                s3_arr_focus_margin = p3_arr_aff_best_score - p3_nsr_chf_best_score;
+            else
+                s3_arr_focus_margin = p3_arr_aff_best_score - p3_arr_aff_second_score;
+        end else begin
+            s3_arr_focus_pred = p3_nsr_chf_best_class;
+            if (p3_arr_aff_best_score > p3_nsr_chf_second_score)
+                s3_arr_focus_margin = p3_nsr_chf_best_score - p3_arr_aff_best_score;
+            else
+                s3_arr_focus_margin = p3_nsr_chf_best_score - p3_nsr_chf_second_score;
+        end
+    end
+
+    always @(*) begin
+        s4_calc_nsr = p3_post_nsr;
+        s4_calc_chf = p3_post_chf;
+        s4_calc_arr = p3_post_arr;
+        s4_calc_aff = p3_post_aff;
+
+        s4_margin_evidence_rescue = (p3_arr_focus_pred == CLS_AFF) &&
+                                    (p3_arr_focus_margin <= 32'sd12) &&
+                                    (dec_count_arr >= 6'd3) &&
+                                    (dec_rdm_code >= 32'd512) &&
+                                    (dec_pnn_mismatch >= 32'd800) &&
+                                    (dec_ectopic_pair >= 32'd256) &&
+                                    (dec_abnormal >= 32'd256);
+        if (s4_margin_evidence_rescue) begin
+            s4_calc_arr = s4_calc_arr + 32'sd4;
+            s4_calc_aff = s4_calc_aff - 32'sd16;
+        end
+    end
+
+    always @(*) begin
+        s4_final_pred_calc = argmax_score4(p4_final_nsr, p4_final_chf, p4_final_arr, p4_final_aff);
     end
 
     always @(posedge clk) begin
@@ -388,6 +516,20 @@ module final_membrane_layer(
             final_mem_chf <= 32'sd0;
             final_mem_arr <= 32'sd0;
             final_mem_aff <= 32'sd0;
+            p3_nsr_chf_best_score <= 32'sd0;
+            p3_nsr_chf_second_score <= 32'sd0;
+            p3_arr_aff_best_score <= 32'sd0;
+            p3_arr_aff_second_score <= 32'sd0;
+            p3_nsr_chf_best_class <= CLS_NSR;
+            p3_arr_aff_best_class <= CLS_ARR;
+            p3_arr_focus_pred <= CLS_NSR;
+            p3_arr_focus_margin <= 32'sd0;
+            p4_final_nsr <= 32'sd0;
+            p4_final_chf <= 32'sd0;
+            p4_final_arr <= 32'sd0;
+            p4_final_aff <= 32'sd0;
+            final_pipe_stage <= FM_IDLE;
+            final_pipe_chunk <= 1'b0;
         end else begin
             final_valid <= 1'b0;
             if (snapshot_done) begin
@@ -405,13 +547,99 @@ module final_membrane_layer(
                 sum_morphology <= morphology_next;
                 sum_rdm_valid <= rdm_valid_next;
                 sum_rdm_code <= rdm_code_next;
-                final_mem_nsr <= calc_nsr;
-                final_mem_chf <= calc_chf;
-                final_mem_arr <= calc_arr;
-                final_mem_aff <= calc_aff;
-                final_pred_class <= final_pred_calc;
-                if (chunk_done)
-                    final_valid <= 1'b1;
+                dec_count_nsr <= count_nsr_next;
+                dec_count_chf <= count_chf_next;
+                dec_count_arr <= count_arr_next;
+                dec_count_aff <= count_aff_next;
+                dec_pnn_mismatch <= pnn_mismatch_next;
+                dec_ectopic_pair <= ectopic_pair_next;
+                dec_qrs_maf <= qrs_maf_next;
+                dec_rbbb_like <= rbbb_like_next;
+                dec_pre_qrs <= pre_qrs_next;
+                dec_abnormal <= abnormal_next;
+                dec_rhythm <= rhythm_next;
+                dec_morphology <= morphology_next;
+                dec_rdm_valid <= rdm_valid_next;
+                dec_rdm_code <= rdm_code_next;
+                final_pipe_stage <= FM_BASE;
+                final_pipe_chunk <= chunk_done;
+            end else begin
+                case (final_pipe_stage)
+                    FM_BASE: begin
+                        p1_base_pred <= s1_base_pred;
+                        p1_nsr_arr_margin <= s1_nsr_arr_margin;
+                        p1_chf_aff_margin <= s1_chf_aff_margin;
+                        p1_arr_aff_margin <= s1_arr_aff_margin;
+                        p1_base_nsr <= s1_base_nsr;
+                        p1_base_chf <= s1_base_chf;
+                        p1_base_arr <= s1_base_arr;
+                        p1_base_aff <= s1_base_aff;
+                        p1_rdm_code_ext <= s1_rdm_code_ext;
+                        p1_rdm_valid_times10 <= s1_rdm_valid_times10;
+                        final_pipe_stage <= FM_LOCAL;
+                    end
+
+                    FM_LOCAL: begin
+                        p2_local_nsr <= s2_local_nsr;
+                        p2_local_chf <= s2_local_chf;
+                        p2_local_arr <= s2_local_arr;
+                        p2_local_aff <= s2_local_aff;
+                        final_pipe_stage <= FM_LOCAL_WTA;
+                    end
+
+                    FM_LOCAL_WTA: begin
+                        p2_local_pred <= s2_local_wta_pred;
+                        final_pipe_stage <= FM_POST;
+                    end
+
+                    FM_POST: begin
+                        p3_post_nsr <= s3_post_nsr;
+                        p3_post_chf <= s3_post_chf;
+                        p3_post_arr <= s3_post_arr;
+                        p3_post_aff <= s3_post_aff;
+                        final_pipe_stage <= FM_POST_PAIR;
+                    end
+
+                    FM_POST_PAIR: begin
+                        p3_nsr_chf_best_score <= s3_nsr_chf_best_score;
+                        p3_nsr_chf_second_score <= s3_nsr_chf_second_score;
+                        p3_arr_aff_best_score <= s3_arr_aff_best_score;
+                        p3_arr_aff_second_score <= s3_arr_aff_second_score;
+                        p3_nsr_chf_best_class <= s3_nsr_chf_best_class;
+                        p3_arr_aff_best_class <= s3_arr_aff_best_class;
+                        final_pipe_stage <= FM_POST_WTA;
+                    end
+
+                    FM_POST_WTA: begin
+                        p3_arr_focus_pred <= s3_arr_focus_pred;
+                        p3_arr_focus_margin <= s3_arr_focus_margin;
+                        final_pipe_stage <= FM_FINAL;
+                    end
+
+                    FM_FINAL: begin
+                        p4_final_nsr <= s4_calc_nsr;
+                        p4_final_chf <= s4_calc_chf;
+                        p4_final_arr <= s4_calc_arr;
+                        p4_final_aff <= s4_calc_aff;
+                        final_pipe_stage <= FM_FINAL_WTA;
+                    end
+
+                    FM_FINAL_WTA: begin
+                        final_mem_nsr <= p4_final_nsr;
+                        final_mem_chf <= p4_final_chf;
+                        final_mem_arr <= p4_final_arr;
+                        final_mem_aff <= p4_final_aff;
+                        final_pred_class <= s4_final_pred_calc;
+                        final_valid <= final_pipe_chunk;
+                        final_pipe_chunk <= 1'b0;
+                        final_pipe_stage <= FM_IDLE;
+                    end
+
+                    default: begin
+                        final_pipe_chunk <= 1'b0;
+                        final_pipe_stage <= FM_IDLE;
+                    end
+                endcase
             end
         end
     end

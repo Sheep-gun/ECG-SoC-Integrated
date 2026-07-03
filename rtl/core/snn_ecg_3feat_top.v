@@ -898,7 +898,6 @@ module snn_ecg_3feat_top #(
         end
     endfunction
 
-    assign ram_predictor_center = hyp_center(predictor_id);
     assign ram_predictor_error = abs_age_diff(token_age, ram_predictor_center);
     assign ram_window_open = token_active && predictor_valid && (ram_predictor_error <= WINDOW_HALF);
     assign adc_frontend = (ENABLE_INPUT_NORMALIZER != 0) ? adc_norm_data : adc_data;
@@ -1003,6 +1002,7 @@ module snn_ecg_3feat_top #(
         .rr_interval(rr_interval),
         .winner_id(winner_id),
         .predictor_id(predictor_id),
+        .predictor_center(ram_predictor_center),
         .winner_valid(winner_valid),
         .predictor_valid(predictor_valid),
         .winner_error(winner_error),
@@ -1788,6 +1788,8 @@ module snn_ecg_3feat_top #(
         .rdm_valid_spike(rdm_valid_spike),
 
         .rdm_level_spike(rdm_level_spike),
+
+        .rdm_level_code(rdm_level_code),
 
         .ectopic_pair_spike(ectopic_pair_spike),
 

@@ -81,6 +81,25 @@ module qrs_maf_neuron #(
     localparam [CODE_WIDTH-1:0] CODE_MAX = {CODE_WIDTH{1'b1}};
 
 
+    function [7:0] pre_fifo_ptr_next;
+
+        input [7:0] ptr;
+
+        begin
+
+            if (ptr == (PRE_WIN_U - 8'd1))
+
+                pre_fifo_ptr_next = 8'd0;
+
+            else
+
+                pre_fifo_ptr_next = ptr + 8'd1;
+
+        end
+
+    endfunction
+
+
 
     reg [PRE_WIN-1:0] pre_strong_sr;
 
@@ -93,6 +112,18 @@ module qrs_maf_neuron #(
     reg [7:0] pre_flip_count;
 
     reg [15:0] pre_energy_sum;
+
+    (* ram_style = "distributed" *) reg [7:0] pre_strong_time_fifo [0:PRE_WIN-1];
+
+    reg [7:0] pre_strong_head;
+
+    reg [7:0] pre_strong_tail;
+
+    reg [7:0] pre_sample_idx;
+
+    reg [7:0] pre_oldest_time;
+
+    reg [7:0] pre_newest_time;
 
 
 
@@ -133,6 +164,22 @@ module qrs_maf_neuron #(
     reg [7:0] pre_first_comb;
 
     reg [7:0] pre_last_comb;
+
+    reg pre_strong_pop_comb;
+
+    reg [7:0] pre_strong_head_next_comb;
+
+    reg [7:0] pre_strong_tail_next_comb;
+
+    reg [7:0] pre_strong_count_next_comb;
+
+    reg [7:0] pre_oldest_age_comb;
+
+    reg [7:0] pre_newest_age_comb;
+
+    reg [7:0] pre_oldest_time_next_comb;
+
+    reg [7:0] pre_newest_time_next_comb;
 
     reg event_seen_eval;
 
@@ -176,27 +223,57 @@ module qrs_maf_neuron #(
 
     always @* begin
 
-        pre_seen_comb = 1'b0;
+        pre_seen_comb = (pre_strong_count != 8'd0);
 
-        pre_first_comb = 8'd0;
+        pre_oldest_age_comb = pre_sample_idx - pre_oldest_time;
 
-        pre_last_comb = 8'd0;
+        pre_newest_age_comb = pre_sample_idx - pre_newest_time;
 
-        for (i = 0; i < PRE_WIN; i = i + 1) begin
+        pre_first_comb = pre_seen_comb ? (PRE_WIN_U - pre_oldest_age_comb) : 8'd0;
 
-            if (pre_strong_sr[PRE_WIN-1-i]) begin
+        pre_last_comb = pre_seen_comb ? (PRE_WIN_U - pre_newest_age_comb) : 8'd0;
 
-                if (!pre_seen_comb) begin
+        pre_strong_pop_comb = pre_strong_sr[PRE_WIN-1];
 
-                    pre_seen_comb = 1'b1;
+        pre_strong_head_next_comb = pre_fifo_ptr_next(pre_strong_head);
 
-                    pre_first_comb = i[7:0];
+        pre_strong_tail_next_comb = pre_fifo_ptr_next(pre_strong_tail);
 
-                end
+        pre_strong_count_next_comb = pre_strong_count + {7'd0, strong_event} - {7'd0, pre_strong_pop_comb};
 
-                pre_last_comb = i[7:0];
+        pre_oldest_time_next_comb = pre_oldest_time;
+
+        pre_newest_time_next_comb = pre_newest_time;
+
+        if (pre_strong_count_next_comb == 8'd0) begin
+
+            pre_oldest_time_next_comb = 8'd0;
+
+            pre_newest_time_next_comb = 8'd0;
+
+        end else begin
+
+            if (pre_strong_count == 8'd0)
+
+                pre_oldest_time_next_comb = pre_sample_idx;
+
+            else if (pre_strong_pop_comb) begin
+
+                if (pre_strong_count == 8'd1)
+
+                    pre_oldest_time_next_comb = strong_event ? pre_sample_idx : 8'd0;
+
+                else
+
+                    pre_oldest_time_next_comb = pre_strong_time_fifo[pre_strong_head_next_comb];
 
             end
+
+
+
+            if (strong_event)
+
+                pre_newest_time_next_comb = pre_sample_idx;
 
         end
 
@@ -328,6 +405,16 @@ module qrs_maf_neuron #(
 
             pre_energy_sum <= 16'd0;
 
+            pre_strong_head <= 8'd0;
+
+            pre_strong_tail <= 8'd0;
+
+            pre_sample_idx <= 8'd0;
+
+            pre_oldest_time <= 8'd0;
+
+            pre_newest_time <= 8'd0;
+
             for (i = 0; i < PRE_WIN; i = i + 1)
 
                 pre_energy_sr[i] <= 8'd0;
@@ -406,6 +493,16 @@ module qrs_maf_neuron #(
 
                 pre_energy_sum <= 16'd0;
 
+                pre_strong_head <= 8'd0;
+
+                pre_strong_tail <= 8'd0;
+
+                pre_sample_idx <= 8'd0;
+
+                pre_oldest_time <= 8'd0;
+
+                pre_newest_time <= 8'd0;
+
                 for (i = 0; i < PRE_WIN; i = i + 1)
 
                     pre_energy_sr[i] <= 8'd0;
@@ -452,11 +549,29 @@ module qrs_maf_neuron #(
 
                 pre_flip_sr <= {pre_flip_sr[PRE_WIN-2:0], dscr_sign_flip_spike};
 
-                pre_strong_count <= pre_strong_count + {7'd0, strong_event} - {7'd0, pre_strong_sr[PRE_WIN-1]};
+                pre_strong_count <= pre_strong_count_next_comb;
 
                 pre_flip_count <= pre_flip_count + {7'd0, dscr_sign_flip_spike} - {7'd0, pre_flip_sr[PRE_WIN-1]};
 
                 pre_energy_sum <= pre_energy_sum + {8'd0, energy_sample_code} - {8'd0, pre_energy_sr[PRE_WIN-1]};
+
+                if (pre_strong_pop_comb)
+
+                    pre_strong_head <= pre_strong_head_next_comb;
+
+                if (strong_event) begin
+
+                    pre_strong_time_fifo[pre_strong_tail] <= pre_sample_idx;
+
+                    pre_strong_tail <= pre_strong_tail_next_comb;
+
+                end
+
+                pre_sample_idx <= pre_sample_idx + 8'd1;
+
+                pre_oldest_time <= pre_oldest_time_next_comb;
+
+                pre_newest_time <= pre_newest_time_next_comb;
 
                 for (i = PRE_WIN-1; i > 0; i = i - 1)
 

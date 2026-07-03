@@ -18,6 +18,7 @@ module pnn_rhythm_predictor #(
     output reg [AGE_WIDTH-1:0] rr_interval,
     output reg [ID_WIDTH-1:0] winner_id,
     output reg [ID_WIDTH-1:0] predictor_id,
+    output reg [AGE_WIDTH-1:0] predictor_center,
     output reg winner_valid,
     output reg predictor_valid,
     output reg [AGE_WIDTH-1:0] winner_error,
@@ -55,15 +56,56 @@ module pnn_rhythm_predictor #(
 
     function [AGE_WIDTH-1:0] hyp_center;
         input [ID_WIDTH-1:0] idx;
-        integer center_int;
         begin
-            center_int = BASE_DELAY + (idx * DELAY_STEP);
-            if (center_int < 0)
-                hyp_center = {AGE_WIDTH{1'b0}};
-            else if (center_int > ((1 << AGE_WIDTH) - 1))
-                hyp_center = {AGE_WIDTH{1'b1}};
-            else
-                hyp_center = center_int;
+            case (idx)
+                0:  hyp_center = BASE_DELAY + (0  * DELAY_STEP);
+                1:  hyp_center = BASE_DELAY + (1  * DELAY_STEP);
+                2:  hyp_center = BASE_DELAY + (2  * DELAY_STEP);
+                3:  hyp_center = BASE_DELAY + (3  * DELAY_STEP);
+                4:  hyp_center = BASE_DELAY + (4  * DELAY_STEP);
+                5:  hyp_center = BASE_DELAY + (5  * DELAY_STEP);
+                6:  hyp_center = BASE_DELAY + (6  * DELAY_STEP);
+                7:  hyp_center = BASE_DELAY + (7  * DELAY_STEP);
+                8:  hyp_center = BASE_DELAY + (8  * DELAY_STEP);
+                9:  hyp_center = BASE_DELAY + (9  * DELAY_STEP);
+                10: hyp_center = BASE_DELAY + (10 * DELAY_STEP);
+                11: hyp_center = BASE_DELAY + (11 * DELAY_STEP);
+                12: hyp_center = BASE_DELAY + (12 * DELAY_STEP);
+                13: hyp_center = BASE_DELAY + (13 * DELAY_STEP);
+                14: hyp_center = BASE_DELAY + (14 * DELAY_STEP);
+                15: hyp_center = BASE_DELAY + (15 * DELAY_STEP);
+                16: hyp_center = BASE_DELAY + (16 * DELAY_STEP);
+                17: hyp_center = BASE_DELAY + (17 * DELAY_STEP);
+                18: hyp_center = BASE_DELAY + (18 * DELAY_STEP);
+                19: hyp_center = BASE_DELAY + (19 * DELAY_STEP);
+                20: hyp_center = BASE_DELAY + (20 * DELAY_STEP);
+                21: hyp_center = BASE_DELAY + (21 * DELAY_STEP);
+                22: hyp_center = BASE_DELAY + (22 * DELAY_STEP);
+                23: hyp_center = BASE_DELAY + (23 * DELAY_STEP);
+                24: hyp_center = BASE_DELAY + (24 * DELAY_STEP);
+                25: hyp_center = BASE_DELAY + (25 * DELAY_STEP);
+                26: hyp_center = BASE_DELAY + (26 * DELAY_STEP);
+                27: hyp_center = BASE_DELAY + (27 * DELAY_STEP);
+                28: hyp_center = BASE_DELAY + (28 * DELAY_STEP);
+                29: hyp_center = BASE_DELAY + (29 * DELAY_STEP);
+                30: hyp_center = BASE_DELAY + (30 * DELAY_STEP);
+                31: hyp_center = BASE_DELAY + (31 * DELAY_STEP);
+                32: hyp_center = BASE_DELAY + (32 * DELAY_STEP);
+                33: hyp_center = BASE_DELAY + (33 * DELAY_STEP);
+                34: hyp_center = BASE_DELAY + (34 * DELAY_STEP);
+                35: hyp_center = BASE_DELAY + (35 * DELAY_STEP);
+                36: hyp_center = BASE_DELAY + (36 * DELAY_STEP);
+                37: hyp_center = BASE_DELAY + (37 * DELAY_STEP);
+                38: hyp_center = BASE_DELAY + (38 * DELAY_STEP);
+                39: hyp_center = BASE_DELAY + (39 * DELAY_STEP);
+                40: hyp_center = BASE_DELAY + (40 * DELAY_STEP);
+                41: hyp_center = BASE_DELAY + (41 * DELAY_STEP);
+                42: hyp_center = BASE_DELAY + (42 * DELAY_STEP);
+                43: hyp_center = BASE_DELAY + (43 * DELAY_STEP);
+                44: hyp_center = BASE_DELAY + (44 * DELAY_STEP);
+                45: hyp_center = BASE_DELAY + (45 * DELAY_STEP);
+                default: hyp_center = BASE_DELAY + (45 * DELAY_STEP);
+            endcase
         end
     endfunction
 
@@ -94,6 +136,7 @@ module pnn_rhythm_predictor #(
             rr_interval <= {AGE_WIDTH{1'b0}};
             winner_id <= {ID_WIDTH{1'b0}};
             predictor_id <= {ID_WIDTH{1'b0}};
+            predictor_center <= {AGE_WIDTH{1'b0}};
             winner_valid <= 1'b0;
             predictor_valid <= 1'b0;
             winner_error <= {AGE_WIDTH{1'b1}};
@@ -117,6 +160,7 @@ module pnn_rhythm_predictor #(
                 rr_interval <= {AGE_WIDTH{1'b0}};
                 winner_id <= {ID_WIDTH{1'b0}};
                 predictor_id <= {ID_WIDTH{1'b0}};
+                predictor_center <= {AGE_WIDTH{1'b0}};
                 winner_valid <= 1'b0;
                 predictor_valid <= 1'b0;
                 winner_error <= {AGE_WIDTH{1'b1}};
@@ -156,6 +200,7 @@ module pnn_rhythm_predictor #(
                         winner_error <= scan_best_err_next;
                         winner_valid <= 1'b1;
                         predictor_id <= scan_best_id_next;
+                        predictor_center <= hyp_center(scan_best_id_next);
                         predictor_valid <= 1'b1;
                         evaluating <= 1'b0;
 

@@ -44,6 +44,7 @@ module dscr_spike_counter #(
     reg [MEM_WIDTH-1:0] sign_next;
     reg curr_slope_spike;
     reg curr_slope_sign;
+    reg curr_sign_clear;
 
     localparam [MEM_WIDTH-1:0] SLOPE_LEAK_U = SLOPE_LEAK;
     localparam [MEM_WIDTH-1:0] SLOPE_THRESHOLD_U = SLOPE_THRESHOLD;
@@ -128,22 +129,19 @@ module dscr_spike_counter #(
                     sign_next = leak_mem(sign_mem, SIGN_LEAK_U);
                     curr_slope_spike = 1'b0;
                     curr_slope_sign = 1'b0;
+                    curr_sign_clear = 1'b0;
 
                     if ((filter_update > 0) && (slope_input != {MEM_WIDTH{1'b0}})) begin
                         up_next = sat_mem_add(up_next, slope_input);
                         if (up_next >= SLOPE_THRESHOLD_U) begin
                             curr_slope_spike = 1'b1;
                             curr_slope_sign = 1'b1;
-                            up_next = {MEM_WIDTH{1'b0}};
-                            down_next = {MEM_WIDTH{1'b0}};
                         end
                     end else if ((filter_update < 0) && (slope_input != {MEM_WIDTH{1'b0}})) begin
                         down_next = sat_mem_add(down_next, slope_input);
                         if (down_next >= SLOPE_THRESHOLD_U) begin
                             curr_slope_spike = 1'b1;
                             curr_slope_sign = 1'b0;
-                            up_next = {MEM_WIDTH{1'b0}};
-                            down_next = {MEM_WIDTH{1'b0}};
                         end
                     end
 
@@ -154,7 +152,7 @@ module dscr_spike_counter #(
                             sign_next = sat_mem_add(sign_next, SIGN_WEIGHT_U);
                             if (sign_next >= SIGN_THRESHOLD_U) begin
                                 sign_flip_spike <= 1'b1;
-                                sign_next = {MEM_WIDTH{1'b0}};
+                                curr_sign_clear = 1'b1;
                             end
                         end
 
@@ -162,9 +160,9 @@ module dscr_spike_counter #(
                         prev_slope_sign <= curr_slope_sign;
                     end
 
-                    up_mem <= up_next;
-                    down_mem <= down_next;
-                    sign_mem <= sign_next;
+                    up_mem <= up_next & {MEM_WIDTH{~curr_slope_spike}};
+                    down_mem <= down_next & {MEM_WIDTH{~curr_slope_spike}};
+                    sign_mem <= sign_next & {MEM_WIDTH{~curr_sign_clear}};
                     filt_mem <= filt_next;
                 end
             end
