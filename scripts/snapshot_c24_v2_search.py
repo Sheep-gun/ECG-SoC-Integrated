@@ -199,7 +199,7 @@ def install_score_mask(feature_off: set[str]) -> None:
             rbbb_qrs_like_count,
         )
 
-        # Snapshot V2 removes both direct EERG contribution and the C24
+        # The final snapshot readout removes both direct EERG contribution and the C24
         # EERG-like global gate while keeping upstream rhythm/morphology
         # counters intact for analysis.
         if "EERG" in feature_off and segment_done:

@@ -358,7 +358,7 @@ def status(bit: Path, xsa: Path) -> dict[str, object]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run a JTAG MMIO smoke for the MicroBlaze SNN ECG system.")
+    parser = argparse.ArgumentParser(description="Run a JTAG MMIO smoke for the MicroBlaze long-window ECG 4-class accelerator system.")
     parser.add_argument("--bit", type=Path, default=BIT)
     parser.add_argument("--xsa", type=Path, default=XSA)
     parser.add_argument("--timeout-seconds", type=int, default=120)

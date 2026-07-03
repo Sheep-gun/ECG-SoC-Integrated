@@ -141,7 +141,7 @@ def build_jobs(splits: list[str], dataset: Path) -> list[dict[str, str]]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build fresh Snapshot V2 60s dumps from 30min chunks.")
+    parser = argparse.ArgumentParser(description="Build fresh 60s snapshot readout dumps from 30min chunks.")
     parser.add_argument("--dataset-root", default=str(DATASET))
     parser.add_argument("--out-dir", default=str(RESULTS))
     parser.add_argument("--splits", nargs="+", default=["train", "val"], choices=["train", "val", "test"])

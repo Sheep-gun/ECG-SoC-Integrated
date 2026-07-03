@@ -189,7 +189,7 @@ validate_bd_design
 save_bd_design
 write_bd_tcl -force "$out_dir/snn_ecg_mb_smoke_bd.tcl"
 set addr_fh [open "$out_dir/reports/system_bd_address.rpt" w]
-puts $addr_fh "SNN ECG MicroBlaze smoke address map"
+puts $addr_fh "Long-window ECG 4-Class Accelerator MicroBlaze smoke address map"
 puts $addr_fh "snn_ecg_axi_accelerator_0/s_axi/reg0 0x{SNN_BASE:08x} 4K"
 puts $addr_fh "sample_feeder_0/s_axi/reg0          0x{FEEDER_BASE:08x} 4K"
 puts $addr_fh "axi_uartlite_0/S_AXI/Reg            0x{UART_BASE:08x} 4K"
@@ -360,7 +360,7 @@ def write_summary(no_bitstream: bool) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build the MicroBlaze SNN ECG packaged-IP smoke system.")
+    parser = argparse.ArgumentParser(description="Build the MicroBlaze long-window ECG 4-class accelerator packaged-IP smoke system.")
     parser.add_argument("--skip-package", action="store_true", help="Do not regenerate local packaged IPs first.")
     parser.add_argument("--no-bitstream", action="store_true", help="Stop at routed implementation reports without writing a bitstream.")
     parser.add_argument("--keep-work", action="store_true", help="Keep the previous external Vivado work directory.")

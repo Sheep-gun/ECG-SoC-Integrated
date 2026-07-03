@@ -1,4 +1,4 @@
-# MicroBlaze SNN ECG Smoke
+# MicroBlaze 장시간 ECG 4-Class Accelerator IP Core Smoke
 
 This smoke target validates the packaged `snn_ecg_axi_accelerator` as a
 MicroBlaze-controlled IP with a small MMIO-to-AXIS sample feeder.

@@ -170,7 +170,7 @@ def write_summary() -> None:
     }
     (SYNTH / "snn_ecg_v2_vivado_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     lines = [
-        "# SNN ECG V2 Vivado Resource Report",
+        "# Long-Window ECG 4-Class Accelerator IP Core Vivado Resource Report",
         "",
         f"Top: `{summary['top']}`",
         f"Part: `{summary['part']}`",

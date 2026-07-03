@@ -1073,7 +1073,7 @@
       </spirit:file>
     </spirit:fileSet>
   </spirit:fileSets>
-  <spirit:description>SNN ECG 4-class classifier accelerator with AXI4-Lite control and AXI4-Stream ADC sample input.</spirit:description>
+  <spirit:description>Long-window ECG 4-class accelerator IP core with AXI4-Lite control and AXI4-Stream ADC sample input.</spirit:description>
   <spirit:parameters>
     <spirit:parameter>
       <spirit:name>ADC_WIDTH</spirit:name>
@@ -1151,7 +1151,7 @@
       <xilinx:taxonomies>
         <xilinx:taxonomy>/UserIP</xilinx:taxonomy>
       </xilinx:taxonomies>
-      <xilinx:displayName>SNN ECG AXI Accelerator</xilinx:displayName>
+      <xilinx:displayName>Long-Window ECG 4-Class AXI Accelerator</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
       <xilinx:vendorDisplayName>User</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://user.org</xilinx:vendorURL>

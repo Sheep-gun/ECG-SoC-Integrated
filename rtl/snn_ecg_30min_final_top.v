@@ -4,7 +4,7 @@
 //
 // The timer neuron integrates accepted ADC sample ticks. When its membrane
 // reaches SNAPSHOT_SAMPLES, it emits a snapshot boundary spike, drives
-// Snapshot V2 segment_done, resets itself, and starts the next 60s snapshot.
+// the 60s snapshot readout segment_done, resets itself, and starts the next 60s snapshot.
 // Each snapshot spike then stimulates the final membrane layer with class
 // spikes and feature-evidence neuron activity.
 module snn_ecg_30min_final_top #(

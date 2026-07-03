@@ -1,20 +1,22 @@
-# SNN ECG V2
+# AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계
 
-이 저장소는 AFE+ADC가 완료된 ECG stream을 저전력 RTL 구조로 처리하는 **SNN-inspired 4-class ECG classifier**이다.
+이 저장소는 AFE+ADC가 완료된 ECG stream을 저전력 RTL 구조로 처리하는 **SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core**이다.
 
-현재 확정 모델명은 **SNN ECG V2**이다.
+정식 프로젝트명은 **AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계**이다. 본 문서에서는 반복을 줄이기 위해 **장시간 ECG 4-Class Accelerator IP Core**라고도 부른다.
 
-대회 제출/최종 설명 기준의 상세 문서는 반드시 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)를 먼저 읽으면 된다. 해당 문서에는 연구 목적, Holter-style 설계 동기, AFE+ADC 조건, Snapshot feature block의 뉴로모픽 동작 설명, Final Membrane Layer V2, XSim 성능, Vivado 자원량이 모두 포함되어 있다.
+대회 제출/최종 설명 기준의 상세 문서는 반드시 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)를 먼저 읽으면 된다. 해당 문서에는 연구 목적, Holter-style 설계 동기, AFE+ADC 조건, Snapshot feature block의 뉴로모픽 동작 설명, 30분 Final Membrane Readout, XSim 성능, Vivado 자원량이 모두 포함되어 있다.
 
 추가 설계 문서:
 
-- [SNN ECG Classification Accelerator IP Core](<docs/Accelerator IP Core.md>): RTL을 Vivado-packaged custom accelerator IP 관점에서 정리하고, 병목 원인/해결 구조, AXI wrapper, sample feeder, MicroBlaze smoke 검증 범위를 설명한다.
+- [AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계](<docs/Accelerator IP Core.md>): RTL을 Vivado-packaged custom accelerator IP 관점에서 정리하고, 병목 원인/해결 구조, AXI wrapper, sample feeder, MicroBlaze smoke 검증 범위를 설명한다.
 - [AFE+ADC XMODEL 기반 입력 생성 흐름](docs/AFE_ADC_XMODEL_FLOW_KR.md): digitized ECG record에서 virtual DAC/PWL-equivalent `vin_v`를 만들고, AFE+ADC XMODEL 및 signed 12-bit `.mem` RTL 검증으로 연결하는 흐름을 정리한다.
 
 ```text
-SNN ECG V2
-= Snapshot Model V2
-+ Final Membrane Layer V2
+AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계
+= AFE+ADC XMODEL 기반 입력 생성 흐름
++ 60초 Snapshot Readout
++ 30분 Final Membrane Readout
++ AXI/Vivado packaged Accelerator IP Core
 ```
 
 분류 class는 다음 네 가지이다.
@@ -28,13 +30,13 @@ SNN ECG V2
 
 ## 전체 구조
 
-SNN ECG V2는 30분 AFE+ADC ECG stream을 직접 입력받고, 내부 timer neuron이 60초마다 snapshot boundary spike를 만든다. 각 60초 구간은 Snapshot Model V2로 분류되고, 30개의 snapshot 결과는 Final Membrane Layer V2에 누적된다.
+장시간 ECG 4-Class Accelerator IP Core는 30분 AFE+ADC ECG stream을 직접 입력받고, 내부 timer neuron이 60초마다 snapshot boundary spike를 만든다. 각 60초 구간은 60초 Snapshot Readout으로 분류되고, 30개의 snapshot 결과는 30분 Final Membrane Readout에 누적된다.
 
 ```text
 30분 signed 12-bit AFE+ADC ECG stream
 -> timer neuron: 60000 sample마다 60초 boundary spike 발생
--> Snapshot Model V2: 60초 구간별 class/evidence spike 생성
--> Final Membrane Layer V2: class neuron membrane에 흥분성/억제성 자극 누적
+-> 60초 Snapshot Readout: 60초 구간별 class/evidence spike 생성
+-> 30분 Final Membrane Readout: class neuron membrane에 흥분성/억제성 자극 누적
 -> 30분 chunk_done
 -> WTA
 -> NSR / CHF / ARR / AFF
@@ -42,9 +44,9 @@ SNN ECG V2는 30분 AFE+ADC ECG stream을 직접 입력받고, 내부 timer neur
 
 이 구조는 단순 software classifier가 아니라, RTL에서 counter, comparator, signed accumulator, threshold, WTA로 구현되는 **event-driven membrane readout**이다.
 
-## Snapshot Model V2
+## 60초 Snapshot Readout
 
-Snapshot Model V2는 60초 ECG window 하나를 분류하는 고정 snapshot classifier이다.
+60초 Snapshot Readout은 60초 ECG window 하나를 분류하는 고정 snapshot classifier이다.
 
 입력:
 
@@ -73,9 +75,9 @@ AFE+ADC sample
 -> 4-class WTA
 ```
 
-Snapshot V2는 기존 C24 folded spike readout을 유지하되, EERG direct class-membrane 기여를 제거한 구조이다. EERG 제거는 validation에서 불필요한 경로를 줄이면서 test 성능을 유지했기 때문에 V2에 반영했다.
+60초 Snapshot Readout은 기존 C24 folded spike readout을 유지하되, EERG direct class-membrane 기여를 제거한 구조이다. EERG 제거는 validation에서 불필요한 경로를 줄이면서 test 성능을 유지했기 때문에 최종 구조에 반영했다.
 
-Snapshot Model V2의 주요 feature neuron은 다음과 같다. 상세 알고리즘은 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)의 “Snapshot Feature Block 상세 설명” 절에 정리되어 있다.
+60초 Snapshot Readout의 주요 feature neuron은 다음과 같다. 상세 알고리즘은 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)의 “Snapshot Feature Block 상세 설명” 절에 정리되어 있다.
 
 | Feature block | 역할 |
 |---|---|
@@ -87,11 +89,11 @@ Snapshot Model V2의 주요 feature neuron은 다음과 같다. 상세 알고리
 | ECP Ectopic Pair Neuron | early beat + compensatory pause pattern을 감지한다. |
 | QRS MAF Neuron | QRS width/complexity/energy abnormal evidence를 만든다. |
 | RBBB QRS Delay Bank | RBBB-like conduction delay proxy evidence를 만든다. |
-| EERG Gate | 검토된 ARR-like rescue gate이며, V2에서는 direct class-membrane 자극 경로를 제거했다. |
+| EERG Gate | 검토된 ARR-like rescue gate이며, 최종 구조에서는 direct class-membrane 자극 경로를 제거했다. |
 
-## Final Membrane Layer V2
+## 30분 Final Membrane Readout
 
-Final Membrane Layer V2는 30분 동안 들어오는 30개의 snapshot 발화 결과를 모아 최종 class를 판정한다.
+30분 Final Membrane Readout은 30분 동안 들어오는 30개의 snapshot 발화 결과를 모아 최종 class를 판정한다.
 
 가장 단순한 기준은 snapshot `pred_class`의 class별 발화 횟수이다.
 
@@ -104,7 +106,7 @@ pred_count_AFF
 
 이것은 majority vote membrane에 해당한다.
 
-하지만 snapshot WTA는 60초마다 하나의 class만 출력하므로, WTA에서 패배한 subthreshold evidence가 사라질 수 있다. 그래서 Final Membrane V2는 보조 evidence neuron membrane도 함께 누적한다.
+하지만 snapshot WTA는 60초마다 하나의 class만 출력하므로, WTA에서 패배한 subthreshold evidence가 사라질 수 있다. 그래서 30분 Final Membrane Readout은 보조 evidence neuron membrane도 함께 누적한다.
 
 예:
 
@@ -127,7 +129,7 @@ final_mem_arr = final_mem_arr + 4;   // ARR neuron 흥분성 자극
 final_mem_aff = final_mem_aff - 16;  // AFF neuron 억제성 자극
 ```
 
-최종 확정 후보는 `margin_evidence_0038974`이다.
+최종 readout rule set은 Python/RTL golden 동기화를 위해 내부 ID `margin_evidence_0038974`로 보존한다.
 
 ```text
 if 현재 우세 class가 AFF이고
@@ -162,7 +164,7 @@ scripts/run_final_membrane_v2_xsim.py
 scripts/build_snn_ecg_v2_bitstream.py
 ```
 
-`snapshot_c24_v2_search.py`, `search_final_membrane_v2_snn.py`, `search_final_membrane_v2_arr_focus.py`는 이름에 `search`가 남아 있지만, 현재 repo에서는 최종 V2 Python 등가모델과 XSim expected 결과 생성에 필요한 고정 모듈로 보존한다.
+`snapshot_c24_v2_search.py`, `search_final_membrane_v2_snn.py`, `search_final_membrane_v2_arr_focus.py`는 이름에 `search`가 남아 있지만, 현재 repo에서는 최종 Python 등가모델과 XSim expected 결과 생성에 필요한 고정 모듈로 보존한다.
 
 실행 예:
 
@@ -172,7 +174,7 @@ python scripts\run_final_membrane_v2_xsim.py --split all
 python scripts\build_snn_ecg_v2_bitstream.py
 ```
 
-## Snapshot Model V2 XSim 성능
+## 60초 Snapshot Readout XSim 성능
 
 60초 window-level 성능이다.
 
@@ -182,7 +184,7 @@ python scripts\build_snn_ecg_v2_bitstream.py
 | validation | 231 / 256 | 90.23% | 90.29% | 90.23% |
 | test | 205 / 256 | 80.08% | 80.06% | 80.08% |
 
-Snapshot V2 test confusion matrix:
+60초 Snapshot Readout test confusion matrix:
 
 | True \ Pred | NSR | CHF | ARR | AFF |
 |---|---:|---:|---:|---:|
@@ -191,7 +193,7 @@ Snapshot V2 test confusion matrix:
 | ARR | 15 | 3 | 42 | 4 |
 | AFF | 0 | 4 | 3 | 57 |
 
-Snapshot V2 test class별 성능:
+60초 Snapshot Readout test class별 성능:
 
 | Class | Precision | Recall | F1 |
 |---|---:|---:|---:|
@@ -200,7 +202,7 @@ Snapshot V2 test class별 성능:
 | ARR | 89.36% | 65.62% | 75.68% |
 | AFF | 91.94% | 89.06% | 90.48% |
 
-## SNN ECG V2 30분 XSim 성능
+## AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계 30분 XSim 성능
 
 30분 chunk-level 성능이다. Python 등가모델과 RTL/XSim 결과가 `pred_class`와 `final_mem[4]` 기준으로 일치한다.
 
@@ -210,7 +212,7 @@ Snapshot V2 test class별 성능:
 | validation | 31 / 32 = 96.88% | 31 / 32 = 96.88% | 0 | 0 |
 | test | 32 / 36 = 88.89% | 32 / 36 = 88.89% | 0 | 0 |
 
-SNN ECG V2 test confusion matrix:
+장시간 ECG 4-Class Accelerator IP Core test confusion matrix:
 
 | True \ Pred | NSR | CHF | ARR | AFF |
 |---|---:|---:|---:|---:|
@@ -219,7 +221,7 @@ SNN ECG V2 test confusion matrix:
 | ARR | 2 | 1 | 6 | 0 |
 | AFF | 0 | 0 | 1 | 8 |
 
-SNN ECG V2 test class별 성능:
+장시간 ECG 4-Class Accelerator IP Core test class별 성능:
 
 | Class | Precision | Recall | F1 |
 |---|---:|---:|---:|
@@ -294,7 +296,7 @@ DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/count
 ## 주의사항
 
 - 본 모델은 `SNN-inspired` 구조이다. 완전한 생물학적 SNN이나 STDP 학습 구조라고 주장하지 않는다.
-- Final Membrane Layer V2는 1 kSPS sample마다 직접 class spike를 내는 층이 아니라, 60초 snapshot event를 시간축으로 누적하는 final readout이다.
+- 30분 Final Membrane Readout은 1 kSPS sample마다 직접 class spike를 내는 층이 아니라, 60초 snapshot event를 시간축으로 누적하는 final readout이다.
 - 30분 데이터셋은 class별 30분 chunk 수를 균형화한 `chunk-level balanced` 데이터셋이다. 원천 record 수가 class별로 같지 않기 때문에 모든 chunk가 서로 다른 record에서 나온 strict record-wise holdout은 아니다.
 - XSim 정확도는 30분 `.mem` dataset testbench 기준이다.
 - Vivado power는 실제 보드 전류 측정값이 아니라 post-implementation 추정값이다.

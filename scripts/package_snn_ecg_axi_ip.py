@@ -111,8 +111,8 @@ ipx::package_project -root_dir $ip_root -vendor $ip_vendor -library $ip_library 
     -taxonomy /UserIP -import_files -set_current true -force
 set core [ipx::current_core]
 set_property name $ip_name $core
-set_property display_name {{SNN ECG AXI Accelerator}} $core
-set_property description {{SNN ECG 4-class classifier accelerator with AXI4-Lite control and AXI4-Stream ADC sample input.}} $core
+set_property display_name {{Long-Window ECG 4-Class AXI Accelerator}} $core
+set_property description {{Long-window ECG 4-class accelerator IP core with AXI4-Lite control and AXI4-Stream ADC sample input.}} $core
 set_property vendor_display_name {{User}} $core
 set_property company_url {{https://user.org}} $core
 set_property version $ip_version $core

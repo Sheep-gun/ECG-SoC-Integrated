@@ -1,10 +1,10 @@
-# SNN ECG RTL Timing Bottlenecks
+# 장시간 ECG 4-Class Accelerator IP Core RTL Timing Bottlenecks
 
 Date: 2026-07-03
 
 ## Scope
 
-This note records the profiling-driven RTL timing work for the SNN ECG 4-class classifier path and the follow-up AXI wrapper OOC timing checks.
+This note records the profiling-driven RTL timing work for the long-window ECG 4-class accelerator path and the follow-up AXI wrapper OOC timing checks.
 
 ## Original Bottleneck
 

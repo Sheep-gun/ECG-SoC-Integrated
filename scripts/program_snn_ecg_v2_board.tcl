@@ -11,7 +11,7 @@ if {![file exists $bit_file]} {
 }
 
 set fh [open $report_file "w"]
-puts $fh "SNN ECG V2 FPGA board programming report"
+puts $fh "Long-window ECG 4-Class Accelerator IP Core FPGA board programming report"
 puts $fh "Bitstream: $bit_file"
 puts $fh "Timestamp: [clock format [clock seconds] -format {%Y-%m-%d %H:%M:%S}]"
 

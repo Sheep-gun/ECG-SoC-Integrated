@@ -78,7 +78,7 @@ def write_expected(split: str, dataset: Path, out_dir: Path, workers: int, chunk
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build Snapshot V2 Python expected CSVs.")
+    parser = argparse.ArgumentParser(description="Build 60s snapshot readout Python expected CSVs.")
     parser.add_argument("--dataset-root", default=str(DATASET))
     parser.add_argument("--out-dir", default=str(OUT))
     parser.add_argument("--splits", nargs="+", default=["train", "val", "test"], choices=["train", "val", "test"])

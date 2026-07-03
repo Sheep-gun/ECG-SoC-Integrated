@@ -532,7 +532,7 @@ def write_summary(
 ) -> None:
     summary: dict[str, Any] = {
         "candidate_id": "margin_evidence_0038974",
-        "structure": "30-minute stream -> timer neuron 60s snapshot spikes -> Snapshot V2 -> final membrane row612 WTA",
+        "structure": "30-minute stream -> timer neuron 60s snapshot spikes -> 60s snapshot readout -> final membrane row612 WTA",
         "max_cases_per_split": max_cases,
         "splits": {},
         "python_vs_xsim": compare,
@@ -556,11 +556,11 @@ def write_summary(
     (RESULTS / f"{summary_name}.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     lines = [
-        "# SNN ECG V2 Final Membrane XSim Report",
+        "# Long-Window ECG 4-Class Accelerator IP Core Final Membrane XSim Report",
         "",
         "Candidate: `margin_evidence_0038974`.",
         "",
-        "Structure: 30-minute ADC stream -> timer neuron emits one 60-second snapshot spike every 60000 accepted samples -> fixed Snapshot V2 -> final membrane signed current accumulation -> WTA.",
+        "Structure: 30-minute ADC stream -> timer neuron emits one 60-second snapshot spike every 60000 accepted samples -> fixed 60s snapshot readout -> final membrane signed current accumulation -> WTA.",
         "",
         "| Split | Run tag | Python | XSim | Pred mismatch | Mem mismatch |",
         "|---|---|---:|---:|---:|---:|",

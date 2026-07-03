@@ -1,8 +1,8 @@
-# SNN ECG Classification Accelerator IP Core
+# AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계
 
 ## 1. 프로젝트 요약
 
-이 문서는 SNN ECG V2의 디지털 RTL을 **SNN ECG Classification Accelerator IP Core** 관점에서 다시 정리한다. 핵심은 “ECG stream을 받으면 정해진 feature/event datapath가 60초 snapshot evidence를 만들고, 30분 동안 누적된 membrane으로 NSR / CHF / ARR / AFF 중 하나를 출력한다”는 점이다.
+이 문서는 **AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계**의 디지털 RTL을 Accelerator IP Core 관점에서 다시 정리한다. 핵심은 “ECG stream을 받으면 정해진 feature/event datapath가 60초 snapshot evidence를 만들고, 30분 동안 누적된 membrane으로 NSR / CHF / ARR / AFF 중 하나를 출력한다”는 점이다.
 
 > 본 IP Core는 AFE+ADC 이후의 ECG sample stream을 직접 받아 60초 단위 snapshot evidence를 생성하고, 이를 30분 단위 final membrane에 누적하여 NSR, CHF, ARR, AFF 중 하나를 출력하는 streaming ECG classification accelerator이다.
 
@@ -26,7 +26,7 @@
 
 | 검증 항목 | 결과 |
 |---|---:|
-| Snapshot Model V2 60초 test accuracy | 205 / 256 = 80.08% |
+| 60초 Snapshot Readout test accuracy | 205 / 256 = 80.08% |
 | 30분 chunk train XSim accuracy | 62 / 68 = 91.18% |
 | 30분 chunk validation XSim accuracy | 31 / 32 = 96.88% |
 | 30분 chunk test XSim accuracy | 32 / 36 = 88.89% |
@@ -89,7 +89,7 @@ ECG class는 단일 sample 하나로 결정되지 않는다. NSR / CHF / ARR / A
 
 CNN/RNN/MLP류를 그대로 RTL에 올리면 multiplier, DSP, BRAM, weight memory, activation buffer가 필요해진다. 작은 FPGA나 low-power edge 환경에서는 DSP/BRAM 사용량과 timing closure가 병목이 된다.
 
-SNN ECG V2는 multiply-heavy classifier 대신 다음 구조를 사용한다.
+장시간 ECG 4-Class Accelerator IP Core는 multiply-heavy classifier 대신 다음 구조를 사용한다.
 
 - fixed threshold
 - counter
@@ -121,7 +121,7 @@ repo의 snapshot core는 다음 feature block으로 sample stream을 event evide
 
 60초 snapshot만 보면 borderline case에서 class가 흔들릴 수 있다. 특히 snapshot WTA는 한 class만 출력하므로, 2등 class나 subthreshold evidence가 사라질 수 있다.
 
-그래서 SNN ECG V2는 두 단계 readout을 사용한다.
+그래서 장시간 ECG 4-Class Accelerator IP Core는 두 단계 readout을 사용한다.
 
 1. `class_score_neurons.v`가 60초 snapshot의 class membrane과 WTA를 만든다.
 2. `final_membrane_layer.v`가 30개의 snapshot class/evidence를 final membrane에 누적한 뒤 30분 WTA를 수행한다.
@@ -290,7 +290,7 @@ repo에는 Vivado IP Packager 산출물이 존재한다.
 
 | IP | 산출물 | VLNV |
 |---|---|---|
-| SNN ECG accelerator | `ip_repo/snn_ecg_axi_accelerator/component.xml` | `user.org:user:snn_ecg_axi_accelerator:1.0` |
+| Accelerator IP Core | `ip_repo/snn_ecg_axi_accelerator/component.xml` | `user.org:user:snn_ecg_axi_accelerator:1.0` |
 | MMIO-to-AXIS feeder | `ip_repo/axi_lite_axis_sample_feeder/component.xml` | `user.org:user:axi_lite_axis_sample_feeder:1.0` |
 
 packaging script는 다음을 수행한다.

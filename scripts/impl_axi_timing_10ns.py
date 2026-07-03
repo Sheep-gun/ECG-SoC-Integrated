@@ -348,7 +348,7 @@ def write_report(summary: dict[str, Any]) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run OOC place/route timing for the AXI SNN ECG wrapper at 10 ns.")
+    parser = argparse.ArgumentParser(description="Run OOC place/route timing for the AXI long-window ECG 4-class accelerator wrapper at 10 ns.")
     parser.add_argument(
         "--profile-en",
         choices=["0", "1", "all"],

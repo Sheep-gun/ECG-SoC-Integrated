@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-// SNN-style 30-minute final membrane layer for Snapshot V2.
+// SNN-style 30-minute final membrane readout for the 60s snapshot readout.
 //
 // Structure:
 //   60s snapshot pred spike -> pred_count_* membranes
