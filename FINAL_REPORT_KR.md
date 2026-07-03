@@ -38,6 +38,11 @@ SNN ECG V2
 | Vivado LUT / FF / BRAM / DSP | 21002 / 2803 / 0 / 0 |
 | Vivado estimated total on-chip power | 0.101 W |
 
+관련 심화 문서:
+
+- [SNN ECG Classification Accelerator IP Core](<docs/Accelerator IP Core.md>): SNN ECG V2 RTL을 accelerator IP core 관점에서 재정리하고, `class_score_neurons` 병목 해결, AXI wrapper/IP packaging, MicroBlaze smoke 검증 범위를 분리해 설명한다.
+- [AFE+ADC XMODEL 기반 입력 생성 흐름](docs/AFE_ADC_XMODEL_FLOW_KR.md): 공개 ECG dataset이 이미 digitized record라는 한계, virtual DAC/PWL-equivalent reconstruction, AFE+ADC XMODEL 이후 signed 12-bit `.mem` RTL 입력 흐름을 정리한다.
+
 ## 1. 연구 목적과 Holter-style 설계 동기
 
 일반적인 12-lead ECG는 짧은 시간의 심전도만 기록한다. 그러나 부정맥은 간헐적으로 나타나는 경우가 많고, 짧은 ECG만으로는 rhythm abnormality를 포착하지 못할 수 있다. Holter monitor와 ambulatory ECG monitoring은 이러한 문제를 해결하기 위해 일상 환경에서 장시간 ECG를 연속 기록하고, 그 안에서 transient 또는 infrequent arrhythmia pattern을 찾는 방식이다.
