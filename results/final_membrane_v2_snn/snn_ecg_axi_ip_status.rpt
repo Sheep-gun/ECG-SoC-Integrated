@@ -1,0 +1,27 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Fri Jul  3 19:13:07 2026
+| Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
+| Command      : report_ip_status
+------------------------------------------------------------------------------------
+
+IP Status Summary
+
+1. Project IP Status
+--------------------
+Your project uses 1 IP. Some of these IP may have undergone changes in this release of the software. Please review the recommended actions.
+
+More information on the Xilinx versioning policy is available at www.xilinx.com.
+
+Project IP Instances
++---------------------------+------------+---------------------+-----------+--------------------+---------+--------------+------------+----------------------+
+| Instance Name             | Status     | Recommendation      | Change    | IP Name            | IP      | New Version  | New        | Original Part        |
+|                           |            |                     | Log       |                    | Version |              | License    |                      |
++---------------------------+------------+---------------------+-----------+--------------------+---------+--------------+------------+----------------------+
+| snn_ecg_axi_accelerator_0 | Up-to-date | No changes required | Change    | SNN ECG AXI        | 1.0     | 1.0 (Rev. 1) | Included   | xc7a100tcsg324-1     |
+|                           |            |                     | Log not   | Accelerator        | (Rev.   |              |            |                      |
+|                           |            |                     | available |                    | 1)      |              |            |                      |
++---------------------------+------------+---------------------+-----------+--------------------+---------+--------------+------------+----------------------+
+
+

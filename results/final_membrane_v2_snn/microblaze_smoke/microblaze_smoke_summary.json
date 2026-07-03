@@ -1,0 +1,51 @@
+{
+  "top": "snn_ecg_mb_smoke_wrapper",
+  "part": "xc7a100tcsg324-1",
+  "smoke_parameters": {
+    "snapshot_samples": 8,
+    "snapshots_per_chunk": 2,
+    "total_samples": 16,
+    "tlast_check_en": 1,
+    "profile_en": 1
+  },
+  "addresses": {
+    "snn_ecg_axi_accelerator": "0x44a00000",
+    "sample_feeder": "0x44a10000",
+    "axi_uartlite": "0x40600000",
+    "axi_intc": "0x41200000"
+  },
+  "bitstream": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\snn_ecg_mb_smoke.bit",
+  "bitstream_exists": true,
+  "xsa": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\snn_ecg_mb_smoke.xsa",
+  "xsa_exists": true,
+  "timing_constraints_met": true,
+  "timing": {
+    "setup_worst_slack_ns": 0.185,
+    "setup_total_violation_ns": 0.0,
+    "setup_failing_endpoints": 0,
+    "hold_worst_slack_ns": 0.037,
+    "hold_total_violation_ns": 0.0,
+    "hold_failing_endpoints": 0
+  },
+  "check_timing_clean_markers": true,
+  "cdc_clean_markers": true,
+  "utilization": {
+    "slice_lut": "12650",
+    "slice_reg": "8747",
+    "ff": "8746",
+    "bram_tile": "16",
+    "dsp": "3"
+  },
+  "reports": {
+    "timing": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_timing_summary.rpt",
+    "cdc": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_cdc.rpt",
+    "clock_interaction": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_clock_interaction.rpt",
+    "drc": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_drc.rpt",
+    "io": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_io.rpt",
+    "route_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_route_status.rpt",
+    "utilization": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_utilization.rpt",
+    "utilization_hier": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_utilization_hier.rpt",
+    "bd_address": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_bd_address.rpt",
+    "ip_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_ip_status.rpt"
+  }
+}

@@ -1,0 +1,2 @@
+split,run_tag,case_id,expected_class,python_pred_class,xsim_pred_class,pred_mismatch,python_final_mem_NSR,python_final_mem_CHF,python_final_mem_ARR,python_final_mem_AFF,xsim_final_mem_NSR,xsim_final_mem_CHF,xsim_final_mem_ARR,xsim_final_mem_AFF,mem_mismatch
+test,test_first1,0,0,0,0,0,31,0,1,0,31,0,1,0,0

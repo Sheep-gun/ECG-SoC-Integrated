@@ -1,0 +1,11 @@
+split,run_tag,case_id,expected_class,python_pred_class,xsim_pred_class,pred_mismatch,python_final_mem_NSR,python_final_mem_CHF,python_final_mem_ARR,python_final_mem_AFF,xsim_final_mem_NSR,xsim_final_mem_CHF,xsim_final_mem_ARR,xsim_final_mem_AFF,mem_mismatch
+test,test_first10,0,0,0,0,0,31,0,1,0,31,0,1,0,0
+test,test_first10,1,0,0,0,0,29,0,1,2,29,0,1,2,0
+test,test_first10,2,0,0,0,0,32,0,0,0,32,0,0,0,0
+test,test_first10,3,0,0,0,0,32,0,0,0,32,0,0,0,0
+test,test_first10,4,0,0,0,0,30,0,2,0,30,0,2,0,0
+test,test_first10,5,0,0,0,0,31,0,1,0,31,1,0,0,1
+test,test_first10,6,0,0,0,0,20,-14,6,0,20,-14,6,0,0
+test,test_first10,7,0,0,0,0,32,0,0,0,32,0,0,0,0
+test,test_first10,8,0,0,0,0,31,0,1,0,31,0,1,0,0
+test,test_first10,9,1,1,1,0,2,10,8,0,2,10,8,0,0

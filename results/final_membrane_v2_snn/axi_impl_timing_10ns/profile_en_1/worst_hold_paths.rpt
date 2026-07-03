@@ -1,0 +1,1274 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Fri Jul  3 17:01:57 2026
+| Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type min -max_paths 30 -nworst 5 -path_type full_clock_expanded -input_pins -file {C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/axi_impl_timing_10ns/profile_en_1/worst_hold_paths.rpt}
+| Design       : snn_ecg_axi_lite_stream_top
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/A3
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/A3
+    SLICE_X34Y71         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/DP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/A3
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/A3
+    SLICE_X34Y71         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_6_6/SP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/A3
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/A3
+    SLICE_X34Y71         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/DP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/A3
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.098ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP/WADR3
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.360ns  (logic 0.141ns (39.205%)  route 0.219ns (60.795%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[3]/Q
+                         net (fo=38, routed)          0.219     0.770    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/A3
+    SLICE_X34Y71         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP/WADR3
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/WCLK
+    SLICE_X34Y71         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y71         RAMD64E (Hold_ramd64e_CLK_WADR3)
+                                                      0.240     0.672    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_0_63_7_7/SP
+  -------------------------------------------------------------------
+                         required time                         -0.672    
+                         arrival time                           0.770    
+  -------------------------------------------------------------------
+                         slack                                  0.098    
+
+Slack (MET) :             0.100ns  (arrival time - required time)
+  Source:                 u_reset_sync/sync_reg_reg[0]/C
+                            (rising edge-triggered cell FDCE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_reset_sync/sync_reg_reg[1]/D
+                            (rising edge-triggered cell FDCE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.197ns  (logic 0.141ns (71.611%)  route 0.056ns (28.389%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_reset_sync/clk
+    SLICE_X73Y76         FDCE                                         r  u_reset_sync/sync_reg_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X73Y76         FDCE (Prop_fdce_C_Q)         0.141     0.551 r  u_reset_sync/sync_reg_reg[0]/Q
+                         net (fo=1, routed)           0.056     0.607    u_reset_sync/sync_reg[0]
+    SLICE_X73Y76         FDCE                                         r  u_reset_sync/sync_reg_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_reset_sync/clk
+    SLICE_X73Y76         FDCE                                         r  u_reset_sync/sync_reg_reg[1]/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X73Y76         FDCE (Hold_fdce_C_D)         0.075     0.507    u_reset_sync/sync_reg_reg[1]
+  -------------------------------------------------------------------
+                         required time                         -0.507    
+                         arrival time                           0.607    
+  -------------------------------------------------------------------
+                         slack                                  0.100    
+
+Slack (MET) :             0.100ns  (arrival time - required time)
+  Source:                 u_reset_sync/sync_reg_reg[0]/C
+                            (rising edge-triggered cell FDCE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_reset_sync/sync_reg_reg[1]/D
+                            (rising edge-triggered cell FDCE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.197ns  (logic 0.141ns (71.611%)  route 0.056ns (28.389%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_reset_sync/clk
+    SLICE_X73Y76         FDCE                                         r  u_reset_sync/sync_reg_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X73Y76         FDCE (Prop_fdce_C_Q)         0.141     0.551 f  u_reset_sync/sync_reg_reg[0]/Q
+                         net (fo=1, routed)           0.056     0.607    u_reset_sync/sync_reg[0]
+    SLICE_X73Y76         FDCE                                         f  u_reset_sync/sync_reg_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_reset_sync/clk
+    SLICE_X73Y76         FDCE                                         r  u_reset_sync/sync_reg_reg[1]/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X73Y76         FDCE (Hold_fdce_C_D)         0.075     0.507    u_reset_sync/sync_reg_reg[1]
+  -------------------------------------------------------------------
+                         required time                         -0.507    
+                         arrival time                           0.607    
+  -------------------------------------------------------------------
+                         slack                                  0.100    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/A1
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/A1
+    SLICE_X30Y69         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/DP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/A1
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/A1
+    SLICE_X30Y69         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_6_6/SP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/A1
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/A1
+    SLICE_X30Y69         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/DP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/A1
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.102ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP/WADR1
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.433ns  (logic 0.141ns (32.581%)  route 0.292ns (67.419%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X31Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[1]/Q
+                         net (fo=35, routed)          0.292     0.843    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/A1
+    SLICE_X30Y69         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP/WADR1
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/WCLK
+    SLICE_X30Y69         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y69         RAMD64E (Hold_ramd64e_CLK_WADR1)
+                                                      0.309     0.741    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_7_7/SP
+  -------------------------------------------------------------------
+                         required time                         -0.741    
+                         arrival time                           0.843    
+  -------------------------------------------------------------------
+                         slack                                  0.102    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMA
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMB
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMC
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.444ns  (logic 0.141ns (31.723%)  route 0.303ns (68.277%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.303     0.855    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/ADDRD0
+    SLICE_X34Y72         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/WCLK
+    SLICE_X34Y72         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X34Y72         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_3_5/RAMD
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.855    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.118ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.450ns  (logic 0.141ns (31.350%)  route 0.309ns (68.650%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.309     0.860    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/ADDRD0
+    SLICE_X30Y70         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/WCLK
+    SLICE_X30Y70         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y70         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.860    
+  -------------------------------------------------------------------
+                         slack                                  0.118    
+
+Slack (MET) :             0.118ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.450ns  (logic 0.141ns (31.350%)  route 0.309ns (68.650%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.309     0.860    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/ADDRD0
+    SLICE_X30Y70         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/WCLK
+    SLICE_X30Y70         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y70         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMA
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.860    
+  -------------------------------------------------------------------
+                         slack                                  0.118    
+
+Slack (MET) :             0.118ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.450ns  (logic 0.141ns (31.350%)  route 0.309ns (68.650%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.309     0.860    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/ADDRD0
+    SLICE_X30Y70         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/WCLK
+    SLICE_X30Y70         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y70         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.860    
+  -------------------------------------------------------------------
+                         slack                                  0.118    
+
+Slack (MET) :             0.118ns  (arrival time - required time)
+  Source:                 u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB/WADR0
+                            (rising edge-triggered cell RAMD64E clocked by s_axi_aclk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             s_axi_aclk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (s_axi_aclk rise@0.000ns - s_axi_aclk rise@0.000ns)
+  Data Path Delay:        0.450ns  (logic 0.141ns (31.350%)  route 0.309ns (68.650%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.410     0.410    u_core/u_snapshot/u_qrs_maf/clk
+    SLICE_X32Y71         FDRE                                         r  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y71         FDRE (Prop_fdre_C_Q)         0.141     0.551 f  u_core/u_snapshot/u_qrs_maf/pre_strong_tail_reg[0]/Q
+                         net (fo=37, routed)          0.309     0.860    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/ADDRD0
+    SLICE_X30Y70         RAMD64E                                      f  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB/WADR0
+  -------------------------------------------------------------------    -------------------
+
+                         (clock s_axi_aclk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=6994, unset)         0.432     0.432    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/WCLK
+    SLICE_X30Y70         RAMD64E                                      r  u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X30Y70         RAMD64E (Hold_ramd64e_CLK_WADR0)
+                                                      0.310     0.742    u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo_reg_64_127_0_2/RAMB
+  -------------------------------------------------------------------
+                         required time                         -0.742    
+                         arrival time                           0.860    
+  -------------------------------------------------------------------
+                         slack                                  0.118    
+
+
+
+

@@ -1,0 +1,23 @@
+{
+  "component_xml": "C:\\Users\\YangGeon\\SNN ECG Classifier\\ip_repo\\axi_lite_axis_sample_feeder\\component.xml",
+  "ip_vlnv": "user.org:user:axi_lite_axis_sample_feeder:1.0",
+  "required_markers_present": [
+    "arprot",
+    "associated_busif",
+    "awprot",
+    "aximm",
+    "axis",
+    "clock",
+    "library",
+    "m_axis",
+    "name",
+    "reset",
+    "s_axi",
+    "top",
+    "vendor",
+    "version"
+  ],
+  "workdir_paths_leaked": false,
+  "catalog_check_ip_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\sample_feeder_ip_status.rpt",
+  "vivado_log": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\sample_feeder_ip_package.log"
+}

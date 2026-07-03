@@ -1,0 +1,67 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Fri Jul  3 17:02:00 2026
+| Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
+| Command      : report_control_sets -file {C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/axi_impl_timing_10ns/profile_en_1/control_sets.rpt}
+| Design       : snn_ecg_axi_lite_stream_top
+| Device       : xc7a100t
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+
+1. Summary
+----------
+
++---------------------------------------------------+-------+
+|                       Status                      | Count |
++---------------------------------------------------+-------+
+| Total control sets                                |   125 |
+|    Minimum number of control sets                 |   125 |
+|    Addition due to synthesis replication          |     0 |
+|    Addition due to physical synthesis replication |     0 |
++---------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |   125 |
+| >= 0 to < 4        |     1 |
+| >= 4 to < 6        |    12 |
+| >= 6 to < 8        |     8 |
+| >= 8 to < 10       |    10 |
+| >= 10 to < 12      |     3 |
+| >= 12 to < 14      |    11 |
+| >= 14 to < 16      |     2 |
+| >= 16              |    78 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              82 |           57 |
+| No           | No                    | Yes                    |               3 |            1 |
+| No           | Yes                   | No                     |            2131 |          656 |
+| Yes          | No                    | No                     |             589 |          169 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |            4126 |         1160 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+

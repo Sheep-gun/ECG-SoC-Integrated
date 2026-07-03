@@ -1,0 +1,50 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Fri Jul  3 19:20:08 2026
+| Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
+| Command      : report_cdc -details -file {C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/microblaze_smoke/reports/system_cdc.rpt}
+| Design       : snn_ecg_mb_smoke_wrapper
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CDC Report
+
+ID     Severity  Count  Description
+-----  --------  -----  ------------------------------------------
+CDC-3  Info         12  1-bit synchronized with ASYNC_REG property
+
+Source Clock: input port clock
+Destination Clock: sys_clk_pin
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                 Depth  Exception   Source (From)  Destination (To)
+---  -----  --------  ------------------------------------------  -----  ----------  -------------  ----------------------------------------------------------------------------------------------------------------------------------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property      4  False Path  UART_TXD_IN    snn_ecg_mb_smoke_i/axi_uartlite_0/U0/UARTLITE_CORE_I/UARTLITE_RX_I/INPUT_DOUBLE_REGS3/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to/D
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property      4  False Path  CPU_RESETN     snn_ecg_mb_smoke_i/rst_CLK100MHZ_100M/U0/EXT_LPF/ACTIVE_LOW_EXT.ACT_LO_EXT/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to/D
+
+Source Clock: snn_ecg_mb_smoke_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK
+Destination Clock: sys_clk_pin
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                 Depth  Exception            Source (From)                                                                                                                                          Destination (To)
+---  -----  --------  ------------------------------------------  -----  -------------------  -----------------------------------------------------------------------------------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.New_Dbg_Instr2_TCK_reg/C  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[6].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+
+Source Clock: snn_ecg_mb_smoke_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE
+Destination Clock: sys_clk_pin
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                 Depth  Exception            Source (From)                                                                                                                                              Destination (To)
+---  -----  --------  ------------------------------------------  -----  -------------------  ---------------------------------------------------------------------------------------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.normal_stop_TClk_reg/C        snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[0].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.force_stop_TClk_reg/C         snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[1].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  3  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.single_Step_TClk_reg/C        snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[2].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  4  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.command_reg_reg[0]/C          snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[3].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  5  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.command_reg_reg[1]/C          snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[4].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  6  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.continue_from_brk_TClk_reg/C  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[5].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  7  CDC-3  Info      1-bit synchronized with ASYNC_REG property      3  Asynch Clock Groups  snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.control_reg_reg[3]/C          snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Performance.Core/Use_Debug_Logic.Master_Core.Debug_Perf/Serial_Dbg_Intf.sync_sample/sync_bits[9].sync_bit/Synchronize.use_sync_reset.sync_reg[1]/D
+  8  CDC-3  Info      1-bit synchronized with ASYNC_REG property      3  Asynch Clock Groups  snn_ecg_mb_smoke_i/mdm_1/U0/MDM_Core_I1/JTAG_CONTROL_I/Debug_Rst_i_reg/C                                                                                   snn_ecg_mb_smoke_i/microblaze_0/U0/MicroBlaze_Core_I/Reset_DFF/Synchronize.use_sync_reset.sync_reg[1]/D
+  9  CDC-3  Info      1-bit synchronized with ASYNC_REG property      4  Asynch Clock Groups  snn_ecg_mb_smoke_i/mdm_1/U0/MDM_Core_I1/JTAG_CONTROL_I/Debug_SYS_Rst_i_reg/C                                                                               snn_ecg_mb_smoke_i/rst_CLK100MHZ_100M/U0/EXT_LPF/ACTIVE_LOW_EXT.ACT_LO_EXT/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to/D
+

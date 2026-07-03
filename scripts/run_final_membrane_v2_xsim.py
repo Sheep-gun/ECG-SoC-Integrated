@@ -310,7 +310,7 @@ module {top};
         .RESULT_CSV("{slash(result_ref)}"),
         .DUT_SNAPSHOT_SAMPLES(8),
         .DUT_SNAPSHOTS_PER_CHUNK(2),
-        .DUT_POST_DONE_TICKS(36),
+        .DUT_POST_DONE_TICKS(37),
         .DUT_PROFILE_EN({profile_en})
     ) tb();
 endmodule

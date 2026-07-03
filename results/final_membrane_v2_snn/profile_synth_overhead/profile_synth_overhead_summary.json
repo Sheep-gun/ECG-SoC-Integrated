@@ -1,0 +1,329 @@
+{
+  "runs": {
+    "0": {
+      "utilization": {
+        "slice_lut": 10020,
+        "slice_reg": 5300,
+        "ff": 5300,
+        "bram_tile": 0,
+        "dsp": 0
+      },
+      "timing": {
+        "setup_wns_ns": 0.881,
+        "hold_whs_ns": 0.19
+      },
+      "top_hierarchy_by_lut": [
+        {
+          "instance": "snn_ecg_30min_final_top",
+          "module": "(top)",
+          "lut": 10020,
+          "logic_lut": 9956,
+          "lutram": 24,
+          "srl": 40,
+          "ff": 5300,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_snapshot",
+          "module": "snn_ecg_3feat_top",
+          "lut": 8167,
+          "logic_lut": 8103,
+          "lutram": 24,
+          "srl": 40,
+          "ff": 3551,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_class",
+          "module": "class_score_neurons",
+          "lut": 6814,
+          "logic_lut": 6814,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 2691,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_final",
+          "module": "final_membrane_layer",
+          "lut": 1495,
+          "logic_lut": 1495,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 1340,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_qrs_maf",
+          "module": "qrs_maf_neuron",
+          "lut": 407,
+          "logic_lut": 343,
+          "lutram": 24,
+          "srl": 40,
+          "ff": 349,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "(snn_ecg_30min_final_top)",
+          "module": "(top)",
+          "lut": 358,
+          "logic_lut": 358,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 409,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_event_encoder",
+          "module": "ecg_event_encoder_adaptive",
+          "lut": 330,
+          "logic_lut": 330,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 237,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_pnn",
+          "module": "pnn_rhythm_predictor",
+          "lut": 155,
+          "logic_lut": 155,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 77,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_rbbb_qrs_delay",
+          "module": "rbbb_qrs_delay_bank",
+          "lut": 155,
+          "logic_lut": 155,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 83,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_dscr",
+          "module": "dscr_spike_counter",
+          "lut": 95,
+          "logic_lut": 95,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 29,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_ectopic",
+          "module": "ectopic_pair_neuron",
+          "lut": 69,
+          "logic_lut": 69,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 16,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_ram",
+          "module": "ram_peak_accumulator",
+          "lut": 43,
+          "logic_lut": 43,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 24,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        }
+      ]
+    },
+    "1": {
+      "utilization": {
+        "slice_lut": 10062,
+        "slice_reg": 6008,
+        "ff": 6008,
+        "bram_tile": 0,
+        "dsp": 0
+      },
+      "timing": {
+        "setup_wns_ns": 0.881,
+        "hold_whs_ns": 0.19
+      },
+      "top_hierarchy_by_lut": [
+        {
+          "instance": "snn_ecg_30min_final_top",
+          "module": "(top)",
+          "lut": 10062,
+          "logic_lut": 9998,
+          "lutram": 24,
+          "srl": 40,
+          "ff": 6008,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_snapshot",
+          "module": "snn_ecg_3feat_top",
+          "lut": 8167,
+          "logic_lut": 8103,
+          "lutram": 24,
+          "srl": 40,
+          "ff": 3551,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_class",
+          "module": "class_score_neurons",
+          "lut": 6814,
+          "logic_lut": 6814,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 2691,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_final",
+          "module": "final_membrane_layer",
+          "lut": 1495,
+          "logic_lut": 1495,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 1340,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_qrs_maf",
+          "module": "qrs_maf_neuron",
+          "lut": 407,
+          "logic_lut": 343,
+          "lutram": 24,
+          "srl": 40,
+          "ff": 349,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "(snn_ecg_30min_final_top)",
+          "module": "(top)",
+          "lut": 400,
+          "logic_lut": 400,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 1117,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_event_encoder",
+          "module": "ecg_event_encoder_adaptive",
+          "lut": 330,
+          "logic_lut": 330,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 237,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_pnn",
+          "module": "pnn_rhythm_predictor",
+          "lut": 155,
+          "logic_lut": 155,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 77,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_rbbb_qrs_delay",
+          "module": "rbbb_qrs_delay_bank",
+          "lut": 155,
+          "logic_lut": 155,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 83,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_dscr",
+          "module": "dscr_spike_counter",
+          "lut": 95,
+          "logic_lut": 95,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 29,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_ectopic",
+          "module": "ectopic_pair_neuron",
+          "lut": 69,
+          "logic_lut": 69,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 16,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "u_ram",
+          "module": "ram_peak_accumulator",
+          "lut": 43,
+          "logic_lut": 43,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 24,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        }
+      ]
+    }
+  },
+  "delta_profile_en_1_minus_0": {
+    "bram_tile": 0,
+    "dsp": 0,
+    "ff": 708,
+    "slice_lut": 42,
+    "slice_reg": 708
+  }
+}
