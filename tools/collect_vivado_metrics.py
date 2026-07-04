@@ -32,7 +32,7 @@ def main() -> None:
         },
         "ip_packaging": {
             "snn_component_xml": status(REPO / "ip_repo" / "snn_ecg_axi_accelerator" / "component.xml"),
-            "snn_xgui": status(REPO / "ip_repo" / "snn_ecg_axi_accelerator" / "xgui" / "snn_ecg_axi_lite_stream_top_v1_0.tcl"),
+            "snn_xgui": status(REPO / "ip_repo" / "snn_ecg_axi_accelerator" / "xgui" / "snn_ecg_axi_accelerator_v1_0.tcl"),
             "feeder_component_xml": status(REPO / "ip_repo" / "axi_lite_axis_sample_feeder" / "component.xml"),
             "feeder_xgui": status(REPO / "ip_repo" / "axi_lite_axis_sample_feeder" / "xgui" / "axi_lite_axis_sample_feeder_v1_0.tcl"),
         },

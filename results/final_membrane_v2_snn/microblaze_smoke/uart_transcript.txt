@@ -1,0 +1,27 @@
+SNN_ECG_MB_SMOKE_BEGIN
+snn_config=0xD8C023C0 feeder_config=0xF1F01010 total=16
+OK total_samples 0x10
+OK snn_error_pre 0x0
+OK feeder_error_pre 0x0
+OK feeder_write_count_prefill 0x10
+OK feeder_tlast_prefill 0x0
+status=0x106 final_pred_reg=0x101 irq_pending=0x1
+profile total=104 run=16 input_wait=0 accepted=16 windows=2 decisions=1
+OK irq_pending 0x1
+OK final_valid_bit 0x1
+OK final_done_bit 0x1
+OK final_pred 0x0
+OK final_mem_nsr 0x2
+OK final_mem_chf 0x2
+OK final_mem_arr 0x0
+OK final_mem_aff 0x0
+OK samples_accepted 0x10
+OK samples_consumed 0x10
+OK profile_accepted 0x10
+OK profile_windows 0x2
+OK profile_decisions 0x1
+OK feeder_tx_count 0x10
+OK feeder_tlast_count 0x1
+OK snn_error_post 0x0
+OK feeder_error_post 0x0
+SNN_ECG_MB_SMOKE_PASS

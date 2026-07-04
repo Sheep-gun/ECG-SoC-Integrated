@@ -20,6 +20,9 @@ IP_NAME = "snn_ecg_axi_accelerator"
 IP_VERSION = "1.0"
 TOP = "snn_ecg_axi_lite_stream_top"
 PART = "xc7a100tcsg324-1"
+IP_VERSION_TAG = IP_VERSION.replace(".", "_")
+XGUI_NAME = f"{IP_NAME}_v{IP_VERSION_TAG}.tcl"
+OLD_XGUI_NAME = f"{TOP}_v{IP_VERSION_TAG}.tcl"
 
 CORE_SOURCES = [
     "ecg_event_encoder_adaptive.v",
@@ -175,6 +178,25 @@ ipx::check_integrity $core
 ipx::save_core $core
 close_project
 
+set old_xgui "$ip_root/xgui/{OLD_XGUI_NAME}"
+set new_xgui "$ip_root/xgui/{XGUI_NAME}"
+if {{[file exists $old_xgui]}} {{
+    file copy -force $old_xgui $new_xgui
+    if {{$old_xgui ne $new_xgui}} {{
+        file delete -force $old_xgui
+    }}
+}}
+
+set component_xml "$ip_root/component.xml"
+set component_fh [open $component_xml r]
+set component_text [read $component_fh]
+close $component_fh
+regsub -all {{xgui/{OLD_XGUI_NAME}}} $component_text {{xgui/{XGUI_NAME}}} component_text
+regsub -all {{{TOP}_v{IP_VERSION_TAG}}} $component_text {{{IP_NAME}_v{IP_VERSION_TAG}}} component_text
+set component_fh [open $component_xml w]
+puts -nonewline $component_fh $component_text
+close $component_fh
+
 file delete -force $check_work
 create_project -force ${{ip_name}}_catalog_check "$check_work/vivado_project" -part {PART}
 set_property ip_repo_paths [list $ip_repo] [current_project]
@@ -216,6 +238,8 @@ def validate_component() -> dict[str, object]:
         "axis": 'spirit:name="axis"',
         "interrupt": 'spirit:name="interrupt"',
         "associated_busif": "s_axi:s_axis",
+        "xgui": f"xgui/{XGUI_NAME}",
+        "component_name": f"{IP_NAME}_v{IP_VERSION_TAG}",
     }
     missing = [name for name, needle in required.items() if needle not in text]
     if missing:

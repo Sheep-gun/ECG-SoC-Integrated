@@ -359,7 +359,7 @@ JTAG MMIO smoke는 16-sample deterministic stream으로 다음을 확인했다.
 | interrupt pending | set |
 | transcript result | `JTAG_MMIO_SMOKE_PASS` |
 
-UART bare-metal C app은 `sw/microblaze_smoke/src/main.c`에 존재하지만, ELF 생성과 UART transcript 검증은 `xsct` 및 MicroBlaze bare-metal GCC toolchain이 필요하다. 현재 repo evidence 기준으로는 JTAG MMIO smoke가 hardware smoke의 완료된 검증이고, UART C smoke는 향후 toolchain 준비 후 실행할 항목이다.
+Vitis 2020.2 설치 후 bare-metal C app도 빌드했고, `results/final_membrane_v2_snn/microblaze_smoke/snn_ecg_mb_smoke_app.elf`를 MicroBlaze에 다운로드해 UART transcript에서 `SNN_ECG_MB_SMOKE_PASS`를 확인했다. UART transcript는 `results/final_membrane_v2_snn/microblaze_smoke/uart_transcript.txt`에 보존했다.
 
 ## 8. 한계와 향후 보완
 
@@ -369,8 +369,8 @@ UART bare-metal C app은 `sw/microblaze_smoke/src/main.c`에 존재하지만, EL
 | formal equivalence | 수행되지 않음. Python-vs-XSim tested-vector mismatch 0으로 제한 |
 | formal AXI protocol proof | 수행되지 않음. RTL smoke/OOC timing/IP packaging 검증으로 제한 |
 | full 30분 hardware replay | 아직 DMA/DDR 기반 full-record hardware replay 미구현 |
-| UART bare-metal smoke | C app은 작성되어 있으나 local toolchain 의존으로 실행 전제 있음 |
+| UART bare-metal smoke | Vitis-built ELF와 UART PASS transcript 확인 |
 | energy/sample | Vivado power estimate는 있으나 workload 기반 energy/sample 실측은 없음 |
 | production IP qualification | Vivado custom IP packaging 완료 수준이며 제품화 검증은 아님 |
 
-현재 문서에서 말하는 Accelerator IP Core는 “검증된 RTL datapath + AXI wrapper + Vivado packaged custom IP + smoke-level system integration”을 의미한다. 다음 단계는 full-record replay와 board-level software transcript를 더 강하게 만드는 것이다.
+현재 문서에서 말하는 Accelerator IP Core는 “검증된 RTL datapath + AXI wrapper + Vivado packaged custom IP + smoke-level system integration”을 의미한다. 다음 단계는 full-record replay와 throughput/power 측정이다.

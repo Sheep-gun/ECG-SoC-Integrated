@@ -19,7 +19,7 @@
 - [Ablation Study](docs/ABLATION_STUDY_KR.md): final membrane, snapshot-only, feature evidence 제거 실험을 통해 각 구조가 왜 필요한지 수치로 비교한다.
 - [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md): Python fixed-model latency, RTL cycle counter, Vivado resource/power estimate를 같은 관점에서 비교한다.
 - [Board and IP Packaging Evidence](docs/BOARD_AND_IP_PACKAGING_EVIDENCE_KR.md): AXI/IP-XACT packaging, MicroBlaze smoke system, Vivado report 산출물을 evidence table로 정리한다.
-- [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md): full board replay/UART transcript까지 가기 위한 남은 hardware 검증 절차를 정의한다.
+- [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md): 완료된 MicroBlaze UART smoke와 full board replay까지 가기 위한 남은 hardware 검증 절차를 정의한다.
 - [Judge Q&A Defense](docs/JUDGE_QA_DEFENSE_KR.md): 심사에서 나올 수 있는 dataset, AFE, IP, board 검증 질문에 대한 방어 논리를 정리한다.
 
 ```text

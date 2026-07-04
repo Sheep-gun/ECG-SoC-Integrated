@@ -52,6 +52,5 @@
 - strict record-wise protocol을 model search 이전에 고정한 독립 검증은 아직 없다.
 - raw/AFE-off full-record `.mem` dataset이 없어 AFE on/off end-to-end accuracy ablation은 TODO이다.
 - HPF/notch/LPF off dataset 재생성은 아직 수행하지 않았다.
-- full 30분 board replay transcript는 아직 없다. 현재는 MicroBlaze smoke bit/XSA 및 XSDB MMIO smoke evidence이다.
-- Vitis/MicroBlaze ELF + UART transcript는 toolchain 설치 후 실행할 항목이다.
+- full 30분 board replay transcript는 아직 없다. 현재는 MicroBlaze smoke bit/XSA, XSDB MMIO smoke, Vitis-built ELF, UART PASS transcript evidence이다.
 - AFE+ADC evidence figure는 nominal model 기반이며 PCB/silicon/Virtuoso post-layout 검증이 아니다.

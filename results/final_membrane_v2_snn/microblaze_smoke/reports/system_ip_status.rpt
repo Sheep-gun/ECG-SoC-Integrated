@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Fri Jul  3 19:20:23 2026
+| Date         : Sun Jul  5 02:16:29 2026
 | Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
 | Command      : report_ip_status
 ------------------------------------------------------------------------------------
@@ -67,9 +67,9 @@ Project IP Instances
 |                                              |            |                     | Log not   | Sample Feeder      | (Rev.   |               |            |                      |
 |                                              |            |                     | available |                    | 1)      |               |            |                      |
 +----------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
-| snn_ecg_mb_smoke_snn_ecg_axi_accelerator_0_0 | Up-to-date | No changes required | Change    | SNN ECG AXI        | 1.0     | 1.0 (Rev. 1)  | Included   | xc7a100tcsg324-1     |
-|                                              |            |                     | Log not   | Accelerator        | (Rev.   |               |            |                      |
-|                                              |            |                     | available |                    | 1)      |               |            |                      |
+| snn_ecg_mb_smoke_snn_ecg_axi_accelerator_0_0 | Up-to-date | No changes required | Change    | Long-Window ECG    | 1.0     | 1.0 (Rev. 1)  | Included   | xc7a100tcsg324-1     |
+|                                              |            |                     | Log not   | 4-Class AXI        | (Rev.   |               |            |                      |
+|                                              |            |                     | available | Accelerator        | 1)      |               |            |                      |
 +----------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
 | snn_ecg_mb_smoke_xlconcat_0_0                | Up-to-date | No changes required |  *(12)    | Concat             | 2.1     | 2.1 (Rev. 4)  | Included   | xc7a100tcsg324-1     |
 |                                              |            |                     |           |                    | (Rev.   |               |            |                      |

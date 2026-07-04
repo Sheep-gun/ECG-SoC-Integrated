@@ -26,7 +26,7 @@ workload scale, HBM, 대형 accelerator optimization, 엄격한 baseline speedup
 
 ## Q7. 실제 board에서 돌렸나?
 
-현재 evidence는 bitstream programming, MicroBlaze smoke bit/XSA, XSDB MMIO smoke 수준이다. full 30분 ECG board replay와 UART bare-metal transcript는 아직 TODO이다. 없는 것을 완료됐다고 말하지 않는다.
+현재 evidence는 bitstream programming, MicroBlaze smoke bit/XSA, XSDB MMIO smoke, Vitis-built ELF, UART bare-metal PASS transcript 수준이다. full 30분 ECG board replay는 아직 TODO이다. 없는 것을 완료됐다고 말하지 않는다.
 
 ## Q8. 88.89%가 최종 성능인가?
 

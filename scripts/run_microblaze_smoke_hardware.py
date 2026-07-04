@@ -12,7 +12,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 RESULTS = REPO / "results" / "final_membrane_v2_snn" / "microblaze_smoke"
 BIT = RESULTS / "snn_ecg_mb_smoke.bit"
-DEFAULT_ELF = RESULTS / "vitis_workspace" / "snn_ecg_mb_smoke_app" / "Debug" / "snn_ecg_mb_smoke_app.elf"
+DEFAULT_ELF = RESULTS / "snn_ecg_mb_smoke_app.elf"
 XSDB_TCL = RESULTS / "program_microblaze_smoke_board.tcl"
 TRANSCRIPT = RESULTS / "uart_transcript.txt"
 
@@ -130,6 +130,23 @@ def status(bit: Path, elf: Path, uart: str | None) -> dict[str, object]:
     }
 
 
+def update_summary_after_hardware(pass_seen: bool) -> None:
+    summary_path = RESULTS / "microblaze_smoke_summary.json"
+    if not summary_path.exists():
+        return
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary.update(
+        {
+            "baremetal_elf": str(DEFAULT_ELF),
+            "baremetal_elf_exists": DEFAULT_ELF.exists(),
+            "uart_transcript": str(TRANSCRIPT),
+            "uart_smoke_pass": bool(pass_seen),
+            "jtag_program_log": str(RESULTS / "xsdb_program.log"),
+        }
+    )
+    summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+
+
 def run_hw_server(hw_server: Path) -> subprocess.Popen[str]:
     log = RESULTS / "hw_server.log"
     f = log.open("w", encoding="utf-8", errors="replace")
@@ -164,18 +181,32 @@ def main() -> int:
         time.sleep(2.0)
 
     xsdb_log = RESULTS / "xsdb_program.log"
+    uart_status = None
+    uart_proc = None
+    uart_stdout = None
+    if args.uart:
+        ps1 = write_uart_capture_ps1(args.uart, args.baud, args.uart_seconds, TRANSCRIPT)
+        uart_stdout = (RESULTS / "uart_capture_stdout.log").open("w", encoding="utf-8", errors="replace")
+        uart_proc = subprocess.Popen(
+            ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(ps1)],
+            cwd=REPO,
+            stdout=uart_stdout,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
+        time.sleep(0.5)
+
     with xsdb_log.open("w", encoding="utf-8", errors="replace") as f:
         xsdb_proc = subprocess.run([str(payload["xsdb"]), str(XSDB_TCL)], cwd=REPO, stdout=f, stderr=subprocess.STDOUT, text=True)
 
-    uart_status = None
-    if args.uart:
-        ps1 = write_uart_capture_ps1(args.uart, args.baud, args.uart_seconds, TRANSCRIPT)
-        uart_proc = subprocess.run(
-            ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(ps1)],
-            cwd=REPO,
-            text=True,
-        )
-        uart_status = uart_proc.returncode
+    if uart_proc is not None:
+        try:
+            uart_status = uart_proc.wait(timeout=args.uart_seconds + 5)
+        except subprocess.TimeoutExpired:
+            uart_proc.terminate()
+            uart_status = 124
+        if uart_stdout is not None:
+            uart_stdout.close()
 
     if hw_proc is not None:
         hw_proc.terminate()
@@ -188,6 +219,7 @@ def main() -> int:
         "uart_returncode": uart_status,
         "pass_seen": TRANSCRIPT.exists() and ("SNN_ECG_MB_SMOKE_PASS" in TRANSCRIPT.read_text(encoding="utf-8", errors="replace")),
     }
+    update_summary_after_hardware(bool(payload["pass_seen"]))
     print(json.dumps(payload, indent=2))
     return 0 if payload["xsdb_returncode"] == 0 and (uart_status in (None, 0)) else 1
 

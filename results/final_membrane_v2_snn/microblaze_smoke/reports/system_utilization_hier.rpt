@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Fri Jul  3 19:20:20 2026
+| Date         : Sun Jul  5 02:16:26 2026
 | Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
 | Command      : report_utilization -hierarchical -file {C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/microblaze_smoke/reports/system_utilization_hier.rpt}
 | Design       : snn_ecg_mb_smoke_wrapper

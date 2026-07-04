@@ -8,6 +8,7 @@
     "aximm",
     "axis",
     "clock",
+    "component_name",
     "interrupt",
     "irq",
     "library",
@@ -17,7 +18,8 @@
     "s_axis",
     "top",
     "vendor",
-    "version"
+    "version",
+    "xgui"
   ],
   "workdir_paths_leaked": false,
   "catalog_check_ip_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\snn_ecg_axi_ip_status.rpt",

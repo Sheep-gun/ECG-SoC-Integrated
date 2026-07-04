@@ -43,7 +43,7 @@
 
 - 상대 강점: 실물 시스템 demo와 응용 완성도.
 - 본 프로젝트 강점: 반도체 설계/IP flow와 FPGA 검증.
-- 보강 방향: IP catalog evidence, MicroBlaze smoke, board replay plan, UART transcript TODO를 명확히 정리한다.
+- 보강 방향: IP catalog evidence, MicroBlaze smoke, UART PASS transcript, board replay plan을 명확히 정리한다.
 
 ## 3. 최우선 보강 항목
 
@@ -93,4 +93,4 @@
 - [ ] raw/AFE-off full-record end-to-end accuracy
 - [ ] HPF/notch/LPF-off regenerated dataset accuracy
 - [ ] full 30분 board replay transcript
-- [ ] Vitis-built MicroBlaze ELF UART PASS/FAIL transcript
+- [x] Vitis-built MicroBlaze ELF UART PASS/FAIL transcript

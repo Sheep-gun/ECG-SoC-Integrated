@@ -134,7 +134,7 @@ validate_bd_design
 save_bd_design
 write_bd_tcl -force "$out_dir/snn_ecg_mb_smoke_bd.tcl"
 set addr_fh [open "$out_dir/reports/system_bd_address.rpt" w]
-puts $addr_fh "SNN ECG MicroBlaze smoke address map"
+puts $addr_fh "Long-window ECG 4-Class Accelerator MicroBlaze smoke address map"
 puts $addr_fh "snn_ecg_axi_accelerator_0/s_axi/reg0 0x44a00000 4K"
 puts $addr_fh "sample_feeder_0/s_axi/reg0          0x44a10000 4K"
 puts $addr_fh "axi_uartlite_0/S_AXI/Reg            0x40600000 4K"

@@ -8,7 +8,7 @@ puts "XSDB targets after fpga:"
 targets
 targets -set -nocase -filter {name =~ "*MicroBlaze*#0"}
 rst -processor
-dow "C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/microblaze_smoke/vitis_workspace/snn_ecg_mb_smoke_app/Debug/snn_ecg_mb_smoke_app.elf"
+dow "C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/microblaze_smoke/snn_ecg_mb_smoke_app.elf"
 con
 puts "SNN_ECG_MB_XSDB_PROGRAM_DONE"
 exit

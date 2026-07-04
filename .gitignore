@@ -41,6 +41,9 @@ results/**/xsim_*_work/
 results/**/xsim_stream_work/
 results/**/xsim_record_level_strict_work/
 results/**/xsim_replay_work/
+results/**/vitis_workspace/
+results/**/*.mmi
+results/**/capture_uart_transcript.ps1
 results/**/windows/
 results/**/synth/vivado_*/
 results/**/vivado_*/project/

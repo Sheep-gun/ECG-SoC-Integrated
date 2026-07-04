@@ -4,6 +4,7 @@ import argparse
 import glob
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -12,7 +13,12 @@ REPO = Path(__file__).resolve().parents[1]
 RESULTS = REPO / "results" / "final_membrane_v2_snn" / "microblaze_smoke"
 SW_SRC = REPO / "sw" / "microblaze_smoke" / "src"
 XSA = RESULTS / "snn_ecg_mb_smoke.xsa"
-WORKSPACE = RESULTS / "vitis_workspace"
+WORK_ROOT = REPO.parent / "_snn_ecg_microblaze_smoke_app_work"
+WORKSPACE = WORK_ROOT / "vitis_workspace"
+SHADOW_XSA = WORK_ROOT / "hw" / "snn_ecg_mb_smoke.xsa"
+SHADOW_SRC = WORK_ROOT / "src"
+WORKSPACE_ELF = WORKSPACE / "snn_ecg_mb_smoke_app" / "Debug" / "snn_ecg_mb_smoke_app.elf"
+RESULT_ELF = RESULTS / "snn_ecg_mb_smoke_app.elf"
 
 
 def which(name: str) -> Path | None:
@@ -70,11 +76,22 @@ def find_microblaze_gcc() -> Path | None:
     return None
 
 
+def prepare_shadow_inputs() -> None:
+    WORK_ROOT.mkdir(parents=True, exist_ok=True)
+    SHADOW_XSA.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(XSA, SHADOW_XSA)
+    if SHADOW_SRC.exists():
+        shutil.rmtree(SHADOW_SRC)
+    shutil.copytree(SW_SRC, SHADOW_SRC)
+    if WORKSPACE.exists():
+        shutil.rmtree(WORKSPACE)
+
+
 def write_xsct_tcl() -> Path:
     tcl = RESULTS / "build_microblaze_smoke_app.tcl"
     tcl.write_text(
         f"""setws "{WORKSPACE.as_posix()}"
-platform create -name snn_ecg_mb_smoke_platform -hw "{XSA.as_posix()}" -proc microblaze_0 -os standalone
+platform create -name snn_ecg_mb_smoke_platform -hw "{SHADOW_XSA.as_posix()}" -proc microblaze_0 -os standalone
 platform active snn_ecg_mb_smoke_platform
 domain active standalone_domain
 catch {{bsp config stdin axi_uartlite_0}} stdin_msg
@@ -85,7 +102,7 @@ catch {{bsp regenerate}} bsp_msg
 if {{$bsp_msg ne ""}} {{puts "WARN BSP regenerate: $bsp_msg"}}
 platform generate
 app create -name snn_ecg_mb_smoke_app -platform snn_ecg_mb_smoke_platform -domain standalone_domain -template {{Empty Application}}
-importsources -name snn_ecg_mb_smoke_app -path "{SW_SRC.as_posix()}"
+importsources -name snn_ecg_mb_smoke_app -path "{SHADOW_SRC.as_posix()}"
 app build -name snn_ecg_mb_smoke_app
 exit
 """,
@@ -95,21 +112,39 @@ exit
     return tcl
 
 
+def update_summary_after_build() -> None:
+    summary_path = RESULTS / "microblaze_smoke_summary.json"
+    if not summary_path.exists():
+        return
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary.update(
+        {
+            "baremetal_elf": str(RESULT_ELF),
+            "baremetal_elf_exists": RESULT_ELF.exists(),
+        }
+    )
+    summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+
+
 def status_payload() -> dict[str, object]:
     xsct = find_xsct()
     gcc = find_microblaze_gcc()
-    elf = WORKSPACE / "snn_ecg_mb_smoke_app" / "Debug" / "snn_ecg_mb_smoke_app.elf"
     return {
         "xsa": str(XSA),
         "xsa_exists": XSA.exists(),
         "source_dir": str(SW_SRC),
         "source_exists": (SW_SRC / "main.c").exists(),
+        "work_root": str(WORK_ROOT),
         "workspace": str(WORKSPACE),
+        "shadow_xsa": str(SHADOW_XSA),
+        "shadow_source_dir": str(SHADOW_SRC),
         "xsct": str(xsct) if xsct else None,
         "microblaze_gcc": str(gcc) if gcc else None,
         "toolchain_available": bool(xsct and gcc),
-        "elf": str(elf),
-        "elf_exists": elf.exists(),
+        "workspace_elf": str(WORKSPACE_ELF),
+        "workspace_elf_exists": WORKSPACE_ELF.exists(),
+        "elf": str(RESULT_ELF),
+        "elf_exists": RESULT_ELF.exists(),
     }
 
 
@@ -124,7 +159,7 @@ def build_app() -> int:
 
     tcl = write_xsct_tcl()
     log = RESULTS / "build_microblaze_smoke_app.log"
-    WORKSPACE.mkdir(parents=True, exist_ok=True)
+    prepare_shadow_inputs()
     env = os.environ.copy()
     with log.open("w", encoding="utf-8", errors="replace") as f:
         proc = subprocess.run(
@@ -135,6 +170,9 @@ def build_app() -> int:
             text=True,
             env=env,
         )
+    if proc.returncode == 0 and WORKSPACE_ELF.exists():
+        shutil.copy2(WORKSPACE_ELF, RESULT_ELF)
+        update_summary_after_build()
     payload = status_payload()
     payload["status"] = "built" if proc.returncode == 0 and payload["elf_exists"] else "build_failed"
     payload["log"] = str(log)

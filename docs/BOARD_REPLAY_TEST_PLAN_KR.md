@@ -2,7 +2,7 @@
 
 ## 1. 목표
 
-현재 repo에는 MicroBlaze smoke bit/XSA와 XSDB MMIO transcript가 있다. 다음 단계는 실제 30분 ECG stream을 board에서 replay하고, Python/XSim expected result와 board register output을 비교하는 것이다.
+현재 repo에는 MicroBlaze smoke bit/XSA, XSDB MMIO transcript, Vitis-built bare-metal ELF, UART PASS transcript가 있다. 다음 단계는 실제 30분 ECG stream을 board에서 replay하고, Python/XSim expected result와 board register output을 비교하는 것이다.
 
 ## 2. 권장 단계
 
@@ -45,4 +45,4 @@ PC
 
 ## 5. 현재 제한
 
-Vitis/MicroBlaze GCC가 아직 설치되지 않았기 때문에 bare-metal ELF와 UART transcript는 생성하지 못했다. 또한 현재 sample feeder는 smoke에 적합한 MMIO feeder이며, full 1.8M sample replay에는 속도/automation 보강이 필요하다.
+Vitis/MicroBlaze GCC 기반 bare-metal smoke는 완료되었고 `uart_transcript.txt`에 `SNN_ECG_MB_SMOKE_PASS`가 남아 있다. 다만 현재 sample feeder는 smoke에 적합한 MMIO feeder이며, full 1.8M sample replay에는 속도/automation 보강이 필요하다.

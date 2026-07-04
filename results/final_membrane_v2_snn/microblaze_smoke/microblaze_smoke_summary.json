@@ -47,5 +47,10 @@
     "utilization_hier": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_utilization_hier.rpt",
     "bd_address": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_bd_address.rpt",
     "ip_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\reports\\system_ip_status.rpt"
-  }
+  },
+  "baremetal_elf": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\snn_ecg_mb_smoke_app.elf",
+  "baremetal_elf_exists": true,
+  "uart_transcript": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\uart_transcript.txt",
+  "uart_smoke_pass": true,
+  "jtag_program_log": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\microblaze_smoke\\xsdb_program.log"
 }
