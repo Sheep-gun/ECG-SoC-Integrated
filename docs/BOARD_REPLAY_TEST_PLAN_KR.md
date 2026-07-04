@@ -1,48 +1,83 @@
 # Board Replay Test Plan
 
-## 1. 목표
+## 1. 현재 상태
 
-현재 repo에는 MicroBlaze smoke bit/XSA, XSDB MMIO transcript, Vitis-built bare-metal ELF, UART PASS transcript가 있다. 다음 단계는 실제 30분 ECG stream을 board에서 replay하고, Python/XSim expected result와 board register output을 비교하는 것이다.
+repo에는 세 단계의 board evidence가 있다.
 
-## 2. 권장 단계
+| 단계 | 상태 | 주요 evidence |
+|---|---|---|
+| 16-sample smoke | 완료 | `results/final_membrane_v2_snn/microblaze_smoke/uart_transcript.txt` |
+| JTAG/MMIO smoke | 완료 | `results/final_membrane_v2_snn/microblaze_smoke/xsdb_mmio_transcript.txt` |
+| 30분 full-record replay 1건 | 완료 | `reports/board_replay/transcripts/test_case0_nsr_uart_full_replay.txt` |
+
+full-record replay는 Vitis MicroBlaze bare-metal app과 PC UART sender를 사용한다. 입력은 physical AFE/ADC가 아니라 AFE+ADC XMODEL 이후 생성된 signed 12-bit `.mem`이다.
+
+상세 구현과 실행 결과는 [FULL_RECORD_BOARD_REPLAY_VITIS_KR.md](FULL_RECORD_BOARD_REPLAY_VITIS_KR.md)에 정리했다.
+
+## 2. Replay 구조
 
 ```text
-PC
--> JTAG/XSDB 또는 UART loader
--> AXI-Lite sample feeder register
--> AXI-Stream ADC sample
+PC .mem sender
+-> UART raw_i16le chunk stream
+-> MicroBlaze bare-metal full_record_replay app
+-> AXI-Lite sample feeder SAMPLE register
+-> AXI4-Stream sample + TLAST
 -> SNN ECG Accelerator IP
--> STATUS / final_pred / final_mem registers
--> expected-vs-board comparison
+-> final_pred / final_mem / profile counter readback
+-> UART transcript
+-> Python/XSim expected comparison
 ```
 
-## 3. 최소 smoke
+단순 raw UART push는 RX FIFO overrun 위험이 있어 최종 flow는 4096-sample chunk ACK 방식으로 고정했다.
 
-1. Vitis 2020.2 설치
-2. `python scripts\build_microblaze_smoke_app.py --check-tools`
-3. `python scripts\build_microblaze_smoke_app.py`
-4. `python scripts\run_microblaze_smoke_hardware.py --check`
-5. `python scripts\run_microblaze_smoke_hardware.py --uart COMx`
+## 3. 실행 명령
 
-산출물:
+```powershell
+python scripts\build_microblaze_full_replay_system.py --skip-package
+python scripts\build_microblaze_full_replay_app.py
+python tools\board_replay\send_full_record_uart.py `
+  --program `
+  --uart COM8 `
+  --mem fullrec_afe_30min_annotation_valid_balanced\test\NSR\16786\16786_30min_w035.mem `
+  --case-id 0 `
+  --case-name test_case0_nsr `
+  --ready-timeout 90 `
+  --ack-timeout 60 `
+  --done-timeout 600
+```
 
-- MicroBlaze ELF
-- UART transcript
-- PASS/FAIL line
-- register dump
+## 4. 완료된 full-record replay 결과
 
-## 4. full replay 계획
+| 항목 | 결과 |
+|---|---:|
+| samples_received | 1,800,000 |
+| samples_sent_to_ip | 1,800,000 |
+| samples_accepted | 1,800,000 |
+| samples_consumed | 1,800,000 |
+| snapshot_count | 30 |
+| decision_count | 1 |
+| final_pred | 0 |
+| final_mem NSR/CHF/ARR/AFF | 31 / 0 / 1 / 0 |
+| snn_error / feeder_error | 0 / 0 |
+| board marker | `SNN_ECG_FULL_REPLAY_BOARD_PASS` |
+| expected-vs-board | PASS |
 
-필요 산출물:
+비교 산출물:
 
-- `board_replay_input.mem`
-- `expected_result.json`
-- `board_transcript.txt`
-- `expected_vs_board.csv`
-- final class match
-- final membrane match 또는 tolerance-free exact match
-- cycles/sample board counter
+- `reports/board_replay/comparisons/test_case0_nsr_expected_vs_board.csv`
+- `reports/board_replay/comparisons/test_case0_nsr_summary.md`
+- `reports/board_replay/comparisons/test_case0_nsr_expected_result.json`
 
-## 5. 현재 제한
+## 5. 남은 검증 계획
 
-Vitis/MicroBlaze GCC 기반 bare-metal smoke는 완료되었고 `uart_transcript.txt`에 `SNN_ECG_MB_SMOKE_PASS`가 남아 있다. 다만 현재 sample feeder는 smoke에 적합한 MMIO feeder이며, full 1.8M sample replay에는 속도/automation 보강이 필요하다.
+현재 full replay 완료 범위는 test NSR case 0 한 건이다. 다음 단계는 같은 flow를 여러 class와 여러 split에 반복하는 것이다.
+
+우선순위:
+
+1. non-NSR full board replay 1건 추가
+2. test split 대표 case batch replay
+3. UART replay time과 profile counter 정리
+4. AXI DMA/DDR 기반 faster replay 검토
+5. board-level current/power 측정
+
+UART replay는 board integration evidence이며 real-time throughput 검증은 아니다. 물리 AFE/ADC 검증도 아니므로 physical analog validation과는 구분해서 보고해야 한다.

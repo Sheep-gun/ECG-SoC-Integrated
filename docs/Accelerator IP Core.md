@@ -368,9 +368,9 @@ Vitis 2020.2 설치 후 bare-metal C app도 빌드했고, `results/final_membran
 | 임상 검증 | 수행되지 않음. dataset split 기반 engineering validation임 |
 | formal equivalence | 수행되지 않음. Python-vs-XSim tested-vector mismatch 0으로 제한 |
 | formal AXI protocol proof | 수행되지 않음. RTL smoke/OOC timing/IP packaging 검증으로 제한 |
-| full 30분 hardware replay | 아직 DMA/DDR 기반 full-record hardware replay 미구현 |
+| full 30분 hardware replay | Vitis MicroBlaze + UART chunk-ACK로 test NSR case 0 full record 1건 PASS |
 | UART bare-metal smoke | Vitis-built ELF와 UART PASS transcript 확인 |
 | energy/sample | Vivado power estimate는 있으나 workload 기반 energy/sample 실측은 없음 |
 | production IP qualification | Vivado custom IP packaging 완료 수준이며 제품화 검증은 아님 |
 
-현재 문서에서 말하는 Accelerator IP Core는 “검증된 RTL datapath + AXI wrapper + Vivado packaged custom IP + smoke-level system integration”을 의미한다. 다음 단계는 full-record replay와 throughput/power 측정이다.
+현재 문서에서 말하는 Accelerator IP Core는 “검증된 RTL datapath + AXI wrapper + Vivado packaged custom IP + smoke-level system integration + 1-case full-record board replay evidence”를 의미한다. 다음 단계는 non-NSR/full-split board replay batch와 throughput/power 측정이다.

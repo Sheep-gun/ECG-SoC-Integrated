@@ -18,6 +18,12 @@
 | MicroBlaze smoke BRAM | 16 | system infrastructure included |
 | MicroBlaze smoke DSP | 3 | system infrastructure included |
 | MicroBlaze smoke WNS ns | 0.185 | system_timing_summary |
+| MicroBlaze full replay LUT | 12638 | microblaze_full_replay_summary |
+| MicroBlaze full replay FF | 8745 | microblaze_full_replay_summary |
+| MicroBlaze full replay BRAM | 16 | system infrastructure included |
+| MicroBlaze full replay DSP | 3 | system infrastructure included |
+| MicroBlaze full replay WNS ns | 0.192 | microblaze_full_replay_summary |
+| MicroBlaze full replay WHS ns | 0.026 | microblaze_full_replay_summary |
 
 ## IP Packaging Evidence
 
@@ -28,4 +34,4 @@
 | feeder_component_xml | present |
 | feeder_xgui | present |
 
-Limitations: Vivado power is an estimate. MicroBlaze system resources include CPU/LMB/BRAM/UART infrastructure and should not be compared directly with the bare accelerator core.
+Limitations: Vivado power is an estimate. MicroBlaze system resources include CPU/LMB/BRAM/UART infrastructure and should not be compared directly with the bare accelerator core. The full replay system metrics are integration-build metrics for the MicroBlaze/UART/sample-feeder board replay flow.

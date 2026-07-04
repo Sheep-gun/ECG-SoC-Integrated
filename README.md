@@ -4,6 +4,67 @@
 
 정식 프로젝트명은 **AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계**이다. 본 문서에서는 반복을 줄이기 위해 **장시간 ECG 4-Class Accelerator IP Core**라고도 부른다.
 
+## 1. 프로젝트 한 줄 요약
+
+**AFE+ADC XMODEL output stream을 입력으로 받아 NSR / CHF / ARR / AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core**이다.
+
+본 프로젝트는 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit stream을 만든 뒤, 이를 FPGA RTL/IP에 입력해 30분 long-record ECG 4-class classification을 수행하는 biomedical streaming accelerator prototype이다.
+
+## 2. 전체 시스템 flow
+
+```mermaid
+flowchart LR
+    A["Digitized ECG record"] --> B["analog-equivalent vin reconstruction"]
+    B --> C["AFE+ADC XMODEL"]
+    C --> D["signed 12-bit .mem"]
+    D --> E["SNN ECG Accelerator IP Core"]
+    E --> F["Python / XSim / Vivado"]
+    E --> G["Vitis MicroBlaze board replay"]
+    F --> H["NSR / CHF / ARR / AFF"]
+    G --> H
+```
+
+## 3. 핵심 결과 요약표
+
+| 항목 | 결과 |
+|---|---|
+| Chunk-level test accuracy | 32/36 = 88.89% |
+| Python-vs-XSim mismatch | final prediction 0/136, final membrane 0/136 |
+| Dataset split audit | 70 class-record pairs 중 33 pairs가 여러 split에 걸침 |
+| Record-wise regrouping stress test | 30/35 = 85.71% |
+| LORO recall | NSR 94.12%, CHF 94.12%, ARR 88.24%, AFF 91.18% |
+| Ablation full vs snapshot majority | 125/136 = 91.91% vs 103/136 = 75.74% |
+| Vivado board resource | LUT 21002, FF 2803, BRAM 0, DSP 0 |
+| Vivado board timing / power | WNS 7.873 ns, estimated total power 0.101 W |
+| AXI/IP packaging | accelerator IP-XACT `component.xml`, xgui, AXI wrapper, sample feeder 존재 |
+| Board replay | test NSR case 0 full-record PASS, 1,800,000 samples, final_pred 0, final_mem 31/0/1/0 |
+
+위의 88.89%는 chunk-level split 기준이다. strict record-wise 성능으로 주장하지 않으며, record-wise regrouping과 LORO는 frozen rule set에 대한 stress-test evidence로 분리한다.
+
+## 4. 추가 문서 링크
+
+- [Final Submission Summary](docs/FINAL_SUBMISSION_SUMMARY_KR.md)
+- [Final Project Positioning](docs/FINAL_PROJECT_POSITIONING_KR.md)
+- [Full-Record Board Replay Result](docs/FULL_RECORD_BOARD_REPLAY_RESULT_KR.md)
+- [Final Limitations and Defense](docs/FINAL_LIMITATIONS_AND_DEFENSE_KR.md)
+- [Accelerator IP Core](<docs/Accelerator IP Core.md>)
+- [AFE+ADC XMODEL Flow](docs/AFE_ADC_XMODEL_FLOW_KR.md)
+- [Dataset Split Validation](docs/DATASET_SPLIT_VALIDATION_KR.md)
+- [AFE XMODEL Evidence](docs/AFE_XMODEL_EVIDENCE_KR.md)
+- [Ablation Study](docs/ABLATION_STUDY_KR.md)
+- [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md)
+- [Board/IP Packaging Evidence](docs/BOARD_AND_IP_PACKAGING_EVIDENCE_KR.md)
+- [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md)
+- [Judge Q&A Defense](docs/JUDGE_QA_DEFENSE_KR.md)
+
+## 5. 한계
+
+- Source ECG는 already digitized public record이며, raw analog ECG acquisition이 아니다.
+- AFE+ADC는 XMODEL 기반 nominal model이며, physical AFE PCB나 ADC silicon measurement가 아니다.
+- Physical DAC replay나 실제 전극 측정은 수행하지 않았다.
+- Virtuoso layout/post-layout 검증과 clinical validation은 수행하지 않았다.
+- Full-record board replay는 test NSR case 0 한 건의 integration evidence이며, 전체 split board replay batch는 향후 과제이다.
+
 대회 제출/최종 설명 기준의 상세 문서는 반드시 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)를 먼저 읽으면 된다. 해당 문서에는 연구 목적, Holter-style 설계 동기, AFE+ADC 조건, Snapshot feature block의 뉴로모픽 동작 설명, 30분 Final Membrane Readout, XSim 성능, Vivado 자원량이 모두 포함되어 있다.
 
 추가 설계 문서:
@@ -19,7 +80,8 @@
 - [Ablation Study](docs/ABLATION_STUDY_KR.md): final membrane, snapshot-only, feature evidence 제거 실험을 통해 각 구조가 왜 필요한지 수치로 비교한다.
 - [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md): Python fixed-model latency, RTL cycle counter, Vivado resource/power estimate를 같은 관점에서 비교한다.
 - [Board and IP Packaging Evidence](docs/BOARD_AND_IP_PACKAGING_EVIDENCE_KR.md): AXI/IP-XACT packaging, MicroBlaze smoke system, Vivado report 산출물을 evidence table로 정리한다.
-- [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md): 완료된 MicroBlaze UART smoke와 full board replay까지 가기 위한 남은 hardware 검증 절차를 정의한다.
+- [Full-Record Board Replay with Vitis/MicroBlaze](docs/FULL_RECORD_BOARD_REPLAY_VITIS_KR.md): Vitis MicroBlaze + UART chunk-ACK sender로 1,800,000-sample `.mem` full record를 실제 board에서 replay하고 Python/XSim expected와 final_pred/final_mem exact match를 확인한 flow와 transcript를 정리한다.
+- [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md): MicroBlaze UART smoke부터 실제 full-record board replay까지의 단계와 남은 batch/throughput 검증 항목을 정리한다.
 - [Judge Q&A Defense](docs/JUDGE_QA_DEFENSE_KR.md): 심사에서 나올 수 있는 dataset, AFE, IP, board 검증 질문에 대한 방어 논리를 정리한다.
 
 ```text
@@ -304,7 +366,7 @@ FPGA board programming:
 | Board report | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/board_program_report.txt` |
 
 DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/counter/accumulator 기반 SNN-inspired RTL 구조임을 확인할 수 있다.
-보드에는 bitstream이 정상적으로 올라갔고, 현재 board wrapper에는 UART/ILA 기반 live ECG stream 계측 경로가 없기 때문에 보드 위 실제 분류 정확도는 XSim dataset replay 결과로 검증한다.
+보드에는 bitstream이 정상적으로 올라갔고, MicroBlaze/UART chunk-ACK replay로 test NSR case 0의 1,800,000-sample full record를 실제 board에서 끝까지 흘려 final_pred/final_mem exact match를 확인했다. 전체 test split 정확도는 여전히 XSim dataset replay 결과를 기준으로 보고하며, board full replay는 현재 1-case integration evidence로 구분한다.
 
 ## 주의사항
 
