@@ -44,6 +44,13 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 
 - [AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계](<docs/Accelerator IP Core.md>): 장시간 ECG 4-Class Accelerator IP Core RTL을 accelerator IP core 관점에서 재정리하고, `class_score_neurons` 병목 해결, AXI wrapper/IP packaging, MicroBlaze smoke 검증 범위를 분리해 설명한다.
 - [AFE+ADC XMODEL 기반 입력 생성 흐름](docs/AFE_ADC_XMODEL_FLOW_KR.md): 공개 ECG dataset이 이미 digitized record라는 한계, virtual DAC/PWL-equivalent reconstruction, AFE+ADC XMODEL 이후 signed 12-bit `.mem` RTL 입력 흐름을 정리한다.
+- [수상권 경쟁력 보강 분석](docs/AWARD_READINESS_GAP_ANALYSIS_KR.md): 경쟁작 대비 강점/약점, 보강 우선순위, 과장 금지 표현을 정리한다.
+- [Dataset Split 검증](docs/DATASET_SPLIT_VALIDATION_KR.md): 현재 split이 chunk-level balanced임을 명확히 하고 record-wise regrouping 및 leave-one-record-out stress test 결과를 정리한다.
+- [AFE XMODEL Evidence](docs/AFE_XMODEL_EVIDENCE_KR.md): PWL-equivalent `vin_v`, nominal AFE chain figure, signed 12-bit `.mem` 입력 검증 흐름과 한계를 분리한다.
+- [Ablation Study](docs/ABLATION_STUDY_KR.md): snapshot-only, final membrane, feature evidence ablation으로 구조적 필요성을 비교한다.
+- [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md): Python fixed-model baseline, RTL cycle counter, Vivado resource/power estimate를 정리한다.
+- [Board and IP Packaging Evidence](docs/BOARD_AND_IP_PACKAGING_EVIDENCE_KR.md): AXI/IP-XACT packaging, MicroBlaze smoke system, Vivado 산출물을 evidence table로 정리한다.
+- [Judge Q&A Defense](docs/JUDGE_QA_DEFENSE_KR.md): 심사 질문에 대한 방어 논리와 남은 TODO를 명시한다.
 
 ## 1. 연구 목적과 Holter-style 설계 동기
 
@@ -1171,7 +1178,100 @@ results/final_membrane_v2_snn/snn_ecg_v2_final_report.md
 results/final_membrane_v2_snn/vivado_snn_ecg_v2/snn_ecg_v2_vivado_summary.json
 ```
 
-## 14. 한계와 향후 개선
+## 14. 수상권 경쟁력 보강 관점
+
+기존 보고서는 RTL/XSim/Vivado 중심 검증은 충분히 보여주지만, 상위권 작품과 비교하면 dataset split 신뢰성, AFE+ADC model evidence, ablation, baseline, board/IP evidence를 더 명확히 분리할 필요가 있었다. 이번 보강에서는 새 결과를 만들 수 있는 항목은 실제 스크립트로 실행하고, 아직 hardware 또는 data artifact가 없는 항목은 TODO로 분리했다.
+
+### 14.1 Dataset split 신뢰성
+
+기존 30분 chunk-level test 결과 32/36 = 88.89%는 유지하되, 이를 strict record-wise generalization으로 표현하지 않는다. 새 split audit은 현재 balanced dataset의 136개 chunk, 70개 class-record pair를 검사했고, 그중 33개 class-record pair가 train/validation/test 여러 split에 걸쳐 있음을 확인했다.
+
+추가 stress test 결과:
+
+| 항목 | 결과 | 해석 |
+|---|---:|---|
+| Current chunk-level test | 32/36 = 88.89% | 기존 공식 test split 기준 |
+| Record-wise regrouping test | 30/35 = 85.71% | frozen rule set의 record-wise stress test |
+| LORO NSR recall | 32/34 = 94.12% | fixed-model error localization |
+| LORO CHF recall | 32/34 = 94.12% | fixed-model error localization |
+| LORO ARR recall | 30/34 = 88.24% | ARR record diversity 확인 |
+| LORO AFF recall | 31/34 = 91.18% | AFF record 수가 4개뿐이라는 한계 포함 |
+
+따라서 제출 문서에서는 “chunk-level split에서 Python/XSim 88.89%”와 “record-wise regrouping stress test에서 85.71%”를 구분해 써야 한다. 진짜 strict record-wise 성능 주장은 protocol을 먼저 고정한 뒤 feature/rule search를 다시 수행해야 한다.
+
+### 14.2 AFE+ADC XMODEL evidence
+
+공개 ECG dataset은 이미 digitized record이므로 실제 raw analog ECG를 복원한 것이 아니다. 보강 자료에서는 signed code를 `vin_v = code / 200000`으로 해석해 PWL-equivalent 입력을 만들고, nominal HPF 0.482 Hz, instrumentation gain x201, 60 Hz notch, LPF 150 Hz, 12-bit ADC quantization을 통과시키는 model evidence figure를 생성했다.
+
+생성된 figure:
+
+```text
+reports/award_readiness/figures/afe_vin_reconstruction.png
+reports/award_readiness/figures/afe_chain_waveform.png
+reports/award_readiness/figures/afe_frequency_response.png
+reports/award_readiness/figures/notch_60hz_effect.png
+reports/award_readiness/figures/adc_quantization_hist.png
+reports/award_readiness/figures/afe_on_off_comparison.png
+```
+
+이 결과는 model-based mixed-signal-to-digital verification evidence로 해석해야 한다. PCB 측정, CMOS post-layout, transistor-level transient 검증을 완료한 것처럼 쓰지 않는다.
+
+### 14.3 Accelerator IP Core 병목 분석
+
+본 구조의 병목은 긴 ECG window를 dense MAC 기반 neural network로 직접 처리하지 않고, sample stream을 event/spike evidence로 압축한 뒤 class membrane에 누적해야 한다는 점이다. RTL에서는 QRS/rhythm/morphology/variability evidence를 counter, comparator, signed accumulator, WTA로 구현했고, DSP/BRAM 0 구조를 유지했다.
+
+Vivado/IP evidence는 다음과 같이 정리된다.
+
+| 항목 | 결과 |
+|---|---:|
+| Board LUT / FF / BRAM / DSP | 21002 / 2803 / 0 / 0 |
+| Board WNS | 7.873 ns |
+| Vivado estimated power | 0.101 W |
+| AXI OOC LUT / FF / BRAM / DSP | 10773 / 6931 / 0 / 0 |
+| AXI OOC WNS @10 ns | 0.081 ns |
+| MicroBlaze smoke LUT / FF / BRAM / DSP | 12650 / 8746 / 16 / 3 |
+| MicroBlaze smoke WNS | 0.185 ns |
+
+AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `component.xml` 및 `xgui`로 확인된다. 다만 full 30분 board replay transcript는 아직 없으므로 smoke/system build evidence와 full replay 완료 주장을 분리한다.
+
+### 14.4 Baseline/Ablation
+
+새 ablation은 frozen Python golden rule set과 기존 chunk feature dump를 사용해 실행했다.
+
+| experiment | result | delta |
+|---|---:|---:|
+| full_model | 125/136 = 91.91% | +0.00 pp |
+| arr_focus_no_margin | 124/136 = 91.18% | -0.74 pp |
+| base_final | 120/136 = 88.24% | -3.68 pp |
+| snapshot_majority | 103/136 = 75.74% | -16.18 pp |
+| snapshot_mem_sum | 101/136 = 74.26% | -17.65 pp |
+| feature_sum_zeroed | 84/136 = 61.76% | -30.15 pp |
+
+이 결과는 본 구조가 단순 threshold classifier 하나가 아니라, snapshot WTA 이후 final membrane evidence accumulation을 통해 장시간 evidence를 안정화하는 구조임을 보여준다. AFE-off, HPF/notch/LPF-off, RTL feature module synthesis ablation은 별도 `.mem` 재생성과 RTL variant synthesis가 필요하므로 TODO로 남겨 둔다.
+
+### 14.5 Baseline/throughput 해석
+
+Python baseline은 raw ECG sample processing이 아니라 precomputed chunk feature에 대한 fixed-model final readout 시간이다. 따라서 CPU end-to-end ECG classifier보다 빠르다는 주장에는 쓰지 않는다. RTL 지표는 XSim profile counter와 Vivado timing/power estimate에서 유도했다.
+
+| implementation | time/chunk | throughput | 해석 |
+|---|---:|---:|---|
+| Python fixed model | 0.000025 s | 40087.25 chunks/s | precomputed feature readout |
+| RTL cycle model @1 MHz | 1.800480 s | 0.56 chunks/s | profile counter 기반 |
+| RTL cycle model @100 MHz | 0.018005 s | 55.54 chunks/s | AXI OOC 10 ns timing 기반 |
+
+RTL total cycle/sample은 1.000267이며, 1 MHz/0.101 W Vivado estimate를 단순 적용하면 약 101.03 nJ/sample이다. 이 값은 board-level measured energy가 아니라 synthesis estimate 기반 계산이다.
+
+### 14.6 남은 한계
+
+보강 후에도 남는 핵심 한계는 명확하다.
+
+1. strict record-wise protocol을 먼저 고정한 뒤 model/rule search를 다시 한 결과는 아직 없다.
+2. AFE-off 및 filter-stage-off ablation은 full-record `.mem` variant가 없어 TODO이다.
+3. AFE+ADC evidence는 nominal model figure이며 physical analog PCB/CMOS 검증이 아니다.
+4. MicroBlaze smoke/IP evidence는 있으나 full 30분 board replay와 UART transcript는 아직 TODO이다.
+5. Vivado power/energy는 추정값이며 실제 board 전력 측정이 아니다.
+
+## 15. 한계와 향후 개선
 
 현재 한계:
 
@@ -1192,7 +1292,7 @@ results/final_membrane_v2_snn/vivado_snn_ecg_v2/snn_ecg_v2_vivado_summary.json
 5. board-level timing/resource/power/throughput 통합 측정
 6. clinical disease label과 rhythm annotation 차이를 분리한 evaluation protocol 작성
 
-## 15. 최종 결론
+## 16. 최종 결론
 
 장시간 ECG 4-Class Accelerator IP Core는 30분 ECG stream을 60초 snapshot event들의 시간축 발화 패턴으로 해석하고, class neuron membrane에 흥분성/억제성 자극을 누적하여 최종 class를 판정하는 SNN-inspired hierarchical ECG classifier이다.
 
@@ -1217,7 +1317,7 @@ final class neuron membrane에 누적하고,
 SNN-inspired hierarchical ECG classifier이다.
 ```
 
-## 16. 참고문헌 및 데이터 출처
+## 17. 참고문헌 및 데이터 출처
 
 1. American Heart Association, Holter Monitor.
    https://www.heart.org/en/health-topics/arrhythmia/symptoms-diagnosis--monitoring-of-arrhythmia/holter-monitor

@@ -1,0 +1,4 @@
+implementation,time_per_136_chunks_s,time_per_30min_chunk_s,chunks_per_sec,equivalent_samples_per_sec,notes
+Python golden fixed model,0.003392600000552193,2.4945588239354358e-05,40087.248711272805,72157047680.29105,"Local Python final-readout inference on precomputed chunk features, 3 repeats; best=0.003288s. Not raw-sample CPU processing."
+RTL cycle model @ 1 MHz,244.86528,1.80048,0.555407446903048,999733.4044254866,Derived from PROFILE_EN XSim cycle counters; not wall-clock board replay.
+RTL cycle model @ 100 MHz,2.4486528,0.0180048,55.540744690304805,99973340.44254866,Derived from AXI OOC 10 ns timing feasibility and cycle counters.

@@ -1,0 +1,186 @@
+{
+  "note": "Retrospective fixed-model regrouping by source record. The model/rules were not retrained and were originally selected using existing chunk-level development data, so this is a leakage stress-test, not an unbiased record-wise training protocol.",
+  "seed": "award_readiness_recordwise_v1",
+  "splits": {
+    "train": {
+      "correct": 62,
+      "total": 67,
+      "accuracy": 0.9253731343283582,
+      "macro_f1": 0.9250397886427297,
+      "balanced_accuracy": 0.9264705882352942,
+      "min_recall": 0.8235294117647058,
+      "per_class": {
+        "NSR": {
+          "precision": 0.8421052631578947,
+          "recall": 1.0,
+          "f1": 0.9142857142857143,
+          "support": 16
+        },
+        "CHF": {
+          "precision": 0.9411764705882353,
+          "recall": 0.9411764705882353,
+          "f1": 0.9411764705882353,
+          "support": 17
+        },
+        "ARR": {
+          "precision": 0.9333333333333333,
+          "recall": 0.8235294117647058,
+          "f1": 0.8749999999999999,
+          "support": 17
+        },
+        "AFF": {
+          "precision": 1.0,
+          "recall": 0.9411764705882353,
+          "f1": 0.9696969696969697,
+          "support": 17
+        }
+      },
+      "confusion_matrix": [
+        [
+          16,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          16,
+          0,
+          0
+        ],
+        [
+          2,
+          1,
+          14,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          16
+        ]
+      ]
+    },
+    "val": {
+      "correct": 33,
+      "total": 34,
+      "accuracy": 0.9705882352941176,
+      "macro_f1": 0.9721362229102167,
+      "balanced_accuracy": 0.975,
+      "min_recall": 0.9,
+      "per_class": {
+        "NSR": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 8
+        },
+        "CHF": {
+          "precision": 1.0,
+          "recall": 0.9,
+          "f1": 0.9473684210526316,
+          "support": 10
+        },
+        "ARR": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 8
+        },
+        "AFF": {
+          "precision": 0.8888888888888888,
+          "recall": 1.0,
+          "f1": 0.9411764705882353,
+          "support": 8
+        }
+      },
+      "confusion_matrix": [
+        [
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          8
+        ]
+      ]
+    },
+    "test": {
+      "correct": 30,
+      "total": 35,
+      "accuracy": 0.8571428571428571,
+      "macro_f1": 0.86875,
+      "balanced_accuracy": 0.8666666666666667,
+      "min_recall": 0.7777777777777778,
+      "per_class": {
+        "NSR": {
+          "precision": 0.8,
+          "recall": 0.8,
+          "f1": 0.8000000000000002,
+          "support": 10
+        },
+        "CHF": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 7
+        },
+        "ARR": {
+          "precision": 0.7272727272727273,
+          "recall": 0.8888888888888888,
+          "f1": 0.7999999999999999,
+          "support": 9
+        },
+        "AFF": {
+          "precision": 1.0,
+          "recall": 0.7777777777777778,
+          "f1": 0.8750000000000001,
+          "support": 9
+        }
+      },
+      "confusion_matrix": [
+        [
+          8,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          8,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          7
+        ]
+      ]
+    }
+  }
+}

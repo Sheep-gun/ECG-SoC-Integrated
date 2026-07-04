@@ -11,6 +11,17 @@
 - [AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계](<docs/Accelerator IP Core.md>): RTL을 Vivado-packaged custom accelerator IP 관점에서 정리하고, 병목 원인/해결 구조, AXI wrapper, sample feeder, MicroBlaze smoke 검증 범위를 설명한다.
 - [AFE+ADC XMODEL 기반 입력 생성 흐름](docs/AFE_ADC_XMODEL_FLOW_KR.md): digitized ECG record에서 virtual DAC/PWL-equivalent `vin_v`를 만들고, AFE+ADC XMODEL 및 signed 12-bit `.mem` RTL 검증으로 연결하는 흐름을 정리한다.
 
+수상권 보강/검증 문서:
+
+- [수상권 경쟁력 보강 분석](docs/AWARD_READINESS_GAP_ANALYSIS_KR.md): 경쟁작 대비 강점, 약점, 금지해야 할 과장 표현, 제출 전 체크리스트를 정리한다.
+- [Dataset Split 검증](docs/DATASET_SPLIT_VALIDATION_KR.md): 현재 chunk-level split 상태, record overlap audit, record-wise fixed-model 평가, leave-one-record-out 결과를 분리해 설명한다.
+- [AFE XMODEL Evidence](docs/AFE_XMODEL_EVIDENCE_KR.md): `code / 200000` 기반 PWL-equivalent `vin_v`, HPF/gain/notch/LPF/ADC nominal model figure, model-based 검증 한계를 정리한다.
+- [Ablation Study](docs/ABLATION_STUDY_KR.md): final membrane, snapshot-only, feature evidence 제거 실험을 통해 각 구조가 왜 필요한지 수치로 비교한다.
+- [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md): Python fixed-model latency, RTL cycle counter, Vivado resource/power estimate를 같은 관점에서 비교한다.
+- [Board and IP Packaging Evidence](docs/BOARD_AND_IP_PACKAGING_EVIDENCE_KR.md): AXI/IP-XACT packaging, MicroBlaze smoke system, Vivado report 산출물을 evidence table로 정리한다.
+- [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md): full board replay/UART transcript까지 가기 위한 남은 hardware 검증 절차를 정의한다.
+- [Judge Q&A Defense](docs/JUDGE_QA_DEFENSE_KR.md): 심사에서 나올 수 있는 dataset, AFE, IP, board 검증 질문에 대한 방어 논리를 정리한다.
+
 ```text
 AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계
 = AFE+ADC XMODEL 기반 입력 생성 흐름
@@ -18,6 +29,8 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 + 30분 Final Membrane Readout
 + AXI/Vivado packaged Accelerator IP Core
 ```
+
+수상권 보강 결과는 별도 산출물로 `reports/award_readiness/`에 정리했다. 현재 기존 88.89% test accuracy는 chunk-level split 기준이며 strict record-wise generalization으로 과장하지 않는다. 새 audit에서는 class-record pair 70개 중 33개가 현재 split 여러 곳에 걸쳐 있음을 확인했고, frozen Python rule set으로 record-wise regrouping test 30/35 = 85.71%, class별 leave-one-record-out recall NSR/CHF/ARR/AFF = 94.12% / 94.12% / 88.24% / 91.18%를 얻었다. Ablation은 full model 125/136 = 91.91%, snapshot majority 103/136 = 75.74%로 final membrane evidence accumulation의 필요성을 보였다.
 
 분류 class는 다음 네 가지이다.
 
