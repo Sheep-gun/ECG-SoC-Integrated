@@ -52,8 +52,10 @@ results/**/vivado_*/build_*.tcl
 vivado_project/SNN_ECG_ModelS_Restore/
 vivado_project/*/.Xil/
 vivado_project/*/*.cache/
+vivado_project/*/*.gen/
 vivado_project/*/*.hw/
 vivado_project/*/*.ip_user_files/
+vivado_project/*/*.runs/
 vivado_project/*/*.sim/
 
 # Python
