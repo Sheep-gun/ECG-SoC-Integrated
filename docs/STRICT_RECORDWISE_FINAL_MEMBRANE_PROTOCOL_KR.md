@@ -67,4 +67,4 @@
 | RTL implementation | `rtl/final_membrane_layer.v` |
 | Standalone Final Membrane XSim | final_test 36 cases, final_pred mismatch 0, final_mem mismatch 0 |
 | Vivado locked pure RTL | LUT/FF/BRAM/DSP 9719/5038/0/0, WNS 8.184 ns |
-| Vitis/MicroBlaze board flow | bitstream/XSA/ELF rebuilt, actual locked UART replay pending |
+| Vitis/MicroBlaze board flow | NSR/CHF/ARR/AFF 각 1건 30분 replay 완료, final_pred 4/4 match |

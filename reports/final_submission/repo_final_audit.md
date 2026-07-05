@@ -37,7 +37,7 @@ This is an engineering FPGA/VLSI prototype. It does not claim raw electrode acqu
 | Previous rdm->pred_class hotspot | `No timing paths found` in targeted timing query |
 | MicroBlaze full replay system build | LUT/reg/BRAM/DSP `12485 / 8480 / 16 / 3`, WNS/WHS `0.294 ns / 0.055 ns` |
 | IP packaging | accelerator IP repackaged, interface/register map unchanged |
-| Locked full-record board UART replay | Pending, no locked transcript generated |
+| Locked full-record board UART replay | Class-wise NSR/CHF/ARR/AFF replay executed; final_pred 4/4 match |
 
 ## 3. Key Evidence Paths
 
@@ -71,7 +71,7 @@ The locked model board bitstream, XSA, and MicroBlaze ELF were rebuilt:
 - `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa`
 - `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf`
 
-The actual locked UART full-record replay has not been executed in this run. Existing `test_case0_nsr` board transcript files remain in the repo as earlier board integration evidence, but they are not counted as locked-model replay results.
+Locked UART full-record replay has been executed for one NSR, CHF, ARR, and AFF case. All four match full-top XSim at final_pred level; NSR/AFF also match final_mem exactly, while CHF/ARR final_mem divergence remains as a hardware replay semantics issue.
 
 ## 6. Remaining TODO
 

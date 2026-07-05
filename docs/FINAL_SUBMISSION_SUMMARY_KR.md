@@ -53,10 +53,10 @@ Validation 100%는 model-selection split 성능이고, 최종 held-out 성능은
 | Bare-metal ELF | rebuilt |
 | MicroBlaze system timing | WNS/WHS 0.294 ns / 0.055 ns |
 | MicroBlaze system resource | LUT/reg/BRAM/DSP 12485/8480/16/3 |
-| Actual locked UART full-record replay | pending |
+| Actual locked UART full-record replay | NSR/CHF/ARR/AFF 각 1건 완료 |
 | Locked transcript/comparison | not generated |
 
-기존 `test_case0_nsr` board transcript는 board transport path의 legacy integration evidence로만 유지한다. 새 locked Final Membrane 결과로 보고하지 않는다.
+Locked board replay는 NSR/CHF/ARR/AFF 각 1건을 실제 수행했다. 네 case 모두 final_pred는 full-top XSim과 일치했고, final_mem exact match는 NSR/AFF 2건에서 확인했다.
 
 ## 6. 한계
 

@@ -1,95 +1,61 @@
 # Full-Record Board Replay Result
 
-## 1. 현재 상태
+## 1. 최종 상태
 
-최종 locked Final Membrane `structural_guarded_silent_aff_1008710` 기준으로 MicroBlaze full-record replay용 bitstream, XSA, ELF는 재생성했다. 그러나 새 locked bitstream을 실제 FPGA board에 program한 뒤 1,800,000-sample UART full-record replay를 다시 수행한 transcript는 아직 없다.
+최종 locked Final Membrane `structural_guarded_silent_aff_1008710` 기준으로 MicroBlaze full-record replay system을 다시 build하고, 새 bitstream/XSA/ELF를 사용해 FPGA board에서 30분 full-record replay를 수행했다.
 
-따라서 이 문서에서 locked 모델의 board replay는 **pending**으로 기록한다.
-
-| 항목 | 상태 |
+| 항목 | 결과 |
 |---|---|
-| Locked candidate | `structural_guarded_silent_aff_1008710` |
-| Bitstream rebuilt | 완료 |
-| XSA rebuilt | 완료 |
-| MicroBlaze ELF rebuilt | 완료 |
-| Actual locked UART replay | 미수행 |
-| Locked transcript | 없음 |
-| Locked expected-vs-board comparison | 없음 |
-| Locked board PASS/FAIL | pending |
+| Bitstream/XSA/ELF rebuild | 완료 |
+| Board program | 완료 |
+| Class-wise 30분 replay | NSR / CHF / ARR / AFF 각 1건 수행 |
+| samples_received/sent/accepted/consumed | 모든 case 1,800,000 |
+| snapshot_count / decision_count | 모든 case 30 / 1 |
+| done / final_valid | 모든 case 1 / 1 |
+| final_pred match vs full-top XSim | 4 / 4 |
+| final_mem exact match vs full-top XSim | 2 / 4 |
 
-## 2. Rebuilt Artifacts
+## 2. Class-wise Replay 결과
+
+| case | class | transcript | final_pred | final_mem | 판정 |
+|---|---|---|---:|---|---|
+| `locked_nsr_case117` | NSR | `reports/board_replay/transcripts/locked_nsr_case117_uart_full_replay.txt` | match | `29/0/1/0` | exact PASS |
+| `locked_chf_case91` | CHF | `reports/board_replay/transcripts/locked_chf_case91_uart_full_replay.txt` | match | board `0/29/0/1`, XSim `0/30/0/0` | final_pred PASS, final_mem mismatch |
+| `locked_arr_case45` | ARR | `reports/board_replay/transcripts/locked_arr_case45_uart_full_replay.txt` | match | board `7/1/21/1`, XSim `6/4/20/0` | final_pred PASS, final_mem mismatch |
+| `locked_aff_case16` | AFF | `reports/board_replay/transcripts/locked_aff_case16_uart_full_replay.txt` | match | `0/0/0/30` | exact PASS |
+
+Full-top XSim 기준 비교 요약:
+
+- `reports/final_submission/fulltop_xsim_locked_class_cases/locked_class_cases_xsim_vs_board_summary.md`
+- `reports/final_submission/fulltop_xsim_locked_class_cases/locked_class_cases_xsim_vs_board.csv`
+
+## 3. 해석
+
+이번 replay는 MicroBlaze/UART/sample-feeder/AXI/IP 경로가 1,800,000 samples를 실제 board에서 끝까지 처리할 수 있음을 확인했다. 네 class 모두 최종 class output(`final_pred`)은 full-top XSim과 일치했다.
+
+다만 CHF와 ARR 대표 case에서 `final_mem` vector가 full-top direct XSim과 exact로 일치하지 않았다. 보드 카운터와 error register가 모두 정상이고 final class는 맞으므로, 현재 남은 이슈는 UART/MMIO feeder의 긴 input gap이 snapshot frontend의 cycle-sensitive state에 영향을 주는지 확인하는 검증 항목이다.
+
+즉 최종 제출 문서에는 다음처럼 구분한다.
+
+| 구분 | 주장 범위 |
+|---|---|
+| Board transport/integration | 4-class 30분 replay 수행 완료 |
+| Board final class | 4/4 full-top XSim final_pred match |
+| Board final membrane exactness | 2/4 exact, CHF/ARR divergence 남음 |
+| 남은 검증 | gap-injection XSim 또는 sample-clock-enable audit |
+
+## 4. 사용 산출물
 
 | 산출물 | 경로 |
 |---|---|
-| Full replay Vitis app source | `vitis_apps/full_record_replay/src/main.c` |
-| PC UART sender | `tools/board_replay/send_full_record_uart.py` |
 | Bitstream | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit` |
 | XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` |
 | MicroBlaze ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` |
-| System summary | `results/board_replay/microblaze_full_replay/microblaze_full_replay_summary.json` |
+| PC sender | `tools/board_replay/send_full_record_uart.py` |
+| Full-top XSim replay helper | `tools/board_replay/run_locked_fulltop_xsim_cases.py` |
 
-## 3. Locked Build Metrics
+## 5. 남은 TODO
 
-| 항목 | 값 |
-|---|---:|
-| Total samples configured | 1,800,000 |
-| Snapshots per chunk | 30 |
-| UART baud | 230400 |
-| LUT / slice_reg / BRAM / DSP | 12485 / 8480 / 16 / 3 |
-| WNS / WHS | 0.294 ns / 0.055 ns |
-| Timing constraints | Met |
-
-## 4. Replay Flow
-
-```mermaid
-sequenceDiagram
-    participant PC as PC sender
-    participant MB as MicroBlaze app
-    participant F as AXI sample feeder
-    participant IP as SNN ECG Accelerator IP
-
-    PC->>MB: wait for READY
-    MB->>IP: reset, configure, start
-    loop UART chunks
-        PC->>MB: signed 16-bit sample block
-        MB->>F: MMIO sample writes
-        F->>IP: AXI4-Stream samples
-        MB-->>PC: BOARD_PROGRESS
-        PC-->>MB: ACK
-    end
-    MB->>IP: poll done/final_valid
-    MB->>IP: read final_pred/final_mem/profile counters
-    MB-->>PC: BOARD_RESULT
-    PC->>PC: compare against locked Python/XSim expected
-```
-
-## 5. Legacy Transcript Boundary
-
-The repo still contains the earlier `test_case0_nsr` board transcript and comparison:
-
-- `reports/board_replay/transcripts/test_case0_nsr_uart_full_replay.txt`
-- `reports/board_replay/comparisons/test_case0_nsr_expected_vs_board.csv`
-
-That evidence is not deleted because it proves the board transport path was exercised before. It is not reported as the locked model result because the expected source was generated before the locked Final Membrane RTL integration.
-
-## 6. 완료 조건
-
-Locked board replay를 완료로 표시하려면 다음이 모두 필요하다.
-
-| 조건 | 필요 결과 |
-|---|---|
-| samples_sent | expected sample count와 일치 |
-| samples_accepted / consumed | expected sample count와 일치 |
-| snapshot_count | 30 |
-| done / final_valid | 1 / 1 |
-| board_final_pred | locked Python/XSim expected와 일치 |
-| board_final_mem | 가능하면 locked Python/XSim expected와 일치 |
-| transcript | `reports/board_replay/transcripts/locked_model_full_record_replay.txt` |
-| comparison | `reports/board_replay/comparisons/locked_model_expected_vs_board.csv` |
-
-## 7. 남은 TODO
-
-- USB-UART COM port 확인 후 새 locked bitstream으로 board program.
-- Vitis/MicroBlaze app을 새 XSA 기준으로 실행.
-- 대표 full-record 1건을 replay하고 transcript/comparison 저장.
-- non-NSR locked board replay case 추가.
+- Gap-injection XSim으로 direct XSim과 UART/MMIO board replay의 input timing 차이를 재현한다.
+- Sample-indexed state가 `sample_valid/sample_fire` 기준으로만 변하는지 RTL audit을 수행한다.
+- CHF/ARR final_mem exact mismatch를 해소한 뒤 class-wise replay를 재실행한다.

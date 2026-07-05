@@ -14,7 +14,7 @@
 | IP packaging | `component.xml`, `xgui`, AXI wrapper, feeder 존재 | 강점 |
 | AFE/ADC physical verification | XMODEL/nominal model 중심 | 이화여대/SWIR 대비 약함 |
 | Dataset validation | seed 20260808 strict record-wise split, source/physical overlap 0 | 보강됨 |
-| Board-level demo | locked bit/XSA/ELF build 있음, actual locked UART full replay pending | 보강 중. transcript 확보 필요 |
+| Board-level demo | locked bit/XSA/ELF build 및 class-wise UART full replay 완료 | final_pred 4/4 match, final_mem exact 2/4 |
 | Baseline comparison | 새로 일부 정리, energy는 추정 | 보강 필요 |
 
 ## 2. 수상작별 비교
@@ -49,7 +49,7 @@
 
 | 우선순위 | 항목 | 필요한 이유 | 현재 작업 결과 |
 |---:|---|---|---|
-| 1 | Dataset split audit | 88.89%가 strict record-wise인지 방어 필요 | `reports/award_readiness/dataset_split_audit.md` |
+| 1 | Dataset split audit | locked strict record-wise protocol 중심으로 방어 | `reports/award_readiness/dataset_split_audit.md` |
 | 2 | Final Membrane 확정 프로토콜 | strict train/validation 선택 및 lock 이후 test 최종 평가 | `DATASET_SPLIT_VALIDATION_KR.md` |
 | 3 | AFE+ADC evidence figure | analog/mixed-signal 근거 보강 | `figures/*.png`, `AFE_XMODEL_EVIDENCE_KR.md` |
 | 4 | Ablation | 왜 final membrane/evidence가 필요한지 수치화 | `ablation_summary.md` |
@@ -65,7 +65,7 @@
 - 실제 AFE PCB나 ADC 회로를 실측했다.
 - Virtuoso post-layout 검증을 완료했다.
 - 임상적으로 검증된 진단 시스템이다.
-- 88.89%만으로 완료 진단 성능을 주장할 수 있다.
+- 최종 성능은 locked strict record-wise final_test 결과로만 주장한다.
 - locked result 없이 strict record-wise 최종 성능을 단정한다.
 - 전체 dataset의 모든 full 30분 board replay batch가 완료됐다.
 

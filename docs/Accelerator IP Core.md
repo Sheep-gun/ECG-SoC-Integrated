@@ -29,7 +29,8 @@
 | 60초 Snapshot Readout test accuracy | 205 / 256 = 80.08% |
 | 30분 chunk train XSim accuracy | 62 / 68 = 91.18% |
 | 30분 chunk validation XSim accuracy | 31 / 32 = 96.88% |
-| 30분 chunk test XSim accuracy | 32 / 36 = 88.89% |
+| Strict record-wise final_test chunk accuracy | 29 / 36 = 80.56% |
+| Strict record-wise final_test record-majority | 16 / 19 = 84.21% |
 | Python-vs-XSim final prediction mismatch | 0 / 136 |
 | Python-vs-XSim final membrane mismatch | 0 / 136 |
 | Locked pure RTL Vivado resource | LUT 9719 / FF 5038 / BRAM 0 / DSP 0 |
@@ -313,7 +314,7 @@ packaging script는 다음을 수행한다.
 |---|---:|---:|---:|
 | train | 62 / 68 = 91.18% | 0 | 0 |
 | validation | 31 / 32 = 96.88% | 0 | 0 |
-| test | 32 / 36 = 88.89% | 0 | 0 |
+| final_test | 29 / 36 = 80.56% | 0 | 0 |
 | total | 125 / 136 = 91.91% | 0 / 136 | 0 / 136 |
 
 limited regression인 `--split all --max-cases 2`에서도 train/val/test 각각 2개 case에 대해 pred/mem mismatch 0이 보고되었고, profiling counter는 다음과 같이 정상 범위로 확인되었다.
@@ -367,7 +368,7 @@ Vitis 2020.2 설치 후 bare-metal C app도 빌드했고, `results/final_membran
 | 임상 검증 | 수행되지 않음. dataset split 기반 engineering validation임 |
 | formal equivalence | 수행되지 않음. Python-vs-XSim tested-vector mismatch 0으로 제한 |
 | formal AXI protocol proof | 수행되지 않음. RTL smoke/OOC timing/IP packaging 검증으로 제한 |
-| locked full 30분 hardware replay | bitstream/XSA/ELF build 완료, actual UART transcript pending |
+| locked full 30분 hardware replay | NSR/CHF/ARR/AFF 각 1건 수행, final_pred 4/4 match |
 | UART bare-metal smoke | Vitis-built ELF와 UART PASS transcript 확인 |
 | energy/sample | Vivado power estimate는 있으나 workload 기반 energy/sample 실측은 없음 |
 | production IP qualification | Vivado custom IP packaging 완료 수준이며 제품화 검증은 아님 |

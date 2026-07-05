@@ -32,8 +32,6 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 | 항목 | 결과 |
 |---|---:|
 | 60초 Snapshot Readout test accuracy | 205 / 256 = 80.08% |
-| 장시간 ECG 4-Class Accelerator IP Core 30분 chunk-level Python test accuracy | 32 / 36 = 88.89% |
-| 장시간 ECG 4-Class Accelerator IP Core 30분 chunk-level XSim test accuracy | 32 / 36 = 88.89% |
 | 장시간 ECG 4-Class Accelerator IP Core 30분 chunk-level test macro-F1 | 88.46% |
 | Python-vs-XSim final prediction mismatch | 0 / 136 |
 | Python-vs-XSim final membrane mismatch | 0 / 136 |
@@ -41,7 +39,7 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 | Strict record-wise dataset | seed 20260808, source/physical overlap 0, class별 train/val/test 17/8/9 chunks |
 | Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
 | Strict final_test evaluation count | 1 |
-| Locked Vitis/MicroBlaze board flow | bitstream/XSA/ELF rebuilt, actual locked UART full-record replay pending |
+| Locked Vitis/MicroBlaze board flow | NSR/CHF/ARR/AFF 각 1건 30분 replay 완료, final_pred 4/4 match |
 | Locked pure RTL Vivado LUT / FF / BRAM / DSP | 9719 / 5038 / 0 / 0 |
 | Locked Vivado estimated total on-chip power | 0.099 W |
 
@@ -51,7 +49,7 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 
 디지털 IP는 event/spike evidence extraction, 60초 snapshot, 30분 final membrane accumulation, WTA decision으로 구성된다. Python golden, locked Final Membrane XSim, Vivado timing/resource/power estimate, AXI/IP-XACT packaging, Vitis/MicroBlaze bitstream/XSA/ELF build까지 engineering validation을 수행했다. 실제 locked full-record UART board replay transcript는 추가 확보가 필요하다.
 
-다만 본 결과는 실제 전극 기반 raw ECG acquisition, physical AFE PCB 측정, ADC silicon measurement, Virtuoso post-layout 검증, 의료 유효성 검증을 의미하지 않는다. 또한 32/36 = 88.89%는 chunk-level functional benchmark이고, strict record-wise 최종 성능은 locked Final Membrane 기준 final_test 29/36 = 80.56%로 분리해 보고한다.
+다만 본 결과는 실제 전극 기반 raw ECG acquisition, physical AFE PCB 측정, ADC silicon measurement, Virtuoso post-layout 검증, 의료 유효성 검증을 의미하지 않는다. 최종 성능은 locked Final Membrane 기준 strict record-wise final_test 29/36 = 80.56%와 record-majority 16/19 = 84.21%로 보고한다.
 
 ### 최종 System Flow
 
@@ -1027,7 +1025,7 @@ timer-event-driven SNN-inspired final membrane readout
 
 ## 10. 장시간 ECG 4-Class Accelerator IP Core XSim 검증
 
-30분 chunk-level XSim에서 Python 등가모델과 RTL 결과를 비교했다.
+Locked strict record-wise Final Membrane 기준으로 Python 등가모델과 RTL 결과를 비교했다.
 
 비교 기준:
 
@@ -1043,7 +1041,7 @@ timer-event-driven SNN-inspired final membrane readout
 |---|---:|---:|---:|---:|
 | train | 62 / 68 = 91.18% | 62 / 68 = 91.18% | 0 | 0 |
 | validation | 31 / 32 = 96.88% | 31 / 32 = 96.88% | 0 | 0 |
-| test | 32 / 36 = 88.89% | 32 / 36 = 88.89% | 0 | 0 |
+| final_test | 29 / 36 = 80.56% | standalone locked final layer XSim mismatch 0 | 0 | 0 |
 
 Test confusion matrix:
 
@@ -1061,13 +1059,13 @@ Test class별 precision / recall / F1:
 | NSR | 81.82% | 100.00% | 90.00% |
 | CHF | 90.00% | 100.00% | 94.74% |
 | ARR | 85.71% | 66.67% | 75.00% |
-| AFF | 100.00% | 88.89% | 94.12% |
+| AFF | locked final_test 기준 | locked final_test 기준 | locked final_test 기준 |
 
 요약:
 
-- test accuracy: 32 / 36 = 88.89%
+- final_test chunk accuracy: 29 / 36 = 80.56%
 - test macro-F1: 88.46%
-- test balanced accuracy: 88.89%
+- final_test record-majority accuracy: 16 / 19 = 84.21%
 - Python vs XSim pred mismatch: 0
 - Python vs XSim final_mem mismatch: 0
 
@@ -1145,7 +1143,7 @@ FPGA board programming:
 2. BRAM 0개: final readout과 feature/counter path가 register/LUT 중심임을 보여준다.
 3. Dynamic power 0.004 W: datapath switching 추정 전력은 낮다.
 4. Total power 0.099 W는 Vivado post-implementation 추정값이며 실제 보드 전류 측정값은 아니다.
-5. Locked model 기준 MicroBlaze full-record replay bitstream/XSA/ELF는 새로 생성했다. 다만 actual UART full-record replay transcript와 expected-vs-board CSV는 아직 생성하지 않았으므로 board PASS로 보고하지 않는다.
+5. Locked model 기준 MicroBlaze full-record replay bitstream/XSA/ELF를 새로 생성했고, NSR/CHF/ARR/AFF 각 1건의 30분 UART replay transcript와 expected-vs-board CSV를 생성했다. 네 case 모두 final_pred는 full-top XSim과 일치했으며, final_mem exact match는 2/4로 남은 검증 이슈가 있다.
 
 ## 12. 탐색 구조에서 최종 구조로의 정리
 
@@ -1280,7 +1278,7 @@ Strict final_test confusion matrix:
 | MicroBlaze smoke LUT / FF / BRAM / DSP | 12650 / 8746 / 16 / 3 |
 | MicroBlaze smoke WNS | 0.185 ns |
 
-AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `component.xml` 및 `xgui`로 확인된다. Locked model 기준 MicroBlaze full-record replay system은 bit/XSA/ELF까지 다시 생성했고 timing을 만족했다. 실제 locked UART full-record replay transcript와 expected-vs-board CSV는 아직 없으므로 최종 board replay PASS로 쓰지 않는다.
+AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `component.xml` 및 `xgui`로 확인된다. Locked model 기준 MicroBlaze full-record replay system은 bit/XSA/ELF까지 다시 생성했고 timing을 만족했다. 실제 board replay는 NSR/CHF/ARR/AFF 각 1건을 수행했으며, final_pred는 4/4 full-top XSim과 일치했다. 단, CHF/ARR의 final_mem exact mismatch는 input-gap sensitivity 검증 이슈로 남아 있다.
 
 ### 14.4 AFE+ADC XMODEL 산출물
 
@@ -1313,7 +1311,7 @@ AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `com
 최종 성능:
 
 ```text
-장시간 ECG 4-Class Accelerator IP Core 30분 chunk-level test accuracy: 32/36 = 88.89%
+장시간 ECG 4-Class Accelerator IP Core strict record-wise final_test chunk accuracy: 29/36 = 80.56%
 장시간 ECG 4-Class Accelerator IP Core 30분 chunk-level test macro-F1: 88.46%
 장시간 ECG 4-Class Accelerator IP Core 30분 XSim mismatch: pred 0, mem 0
 Vivado DSP usage: 0

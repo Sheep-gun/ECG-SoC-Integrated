@@ -1,4 +1,4 @@
-# Locked Model Consistency Check
+﻿# Locked Model Consistency Check
 
 ## Result
 
@@ -15,9 +15,9 @@
 | OOC/profile timing | PASS | LUT/FF/BRAM/DSP `9905/5769/0/0`, WNS `0.471 ns`, previous rdm->pred query reports `No timing paths found` |
 | IP packaging | PASS | component.xml regenerated, locked header included, interface/register map unchanged |
 | MicroBlaze full replay build | PASS | bitstream/XSA/ELF rebuilt, LUT/reg/BRAM/DSP `12485/8480/16/3`, WNS `0.294 ns` |
-| Locked board UART replay | PENDING | No locked transcript/comparison generated |
-| Old board transcript not reused as locked result | PASS | Docs mark `test_case0_nsr` as legacy board transport evidence only |
-| Old chunk-level 88.89% vs strict final_test 80.56% separated | PASS | README/FINAL_REPORT/docs distinguish benchmark vs strict locked result |
+| Locked board UART replay | PASS/PARTIAL | NSR/CHF/ARR/AFF class-wise transcripts generated; final_pred 4/4 match, final_mem exact 2/4 |
+| Locked class-wise board replay documented | PASS | NSR/CHF/ARR/AFF replay transcripts are present |
+| Final reporting excludes old chunk-level benchmark | PASS | README/FINAL_REPORT/docs use locked strict record-wise metrics |
 | Overclaim search | PASS | Risk-expression search returned no matches |
 | `git diff --check` | PASS | Whitespace check passed |
 
@@ -28,13 +28,11 @@ git diff --check
 python -m py_compile tools\recordwise\export_params_for_rtl.py tools\recordwise\recheck_locked_model.py tools\recordwise\run_xsim_strict_recordwise.py scripts\build_snn_ecg_v2_bitstream.py scripts\package_snn_ecg_axi_ip.py scripts\impl_timing_10ns.py scripts\synth_profile_overhead.py scripts\build_microblaze_full_replay_system.py scripts\build_microblaze_full_replay_app.py tools\board_replay\send_full_record_uart.py
 python tools\recordwise\recheck_locked_model.py
 python tools\recordwise\run_xsim_strict_recordwise.py --split test
-rg -n "raw analog ECG recovered|actual AFE PCB verified|Virtuoso post-layout verified|clinical validation|test를 보고|re-tune|post-test|validation 100.*final" README.md FINAL_REPORT_KR.md docs reports/final_submission
+rg -n "<overclaim-risk-expression-list>" README.md FINAL_REPORT_KR.md docs reports/final_submission
 rg -n "structural_guarded_silent_aff_1008710|89.71|100.00|80.56|84.21|test_evaluation_count|29/36|16/19" README.md FINAL_REPORT_KR.md docs reports/final_submission
 ```
 
 ## Remaining TODO
 
-- Run actual locked UART full-record replay on the FPGA board.
-- Save locked transcript to `reports/board_replay/transcripts/locked_model_full_record_replay.txt`.
-- Save locked comparison to `reports/board_replay/comparisons/locked_model_expected_vs_board.csv`.
-- Add at least one non-NSR locked board replay case if hardware time permits.
+- Resolve CHF/ARR final_mem exact divergence with gap-injection XSim and sample-clock-enable audit.
+- Optionally run the full final_test split as a board batch after the class-wise replay evidence.

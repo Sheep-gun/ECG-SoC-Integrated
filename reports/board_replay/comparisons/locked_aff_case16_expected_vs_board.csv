@@ -7,11 +7,11 @@ snapshot_count,30,30,1
 decision_count,1,1,1
 final_valid,1,1,1
 done,1,1,1
-final_pred,0,0,1
-final_mem_NSR,31,31,1
+final_pred,3,3,1
+final_mem_NSR,0,0,1
 final_mem_CHF,0,0,1
-final_mem_ARR,1,1,1
-final_mem_AFF,0,0,1
+final_mem_ARR,0,0,1
+final_mem_AFF,30,30,1
 feeder_tlast_count,1,1,1
 snn_error,0,0,1
 feeder_error,0,0,1

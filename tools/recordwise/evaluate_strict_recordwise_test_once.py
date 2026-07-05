@@ -158,7 +158,7 @@ def write_summary(metrics: dict[str, Any], eval_count: int, warning: str | None)
         "",
         "## Interpretation Boundary",
         "",
-        "이 결과는 source_record_id 기준 strict split에서 train/validation-only search 이후 locked params로 수행한 held-out test 1회 평가이다. 기존 chunk-level 32/36 = 88.89% 결과와 protocol이 다르므로 같은 의미로 직접 비교하지 않는다.",
+        "이 결과는 source_record_id 기준 strict split에서 train/validation-only search 이후 locked params로 수행한 held-out test 1회 평가이다. 최종 보고에는 이 locked strict record-wise 결과만 사용한다.",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")

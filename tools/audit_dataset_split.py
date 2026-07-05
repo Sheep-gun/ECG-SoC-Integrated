@@ -115,7 +115,7 @@ def main() -> None:
         "",
         "## Interpretation",
         "",
-        "The current train/validation/test organization is chunk-level balanced. Some source records appear in more than one current split, so the existing 88.89% test result must not be described as strict record-wise generalization.",
+        "The earlier chunk-level organization is not used as the final model evidence. Final reporting uses the locked strict record-wise protocol only.",
         "",
         "Detailed record overlap tables:",
         "",

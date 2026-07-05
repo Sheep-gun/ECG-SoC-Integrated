@@ -55,7 +55,7 @@ def write_repo_audit() -> Path:
         ["XSim runner", exists(REPO / "scripts" / "run_final_membrane_v2_xsim.py"), "scripts/run_final_membrane_v2_xsim.py", "existing frozen RTL comparison runner"],
         ["AXI/IP wrapper", exists(REPO / "rtl" / "axi" / "snn_ecg_axi_lite_stream_top.v"), "rtl/axi/snn_ecg_axi_lite_stream_top.v", "packaged accelerator wrapper"],
         ["IP-XACT component", exists(REPO / "ip_repo" / "snn_ecg_axi_accelerator" / "component.xml"), "ip_repo/snn_ecg_axi_accelerator/component.xml", "Vivado IP packaging evidence"],
-        ["Board full replay transcript", exists(REPO / "reports" / "board_replay" / "transcripts" / "test_case0_nsr_uart_full_replay.txt"), "reports/board_replay/transcripts/test_case0_nsr_uart_full_replay.txt", "previous board evidence, not strict search"],
+        ["Board full replay transcript", exists(REPO / "reports" / "board_replay" / "transcripts" / "locked_nsr_case117_uart_full_replay.txt"), "reports/board_replay/transcripts/locked_nsr_case117_uart_full_replay.txt", "locked class-wise board replay evidence"],
     ]
     lines = [
         "# Strict Record-wise Repo Audit",
@@ -66,7 +66,7 @@ def write_repo_audit() -> Path:
         "",
         "## Scope Notes",
         "",
-        "- Existing `32/36 = 88.89%` is the earlier chunk-level test protocol.",
+        "- Final reporting uses the locked strict record-wise protocol only.",
         "- Strict record-wise scripts reuse split-independent cached snapshot feature rows from `window_dump_*.csv` and reassign them by `source_record_id`.",
         "- A class-free `physical_record_id = <source_db>_<record_id>` audit is also performed to catch cross-class source-record leakage.",
         "- The strict search does not claim raw analog ECG acquisition, physical AFE PCB validation, or clinical validation.",
@@ -172,7 +172,7 @@ def write_docs() -> list[Path]:
         "",
         "## 1. 왜 strict record-wise가 필요한가",
         "",
-        "기존 32/36 = 88.89% 결과는 chunk-level split 기준이다. 같은 원천 ECG record에서 잘린 여러 30분 chunk가 서로 다른 split에 섞이면, 모델이 unseen record 일반화가 아니라 record-specific 특성을 재사용할 수 있다. 이 문서는 `source_record_id` 단위로 train/validation/test를 다시 묶고, parameter search를 train/validation에만 제한한 절차를 정리한다.",
+        "최종 보고는 `source_record_id` 단위로 train/validation/test를 분리하고, parameter search를 train/validation에만 제한한 locked strict record-wise 절차만 사용한다.",
         "",
         "## 2. Manifest와 source_record_id",
         "",
@@ -253,7 +253,7 @@ def write_docs() -> list[Path]:
                 "",
                 "## 6. Existing chunk-level result와의 관계",
                 "",
-                "기존 32/36 = 88.89%는 chunk-level split 기준 결과이고, 이 문서의 strict record-wise 결과는 unseen source record 평가이다. 두 수치는 protocol이 다르므로 같은 성능 지표처럼 직접 비교하지 않는다.",
+                "최종 보고 성능은 locked strict record-wise final_test 결과로만 해석한다.",
                 "",
                 "## 7. Evidence Paths",
                 "",
@@ -308,7 +308,7 @@ def update_readme_and_final_report() -> list[Path]:
         result_sentence = "Strict record-wise final test는 아직 실행 전이므로 성능 수치를 주장하지 않는다."
     readme_body = "\n".join(
         [
-            "기존 `32/36 = 88.89%` 결과는 chunk-level split 기준이다. 제출 직전 검증에서는 같은 원천 ECG record의 chunk가 서로 다른 split에 섞이지 않도록 `source_record_id` 기준 strict split을 별도로 구성했다.",
+            "제출 직전 검증에서는 같은 원천 ECG record의 chunk가 서로 다른 split에 섞이지 않도록 `source_record_id` 기준 strict split을 구성했다.",
             "",
             result_sentence,
             "",
@@ -323,7 +323,7 @@ def update_readme_and_final_report() -> list[Path]:
             "",
             result_sentence,
             "",
-            "이 결과는 기존 88.89% chunk-level result와 protocol이 다르다. 따라서 strict record-wise 결과는 unseen source-record stress test로 해석하고, chunk-level test accuracy처럼 직접 비교하지 않는다.",
+            "이 결과는 locked strict record-wise final_test 결과이며 최종 보고 성능으로 사용한다.",
         ]
     )
     upsert_section(REPO / "README.md", "STRICT_RECORDWISE", "Strict Record-wise Validation", readme_body)

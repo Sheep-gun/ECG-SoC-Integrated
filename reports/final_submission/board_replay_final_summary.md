@@ -1,14 +1,15 @@
 # Board Replay Final Summary
 
-## Locked Model Status
+## Locked Model Board Replay
 
 | 항목 | 결과 |
 |---|---|
 | Locked candidate | `structural_guarded_silent_aff_1008710` |
 | Locked bitstream/XSA/ELF | Rebuilt |
-| Locked full-record UART replay | Pending |
-| Locked transcript | Not generated |
-| Locked expected-vs-board comparison | Not generated |
+| Locked full-record UART replay | Executed |
+| Class coverage | NSR / CHF / ARR / AFF, one 30-minute case each |
+| final_pred match vs full-top XSim | 4 / 4 |
+| final_mem exact match vs full-top XSim | 2 / 4 |
 
 ## Rebuilt Board Flow Artifacts
 
@@ -31,11 +32,6 @@
 | WNS / WHS | 0.294 ns / 0.055 ns |
 | timing constraints | met |
 
-## Legacy Board Transcript
+## Exactness Boundary
 
-The repo also contains an earlier `test_case0_nsr` board replay transcript:
-
-- `reports/board_replay/transcripts/test_case0_nsr_uart_full_replay.txt`
-- `reports/board_replay/comparisons/test_case0_nsr_expected_vs_board.csv`
-
-That transcript remains useful as board integration evidence for the existing UART/MicroBlaze/sample-feeder path, but it is not reported as the locked `structural_guarded_silent_aff_1008710` result. The locked model requires a fresh replay transcript generated after programming the newly rebuilt locked bitstream.
+NSR and AFF match full-top XSim at both final_pred and final_mem levels. CHF and ARR match final_pred and all transport counters, but final_mem vectors differ. The remaining technical item is sample-gap sensitivity between back-to-back direct XSim and UART/MMIO board replay.

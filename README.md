@@ -28,7 +28,6 @@ flowchart LR
 
 | 항목 | 결과 |
 |---|---|
-| Chunk-level functional benchmark accuracy | 32/36 = 88.89% |
 | Fully blind strict record-wise model lock | Snapshot fixed, Final Membrane train/validation-only selection, final_test one-shot |
 | Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
 | Strict final_test evaluation count | 1 |
@@ -38,7 +37,7 @@ flowchart LR
 | Locked pure RTL Vivado resource | LUT 9719, FF 5038, BRAM 0, DSP 0 |
 | Locked pure RTL timing / power | WNS 8.184 ns, estimated total power 0.099 W |
 | AXI/IP packaging | accelerator IP-XACT `component.xml`, xgui, AXI wrapper, sample feeder 존재 |
-| Locked Vitis/MicroBlaze board flow | bitstream/XSA/ELF rebuilt, actual locked UART full-record replay pending |
+| Locked Vitis/MicroBlaze board flow | 4 class-wise 30분 replay 완료, final_pred 4/4 match, final_mem exact 2/4 |
 
 
 ## 4. 추가 문서 링크
@@ -282,7 +281,7 @@ python scripts\build_snn_ecg_v2_bitstream.py
 |---|---:|---:|---:|---:|
 | train | 62 / 68 = 91.18% | 62 / 68 = 91.18% | 0 | 0 |
 | validation | 31 / 32 = 96.88% | 31 / 32 = 96.88% | 0 | 0 |
-| test | 32 / 36 = 88.89% | 32 / 36 = 88.89% | 0 | 0 |
+| final_test | 29 / 36 = 80.56% | locked strict record-wise one-shot | 0 | standalone final layer |
 
 장시간 ECG 4-Class Accelerator IP Core test confusion matrix:
 
@@ -300,9 +299,9 @@ python scripts\build_snn_ecg_v2_bitstream.py
 | NSR | 81.82% | 100.00% | 90.00% |
 | CHF | 90.00% | 100.00% | 94.74% |
 | ARR | 85.71% | 66.67% | 75.00% |
-| AFF | 100.00% | 88.89% | 94.12% |
+| AFF | locked final_test 기준 | locked final_test 기준 | locked final_test 기준 |
 
-Test macro-F1은 88.46%, balanced accuracy는 88.89%이다.
+최종 보고 성능은 locked strict record-wise final_test 29/36 = 80.56%와 record-majority 16/19 = 84.21%이다.
 
 ## Vivado 구현 결과
 
@@ -363,7 +362,7 @@ FPGA board programming:
 | Board report | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/board_program_report.txt` |
 
 DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/counter/accumulator 기반 SNN-inspired RTL 구조임을 확인할 수 있다.
-Locked model 기준 MicroBlaze full-record replay system은 bitstream/XSA/ELF까지 새로 build했다. 다만 새 locked bitstream으로 actual UART full-record replay transcript는 아직 생성하지 않았다. 기존 `test_case0_nsr` transcript는 board transport path legacy evidence로만 유지하고, locked result로 재사용하지 않는다.
+Locked model 기준 MicroBlaze full-record replay system은 bitstream/XSA/ELF까지 새로 build했고, NSR/CHF/ARR/AFF 각 1건의 30분 UART board replay를 수행했다. 네 case 모두 final_pred는 full-top XSim과 일치했고, final_mem exact match는 NSR/AFF 2건에서 확인했다. CHF/ARR final_mem divergence는 input-gap sensitivity 검증 이슈로 남긴다.
 
 ## 주의사항
 

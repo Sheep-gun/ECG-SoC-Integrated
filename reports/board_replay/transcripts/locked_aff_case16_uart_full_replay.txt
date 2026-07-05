@@ -445,14 +445,14 @@ BOARD_PROGRESS samples_received=1798144 samples_sent_to_ip=1798144
 BOARD_PROGRESS samples_received=1800000 samples_sent_to_ip=1800000
 BOARD_RESULT samples_received=1800000 samples_sent_to_ip=1800000
 BOARD_RESULT samples_accepted=1800000 samples_consumed=1800000 snapshot_count=30 decision_count=1
-BOARD_RESULT final_pred_reg=0x101 final_valid=1 done=1 final_pred=0
-BOARD_RESULT final_mem_nsr=31 final_mem_chf=0 final_mem_arr=1 final_mem_aff=0
+BOARD_RESULT final_pred_reg=0x107 final_valid=1 done=1 final_pred=3
+BOARD_RESULT final_mem_nsr=0 final_mem_chf=0 final_mem_arr=0 final_mem_aff=30
 BOARD_RESULT feeder_write_count=1800000 feeder_tx_count=1800000 feeder_tlast_count=1
-BOARD_RESULT status=0x1D06 snn_error=0x0 feeder_error=0x0
-BOARD_PROFILE profile_total_lo=1916506856 profile_total_hi=4
-BOARD_PROFILE profile_busy_lo=1916506856 profile_busy_hi=4
-BOARD_PROFILE profile_run_lo=1916505536 profile_run_hi=4
-BOARD_PROFILE profile_input_wait_lo=1914705536 profile_input_wait_hi=4
+BOARD_RESULT status=0x31D06 snn_error=0x0 feeder_error=0x0
+BOARD_PROFILE profile_total_lo=1940028278 profile_total_hi=4
+BOARD_PROFILE profile_busy_lo=1940028278 profile_busy_hi=4
+BOARD_PROFILE profile_run_lo=1940026958 profile_run_hi=4
+BOARD_PROFILE profile_input_wait_lo=1938226958 profile_input_wait_hi=4
 BOARD_PROFILE profile_accepted_lo=1800000 profile_accepted_hi=0
 BOARD_PROFILE profile_windows_lo=30 profile_windows_hi=0
 BOARD_PROFILE profile_decisions_lo=1 profile_decisions_hi=0

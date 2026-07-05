@@ -18,8 +18,8 @@ This audit checks whether the strict record-wise locked Final Membrane candidate
 | Pure RTL Vivado build | bitstream generated, timing met | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/` | Locked RTL, no XSA for this pure top |
 | IP package | Accelerator IP source list includes locked header | `ip_repo/snn_ecg_axi_accelerator/component.xml` | Repackaged, interface unchanged |
 | MicroBlaze full replay build | bitstream/XSA/ELF rebuilt, timing met | `results/board_replay/microblaze_full_replay/` | Locked RTL build artifact |
-| Locked board UART replay | Not executed in this run | `reports/final_submission/vitis_locked_model_board_replay_summary.md` | No locked transcript/comparison generated |
+| Locked board UART replay | Executed for NSR/CHF/ARR/AFF one 30-minute case each | `reports/final_submission/vitis_locked_model_board_replay_summary.md` | final_pred 4/4 match, final_mem exact 2/4 |
 
 ## Boundary
 
-The existing `test_case0_nsr` UART transcript under `reports/board_replay/` is preserved as earlier board integration evidence. It is not reused as the locked `structural_guarded_silent_aff_1008710` board replay result because its expected source is the previous XSim prediction artifact.
+Locked board replay evidence is stored under `reports/board_replay/transcripts/locked_*_uart_full_replay.txt` and compared against full-top XSim class-wise replay artifacts.

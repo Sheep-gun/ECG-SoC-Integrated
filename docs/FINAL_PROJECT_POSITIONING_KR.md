@@ -17,7 +17,7 @@
 | Low-resource digital classifier core | board wrapper BRAM 0 / DSP 0, AXI OOC BRAM 0 / DSP 0 |
 | Model-based AFE+ADC integration | `vin_v = signed_code / 200000`, HPF/gain/notch/LPF/ADC nominal model figures |
 | Board-level IP call | MicroBlaze smoke UART PASS transcript, XSDB MMIO transcript |
-| Locked board integration build | MicroBlaze full-record bitstream/XSA/ELF rebuilt, actual UART replay pending |
+| Locked board integration replay | MicroBlaze full-record bitstream/XSA/ELF rebuilt, class-wise UART replay executed |
 
 ## 3. 주장하면 안 되는 것
 
@@ -31,7 +31,7 @@
 | silicon ADC measured | ADC silicon 측정 없음 |
 | Virtuoso post-layout verification completed | layout/post-layout simulation 없음 |
 | clinical diagnosis validation | engineering prototype이며 임상 validation 아님 |
-| locked full dataset board replay completed | actual locked UART board replay transcript가 아직 없음 |
+| full final_test batch board replay completed | class-wise representative replay만 수행했고 전체 final_test batch는 아직 아님 |
 
 ## 4. 심사 방어 논리
 
@@ -41,13 +41,13 @@
 
 ### 왜 Accelerator IP Core인가?
 
-범용 CPU software classifier가 아니라, ECG stream 처리와 class evidence accumulation을 RTL datapath로 고정했다. AXI4-Lite control/status, AXI4-Stream sample input, sample feeder, IP-XACT packaging 산출물이 있으며, locked model 기준 MicroBlaze full-record replay bitstream/XSA/ELF build까지 수행했다. actual UART board replay는 pending이다.
+범용 CPU software classifier가 아니라, ECG stream 처리와 class evidence accumulation을 RTL datapath로 고정했다. AXI4-Lite control/status, AXI4-Stream sample input, sample feeder, IP-XACT packaging 산출물이 있으며, locked model 기준 MicroBlaze full-record replay bitstream/XSA/ELF build와 class-wise UART board replay를 수행했다.
 
 ### board full replay와 smoke의 차이는 무엇인가?
 
-Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final readback을 빠르게 확인한다. Full replay는 1 kSPS x 30분 = 1,800,000 samples를 실제 board에서 입력하고, 30 snapshots와 final decision을 locked Python/XSim expected와 비교하는 단계이다. locked transcript는 아직 생성하지 않았다.
+Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final readback을 빠르게 확인한다. Full replay는 1 kSPS x 30분 = 1,800,000 samples를 실제 board에서 입력하고, 30 snapshots와 final decision을 locked full-top XSim expected와 비교하는 단계이다. 현재 NSR/CHF/ARR/AFF 각 1건 transcript가 생성되어 있고 final_pred는 4/4 일치한다.
 
-### 88.89% 성능을 어떻게 표현해야 하나?
+### 최종 성능을 어떻게 표현해야 하나?
 
 
 ## 5. 최종 제출용 안전 문장

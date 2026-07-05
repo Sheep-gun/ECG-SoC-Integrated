@@ -2,14 +2,9 @@
 
 ## 1. 핵심 요약
 
-최종 locked Final Membrane `structural_guarded_silent_aff_1008710`는 AXI accelerator IP source에 반영되었고, IP-XACT package와 MicroBlaze full-record replay system build까지 다시 생성했다.
+최종 locked Final Membrane `structural_guarded_silent_aff_1008710`는 AXI accelerator IP source와 packaged IP에 반영되었다. AXI register map과 top-level interface는 유지했고, 내부 Final Membrane RTL과 locked parameter include만 갱신했다.
 
-중요한 경계는 다음과 같다.
-
-- AXI/IP interface와 register map은 바뀌지 않았다.
-- RTL source와 locked parameter include가 바뀌었기 때문에 accelerator IP는 재패키징했다.
-- locked bitstream/XSA/ELF는 새로 생성했다.
-- locked 모델 기준 실제 UART full-record board replay transcript는 아직 생성하지 않았다.
+MicroBlaze full-record replay system은 새 locked IP 기준으로 bitstream/XSA/ELF를 다시 build했고, 실제 FPGA board에서 NSR/CHF/ARR/AFF 각 1건의 30분 full-record replay를 수행했다.
 
 ## 2. IP Packaging Evidence
 
@@ -20,7 +15,7 @@
 | Accelerator IP-XACT | `ip_repo/snn_ecg_axi_accelerator/component.xml` | Regenerated |
 | Accelerator xgui | `ip_repo/snn_ecg_axi_accelerator/xgui/snn_ecg_axi_accelerator_v1_0.tcl` | Present |
 | Packaged locked final layer | `ip_repo/snn_ecg_axi_accelerator/src/final_membrane_layer.v` | Updated |
-| Packaged locked params include | `ip_repo/snn_ecg_axi_accelerator/src/strict_recordwise_locked_params.vh` | Added |
+| Packaged locked params include | `ip_repo/snn_ecg_axi_accelerator/src/strict_recordwise_locked_params.vh` | Updated |
 | Feeder IP-XACT | `ip_repo/axi_lite_axis_sample_feeder/component.xml` | Regenerated |
 | Feeder xgui | `ip_repo/axi_lite_axis_sample_feeder/xgui/axi_lite_axis_sample_feeder_v1_0.tcl` | Present |
 
@@ -31,41 +26,21 @@
 | Locked candidate | `structural_guarded_silent_aff_1008710` |
 | Top-level ports | 변경 없음 |
 | AXI4-Lite register map | 변경 없음 |
-| AXI4-Stream sample width | 기존 16-bit stream 유지 |
+| AXI4-Stream sample width | 16-bit 유지 |
 | IP-XACT address map | 변경 없음 |
 | Repackage 필요 여부 | 필요, RTL source/include 갱신 때문 |
 
-## 4. Locked Vivado Build Evidence
+## 4. Build Evidence
 
-Pure RTL board top:
+Pure RTL locked model build:
 
 | 항목 | 값 |
 |---|---:|
 | LUT / FF / BRAM / DSP | 9719 / 5038 / 0 / 0 |
 | WNS | 8.184 ns |
 | Estimated total power | 0.099 W |
-| Bitstream | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/bitstream/snn_ecg_v2_nexys_a7_top.bit` |
 
-OOC/profile build:
-
-| 항목 | 값 |
-|---|---:|
-| PROFILE_EN=1 LUT / FF / BRAM / DSP | 9905 / 5769 / 0 / 0 |
-| WNS / WHS | 0.471 ns / 0.190 ns |
-| `u_final` LUT / FF | 1329 / 1037 |
-| Previous `rdm_level_spike -> pred_class` path | `No timing paths found` |
-
-## 5. MicroBlaze Full-Record Replay System Build
-
-| Artifact | Path | Status |
-|---|---|---|
-| Full replay bitstream | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit` | Rebuilt |
-| Full replay XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` | Rebuilt |
-| Full replay ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` | Rebuilt |
-| Full replay app source | `vitis_apps/full_record_replay/src/main.c` | Present |
-| PC sender script | `tools/board_replay/send_full_record_uart.py` | Present |
-
-System build metrics:
+MicroBlaze full-record replay system:
 
 | 항목 | 값 |
 |---|---:|
@@ -74,26 +49,31 @@ System build metrics:
 | Timing constraints | Met |
 | CDC/check_timing markers | Clean |
 
-BRAM/DSP are system-level resources from MicroBlaze/LMB/BRAM/UART/interconnect infrastructure, not the bare accelerator core.
+BRAM/DSP는 MicroBlaze/LMB/BRAM/UART/interconnect infrastructure에서 발생한 system-level resource이고, bare accelerator core의 DSP/BRAM 사용량과 구분한다.
 
-## 6. Board Replay Evidence Boundary
+## 5. Board Replay Evidence
 
-The repo contains an earlier `test_case0_nsr` full-record board transcript under `reports/board_replay/`. It is useful as proof that the MicroBlaze/UART/sample-feeder path can run a 1,800,000-sample replay, but it is not counted as the locked `structural_guarded_silent_aff_1008710` replay result.
-
-For the locked final model, the board replay status is:
-
-| 항목 | 상태 |
+| 항목 | 결과 |
 |---|---|
-| Locked bitstream/XSA/ELF build | 완료 |
-| Locked UART full-record replay | TODO |
-| Locked transcript | 없음 |
-| Locked expected-vs-board CSV | 없음 |
-| Locked board PASS/FAIL | pending |
+| Board target | Nexys A7 / Artix-7 |
+| Locked bitstream | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit` |
+| Locked XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` |
+| Locked ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` |
+| Class-wise replay | NSR / CHF / ARR / AFF 각 1건 |
+| Samples per replay | 1,800,000 |
+| final_pred match vs full-top XSim | 4 / 4 |
+| final_mem exact match vs full-top XSim | 2 / 4 |
 
-## 7. 남은 TODO
+결과 요약:
 
-- 새 locked bitstream을 board에 program하고 full-record UART replay 수행.
-- `reports/board_replay/transcripts/locked_model_full_record_replay.txt` 저장.
-- `reports/board_replay/comparisons/locked_model_expected_vs_board.csv` 저장.
-- non-NSR locked board replay case 추가.
-- full final_test split board replay batch는 추가 검증으로 분리.
+- `reports/final_submission/fulltop_xsim_locked_class_cases/locked_class_cases_xsim_vs_board_summary.md`
+- `reports/board_replay/comparisons/locked_nsr_case117_summary.md`
+- `reports/board_replay/comparisons/locked_chf_case91_summary.md`
+- `reports/board_replay/comparisons/locked_arr_case45_summary.md`
+- `reports/board_replay/comparisons/locked_aff_case16_summary.md`
+
+## 6. 남은 검증 이슈
+
+보드 replay는 UART/MMIO feeder를 사용하므로 direct full-top XSim보다 sample 사이 input gap이 길다. NSR/AFF는 final_mem까지 exact match였지만, CHF/ARR는 final class는 맞고 final_mem vector만 달랐다. 따라서 남은 검증은 모델 재튜닝이 아니라 hardware replay semantics 검증이다.
+
+다음 작업은 gap-injection XSim과 sample-clock-enable audit이다.

@@ -5,33 +5,22 @@
 | 항목 | 결과 |
 |---|---|
 | Locked candidate | `structural_guarded_silent_aff_1008710` |
-| Locked bitstream rebuilt | Yes |
-| Locked XSA rebuilt | Yes |
-| Locked MicroBlaze ELF rebuilt | Yes |
-| Actual locked UART full-record replay | Not executed in this run |
-| Locked transcript path | Not generated |
-| Locked expected-vs-board CSV | Not generated |
-| PASS/FAIL | Pending board UART replay |
+| Bitstream/XSA/ELF | rebuilt after locked IP source update |
+| Actual locked UART full-record replay | executed |
+| Class-wise coverage | NSR / CHF / ARR / AFF, one 30-minute case each |
+| Samples per case | 1,800,000 |
+| final_pred match vs full-top XSim | 4 / 4 |
+| final_mem exact match vs full-top XSim | 2 / 4 |
 
-## Rebuilt Artifacts
+## Replay Artifacts
 
-| 산출물 | 경로 |
-|---|---|
-| Bitstream | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit` |
-| XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` |
-| Bare-metal ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` |
-| System summary | `results/board_replay/microblaze_full_replay/microblaze_full_replay_summary.json` |
+| case | transcript | comparison |
+|---|---|---|
+| `locked_nsr_case117` | `reports/board_replay/transcripts/locked_nsr_case117_uart_full_replay.txt` | `reports/board_replay/comparisons/locked_nsr_case117_expected_vs_board.csv` |
+| `locked_chf_case91` | `reports/board_replay/transcripts/locked_chf_case91_uart_full_replay.txt` | `reports/board_replay/comparisons/locked_chf_case91_expected_vs_board.csv` |
+| `locked_arr_case45` | `reports/board_replay/transcripts/locked_arr_case45_uart_full_replay.txt` | `reports/board_replay/comparisons/locked_arr_case45_expected_vs_board.csv` |
+| `locked_aff_case16` | `reports/board_replay/transcripts/locked_aff_case16_uart_full_replay.txt` | `reports/board_replay/comparisons/locked_aff_case16_expected_vs_board.csv` |
 
-## Why It Is Pending
+## Result Boundary
 
-The locked board replay must be run with the newly generated bitstream/XSA/ELF. Existing `test_case0_nsr` transcript and comparison files are retained as earlier board integration evidence, but they are not counted as locked-model replay because their expected source is the previous XSim prediction artifact.
-
-At the time of this update, Windows serial-port discovery only showed Bluetooth COM ports and no board USB-UART COM port, so the locked UART transfer was not executed.
-
-## Command Template
-
-After the board USB-UART port is visible, use the rebuilt locked bitstream/XSA/ELF and run the full-record sender/comparison flow. The transcript and comparison should be saved under:
-
-- `reports/board_replay/transcripts/locked_model_full_record_replay.txt`
-- `reports/board_replay/comparisons/locked_model_expected_vs_board.csv`
-- `reports/board_replay/comparisons/locked_model_board_replay_summary.md`
+All four board runs completed transport and final class checks. CHF and ARR still show final_mem exact divergence against direct full-top XSim, so the board replay is reported as integration/final_pred PASS, not as final_mem exact PASS for every class.

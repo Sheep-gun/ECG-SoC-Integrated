@@ -51,5 +51,28 @@
     "ip_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\board_replay\\microblaze_full_replay\\reports\\system_ip_status.rpt"
   },
   "baremetal_elf": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\board_replay\\microblaze_full_replay\\snn_ecg_mb_full_replay_app.elf",
-  "baremetal_elf_exists": true
+  "baremetal_elf_exists": true,
+  "last_full_record_replay": {
+    "case_name": "locked_aff_case16",
+    "transcript": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\transcripts\\locked_aff_case16_uart_full_replay.txt",
+    "comparison": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\comparisons\\locked_aff_case16_expected_vs_board.csv",
+    "summary": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\comparisons\\locked_aff_case16_summary.md",
+    "board_internal_pass": true,
+    "expected_vs_board_pass": true,
+    "samples_received": 1800000,
+    "samples_sent_to_ip": 1800000,
+    "samples_accepted": 1800000,
+    "samples_consumed": 1800000,
+    "snapshot_count": 30,
+    "decision_count": 1,
+    "final_pred": 3,
+    "final_mem": {
+      "NSR": 0,
+      "CHF": 0,
+      "ARR": 0,
+      "AFF": 30
+    },
+    "snn_error": 0,
+    "feeder_error": 0
+  }
 }

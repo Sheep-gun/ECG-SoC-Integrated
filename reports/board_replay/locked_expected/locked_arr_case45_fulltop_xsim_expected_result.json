@@ -1,0 +1,16 @@
+{
+  "case_name": "locked_arr_case45",
+  "case_id": "45",
+  "expected_class": 2,
+  "final_pred": 2,
+  "final_mem": {
+    "NSR": 6,
+    "CHF": 4,
+    "ARR": 20,
+    "AFF": 0
+  },
+  "samples": 1800000,
+  "snapshot_count": 30,
+  "decision_count": 1,
+  "source": "full-top RTL XSim locked class-wise replay"
+}
