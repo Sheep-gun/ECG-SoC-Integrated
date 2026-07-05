@@ -10,6 +10,8 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
+from PIL import Image
+
 
 REPO = Path(__file__).resolve().parents[1]
 FINAL_MODEL = "structural_guarded_silent_aff_1008710"
@@ -164,6 +166,11 @@ def check_required_figures(failures: list[str]) -> None:
             fail(f"missing required figure: {item}", failures)
         elif path.stat().st_size <= 0:
             fail(f"empty required figure: {item}", failures)
+        else:
+            with Image.open(path) as image:
+                width, height = image.size
+            if width < 1400 or height < 780:
+                fail(f"final figure is too small for report use: {item} ({width}x{height})", failures)
 
 
 def check_doc_count(failures: list[str]) -> None:
@@ -260,6 +267,28 @@ def check_mermaid_fences(failures: list[str]) -> None:
         text = (REPO / item).read_text(encoding="utf-8-sig", errors="replace")
         if "```mermaid" not in text:
             fail(f"missing mermaid code fence: {item}", failures)
+        if text.count("```mermaid") > text.count("```") // 2:
+            fail(f"possibly unclosed mermaid code fence: {item}", failures)
+
+
+def check_markdown_heading_spacing(failures: list[str]) -> None:
+    files: list[Path] = []
+    for pattern in MARKDOWN_LINK_GLOBS:
+        files.extend(REPO.glob(pattern))
+    heading_re = re.compile(r"#{1,6}\s+\S")
+    for path in sorted(set(files)):
+        lines = path.read_text(encoding="utf-8-sig", errors="replace").splitlines()
+        in_fence = False
+        for idx, line in enumerate(lines):
+            if line.startswith("```"):
+                in_fence = not in_fence
+                continue
+            if in_fence or not heading_re.match(line):
+                continue
+            if idx > 0 and lines[idx - 1].strip():
+                fail(f"heading missing blank line before in {rel(path)}:{idx + 1}", failures)
+            if idx + 1 < len(lines) and lines[idx + 1].strip():
+                fail(f"heading missing blank line after in {rel(path)}:{idx + 1}", failures)
 
 
 def check_markdown_tables(failures: list[str]) -> None:
@@ -268,8 +297,16 @@ def check_markdown_tables(failures: list[str]) -> None:
         files.extend(REPO.glob(pattern))
     for path in sorted(set(files)):
         lines = path.read_text(encoding="utf-8-sig", errors="replace").splitlines()
-        for idx, line in enumerate(lines[:-1]):
-            if not line.startswith("|"):
+        in_fence = False
+        idx = 0
+        while idx < len(lines):
+            line = lines[idx]
+            if line.startswith("```"):
+                in_fence = not in_fence
+                idx += 1
+                continue
+            if in_fence or not line.startswith("|") or idx + 1 >= len(lines):
+                idx += 1
                 continue
             sep = lines[idx + 1]
             if sep.startswith("|") and re.fullmatch(r"\|(?:\s*:?-{3,}:?\s*\|)+", sep):
@@ -277,6 +314,14 @@ def check_markdown_tables(failures: list[str]) -> None:
                 sep_cols = sep.count("|")
                 if cols != sep_cols:
                     fail(f"markdown table header/separator column mismatch in {rel(path)}:{idx + 1}", failures)
+                row_idx = idx + 2
+                while row_idx < len(lines) and lines[row_idx].startswith("|"):
+                    if lines[row_idx].count("|") != cols:
+                        fail(f"markdown table row column mismatch in {rel(path)}:{row_idx + 1}", failures)
+                    row_idx += 1
+                idx = row_idx
+                continue
+            idx += 1
 
 
 def check_metrics(failures: list[str]) -> None:
@@ -349,17 +394,16 @@ def write_summary(failures: list[str]) -> None:
     else:
         lines.extend(
             [
-                "## Checked",
+                "## 확인 항목",
                 "",
-                "- Required final files are present.",
-                "- Required final report figures are present.",
-                "- Docs folder contains only the final five documentation files.",
-                "- Retired benchmark/candidate strings are absent from final-facing artifacts.",
-                "- Local markdown links in final-facing documents resolve.",
-                "- Figure image links in final-facing documents resolve.",
-                "- Mermaid code fences and Markdown table headers pass basic checks.",
-                "- Locked strict record-wise metrics match the final source-of-truth values.",
-                "- Four class-wise board replay comparison CSVs and UART PASS markers are present.",
+                "- 최종 제출용 필수 파일이 존재한다.",
+                "- 최종 보고서용 figure가 존재하며 보고서 삽입에 충분한 해상도를 가진다.",
+                "- `docs/` 폴더에는 최종 5개 문서만 남아 있다.",
+                "- 폐기 benchmark/candidate 문자열은 final-facing artifact에 남아 있지 않다.",
+                "- Final-facing Markdown 문서의 local link와 image link가 해석된다.",
+                "- Mermaid fence, heading blank line, Markdown table 구조가 기본 검사를 통과한다.",
+                "- Locked strict record-wise metric은 source-of-truth 값과 일치한다.",
+                "- 4개 class-wise board replay comparison CSV와 UART PASS marker가 존재한다.",
                 "",
             ]
         )
@@ -375,6 +419,7 @@ def main() -> int:
     check_markdown_links(failures)
     check_markdown_image_links(failures)
     check_mermaid_fences(failures)
+    check_markdown_heading_spacing(failures)
     check_markdown_tables(failures)
     check_metrics(failures)
     check_board_replay(failures)

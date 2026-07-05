@@ -1,8 +1,8 @@
 # Board Replay Result
 
-## Summary
+## 요약
 
-The Vitis/MicroBlaze full-record replay flow was rebuilt for the locked model and run on the FPGA board. One 30-minute record was replayed for each class.
+Vitis/MicroBlaze full-record replay flow는 locked model 기준으로 다시 빌드했고, 실제 FPGA board에서 class별 30분 record 1개씩 replay했다.
 
 | Case | Class | Samples | Snapshots | final_pred | final_mem | Result |
 |---|---|---:|---:|---:|---|---|
@@ -11,14 +11,14 @@ The Vitis/MicroBlaze full-record replay flow was rebuilt for the locked model an
 | `locked_arr_case45` | ARR | 1,800,000 | 30 | 2 | 7/1/21/1 | PASS |
 | `locked_aff_case16` | AFF | 1,800,000 | 30 | 3 | 0/0/0/30 | PASS |
 
-All four cases match full-top XSim at both `final_pred` and `final_mem[4]`.
+4개 case 모두 full-top XSim expected와 `final_pred`, `final_mem[4]`가 일치했다.
 
-## Evidence
+## 근거 artifact
 
 - Comparison CSVs: `reports/final/board_replay/locked_*_expected_vs_board.csv`
 - UART transcripts: `reports/final/board_replay/locked_*_uart_full_replay.txt`
 - XSim-vs-board summary CSV: `reports/final/board_replay/locked_class_cases_xsim_vs_board.csv`
 
-## Remaining Scope
+## 남은 범위
 
-This is class-wise representative full-record board replay. A full 36-case final_test board batch and board-level current/power measurement were not performed.
+이 결과는 class-wise representative full-record board replay이다. 전체 36개 final_test case의 board batch replay와 board-level current/power measurement는 수행하지 않았다.

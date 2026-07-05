@@ -34,9 +34,9 @@
 | Hold WNS | 0.019 ns |
 | Timing constraints met | true |
 
-MicroBlaze system resources include CPU, LMB/BRAM, UART, AXI interconnect, and the MMIO-to-AXIS sample feeder. They should not be compared directly with the bare accelerator core.
+MicroBlaze system resource는 CPU, LMB/BRAM, UART, AXI interconnect, MMIO-to-AXIS sample feeder를 포함한다. 따라서 bare accelerator core resource와 직접 비교하지 않는다.
 
-## Evidence
+## 근거 artifact
 
 - Final metrics JSON: `reports/final/final_metrics.json`
 - MicroBlaze build summary: `results/board_replay/microblaze_full_replay/microblaze_full_replay_summary.json`

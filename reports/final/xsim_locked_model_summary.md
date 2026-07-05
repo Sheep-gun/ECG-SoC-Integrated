@@ -1,6 +1,6 @@
 # XSim Locked Model Summary
 
-## Result
+## 결과
 
 | Check | Result |
 |---|---:|
@@ -9,9 +9,9 @@
 | final_pred mismatch | 0 |
 | final_mem mismatch | 0 |
 
-The standalone locked final-layer XSim check agrees with the Python locked model on the final test split.
+Standalone locked final-layer XSim check는 final test split에서 Python locked model과 일치한다.
 
-## Evidence
+## 근거 artifact
 
 - XSim predictions: `reports/final/xsim_locked_model_predictions.csv`
 - Full-top class-wise XSim predictions: `reports/final/fulltop_xsim_locked_class_cases_predictions.csv`

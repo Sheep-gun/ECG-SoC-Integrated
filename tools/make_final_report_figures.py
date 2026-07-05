@@ -120,6 +120,37 @@ def box(draw: ImageDraw.ImageDraw, xy: tuple[int, int, int, int], label: str, de
         wrapped_text(draw, (x0 + 22, y0 + 68), detail, x1 - x0 - 44, FONT_S, MUTED, 4)
 
 
+def card(
+    draw: ImageDraw.ImageDraw,
+    xy: tuple[int, int, int, int],
+    eyebrow: str,
+    value: str,
+    caption: str,
+    accent: str,
+    fill: str = WHITE,
+    value_font: ImageFont.ImageFont = FONT_TITLE,
+) -> None:
+    x0, y0, x1, y1 = xy
+    draw.rounded_rectangle(xy, radius=18, fill=fill, outline=LINE, width=2)
+    draw.rounded_rectangle((x0, y0, x0 + 10, y1), radius=5, fill=accent, outline=accent)
+    if y1 - y0 < 125:
+        draw.text((x0 + 24, y0 + 13), eyebrow, font=FONT_S, fill=MUTED)
+        draw.text((x0 + 24, y0 + 39), value, font=value_font, fill=accent)
+        if caption:
+            wrapped_text(draw, (x0 + 150, y0 + 36), caption, x1 - x0 - 170, FONT_XS, INK, 3)
+        return
+    draw.text((x0 + 28, y0 + 22), eyebrow, font=FONT_S, fill=MUTED)
+    draw.text((x0 + 28, y0 + 53), value, font=value_font, fill=accent)
+    wrapped_text(draw, (x0 + 28, y0 + 107), caption, x1 - x0 - 56, FONT_S, INK, 5)
+
+
+def badge(draw: ImageDraw.ImageDraw, xy: tuple[int, int, int, int], label: str, value: str, accent: str) -> None:
+    x0, y0, x1, y1 = xy
+    draw.rounded_rectangle(xy, radius=14, fill="#fbfcff", outline=accent, width=2)
+    draw.text((x0 + 18, y0 + 15), label, font=FONT_S, fill=MUTED)
+    draw.text((x0 + 18, y0 + 42), value, font=FONT_H, fill=accent)
+
+
 def arrow(draw: ImageDraw.ImageDraw, start: tuple[int, int], end: tuple[int, int], color: str = MUTED) -> None:
     draw.line((start[0], start[1], end[0], end[1]), fill=color, width=4)
     dx, dy = end[0] - start[0], end[1] - start[1]
@@ -210,28 +241,57 @@ def strict_protocol(metrics: dict) -> None:
 
 def result_summary(metrics: dict) -> None:
     img, draw = canvas()
-    title(draw, "Figure 4. Final Locked Result Summary", "Validation and final holdout are separated explicitly")
-    bars = [
-        ("Train", metrics["train"]["accuracy_percent"], GREEN, "61/68"),
-        ("Validation", metrics["validation"]["accuracy_percent"], BLUE, "32/32\nselection only"),
-        ("Final test chunk", metrics["final_test_chunk"]["accuracy_percent"], ORANGE, "29/36"),
-        ("Final test record", metrics["final_test_record_majority"]["accuracy_percent"], PURPLE, "16/19"),
-    ]
-    chart = (160, 210, 1440, 690)
-    draw.rectangle(chart, outline=LINE, width=2)
-    for pct in range(0, 101, 20):
-        y = chart[3] - (pct / 100) * (chart[3] - chart[1])
-        draw.line((chart[0], y, chart[2], y), fill="#edf1f7", width=1)
-        draw.text((105, y - 9), f"{pct}%", font=FONT_S, fill=MUTED)
-    bw = 180
-    for i, (label, value, color, note) in enumerate(bars):
-        x = 245 + i * 300
-        y = chart[3] - (value / 100) * (chart[3] - chart[1])
-        draw.rounded_rectangle((x, y, x + bw, chart[3]), radius=10, fill=color, outline=color)
-        centered_text(draw, (x, y - 45, x + bw, y - 5), f"{value:.2f}%", FONT_H, color)
-        centered_text(draw, (x - 40, chart[3] + 18, x + bw + 40, chart[3] + 60), label, FONT, INK)
-        wrapped_text(draw, (x - 8, chart[3] + 70), note, bw + 16, FONT_S, MUTED)
-    footnote(draw, "Final performance claim uses the locked final_test values: chunk 80.56% and record-majority 84.21%.")
+    title(draw, "Figure 4. Final Locked Result Summary", "Final-test holdout results are the primary reported performance")
+
+    draw.rounded_rectangle((70, 170, 1530, 785), radius=22, fill="#f8fafc", outline=LINE, width=2)
+    draw.text((110, 205), "Locked held-out final_test", font=FONT_H, fill=INK)
+    draw.text((110, 235), "Reported final performance after model lock; test_evaluation_count = 1.", font=FONT, fill=MUTED)
+    card(
+        draw,
+        (110, 290, 560, 535),
+        "Final test chunk accuracy",
+        f"{metrics['final_test_chunk']['accuracy_percent']:.2f}%",
+        f"{metrics['final_test_chunk']['correct']} / {metrics['final_test_chunk']['total']} 30-minute chunks matched the locked expected label.",
+        ORANGE,
+        "#fff8f3",
+    )
+    card(
+        draw,
+        (610, 290, 1060, 535),
+        "Final test record-majority accuracy",
+        f"{metrics['final_test_record_majority']['accuracy_percent']:.2f}%",
+        f"{metrics['final_test_record_majority']['correct']} / {metrics['final_test_record_majority']['total']} source records matched after record-level majority aggregation.",
+        PURPLE,
+        "#f8f6ff",
+    )
+    box(
+        draw,
+        (1110, 290, 1485, 535),
+        "Locked model",
+        f"{metrics['final_model_id']}\n\nSelection/search never used final_test.",
+        fill=WHITE,
+        outline=BLUE,
+    )
+
+    draw.text((110, 610), "Model selection evidence", font=FONT_H, fill=INK)
+    draw.text((110, 640), "These values explain how the candidate was locked; validation is not presented as final generalization.", font=FONT, fill=MUTED)
+    badge(draw, (110, 680, 430, 765), "Train", f"{metrics['train']['accuracy_percent']:.2f}%  ({metrics['train']['correct']}/{metrics['train']['total']})", GREEN)
+    badge(
+        draw,
+        (470, 680, 790, 765),
+        "Validation - selection only",
+        f"{metrics['validation']['accuracy_percent']:.2f}%  ({metrics['validation']['correct']}/{metrics['validation']['total']})",
+        BLUE,
+    )
+    box(
+        draw,
+        (830, 665, 1485, 775),
+        "Protocol guard",
+        "test_used_for_selection = false | test_evaluation_count = 1",
+        fill=WHITE,
+        outline=RED,
+    )
+    footnote(draw, "Do not interpret the validation 100.00% value as the final score; final_test chunk 80.56% and record-majority 84.21% are the final held-out results.")
     save(img, "final_result_summary.png")
 
 
@@ -263,32 +323,58 @@ def hardware_flow(metrics: dict) -> None:
 
 def resource_summary(metrics: dict) -> None:
     img, draw = canvas()
-    title(draw, "Figure 6. Resource and Timing Summary", "Pure accelerator core and MicroBlaze integration are reported separately")
+    title(draw, "Figure 6. Resource and Timing Summary", "Resource usage, timing margin, and integration overhead are separated")
     pure = metrics["pure_rtl_vivado"]
     mb = metrics["microblaze_full_replay_system"]
-    resources = [
-        ("Pure RTL LUT", pure["lut"], BLUE),
-        ("Pure RTL FF", pure["ff"], GREEN),
-        ("Pure RTL BRAM", pure["bram"], ORANGE),
-        ("Pure RTL DSP", pure["dsp"], RED),
-        ("MB LUT", mb["lut"], PURPLE),
-        ("MB FF", mb["slice_reg"], TEAL),
-        ("MB BRAM", mb["bram"], ORANGE),
-        ("MB DSP", mb["dsp"], RED),
+
+    draw.text((95, 180), "Pure accelerator RTL", font=FONT_H, fill=INK)
+    draw.text((850, 180), "MicroBlaze replay system", font=FONT_H, fill=INK)
+    draw.rounded_rectangle((70, 210, 745, 640), radius=22, fill="#f7fbff", outline=BLUE, width=3)
+    draw.rounded_rectangle((825, 210, 1530, 640), radius=22, fill="#fffaf4", outline=ORANGE, width=3)
+
+    pure_badges = [
+        ("LUT", str(pure["lut"]), BLUE),
+        ("FF", str(pure["ff"]), GREEN),
+        ("BRAM", str(pure["bram"]), ORANGE),
+        ("DSP", str(pure["dsp"]), RED),
     ]
-    chart = (120, 210, 1480, 600)
-    maxv = max(v for _, v, _ in resources)
-    for i, (label, value, color) in enumerate(resources):
-        x = chart[0] + i * 165
-        h = 0 if maxv == 0 else int((value / maxv) * 310)
-        y = chart[3] - h
-        draw.rounded_rectangle((x, y, x + 95, chart[3]), radius=8, fill=color, outline=color)
-        centered_text(draw, (x - 18, y - 34, x + 113, y - 6), str(value), FONT_S, color)
-        wrapped_text(draw, (x - 20, chart[3] + 18), label, 145, FONT_S, INK)
-    box(draw, (200, 705, 540, 800), "Pure RTL timing", f"WNS {pure['wns_ns']} ns | Power {pure['estimated_total_power_w']} W", fill="#f7fbff", outline=BLUE)
-    box(draw, (660, 705, 1030, 800), "MicroBlaze timing", f"Setup WNS {mb['setup_wns_ns']} ns | Hold WNS {mb['hold_wns_ns']} ns", fill="#f8fff9", outline=GREEN)
-    box(draw, (1150, 705, 1460, 800), "Integration note", "MicroBlaze numbers include CPU, BRAM/LMB, UART, AXI, feeder, and accelerator.", fill="#fffaf4", outline=ORANGE)
-    footnote(draw, "Values are read from reports/final/final_metrics.json.")
+    mb_badges = [
+        ("LUT", str(mb["lut"]), PURPLE),
+        ("FF", str(mb["slice_reg"]), TEAL),
+        ("BRAM", str(mb["bram"]), ORANGE),
+        ("DSP", str(mb["dsp"]), RED),
+    ]
+    for i, (label, value, color) in enumerate(pure_badges):
+        x = 110 + (i % 2) * 300
+        y = 265 + (i // 2) * 125
+        badge(draw, (x, y, x + 235, y + 88), label, value, color)
+    for i, (label, value, color) in enumerate(mb_badges):
+        x = 870 + (i % 2) * 310
+        y = 265 + (i // 2) * 125
+        badge(draw, (x, y, x + 250, y + 88), label, value, color)
+
+    badge(draw, (110, 515, 390, 610), "Pure RTL timing", f"WNS {pure['wns_ns']} ns", BLUE)
+    badge(draw, (420, 515, 705, 610), "Pure RTL power", f"{pure['estimated_total_power_w']} W", GREEN)
+    badge(draw, (870, 515, 1180, 610), "Setup / hold WNS", f"{mb['setup_wns_ns']} / {mb['hold_wns_ns']} ns", ORANGE)
+    badge(draw, (1210, 515, 1490, 610), "Timing met", str(mb["timing_constraints_met"]).lower(), GREEN)
+
+    box(
+        draw,
+        (110, 675, 705, 820),
+        "Why BRAM/DSP are explicit badges",
+        "The pure accelerator uses BRAM 0 and DSP 0. A single-scale bar chart would hide these values, so this report figure shows them as first-class resource fields.",
+        fill=WHITE,
+        outline=BLUE,
+    )
+    box(
+        draw,
+        (870, 675, 1490, 820),
+        "Integration scope",
+        "MicroBlaze numbers include CPU, BRAM/LMB, UARTLite, AXI interconnect, sample feeder, and accelerator. They are not pure-core resource numbers.",
+        fill=WHITE,
+        outline=ORANGE,
+    )
+    footnote(draw, "Values are read from reports/final/final_metrics.json; no new hardware claim is introduced by this visualization.")
     save(img, "resource_timing_summary.png")
 
 

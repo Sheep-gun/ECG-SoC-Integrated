@@ -2,16 +2,16 @@
 
 ## Audit Summary
 
-| 항목 | 현재 상태 | 문제 | 조치 |
-|---|---|---|---|
-| README.md | 최종 제출 첫 화면 구조로 정리됨 | 기존에는 figure package 연결이 부족했음 | Abstract, System Flow, Final Locked Model, Hardware, Repository Structure, Limitations, Main Report Link로 재구성 |
-| FINAL_REPORT_KR.md | 논문형 12-section 구조로 정리됨 | figure 삽입과 section 흐름이 부족했음 | Abstract부터 Conclusion까지 최종 locked model 기준으로 재작성 |
-| docs tree | final-facing 5개 문서만 유지됨 | 중간 보고서 링크 노출 위험은 현재 없음 | 5개 문서 모두 README/최종보고서와 같은 claim boundary로 정리 |
-| reports/final/figures | 기존 AFE waveform figure만 존재했음 | 최종 시스템/결과/검증 흐름 figure가 부족했음 | final report용 8개 PNG와 `FIGURE_INDEX.md` 생성 |
-| final_metrics.json | 최종 수치 source of truth로 존재 | 문서/figure가 같은 값을 읽는지 확인 필요 | figure script와 checker가 해당 JSON 기준으로 검증 |
-| board replay evidence | 4개 class-wise transcript/CSV 존재 | 36-case board batch와 혼동 위험 | 문서와 figure에 4-case representative replay로 명시 |
-| Mermaid | README/FINAL_REPORT/docs에 code fence로 존재 | Mermaid fence 검증 필요 | consistency checker에 Mermaid fence 존재 검사 추가 |
-| Markdown tables | 주요 결과 표 존재 | table row 형식 검증 필요 | consistency checker에 간단한 pipe table 검사 추가 |
+| 항목 | 최종 상태 | 조치 |
+|---|---|---|
+| README.md | 최종 제출 첫 화면 구조 | heading/table/Mermaid/image link를 GitHub Markdown 기준으로 정리 |
+| FINAL_REPORT_KR.md | 논문형 최종 보고서 구조 | figure 삽입, 결과 해석, 한계 범위를 locked final model 기준으로 정리 |
+| docs tree | final-facing 5개 문서만 유지 | 중간/폐기 문서 노출 없이 README에서 필요한 문서만 연결 |
+| reports/final Markdown | evidence summary 문서 유지 | board replay, strict record-wise, Vivado, XSim 요약을 최종 제출 톤으로 정리 |
+| final result figure | final_test 중심 시각화 | validation 100.00%는 model-selection 영역으로 낮추고 final_test 80.56%/84.21%를 중심 배치 |
+| resource/timing figure | badge/card 기반 시각화 | BRAM/DSP 0 값이 사라지지 않도록 별도 resource badge로 표시 |
+| board replay evidence | 4개 class-wise transcript/CSV 존재 | 36-case board batch와 혼동되지 않도록 representative replay로 명시 |
+| checker | 자동 consistency check | heading blank line, Mermaid fence, table row, image/link, figure 해상도, metric 일치성 검사 |
 
 ## Final-facing Documents
 
@@ -25,7 +25,7 @@
 
 ## Generated Figures
 
-Figure 목록은 `reports/final/figures/FIGURE_INDEX.md`를 기준으로 한다. 모든 새 figure는 `tools/make_final_report_figures.py`로 재생성할 수 있다.
+최종 보고서용 figure 목록은 `reports/final/figures/FIGURE_INDEX.md`에 정리되어 있다. 모든 final report figure는 `tools/make_final_report_figures.py`로 재생성할 수 있다.
 
 ## Remaining Notes
 

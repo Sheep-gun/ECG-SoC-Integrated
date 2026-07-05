@@ -1,10 +1,10 @@
 # Hardware Validation Result
 
-## Summary
+## 요약
 
-The locked RTL has been checked through Python/XSim comparison, Vivado implementation, IP-XACT packaging, and Vitis/MicroBlaze class-wise full-record replay.
+Locked RTL은 Python/XSim 비교, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze class-wise full-record replay까지 연결해 검증했다.
 
-| Layer | Result |
+| Layer | 결과 |
 |---|---|
 | Python vs XSim locked final layer | final_pred/final_mem mismatch 0 over 36 final_test cases |
 | Pure RTL Vivado | LUT/FF/BRAM/DSP 9719/5038/0/0, WNS 8.184 ns |
@@ -13,6 +13,6 @@ The locked RTL has been checked through Python/XSim comparison, Vivado implement
 | MicroBlaze full replay build | bitstream/XSA/ELF generated, timing met |
 | Board replay | NSR/CHF/ARR/AFF one 30-minute case each, final_pred/final_mem exact 4/4 |
 
-## Boundary
+## 주장 범위
 
-This is engineering validation of an FPGA/VLSI prototype. It is not medical diagnosis validation, physical AFE board measurement, ADC silicon measurement, or transistor-level layout verification.
+이 결과는 FPGA/VLSI prototype의 engineering validation이다. Medical diagnosis validation, physical AFE board measurement, ADC silicon measurement, transistor-level layout verification을 의미하지 않는다.
