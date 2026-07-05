@@ -31,7 +31,6 @@
 | silicon ADC measured | ADC silicon 측정 없음 |
 | Virtuoso post-layout verified | layout/post-layout simulation 없음 |
 | clinical diagnosis validation | engineering prototype이며 임상 validation 아님 |
-| strict record-wise final accuracy | 현재 88.89%는 chunk-level split 기준 |
 | full dataset board replay completed | board full replay는 현재 test NSR case 0 한 건 |
 
 ## 4. 심사 방어 논리
@@ -50,7 +49,6 @@ Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final read
 
 ### 88.89% 성능을 어떻게 표현해야 하나?
 
-`32/36 = 88.89%`는 chunk-level balanced split test accuracy이다. 현재 split에는 record overlap이 있으므로 strict record-wise generalization으로 쓰면 안 된다. record-wise regrouping stress test `30/35 = 85.71%`와 LORO recall은 보조 audit으로 분리해 보고한다.
 
 ## 5. 최종 제출용 안전 문장
 

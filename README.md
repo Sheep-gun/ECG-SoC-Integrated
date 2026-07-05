@@ -31,15 +31,12 @@ flowchart LR
 | Chunk-level test accuracy | 32/36 = 88.89% |
 | Python-vs-XSim mismatch | final prediction 0/136, final membrane 0/136 |
 | Dataset split audit | 70 class-record pairs 중 33 pairs가 여러 split에 걸침 |
-| Record-wise regrouping stress test | 30/35 = 85.71% |
-| LORO recall | NSR 94.12%, CHF 94.12%, ARR 88.24%, AFF 91.18% |
 | Ablation full vs snapshot majority | 125/136 = 91.91% vs 103/136 = 75.74% |
 | Vivado board resource | LUT 21002, FF 2803, BRAM 0, DSP 0 |
 | Vivado board timing / power | WNS 7.873 ns, estimated total power 0.101 W |
 | AXI/IP packaging | accelerator IP-XACT `component.xml`, xgui, AXI wrapper, sample feeder 존재 |
 | Board replay | test NSR case 0 full-record PASS, 1,800,000 samples, final_pred 0, final_mem 31/0/1/0 |
 
-위의 88.89%는 chunk-level split 기준이다. strict record-wise 성능으로 주장하지 않으며, record-wise regrouping과 LORO는 frozen rule set에 대한 stress-test evidence로 분리한다.
 
 ## 4. 추가 문서 링크
 
@@ -47,9 +44,10 @@ flowchart LR
 - [Final Project Positioning](docs/FINAL_PROJECT_POSITIONING_KR.md)
 - [Full-Record Board Replay Result](docs/FULL_RECORD_BOARD_REPLAY_RESULT_KR.md)
 - [Final Limitations and Defense](docs/FINAL_LIMITATIONS_AND_DEFENSE_KR.md)
+- [Final Membrane 확정 프로토콜](docs/STRICT_RECORDWISE_FINAL_MEMBRANE_PROTOCOL_KR.md)
 - [Accelerator IP Core](<docs/Accelerator IP Core.md>)
 - [AFE+ADC XMODEL Flow](docs/AFE_ADC_XMODEL_FLOW_KR.md)
-- [Dataset Split Validation](docs/DATASET_SPLIT_VALIDATION_KR.md)
+- [Strict Record-wise Dataset Protocol](docs/DATASET_SPLIT_VALIDATION_KR.md)
 - [AFE XMODEL Evidence](docs/AFE_XMODEL_EVIDENCE_KR.md)
 - [Ablation Study](docs/ABLATION_STUDY_KR.md)
 - [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md)
@@ -72,13 +70,10 @@ flowchart LR
 - [AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계](<docs/Accelerator IP Core.md>): RTL을 Vivado-packaged custom accelerator IP 관점에서 정리하고, 병목 원인/해결 구조, AXI wrapper, sample feeder, MicroBlaze smoke 검증 범위를 설명한다.
 - [AFE+ADC XMODEL 기반 입력 생성 흐름](docs/AFE_ADC_XMODEL_FLOW_KR.md): digitized ECG record에서 virtual DAC/PWL-equivalent `vin_v`를 만들고, AFE+ADC XMODEL 및 signed 12-bit `.mem` RTL 검증으로 연결하는 흐름을 정리한다.
 
-수상권 보강/검증 문서:
-
-- [수상권 경쟁력 보강 분석](docs/AWARD_READINESS_GAP_ANALYSIS_KR.md): 경쟁작 대비 강점, 약점, 금지해야 할 과장 표현, 제출 전 체크리스트를 정리한다.
-- [Dataset Split 검증](docs/DATASET_SPLIT_VALIDATION_KR.md): 현재 chunk-level split 상태, record overlap audit, record-wise fixed-model 평가, leave-one-record-out 결과를 분리해 설명한다.
+- [Strict Record-wise Dataset 및 Final Membrane 확정 프로토콜](docs/DATASET_SPLIT_VALIDATION_KR.md): 최종 strict split과 Final Membrane train/validation-only selection 절차를 정리한다.
 - [AFE XMODEL Evidence](docs/AFE_XMODEL_EVIDENCE_KR.md): `code / 200000` 기반 PWL-equivalent `vin_v`, HPF/gain/notch/LPF/ADC nominal model figure, model-based 검증 한계를 정리한다.
 - [Ablation Study](docs/ABLATION_STUDY_KR.md): final membrane, snapshot-only, feature evidence 제거 실험을 통해 각 구조가 왜 필요한지 수치로 비교한다.
-- [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md): Python fixed-model latency, RTL cycle counter, Vivado resource/power estimate를 같은 관점에서 비교한다.
+- [Performance Baseline](docs/PERFORMANCE_BASELINE_KR.md): Python baseline latency, RTL cycle counter, Vivado resource/power estimate를 같은 관점에서 비교한다.
 - [Board and IP Packaging Evidence](docs/BOARD_AND_IP_PACKAGING_EVIDENCE_KR.md): AXI/IP-XACT packaging, MicroBlaze smoke system, Vivado report 산출물을 evidence table로 정리한다.
 - [Full-Record Board Replay with Vitis/MicroBlaze](docs/FULL_RECORD_BOARD_REPLAY_VITIS_KR.md): Vitis MicroBlaze + UART chunk-ACK sender로 1,800,000-sample `.mem` full record를 실제 board에서 replay하고 Python/XSim expected와 final_pred/final_mem exact match를 확인한 flow와 transcript를 정리한다.
 - [Board Replay Test Plan](docs/BOARD_REPLAY_TEST_PLAN_KR.md): MicroBlaze UART smoke부터 실제 full-record board replay까지의 단계와 남은 batch/throughput 검증 항목을 정리한다.
@@ -92,7 +87,6 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 + AXI/Vivado packaged Accelerator IP Core
 ```
 
-수상권 보강 결과는 별도 산출물로 `reports/award_readiness/`에 정리했다. 현재 기존 88.89% test accuracy는 chunk-level split 기준이며 strict record-wise generalization으로 과장하지 않는다. 새 audit에서는 class-record pair 70개 중 33개가 현재 split 여러 곳에 걸쳐 있음을 확인했고, frozen Python rule set으로 record-wise regrouping test 30/35 = 85.71%, class별 leave-one-record-out recall NSR/CHF/ARR/AFF = 94.12% / 94.12% / 88.24% / 91.18%를 얻었다. Ablation은 full model 125/136 = 91.91%, snapshot majority 103/136 = 75.74%로 final membrane evidence accumulation의 필요성을 보였다.
 
 분류 class는 다음 네 가지이다.
 
@@ -372,7 +366,7 @@ DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/count
 
 - 본 모델은 `SNN-inspired` 구조이다. 완전한 생물학적 SNN이나 STDP 학습 구조라고 주장하지 않는다.
 - 30분 Final Membrane Readout은 1 kSPS sample마다 직접 class spike를 내는 층이 아니라, 60초 snapshot event를 시간축으로 누적하는 final readout이다.
-- 30분 데이터셋은 class별 30분 chunk 수를 균형화한 `chunk-level balanced` 데이터셋이다. 원천 record 수가 class별로 같지 않기 때문에 모든 chunk가 서로 다른 record에서 나온 strict record-wise holdout은 아니다.
+- 30분 Final Membrane 확정은 `seed=20260808` strict record-wise dataset을 기준으로 진행한다. class별 chunk 수는 train / validation / test = 17 / 8 / 9로 맞추고, `source_record_id`와 label-stripped `physical_record_id` 기준 split overlap 0을 확인한다.
 - XSim 정확도는 30분 `.mem` dataset testbench 기준이다.
 - Vivado power는 실제 보드 전류 측정값이 아니라 post-implementation 추정값이다.
 - ARR test recall은 6/9로 남은 병목이다. 전체 accuracy와 별도로 보고해야 한다.

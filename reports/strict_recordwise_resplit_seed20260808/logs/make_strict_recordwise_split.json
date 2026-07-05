@@ -1,0 +1,27 @@
+{
+  "script": "make_strict_recordwise_split",
+  "argv": [
+    "tools\\recordwise\\make_strict_recordwise_split.py",
+    "--seed",
+    "20260808",
+    "--balance-chunks"
+  ],
+  "timestamp_utc": "2026-07-05T07:40:44.658681+00:00",
+  "git_commit": "d44743e021aa794db3ad1a4f2b8b2327477cd64d",
+  "cwd": "C:\\Users\\YangGeon\\SNN ECG Classifier",
+  "outputs": [
+    "configs\\recordwise_resplit_seed20260808\\strict_recordwise_split_seed20260808.json",
+    "reports\\strict_recordwise_resplit_seed20260808\\strict_recordwise_split.csv",
+    "reports\\strict_recordwise_resplit_seed20260808\\strict_recordwise_split_summary.md",
+    "reports\\strict_recordwise_resplit_seed20260808\\strict_recordwise_split_lock.json"
+  ],
+  "extra": {
+    "locked": true,
+    "seed": 20260808,
+    "split_hash": "9514200bcbe3a57a120ff135eee905405edac396a1a464327b9247e059ff47a0",
+    "split_json": "C:\\Users\\YangGeon\\SNN ECG Classifier\\configs\\recordwise_resplit_seed20260808\\strict_recordwise_split_seed20260808.json",
+    "split_csv": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\strict_recordwise_resplit_seed20260808\\strict_recordwise_split.csv",
+    "balance_chunks": true,
+    "rule": "Do not change this split after parameter search starts."
+  }
+}

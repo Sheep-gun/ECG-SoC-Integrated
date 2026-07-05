@@ -1,21 +1,15 @@
-# Record-Wise Fixed-Model Evaluation
+# Strict Record-wise Final Dataset Summary
 
-This is a retrospective source-record regrouping of the existing 136 chunks. It applies the already frozen Python golden rule set; it does not retrain or reselect thresholds.
+최종 30분 Final Membrane 검증은 `seed=20260808` strict record-wise dataset을 기준으로 진행한다.
 
-| split | chunks | class-record pairs | correct | accuracy | macro-F1 | ARR recall | AFF recall |
-|---|---|---|---|---|---|---|---|
-| train | 67 | 35 | 62/67 | 92.54% | 92.50% | 82.35% | 94.12% |
-| val | 34 | 17 | 33/34 | 97.06% | 97.21% | 100.00% | 100.00% |
-| test | 35 | 18 | 30/35 | 85.71% | 86.88% | 88.89% | 77.78% |
+| 항목 | 값 |
+|---|---|
+| Split CSV | `reports/strict_recordwise_resplit_seed20260808/strict_recordwise_split.csv` |
+| Split config | `configs/recordwise_resplit_seed20260808/strict_recordwise_split_seed20260808.json` |
+| source_record_id overlap | 0 |
+| physical_record_id overlap | 0 |
+| class별 train / validation / test chunks | 17 / 8 / 9 |
 
-## Split Composition
+Final Membrane 후보는 SNN-inspired membrane 구조를 유지한다. 60초 snapshot에서 발생한 class spike와 evidence spike를 최종 class neuron membrane에 흥분성/억제성 current로 누적하고, 30분 window 끝에서 WTA로 NSR / CHF / ARR / AFF를 결정한다.
 
-| split | NSR | CHF | ARR | AFF |
-|---|---|---|---|---|
-| train | 16 chunks / 9 recs | 17 chunks / 7 recs | 17 chunks / 17 recs | 17 chunks / 2 recs |
-| val | 8 chunks / 4 recs | 10 chunks / 4 recs | 8 chunks / 8 recs | 8 chunks / 1 recs |
-| test | 10 chunks / 5 recs | 7 chunks / 3 recs | 9 chunks / 9 recs | 9 chunks / 1 recs |
-
-## Limitation
-
-Because the final rule set was selected before this audit and the current repo contains chunk-level train/validation/test artifacts, this result is best treated as a record-wise leakage stress-test. A publishable strict record-wise claim would require freezing the protocol before model/rule search.
+최종 보고서에는 strict train / validation에서 선택된 locked parameter와 strict test 최종 결과만 남긴다.

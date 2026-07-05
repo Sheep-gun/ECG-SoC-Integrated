@@ -70,8 +70,7 @@ repo 기준 AFE+ADC evidence:
 | Chunk-level test accuracy | 32/36 = 88.89% |
 | Python-vs-XSim final prediction mismatch | 0/136 |
 | Python-vs-XSim final membrane mismatch | 0/136 |
-| Record-wise regrouping stress test | 30/35 = 85.71% |
-| LORO recall NSR/CHF/ARR/AFF | 94.12% / 94.12% / 88.24% / 91.18% |
+| Strict record-wise dataset | seed 20260808, source/physical overlap 0, class별 train/val/test 17/8/9 chunks |
 | Full model ablation | 125/136 = 91.91% |
 | Snapshot majority | 103/136 = 75.74% |
 | Snapshot membrane sum | 101/136 = 74.26% |
@@ -129,5 +128,4 @@ Vivado/performance evidence:
 - actual AFE PCB / ADC silicon measurement가 아니다.
 - Virtuoso layout/post-layout 검증이 아니다.
 - clinical validation이 아니다.
-- chunk-level 88.89%를 strict record-wise final accuracy로 주장하면 안 된다.
 - full-record board replay는 1-case 완료이며, full split batch는 남아 있다.

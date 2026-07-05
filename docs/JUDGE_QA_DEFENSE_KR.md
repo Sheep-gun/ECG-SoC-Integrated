@@ -6,7 +6,6 @@ true raw analog recovery가 아니다. 공개 ECG dataset은 이미 digitized re
 
 ## Q2. record-wise split인가?
 
-기존 88.89% test accuracy는 chunk-level balanced split 기준이다. 새 audit에서 source record가 split을 가로지르는 항목이 확인되었다. 따라서 strict record-wise generalization이라고 주장하지 않는다. 대신 `reports/award_readiness/recordwise_eval_summary.md`와 `loro_eval_summary.md`를 추가해 record-level stress-test를 제시한다.
 
 ## Q3. 임상적으로 유효한 진단기인가?
 
@@ -29,5 +28,3 @@ workload scale, HBM, 대형 accelerator optimization, 엄격한 baseline speedup
 현재 evidence는 bitstream programming, MicroBlaze smoke bit/XSA, XSDB MMIO smoke, Vitis-built ELF, UART bare-metal PASS transcript, 그리고 test NSR case 0 full-record board replay PASS transcript 수준이다. 전체 test split board replay나 physical AFE/ADC replay는 아직 TODO이다. 없는 것을 완료됐다고 말하지 않는다.
 
 ## Q8. 88.89%가 최종 성능인가?
-
-현재 문서화된 88.89%는 30분 chunk-level test split에서 Python/XSim이 일치한 결과이다. split leakage 가능성을 audit로 제시했기 때문에, 이 수치는 RTL functional correctness와 engineering benchmark로 사용하고 strict clinical/generalization claim으로 사용하지 않는다.

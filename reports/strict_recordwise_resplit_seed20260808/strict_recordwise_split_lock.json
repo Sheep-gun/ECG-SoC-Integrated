@@ -1,0 +1,9 @@
+{
+  "locked": true,
+  "seed": 20260808,
+  "split_hash": "9514200bcbe3a57a120ff135eee905405edac396a1a464327b9247e059ff47a0",
+  "split_json": "C:\\Users\\YangGeon\\SNN ECG Classifier\\configs\\recordwise_resplit_seed20260808\\strict_recordwise_split_seed20260808.json",
+  "split_csv": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\strict_recordwise_resplit_seed20260808\\strict_recordwise_split.csv",
+  "balance_chunks": true,
+  "rule": "Do not change this split after parameter search starts."
+}

@@ -1,91 +1,41 @@
-# Dataset Split 신뢰성 검증
+# Strict Record-wise Dataset 및 Final Membrane 확정 프로토콜
 
-## 1. 왜 chunk-level split만으로는 부족한가
+## 1. 최종 Dataset 기준
 
-ECG record 하나에서 여러 30분 chunk를 잘라 train/validation/test에 나누면, 같은 source record의 rhythm/morphology 특성이 여러 split에 동시에 들어갈 수 있다. 이 경우 test accuracy는 실제 새로운 record에 대한 generalization보다 낙관적으로 보일 수 있다.
+최종 보고서에서 사용하는 record-wise 검증 기준은 `source_record_id` 단위로 train / validation / test를 분리한 strict record-wise dataset이다. 같은 ECG source record에서 나온 30분 chunk가 서로 다른 split에 들어가지 않도록 구성했고, class label을 제거한 `physical_record_id` 기준으로도 overlap이 없음을 확인한다.
 
-따라서 본 보강에서는 기존 chunk-level 결과를 유지하되, 그것을 strict record-wise 결과처럼 말하지 않는다. 대신 record overlap audit, record-wise regrouping stress-test, leave-one-record-out report를 별도로 제공한다.
+| 항목 | 최종 기준 |
+|---|---|
+| Split seed | `20260808` |
+| Split file | `reports/strict_recordwise_resplit_seed20260808/strict_recordwise_split.csv` |
+| Config file | `configs/recordwise_resplit_seed20260808/strict_recordwise_split_seed20260808.json` |
+| source_record_id overlap | 0 |
+| physical_record_id overlap | 0 |
+| class별 chunk 수 | train / validation / test = 17 / 8 / 9 |
 
-## 2. 현재 repo split 상태
+## 2. Class별 구성
 
-감사 스크립트:
+| class | train records | validation records | test records | train chunks | validation chunks | test chunks |
+|---|---:|---:|---:|---:|---:|---:|
+| NSR | 9 | 4 | 5 | 17 | 8 | 9 |
+| CHF | 6 | 4 | 4 | 17 | 8 | 9 |
+| ARR | 17 | 8 | 9 | 17 | 8 | 9 |
+| AFF | 2 | 1 | 1 | 17 | 8 | 9 |
 
-```powershell
-python tools\audit_dataset_split.py
+## 3. Final Membrane 확정 절차
+
+최종 Final Membrane은 위 strict record-wise dataset을 기준으로 확정한다. 60초 Snapshot frontend는 먼저 고정하고, 30분 Final Membrane readout만 train / validation split에서 탐색한다.
+
+```text
+strict train records
+-> candidate final membrane parameter grid 평가
+-> train signature dedup / shortlist 구성
+-> validation split으로 최종 후보 선택
+-> selected params lock
+-> test split은 lock 이후 최종 1회 평가
+-> 최종 보고서에는 locked final result만 기재
 ```
 
-결과:
+## 4. 문서화 원칙
 
-- `reports/award_readiness/dataset_split_audit.md`
-- `reports/award_readiness/dataset_split_audit.csv`
-- `reports/award_readiness/dataset_split_leakage_detail.csv`
-- `reports/award_readiness/dataset_manifest_split_trace.csv`
-
-핵심 결과:
-
-| class | chunks | unique records | overlapping records |
-|---|---:|---:|---:|
-| NSR | 34 | 18 | 15 |
-| CHF | 34 | 14 | 14 |
-| ARR | 34 | 34 | 0 |
-| AFF | 34 | 4 | 4 |
-
-즉 현재 30분 dataset은 class별 chunk 수를 균형화한 구조이지, strict record-wise split이 아니다.
-
-## 3. Record-wise regrouping 결과
-
-실행:
-
-```powershell
-python tools\run_recordwise_eval.py
-```
-
-결과 파일:
-
-- `reports/award_readiness/recordwise_eval_summary.md`
-- `reports/award_readiness/recordwise_predictions.csv`
-- `reports/award_readiness/recordwise_confusion_matrix.csv`
-
-요약:
-
-| split | chunks | class-record pairs | correct | accuracy |
-|---|---:|---:|---:|---:|
-| train | 67 | 35 | 62/67 | 92.54% |
-| val | 34 | 17 | 33/34 | 97.06% |
-| test | 35 | 18 | 30/35 | 85.71% |
-
-이 결과는 이미 고정된 Python golden rule set을 source-record 단위로 다시 묶어 본 stress-test이다. 모델을 새 record-wise train split에서 다시 탐색한 것은 아니므로, 독립적인 strict record-wise training protocol이라고 주장하지 않는다.
-
-## 4. Leave-One-Record-Out 결과
-
-실행:
-
-```powershell
-python tools\run_leave_one_record_out.py
-```
-
-결과 파일:
-
-- `reports/award_readiness/loro_eval_summary.md`
-- `reports/award_readiness/loro_predictions.csv`
-
-class별 fixed-model localization 결과:
-
-| class | records | chunks | correct | class recall |
-|---|---:|---:|---:|---:|
-| NSR | 18 | 34 | 32/34 | 94.12% |
-| CHF | 14 | 34 | 32/34 | 94.12% |
-| ARR | 34 | 34 | 30/34 | 88.24% |
-| AFF | 4 | 34 | 31/34 | 91.18% |
-
-AFF는 unique record가 4개뿐이므로 record diversity가 낮다. LORO 결과는 어떤 record가 취약한지 찾는 engineering audit으로 사용하고, clinical generalization claim으로 사용하지 않는다.
-
-## 5. 보고서에 쓸 안전한 표현
-
-사용 가능:
-
-> 기존 88.89% test accuracy는 chunk-level balanced split 기준이다. 추가 감사에서 source record가 split을 가로지르는 항목이 확인되었으므로, 본 프로젝트는 이를 strict record-wise 결과로 주장하지 않는다. 대신 fixed-model record-wise regrouping 및 leave-one-record-out report를 추가하여 record-level 취약성을 투명하게 제시했다.
-
-금지:
-
-> record-wise generalization이 완전히 검증되었다.
+최종보고서에는 최종 채택된 strict record-wise dataset, locked Final Membrane parameter, 최종 test 결과만 남긴다. 중간 후보나 채택되지 않은 산출물은 최종 제출 문서에 포함하지 않는다.

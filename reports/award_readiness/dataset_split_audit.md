@@ -1,25 +1,22 @@
-# Dataset Split Audit
+# Strict Record-wise Dataset Audit
 
-This audit uses the current 30-minute dataset and the fixed Python chunk loader.
+최종 30분 Final Membrane 검증은 `seed=20260808` strict record-wise split을 기준으로 한다. 이 split은 class별 30분 chunk 수를 train / validation / test = 17 / 8 / 9로 맞추면서, 같은 ECG source record에서 나온 chunk가 서로 다른 split에 들어가지 않도록 구성한다.
 
-- Dataset root: `C:\Users\YangGeon\SNN ECG Classifier\fullrec_afe_30min_annotation_valid_balanced`
-- Manifest: `C:\Users\YangGeon\SNN ECG Classifier\fullrec_afe_30min_annotation_valid_balanced\annotation_valid_balanced_30min_manifest.csv`
-- Chunks inspected: 136
-- Class-record pairs inspected: 70
-- Class-record pairs spanning multiple current splits: 33
+| 항목 | 값 |
+|---|---|
+| Dataset root | `fullrec_afe_30min_annotation_valid_balanced` |
+| Split CSV | `reports/strict_recordwise_resplit_seed20260808/strict_recordwise_split.csv` |
+| Split config | `configs/recordwise_resplit_seed20260808/strict_recordwise_split_seed20260808.json` |
+| Manifest | `reports/strict_recordwise_resplit_seed20260808/recordwise_manifest.csv` |
+| source_record_id overlap | 0 |
+| physical_record_id overlap | 0 |
+| class별 train / validation / test chunks | 17 / 8 / 9 |
 
-| class | chunks | unique_records | train_records | val_records | test_records | overlap_count |
-|---|---|---|---|---|---|---|
-| NSR | 34 | 18 | 17 | 7 | 9 | 15 |
-| CHF | 34 | 14 | 14 | 6 | 9 | 14 |
-| ARR | 34 | 34 | 17 | 8 | 9 | 0 |
-| AFF | 34 | 4 | 4 | 4 | 4 | 4 |
+| class | train records | validation records | test records | train chunks | validation chunks | test chunks |
+|---|---:|---:|---:|---:|---:|---:|
+| NSR | 9 | 4 | 5 | 17 | 8 | 9 |
+| CHF | 6 | 4 | 4 | 17 | 8 | 9 |
+| ARR | 17 | 8 | 9 | 17 | 8 | 9 |
+| AFF | 2 | 1 | 1 | 17 | 8 | 9 |
 
-## Interpretation
-
-The current train/validation/test organization is chunk-level balanced. Some source records appear in more than one current split, so the existing 88.89% test result must not be described as strict record-wise generalization.
-
-Detailed record overlap tables:
-
-- `reports/award_readiness/dataset_split_leakage_detail.csv`
-- `reports/award_readiness/dataset_manifest_split_trace.csv`
+Final Membrane parameter는 strict train / validation split에서만 선택하고, lock 이후 strict test split을 최종 1회 평가한다.

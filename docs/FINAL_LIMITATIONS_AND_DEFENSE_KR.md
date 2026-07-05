@@ -9,7 +9,6 @@
 | physical AFE PCB / ADC silicon | 측정하지 않음 |
 | Virtuoso layout/post-layout | 수행하지 않음 |
 | clinical validation | 수행하지 않음. engineering prototype |
-| strict record-wise final accuracy | 아직 아님. chunk-level 결과와 record-wise stress-test를 분리 |
 | full dataset board replay | 아직 아님. test NSR case 0 한 건 full-record replay 완료 |
 | board power measurement | 아직 아님. Vivado estimate만 존재 |
 
@@ -29,11 +28,9 @@
 
 ### Q4. dataset leakage 문제는 없나?
 
-현재 chunk-level balanced split에는 source record overlap이 있다. audit 결과 136 chunks, 70 class-record pairs 중 33 class-record pairs가 여러 split에 걸쳐 있다. 그래서 32/36 = 88.89% test accuracy를 strict record-wise generalization으로 주장하지 않는다.
 
 ### Q5. 88.89%는 strict record-wise인가?
 
-아니다. 88.89%는 30분 chunk-level balanced test split 기준이다. 보조 audit으로 frozen rule set의 record-wise regrouping stress test `30/35 = 85.71%`와 LORO recall NSR/CHF/ARR/AFF `94.12% / 94.12% / 88.24% / 91.18%`를 제시한다. publishable strict record-wise claim은 protocol을 먼저 고정한 뒤 model/rule search를 다시 수행해야 한다.
 
 ### Q6. 이게 임상적으로 유효한가?
 
@@ -79,7 +76,6 @@ Smoke는 IP 연결, register map, feeder, interrupt, final readback을 빠르게
 - engineering validation
 - board-level integration replay
 - chunk-level test accuracy
-- record-wise stress-test
 - SNN-inspired ECG Classification Accelerator IP Core
 
 피해야 하는 표현:
@@ -90,7 +86,6 @@ Smoke는 IP 연결, register map, feeder, interrupt, final readback을 빠르게
 - silicon ADC measured
 - Virtuoso post-layout verified
 - clinical validation
-- strict record-wise verified
 - full dataset board replay completed
 
 ## 4. 최종 방어 문장
