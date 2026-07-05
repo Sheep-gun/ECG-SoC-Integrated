@@ -4,39 +4,33 @@
 
 본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 거쳐 signed 12-bit stream을 만든 뒤, RTL accelerator에서 60초 Snapshot Readout과 30분 Final Membrane Readout을 수행한다.
 
-최종 locked model은 `structural_guarded_silent_aff_1008710`이다. Snapshot은 고정하고 Final Membrane만 strict record-wise train/validation 기준으로 lock했다. Final test는 selection/search/context에 사용하지 않았고, lock 이후 한 번만 평가했다.
+![Final system architecture](../reports/final/figures/final_system_architecture.png)
+
+최종 locked model은 `structural_guarded_silent_aff_1008710`이다. Snapshot은 고정하고 Final Membrane만 strict record-wise train/validation 기준으로 lock했다. Locked final_test는 모델 선택이나 파라미터 탐색에 사용하지 않았고, lock 이후 1회만 평가했다.
 
 ## 최종 결과
 
-| Item | Result |
+![Final result summary](../reports/final/figures/final_result_summary.png)
+
+| 항목 | 결과 |
 |---|---:|
-| Train | 61/68 = 89.71% |
-| Validation | 32/32 = 100.00% |
-| Final test chunk | 29/36 = 80.56% |
-| Final test record-majority | 16/19 = 84.21% |
-| Final test evaluation count | 1 |
-| XSim final_pred/final_mem mismatch | 0 / 0 |
-| Board replay final_pred/final_mem match | 4/4 / 4/4 |
+| Train | 61 / 68 = 89.71% |
+| Validation | 32 / 32 = 100.00% |
+| Final test 30분 chunk | 29 / 36 = 80.56% |
+| Final test record-majority | 16 / 19 = 84.21% |
+| Test evaluation count | 1 |
+| Test used for selection | false |
 
-Validation 100%는 model-selection 결과이며 final claim은 locked final_test 결과이다.
+Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-out 성능은 final_test 30분 chunk 80.56%와 record-majority 84.21% 기준으로 보고한다.
 
-## Feature Evidence 요약
+## 제출 포지션
 
-60초 Snapshot Readout은 ECG sample을 바로 class로 매핑하지 않고, 다음 evidence block으로 압축한다.
+본 결과는 실제 전극 기반 의료기기 검증이 아니라, AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. Digital IP 관점에서는 Python golden, XSim, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze board replay evidence를 갖는다.
 
-| Evidence | 의미 |
-|---|---|
-| Adaptive QRS LIF | `strong_event`를 적분해 beat/QRS 기준 spike 생성 |
-| PNN/RDM rhythm | beat timing 예측 오차와 RR variability 측정 |
-| DSCR/RAM morphology | slope sign flip, waveform complexity, R-peak amplitude response 측정 |
-| Ectopic pair | early/late RR pair pattern 측정 |
-| QRS MAF/RBBB-like delay | QRS width, energy, terminal activity, conduction-delay proxy 측정 |
-| Class/Final membrane | feature spike를 signed weight로 누적하고 WTA로 60초/30분 class 결정 |
+## 한계
 
-상세한 feature별 직관 설명은 `FINAL_REPORT_KR.md`의 “Snapshot SNN Readout” 절과 `docs/SYSTEM_ARCHITECTURE_KR.md`의 “Snapshot Feature Datapath 상세” 절에 정리했다.
-
-## 최종 주장 범위
-
-주장 가능한 것은 FPGA/VLSI engineering validation이다. 즉, AFE+ADC XMODEL-linked input generation, locked strict record-wise protocol, RTL/XSim bit-accurate check, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze class-wise board replay이다.
-
-주장하지 않는 것은 direct electrode acquisition, physical AFE board measurement, ADC silicon measurement, transistor-level layout verification, medical diagnosis validation이다.
+- Source ECG는 이미 digitized public record이다.
+- AFE+ADC는 XMODEL/nominal model 기반이다.
+- Physical AFE PCB, ADC silicon, transistor-level layout 검증은 수행하지 않았다.
+- Clinical diagnosis validation은 수행하지 않았다.
+- Board replay는 class-wise 대표 4개 30분 case이며 전체 36개 final_test case의 board batch replay는 아니다.

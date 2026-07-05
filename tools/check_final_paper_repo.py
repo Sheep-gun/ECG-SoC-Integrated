@@ -47,6 +47,8 @@ REQUIRED_FILES = [
     "reports/final/xsim_locked_model_summary.md",
     "reports/final/vivado_locked_model_metrics.md",
     "reports/final/board_replay_result.md",
+    "reports/final/formatting_and_figure_audit.md",
+    "reports/final/figures/FIGURE_INDEX.md",
     "reports/final/fulltop_xsim_locked_class_cases_predictions.csv",
     "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit",
     "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa",
@@ -56,6 +58,7 @@ REQUIRED_FILES = [
     "tools/board_replay/run_locked_fulltop_xsim_cases.py",
     "tools/board_replay/send_full_record_uart.py",
     "tools/check_final_paper_repo.py",
+    "tools/make_final_report_figures.py",
 ]
 
 FINAL_DOC_GLOBS = [
@@ -74,6 +77,34 @@ MARKDOWN_LINK_GLOBS = [
     "docs/*.md",
     "reports/final/*.md",
 ]
+
+REQUIRED_FIGURES = [
+    "reports/final/figures/final_system_architecture.png",
+    "reports/final/figures/snapshot_to_final_membrane_pipeline.png",
+    "reports/final/figures/strict_recordwise_protocol.png",
+    "reports/final/figures/final_result_summary.png",
+    "reports/final/figures/hardware_validation_flow.png",
+    "reports/final/figures/resource_timing_summary.png",
+    "reports/final/figures/board_replay_pass_matrix.png",
+    "reports/final/figures/final_test_confusion_matrix.png",
+]
+
+REQUIRED_IMAGE_LINKS = {
+    "README.md": [
+        "reports/final/figures/final_system_architecture.png",
+        "reports/final/figures/final_result_summary.png",
+    ],
+    "FINAL_REPORT_KR.md": [
+        "reports/final/figures/final_system_architecture.png",
+        "reports/final/figures/snapshot_to_final_membrane_pipeline.png",
+        "reports/final/figures/strict_recordwise_protocol.png",
+        "reports/final/figures/final_result_summary.png",
+        "reports/final/figures/hardware_validation_flow.png",
+        "reports/final/figures/resource_timing_summary.png",
+        "reports/final/figures/board_replay_pass_matrix.png",
+        "reports/final/figures/final_test_confusion_matrix.png",
+    ],
+}
 
 FORBIDDEN_PATTERNS = [
     r"margin_" + r"evidence_0038974",
@@ -97,6 +128,7 @@ FORBIDDEN_PATTERNS = [
     r"actual AFE PCB " + r"verified",
     r"Virtuoso post-layout " + r"verified",
     r"clinical " + r"validation " + r"completed",
+    r"full\s+36" + r".{0,80}" + r"board\s+batch" + r".{0,80}" + r"completed",
 ]
 
 BOARD_CASES = [
@@ -123,6 +155,15 @@ def check_required_files(failures: list[str]) -> None:
     for item in REQUIRED_FILES:
         if not (REPO / item).exists():
             fail(f"missing required file: {item}", failures)
+
+
+def check_required_figures(failures: list[str]) -> None:
+    for item in REQUIRED_FIGURES:
+        path = REPO / item
+        if not path.exists():
+            fail(f"missing required figure: {item}", failures)
+        elif path.stat().st_size <= 0:
+            fail(f"empty required figure: {item}", failures)
 
 
 def check_doc_count(failures: list[str]) -> None:
@@ -188,6 +229,54 @@ def check_markdown_links(failures: list[str]) -> None:
                 target_path = path.parent / target_path
             if not target_path.exists():
                 fail(f"broken markdown link in {rel(path)}: {match.group(1)}", failures)
+
+
+def check_markdown_image_links(failures: list[str]) -> None:
+    image_re = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
+    files: list[Path] = []
+    for pattern in MARKDOWN_LINK_GLOBS:
+        files.extend(REPO.glob(pattern))
+    for path in sorted(set(files)):
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        image_targets = [local_link_target(match.group(1)) for match in image_re.finditer(text)]
+        image_targets = [target for target in image_targets if target is not None]
+        for target in image_targets:
+            target_path = Path(target)
+            if not target_path.is_absolute():
+                target_path = path.parent / target_path
+            if not target_path.exists():
+                fail(f"broken markdown image link in {rel(path)}: {target}", failures)
+        required = REQUIRED_IMAGE_LINKS.get(rel(path), [])
+        normalized = {str((path.parent / target).resolve()).replace("\\", "/") for target in image_targets}
+        for target in required:
+            expected = str((REPO / target).resolve()).replace("\\", "/")
+            if expected not in normalized:
+                fail(f"missing required image link in {rel(path)}: {target}", failures)
+
+
+def check_mermaid_fences(failures: list[str]) -> None:
+    required = ["README.md", "FINAL_REPORT_KR.md", "docs/SYSTEM_ARCHITECTURE_KR.md"]
+    for item in required:
+        text = (REPO / item).read_text(encoding="utf-8-sig", errors="replace")
+        if "```mermaid" not in text:
+            fail(f"missing mermaid code fence: {item}", failures)
+
+
+def check_markdown_tables(failures: list[str]) -> None:
+    files: list[Path] = []
+    for pattern in MARKDOWN_LINK_GLOBS:
+        files.extend(REPO.glob(pattern))
+    for path in sorted(set(files)):
+        lines = path.read_text(encoding="utf-8-sig", errors="replace").splitlines()
+        for idx, line in enumerate(lines[:-1]):
+            if not line.startswith("|"):
+                continue
+            sep = lines[idx + 1]
+            if sep.startswith("|") and re.fullmatch(r"\|(?:\s*:?-{3,}:?\s*\|)+", sep):
+                cols = line.count("|")
+                sep_cols = sep.count("|")
+                if cols != sep_cols:
+                    fail(f"markdown table header/separator column mismatch in {rel(path)}:{idx + 1}", failures)
 
 
 def check_metrics(failures: list[str]) -> None:
@@ -263,9 +352,12 @@ def write_summary(failures: list[str]) -> None:
                 "## Checked",
                 "",
                 "- Required final files are present.",
+                "- Required final report figures are present.",
                 "- Docs folder contains only the final five documentation files.",
                 "- Retired benchmark/candidate strings are absent from final-facing artifacts.",
                 "- Local markdown links in final-facing documents resolve.",
+                "- Figure image links in final-facing documents resolve.",
+                "- Mermaid code fences and Markdown table headers pass basic checks.",
                 "- Locked strict record-wise metrics match the final source-of-truth values.",
                 "- Four class-wise board replay comparison CSVs and UART PASS markers are present.",
                 "",
@@ -277,9 +369,13 @@ def write_summary(failures: list[str]) -> None:
 def main() -> int:
     failures: list[str] = []
     check_required_files(failures)
+    check_required_figures(failures)
     check_doc_count(failures)
     check_forbidden_patterns(failures)
     check_markdown_links(failures)
+    check_markdown_image_links(failures)
+    check_mermaid_fences(failures)
+    check_markdown_tables(failures)
     check_metrics(failures)
     check_board_replay(failures)
     write_summary(failures)

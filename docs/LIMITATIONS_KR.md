@@ -1,33 +1,40 @@
-# Limitations
+# Limitations and Claim Boundary
 
 ## Claim Boundary
 
-| Claim | Status |
+| 주장 가능 | 근거 |
 |---|---|
-| SNN-inspired ECG Classification Accelerator IP Core | supported |
-| AFE+ADC XMODEL-linked input generation | supported |
-| fully blind strict record-wise locked final holdout | supported |
-| Vivado/IP-XACT packaged accelerator IP | supported |
-| Vitis/MicroBlaze class-wise board replay | supported |
-| direct electrode ECG acquisition | not performed |
-| physical AFE board measurement | not performed |
-| ADC silicon measurement | not performed |
-| transistor-level layout verification | not performed |
-| medical diagnosis validation | not performed |
+| SNN-inspired ECG Classification Accelerator IP Core | RTL, AXI wrapper, IP-XACT package |
+| AFE+ADC XMODEL-linked input generation | analog-equivalent `vin` reconstruction, XMODEL output stream |
+| Fully blind strict record-wise locked final holdout | final_test not used for selection/search/context, evaluation count 1 |
+| Python/XSim bit-accurate locked final-layer check | final_pred/final_mem mismatch 0 over 36 final_test cases |
+| Vivado implementation evidence | timing/resource/power reports |
+| Vitis/MicroBlaze class-wise board replay | UART transcript and expected-vs-board CSV for 4 representative 30-minute cases |
 
-## 해석상 주의
+## 주장 금지
 
-공개 ECG dataset은 already digitized record이다. 따라서 본 프로젝트의 `vin` reconstruction은 analog-equivalent/PWL-equivalent input generation이지 원래 analog waveform 복원이 아니다.
+| 주장 금지 | 이유 |
+|---|---|
+| Raw analog ECG acquisition | Source DB is already digitized |
+| Original sensor waveform recovery | `vin` is analog-equivalent reconstruction, not true waveform recovery |
+| Physical AFE PCB validation | Not performed |
+| ADC silicon measurement | Not performed |
+| Virtuoso/post-layout analog verification | Not performed |
+| Clinical diagnosis validation | Engineering prototype only |
+| Validation 100.00% as final generalization | Validation is model-selection performance |
+| Full 36-case board batch replay | Board evidence is class-wise 4-case representative replay |
 
-Validation 100%는 model selection 단계의 성능이다. 최종 일반화 성능은 locked final_test chunk 29/36 = 80.56%와 record-majority 16/19 = 84.21%로 보고한다.
+## Final Result Interpretation
 
-Board replay는 NSR/CHF/ARR/AFF 대표 4개 30분 record에서 수행했다. 전체 final_test 36개 case board batch와 board current/power measurement는 수행하지 않았다.
+최종 성능 주장은 locked final_test 기준으로만 한다.
 
-## 금지 표현
+| 항목 | 값 |
+|---|---:|
+| Final test 30분 chunk | 29 / 36 = 80.56% |
+| Final test record-majority | 16 / 19 = 84.21% |
 
-- original sensor waveform recovered
-- actual AFE board verified
-- ADC silicon measured
-- transistor-level layout verified
-- medical diagnosis validated
-- validation accuracy as final generalization
+Validation 32/32 = 100.00%는 Final Membrane 후보를 선택하는 단계의 성능이며, 최종 held-out 일반화 성능으로 쓰지 않는다.
+
+## 심사 대응 핵심 문장
+
+본 프로젝트는 실제 전극 기반 의료기기 검증이 아니라, AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 생성한 signed 12-bit stream을 RTL/IP에 입력하여 장시간 ECG 4-class classification을 수행한다.

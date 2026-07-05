@@ -1,101 +1,88 @@
 # AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계
 
-## 개요
+## 1. Abstract
 
-이 repo는 공개 digitized ECG record를 입력으로 사용하는 FPGA/VLSI engineering prototype이다. 공개 ECG record를 analog-equivalent `vin` waveform으로 재구성하고, AFE+ADC XMODEL flow를 통과시켜 signed 12-bit sample stream을 생성한 뒤, SNN-inspired RTL accelerator에서 NSR/CHF/ARR/AFF 4개 class를 분류한다.
+본 프로젝트는 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit ECG stream을 만든 뒤, 이를 SNN-inspired ECG Classification Accelerator IP Core에 입력하여 NSR/CHF/ARR/AFF를 분류하는 FPGA/VLSI engineering prototype이다.
 
-디지털 분류기는 60초 Snapshot Readout과 30분 Final Membrane Readout으로 구성된다. 60초마다 ECG event/rhythm/morphology evidence를 만들고, 30분 동안 30개의 snapshot evidence를 class membrane에 누적한 뒤 WTA로 최종 class를 출력한다.
+디지털 분류기는 CNN/RNN/MLP처럼 weight memory와 MAC을 크게 쓰는 구조가 아니라, ECG domain event를 spike/counter evidence로 압축하고 60초 Snapshot Readout과 30분 Final Membrane Readout으로 장시간 evidence를 누적한다. 최종 모델은 `structural_guarded_silent_aff_1008710`이며, Snapshot Readout은 고정하고 Final Membrane만 strict record-wise train/validation 기준으로 lock했다.
 
-최종 locked model은 `structural_guarded_silent_aff_1008710`이다. Snapshot은 고정하고 Final Membrane만 strict record-wise train/validation 기준으로 lock했으며, final_test는 모델 선택이나 파라미터 탐색에 사용하지 않고 lock 이후 1회만 평가했다. 하드웨어 검증은 Python/XSim 일치, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze class-wise 30분 board replay까지 포함한다.
+본 repo는 raw electrode acquisition, physical AFE PCB measurement, ADC silicon measurement, Virtuoso post-layout 검증, clinical validation을 주장하지 않는다. 핵심 주장은 AFE+ADC XMODEL과 RTL/IP accelerator를 연결한 model-based mixed-signal-to-digital FPGA prototype이다.
 
-본 프로젝트는 직접 전극 측정, physical AFE board 측정, ADC silicon 측정, transistor-level layout 검증, 의료 진단 유효성 검증을 주장하지 않는다.
+## 2. System Flow
 
-## 전체 시스템 Flow
+![Final system architecture](reports/final/figures/final_system_architecture.png)
 
 ```mermaid
 flowchart LR
-    A["공개 digitized ECG record"] --> B["Analog-equivalent vin reconstruction"]
+    A["Public digitized ECG record"] --> B["analog-equivalent vin reconstruction"]
     B --> C["AFE+ADC XMODEL"]
-    C --> D["Signed 12-bit ECG stream"]
-    D --> E["60초 Snapshot SNN Readout"]
-    E --> F["30분 Final Membrane Readout"]
+    C --> D["signed 12-bit ECG stream"]
+    D --> E["60 s Snapshot SNN Readout"]
+    E --> F["30 min Final Membrane Readout"]
     F --> G["NSR / CHF / ARR / AFF"]
     F --> H["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
 ```
 
-## Feature Evidence 요약
+입력은 공개 ECG database의 이미 digitized된 sample이다. 이 값을 `code / 200000` 기준의 voltage-equivalent waveform으로 해석하고, HPF, IA gain x201, 60 Hz notch, LPF 150 Hz, 12-bit ADC quantization으로 구성된 AFE+ADC XMODEL flow를 통과시킨다.
 
-본 분류기는 내부가 보이지 않는 dense neural network가 아니다. 각 60초 snapshot은 ECG-oriented event block으로 구성되고, feature event는 integer class membrane에 signed weight로 누적된다.
+그 결과 생성된 signed 12-bit `.mem` stream이 RTL/IP의 실제 입력이 된다. 60초마다 Snapshot Readout이 event, rhythm, morphology, variability evidence를 만들고, 30개 snapshot을 Final Membrane Readout이 누적하여 최종 class를 출력한다.
 
-| Feature block | 직관적 의미 | RTL 역할 |
-|---|---|---|
-| Adaptive event encoder + QRS LIF | ECG slope가 갑자기 크게 변하는 `strong_event`를 적분해 beat/QRS spike를 만든다. | downstream rhythm/morphology block의 기준이 되는 `beat_spike` 생성 |
-| PNN rhythm predictor | 다음 beat가 이전 rhythm hypothesis가 예상한 위치에 들어오는지 확인한다. | 규칙/불규칙 rhythm에 대한 match/mismatch evidence 생성 |
-| RDM variability neuron | 연속 RR interval이 얼마나 변하는지 측정한다. | beat-to-beat variability evidence 누적 |
-| DSCR spike counter | waveform slope sign change와 유효 기울기 변화를 센다. | multiplier 없이 morphology complexity evidence 생성 |
-| RAM peak accumulator | R-peak amplitude response를 threshold bank로 측정한다. | beat amplitude behavior를 integer evidence code로 변환 |
-| Ectopic pair neuron | 단일 short/long RR이 아니라 early/late beat pair pattern을 본다. | ARR-like ectopic rhythm evidence 생성 |
-| QRS MAF neuron | QRS width, complexity, energy, pre-QRS bump를 본다. | morphology abnormality evidence 생성 |
-| RBBB-like QRS delay bank | wide QRS와 terminal activity를 conduction-delay proxy로 본다. | 반복되는 wide/terminal QRS evidence를 snapshot level에 추가 |
-| Class score neurons | fixed signed feature weight를 NSR/CHF/ARR/AFF class membrane에 적용한다. | 60초 snapshot WTA output 생성 |
-| Final Membrane Readout | 30개 snapshot output과 evidence counter를 누적한다. | locked 30분 final WTA output 생성 |
+## 3. Final Locked Model and Results
 
-Feature별 상세 직관 설명은 `FINAL_REPORT_KR.md`와 `docs/SYSTEM_ARCHITECTURE_KR.md`에 정리되어 있다.
-
-## 최종 Locked 모델 및 결과
+![Final result summary](reports/final/figures/final_result_summary.png)
 
 | 항목 | 결과 |
-|---|---|
-| 최종 모델 | `structural_guarded_silent_aff_1008710` |
-| 프로토콜 | fully blind strict record-wise locked final holdout |
-| Train | 61/68 = 89.71% |
-| Validation | 32/32 = 100.00% |
-| Final test 30분 청크 | 29/36 = 80.56% |
-| Final test record-majority | 16/19 = 84.21% |
+|---|---:|
+| Locked candidate | `structural_guarded_silent_aff_1008710` |
+| Train | 61 / 68 = 89.71% |
+| Validation | 32 / 32 = 100.00% |
+| Final test 30분 chunk | 29 / 36 = 80.56% |
+| Final test record-majority | 16 / 19 = 84.21% |
 | Test evaluation count | 1 |
-| Test used for selection | No |
+| Test used for selection | false |
 
-Validation 100%는 model-selection 단계의 결과이며, 최종 일반화 성능 주장은 locked final_test 결과를 기준으로 한다.
+Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-out 성능 주장은 locked final_test의 30분 chunk 정확도 80.56%와 record-majority 정확도 84.21%를 기준으로 한다.
 
-## 하드웨어 구현 및 검증
+## 4. Hardware Implementation
 
 | 항목 | 결과 |
-|---|---|
-| Locked final-layer XSim | 36개 final_test case에서 final_pred mismatch 0, final_mem mismatch 0 |
-| Pure RTL Vivado | LUT/FF/BRAM/DSP 9719/5038/0/0, WNS 8.184 ns, power estimate 0.099 W |
-| OOC/profile Vivado | LUT/FF/BRAM/DSP 9905/5769/0/0, WNS 0.471 ns |
-| IP packaging | AXI accelerator IP와 MMIO-to-AXIS sample feeder IP-XACT package |
-| MicroBlaze full replay build | bitstream/XSA/ELF 생성, timing met |
-| Board replay | NSR/CHF/ARR/AFF 각 1개 30분 case, final_pred/final_mem exact 4/4 |
+|---|---:|
+| Locked final-layer XSim | final_pred mismatch 0, final_mem mismatch 0 over 36 final_test cases |
+| Pure RTL Vivado | LUT 9719, FF 5038, BRAM 0, DSP 0, WNS 8.184 ns |
+| Pure RTL estimated power | 0.099 W |
+| OOC/profile Vivado | LUT 9905, FF 5769, BRAM 0, DSP 0, WNS 0.471 ns |
+| MicroBlaze full replay system | LUT 12494, FF 8494, BRAM 16, DSP 3, setup WNS 0.097 ns |
+| IP packaging | AXI accelerator IP + MMIO-to-AXIS sample feeder IP-XACT |
+| Board replay | NSR/CHF/ARR/AFF each 1 full 30-minute case, final_pred/final_mem exact 4/4 |
 
-Board replay evidence는 `reports/final/board_replay_result.md`에 요약되어 있으며, raw UART transcript와 comparison CSV는 `reports/final/board_replay/` 아래에 있다.
+MicroBlaze system resource는 CPU, LMB/BRAM, UART, AXI interconnect, sample feeder, accelerator를 모두 포함한다. 따라서 pure RTL resource와 직접 비교하지 않고 integration proof로 분리해서 해석한다.
 
-## Repo 구조
+## 5. Repository Structure
 
 | 경로 | 역할 |
 |---|---|
-| `FINAL_REPORT_KR.md` | 한국어 최종 보고서 |
-| `docs/PAPER_SUMMARY_KR.md` | 제출용 짧은 요약 |
+| `FINAL_REPORT_KR.md` | 최종 보고서 본문 |
+| `docs/PAPER_SUMMARY_KR.md` | 제출용 핵심 요약 |
 | `docs/SYSTEM_ARCHITECTURE_KR.md` | AFE+ADC XMODEL 및 accelerator architecture |
-| `docs/STRICT_RECORDWISE_PROTOCOL_KR.md` | locked dataset/model protocol |
-| `docs/HARDWARE_VALIDATION_KR.md` | RTL/XSim/Vivado/IP/Vitis 검증 evidence |
+| `docs/STRICT_RECORDWISE_PROTOCOL_KR.md` | strict record-wise locked model protocol |
+| `docs/HARDWARE_VALIDATION_KR.md` | RTL/XSim/Vivado/IP/Vitis/board evidence |
 | `docs/LIMITATIONS_KR.md` | 주장 범위와 한계 |
-| `configs/final_submission_locked_model.json` | 최종 모델, 수치, 주장 범위 source of truth |
-| `reports/final/` | 최종 metrics, evidence summary, figure, board replay transcript |
+| `configs/final_submission_locked_model.json` | 최종 모델과 수치의 source of truth |
+| `reports/final/` | final metrics, evidence summary, board replay transcript, figures |
 | `rtl/`, `sim/` | 최종 RTL 및 simulation source |
-| `ip_repo/` | packaged AXI accelerator 및 sample feeder IP source |
+| `ip_repo/` | packaged AXI accelerator 및 sample feeder IP |
 | `vitis_apps/full_record_replay/` | MicroBlaze full-record replay application |
-| `tools/` | 최종 재현 및 consistency check script |
+| `tools/` | 재현, figure 생성, consistency check script |
 
-## 한계
+## 6. Limitations
 
-- Source ECG record는 이미 digitized public dataset이다.
-- `vin`은 analog-equivalent/PWL-equivalent reconstruction이며, 원래 sensor waveform을 복원한 것이 아니다.
-- AFE+ADC 검증은 XMODEL/nominal-model 기반이며, board-level AFE 또는 ADC silicon 측정이 아니다.
-- Transistor-level layout 검증은 주장하지 않는다.
-- 의료 진단 유효성 검증은 주장하지 않는다.
-- Board replay는 class별 대표 30분 case 검증이며, 모든 final_test case의 full board batch replay는 아니다.
+- Source ECG는 public digitized record이며 raw analog acquisition이 아니다.
+- `vin`은 analog-equivalent/PWL-equivalent reconstruction이며 원래 sensor waveform의 완전 복원이 아니다.
+- AFE+ADC는 XMODEL/nominal model 기반이며 physical AFE PCB 또는 ADC silicon 측정이 아니다.
+- CMOS/transistor-level layout 및 post-layout verification은 수행하지 않았다.
+- Clinical diagnosis validation은 수행하지 않았으며, 본 결과는 engineering validation 범위에 머문다.
+- Board replay는 class-wise 대표 4개 30분 case 검증이며, 전체 36개 final_test case의 board batch replay는 아니다.
 
-## 최종 보고서
+## 7. Main Report Link
 
-전체 한국어 최종 보고서는 `FINAL_REPORT_KR.md`를 보면 된다.
+전체 최종 보고서는 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)를 기준 문서로 본다. Figure source와 생성 목록은 [reports/final/figures/FIGURE_INDEX.md](reports/final/figures/FIGURE_INDEX.md)에 정리되어 있다.
