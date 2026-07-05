@@ -6,7 +6,7 @@
 
 핵심은 다음 한 문장으로 요약된다.
 
-> 공개 ECG dataset은 이미 digitized record이므로 원래의 raw analog ECG를 복원할 수 없다. 대신 physical-voltage-equivalent waveform을 재구성하고, virtual DAC / PWL-equivalent replay를 통해 AFE+ADC XMODEL에 넣을 수 있는 입력 stimulus를 만든 뒤, 모델화된 AFE+ADC 출력을 signed 12-bit RTL input stream으로 연결한다.
+> 공개 ECG dataset은 이미 digitized record이므로 원래의 raw analog ECG를 복원할 수 없다. 대신 analog-equivalent `vin` waveform을 재구성하고, virtual DAC / PWL-equivalent replay를 통해 AFE+ADC XMODEL에 넣을 수 있는 입력 stimulus를 만든 뒤, 모델화된 AFE+ADC 출력을 signed 12-bit RTL input stream으로 연결한다.
 
 이 flow는 “실제 환자의 아날로그 심전도를 되살리는 절차”가 아니다. 이미 digital sample로 배포된 PhysioNet/WFDB/CSV record를 사용해 mixed-signal model 검증에 필요한 analog-equivalent input을 만드는 절차이다.
 

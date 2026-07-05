@@ -71,7 +71,7 @@
 
 대신 다음처럼 표현한다.
 
-- 공개 digitized ECG를 physical-voltage-equivalent input으로 재구성했다.
+- 공개 digitized ECG를 analog-equivalent vin / PWL-equivalent input으로 재구성했다.
 - AFE+ADC XMODEL/nominal chain을 통과한 signed 12-bit RTL input flow를 구성했다.
 - Python golden과 RTL/XSim bit-accurate 비교를 수행했다.
 - 최종 strict record-wise dataset과 Final Membrane lock protocol을 기준으로 결과를 제시한다.

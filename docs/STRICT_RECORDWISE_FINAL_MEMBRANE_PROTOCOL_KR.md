@@ -2,7 +2,7 @@
 
 ## 1. 목적
 
-이 문서는 최종 30분 Final Membrane readout을 strict record-wise dataset 위에서 확정하는 절차만 정리한다. 최종 보고서에는 채택된 구조, locked parameter, 최종 test result만 남긴다.
+이 문서는 최종 30분 Final Membrane readout을 strict record-wise dataset 위에서 확정한 절차와 결과만 정리한다. 최종 보고서에는 채택된 구조, locked parameter, 최종 test result만 남긴다.
 
 ## 2. 고정된 입력 조건
 
@@ -25,13 +25,28 @@
 ## 4. 선택 절차
 
 1. Train split에서 수백만 개 규모의 integer parameter candidate를 빠르게 평가한다.
-2. 동일한 train prediction signature를 내는 후보는 중복 제거한다.
-3. Validation split에서 shortlist를 평가해 최종 후보를 선택한다.
+2. ChatGPT 5.5 Pro 구조 제안을 참고하되, final_test record/result는 전달하지 않는다.
+3. Validation split에서 최종 후보를 선택한다.
 4. 선택된 parameter, split hash, train/validation/test record hash를 lock file로 저장한다.
 5. Test split은 lock 이후 최종 1회만 평가한다.
 6. 최종보고서에는 locked candidate와 final test result만 기재한다.
 
-## 5. 보고 기준
+## 5. 최종 Locked Result
+
+| 항목 | 결과 |
+|---|---:|
+| Selected candidate | `structural_guarded_silent_aff_1008710` |
+| Candidate family | `F1_F6_F10_guarded_rescue_silent_aff` |
+| Candidates evaluated | 3,000,000 |
+| Passing candidates | 6,569 |
+| Train | 61/68 = 89.71% |
+| Validation | 32/32 = 100.00% |
+| Final test evaluation count | 1 |
+| Final test chunk accuracy | 29/36 = 80.56% |
+| Final test macro-F1 | 80.44% |
+| Final test record-majority accuracy | 16/19 = 84.21% |
+
+## 6. 보고 기준
 
 최종보고서에는 다음 항목만 남긴다.
 

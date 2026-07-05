@@ -47,7 +47,7 @@ IP packaging evidence:
 
 ## 4. AFE+ADC XMODEL 검증
 
-공개 ECG dataset은 이미 digitized record이다. 따라서 본 프로젝트는 raw analog ECG를 복원했다고 주장하지 않고, signed code를 physical-voltage-equivalent 입력으로 해석하는 virtual DAC/PWL-equivalent reconstruction을 사용한다.
+공개 ECG dataset은 이미 digitized record이다. 따라서 본 프로젝트는 raw analog ECG를 복원했다고 주장하지 않고, signed code를 analog-equivalent `vin` 입력으로 해석하는 virtual DAC/PWL-equivalent reconstruction을 사용한다.
 
 repo 기준 AFE+ADC evidence:
 
@@ -68,6 +68,8 @@ repo 기준 AFE+ADC evidence:
 | 항목 | 결과 |
 |---|---:|
 | Chunk-level test accuracy | 32/36 = 88.89% |
+| Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
+| Strict final_test evaluation count | 1 |
 | Python-vs-XSim final prediction mismatch | 0/136 |
 | Python-vs-XSim final membrane mismatch | 0/136 |
 | Strict record-wise dataset | seed 20260808, source/physical overlap 0, class별 train/val/test 17/8/9 chunks |

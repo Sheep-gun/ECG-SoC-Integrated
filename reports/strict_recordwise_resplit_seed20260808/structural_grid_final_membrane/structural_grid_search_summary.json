@@ -1,0 +1,203 @@
+{
+  "selected_before_test_evaluation": true,
+  "test_used_for_selection": false,
+  "test_used_for_parameter_search": false,
+  "test_used_for_chatgpt_context": false,
+  "split_hash": "9514200bcbe3a57a120ff135eee905405edac396a1a464327b9247e059ff47a0",
+  "final_test_lock_path": "C:\\Users\\YangGeon\\SNN ECG Classifier\\configs\\recordwise_resplit_seed20260808\\final_test_records_locked.json",
+  "final_test_lock_artifact": [
+    {
+      "path": "configs/recordwise_resplit_seed20260808/final_test_records_locked.json",
+      "bytes": 2254,
+      "sha256": "0e49b0a1f6d8f092059f759cbd1e7e2af676a55ebccd69217214cb1d7318042b"
+    }
+  ],
+  "base_locked_params_path": "C:\\Users\\YangGeon\\SNN ECG Classifier\\configs\\recordwise_resplit_seed20260808\\best_final_membrane_snn_huge_grid_locked.json",
+  "base_locked_params_hash": "be2afbcba95a0edda4c77713217ceac5e83ae3afd6a71d98a6da065ebe2e631f",
+  "fixed_frontend_subset_hashes": {
+    "train": "7cb747213ee80f0e8879438034c364c7dbe269c191befaaeb682945cf8c948d8",
+    "val": "ac80099d34bab7d8d72891302746ff5c0811877fd9030d7293d77be3e661933d"
+  },
+  "search_script_artifacts": [
+    {
+      "path": "tools/recordwise/search_final_membrane_structural_grid.py",
+      "bytes": 24990,
+      "sha256": "b0d55d20e7864de9391a8d1927f3e6e186d19cc70c2f898a59d2e9ffc88c1411"
+    }
+  ],
+  "chatgpt_55pro_session": "01KWRNZY09MSV2QHFQ54K07CYV",
+  "random_seed": 5610808,
+  "candidate_count": 3000000,
+  "passing_candidate_count": 6569,
+  "target": {
+    "train_correct_ge": 61,
+    "val_correct_ge": 30
+  },
+  "selected_candidate_id": "structural_guarded_silent_aff_1008710",
+  "selected_trial": 1008710,
+  "selected_candidate_params_hash": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
+  "params": {
+    "aff_cnt": 12,
+    "aff_chf_cnt": 14,
+    "aff_morph_le": 3000,
+    "aff_rhythm_ge": 12000,
+    "aff_qrs_le": 1000,
+    "nsr_cnt": 4,
+    "nsr_chf_cnt": 8,
+    "nsr_morph_le": 100,
+    "nsr_abn_le": 60,
+    "nsr_qrs_le": 10,
+    "nsr_ect_le": 40,
+    "arr_nsr_nsr_cnt": 16,
+    "arr_nsr_morph_ge": 3500,
+    "arr_nsr_pre_ge": 2600,
+    "arr_nsr_arr_cnt": 4,
+    "arr_nsr_qrs_high_le": 100,
+    "arr_nsr_rbbb_high_le": 16,
+    "arr_nsr_arr_low_le": 2,
+    "arr_nsr_qrs_low_le": 30,
+    "arr_nsr_ect_low_le": 40,
+    "arr_nsr_rhythm_low_le": 10000,
+    "arr_aff_aff_cnt": 10,
+    "arr_aff_arr_cnt": 3,
+    "arr_aff_morph_ge": 500,
+    "arr_aff_ect_ge": 400,
+    "arr_aff_qrs_le": 200,
+    "aff_boost": 80,
+    "aff_inh_chf": 40,
+    "aff_inh_arr": 0,
+    "nsr_boost": 40,
+    "nsr_inh_chf": 40,
+    "nsr_inh_arr": 20,
+    "arr_nsr_boost": 40,
+    "arr_nsr_inh_nsr": 40,
+    "arr_nsr_inh_chf": 40,
+    "arr_nsr_inh_aff": 10,
+    "arr_aff_boost": 40,
+    "arr_aff_inh_aff": 40,
+    "candidate_id": "structural_guarded_silent_aff_1008710",
+    "family": "F1_F6_F10_guarded_rescue_silent_aff"
+  },
+  "train_metrics": {
+    "correct": 61,
+    "total": 68,
+    "accuracy": 0.8970588235294118,
+    "macro_f1": 0.8990641711229946,
+    "balanced_accuracy": 0.8970588235294117,
+    "min_recall": 0.8235294117647058,
+    "recall_range": 0.11764705882352944,
+    "per_class": {
+      "NSR": {
+        "precision": 0.7894736842105263,
+        "recall": 0.8823529411764706,
+        "f1": 0.8333333333333333,
+        "support": 17
+      },
+      "CHF": {
+        "precision": 1.0,
+        "recall": 0.9411764705882353,
+        "f1": 0.9696969696969697,
+        "support": 17
+      },
+      "ARR": {
+        "precision": 0.8235294117647058,
+        "recall": 0.8235294117647058,
+        "f1": 0.8235294117647058,
+        "support": 17
+      },
+      "AFF": {
+        "precision": 1.0,
+        "recall": 0.9411764705882353,
+        "f1": 0.9696969696969697,
+        "support": 17
+      }
+    },
+    "confusion_matrix": [
+      [
+        15,
+        0,
+        2,
+        0
+      ],
+      [
+        1,
+        16,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        14,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        16
+      ]
+    ]
+  },
+  "val_metrics": {
+    "correct": 32,
+    "total": 32,
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "balanced_accuracy": 1.0,
+    "min_recall": 1.0,
+    "recall_range": 0.0,
+    "per_class": {
+      "NSR": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 8
+      },
+      "CHF": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 8
+      },
+      "ARR": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 8
+      },
+      "AFF": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 8
+      }
+    },
+    "confusion_matrix": [
+      [
+        8,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        8,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        8
+      ]
+    ]
+  }
+}

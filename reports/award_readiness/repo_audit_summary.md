@@ -40,7 +40,7 @@
 | 감사 항목 | 결과 파일 | 핵심 결론 |
 |---|---|---|
 | strict record-wise dataset | `reports/strict_recordwise_resplit_seed20260808/strict_recordwise_split_summary.md` | seed 20260808, source/physical overlap 0, class별 train/validation/test chunks 17/8/9 |
-| Final Membrane 확정 프로토콜 | `docs/DATASET_SPLIT_VALIDATION_KR.md` | strict train/validation에서 parameter 선택, lock 이후 strict test 최종 1회 평가 |
+| Final Membrane locked result | `reports/strict_recordwise_resplit_seed20260808/final_test_structural_grid_final_membrane/structural_final_test_summary.md` | train 61/68, validation 32/32, final_test 29/36, test_evaluation_count 1 |
 | AFE figure generation | `reports/award_readiness/afe_xmodel_evidence_summary.md` | nominal AFE evidence figure 생성, silicon/PCB 실측은 아님 |
 | ablation | `reports/award_readiness/ablation_summary.md` | final membrane/evidence가 snapshot-only 대비 성능을 올림 |
 | CPU/RTL baseline | `reports/award_readiness/cpu_vs_rtl_summary.md` | Python은 precomputed feature final-readout 기준, RTL은 cycle-derived 기준 |
@@ -48,7 +48,7 @@
 
 ## 부족한 항목
 
-- Final Membrane locked parameter 기준 strict test confusion matrix는 최종 확정 후 보고한다.
+- Strict record-wise locked Final Membrane은 final_test 1회 평가까지 완료했으며, chunk-level 29/36 = 80.56%로 보고한다.
 - raw/AFE-off full-record `.mem` dataset이 없어 AFE on/off end-to-end accuracy ablation은 TODO이다.
 - HPF/notch/LPF off dataset 재생성은 아직 수행하지 않았다.
 - full 30분 board replay transcript는 test NSR case 0 한 건에 대해 존재한다. 현재 evidence는 MicroBlaze smoke bit/XSA, XSDB MMIO smoke, Vitis-built ELF, UART PASS transcript, full-record board replay PASS transcript이다. 전체 split board replay batch는 아직 없다.

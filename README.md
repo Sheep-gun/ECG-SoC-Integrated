@@ -28,9 +28,12 @@ flowchart LR
 
 | 항목 | 결과 |
 |---|---|
-| Chunk-level test accuracy | 32/36 = 88.89% |
+| Chunk-level functional benchmark accuracy | 32/36 = 88.89% |
+| Fully blind strict record-wise model lock | Snapshot fixed, Final Membrane train/validation-only selection, final_test one-shot |
+| Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
+| Strict final_test evaluation count | 1 |
 | Python-vs-XSim mismatch | final prediction 0/136, final membrane 0/136 |
-| Dataset split audit | 70 class-record pairs 중 33 pairs가 여러 split에 걸침 |
+| Strict dataset split audit | seed 20260808, source/physical overlap 0 |
 | Ablation full vs snapshot majority | 125/136 = 91.91% vs 103/136 = 75.74% |
 | Vivado board resource | LUT 21002, FF 2803, BRAM 0, DSP 0 |
 | Vivado board timing / power | WNS 7.873 ns, estimated total power 0.101 W |
@@ -369,4 +372,4 @@ DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/count
 - 30분 Final Membrane 확정은 `seed=20260808` strict record-wise dataset을 기준으로 진행한다. class별 chunk 수는 train / validation / test = 17 / 8 / 9로 맞추고, `source_record_id`와 label-stripped `physical_record_id` 기준 split overlap 0을 확인한다.
 - XSim 정확도는 30분 `.mem` dataset testbench 기준이다.
 - Vivado power는 실제 보드 전류 측정값이 아니라 post-implementation 추정값이다.
-- ARR test recall은 6/9로 남은 병목이다. 전체 accuracy와 별도로 보고해야 한다.
+- Strict final_test chunk accuracy는 29/36 = 80.56%이며, CHF recall 6/9, ARR recall 7/9, AFF recall 7/9를 전체 accuracy와 별도로 보고해야 한다.

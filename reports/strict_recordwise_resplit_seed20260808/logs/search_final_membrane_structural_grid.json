@@ -1,0 +1,33 @@
+{
+  "script": "search_final_membrane_structural_grid",
+  "argv": [
+    "tools\\recordwise\\search_final_membrane_structural_grid.py",
+    "search",
+    "--seed",
+    "20260808",
+    "--iterations",
+    "3000000",
+    "--random-seed",
+    "5610808",
+    "--progress-every",
+    "100000",
+    "--top",
+    "64",
+    "--chatgpt-session",
+    "01KWRNZY09MSV2QHFQ54K07CYV"
+  ],
+  "timestamp_utc": "2026-07-05T09:10:23.957005+00:00",
+  "git_commit": "4ec62773f1755eb354e0763a739c3b31e1e64334",
+  "cwd": "C:\\Users\\YangGeon\\SNN ECG Classifier",
+  "outputs": [
+    "configs\\recordwise_resplit_seed20260808\\best_final_membrane_structural_grid_locked.json",
+    "reports\\strict_recordwise_resplit_seed20260808\\structural_grid_final_membrane\\structural_grid_search_summary.json",
+    "reports\\strict_recordwise_resplit_seed20260808\\structural_grid_final_membrane\\structural_grid_search_summary.md",
+    "reports\\strict_recordwise_resplit_seed20260808\\structural_grid_final_membrane\\structural_grid_top_candidates.csv"
+  ],
+  "extra": {
+    "candidate_count": 3000000,
+    "passing_candidate_count": 6569,
+    "selected_candidate_id": "structural_guarded_silent_aff_1008710"
+  }
+}

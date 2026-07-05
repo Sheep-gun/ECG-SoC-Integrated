@@ -16,7 +16,7 @@
 
 ### Q1. 원본 ECG가 이미 디지털인데 AFE+ADC를 다시 거치는 게 의미 있나?
 
-의미는 “raw analog를 새로 측정했다”가 아니라, digital ECG record를 physical-voltage-equivalent input으로 재해석하고 AFE+ADC 이후 digital stream이 accelerator에 들어가는 전체 flow를 검증한다는 데 있다. 공개 ECG dataset은 대부분 digitized record이므로, 본 프로젝트는 virtual DAC/PWL-equivalent `vin` reconstruction과 nominal AFE+ADC XMODEL을 통해 model-based mixed-signal-to-digital verification을 구성했다.
+의미는 “raw analog를 새로 측정했다”가 아니라, digital ECG record를 analog-equivalent `vin` input으로 재해석하고 AFE+ADC 이후 digital stream이 accelerator에 들어가는 전체 flow를 검증한다는 데 있다. 공개 ECG dataset은 대부분 digitized record이므로, 본 프로젝트는 virtual DAC/PWL-equivalent `vin` reconstruction과 nominal AFE+ADC XMODEL을 통해 model-based mixed-signal-to-digital verification을 구성했다.
 
 ### Q2. 이것이 실제 raw analog ECG 복원인가?
 

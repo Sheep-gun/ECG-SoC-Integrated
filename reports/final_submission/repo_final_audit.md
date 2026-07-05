@@ -27,7 +27,7 @@ public digitized ECG records
 | Chunk-level test accuracy | `results/final_membrane_v2_snn/xsim_snn_ecg_v2_summary.json` 기준 `32/36 = 88.89%` |
 | Python-vs-XSim mismatch | final prediction `0/136`, final membrane `0/136` |
 | Strict record-wise dataset | seed `20260808`, source/physical overlap 0, class별 train/validation/test chunks `17/8/9` |
-| Final Membrane selection protocol | strict train/validation에서 parameter 선택, lock 이후 strict test 최종 1회 평가 |
+| Strict locked Final Membrane | train `61/68`, validation `32/32`, final_test `29/36`, test_evaluation_count `1` |
 | Ablation full model | `125/136 = 91.91%` |
 | Ablation snapshot majority | `103/136 = 75.74%` |
 | Ablation snapshot membrane sum | `101/136 = 74.26%` |

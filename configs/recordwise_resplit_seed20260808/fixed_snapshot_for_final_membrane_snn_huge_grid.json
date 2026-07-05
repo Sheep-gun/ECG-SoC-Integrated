@@ -1,0 +1,6 @@
+{
+  "fixed_snapshot_frontend": "existing active C24/V2 window dump from results/final_membrane_v2_snn",
+  "snapshot_search_performed_in_this_flow": false,
+  "reason": "user requested final membrane structure/parameter search only",
+  "final_membrane_search_scope": "existing SNN final membrane shell; pure neutral majority is report-only and not selectable"
+}

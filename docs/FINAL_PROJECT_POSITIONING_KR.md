@@ -37,7 +37,7 @@
 
 ### 왜 이미 digitized ECG에 AFE+ADC XMODEL을 붙였나?
 
-공개 ECG dataset은 대부분 digital record로 제공된다. 본 프로젝트는 이를 실제 analog acquisition으로 과장하지 않고, digital code를 physical-voltage-equivalent input으로 재해석하여 AFE+ADC nominal model을 통과시키는 verification stage를 구성했다. 목적은 analog PCB 성능을 주장하는 것이 아니라, **mixed-signal front-end 이후 생성될 signed 12-bit stream이 digital accelerator로 연결되는 흐름**을 검증하는 것이다.
+공개 ECG dataset은 대부분 digital record로 제공된다. 본 프로젝트는 이를 실제 analog acquisition으로 과장하지 않고, digital code를 analog-equivalent `vin` input으로 재해석하여 AFE+ADC nominal model을 통과시키는 verification stage를 구성했다. 목적은 analog PCB 성능을 주장하는 것이 아니라, **mixed-signal front-end 이후 생성될 signed 12-bit stream이 digital accelerator로 연결되는 흐름**을 검증하는 것이다.
 
 ### 왜 Accelerator IP Core인가?
 

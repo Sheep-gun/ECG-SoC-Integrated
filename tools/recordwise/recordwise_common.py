@@ -252,8 +252,13 @@ def enrich_snapshot_features(row: dict[str, Any]) -> dict[str, Any]:
     return row
 
 
-def strict_rows_from_split(split_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
-    by_chunk = {norm_rel(row["chunk_file"]): row for row in split_rows}
+def strict_rows_from_split(split_rows: list[dict[str, str]], target_splits: Iterable[str] | None = None) -> list[dict[str, Any]]:
+    target_set = set(target_splits) if target_splits is not None else None
+    by_chunk = {
+        norm_rel(row["chunk_file"]): row
+        for row in split_rows
+        if target_set is None or row["split"] in target_set
+    }
     rows: list[dict[str, Any]] = []
     missing: list[str] = []
     for row in load_all_window_rows():
@@ -272,8 +277,13 @@ def strict_rows_from_split(split_rows: list[dict[str, str]]) -> list[dict[str, A
         item["mem_path"] = meta["mem_path"]
         item["original_case_id"] = row.get("case_id", "")
         rows.append(enrich_snapshot_features(item))
-    if missing:
+    if target_set is None and missing:
         raise RuntimeError(f"{len(missing)} window rows missing from strict split; first={missing[0]}")
+    expected_chunks = set(by_chunk)
+    seen_chunks = {norm_rel(row["chunk_file"]) for row in rows}
+    missing_expected = sorted(expected_chunks - seen_chunks)
+    if missing_expected:
+        raise RuntimeError(f"{len(missing_expected)} strict rows missing from window dumps; first={missing_expected[0]}")
     return rows
 
 

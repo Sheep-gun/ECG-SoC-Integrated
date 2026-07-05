@@ -2,7 +2,7 @@
 
 ## 1. 이 문서의 위치
 
-본 문서는 기존 [AFE+ADC XMODEL 기반 입력 생성 흐름](AFE_ADC_XMODEL_FLOW_KR.md)에 이어, 대회 제출용 figure와 실험 로그를 정리한다. 핵심은 **공개 digitized ECG record를 실제 raw analog ECG로 복원했다고 주장하지 않고**, physical-voltage-equivalent input과 nominal AFE+ADC model evidence를 분리해서 보여주는 것이다.
+본 문서는 기존 [AFE+ADC XMODEL 기반 입력 생성 흐름](AFE_ADC_XMODEL_FLOW_KR.md)에 이어, 대회 제출용 figure와 실험 로그를 정리한다. 핵심은 **공개 digitized ECG record를 실제 raw analog ECG로 복원했다고 주장하지 않고**, analog-equivalent `vin` / PWL-equivalent input과 nominal AFE+ADC model evidence를 분리해서 보여주는 것이다.
 
 ## 2. 생성한 evidence
 

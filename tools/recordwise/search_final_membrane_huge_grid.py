@@ -108,15 +108,21 @@ def assert_artifact_manifest(manifest: list[dict[str, Any]], label: str) -> None
             raise RuntimeError(f"{label} artifact hash mismatch: {path} expected={item['sha256']} got={got}")
 
 
-def frontend_artifact_manifest() -> list[dict[str, Any]]:
-    return artifact_manifest(
-        [
-            RESULTS / "window_dump_train.csv",
-            RESULTS / "window_dump_val.csv",
-            RESULTS / "window_dump_test.csv",
-            REPO / "scripts" / "search_final_membrane_v2_snn.py",
-        ]
-    )
+def frontend_subset_hash(split_rows: list[dict[str, str]], target_splits: Iterable[str]) -> dict[str, str]:
+    out: dict[str, str] = {}
+    for split in target_splits:
+        rows = strict_rows_from_split(split_rows, target_splits=[split])
+        stable_rows: list[dict[str, Any]] = []
+        for row in rows:
+            stable_rows.append(
+                {
+                    key: row.get(key)
+                    for key in sorted(row)
+                    if key not in {"source_record_id", "physical_record_id", "source_database", "mem_path", "source_file_path"}
+                }
+            )
+        out[split] = sha256_json(stable_rows)
+    return out
 
 
 def search_script_manifest() -> list[dict[str, Any]]:
@@ -215,9 +221,11 @@ def neutral_params() -> dict[str, Any]:
     }
 
 
-def load_chunks_by_split(final_mod: Any) -> dict[str, list[Any]]:
-    rows = strict_rows_from_split(load_strict_split())
-    return {split: final_mod.build_chunks([row for row in rows if row["split"] == split]) for split in SPLITS}
+def load_chunks_by_split(final_mod: Any, target_splits: Iterable[str] | None = None) -> dict[str, list[Any]]:
+    split_rows = load_strict_split()
+    targets = list(target_splits) if target_splits is not None else SPLITS
+    rows = strict_rows_from_split(split_rows, target_splits=targets)
+    return {split: final_mod.build_chunks([row for row in rows if row["split"] == split]) for split in targets}
 
 
 def source_record_by_case(split_rows: list[dict[str, str]]) -> dict[str, str]:
@@ -357,7 +365,7 @@ def write_stage_a_summary(path: Path, rows: list[dict[str, Any]], counts: dict[s
 
 def command_search(args: argparse.Namespace) -> None:
     final_mod = load_final_module()
-    chunks = load_chunks_by_split(final_mod)
+    chunks = load_chunks_by_split(final_mod, target_splits=["train", "val"])
     train = chunks["train"]
     val = chunks["val"]
     split_payload = read_json(split_json_path(args.seed))
@@ -377,7 +385,7 @@ def command_search(args: argparse.Namespace) -> None:
         },
     )
     fixed_snapshot_artifact = artifact_manifest([FIXED_SNAPSHOT])
-    frontend_artifacts = frontend_artifact_manifest()
+    frontend_subset_hashes = frontend_subset_hash(split_rows, ["train", "val"])
     script_artifacts = search_script_manifest()
 
     global_heap: list[tuple[Any, int, dict[str, Any]]] = []
@@ -534,14 +542,14 @@ def command_search(args: argparse.Namespace) -> None:
         "test_record_list_hash": sha256_json(record_lists["test"]),
         "fixed_snapshot_path": rel_path(FIXED_SNAPSHOT),
         "fixed_snapshot_artifact": fixed_snapshot_artifact,
-        "fixed_frontend_artifacts": frontend_artifacts,
+        "fixed_frontend_subset_hashes": frontend_subset_hashes,
         "search_script_artifacts": script_artifacts,
         "chatgpt_55pro_session": args.chatgpt_session,
         "search_protocol": {
             "stage_a": "huge grid evaluated on train only",
             "stage_b": "top train candidates deduped by train prediction signature",
             "stage_c": "shortlist evaluated on validation once",
-            "stage_d": "held-out test must be evaluated only after this lock",
+            "stage_d": "final_test is loaded and evaluated only after this lock",
             "families": families,
             "selectable_candidate_scope": "SNN membrane candidates only",
             "neutral_majority_baseline_selectable": bool(args.include_neutral_baseline),
@@ -698,7 +706,10 @@ def command_final_test(args: argparse.Namespace) -> None:
     locked = read_json(LOCKED_PARAMS)
     split_hash = locked["split_hash"]
     assert_artifact_manifest(locked.get("fixed_snapshot_artifact", []), "fixed snapshot")
-    assert_artifact_manifest(locked.get("fixed_frontend_artifacts", []), "fixed frontend")
+    split_rows = load_strict_split()
+    expected_frontend_hashes = locked.get("fixed_frontend_subset_hashes", {})
+    if expected_frontend_hashes and frontend_subset_hash(split_rows, ["train", "val"]) != expected_frontend_hashes:
+        raise RuntimeError("locked train/validation frontend subset hash mismatch")
     params_hash = sha256_json(locked["params"])
     if params_hash != locked.get("selected_candidate_params_hash"):
         raise RuntimeError("locked params hash mismatch")
@@ -709,7 +720,7 @@ def command_final_test(args: argparse.Namespace) -> None:
         "val_record_list_hash": locked.get("val_record_list_hash"),
         "test_record_list_hash": locked.get("test_record_list_hash"),
         "fixed_snapshot_artifact": locked.get("fixed_snapshot_artifact", []),
-        "fixed_frontend_artifacts": locked.get("fixed_frontend_artifacts", []),
+        "fixed_frontend_subset_hashes": expected_frontend_hashes,
         "params_hash": params_hash,
         "eval_script_artifacts": eval_script_artifacts,
     }
@@ -727,12 +738,11 @@ def command_final_test(args: argparse.Namespace) -> None:
         warning = None
 
     final_mod = load_final_module()
-    chunks = load_chunks_by_split(final_mod)
+    chunks = load_chunks_by_split(final_mod, target_splits=["test"])
     test = chunks["test"]
     params = locked["params"]
     pred, details = final_mod.apply_candidate(test, params)
     metric = final_mod.metric_for_predictions(test, pred)
-    split_rows = load_strict_split()
     source_by_case = {str(row["strict_case_id"]): row["source_record_id"] for row in split_rows if row["split"] == "test"}
     pred_rows = prediction_rows(test, pred, details, source_by_case)
     rec_true, rec_pred, rec_rows = record_level(pred_rows)

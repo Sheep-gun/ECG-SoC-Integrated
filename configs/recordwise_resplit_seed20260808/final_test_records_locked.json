@@ -1,0 +1,77 @@
+{
+  "locked": true,
+  "timestamp_utc": "2026-07-05T08:21:26.718424+00:00",
+  "seed": 20260808,
+  "split_hash": "9514200bcbe3a57a120ff135eee905405edac396a1a464327b9247e059ff47a0",
+  "rule": "final_test records are locked before structure search and parameter search; do not use final_test chunks, labels, predictions, or features before locked-parameter evaluation.",
+  "allowed_before_final_test": [
+    "train",
+    "val"
+  ],
+  "forbidden_before_lock": [
+    "test"
+  ],
+  "test_used_for_structure_selection": false,
+  "test_used_for_parameter_search": false,
+  "test_used_for_chatgpt_context": false,
+  "test_record_list_hash": "fdfa7ddefede2e212ed2fe77c268542afdde0737ac65ffd6817d83b912723ea3",
+  "train_record_list_hash": "1e19ce7901c320c846dead43c005c408ea3cde825317d0270a7e3e059fb4bf39",
+  "val_record_list_hash": "051509cb5c811559a5e97685ec95b57722eb49bf32bd554f19a21d9e18fecb7c",
+  "train_val_chunk_file_hash": "d658d06b7fb107ac766bc8b7597eed41edd994b53be1e3040913238dd7dbb598",
+  "test_chunk_file_hash": "6d5f1110c3f939e005b276f45dc6d8097d30be51d379d0ef4ddd5b0843e753b8",
+  "test_source_records": [
+    "AFF_afdb_06995",
+    "ARR_mitdb_102",
+    "ARR_mitdb_105",
+    "ARR_mitdb_118",
+    "ARR_mitdb_202",
+    "ARR_mitdb_208",
+    "ARR_mitdb_214",
+    "ARR_mitdb_217",
+    "ARR_mitdb_220",
+    "ARR_mitdb_231",
+    "CHF_chfdb_chf06",
+    "CHF_chfdb_chf07",
+    "CHF_chfdb_chf09",
+    "CHF_chfdb_chf15",
+    "NSR_nsrdb_16272",
+    "NSR_nsrdb_16483",
+    "NSR_nsrdb_16786",
+    "NSR_nsrdb_19093",
+    "NSR_nsrdb_19140"
+  ],
+  "test_physical_records": [
+    "afdb_06995",
+    "chfdb_chf06",
+    "chfdb_chf07",
+    "chfdb_chf09",
+    "chfdb_chf15",
+    "mitdb_102",
+    "mitdb_105",
+    "mitdb_118",
+    "mitdb_202",
+    "mitdb_208",
+    "mitdb_214",
+    "mitdb_217",
+    "mitdb_220",
+    "mitdb_231",
+    "nsrdb_16272",
+    "nsrdb_16483",
+    "nsrdb_16786",
+    "nsrdb_19093",
+    "nsrdb_19140"
+  ],
+  "test_record_count_by_class": {
+    "NSR": 5,
+    "CHF": 4,
+    "ARR": 9,
+    "AFF": 1
+  },
+  "test_chunk_count_by_class": {
+    "AFF": 9,
+    "ARR": 9,
+    "CHF": 9,
+    "NSR": 9
+  },
+  "lock_hash": "9c7a3d9bf3f7d15dbb29b22763ba441d4a91179ea69aaa43edefe0d79ac2b207"
+}

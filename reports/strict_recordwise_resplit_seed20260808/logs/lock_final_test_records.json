@@ -1,0 +1,18 @@
+{
+  "script": "lock_final_test_records",
+  "argv": [
+    "tools\\recordwise\\lock_final_test_records.py",
+    "--seed",
+    "20260808"
+  ],
+  "timestamp_utc": "2026-07-05T08:21:26.719528+00:00",
+  "git_commit": "4ec62773f1755eb354e0763a739c3b31e1e64334",
+  "cwd": "C:\\Users\\YangGeon\\SNN ECG Classifier",
+  "outputs": [
+    "configs\\recordwise_resplit_seed20260808\\final_test_records_locked.json",
+    "reports\\strict_recordwise_resplit_seed20260808\\final_test_records_lock_summary.md"
+  ],
+  "extra": {
+    "lock_hash": "9c7a3d9bf3f7d15dbb29b22763ba441d4a91179ea69aaa43edefe0d79ac2b207"
+  }
+}

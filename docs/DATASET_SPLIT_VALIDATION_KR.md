@@ -24,18 +24,32 @@
 
 ## 3. Final Membrane 확정 절차
 
-최종 Final Membrane은 위 strict record-wise dataset을 기준으로 확정한다. 60초 Snapshot frontend는 먼저 고정하고, 30분 Final Membrane readout만 train / validation split에서 탐색한다.
+최종 Final Membrane은 위 strict record-wise dataset을 기준으로 확정했다. 60초 Snapshot frontend는 먼저 고정하고, 30분 Final Membrane readout만 train / validation split에서 탐색했다.
 
 ```text
 strict train records
 -> candidate final membrane parameter grid 평가
--> train signature dedup / shortlist 구성
+-> ChatGPT 5.5 Pro 구조 제안 반영
+-> 3,000,000 structural-grid candidate 평가
 -> validation split으로 최종 후보 선택
 -> selected params lock
 -> test split은 lock 이후 최종 1회 평가
 -> 최종 보고서에는 locked final result만 기재
 ```
 
-## 4. 문서화 원칙
+## 4. 최종 Locked Result
 
-최종보고서에는 최종 채택된 strict record-wise dataset, locked Final Membrane parameter, 최종 test 결과만 남긴다. 중간 후보나 채택되지 않은 산출물은 최종 제출 문서에 포함하지 않는다.
+| 항목 | 결과 |
+|---|---:|
+| Selected candidate | `structural_guarded_silent_aff_1008710` |
+| Passing candidates | 6,569 / 3,000,000 |
+| Train | 61/68 = 89.71% |
+| Validation | 32/32 = 100.00% |
+| Final test evaluation count | 1 |
+| Final test chunk accuracy | 29/36 = 80.56% |
+| Final test macro-F1 | 80.44% |
+| Final test record-majority accuracy | 16/19 = 84.21% |
+
+## 5. 문서화 원칙
+
+최종보고서에는 최종 채택된 strict record-wise dataset, locked Final Membrane parameter, 최종 test 결과만 남긴다.

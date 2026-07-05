@@ -2,7 +2,7 @@
 
 ## Q1. 원본 ECG가 이미 디지털인데 AFE+ADC를 다시 거치는 이유는?
 
-true raw analog recovery가 아니다. 공개 ECG dataset은 이미 digitized record이므로, 본 프로젝트는 그 sample을 physical-voltage-equivalent `vin_v`로 재구성하고 virtual DAC/PWL-equivalent replay로 AFE+ADC XMODEL 입력을 만든다. 이후 HPF, gain, 60 Hz notch, LPF, 12-bit ADC quantization을 적용해 RTL이 받는 signed 12-bit stream을 만든다.
+true raw analog recovery가 아니다. 공개 ECG dataset은 이미 digitized record이므로, 본 프로젝트는 그 sample을 analog-equivalent `vin_v`로 재구성하고 virtual DAC/PWL-equivalent replay로 AFE+ADC XMODEL 입력을 만든다. 이후 HPF, gain, 60 Hz notch, LPF, 12-bit ADC quantization을 적용해 RTL이 받는 signed 12-bit stream을 만든다.
 
 ## Q2. record-wise split인가?
 

@@ -4,10 +4,11 @@
     "tools\\recordwise\\make_strict_recordwise_split.py",
     "--seed",
     "20260808",
-    "--balance-chunks"
+    "--balance-chunks",
+    "--allow-existing-lock"
   ],
-  "timestamp_utc": "2026-07-05T07:40:44.658681+00:00",
-  "git_commit": "d44743e021aa794db3ad1a4f2b8b2327477cd64d",
+  "timestamp_utc": "2026-07-05T08:21:26.541114+00:00",
+  "git_commit": "4ec62773f1755eb354e0763a739c3b31e1e64334",
   "cwd": "C:\\Users\\YangGeon\\SNN ECG Classifier",
   "outputs": [
     "configs\\recordwise_resplit_seed20260808\\strict_recordwise_split_seed20260808.json",

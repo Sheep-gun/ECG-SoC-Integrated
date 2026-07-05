@@ -37,7 +37,10 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 | 장시간 ECG 4-Class Accelerator IP Core 30분 chunk-level test macro-F1 | 88.46% |
 | Python-vs-XSim final prediction mismatch | 0 / 136 |
 | Python-vs-XSim final membrane mismatch | 0 / 136 |
+| Fully blind strict record-wise model lock | Snapshot fixed, Final Membrane train/validation-only selection, final_test one-shot |
 | Strict record-wise dataset | seed 20260808, source/physical overlap 0, class별 train/val/test 17/8/9 chunks |
+| Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
+| Strict final_test evaluation count | 1 |
 | Board full-record replay integration | test NSR case 0, 1,800,000 samples, exact match PASS |
 | Vivado LUT / FF / BRAM / DSP | 21002 / 2803 / 0 / 0 |
 | Vivado estimated total on-chip power | 0.101 W |
@@ -48,7 +51,7 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 
 디지털 IP는 event/spike evidence extraction, 60초 snapshot, 30분 final membrane accumulation, WTA decision으로 구성된다. Python golden, XSim RTL replay, Vivado timing/resource/power estimate, AXI/IP-XACT packaging, Vitis/MicroBlaze board replay까지 engineering validation을 수행했다.
 
-다만 본 결과는 실제 전극 기반 raw analog ECG acquisition, physical AFE PCB 측정, ADC silicon measurement, Virtuoso post-layout 검증, clinical validation을 의미하지 않는다. 또한 32/36 = 88.89%는 chunk-level split 성능이며, strict record-wise 성능으로 주장하지 않는다.
+다만 본 결과는 실제 전극 기반 raw analog ECG acquisition, physical AFE PCB 측정, ADC silicon measurement, Virtuoso post-layout 검증, clinical validation을 의미하지 않는다. 또한 32/36 = 88.89%는 chunk-level functional benchmark이고, strict record-wise 최종 성능은 locked Final Membrane 기준 final_test 29/36 = 80.56%로 분리해 보고한다.
 
 ### 최종 System Flow
 
@@ -864,7 +867,7 @@ Snapshot C24를 선택하기 위해 C01-C32 후보군을 구성했다. 이는 fe
 | C15 | DSCR slope threshold 6 |
 | C16 | DSCR slope threshold 10 |
 | C17 | QRS MAF 민감 후보 |
-| C18 | QRS MAF 중간 후보 |
+| C18 | QRS MAF 비교 구조 |
 | C19 | QRS MAF 엄격 후보 |
 | C20 | rhythm 후보 + QRS MAF 중간 조합 |
 | C21 | RBBB QRS delay 매우 민감 |
@@ -1146,7 +1149,7 @@ FPGA board programming:
 
 ## 12. 탐색 구조에서 최종 구조로의 정리
 
-초기 탐색 단계에서는 60초 Snapshot C24와 여러 30분 final layer 후보가 섞여 있었고, 일부 record-level aggregation 후보나 SVC/선형 classifier 계열 후보가 검토되었다.
+최종 제출 기준에서는 60초 Snapshot Readout과 30분 Final Membrane Readout을 하나의 계층형 SNN-inspired streaming classifier로 정리한다.
 
 최종 구조에서는 다음 기준으로 정리했다.
 
@@ -1228,17 +1231,42 @@ results/final_membrane_v2_snn/vivado_snn_ecg_v2/snn_ecg_v2_vivado_summary.json
 
 ### 14.2 Final Membrane 확정 절차
 
-60초 Snapshot frontend는 고정하고, 30분 Final Membrane readout만 strict train / validation split에서 선택한다. 후보는 SNN-inspired membrane 구조를 유지해야 하며, 30개 snapshot의 class spike와 evidence spike를 최종 class neuron membrane에 흥분성/억제성 current로 누적한 뒤 30분 window 끝에서 WTA를 수행한다.
+60초 Snapshot frontend는 고정하고, 30분 Final Membrane readout만 strict train / validation split에서 선택했다. 후보는 SNN-inspired membrane 구조를 유지했으며, 30개 snapshot의 class spike와 evidence spike를 최종 class neuron membrane에 흥분성/억제성 current로 누적한 뒤 30분 window 끝에서 WTA를 수행한다.
 
 ```text
 strict train split
 -> integer-only Final Membrane candidate grid 평가
--> train prediction signature dedup / shortlist 구성
+-> ChatGPT 5.5 Pro 구조 제안 반영
+-> 3,000,000 structural-grid candidate 평가
 -> strict validation split으로 최종 후보 선택
 -> selected parameter lock
 -> strict test split 최종 1회 평가
 -> 최종 보고서에는 locked result만 기재
 ```
+
+최종 locked candidate:
+
+| 항목 | 결과 |
+|---|---:|
+| ChatGPT 5.5 Pro session | `01KWRNZY09MSV2QHFQ54K07CYV` |
+| Structural-grid candidates | 3,000,000 |
+| Passing candidates | 6,569 |
+| Selected candidate | `structural_guarded_silent_aff_1008710` |
+| Train | 61/68 = 89.71% |
+| Validation | 32/32 = 100.00% |
+| Final test evaluation count | 1 |
+| Final test chunk accuracy | 29/36 = 80.56% |
+| Final test macro-F1 | 80.44% |
+| Final test record-majority accuracy | 16/19 = 84.21% |
+
+Strict final_test confusion matrix:
+
+| true \\ pred | NSR | CHF | ARR | AFF |
+|---|---:|---:|---:|---:|
+| NSR | 9 | 0 | 0 | 0 |
+| CHF | 0 | 6 | 0 | 3 |
+| ARR | 2 | 0 | 7 | 0 |
+| AFF | 1 | 0 | 1 | 7 |
 
 ### 14.3 Accelerator/IP 검증 산출물
 
@@ -1266,7 +1294,7 @@ AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `com
 3. CHF는 record-level disease label이며, beat annotation만으로 CHF-specific rhythm을 직접 증명하기 어렵다.
 4. strict record-wise split은 `source_record_id`와 `physical_record_id` overlap 0으로 구성했지만, class별 원천 record support는 불균형하며 특히 AFF test support가 작다.
 5. 60초 Snapshot Readout의 ARR 일부가 NSR/CHF로 흡수되는 문제가 남아 있다.
-6. 최종 Final Membrane 성능은 strict split에서 locked parameter 기준으로 별도 confusion matrix를 작성해 해석한다.
+6. locked Final Membrane 기준 strict final_test는 29/36 = 80.56%이며, validation 32/32 대비 일반화 하락을 명확히 구분해 해석한다.
 7. Vivado power는 추정값이며 실제 board-level power 측정은 아직 수행하지 않았다.
 
 향후 개선:

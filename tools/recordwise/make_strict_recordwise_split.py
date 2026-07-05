@@ -174,7 +174,6 @@ def write_summary(rows: list[dict[str, Any]], seed: int | str, split_hash: str) 
                 chunks_by_split["test"],
             ]
         )
-    record_lists = record_lists_from_split(rows)
     lines = [
         "# Strict Record-wise Split Summary",
         "",
@@ -182,6 +181,7 @@ def write_summary(rows: list[dict[str, Any]], seed: int | str, split_hash: str) 
         f"- Split hash: `{split_hash}`",
         "- source_record_id overlap check: `PASS`",
         "- physical_record_id overlap check: `PASS`",
+        "- Final-test record list: locked separately by `tools/recordwise/lock_final_test_records.py`",
         "",
         md_table(
             [
@@ -195,12 +195,7 @@ def write_summary(rows: list[dict[str, Any]], seed: int | str, split_hash: str) 
             ],
             table_rows,
         ),
-        "",
-        "## Test Source Records",
-        "",
     ]
-    for record in record_lists["test"]:
-        lines.append(f"- `{record}`")
     summary.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
     return summary
 
