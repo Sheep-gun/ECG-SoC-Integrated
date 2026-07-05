@@ -51,10 +51,37 @@
   },
   "board_replay": {
     "cases": 4,
-    "classes": ["NSR", "CHF", "ARR", "AFF"],
+    "classes": [
+      "NSR",
+      "CHF",
+      "ARR",
+      "AFF"
+    ],
     "samples_per_case": 1800000,
     "snapshots_per_case": 30,
     "final_pred_match": "4/4",
     "final_mem_match": "4/4"
+  },
+  "board_replay_36": {
+    "status": "completed",
+    "validation_result": "fail",
+    "cases_requested": 36,
+    "cases_completed": 36,
+    "cases_final_mem_mismatch": 1,
+    "samples_per_case": 1800000,
+    "snapshots_per_case": 30,
+    "pred_match_correct": 36,
+    "pred_match_total": 36,
+    "final_mem_match_correct": 35,
+    "final_mem_match_total": 36,
+    "classification_correct": 29,
+    "classification_total": 36,
+    "classification_accuracy_percent": 80.56,
+    "summary_path": "reports/final/board_replay_36_batch_summary.md",
+    "csv_path": "reports/final/board_replay_36_expected_vs_board.csv",
+    "manifest_csv": "reports/final/board_replay_36_cases.csv",
+    "manifest_json": "reports/final/board_replay_36_cases.json",
+    "transcript_dir": "reports/final/board_replay_36/transcripts",
+    "parsed_dir": "reports/final/board_replay_36/parsed"
   }
 }

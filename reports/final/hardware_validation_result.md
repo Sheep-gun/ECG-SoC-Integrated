@@ -2,7 +2,7 @@
 
 ## 요약
 
-Locked RTL은 Python/XSim 비교, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze class-wise full-record replay까지 연결해 검증했다.
+Locked RTL은 Python/XSim 비교, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze 36-case full-record replay까지 연결해 검증했다.
 
 | Layer | 결과 |
 |---|---|
@@ -11,7 +11,7 @@ Locked RTL은 Python/XSim 비교, Vivado implementation, IP-XACT packaging, Viti
 | OOC/profile Vivado | LUT/FF/BRAM/DSP 9905/5769/0/0, WNS 0.471 ns |
 | IP packaging | AXI accelerator and sample feeder IP-XACT packages present |
 | MicroBlaze full replay build | bitstream/XSA/ELF generated, timing met |
-| Board replay | NSR/CHF/ARR/AFF one 30-minute case each, final_pred/final_mem exact 4/4 |
+| Board replay | strict final_test 36 cases, final_pred 36/36, final_mem exact 35/36 |
 
 ## 주장 범위
 

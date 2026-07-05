@@ -8,7 +8,7 @@
 | Figure 4 | `reports/final/figures/final_result_summary.png` | README, FINAL_REPORT, docs | Train, validation, and locked final-test result separation. |
 | Figure 5 | `reports/final/figures/hardware_validation_flow.png` | FINAL_REPORT, HARDWARE_VALIDATION | Golden/XSim/Vivado/IP-XACT/Vitis/board evidence chain. |
 | Figure 6 | `reports/final/figures/resource_timing_summary.png` | FINAL_REPORT, HARDWARE_VALIDATION | Resource and timing summary from final metrics. |
-| Figure 7 | `reports/final/figures/board_replay_pass_matrix.png` | FINAL_REPORT, HARDWARE_VALIDATION | Four class-wise board replay PASS matrix. |
+| Figure 7 | `reports/final/figures/board_replay_pass_matrix.png` | FINAL_REPORT, HARDWARE_VALIDATION | 36-case board replay PASS matrix. |
 | Figure 8 | `reports/final/figures/final_test_confusion_matrix.png` | FINAL_REPORT | Strict final_test confusion matrix. |
 
 All figures are generated from checked-in metrics, board replay CSVs, or protocol metadata. Run `python tools/make_final_report_figures.py` to regenerate them.

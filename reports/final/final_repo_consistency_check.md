@@ -13,3 +13,4 @@
 - Mermaid fence, heading blank line, Markdown table 구조가 기본 검사를 통과한다.
 - Locked strict record-wise metric은 source-of-truth 값과 일치한다.
 - 4개 class-wise board replay comparison CSV와 UART PASS marker가 존재한다.
+- 36-case board replay transcript/comparison evidence가 final_metrics와 일치한다.

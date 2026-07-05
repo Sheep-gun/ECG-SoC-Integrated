@@ -9,7 +9,7 @@
 | Fully blind strict record-wise locked final holdout | final_test not used for selection/search/context, evaluation count 1 |
 | Python/XSim bit-accurate locked final-layer check | final_pred/final_mem mismatch 0 over 36 final_test cases |
 | Vivado implementation evidence | timing/resource/power reports |
-| Vitis/MicroBlaze class-wise board replay | UART transcript and expected-vs-board CSV for 4 representative 30-minute cases |
+| Vitis/MicroBlaze 36-case board replay | UART transcripts and expected-vs-board CSV for 36 strict final_test 30-minute cases |
 
 ## 주장 금지
 
@@ -22,7 +22,8 @@
 | Virtuoso/post-layout analog verification | Not performed |
 | Clinical diagnosis validation | Engineering prototype only |
 | Validation 100.00% as final generalization | Validation is model-selection performance |
-| Full 36-case board batch replay | Board evidence is class-wise 4-case representative replay |
+| Physical analog board validation | Board replay is digital RTL/IP integration evidence, not DAC/electrode/AFE PCB validation |
+| 36/36 final_mem exact board match | final_pred matches 36/36, but final_mem exact match is 35/36 |
 
 ## Final Result Interpretation
 

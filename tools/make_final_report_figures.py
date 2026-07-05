@@ -20,7 +20,7 @@ REPO = Path(__file__).resolve().parents[1]
 OUT = REPO / "reports" / "final" / "figures"
 METRICS = REPO / "reports" / "final" / "final_metrics.json"
 CONFUSION = REPO / "reports" / "final" / "strict_recordwise" / "structural_final_test_confusion_matrix.csv"
-BOARD_MATRIX = REPO / "reports" / "final" / "board_replay" / "locked_class_cases_xsim_vs_board.csv"
+BOARD_MATRIX = REPO / "reports" / "final" / "board_replay_36_expected_vs_board.csv"
 
 INK = "#1b2638"
 MUTED = "#5b677a"
@@ -304,7 +304,7 @@ def hardware_flow(metrics: dict) -> None:
         ("Vivado", "Synthesis, implementation, timing, utilization."),
         ("IP-XACT", "AXI accelerator and MMIO-to-AXIS feeder packages."),
         ("Vitis/MicroBlaze", "Bitstream/XSA/ELF full-record replay system."),
-        ("Board comparison", "4 class-wise 30-minute cases; final_pred/final_mem 4/4."),
+        ("Board comparison", "36 final_test 30-minute cases; final_pred 36/36, final_mem exact 35/36."),
     ]
     y = 235
     prev = None
@@ -316,8 +316,9 @@ def hardware_flow(metrics: dict) -> None:
             arrow(draw, (prev[2], y + 88), (xy[0], y + 88))
         prev = xy
     box(draw, (260, 590, 650, 735), "MicroBlaze system", f"LUT {metrics['microblaze_full_replay_system']['lut']}, FF {metrics['microblaze_full_replay_system']['slice_reg']}, BRAM {metrics['microblaze_full_replay_system']['bram']}, DSP {metrics['microblaze_full_replay_system']['dsp']}", fill="#f8fff9", outline=GREEN)
-    box(draw, (880, 590, 1270, 735), "Board replay evidence", f"{metrics['board_replay']['cases']} cases, {metrics['board_replay']['samples_per_case']:,} samples/case, {metrics['board_replay']['final_pred_match']} final_pred match", fill="#fff8f5", outline=ORANGE)
-    footnote(draw, "Board replay is class-wise representative replay, not a full 36-case board batch.")
+    replay36 = metrics["board_replay_36"]
+    box(draw, (880, 590, 1270, 735), "Board replay evidence", f"{replay36['cases_completed']} cases, {replay36['samples_per_case']:,} samples/case, {replay36['pred_match_correct']}/{replay36['pred_match_total']} final_pred match", fill="#fff8f5", outline=ORANGE)
+    footnote(draw, "Board replay is a 36-case strict final_test full-record batch; final_mem exact match is tracked separately as 35/36.")
     save(img, "hardware_validation_flow.png")
 
 
@@ -383,32 +384,36 @@ def board_pass_matrix() -> bool:
         return False
     rows = list(csv.DictReader(BOARD_MATRIX.open(encoding="utf-8-sig", newline="")))
     img, draw = canvas()
-    title(draw, "Figure 7. Board Replay PASS Matrix", "Class-wise 30-minute replay compared against XSim/Python expected values")
-    headers = ["Case", "Class", "Pred", "Mem", "Transport"]
-    x0, y0 = 160, 210
-    widths = [360, 150, 170, 170, 190]
+    title(draw, "Figure 7. 36-case Board Replay Matrix", "Strict final_test full-record replay compared against full-top RTL XSim expected values")
+    headers = ["Case", "Class", "Pred", "Mem", "Label", "Samples"]
+    x0, y0 = 70, 170
+    widths = [470, 110, 135, 135, 135, 150]
     for i, h in enumerate(headers):
         x = x0 + sum(widths[:i])
-        draw.rectangle((x, y0, x + widths[i], y0 + 55), fill="#edf3fb", outline=LINE)
-        centered_text(draw, (x, y0, x + widths[i], y0 + 55), h, FONT_H)
-    class_names = ["NSR", "CHF", "ARR", "AFF"]
+        draw.rectangle((x, y0, x + widths[i], y0 + 34), fill="#edf3fb", outline=LINE)
+        centered_text(draw, (x, y0, x + widths[i], y0 + 34), h, FONT_S)
     for r, row in enumerate(rows):
-        y = y0 + 55 + r * 70
+        y = y0 + 34 + r * 18
+        pred_ok = row["pred_match"] == "1"
+        mem_ok = row["final_mem_exact_match"] == "1"
+        label_ok = row["board_correct_vs_label"] == "1"
+        samples_ok = row["samples_sent"] == "1800000" and row["snapshot_count"] == "30"
         vals = [
-            row["case_name"],
-            class_names[int(row["class_id"])],
-            "PASS" if row["final_pred_match"] == "1" else "FAIL",
-            "PASS" if row["final_mem_match"] == "1" else "FAIL",
-            "PASS" if row["transport_ok"] == "1" else "FAIL",
+            row["case_id"],
+            row["class_label"],
+            "PASS" if pred_ok else "FAIL",
+            "PASS" if mem_ok else "FAIL",
+            "OK" if label_ok else "MISS",
+            "OK" if samples_ok else "BAD",
         ]
         for i, val in enumerate(vals):
             x = x0 + sum(widths[:i])
             fill = WHITE
             if i >= 2:
-                fill = "#e7f6ec" if val == "PASS" else "#fde8e8"
-            draw.rectangle((x, y, x + widths[i], y + 70), fill=fill, outline=LINE)
-            centered_text(draw, (x, y, x + widths[i], y + 70), val, FONT if i < 2 else FONT_H, GREEN if val == "PASS" else INK)
-    footnote(draw, "Board replay evidence is four representative class-wise full-record cases; this is not a 36-case board batch.")
+                fill = "#e7f6ec" if val in ("PASS", "OK") else "#fde8e8"
+            draw.rectangle((x, y, x + widths[i], y + 18), fill=fill, outline=LINE)
+            centered_text(draw, (x, y, x + widths[i], y + 18), val, FONT_XS, GREEN if val in ("PASS", "OK") else RED)
+    footnote(draw, "36/36 final_pred match and 35/36 final_mem exact match; one case is reported as FINAL_MEM_MISMATCH, not hidden.")
     save(img, "board_replay_pass_matrix.png")
     return True
 
@@ -472,7 +477,7 @@ def main() -> int:
     resource_summary(metrics)
     created.append(("Figure 6", "reports/final/figures/resource_timing_summary.png", "FINAL_REPORT, HARDWARE_VALIDATION", "Resource and timing summary from final metrics."))
     if board_pass_matrix():
-        created.append(("Figure 7", "reports/final/figures/board_replay_pass_matrix.png", "FINAL_REPORT, HARDWARE_VALIDATION", "Four class-wise board replay PASS matrix."))
+        created.append(("Figure 7", "reports/final/figures/board_replay_pass_matrix.png", "FINAL_REPORT, HARDWARE_VALIDATION", "36-case board replay PASS matrix."))
     if confusion_matrix():
         created.append(("Figure 8", "reports/final/figures/final_test_confusion_matrix.png", "FINAL_REPORT", "Strict final_test confusion matrix."))
     write_index(created)

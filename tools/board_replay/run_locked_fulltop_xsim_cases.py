@@ -83,6 +83,26 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(f))
 
 
+def load_cases_from_csv(path: Path, case_ids: set[str] | None = None) -> list[dict[str, Any]]:
+    rows = read_csv(path)
+    cases: list[dict[str, Any]] = []
+    for row in rows:
+        case_name = row["case_id"]
+        if case_ids is not None and case_name not in case_ids:
+            continue
+        cases.append(
+            {
+                "case_name": case_name,
+                "case_id": row.get("source_prediction_case_id") or case_name,
+                "expected_class": int(row["class_id"]),
+                "mem": REPO / row["mem_path"],
+            }
+        )
+    if not cases:
+        raise SystemExit(f"no cases selected from {path}")
+    return cases
+
+
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     fields: list[str] = []
     for row in rows:
@@ -208,7 +228,14 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
         case = next(item for item in CASES if item["case_id"] == row["case_id"])
         board = load_board_case(str(case["case_name"]))
         if board is None:
-            board_rows.append({"case_name": case["case_name"], "status": "board_missing"})
+            board_rows.append(
+                {
+                    "case_name": case["case_name"],
+                    "case_id": row["case_id"],
+                    "class_id": row["expected_class"],
+                    "status": "board_missing",
+                }
+            )
             all_pred_match = False
             all_mem_match = False
             all_transport_ok = False
@@ -296,14 +323,19 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
 
 
 def main() -> int:
-    global RESULTS
+    global CASES, RESULTS
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--skip-run", action="store_true", help="reuse existing XSim result CSV")
     parser.add_argument("--sample-gap-cycles", type=int, default=0, help="idle cycles inserted between accepted samples in direct full-top XSim")
     parser.add_argument("--results-dir", type=Path, default=RESULTS, help="directory for XSim outputs")
+    parser.add_argument("--cases-csv", type=Path, default=None, help="optional board_replay_36_cases.csv manifest")
+    parser.add_argument("--case-id", action="append", default=[], help="case_id from --cases-csv to include")
     args = parser.parse_args()
     RESULTS = args.results_dir.resolve()
+    if args.cases_csv is not None:
+        selected = set(args.case_id) if args.case_id else None
+        CASES = load_cases_from_csv(args.cases_csv.resolve(), selected)
 
     work = RESULTS / "work"
     result_csv = RESULTS / "locked_class_cases_fulltop_xsim_predictions.csv"

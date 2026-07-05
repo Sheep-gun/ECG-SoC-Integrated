@@ -2,7 +2,7 @@
 
 ## 요약
 
-Vitis/MicroBlaze full-record replay flow는 locked model 기준으로 다시 빌드했고, 실제 FPGA board에서 class별 30분 record 1개씩 replay했다.
+Vitis/MicroBlaze full-record replay flow는 locked model 기준으로 다시 빌드했고, 실제 FPGA board에서 class별 30분 대표 record 1개씩 replay했다.
 
 | Case | Class | Samples | Snapshots | final_pred | final_mem | Result |
 |---|---|---:|---:|---:|---|---|
@@ -19,6 +19,6 @@ Vitis/MicroBlaze full-record replay flow는 locked model 기준으로 다시 빌
 - UART transcripts: `reports/final/board_replay/locked_*_uart_full_replay.txt`
 - XSim-vs-board summary CSV: `reports/final/board_replay/locked_class_cases_xsim_vs_board.csv`
 
-## 남은 범위
+## 36-case batch replay
 
-이 결과는 class-wise representative full-record board replay이다. 전체 36개 final_test case의 board batch replay와 board-level current/power measurement는 수행하지 않았다.
+이 문서는 class-wise representative full-record board replay evidence이다. 전체 strict final_test 36개 case board batch replay 결과는 `reports/final/board_replay_36_batch_summary.md`와 `reports/final/board_replay_36_expected_vs_board.csv`에 별도로 정리했다.

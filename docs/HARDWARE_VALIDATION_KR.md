@@ -12,7 +12,7 @@
 | OOC/profile Vivado | LUT/FF/BRAM/DSP 9905/5769/0/0, WNS 0.471 ns |
 | IP packaging | accelerator/sample-feeder `component.xml`, `xgui/*.tcl` |
 | MicroBlaze build | bitstream/XSA/ELF generated, timing met |
-| Board replay | NSR/CHF/ARR/AFF each 1 full 30-minute case, final_pred/final_mem exact 4/4 |
+| Board replay | strict final_test 36-case full-record batch, final_pred 36/36, final_mem exact 35/36 |
 
 ## Resource and Timing
 
@@ -34,16 +34,18 @@ MicroBlaze full replay resource는 CPU, LMB/BRAM, UARTLite, AXI interconnect, in
 
 ![Board replay PASS matrix](../reports/final/figures/board_replay_pass_matrix.png)
 
-Board replay는 locked model 기준 bitstream/XSA/ELF로 수행되었다. 각 class에서 대표 30분 record 1개를 replay했으며, 각 case는 1,800,000 samples, 30 snapshots, 1 decision을 가진다.
+Board replay는 locked model 기준 bitstream/XSA/ELF로 수행되었다. strict record-wise final_test 36개 30분 chunk 전체를 replay했으며, 각 case는 1,800,000 samples, 30 snapshots, 1 decision을 가진다. Board final output은 full-top RTL XSim expected와 비교한다.
 
-| Case | Class | Samples | Snapshots | Result |
-|---|---|---:|---:|---|
-| `locked_nsr_case117` | NSR | 1,800,000 | 30 | PASS |
-| `locked_chf_case91` | CHF | 1,800,000 | 30 | PASS |
-| `locked_arr_case45` | ARR | 1,800,000 | 30 | PASS |
-| `locked_aff_case16` | AFF | 1,800,000 | 30 | PASS |
+| Metric | Result |
+|---|---:|
+| Final-test full-record cases | 36/36 completed |
+| Samples per case | 1,800,000 |
+| Snapshots per case | 30 |
+| Board-vs-expected final_pred | 36/36 PASS |
+| Board-vs-expected final_mem exact | 35/36 PASS |
+| Classification accuracy vs label | 29/36 = 80.56% |
 
-이 결과는 class-wise representative board replay이다. 전체 final_test 36 case를 board에서 batch replay했다는 의미가 아니다.
+기존 class-wise 4-case replay는 smoke/integration evidence로 유지한다. 최종 board batch evidence는 `reports/final/board_replay_36_batch_summary.md`를 기준으로 본다.
 
 ## Source Artifacts
 
@@ -53,6 +55,7 @@ Board replay는 locked model 기준 bitstream/XSA/ELF로 수행되었다. 각 cl
 | XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` |
 | ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` |
 | MicroBlaze build summary | `results/board_replay/microblaze_full_replay/microblaze_full_replay_summary.json` |
-| Board replay summary | `reports/final/board_replay_result.md` |
-| Board replay transcripts | `reports/final/board_replay/*_uart_full_replay.txt` |
-| Expected-vs-board CSVs | `reports/final/board_replay/*_expected_vs_board.csv` |
+| 36-case board replay summary | `reports/final/board_replay_36_batch_summary.md` |
+| 36-case board replay CSV | `reports/final/board_replay_36_expected_vs_board.csv` |
+| 36-case board replay transcripts | `reports/final/board_replay_36/transcripts/*.txt` |
+| 4-case representative replay summary | `reports/final/board_replay_result.md` |

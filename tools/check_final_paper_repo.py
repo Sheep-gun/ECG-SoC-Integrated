@@ -49,6 +49,13 @@ REQUIRED_FILES = [
     "reports/final/xsim_locked_model_summary.md",
     "reports/final/vivado_locked_model_metrics.md",
     "reports/final/board_replay_result.md",
+    "reports/final/board_replay_36_preflight_audit.md",
+    "reports/final/board_replay_36_cases.csv",
+    "reports/final/board_replay_36_cases.json",
+    "reports/final/board_replay_36_expected_vs_board.csv",
+    "reports/final/board_replay_36_batch_summary.md",
+    "reports/final/board_replay_36_batch_summary.json",
+    "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv",
     "reports/final/formatting_and_figure_audit.md",
     "reports/final/figures/FIGURE_INDEX.md",
     "reports/final/fulltop_xsim_locked_class_cases_predictions.csv",
@@ -58,6 +65,7 @@ REQUIRED_FILES = [
     "tools/evaluate_final_strict_recordwise.py",
     "tools/collect_final_vivado_metrics.py",
     "tools/board_replay/run_locked_fulltop_xsim_cases.py",
+    "tools/board_replay/run_full_record_batch_36.py",
     "tools/board_replay/send_full_record_uart.py",
     "tools/check_final_paper_repo.py",
     "tools/make_final_report_figures.py",
@@ -130,7 +138,6 @@ FORBIDDEN_PATTERNS = [
     r"actual AFE PCB " + r"verified",
     r"Virtuoso post-layout " + r"verified",
     r"clinical " + r"validation " + r"completed",
-    r"full\s+36" + r".{0,80}" + r"board\s+batch" + r".{0,80}" + r"completed",
 ]
 
 BOARD_CASES = [
@@ -379,6 +386,60 @@ def check_board_replay(failures: list[str]) -> None:
             fail(f"missing PASS marker in {rel(transcript)}", failures)
 
 
+def check_board_replay_36(failures: list[str]) -> None:
+    metrics = read_json("reports/final/final_metrics.json")
+    board = metrics.get("board_replay_36", {})
+    expected_scalars = {
+        "status": "completed",
+        "cases_requested": 36,
+        "cases_completed": 36,
+        "cases_final_mem_mismatch": 1,
+        "pred_match_correct": 36,
+        "pred_match_total": 36,
+        "final_mem_match_correct": 35,
+        "final_mem_match_total": 36,
+        "classification_correct": 29,
+        "classification_total": 36,
+        "classification_accuracy_percent": 80.56,
+    }
+    for key, expected in expected_scalars.items():
+        got = board.get(key)
+        if got != expected:
+            fail(f"board_replay_36.{key} expected {expected}, got {got}", failures)
+    if board.get("validation_result") != "fail":
+        fail("board_replay_36.validation_result must be fail because final_mem exact is 35/36", failures)
+
+    summary = REPO / "reports" / "final" / "board_replay_36_batch_summary.md"
+    comparison = REPO / "reports" / "final" / "board_replay_36_expected_vs_board.csv"
+    manifest = REPO / "reports" / "final" / "board_replay_36_cases.csv"
+    for path in [summary, comparison, manifest]:
+        if not path.exists():
+            fail(f"missing 36-case board replay artifact: {rel(path)}", failures)
+    if not comparison.exists():
+        return
+
+    with comparison.open(newline="", encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    if len(rows) != 36:
+        fail(f"36-case comparison row count expected 36, got {len(rows)}", failures)
+    pred_matches = sum(1 for row in rows if row.get("pred_match") == "1")
+    mem_matches = sum(1 for row in rows if row.get("final_mem_exact_match") == "1")
+    label_matches = sum(1 for row in rows if row.get("board_correct_vs_label") == "1")
+    if pred_matches != 36:
+        fail(f"36-case final_pred matches expected 36, got {pred_matches}", failures)
+    if mem_matches != 35:
+        fail(f"36-case final_mem exact matches expected 35, got {mem_matches}", failures)
+    if label_matches != 29:
+        fail(f"36-case label matches expected 29, got {label_matches}", failures)
+    for row in rows:
+        transcript = row.get("transcript_path")
+        parsed = row.get("parsed_json_path")
+        if not transcript or not (REPO / transcript).exists():
+            fail(f"missing 36-case transcript for {row.get('case_id')}", failures)
+        if not parsed or not (REPO / parsed).exists():
+            fail(f"missing 36-case parsed JSON for {row.get('case_id')}", failures)
+
+
 def write_summary(failures: list[str]) -> None:
     out = REPO / "reports" / "final" / "final_repo_consistency_check.md"
     lines = [
@@ -404,6 +465,7 @@ def write_summary(failures: list[str]) -> None:
                 "- Mermaid fence, heading blank line, Markdown table 구조가 기본 검사를 통과한다.",
                 "- Locked strict record-wise metric은 source-of-truth 값과 일치한다.",
                 "- 4개 class-wise board replay comparison CSV와 UART PASS marker가 존재한다.",
+                "- 36-case board replay transcript/comparison evidence가 final_metrics와 일치한다.",
                 "",
             ]
         )
@@ -423,6 +485,7 @@ def main() -> int:
     check_markdown_tables(failures)
     check_metrics(failures)
     check_board_replay(failures)
+    check_board_replay_36(failures)
     write_summary(failures)
     if failures:
         print("\n".join(failures), file=sys.stderr)
