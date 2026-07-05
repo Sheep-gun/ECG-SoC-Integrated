@@ -21,6 +21,25 @@ flowchart LR
     F --> H["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
 ```
 
+## Feature Evidence Overview
+
+The classifier is not a black-box dense neural network. Each 60-second snapshot is built from ECG-oriented event blocks, and those events are folded into integer class membranes.
+
+| Feature block | Intuitive meaning | RTL role |
+|---|---|---|
+| Adaptive event encoder + QRS LIF | Detects sharp ECG slope bursts and integrates them until a beat/QRS spike is produced. | Creates the `beat_spike` timing reference for downstream rhythm and morphology blocks. |
+| PNN rhythm predictor | Checks whether the next beat arrives where the previous rhythm hypothesis expected it. | Produces rhythm match/mismatch evidence for regular vs irregular rhythm. |
+| RDM variability neuron | Measures how much consecutive RR intervals change. | Accumulates beat-to-beat variability evidence. |
+| DSCR spike counter | Counts meaningful slope sign changes in the waveform. | Provides morphology complexity evidence without multipliers. |
+| RAM peak accumulator | Measures R-peak amplitude response with threshold banks. | Converts beat amplitude behavior into integer evidence codes. |
+| Ectopic pair neuron | Detects early/late beat pairs, not just one short or long RR interval. | Provides ARR-like ectopic rhythm evidence. |
+| QRS MAF neuron | Looks at QRS width, complexity, energy, and pre-QRS bump behavior. | Provides morphology abnormality evidence. |
+| RBBB-like QRS delay bank | Detects wide QRS and terminal activity as conduction-delay proxy evidence. | Adds repeated wide/terminal QRS evidence at snapshot level. |
+| Class score neurons | Applies fixed signed feature weights to NSR/CHF/ARR/AFF class membranes. | Produces 60-second snapshot WTA output. |
+| Final Membrane Readout | Accumulates 30 snapshot outputs and evidence counters. | Produces the locked 30-minute final WTA output. |
+
+The detailed feature-by-feature explanation is in `FINAL_REPORT_KR.md` and `docs/SYSTEM_ARCHITECTURE_KR.md`.
+
 ## Final Locked Model and Results
 
 | Item | Result |

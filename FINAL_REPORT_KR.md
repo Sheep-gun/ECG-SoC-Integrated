@@ -50,7 +50,187 @@ AFE+ADC nominal chain은 다음과 같이 정리한다.
 
 Snapshot Readout은 60초 window마다 ECG evidence를 spike/counter 형태로 압축한다. 주요 feature block은 QRS detection, rhythm prediction/mismatch evidence, morphology evidence, variability evidence, ectopic/abnormal evidence를 포함한다. Snapshot 내부에서는 class membrane과 WTA를 통해 60초 단위 class evidence를 만든다.
 
-최종 제출에서는 중간 후보 탐색 과정이 아니라, locked Final Membrane에 입력되는 고정 Snapshot Readout 구조만을 설명한다.
+최종 제출에서는 locked Final Membrane에 입력되는 고정 Snapshot Readout 구조를 기준으로 설명한다.
+
+### 5.1 Feature block을 왜 나누는가
+
+ECG 4-class classification에서 한 sample의 크기만으로는 NSR, CHF, ARR, AFF를 구분하기 어렵다. 같은 30분 record 안에서도 어떤 60초 구간은 정상처럼 보일 수 있고, 어떤 구간은 rhythm 또는 morphology abnormality가 뚜렷할 수 있다. 그래서 본 설계는 sample stream을 바로 class로 바꾸지 않고, 다음 세 종류의 evidence로 나누어 누적한다.
+
+| Evidence group | 보는 대상 | 직관적 의미 |
+|---|---|---|
+| Beat/QRS evidence | QRS 위치, R peak, QRS 폭 | “심장이 한 번 뛴 위치와 그 beat 모양이 정상적인가” |
+| Rhythm evidence | RR interval, 예측 beat 위치, variability | “박동 간격이 규칙적인가, 갑자기 흔들리는가” |
+| Morphology evidence | slope sign flip, energy, terminal activity | “파형이 단순한가, 넓거나 복잡하거나 늦게 끌리는가” |
+
+이 evidence는 모두 integer counter, comparator, signed accumulator로 구현된다. 따라서 floating-point convolution, recurrent state matrix, multiplier-heavy dense layer가 필요 없다.
+
+### 5.2 Adaptive event encoder와 QRS LIF detector
+
+가장 먼저 필요한 것은 beat의 기준점이다. RTL은 현재 sample과 이전 sample의 차이 `delta`를 보고, 절대값이 adaptive threshold를 넘는 순간을 `strong_event`로 만든다. QRS 구간에서는 slope가 짧은 시간에 크게 변하므로 `strong_event`가 연속해서 나타난다.
+
+QRS LIF detector는 이 `strong_event`를 membrane에 적분한다.
+
+```text
+strong_event 발생        -> QRS membrane += QRS_W_EVENT
+strong_event가 없는 clock -> QRS membrane -= QRS_LEAK
+QRS membrane >= QRS_TH   -> beat_spike 발화, membrane reset, refractory 시작
+```
+
+단발성 noise 하나는 membrane threshold를 넘기 어렵다. 반대로 실제 QRS처럼 event가 모이면 threshold를 넘고 `beat_spike`가 나온다. `refractory`는 같은 QRS를 여러 번 세지 않게 막는 장치이다. 이 `beat_spike`가 PNN, RDM, RAM, ECP, QRS MAF, RBBB-like delay block의 공통 기준 clock이 된다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/ecg_event_encoder_adaptive.v
+rtl/core/qrs_lif_detector.v
+```
+
+### 5.3 PNN rhythm predictor
+
+PNN rhythm predictor는 “다음 beat가 언제 올 것인가”를 예측하고, 실제 beat가 그 예측 위치 근처에 들어왔는지 확인한다. 직전 RR interval 또는 rhythm hypothesis가 다음 beat timing의 기준이 되고, 실제 `beat_spike`가 그 window 안에 오면 match, 벗어나면 mismatch evidence가 된다.
+
+| Output | 의미 |
+|---|---|
+| `pnn_match_spike` | rhythm이 예측 가능한 범위 안에서 유지됨 |
+| `pnn_mismatch_spike` | beat timing이 예측 window를 벗어남 |
+
+match가 반복되면 규칙적인 rhythm evidence가 되고, mismatch가 반복되면 ARR/AFF 계열의 irregular rhythm evidence가 된다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/pnn_rhythm_predictor.v
+```
+
+### 5.4 RDM variability neuron
+
+RDM은 PNN보다 직접적으로 RR interval 변화량을 본다. PNN이 “예측 위치를 지켰는가”를 본다면, RDM은 “이번 RR과 직전 RR이 얼마나 달라졌는가”를 level/code로 만든다.
+
+```text
+rr_delta = abs(current_rr - previous_rr)
+rr_delta가 작음 -> 안정적인 rhythm evidence
+rr_delta가 큼   -> beat-to-beat variability evidence
+```
+
+RDM evidence는 AFF처럼 RR interval이 불규칙하게 흔들리는 경우, 또는 ARR 구간에서 짧게 튀는 rhythm burst를 잡는 보조 evidence로 사용된다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/rdm_variability_neuron.v
+```
+
+### 5.5 DSCR spike counter
+
+DSCR은 beat 간격이 아니라 waveform shape를 본다. ECG가 매끈하게 지나가는지, 아니면 slope 방향이 자주 바뀌는 복잡한 morphology를 보이는지 세는 block이다.
+
+| Signal | 직관적 의미 |
+|---|---|
+| valid slope spike | 의미 있는 waveform 변화가 있음 |
+| sign flip spike | slope 방향이 의미 있게 바뀜 |
+| sign flip/count 증가 | morphology가 복잡하거나 에너지가 큰 구간 |
+
+이 evidence는 CHF/NSR 분리, ARR/AFF 보조 판단, QRS MAF와 연결된 morphology 판단에 사용된다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/dscr_spike_counter.v
+```
+
+### 5.6 RAM peak accumulator
+
+RAM은 memory block 이름이 아니라 R-peak amplitude response를 보는 feature block이다. QRS LIF가 beat를 찾으면, RAM은 beat 주변 window에서 baseline 대비 R peak가 얼마나 크게 올라갔는지 threshold bank로 본다.
+
+```text
+beat 주변 window open
+sample - baseline 계산
+양의 amplitude가 threshold bank를 얼마나 통과하는지 code 생성
+window 안의 peak response를 ram_amp_code / ram_code_sum으로 누적
+```
+
+평균이나 나눗셈을 RTL에 넣지 않고, threshold comparator와 integer sum/count로 amplitude evidence를 만든다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/ram_peak_accumulator.v
+```
+
+### 5.7 Ectopic pair neuron
+
+Ectopic pair neuron은 RR interval 하나가 짧거나 길다는 사실만으로 바로 class evidence를 만들지 않는다. 기준 RR보다 빠른 beat와 늦은 beat가 교대로 나타나는 early/late pair를 본다.
+
+```text
+current_rr < rr_ref - threshold -> early_rr_spike
+current_rr > rr_ref + threshold -> late_rr_spike
+early 다음 late 또는 late 다음 early -> ectopic_pair_spike
+```
+
+즉 단일 outlier가 아니라 “조기 박동 + 보상성 지연”처럼 보이는 pattern이 반복될 때 ARR-like rhythm evidence로 사용된다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/ectopic_pair_neuron.v
+```
+
+### 5.8 QRS MAF neuron
+
+QRS MAF는 QRS Morphology Abnormality Feature이다. 단일 feature 하나가 아니라 QRS 주변 window에서 width, complexity, energy, pre-QRS bump를 함께 보는 morphology analyzer에 가깝다.
+
+| Sub-feature | 보는 현상 |
+|---|---|
+| QRS width | QRS activity가 너무 넓게 지속되는가 |
+| QRS complexity | QRS window 안의 slope sign flip이 많은가 |
+| QRS energy | baseline 대비 energy가 평소 reference에서 벗어나는가 |
+| Pre-QRS bump | beat 직전 window에 이상 activity가 있는가 |
+
+이 feature는 rhythm evidence만으로는 구분이 어려운 case에서 morphology evidence를 제공한다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/qrs_maf_neuron.v
+```
+
+### 5.9 RBBB-like QRS delay bank
+
+RBBB QRS delay bank는 임상적 RBBB 진단 block이 아니다. RTL 관점에서는 “wide QRS + terminal activity”가 반복되는지를 보는 conduction-delay proxy evidence block이다.
+
+```text
+QRS onset 이후 observation window open
+80 ms, 90 ms, ..., 160 ms 지점 activity 확인
+늦은 지점까지 activity가 남으면 wide_qrs_spike
+terminal window activity가 많으면 terminal_delay_spike
+wide + terminal delay가 함께 나타나면 rbbb_like_beat_spike
+60초 안에서 반복되면 rbbb_segment_spike
+```
+
+이 evidence는 NSR을 억제하거나 ARR/CHF/AFF 쪽 morphology evidence를 보강하는 방향으로 class score membrane에 반영될 수 있다.
+
+주요 RTL 파일:
+
+```text
+rtl/core/rbbb_qrs_delay_bank.v
+```
+
+### 5.10 Class score neurons와 60초 WTA
+
+위 feature neuron들이 만든 spike와 count는 `class_score_neurons.v`로 들어간다. 이 block은 NSR/CHF/ARR/AFF class membrane 네 개를 유지하고, 각 feature evidence를 fixed signed weight로 더하거나 뺀다.
+
+```text
+feature spike/count 발생:
+    class_mem[NSR] += W_feature_to_NSR
+    class_mem[CHF] += W_feature_to_CHF
+    class_mem[ARR] += W_feature_to_ARR
+    class_mem[AFF] += W_feature_to_AFF
+
+60초 segment_done:
+    pred_class = WTA(class_mem)
+```
+
+weight가 양수이면 해당 class membrane에 흥분성 자극을 주는 것이고, 음수이면 억제성 자극을 주는 것이다. 이 때문에 본 설계는 “feature vector + software classifier”가 아니라 “feature spike + class membrane + WTA” 구조로 설명할 수 있다.
 
 ## 6. Final Membrane Readout
 
