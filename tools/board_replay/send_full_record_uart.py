@@ -16,11 +16,10 @@ from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
 RESULTS = REPO / "results" / "board_replay" / "microblaze_full_replay"
-REPORTS = REPO / "reports" / "board_replay"
-TRANSCRIPTS = REPORTS / "transcripts"
-COMPARISONS = REPORTS / "comparisons"
-XSIM_RESULTS = REPO / "results" / "final_membrane_v2_snn"
-XSIM_WORK = XSIM_RESULTS / "xsim_snn_ecg_v2_work"
+REPORTS = REPO / "reports" / "final" / "board_replay"
+TRANSCRIPTS = REPORTS
+COMPARISONS = REPORTS
+EXPECTED_CASE_CSV = REPO / "reports" / "final" / "fulltop_xsim_locked_class_cases_predictions.csv"
 
 DEFAULT_BIT = RESULTS / "snn_ecg_mb_full_replay.bit"
 DEFAULT_ELF = RESULTS / "snn_ecg_mb_full_replay_app.elf"
@@ -142,8 +141,8 @@ def normalize(path: Path) -> str:
     return str(path.resolve()).replace("\\", "/").lower()
 
 
-def expected_from_predictions(tag: str, case_id: str) -> dict[str, Any] | None:
-    pred_csv = XSIM_RESULTS / f"xsim_snn_ecg_v2_{tag}_predictions.csv"
+def expected_from_predictions(case_id: str) -> dict[str, Any] | None:
+    pred_csv = EXPECTED_CASE_CSV
     if not pred_csv.exists():
         return None
     for row in read_csv(pred_csv):
@@ -168,24 +167,8 @@ def expected_from_predictions(tag: str, case_id: str) -> dict[str, Any] | None:
 
 
 def find_expected_from_repo(mem_path: Path, case_id: str | None) -> dict[str, Any] | None:
-    target = normalize(mem_path)
-    fallback: tuple[str, str] | None = None
-    for manifest in sorted(XSIM_RESULTS.glob("xsim_snn_ecg_v2_*_manifest.txt")):
-        name = manifest.name
-        tag = name[len("xsim_snn_ecg_v2_") : -len("_manifest.txt")]
-        with manifest.open("r", encoding="utf-8", errors="replace") as f:
-            for line in f:
-                parts = line.split()
-                if len(parts) < 4:
-                    continue
-                row_case_id, _class_id, _samples, rel_mem = parts[:4]
-                resolved = normalize(XSIM_WORK / rel_mem)
-                if resolved == target:
-                    return expected_from_predictions(tag, row_case_id)
-                if case_id is not None and row_case_id == case_id:
-                    fallback = (tag, row_case_id)
-    if fallback is not None:
-        return expected_from_predictions(fallback[0], fallback[1])
+    if case_id is not None:
+        return expected_from_predictions(case_id)
     return None
 
 

@@ -1,7 +1,0 @@
-experiment,status,notes
-legacy_chunk_feature_dump_ablation,Retired,Not used as final locked-model evidence.
-locked_snapshot_only,TODO,Recompute under the locked strict record-wise split.
-locked_final_membrane_without_guards,TODO,Requires a new train/validation-only ablation protocol.
-afe_off_raw_mem,TODO,Raw-converted non-AFE full-record .mem set is not present in the repo.
-hpf_notch_lpf_off,TODO,Requires regenerating full-record .mem variants through the AFE/XMODEL conversion pipeline.
-rtl_feature_module_synthesis_ablation,TODO,Requires separate RTL variants and synthesis runs.

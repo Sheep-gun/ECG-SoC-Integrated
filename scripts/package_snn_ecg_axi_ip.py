@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[1]
-RESULTS = REPO / "results" / "final_membrane_v2_snn"
+RESULTS = REPO / "results" / "board_replay" / "microblaze_full_replay"
 WORK = REPO.parent / "_snn_ecg_ip_packager_work"
 IP_REPO = REPO / "ip_repo"
 IP_ROOT = IP_REPO / "snn_ecg_axi_accelerator"

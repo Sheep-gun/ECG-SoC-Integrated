@@ -1,0 +1,246 @@
+#!/usr/bin/env python3
+"""Validate the final paper-style repository surface.
+
+This checker intentionally focuses on final-facing artifacts.  It rejects
+retired benchmark/candidate strings, verifies the locked strict record-wise
+metrics, and checks that the class-wise board replay evidence is complete.
+"""
+
+from __future__ import annotations
+
+import csv
+import json
+import re
+import sys
+from pathlib import Path
+
+
+REPO = Path(__file__).resolve().parents[1]
+
+FINAL_MODEL = "structural_guarded_silent_aff_1008710"
+EXPECTED = {
+    ("train", "correct"): 61,
+    ("train", "total"): 68,
+    ("train", "accuracy_percent"): 89.71,
+    ("validation", "correct"): 32,
+    ("validation", "total"): 32,
+    ("validation", "accuracy_percent"): 100.0,
+    ("final_test_chunk", "correct"): 29,
+    ("final_test_chunk", "total"): 36,
+    ("final_test_chunk", "accuracy_percent"): 80.56,
+    ("final_test_record_majority", "correct"): 16,
+    ("final_test_record_majority", "total"): 19,
+    ("final_test_record_majority", "accuracy_percent"): 84.21,
+}
+
+REQUIRED_FILES = [
+    "README.md",
+    "FINAL_REPORT_KR.md",
+    "configs/final_submission_locked_model.json",
+    "configs/recordwise_resplit_seed20260808/final_test_records_locked.json",
+    "configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json",
+    "configs/recordwise_resplit_seed20260808/strict_recordwise_split_seed20260808.json",
+    "docs/PAPER_SUMMARY_KR.md",
+    "docs/SYSTEM_ARCHITECTURE_KR.md",
+    "docs/STRICT_RECORDWISE_PROTOCOL_KR.md",
+    "docs/HARDWARE_VALIDATION_KR.md",
+    "docs/LIMITATIONS_KR.md",
+    "reports/final/final_metrics.json",
+    "reports/final/strict_recordwise_final_result.md",
+    "reports/final/hardware_validation_result.md",
+    "reports/final/xsim_locked_model_summary.md",
+    "reports/final/vivado_locked_model_metrics.md",
+    "reports/final/board_replay_result.md",
+    "reports/final/fulltop_xsim_locked_class_cases_predictions.csv",
+    "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit",
+    "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa",
+    "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf",
+]
+
+FINAL_DOC_GLOBS = [
+    "README.md",
+    "FINAL_REPORT_KR.md",
+    "docs/*.md",
+    "reports/final/*.md",
+    "reports/final/*.json",
+    "configs/*.json",
+    "configs/recordwise_resplit_seed20260808/*.json",
+]
+
+FORBIDDEN_PATTERNS = [
+    r"margin_" + r"evidence_0038974",
+    r"test_" + r"case_0_nsr",
+    r"test_" + r"case_0",
+    r"chunk" + r"-level",
+    r"chunk" + r" level",
+    r"\b88" + r"\.89\b",
+    r"\b32" + r"/36\b",
+    r"final_" + r"membrane_v2",
+    r"snapshot_" + r"v2",
+    r"SNN_" + r"ECG_" + r"V" + r"2",
+    r"SNN ECG " + r"V" + r"2",
+    r"holdout\s+" + r"reconfig",
+    r"holdout " + r"재구성",
+    r"test를 " + r"보고",
+    r"post" + r"-test",
+    r"re" + r"-tune",
+    r"re" + r"tune",
+]
+
+BOARD_CASES = [
+    "locked_nsr_case117",
+    "locked_chf_case91",
+    "locked_arr_case45",
+    "locked_aff_case16",
+]
+
+
+def rel(path: Path) -> str:
+    return str(path.relative_to(REPO)).replace("\\", "/")
+
+
+def read_json(rel_path: str) -> dict:
+    return json.loads((REPO / rel_path).read_text(encoding="utf-8-sig"))
+
+
+def fail(message: str, failures: list[str]) -> None:
+    failures.append(message)
+
+
+def check_required_files(failures: list[str]) -> None:
+    for item in REQUIRED_FILES:
+        if not (REPO / item).exists():
+            fail(f"missing required file: {item}", failures)
+
+
+def check_doc_count(failures: list[str]) -> None:
+    docs = sorted(path.name for path in (REPO / "docs").glob("*.md"))
+    expected = sorted(
+        [
+            "PAPER_SUMMARY_KR.md",
+            "SYSTEM_ARCHITECTURE_KR.md",
+            "STRICT_RECORDWISE_PROTOCOL_KR.md",
+            "HARDWARE_VALIDATION_KR.md",
+            "LIMITATIONS_KR.md",
+        ]
+    )
+    if docs != expected:
+        fail(f"unexpected docs set: {docs}", failures)
+
+
+def check_forbidden_patterns(failures: list[str]) -> None:
+    files: list[Path] = []
+    for pattern in FINAL_DOC_GLOBS:
+        files.extend(REPO.glob(pattern))
+    regexes = [(pattern, re.compile(pattern, re.IGNORECASE)) for pattern in FORBIDDEN_PATTERNS]
+    for path in sorted(set(files)):
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        for label, regex in regexes:
+            if regex.search(text):
+                fail(f"forbidden pattern {label!r} found in {rel(path)}", failures)
+
+
+def check_metrics(failures: list[str]) -> None:
+    metrics = read_json("reports/final/final_metrics.json")
+    submission = read_json("configs/final_submission_locked_model.json")
+    locked = read_json("configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json")
+
+    for name, payload in [("final_metrics", metrics), ("final_submission", submission)]:
+        if payload.get("final_model_id") != FINAL_MODEL and name == "final_metrics":
+            fail(f"{name} final_model_id mismatch: {payload.get('final_model_id')}", failures)
+        if name == "final_submission" and payload.get("final_model_id") != FINAL_MODEL:
+            fail(f"{name} final_model_id mismatch: {payload.get('final_model_id')}", failures)
+        for (section, key), expected in EXPECTED.items():
+            got = payload.get(section, {}).get(key)
+            if got != expected:
+                fail(f"{name} {section}.{key} expected {expected}, got {got}", failures)
+    if locked.get("selected_candidate_id") != FINAL_MODEL:
+        fail(f"locked JSON candidate mismatch: {locked.get('selected_candidate_id')}", failures)
+    if locked.get("test_used_for_selection") is not False:
+        fail("locked JSON test_used_for_selection must be false", failures)
+    if locked.get("test_used_for_parameter_search") is not False:
+        fail("locked JSON test_used_for_parameter_search must be false", failures)
+    if locked.get("test_used_for_chatgpt_context") is not False:
+        fail("locked JSON test_used_for_chatgpt_context must be false", failures)
+
+
+def check_board_replay(failures: list[str]) -> None:
+    for case in BOARD_CASES:
+        comparison = REPO / "reports" / "final" / "board_replay" / f"{case}_expected_vs_board.csv"
+        transcript = REPO / "reports" / "final" / "board_replay" / f"{case}_uart_full_replay.txt"
+        summary = REPO / "reports" / "final" / "board_replay" / f"{case}_summary.md"
+        for path in [comparison, transcript, summary]:
+            if not path.exists():
+                fail(f"missing board replay artifact: {rel(path)}", failures)
+        if not comparison.exists():
+            continue
+        with comparison.open(newline="", encoding="utf-8-sig") as f:
+            rows = list(csv.DictReader(f))
+        mismatches = [row for row in rows if row.get("match") not in ("1", "")]
+        if mismatches:
+            fail(f"board replay mismatch in {rel(comparison)}: {mismatches[:3]}", failures)
+        required_metrics = {
+            "samples_received": "1800000",
+            "snapshot_count": "30",
+            "decision_count": "1",
+            "final_valid": "1",
+            "done": "1",
+        }
+        by_metric = {row.get("metric"): row for row in rows}
+        for metric, expected in required_metrics.items():
+            row = by_metric.get(metric)
+            if row is None or row.get("board") != expected or row.get("match") != "1":
+                fail(f"{case} {metric} expected board={expected}, match=1", failures)
+        if transcript.exists() and "SNN_ECG_FULL_REPLAY_BOARD_PASS" not in transcript.read_text(
+            encoding="utf-8-sig", errors="replace"
+        ):
+            fail(f"missing PASS marker in {rel(transcript)}", failures)
+
+
+def write_summary(failures: list[str]) -> None:
+    out = REPO / "reports" / "final" / "final_repo_consistency_check.md"
+    lines = [
+        "# Final Repository Consistency Check",
+        "",
+        f"- Status: `{'PASS' if not failures else 'FAIL'}`",
+        f"- Final model: `{FINAL_MODEL}`",
+        "",
+    ]
+    if failures:
+        lines.extend(["## Failures", ""])
+        lines.extend(f"- {item}" for item in failures)
+    else:
+        lines.extend(
+            [
+                "## Checked",
+                "",
+                "- Required final files are present.",
+                "- Docs folder contains only the final five documentation files.",
+                "- Retired benchmark/candidate strings are absent from final-facing artifacts.",
+                "- Locked strict record-wise metrics match the final source-of-truth values.",
+                "- Four class-wise board replay comparison CSVs and UART PASS markers are present.",
+                "",
+            ]
+        )
+    out.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+
+
+def main() -> int:
+    failures: list[str] = []
+    check_required_files(failures)
+    check_doc_count(failures)
+    check_forbidden_patterns(failures)
+    check_metrics(failures)
+    check_board_replay(failures)
+    write_summary(failures)
+    if failures:
+        print("\n".join(failures), file=sys.stderr)
+        return 1
+    print("final paper repo check PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

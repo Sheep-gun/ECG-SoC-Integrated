@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[1]
-RESULTS = REPO / "results" / "final_membrane_v2_snn" / "microblaze_smoke"
+RESULTS = REPO / "results" / "board_replay" / "microblaze_smoke"
 WORK = REPO.parent / "_snn_ecg_microblaze_smoke_work"
 VIVADO = Path(r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat")
 PART = "xc7a100tcsg324-1"

@@ -1,2 +1,0 @@
-0 0 1800000 ../../../fullrec_afe_30min_annotation_valid_balanced/train/NSR/16272/16272_30min_w003.mem
-1 0 1800000 ../../../fullrec_afe_30min_annotation_valid_balanced/train/NSR/16273/16273_30min_w010.mem

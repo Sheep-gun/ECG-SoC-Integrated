@@ -1,2 +1,0 @@
-0 0 1800000 ../../../fullrec_afe_30min_annotation_valid_balanced/val/NSR/16265/16265_30min_w011.mem
-1 0 1800000 ../../../fullrec_afe_30min_annotation_valid_balanced/val/NSR/16265/16265_30min_w033.mem

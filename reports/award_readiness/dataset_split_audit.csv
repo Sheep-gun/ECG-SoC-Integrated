@@ -1,5 +1,0 @@
-class,chunks,unique_records,train_records,val_records,test_records,overlapping_records,overlapping_record_count
-NSR,34,18,17,7,9,16272|16273|16420|16483|16539|16773|16786|16795|17052|17453|18177|18184|19088|19090|19093,15
-CHF,34,14,14,6,9,chf01|chf02|chf03|chf04|chf05|chf06|chf07|chf08|chf09|chf10|chf11|chf13|chf14|chf15,14
-ARR,34,34,17,8,9,,0
-AFF,34,4,4,4,4,06426|06995|07162|07859,4

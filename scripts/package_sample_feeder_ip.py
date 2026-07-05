@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[1]
-RESULTS = REPO / "results" / "final_membrane_v2_snn"
+RESULTS = REPO / "results" / "board_replay" / "microblaze_full_replay"
 WORK = REPO.parent / "_sample_feeder_ip_packager_work"
 CHECK_WORK = REPO.parent / "_sample_feeder_ip_catalog_check"
 IP_REPO = REPO / "ip_repo"

@@ -54,9 +54,9 @@
   "baremetal_elf_exists": true,
   "last_full_record_replay": {
     "case_name": "locked_aff_case16",
-    "transcript": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\transcripts\\locked_aff_case16_uart_full_replay.txt",
-    "comparison": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\comparisons\\locked_aff_case16_expected_vs_board.csv",
-    "summary": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\comparisons\\locked_aff_case16_summary.md",
+    "transcript": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\final\\board_replay\\locked_aff_case16_uart_full_replay.txt",
+    "comparison": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\final\\board_replay\\locked_aff_case16_expected_vs_board.csv",
+    "summary": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\final\\board_replay\\locked_aff_case16_summary.md",
     "board_internal_pass": true,
     "expected_vs_board_pass": true,
     "samples_received": 1800000,
