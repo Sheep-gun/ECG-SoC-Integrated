@@ -33,11 +33,10 @@ flowchart LR
 | Strict final_test evaluation count | 1 |
 | Locked Final Membrane standalone XSim | final_test 36 cases, final prediction mismatch 0, final membrane mismatch 0 |
 | Strict dataset split audit | seed 20260808, source/physical overlap 0 |
-| Ablation full vs snapshot majority | 125/136 = 91.91% vs 103/136 = 75.74% |
 | Locked pure RTL Vivado resource | LUT 9719, FF 5038, BRAM 0, DSP 0 |
 | Locked pure RTL timing / power | WNS 8.184 ns, estimated total power 0.099 W |
 | AXI/IP packaging | accelerator IP-XACT `component.xml`, xgui, AXI wrapper, sample feeder 존재 |
-| Locked Vitis/MicroBlaze board flow | 4 class-wise 30분 replay 완료, final_pred 4/4 match, final_mem exact 2/4 |
+| Locked Vitis/MicroBlaze board flow | 4 class-wise 30분 replay 완료, final_pred 4/4 match, final_mem exact 4/4 |
 
 
 ## 4. 추가 문서 링크
@@ -63,7 +62,7 @@ flowchart LR
 - AFE+ADC는 XMODEL 기반 nominal model이며, physical AFE PCB나 ADC silicon measurement가 아니다.
 - Physical DAC replay나 실제 전극 측정은 수행하지 않았다.
 - Virtuoso layout/post-layout 검증과 의료 유효성 검증은 수행하지 않았다.
-- Locked full-record board replay는 bitstream/XSA/ELF build까지 완료했고, actual UART transcript/comparison은 향후 과제이다.
+- Locked full-record board replay는 새 bitstream/XSA/ELF 기준 NSR/CHF/ARR/AFF 각 1건의 30분 UART transcript/comparison까지 확보했다.
 
 대회 제출/최종 설명 기준의 상세 문서는 반드시 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)를 먼저 읽으면 된다. 해당 문서에는 연구 목적, Holter-style 설계 동기, AFE+ADC 조건, Snapshot feature block의 뉴로모픽 동작 설명, 30분 Final Membrane Readout, XSim 성능, Vivado 자원량이 모두 포함되어 있다.
 
@@ -275,13 +274,13 @@ python scripts\build_snn_ecg_v2_bitstream.py
 
 ## AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계 30분 XSim 성능
 
-30분 chunk-level 성능이다. Python 등가모델과 RTL/XSim 결과가 `pred_class`와 `final_mem[4]` 기준으로 일치한다.
+최종 locked strict record-wise 모델 기준 30분 final_test 성능이다. 아래 locked final_test 및 XSim/board 검증 결과를 최종 보고 기준으로 둔다.
 
 | Split | Python | XSim | Pred mismatch | Mem mismatch |
 |---|---:|---:|---:|---:|
-| train | 62 / 68 = 91.18% | 62 / 68 = 91.18% | 0 | 0 |
-| validation | 31 / 32 = 96.88% | 31 / 32 = 96.88% | 0 | 0 |
-| final_test | 29 / 36 = 80.56% | locked strict record-wise one-shot | 0 | standalone final layer |
+| train | 61 / 68 = 89.71% | locked params source | - | - |
+| validation | 32 / 32 = 100.00% | locked params source | - | - |
+| final_test | 29 / 36 = 80.56% | standalone locked final layer XSim | 0 | 0 |
 
 장시간 ECG 4-Class Accelerator IP Core test confusion matrix:
 
@@ -362,7 +361,7 @@ FPGA board programming:
 | Board report | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/board_program_report.txt` |
 
 DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/counter/accumulator 기반 SNN-inspired RTL 구조임을 확인할 수 있다.
-Locked model 기준 MicroBlaze full-record replay system은 bitstream/XSA/ELF까지 새로 build했고, NSR/CHF/ARR/AFF 각 1건의 30분 UART board replay를 수행했다. 네 case 모두 final_pred는 full-top XSim과 일치했고, final_mem exact match는 NSR/AFF 2건에서 확인했다. CHF/ARR final_mem divergence는 input-gap sensitivity 검증 이슈로 남긴다.
+Locked model 기준 MicroBlaze full-record replay system은 bitstream/XSA/ELF까지 새로 build했고, NSR/CHF/ARR/AFF 각 1건의 30분 UART board replay를 수행했다. 네 case 모두 full-top XSim과 `final_pred` 및 `final_mem[4]`가 bit-exact로 일치했다.
 
 ## 주의사항
 

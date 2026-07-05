@@ -54,6 +54,7 @@ module snn_ecg_30min_final_top #(
     reg [3:0] reset_count;
     reg [7:0] flush_count;
     reg [31:0] timer_mem;
+    reg sample_process_hold;
     reg [5:0] snapshot_index;
     reg final_snapshot_done_d;
     reg final_chunk_done_d;
@@ -78,7 +79,7 @@ module snn_ecg_30min_final_top #(
     wire [PROF_COUNTER_W-1:0] profile_total_cycle_next = prof_total_cycle_counter + profile_one;
     wire [PROF_COUNTER_W-1:0] profile_window_cycle_next = profile_window_cycle_counter + profile_one;
 
-    assign sample_ready = (state == ST_RUN);
+    assign sample_ready = (state == ST_RUN) && !sample_process_hold;
     assign busy = (state != ST_IDLE) && (state != ST_DONE);
     assign snapshot_index_dbg = snapshot_index;
 
@@ -288,6 +289,7 @@ module snn_ecg_30min_final_top #(
             reset_count <= 4'd0;
             flush_count <= 8'd0;
             timer_mem <= 32'd0;
+            sample_process_hold <= 1'b0;
             snapshot_index <= 6'd0;
             snapshot_pred_class_latched <= 2'd0;
             snapshot_pred_seen <= 1'b0;
@@ -301,6 +303,7 @@ module snn_ecg_30min_final_top #(
                     if (start) begin
                         state <= ST_CORE_RESET;
                         reset_count <= 4'd0;
+                        sample_process_hold <= 1'b0;
                         snapshot_index <= 6'd0;
                         snapshot_pred_class_latched <= 2'd0;
                         snapshot_pred_seen <= 1'b0;
@@ -318,15 +321,20 @@ module snn_ecg_30min_final_top #(
                     snapshot_pred_class_latched <= 2'd0;
                     snapshot_pred_seen <= 1'b0;
                     timer_mem <= 32'd0;
+                    sample_process_hold <= 1'b0;
                     state <= ST_RUN;
                 end
                 ST_RUN: begin
-                    if (sample_tick_spike) begin
+                    if (sample_process_hold) begin
+                        sample_process_hold <= 1'b0;
+                    end else if (sample_tick_spike) begin
                         if (snapshot_boundary_spike) begin
                             timer_mem <= 32'd0;
+                            sample_process_hold <= 1'b0;
                             state <= ST_SEG_DONE;
                         end else begin
                             timer_mem <= timer_mem + 32'd1;
+                            sample_process_hold <= 1'b1;
                         end
                     end
                 end

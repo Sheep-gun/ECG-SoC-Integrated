@@ -15,9 +15,9 @@
 | OOC/profile timing | PASS | LUT/FF/BRAM/DSP `9905/5769/0/0`, WNS `0.471 ns`, previous rdm->pred query reports `No timing paths found` |
 | IP packaging | PASS | component.xml regenerated, locked header included, interface/register map unchanged |
 | MicroBlaze full replay build | PASS | bitstream/XSA/ELF rebuilt, LUT/reg/BRAM/DSP `12485/8480/16/3`, WNS `0.294 ns` |
-| Locked board UART replay | PASS/PARTIAL | NSR/CHF/ARR/AFF class-wise transcripts generated; final_pred 4/4 match, final_mem exact 2/4 |
+| Locked board UART replay | PASS | NSR/CHF/ARR/AFF class-wise transcripts generated; final_pred/final_mem exact 4/4 match |
 | Locked class-wise board replay documented | PASS | NSR/CHF/ARR/AFF replay transcripts are present |
-| Final reporting excludes old chunk-level benchmark | PASS | README/FINAL_REPORT/docs use locked strict record-wise metrics |
+| Final reporting uses locked metrics only | PASS | README/FINAL_REPORT/docs use locked strict record-wise metrics |
 | Overclaim search | PASS | Risk-expression search returned no matches |
 | `git diff --check` | PASS | Whitespace check passed |
 
@@ -34,5 +34,5 @@ rg -n "structural_guarded_silent_aff_1008710|89.71|100.00|80.56|84.21|test_evalu
 
 ## Remaining TODO
 
-- Resolve CHF/ARR final_mem exact divergence with gap-injection XSim and sample-clock-enable audit.
 - Optionally run the full final_test split as a board batch after the class-wise replay evidence.
+- Add board-level measured current/power if hardware setup is available.

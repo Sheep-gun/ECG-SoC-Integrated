@@ -1,44 +1,32 @@
 # Ablation Study
 
-## 1. 왜 ablation이 필요한가
+## 1. 최종 제출 기준
 
-이 프로젝트는 단일 threshold classifier가 아니라, 60초 Snapshot Readout과 30분 Final Membrane Readout이 결합된 구조이다. 따라서 어떤 구조가 실제 성능에 기여하는지 분리해서 보여줘야 한다.
+현재 최종 모델은 `structural_guarded_silent_aff_1008710` locked Final Membrane이며, 성능 주장은 strict record-wise train/validation-only lock과 final_test 1회 평가 결과만 사용한다.
 
-## 2. 실행한 ablation
+기존 chunk feature dump 기반 ablation benchmark는 최종 locked 모델의 주장 근거로 사용하지 않는다. 따라서 README/FINAL_REPORT의 핵심 결과 표에는 포함하지 않고, 최종 제출 기준에서는 retired legacy analysis로만 취급한다.
 
-실행:
+## 2. 주장 가능한 범위
 
-```powershell
-python tools\run_ablation_suite.py
-```
+| 항목 | 최종 상태 |
+|---|---|
+| Snapshot 모델 | 고정된 60초 Snapshot Readout |
+| Final Membrane | strict record-wise train/validation만으로 lock |
+| Final test | lock 이후 1회 평가 |
+| 최종 성능 주장 | final_test 29/36 = 80.56%, record-majority 16/19 = 84.21% |
+| final_test 재튜닝 | 수행하지 않음 |
 
-결과:
+## 3. 남은 ablation TODO
 
-- `reports/award_readiness/ablation_summary.md`
-- `reports/award_readiness/ablation_summary.csv`
-- `reports/award_readiness/figures/ablation_accuracy_bar.png`
+아래 항목은 최종 locked 모델 기준으로 새로 재생성해야 하며, 현재 최종 성능 근거로 주장하지 않는다.
 
-## 3. 결과 요약
+| TODO | 이유 |
+|---|---|
+| Snapshot-only vs locked Final Membrane | locked split 기준으로 다시 계산 필요 |
+| AFE-off full-record `.mem` | raw-converted non-AFE dataset 재생성 필요 |
+| HPF/notch/LPF-off `.mem` | AFE/XMODEL conversion pipeline variant 필요 |
+| RTL feature module synthesis ablation | 별도 RTL variant와 synthesis run 필요 |
 
-| experiment | status | correct | accuracy | 의미 |
-|---|---|---:|---:|---|
-| full_model | Measured | 125/136 | 91.91% | train/val/test 전체 fixed Python golden |
-| arr_focus_no_margin | Measured | 124/136 | 91.18% | 마지막 AFF->ARR margin evidence 제거 |
-| base_final | Measured | 120/136 | 88.24% | ARR-focus post rule 제거 |
-| snapshot_majority | Measured | 103/136 | 75.74% | 30개 snapshot majority만 사용 |
-| snapshot_mem_sum | Measured | 101/136 | 74.26% | snapshot membrane sum만 사용 |
-| feature_sum_zeroed | Limited | 84/136 | 61.76% | final-layer evidence sum만 zero |
+## 4. 방어 문장
 
-이 결과는 final membrane accumulation과 evidence current가 snapshot-only 구조보다 유의미하게 기여한다는 engineering evidence이다.
-
-## 4. 제한
-
-`feature_sum_zeroed`는 final-layer evidence rule에 들어가는 누적 feature sum을 zero로 만든 제한적 ablation이다. snapshot RTL 내부 feature extractor를 제거한 RTL 합성 ablation이 아니다.
-
-아직 수행하지 않은 항목:
-
-- raw/AFE-off full-record end-to-end accuracy
-- HPF/notch/LPF-off `.mem` 재생성 후 accuracy
-- feature module별 RTL 제거 및 synthesis/resource ablation
-
-이 항목들은 `reports/award_readiness/ablation_summary.csv`에서 TODO로 남겼다.
+최종 제출 문서에서는 ablation을 “완료된 최종 수치”로 주장하지 않는다. 본 프로젝트의 최종 검증 축은 locked strict record-wise protocol, Python/XSim bit-accurate check, Vivado/IP packaging, Vitis/MicroBlaze class-wise board replay이다.

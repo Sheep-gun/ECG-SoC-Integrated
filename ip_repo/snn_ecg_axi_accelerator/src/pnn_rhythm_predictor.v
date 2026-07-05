@@ -194,32 +194,34 @@ module pnn_rhythm_predictor #(
                 token_active <= 1'b1;
                 token_age <= {AGE_WIDTH{1'b0}};
             end else begin
-                if (evaluating) begin
-                    if (eval_idx == (NUM_HYP - 1)) begin
-                        winner_id <= scan_best_id_next;
-                        winner_error <= scan_best_err_next;
-                        winner_valid <= 1'b1;
-                        predictor_id <= scan_best_id_next;
-                        predictor_center <= hyp_center(scan_best_id_next);
-                        predictor_valid <= 1'b1;
-                        evaluating <= 1'b0;
+                if (rhythm_tick) begin
+                    if (evaluating) begin
+                        if (eval_idx == (NUM_HYP - 1)) begin
+                            winner_id <= scan_best_id_next;
+                            winner_error <= scan_best_err_next;
+                            winner_valid <= 1'b1;
+                            predictor_id <= scan_best_id_next;
+                            predictor_center <= hyp_center(scan_best_id_next);
+                            predictor_valid <= 1'b1;
+                            evaluating <= 1'b0;
 
-                        if (eval_predictor_valid) begin
-                            predictor_error <= predictor_err_next;
-                            pnn_match_spike <= match_next;
-                            pnn_mismatch_spike <= !match_next;
+                            if (eval_predictor_valid) begin
+                                predictor_error <= predictor_err_next;
+                                pnn_match_spike <= match_next;
+                                pnn_mismatch_spike <= !match_next;
+                            end else begin
+                                predictor_error <= {AGE_WIDTH{1'b1}};
+                            end
                         end else begin
-                            predictor_error <= {AGE_WIDTH{1'b1}};
+                            eval_best_id <= scan_best_id_next;
+                            eval_best_err <= scan_best_err_next;
+                            eval_idx <= eval_idx + 1'b1;
                         end
-                    end else begin
-                        eval_best_id <= scan_best_id_next;
-                        eval_best_err <= scan_best_err_next;
-                        eval_idx <= eval_idx + 1'b1;
                     end
-                end
 
-                if (rhythm_tick && token_active)
-                    token_age <= sat_age_inc(token_age);
+                    if (token_active)
+                        token_age <= sat_age_inc(token_age);
+                end
             end
         end
     end

@@ -5,7 +5,7 @@
 - transcript: `C:\Users\YangGeon\SNN ECG Classifier\reports\board_replay\transcripts\locked_chf_case91_uart_full_replay.txt`
 - comparison: `C:\Users\YangGeon\SNN ECG Classifier\reports\board_replay\comparisons\locked_chf_case91_expected_vs_board.csv`
 - board internal pass marker: `True`
-- expected-vs-board match: `False`
+- expected-vs-board match: `True`
 
 | metric | value |
 |---|---:|

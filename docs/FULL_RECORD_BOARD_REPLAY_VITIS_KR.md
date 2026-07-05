@@ -37,7 +37,7 @@ flowchart LR
 | Snapshot count | 30 |
 | Decision count | 1 |
 | final_pred match vs full-top XSim | 4 / 4 |
-| final_mem exact match vs full-top XSim | 2 / 4 |
+| final_mem exact match vs full-top XSim | 4 / 4 |
 | Board internal PASS marker | 4 / 4 |
 
 세부 비교:
@@ -48,10 +48,8 @@ flowchart LR
 - `reports/board_replay/comparisons/locked_arr_case45_summary.md`
 - `reports/board_replay/comparisons/locked_aff_case16_summary.md`
 
-## 5. 남은 검증 이슈
+## 5. 해결한 검증 이슈와 남은 범위
 
-보드 경로는 UART/MMIO 때문에 샘플 사이에 긴 input gap이 발생한다. direct full-top XSim은 back-to-back sample stream을 사용한다. 현재 final class는 일치하지만 CHF/ARR final_mem exact vector가 달라졌으므로, 최종 engineering note로 다음을 남긴다.
+보드 경로는 UART/MMIO 때문에 샘플 사이에 input gap이 발생한다. 이 차이를 gap-injection XSim으로 재현했고, registered event pulse와 downstream sample-valid timing을 정렬한 뒤 top-level에 one-cycle processing bubble을 추가했다. 이후 back-to-back full-top XSim, board-like gap XSim, 실제 board replay가 같은 final_pred/final_mem을 낸다.
 
-- Direct XSim과 board replay의 input pacing이 다르다.
-- ECG sample-indexed state는 `sample_valid/sample_fire` 기준으로만 변해야 한다.
-- Gap-injection XSim으로 board-like stall을 재현해 final_mem divergence 원인을 확인해야 한다.
+남은 범위는 대표 4건을 넘어 전체 final_test 36개 30분 case를 board batch로 확장하는 것이다.

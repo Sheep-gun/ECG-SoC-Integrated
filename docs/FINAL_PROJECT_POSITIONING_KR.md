@@ -13,11 +13,11 @@
 | ECG 4-class Accelerator IP Core | RTL core, AXI wrapper, IP-XACT `component.xml`, xgui, Vivado reports |
 | Long-record streaming classifier | 60초 snapshot 30개를 30분 final membrane으로 누적 |
 | SNN-inspired event/membrane architecture | event/spike evidence, signed membrane update, WTA decision |
-| Python/XSim bit-accurate RTL validation | final prediction mismatch 0/136, final membrane mismatch 0/136 |
+| Python/XSim bit-accurate RTL validation | locked final_test final prediction/membrane mismatch 0/36 |
 | Low-resource digital classifier core | board wrapper BRAM 0 / DSP 0, AXI OOC BRAM 0 / DSP 0 |
 | Model-based AFE+ADC integration | `vin_v = signed_code / 200000`, HPF/gain/notch/LPF/ADC nominal model figures |
 | Board-level IP call | MicroBlaze smoke UART PASS transcript, XSDB MMIO transcript |
-| Locked board integration replay | MicroBlaze full-record bitstream/XSA/ELF rebuilt, class-wise UART replay executed |
+| Locked board integration replay | MicroBlaze full-record bitstream/XSA/ELF rebuilt, class-wise UART replay executed with final_pred/final_mem 4/4 exact match |
 
 ## 3. 주장하면 안 되는 것
 
@@ -45,7 +45,7 @@
 
 ### board full replay와 smoke의 차이는 무엇인가?
 
-Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final readback을 빠르게 확인한다. Full replay는 1 kSPS x 30분 = 1,800,000 samples를 실제 board에서 입력하고, 30 snapshots와 final decision을 locked full-top XSim expected와 비교하는 단계이다. 현재 NSR/CHF/ARR/AFF 각 1건 transcript가 생성되어 있고 final_pred는 4/4 일치한다.
+Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final readback을 빠르게 확인한다. Full replay는 1 kSPS x 30분 = 1,800,000 samples를 실제 board에서 입력하고, 30 snapshots와 final decision을 locked full-top XSim expected와 비교하는 단계이다. 현재 NSR/CHF/ARR/AFF 각 1건 transcript가 생성되어 있고 final_pred와 final_mem이 4/4 일치한다.
 
 ### 최종 성능을 어떻게 표현해야 하나?
 

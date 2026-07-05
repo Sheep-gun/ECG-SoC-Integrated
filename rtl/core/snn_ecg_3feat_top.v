@@ -786,6 +786,7 @@ module snn_ecg_3feat_top #(
     wire ipb_burst_irreg_spike_i;
 
     reg qrs_sample_valid;
+    reg signed [ADC_WIDTH-1:0] adc_frontend_d;
 
     reg rdm_rr_valid_delay;
 
@@ -922,10 +923,14 @@ module snn_ecg_3feat_top #(
     );
 
     always @(posedge clk) begin
-        if (rst)
+        if (rst || segment_start) begin
             qrs_sample_valid <= 1'b0;
-        else
+            adc_frontend_d <= {ADC_WIDTH{1'b0}};
+        end else begin
             qrs_sample_valid <= sample_valid;
+            if (sample_valid)
+                adc_frontend_d <= adc_frontend;
+        end
     end
 
     always @(posedge clk) begin
@@ -1026,7 +1031,7 @@ module snn_ecg_3feat_top #(
         .clk(clk),
         .rst(rst),
         .clear(segment_start),
-        .sample_valid(qrs_sample_valid),
+        .sample_valid(sample_valid),
         .adc_data(adc_frontend),
         .prev_slope_valid(prev_slope_valid),
         .prev_slope_sign(prev_slope_sign),
@@ -1121,8 +1126,8 @@ module snn_ecg_3feat_top #(
         .clk(clk),
         .rst(rst),
         .clear(segment_start),
-        .sample_valid(sample_valid),
-        .adc_data(adc_frontend),
+        .sample_valid(qrs_sample_valid),
+        .adc_data(adc_frontend_d),
         .baseline(baseline),
         .strong_event(strong_event),
         .dscr_sign_flip_spike(dscr_sign_flip_spike),
@@ -1167,7 +1172,7 @@ module snn_ecg_3feat_top #(
 
         .clear(segment_start),
 
-        .sample_valid(sample_valid),
+        .sample_valid(qrs_sample_valid),
 
         .rhythm_tick(rhythm_tick),
 
@@ -1253,7 +1258,7 @@ module snn_ecg_3feat_top #(
 
         .clear(segment_start),
 
-        .sample_valid(sample_valid),
+        .sample_valid(qrs_sample_valid),
 
         .rhythm_tick(rhythm_tick),
 
@@ -1389,7 +1394,7 @@ module snn_ecg_3feat_top #(
 
         .clear(segment_start),
 
-        .sample_valid(sample_valid),
+        .sample_valid(qrs_sample_valid),
 
         .segment_done(segment_done),
 
@@ -1451,7 +1456,7 @@ module snn_ecg_3feat_top #(
 
         .clear(segment_start),
 
-        .sample_valid(sample_valid),
+        .sample_valid(qrs_sample_valid),
 
         .segment_done(segment_done),
 
@@ -1533,7 +1538,7 @@ module snn_ecg_3feat_top #(
 
         .clear(segment_start),
 
-        .sample_valid(sample_valid),
+        .sample_valid(qrs_sample_valid),
 
         .segment_done(segment_done),
 

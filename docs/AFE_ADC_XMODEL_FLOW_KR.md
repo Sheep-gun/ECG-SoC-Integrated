@@ -172,7 +172,7 @@ signed 12-bit .mem chunk
 
 - 최종 signed 12-bit full-record `.mem` dataset은 존재한다.
 - XSim runner가 해당 `.mem`을 30분 chunk로 replay한다.
-- Python golden과 RTL/XSim의 final prediction/membrane mismatch가 0 / 136으로 확인되었다.
+- Locked Final Membrane 기준 Python golden과 RTL/XSim의 final prediction/membrane mismatch가 final_test 36 cases에서 0으로 확인되었다.
 - `convert_mem`이라는 별도 script 이름은 현재 repo evidence로는 확인되지 않았으므로 TODO/명칭 확인 항목으로 남긴다.
 
 ## 7. signed 12-bit RTL 입력 형식
@@ -247,7 +247,7 @@ flowchart LR
 | NaN/interpolation warning | test에서 warning metadata 확인 |
 | batch routing | class directory routing test 확인 |
 | full-record RTL replay | `scripts/run_final_membrane_v2_xsim.py` |
-| Python-vs-XSim final prediction/membrane | mismatch 0 / 136 |
+| Python-vs-XSim final prediction/membrane | locked final_test mismatch 0 / 36 |
 
 ### 10.2 남은 한계와 TODO
 

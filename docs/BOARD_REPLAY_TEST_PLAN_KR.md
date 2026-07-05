@@ -7,8 +7,8 @@
 | Locked bitstream/XSA/ELF rebuild | 완료 |
 | FPGA board program | 완료 |
 | NSR 30분 full-record replay | 완료, final_pred/final_mem exact PASS |
-| CHF 30분 full-record replay | 완료, final_pred PASS, final_mem mismatch |
-| ARR 30분 full-record replay | 완료, final_pred PASS, final_mem mismatch |
+| CHF 30분 full-record replay | 완료, final_pred/final_mem exact PASS |
+| ARR 30분 full-record replay | 완료, final_pred/final_mem exact PASS |
 | AFF 30분 full-record replay | 완료, final_pred/final_mem exact PASS |
 
 ## 2. 실행 명령 형식
@@ -37,8 +37,7 @@ CHF/ARR/AFF는 같은 형식으로 `locked_chf_case91`, `locked_arr_case45`, `lo
 | case summary | `reports/board_replay/comparisons/locked_*_summary.md` |
 | full-top XSim vs board summary | `reports/final_submission/fulltop_xsim_locked_class_cases/locked_class_cases_xsim_vs_board_summary.md` |
 
-## 4. 다음 검증 계획
+## 4. 남은 검증 계획
 
-- Gap-injection XSim으로 UART/MMIO input gap이 final_mem에 주는 영향을 재현한다.
-- Snapshot frontend와 feature neuron의 sample-clock-enable semantics를 audit한다.
-- CHF/ARR final_mem exact mismatch 해소 후 class-wise replay를 재실행한다.
+- 전체 final_test 36개 30분 case를 board batch로 확장 replay한다.
+- Board 전류/전력 실측 환경이 준비되면 Vivado estimate와 비교한다.

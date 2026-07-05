@@ -21,6 +21,7 @@ from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
 RESULTS = REPO / "reports" / "final_submission" / "fulltop_xsim_locked_class_cases"
+DEFAULT_RESULTS = RESULTS
 BOARD_COMPARISONS = REPO / "reports" / "board_replay" / "comparisons"
 EXPECTED_DIR = REPO / "reports" / "board_replay" / "locked_expected"
 
@@ -115,7 +116,7 @@ def write_manifest(work: Path) -> Path:
     return manifest
 
 
-def write_wrapper(work: Path, manifest: Path, result_csv: Path) -> Path:
+def write_wrapper(work: Path, manifest: Path, result_csv: Path, sample_gap_cycles: int) -> Path:
     wrapper = work / "tb_locked_fulltop_class_cases.v"
     manifest_ref = Path(os.path.relpath(manifest, work))
     result_ref = Path(os.path.relpath(result_csv, work))
@@ -130,7 +131,8 @@ module tb_locked_fulltop_class_cases;
         .DUT_SNAPSHOT_SAMPLES(60000),
         .DUT_SNAPSHOTS_PER_CHUNK(30),
         .DUT_POST_DONE_TICKS(37),
-        .DUT_PROFILE_EN(1)
+        .DUT_PROFILE_EN(1),
+        .DUT_SAMPLE_GAP_CYCLES({sample_gap_cycles})
     ) tb();
 endmodule
 """,
@@ -294,9 +296,14 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
 
 
 def main() -> int:
+    global RESULTS
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--skip-run", action="store_true", help="reuse existing XSim result CSV")
+    parser.add_argument("--sample-gap-cycles", type=int, default=0, help="idle cycles inserted between accepted samples in direct full-top XSim")
+    parser.add_argument("--results-dir", type=Path, default=RESULTS, help="directory for XSim outputs")
     args = parser.parse_args()
+    RESULTS = args.results_dir.resolve()
 
     work = RESULTS / "work"
     result_csv = RESULTS / "locked_class_cases_fulltop_xsim_predictions.csv"
@@ -309,7 +316,7 @@ def main() -> int:
             shutil.rmtree(work)
         work.mkdir(parents=True, exist_ok=True)
         manifest = write_manifest(work)
-        wrapper = write_wrapper(work, manifest, result_csv)
+        wrapper = write_wrapper(work, manifest, result_csv, args.sample_gap_cycles)
         prj, tcl = write_project(work, wrapper)
         run([str(XVLOG), "--nolog", "-i", slash(REPO / "rtl"), "-prj", slash(prj)], work, RESULTS / "xvlog.log")
         run([str(XELAB), "--nolog", "-debug", "typical", "tb_locked_fulltop_class_cases", "-s", "tb_locked_fulltop_class_cases"], work, RESULTS / "xelab.log")
@@ -318,7 +325,8 @@ def main() -> int:
     if not result_csv.exists():
         raise FileNotFoundError(result_csv)
     xsim_rows = read_csv(result_csv)
-    write_expected_jsons(xsim_rows)
+    if args.sample_gap_cycles == 0 and RESULTS == DEFAULT_RESULTS.resolve():
+        write_expected_jsons(xsim_rows)
     write_summary(result_csv, summary_json, summary_md)
     print(summary_md)
     return 0

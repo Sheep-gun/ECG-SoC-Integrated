@@ -10,7 +10,7 @@
 | Class-wise coverage | NSR / CHF / ARR / AFF, one 30-minute case each |
 | Samples per case | 1,800,000 |
 | final_pred match vs full-top XSim | 4 / 4 |
-| final_mem exact match vs full-top XSim | 2 / 4 |
+| final_mem exact match vs full-top XSim | 4 / 4 |
 
 ## Replay Artifacts
 
@@ -23,4 +23,4 @@
 
 ## Result Boundary
 
-All four board runs completed transport and final class checks. CHF and ARR still show final_mem exact divergence against direct full-top XSim, so the board replay is reported as integration/final_pred PASS, not as final_mem exact PASS for every class.
+All four board runs completed transport and final class checks. After the sample-valid alignment fix and one-cycle processing bubble, the rebuilt bitstream matches full-top XSim at both final_pred and final_mem levels for NSR, CHF, ARR, and AFF representative 30-minute cases.

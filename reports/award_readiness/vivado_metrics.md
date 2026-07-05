@@ -19,4 +19,4 @@
 | MicroBlaze full replay DSP | 3 | same |
 | MicroBlaze full replay WNS ns | 0.294 | same |
 
-Limitations: Vivado power is an estimate. MicroBlaze system resources include CPU/LMB/BRAM/UART/interconnect/sample-feeder infrastructure and should not be compared directly with the bare accelerator core. The locked MicroBlaze full replay flow is rebuilt through bitstream/XSA/ELF and class-wise UART replay transcripts are present; CHF/ARR final_mem exact divergence remains under investigation.
+Limitations: Vivado power is an estimate. MicroBlaze system resources include CPU/LMB/BRAM/UART/interconnect/sample-feeder infrastructure and should not be compared directly with the bare accelerator core. The locked MicroBlaze full replay flow is rebuilt through bitstream/XSA/ELF and class-wise UART replay transcripts are present with final_pred/final_mem exact 4/4 match against full-top XSim.

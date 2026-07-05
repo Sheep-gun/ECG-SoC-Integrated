@@ -9,7 +9,7 @@
 | Locked full-record UART replay | Executed |
 | Class coverage | NSR / CHF / ARR / AFF, one 30-minute case each |
 | final_pred match vs full-top XSim | 4 / 4 |
-| final_mem exact match vs full-top XSim | 2 / 4 |
+| final_mem exact match vs full-top XSim | 4 / 4 |
 
 ## Rebuilt Board Flow Artifacts
 
@@ -34,4 +34,4 @@
 
 ## Exactness Boundary
 
-NSR and AFF match full-top XSim at both final_pred and final_mem levels. CHF and ARR match final_pred and all transport counters, but final_mem vectors differ. The remaining technical item is sample-gap sensitivity between back-to-back direct XSim and UART/MMIO board replay.
+NSR, CHF, ARR, and AFF representative 30-minute board runs match full-top XSim at both final_pred and final_mem levels. The remaining boundary is coverage: this is class-wise representative board replay, not a full 36-case final_test board batch.

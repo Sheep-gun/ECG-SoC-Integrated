@@ -62,7 +62,7 @@ BRAM/DSP는 MicroBlaze/LMB/BRAM/UART/interconnect infrastructure에서 발생한
 | Class-wise replay | NSR / CHF / ARR / AFF 각 1건 |
 | Samples per replay | 1,800,000 |
 | final_pred match vs full-top XSim | 4 / 4 |
-| final_mem exact match vs full-top XSim | 2 / 4 |
+| final_mem exact match vs full-top XSim | 4 / 4 |
 
 결과 요약:
 
@@ -74,6 +74,4 @@ BRAM/DSP는 MicroBlaze/LMB/BRAM/UART/interconnect infrastructure에서 발생한
 
 ## 6. 남은 검증 이슈
 
-보드 replay는 UART/MMIO feeder를 사용하므로 direct full-top XSim보다 sample 사이 input gap이 길다. NSR/AFF는 final_mem까지 exact match였지만, CHF/ARR는 final class는 맞고 final_mem vector만 달랐다. 따라서 남은 검증은 모델 재튜닝이 아니라 hardware replay semantics 검증이다.
-
-다음 작업은 gap-injection XSim과 sample-clock-enable audit이다.
+NSR/CHF/ARR/AFF 대표 4건의 30분 board replay는 full-top XSim과 final_pred/final_mem이 모두 일치한다. 남은 검증은 전체 final_test 36개 case로 board replay batch를 확장하는 것과, Vivado estimate가 아닌 board 전류/전력 실측을 확보하는 것이다.

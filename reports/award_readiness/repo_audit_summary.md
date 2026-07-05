@@ -27,7 +27,7 @@
 | 항목 | 값 | 출처 |
 |---|---:|---|
 | locked strict record-wise final_test chunk accuracy | 29/36 = 80.56% | `reports/final_submission/python_locked_model_metrics.json` |
-| Python-vs-XSim mismatch | pred 0, mem 0 / 136 | `results/final_membrane_v2_snn/xsim_snn_ecg_v2_summary.json` |
+| Python-vs-XSim mismatch | locked final_test pred 0, mem 0 / 36 | `reports/final_submission/xsim_locked_model_summary.json` |
 | locked pure RTL LUT/FF/BRAM/DSP | 9719 / 5038 / 0 / 0 | `reports/award_readiness/vivado_metrics.md` |
 | locked pure RTL WNS | 8.184 ns | `reports/award_readiness/vivado_metrics.md` |
 | locked OOC/profile WNS @10ns | 0.471 ns | `reports/award_readiness/vivado_metrics.md` |
@@ -51,5 +51,5 @@
 - Strict record-wise locked Final Membrane은 final_test 1회 평가까지 완료했으며, chunk-level 29/36 = 80.56%로 보고한다.
 - raw/AFE-off full-record `.mem` dataset이 없어 AFE on/off end-to-end accuracy ablation은 TODO이다.
 - HPF/notch/LPF off dataset 재생성은 아직 수행하지 않았다.
-- locked model 기준 full-record replay bitstream/XSA/ELF를 재생성했고, NSR/CHF/ARR/AFF 각 1건의 actual UART full-record transcript와 expected-vs-board comparison을 생성했다. final_pred는 4/4 match이고 final_mem exact는 2/4 match이다.
+- locked model 기준 full-record replay bitstream/XSA/ELF를 재생성했고, NSR/CHF/ARR/AFF 각 1건의 actual UART full-record transcript와 expected-vs-board comparison을 생성했다. final_pred와 final_mem 모두 4/4 exact match이다.
 - AFE+ADC evidence figure는 nominal model 기반이며 PCB/silicon/Virtuoso post-layout 검증이 아니다.

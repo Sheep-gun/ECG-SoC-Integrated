@@ -54,9 +54,9 @@ Validation 100%는 model-selection split 성능이고, 최종 held-out 성능은
 | MicroBlaze system timing | WNS/WHS 0.294 ns / 0.055 ns |
 | MicroBlaze system resource | LUT/reg/BRAM/DSP 12485/8480/16/3 |
 | Actual locked UART full-record replay | NSR/CHF/ARR/AFF 각 1건 완료 |
-| Locked transcript/comparison | not generated |
+| Locked transcript/comparison | `reports/board_replay/transcripts/`, `reports/board_replay/comparisons/` |
 
-Locked board replay는 NSR/CHF/ARR/AFF 각 1건을 실제 수행했다. 네 case 모두 final_pred는 full-top XSim과 일치했고, final_mem exact match는 NSR/AFF 2건에서 확인했다.
+Locked board replay는 NSR/CHF/ARR/AFF 각 1건을 실제 수행했다. 네 case 모두 final_pred와 final_mem이 full-top XSim과 bit-exact로 일치했다.
 
 ## 6. 한계
 
@@ -65,4 +65,4 @@ Locked board replay는 NSR/CHF/ARR/AFF 각 1건을 실제 수행했다. 네 case
 - AFE+ADC는 XMODEL 기반 nominal model이다.
 - physical AFE PCB, ADC silicon, transistor-level post-layout 검증은 수행하지 않았다.
 - 의료 진단 유효성 검증이 아니라 engineering validation이다.
-- locked full-record board replay는 bit/XSA/ELF build까지만 완료했고, 실제 UART transcript는 추가 확보가 필요하다.
+- 전체 final_test 36개 case의 board batch replay는 수행하지 않았고, 대표 class-wise 4건의 UART transcript/comparison을 확보했다.

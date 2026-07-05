@@ -1,5 +1,5 @@
 {
-  "case_name": "locked_arr_case45",
+  "source": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\locked_expected\\locked_arr_case45_fulltop_xsim_expected_result.json",
   "case_id": "45",
   "expected_class": 2,
   "final_pred": 2,
@@ -11,6 +11,5 @@
   },
   "samples": 1800000,
   "snapshot_count": 30,
-  "decision_count": 1,
-  "source": "full-top RTL XSim locked class-wise replay"
+  "decision_count": 1
 }

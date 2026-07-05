@@ -22,19 +22,19 @@
   "xsa_exists": true,
   "timing_constraints_met": true,
   "timing": {
-    "setup_worst_slack_ns": 0.294,
+    "setup_worst_slack_ns": 0.097,
     "setup_total_violation_ns": 0.0,
     "setup_failing_endpoints": 0,
-    "hold_worst_slack_ns": 0.055,
+    "hold_worst_slack_ns": 0.019,
     "hold_total_violation_ns": 0.0,
     "hold_failing_endpoints": 0
   },
   "check_timing_clean_markers": true,
   "cdc_clean_markers": true,
   "utilization": {
-    "slice_lut": "12485",
-    "slice_reg": "8480",
-    "ff": "8479",
+    "slice_lut": "12494",
+    "slice_reg": "8494",
+    "ff": "8493",
     "bram_tile": "16",
     "dsp": "3"
   },

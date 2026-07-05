@@ -7,7 +7,8 @@ module tb_snn_ecg_30min_chunk_dataset #(
     parameter DUT_SNAPSHOT_SAMPLES = 60000,
     parameter DUT_SNAPSHOTS_PER_CHUNK = 30,
     parameter DUT_POST_DONE_TICKS = 37,
-    parameter DUT_PROFILE_EN = 1
+    parameter DUT_PROFILE_EN = 1,
+    parameter DUT_SAMPLE_GAP_CYCLES = 0
 )();
     reg clk;
     reg rst;
@@ -44,6 +45,7 @@ module tb_snn_ecg_30min_chunk_dataset #(
     integer expected_i;
     integer sample_count_i;
     integer sample_index;
+    integer sample_gap_count;
     integer cycles;
     integer total;
     integer correct;
@@ -114,17 +116,21 @@ module tb_snn_ecg_30min_chunk_dataset #(
             start = 1'b0;
 
             sample_index = 0;
+            sample_gap_count = 0;
             cycles = 0;
-            timeout_cycles = sample_count + 20000;
+            timeout_cycles = (sample_count * (DUT_SAMPLE_GAP_CYCLES + 2)) + 20000;
             while ((final_valid == 1'b0) && (cycles < timeout_cycles)) begin
                 @(negedge clk);
-                if (sample_ready && (sample_index < sample_count)) begin
+                if (sample_ready && (sample_gap_count == 0) && (sample_index < sample_count)) begin
                     sample_valid = 1'b1;
                     adc_data = sample_mem[sample_index];
                     sample_index = sample_index + 1;
+                    sample_gap_count = DUT_SAMPLE_GAP_CYCLES;
                 end else begin
                     sample_valid = 1'b0;
                     adc_data = 12'sd0;
+                    if (sample_gap_count > 0)
+                        sample_gap_count = sample_gap_count - 1;
                 end
                 @(posedge clk);
                 #1;

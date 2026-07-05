@@ -8,10 +8,10 @@ decision_count,1,1,1
 final_valid,1,1,1
 done,1,1,1
 final_pred,2,2,1
-final_mem_NSR,6,7,0
-final_mem_CHF,4,1,0
-final_mem_ARR,20,21,0
-final_mem_AFF,0,1,0
+final_mem_NSR,7,7,1
+final_mem_CHF,1,1,1
+final_mem_ARR,21,21,1
+final_mem_AFF,1,1,1
 feeder_tlast_count,1,1,1
 snn_error,0,0,1
 feeder_error,0,0,1

@@ -18,7 +18,7 @@ This audit checks whether the strict record-wise locked Final Membrane candidate
 | Pure RTL Vivado build | bitstream generated, timing met | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/` | Locked RTL, no XSA for this pure top |
 | IP package | Accelerator IP source list includes locked header | `ip_repo/snn_ecg_axi_accelerator/component.xml` | Repackaged, interface unchanged |
 | MicroBlaze full replay build | bitstream/XSA/ELF rebuilt, timing met | `results/board_replay/microblaze_full_replay/` | Locked RTL build artifact |
-| Locked board UART replay | Executed for NSR/CHF/ARR/AFF one 30-minute case each | `reports/final_submission/vitis_locked_model_board_replay_summary.md` | final_pred 4/4 match, final_mem exact 2/4 |
+| Locked board UART replay | Executed for NSR/CHF/ARR/AFF one 30-minute case each | `reports/final_submission/vitis_locked_model_board_replay_summary.md` | final_pred/final_mem exact 4/4 match |
 
 ## Boundary
 

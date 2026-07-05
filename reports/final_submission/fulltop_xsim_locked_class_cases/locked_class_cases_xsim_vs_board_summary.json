@@ -2,7 +2,7 @@
   "case_count": 4,
   "all_transport_ok": true,
   "all_final_pred_match": true,
-  "all_final_mem_match": false,
+  "all_final_mem_match": true,
   "xsim_predictions": "reports\\final_submission\\fulltop_xsim_locked_class_cases\\locked_class_cases_fulltop_xsim_predictions.csv",
   "xsim_vs_board": "reports\\final_submission\\fulltop_xsim_locked_class_cases\\locked_class_cases_xsim_vs_board.csv"
 }

@@ -37,7 +37,7 @@ This is an engineering FPGA/VLSI prototype. It does not claim raw electrode acqu
 | Previous rdm->pred_class hotspot | `No timing paths found` in targeted timing query |
 | MicroBlaze full replay system build | LUT/reg/BRAM/DSP `12485 / 8480 / 16 / 3`, WNS/WHS `0.294 ns / 0.055 ns` |
 | IP packaging | accelerator IP repackaged, interface/register map unchanged |
-| Locked full-record board UART replay | Class-wise NSR/CHF/ARR/AFF replay executed; final_pred 4/4 match |
+| Locked full-record board UART replay | Class-wise NSR/CHF/ARR/AFF replay executed; final_pred/final_mem 4/4 exact match |
 
 ## 3. Key Evidence Paths
 
@@ -71,12 +71,10 @@ The locked model board bitstream, XSA, and MicroBlaze ELF were rebuilt:
 - `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa`
 - `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf`
 
-Locked UART full-record replay has been executed for one NSR, CHF, ARR, and AFF case. All four match full-top XSim at final_pred level; NSR/AFF also match final_mem exactly, while CHF/ARR final_mem divergence remains as a hardware replay semantics issue.
+Locked UART full-record replay has been executed for one NSR, CHF, ARR, and AFF case. All four match full-top XSim at final_pred and final_mem levels.
 
 ## 6. Remaining TODO
 
-- Run locked full-record UART board replay and save transcript/comparison.
-- Add non-NSR locked board replay case.
 - Batch replay more final_test cases on board if time permits.
 - Add board-level measured current/power if hardware setup is available.
 - Regenerate AFE-off/filter-off full-record `.mem` variants for end-to-end ablation if needed.

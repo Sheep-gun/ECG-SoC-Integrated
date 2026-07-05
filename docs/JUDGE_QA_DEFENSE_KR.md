@@ -25,6 +25,6 @@ workload scale, HBM, 대형 accelerator optimization, 엄격한 baseline speedup
 
 ## Q7. 실제 board에서 돌렸나?
 
-현재 locked model evidence는 Python recheck, standalone Final Membrane XSim mismatch 0, Vivado bitstream/resource/timing, AXI/IP-XACT packaging, MicroBlaze full-record replay bitstream/XSA/ELF build, 그리고 NSR/CHF/ARR/AFF 각 1건 actual UART full-record board replay transcript이다. 전체 final_test split board replay batch는 아직 수행하지 않았다.
+현재 locked model evidence는 Python recheck, standalone Final Membrane XSim mismatch 0, Vivado bitstream/resource/timing, AXI/IP-XACT packaging, MicroBlaze full-record replay bitstream/XSA/ELF build, 그리고 NSR/CHF/ARR/AFF 각 1건 actual UART full-record board replay transcript이다. 대표 4건은 final_pred/final_mem이 full-top XSim과 exact match이며, 전체 final_test split board replay batch는 아직 수행하지 않았다.
 
 ## Q8. 최종 성능은 무엇인가?

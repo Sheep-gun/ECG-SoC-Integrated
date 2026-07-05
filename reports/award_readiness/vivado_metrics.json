@@ -24,6 +24,6 @@
     "dsp": 3,
     "wns_ns": 0.294,
     "whs_ns": 0.055,
-    "locked_uart_replay_status": "class-wise replay executed; final_pred 4/4 match; final_mem exact 2/4"
+    "locked_uart_replay_status": "class-wise replay executed; final_pred/final_mem exact 4/4 match"
   }
 }

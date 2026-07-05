@@ -6,7 +6,7 @@
 | RTL cycle model @ 1 MHz | 1.800480 s | 0.56 | 999733.40 | Derived from PROFILE_EN XSim cycle counters; not wall-clock board replay. |
 | RTL cycle model @ 100 MHz | 0.018005 s | 55.54 | 99973340.44 | Derived from AXI OOC 10 ns timing feasibility and cycle counters. |
 
-- Python baseline accuracy over all chunks: 125/136 = 91.91%
+- Python timing row is a legacy precomputed-feature final-readout timing baseline and is not used as final locked-model accuracy evidence.
 - RTL cycles/sample total: 1.000267
 - Energy/sample status: Vivado-estimated @1MHz: approximately 99 nJ/sample using 0.099 W total on-chip power.
 

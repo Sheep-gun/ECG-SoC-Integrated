@@ -1,5 +1,5 @@
 {
-  "case_name": "locked_chf_case91",
+  "source": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\locked_expected\\locked_chf_case91_fulltop_xsim_expected_result.json",
   "case_id": "91",
   "expected_class": 1,
   "final_pred": 1,
@@ -11,6 +11,5 @@
   },
   "samples": 1800000,
   "snapshot_count": 30,
-  "decision_count": 1,
-  "source": "full-top RTL XSim locked class-wise replay"
+  "decision_count": 1
 }
