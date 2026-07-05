@@ -6,18 +6,18 @@ import re
 import shutil
 from pathlib import Path
 
-import build_microblaze_smoke_system as smoke
+import build_microblaze_template_system as base
 
 
 REPO = Path(__file__).resolve().parents[1]
 RESULTS = REPO / "results" / "board_replay" / "microblaze_full_replay"
 WORK = REPO.parent / "_snn_ecg_microblaze_full_replay_work"
-PART = smoke.PART
+PART = base.PART
 
-SNN_BASE = smoke.SNN_BASE
-FEEDER_BASE = smoke.FEEDER_BASE
-UART_BASE = smoke.UART_BASE
-INTC_BASE = smoke.INTC_BASE
+SNN_BASE = base.SNN_BASE
+FEEDER_BASE = base.FEEDER_BASE
+UART_BASE = base.UART_BASE
+INTC_BASE = base.INTC_BASE
 
 SNAPSHOT_SAMPLES = 60000
 SNAPSHOTS_PER_CHUNK = 30
@@ -29,15 +29,15 @@ UART_BAUD = 230400
 
 
 def write_tcl(no_bitstream: bool) -> Path:
-    smoke.RESULTS = RESULTS
-    smoke.WORK = WORK
-    tcl = smoke.write_tcl(no_bitstream)
+    base.RESULTS = RESULTS
+    base.WORK = WORK
+    tcl = base.write_tcl(no_bitstream)
     text = tcl.read_text(encoding="utf-8")
     replacements = {
-        "SNN_ECG_MB_SMOKE": "SNN_ECG_MB_FULL_REPLAY",
-        "snn_ecg_mb_smoke": "snn_ecg_mb_full_replay",
-        "MicroBlaze smoke": "MicroBlaze full-record replay",
-        "MicroBlaze packaged-IP smoke": "MicroBlaze packaged-IP full-record replay",
+        "SNN_ECG_MB_TEMPLATE": "SNN_ECG_MB_FULL_REPLAY",
+        "snn_ecg_mb_template": "snn_ecg_mb_full_replay",
+        "MicroBlaze template": "MicroBlaze full-record replay",
+        "MicroBlaze packaged-IP template": "MicroBlaze packaged-IP full-record replay",
         "CONFIG.SNAPSHOT_SAMPLES {8}": f"CONFIG.SNAPSHOT_SAMPLES {{{SNAPSHOT_SAMPLES}}}",
         "CONFIG.SNAPSHOTS_PER_CHUNK {2}": f"CONFIG.SNAPSHOTS_PER_CHUNK {{{SNAPSHOTS_PER_CHUNK}}}",
         "CONFIG.POST_DONE_TICKS {37}": f"CONFIG.POST_DONE_TICKS {{{POST_DONE_TICKS}}}",
@@ -55,16 +55,16 @@ def write_tcl(no_bitstream: bool) -> Path:
 
 
 def ensure_packaged_ips(skip_package: bool) -> None:
-    smoke.RESULTS = RESULTS
-    smoke.ensure_packaged_ips(skip_package)
+    base.RESULTS = RESULTS
+    base.ensure_packaged_ips(skip_package)
 
 
 def parse_timing(path: Path) -> dict[str, float | int | None]:
-    return smoke.parse_timing(path)
+    return base.parse_timing(path)
 
 
 def parse_util(path: Path) -> dict[str, str]:
-    return smoke.parse_util(path)
+    return base.parse_util(path)
 
 
 def write_summary(no_bitstream: bool) -> None:
@@ -147,15 +147,15 @@ def main() -> None:
     parser.add_argument("--keep-work", action="store_true", help="Keep the previous external Vivado work directory.")
     args = parser.parse_args()
 
-    if not smoke.VIVADO.exists():
-        raise FileNotFoundError(f"Vivado not found: {smoke.VIVADO}")
+    if not base.VIVADO.exists():
+        raise FileNotFoundError(f"Vivado not found: {base.VIVADO}")
     if WORK.exists() and not args.keep_work:
         shutil.rmtree(WORK)
     RESULTS.mkdir(parents=True, exist_ok=True)
     ensure_packaged_ips(args.skip_package)
     tcl = write_tcl(args.no_bitstream)
-    smoke.run(
-        [str(smoke.VIVADO), "-mode", "batch", "-nojournal", "-nolog", "-source", smoke.slash(tcl)],
+    base.run(
+        [str(base.VIVADO), "-mode", "batch", "-nojournal", "-nolog", "-source", base.slash(tcl)],
         REPO,
         RESULTS / "vivado_microblaze_full_replay_build.log",
     )

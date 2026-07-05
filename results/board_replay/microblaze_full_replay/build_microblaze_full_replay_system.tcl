@@ -146,7 +146,7 @@ add_files -norecurse "$proj_dir/SNN_ECG_MB_FULL_REPLAY.gen/sources_1/bd/$bd_name
 set_property top snn_ecg_mb_full_replay_wrapper [current_fileset]
 update_compile_order -fileset sources_1
 
-add_files -fileset constrs_1 [list "$repo_dir/constraints/nexys_a7_microblaze_smoke.xdc"]
+add_files -fileset constrs_1 [list "$repo_dir/constraints/nexys_a7_microblaze_full_replay.xdc"]
 
 generate_target all [get_files "$proj_dir/SNN_ECG_MB_FULL_REPLAY.srcs/sources_1/bd/$bd_name/$bd_name.bd"]
 export_ip_user_files -of_objects [get_files "$proj_dir/SNN_ECG_MB_FULL_REPLAY.srcs/sources_1/bd/$bd_name/$bd_name.bd"] -no_script -sync -force -quiet

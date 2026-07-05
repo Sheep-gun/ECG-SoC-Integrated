@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[1]
-RESULTS = REPO / "results" / "board_replay" / "microblaze_smoke"
-WORK = REPO.parent / "_snn_ecg_microblaze_smoke_work"
+RESULTS = REPO / "results" / "board_replay" / "microblaze_template"
+WORK = REPO.parent / "_snn_ecg_microblaze_template_work"
 VIVADO = Path(r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat")
 PART = "xc7a100tcsg324-1"
 
@@ -43,25 +43,25 @@ def ensure_packaged_ips(skip_package: bool) -> None:
 def write_tcl(no_bitstream: bool) -> Path:
     RESULTS.mkdir(parents=True, exist_ok=True)
     WORK.mkdir(parents=True, exist_ok=True)
-    tcl = RESULTS / "build_microblaze_smoke_system.tcl"
+    tcl = RESULTS / "build_microblaze_template_system.tcl"
     build_to = "route_design" if no_bitstream else "write_bitstream"
     bitstream_block = "" if no_bitstream else """
-set bit_file "$proj_dir/SNN_ECG_MB_SMOKE.runs/impl_1/snn_ecg_mb_smoke_wrapper.bit"
+set bit_file "$proj_dir/SNN_ECG_MB_TEMPLATE.runs/impl_1/snn_ecg_mb_template_wrapper.bit"
 if {![file exists $bit_file]} {
     error "Bitstream not found: $bit_file"
 }
-file copy -force $bit_file "$out_dir/snn_ecg_mb_smoke.bit"
+file copy -force $bit_file "$out_dir/snn_ecg_mb_template.bit"
 """
     tcl.write_text(
         f"""set repo_dir "{slash(REPO)}"
 set work_dir "{slash(WORK)}"
 set out_dir "{slash(RESULTS)}"
 set proj_dir "$work_dir/project"
-set bd_name "snn_ecg_mb_smoke"
+set bd_name "snn_ecg_mb_template"
 file mkdir $out_dir
 file mkdir "$out_dir/reports"
 
-create_project -force SNN_ECG_MB_SMOKE $proj_dir -part {PART}
+create_project -force SNN_ECG_MB_TEMPLATE $proj_dir -part {PART}
 set_property target_language Verilog [current_project]
 set_property ip_repo_paths [list "$repo_dir/ip_repo"] [current_project]
 update_ip_catalog
@@ -187,24 +187,24 @@ assign_bd_address -target_address_space $mb_data_space -offset 0x{INTC_BASE:08x}
 
 validate_bd_design
 save_bd_design
-write_bd_tcl -force "$out_dir/snn_ecg_mb_smoke_bd.tcl"
+write_bd_tcl -force "$out_dir/snn_ecg_mb_template_bd.tcl"
 set addr_fh [open "$out_dir/reports/system_bd_address.rpt" w]
-puts $addr_fh "Long-window ECG 4-Class Accelerator MicroBlaze smoke address map"
+puts $addr_fh "Long-window ECG 4-Class Accelerator MicroBlaze template address map"
 puts $addr_fh "snn_ecg_axi_accelerator_0/s_axi/reg0 0x{SNN_BASE:08x} 4K"
 puts $addr_fh "sample_feeder_0/s_axi/reg0          0x{FEEDER_BASE:08x} 4K"
 puts $addr_fh "axi_uartlite_0/S_AXI/Reg            0x{UART_BASE:08x} 4K"
 puts $addr_fh "axi_intc_0/S_AXI/Reg                0x{INTC_BASE:08x} 4K"
 close $addr_fh
 
-make_wrapper -files [get_files "$proj_dir/SNN_ECG_MB_SMOKE.srcs/sources_1/bd/$bd_name/$bd_name.bd"] -top
-add_files -norecurse "$proj_dir/SNN_ECG_MB_SMOKE.gen/sources_1/bd/$bd_name/hdl/${{bd_name}}_wrapper.v"
-set_property top snn_ecg_mb_smoke_wrapper [current_fileset]
+make_wrapper -files [get_files "$proj_dir/SNN_ECG_MB_TEMPLATE.srcs/sources_1/bd/$bd_name/$bd_name.bd"] -top
+add_files -norecurse "$proj_dir/SNN_ECG_MB_TEMPLATE.gen/sources_1/bd/$bd_name/hdl/${{bd_name}}_wrapper.v"
+set_property top snn_ecg_mb_template_wrapper [current_fileset]
 update_compile_order -fileset sources_1
 
-add_files -fileset constrs_1 [list "$repo_dir/constraints/nexys_a7_microblaze_smoke.xdc"]
+add_files -fileset constrs_1 [list "$repo_dir/constraints/nexys_a7_microblaze_template.xdc"]
 
-generate_target all [get_files "$proj_dir/SNN_ECG_MB_SMOKE.srcs/sources_1/bd/$bd_name/$bd_name.bd"]
-export_ip_user_files -of_objects [get_files "$proj_dir/SNN_ECG_MB_SMOKE.srcs/sources_1/bd/$bd_name/$bd_name.bd"] -no_script -sync -force -quiet
+generate_target all [get_files "$proj_dir/SNN_ECG_MB_TEMPLATE.srcs/sources_1/bd/$bd_name/$bd_name.bd"]
+export_ip_user_files -of_objects [get_files "$proj_dir/SNN_ECG_MB_TEMPLATE.srcs/sources_1/bd/$bd_name/$bd_name.bd"] -no_script -sync -force -quiet
 
 set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
 set_property strategy Performance_Explore [get_runs impl_1]
@@ -235,8 +235,8 @@ report_utilization -hierarchical -file "$out_dir/reports/system_utilization_hier
 write_checkpoint -force "$out_dir/reports/system_routed.dcp"
 report_ip_status -file "$out_dir/reports/system_ip_status.rpt"
 {bitstream_block}
-if {{![catch {{write_hw_platform -fixed -include_bit -force -file "$out_dir/snn_ecg_mb_smoke.xsa"}} msg]}} {{
-    puts "XSA=$out_dir/snn_ecg_mb_smoke.xsa"
+if {{![catch {{write_hw_platform -fixed -include_bit -force -file "$out_dir/snn_ecg_mb_template.xsa"}} msg]}} {{
+    puts "XSA=$out_dir/snn_ecg_mb_template.xsa"
 }} else {{
     puts "WARN write_hw_platform failed: $msg"
 }}
@@ -316,9 +316,9 @@ def write_summary(no_bitstream: bool) -> None:
         cdc_clean = not re.search(r"\b(Critical|Warning)\b", cdc_text)
     timing_text = timing_path.read_text(encoding="utf-8", errors="replace") if timing_path.exists() else ""
     summary = {
-        "top": "snn_ecg_mb_smoke_wrapper",
+        "top": "snn_ecg_mb_template_wrapper",
         "part": PART,
-        "smoke_parameters": {
+        "template_parameters": {
             "snapshot_samples": 8,
             "snapshots_per_chunk": 2,
             "total_samples": 16,
@@ -331,10 +331,10 @@ def write_summary(no_bitstream: bool) -> None:
             "axi_uartlite": f"0x{UART_BASE:08x}",
             "axi_intc": f"0x{INTC_BASE:08x}",
         },
-        "bitstream": str(RESULTS / "snn_ecg_mb_smoke.bit"),
-        "bitstream_exists": (RESULTS / "snn_ecg_mb_smoke.bit").exists() if not no_bitstream else False,
-        "xsa": str(RESULTS / "snn_ecg_mb_smoke.xsa"),
-        "xsa_exists": (RESULTS / "snn_ecg_mb_smoke.xsa").exists(),
+        "bitstream": str(RESULTS / "snn_ecg_mb_template.bit"),
+        "bitstream_exists": (RESULTS / "snn_ecg_mb_template.bit").exists() if not no_bitstream else False,
+        "xsa": str(RESULTS / "snn_ecg_mb_template.xsa"),
+        "xsa_exists": (RESULTS / "snn_ecg_mb_template.xsa").exists(),
         "timing_constraints_met": timing_path.exists() and (
             "Timing constraints are met." in timing_text or
             "All user specified timing constraints are met." in timing_text
@@ -356,11 +356,11 @@ def write_summary(no_bitstream: bool) -> None:
             "ip_status": str(reports / "system_ip_status.rpt"),
         },
     }
-    (RESULTS / "microblaze_smoke_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    (RESULTS / "microblaze_template_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build the MicroBlaze long-window ECG 4-class accelerator packaged-IP smoke system.")
+    parser = argparse.ArgumentParser(description="Build the MicroBlaze long-window ECG 4-class accelerator packaged-IP template system.")
     parser.add_argument("--skip-package", action="store_true", help="Do not regenerate local packaged IPs first.")
     parser.add_argument("--no-bitstream", action="store_true", help="Stop at routed implementation reports without writing a bitstream.")
     parser.add_argument("--keep-work", action="store_true", help="Keep the previous external Vivado work directory.")
@@ -373,9 +373,9 @@ def main() -> None:
     RESULTS.mkdir(parents=True, exist_ok=True)
     ensure_packaged_ips(args.skip_package)
     tcl = write_tcl(args.no_bitstream)
-    run([str(VIVADO), "-mode", "batch", "-nojournal", "-nolog", "-source", slash(tcl)], REPO, RESULTS / "vivado_microblaze_smoke_build.log")
+    run([str(VIVADO), "-mode", "batch", "-nojournal", "-nolog", "-source", slash(tcl)], REPO, RESULTS / "vivado_microblaze_template_build.log")
     write_summary(args.no_bitstream)
-    print(RESULTS / "microblaze_smoke_summary.json")
+    print(RESULTS / "microblaze_template_summary.json")
 
 
 if __name__ == "__main__":
