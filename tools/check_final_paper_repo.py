@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the final paper-style repository surface.
-
-This checker intentionally focuses on final-facing artifacts.  It rejects
-retired benchmark/candidate strings, verifies the locked strict record-wise
-metrics, and checks that the class-wise board replay evidence is complete.
-"""
+"""Validate the final paper-style repository surface."""
 
 from __future__ import annotations
 
@@ -13,11 +8,12 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 
 REPO = Path(__file__).resolve().parents[1]
-
 FINAL_MODEL = "structural_guarded_silent_aff_1008710"
+
 EXPECTED = {
     ("train", "correct"): 61,
     ("train", "total"): 68,
@@ -55,6 +51,11 @@ REQUIRED_FILES = [
     "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit",
     "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa",
     "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf",
+    "tools/evaluate_final_strict_recordwise.py",
+    "tools/collect_final_vivado_metrics.py",
+    "tools/board_replay/run_locked_fulltop_xsim_cases.py",
+    "tools/board_replay/send_full_record_uart.py",
+    "tools/check_final_paper_repo.py",
 ]
 
 FINAL_DOC_GLOBS = [
@@ -65,6 +66,13 @@ FINAL_DOC_GLOBS = [
     "reports/final/*.json",
     "configs/*.json",
     "configs/recordwise_resplit_seed20260808/*.json",
+]
+
+MARKDOWN_LINK_GLOBS = [
+    "README.md",
+    "FINAL_REPORT_KR.md",
+    "docs/*.md",
+    "reports/final/*.md",
 ]
 
 FORBIDDEN_PATTERNS = [
@@ -80,11 +88,15 @@ FORBIDDEN_PATTERNS = [
     r"SNN_" + r"ECG_" + r"V" + r"2",
     r"SNN ECG " + r"V" + r"2",
     r"holdout\s+" + r"reconfig",
-    r"holdout " + r"재구성",
-    r"test를 " + r"보고",
+    r"holdout " + r"\uc7ac\uad6c\uc131",
+    r"test\ub97c " + r"\ubcf4\uace0",
     r"post" + r"-test",
     r"re" + r"-tune",
     r"re" + r"tune",
+    r"raw analog ECG " + r"recovered",
+    r"actual AFE PCB " + r"verified",
+    r"Virtuoso post-layout " + r"verified",
+    r"clinical " + r"validation " + r"completed",
 ]
 
 BOARD_CASES = [
@@ -142,15 +154,49 @@ def check_forbidden_patterns(failures: list[str]) -> None:
                 fail(f"forbidden pattern {label!r} found in {rel(path)}", failures)
 
 
+def local_link_target(raw: str) -> str | None:
+    target = raw.strip()
+    if not target or target.startswith("#"):
+        return None
+    lowered = target.lower()
+    if lowered.startswith(("http://", "https://", "mailto:", "data:")):
+        return None
+    if target.startswith("<"):
+        end = target.find(">")
+        target = target[1:end] if end != -1 else target[1:]
+    else:
+        target = target.split()[0]
+    target = unquote(target)
+    if "#" in target:
+        target = target.split("#", 1)[0]
+    return target or None
+
+
+def check_markdown_links(failures: list[str]) -> None:
+    link_re = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
+    files: list[Path] = []
+    for pattern in MARKDOWN_LINK_GLOBS:
+        files.extend(REPO.glob(pattern))
+    for path in sorted(set(files)):
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        for match in link_re.finditer(text):
+            target = local_link_target(match.group(1))
+            if target is None:
+                continue
+            target_path = Path(target)
+            if not target_path.is_absolute():
+                target_path = path.parent / target_path
+            if not target_path.exists():
+                fail(f"broken markdown link in {rel(path)}: {match.group(1)}", failures)
+
+
 def check_metrics(failures: list[str]) -> None:
     metrics = read_json("reports/final/final_metrics.json")
     submission = read_json("configs/final_submission_locked_model.json")
     locked = read_json("configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json")
 
     for name, payload in [("final_metrics", metrics), ("final_submission", submission)]:
-        if payload.get("final_model_id") != FINAL_MODEL and name == "final_metrics":
-            fail(f"{name} final_model_id mismatch: {payload.get('final_model_id')}", failures)
-        if name == "final_submission" and payload.get("final_model_id") != FINAL_MODEL:
+        if payload.get("final_model_id") != FINAL_MODEL:
             fail(f"{name} final_model_id mismatch: {payload.get('final_model_id')}", failures)
         for (section, key), expected in EXPECTED.items():
             got = payload.get(section, {}).get(key)
@@ -219,6 +265,7 @@ def write_summary(failures: list[str]) -> None:
                 "- Required final files are present.",
                 "- Docs folder contains only the final five documentation files.",
                 "- Retired benchmark/candidate strings are absent from final-facing artifacts.",
+                "- Local markdown links in final-facing documents resolve.",
                 "- Locked strict record-wise metrics match the final source-of-truth values.",
                 "- Four class-wise board replay comparison CSVs and UART PASS markers are present.",
                 "",
@@ -232,6 +279,7 @@ def main() -> int:
     check_required_files(failures)
     check_doc_count(failures)
     check_forbidden_patterns(failures)
+    check_markdown_links(failures)
     check_metrics(failures)
     check_board_replay(failures)
     write_summary(failures)
