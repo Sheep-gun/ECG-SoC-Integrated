@@ -1,89 +1,99 @@
 # Board and IP Packaging Evidence
 
-## 1. IP packaging evidence
+## 1. 핵심 요약
+
+최종 locked Final Membrane `structural_guarded_silent_aff_1008710`는 AXI accelerator IP source에 반영되었고, IP-XACT package와 MicroBlaze full-record replay system build까지 다시 생성했다.
+
+중요한 경계는 다음과 같다.
+
+- AXI/IP interface와 register map은 바뀌지 않았다.
+- RTL source와 locked parameter include가 바뀌었기 때문에 accelerator IP는 재패키징했다.
+- locked bitstream/XSA/ELF는 새로 생성했다.
+- locked 모델 기준 실제 UART full-record board replay transcript는 아직 생성하지 않았다.
+
+## 2. IP Packaging Evidence
 
 | Evidence | Path | Status |
 |---|---|---|
 | AXI accelerator RTL wrapper | `rtl/axi/snn_ecg_axi_lite_stream_top.v` | Done |
-| AXI4-Lite + AXI4-Stream feeder | `rtl/axi/axi_lite_axis_sample_feeder.v` | Done |
-| Accelerator IP-XACT | `ip_repo/snn_ecg_axi_accelerator/component.xml` | Done |
-| Accelerator xgui | `ip_repo/snn_ecg_axi_accelerator/xgui/snn_ecg_axi_accelerator_v1_0.tcl` | Done |
-| Feeder IP-XACT | `ip_repo/axi_lite_axis_sample_feeder/component.xml` | Done |
-| Feeder xgui | `ip_repo/axi_lite_axis_sample_feeder/xgui/axi_lite_axis_sample_feeder_v1_0.tcl` | Done |
-| AXI wrapper smoke testbench | `sim/tb_snn_ecg_axi_smoke.v` | Done |
-| Sample feeder smoke testbench | `sim/tb_axi_lite_axis_sample_feeder.v` | Done |
+| AXI4-Lite to AXI4-Stream feeder | `rtl/axi/axi_lite_axis_sample_feeder.v` | Done |
+| Accelerator IP-XACT | `ip_repo/snn_ecg_axi_accelerator/component.xml` | Regenerated |
+| Accelerator xgui | `ip_repo/snn_ecg_axi_accelerator/xgui/snn_ecg_axi_accelerator_v1_0.tcl` | Present |
+| Packaged locked final layer | `ip_repo/snn_ecg_axi_accelerator/src/final_membrane_layer.v` | Updated |
+| Packaged locked params include | `ip_repo/snn_ecg_axi_accelerator/src/strict_recordwise_locked_params.vh` | Added |
+| Feeder IP-XACT | `ip_repo/axi_lite_axis_sample_feeder/component.xml` | Regenerated |
+| Feeder xgui | `ip_repo/axi_lite_axis_sample_feeder/xgui/axi_lite_axis_sample_feeder_v1_0.tcl` | Present |
 
-## 2. MicroBlaze smoke evidence
+## 3. Interface Status
 
-| Artifact | Path | Status |
-|---|---|---|
-| MicroBlaze smoke bitstream | `results/final_membrane_v2_snn/microblaze_smoke/snn_ecg_mb_smoke.bit` | Present |
-| Smoke XSA | `results/final_membrane_v2_snn/microblaze_smoke/snn_ecg_mb_smoke.xsa` | Present |
-| Block design Tcl | `results/final_membrane_v2_snn/microblaze_smoke/snn_ecg_mb_smoke_bd.tcl` | Present |
-| Address report | `results/final_membrane_v2_snn/microblaze_smoke/reports/system_bd_address.rpt` | Present |
-| XSDB MMIO transcript | `results/final_membrane_v2_snn/microblaze_smoke/xsdb_mmio_transcript.txt` | PASS |
-| UART C app | `sw/microblaze_smoke/src/main.c` | Source present |
-| Vitis ELF | `results/final_membrane_v2_snn/microblaze_smoke/snn_ecg_mb_smoke_app.elf` | Built |
-| UART PASS transcript | `results/final_membrane_v2_snn/microblaze_smoke/uart_transcript.txt` | PASS |
+| 항목 | 결과 |
+|---|---|
+| Locked candidate | `structural_guarded_silent_aff_1008710` |
+| Top-level ports | 변경 없음 |
+| AXI4-Lite register map | 변경 없음 |
+| AXI4-Stream sample width | 기존 16-bit stream 유지 |
+| IP-XACT address map | 변경 없음 |
+| Repackage 필요 여부 | 필요, RTL source/include 갱신 때문 |
 
-MicroBlaze smoke summary:
+## 4. Locked Vivado Build Evidence
+
+Pure RTL board top:
 
 | 항목 | 값 |
 |---|---:|
-| LUT / FF / BRAM / DSP | 12650 / 8746 / 16 / 3 |
-| WNS / WHS | 0.185 ns / 0.037 ns |
-| smoke samples | 16 |
-| smoke snapshots | 2 |
+| LUT / FF / BRAM / DSP | 9719 / 5038 / 0 / 0 |
+| WNS | 8.184 ns |
+| Estimated total power | 0.099 W |
+| Bitstream | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/bitstream/snn_ecg_v2_nexys_a7_top.bit` |
 
-BRAM/DSP는 accelerator core가 아니라 MicroBlaze/LMB/UART/system infrastructure가 포함된 system-level resource이다.
+OOC/profile build:
 
-## 3. Full-record board replay evidence
+| 항목 | 값 |
+|---|---:|
+| PROFILE_EN=1 LUT / FF / BRAM / DSP | 9905 / 5769 / 0 / 0 |
+| WNS / WHS | 0.471 ns / 0.190 ns |
+| `u_final` LUT / FF | 1329 / 1037 |
+| Previous `rdm_level_spike -> pred_class` path | `No timing paths found` |
 
-Vitis MicroBlaze + UART chunk-ACK flow로 test NSR case 0의 30분 full record를 실제 board에서 replay했다.
+## 5. MicroBlaze Full-Record Replay System Build
 
 | Artifact | Path | Status |
 |---|---|---|
-| Full replay bitstream | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit` | Present |
-| Full replay XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` | Present |
-| Full replay ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` | Built |
+| Full replay bitstream | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit` | Rebuilt |
+| Full replay XSA | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa` | Rebuilt |
+| Full replay ELF | `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf` | Rebuilt |
 | Full replay app source | `vitis_apps/full_record_replay/src/main.c` | Present |
 | PC sender script | `tools/board_replay/send_full_record_uart.py` | Present |
-| Full replay transcript | `reports/board_replay/transcripts/test_case0_nsr_uart_full_replay.txt` | PASS |
-| Expected-vs-board CSV | `reports/board_replay/comparisons/test_case0_nsr_expected_vs_board.csv` | PASS |
-| Replay summary | `reports/board_replay/comparisons/test_case0_nsr_summary.md` | PASS |
 
-Full replay system summary:
+System build metrics:
 
 | 항목 | 값 |
 |---|---:|
-| full samples | 1,800,000 |
-| snapshots per chunk | 30 |
-| UART baud | 230400 |
-| LUT / FF / BRAM / DSP | 12638 / 8745 / 16 / 3 |
-| WNS / WHS | 0.192 ns / 0.026 ns |
+| LUT / slice_reg / BRAM / DSP | 12485 / 8480 / 16 / 3 |
+| WNS / WHS | 0.294 ns / 0.055 ns |
+| Timing constraints | Met |
+| CDC/check_timing markers | Clean |
 
-Full replay result:
+BRAM/DSP are system-level resources from MicroBlaze/LMB/BRAM/UART/interconnect infrastructure, not the bare accelerator core.
 
-| 항목 | 값 |
-|---|---:|
-| samples_received / sent_to_ip | 1,800,000 / 1,800,000 |
-| samples_accepted / consumed | 1,800,000 / 1,800,000 |
-| snapshot_count / decision_count | 30 / 1 |
-| final_pred | 0 |
-| final_mem NSR/CHF/ARR/AFF | 31 / 0 / 1 / 0 |
-| snn_error / feeder_error | 0 / 0 |
+## 6. Board Replay Evidence Boundary
 
-## 4. 완료 범위와 안전한 표현
+The repo contains an earlier `test_case0_nsr` full-record board transcript under `reports/board_replay/`. It is useful as proof that the MicroBlaze/UART/sample-feeder path can run a 1,800,000-sample replay, but it is not counted as the locked `structural_guarded_silent_aff_1008710` replay result.
 
-현재 board-level evidence는 bitstream programming, packaged IP integration, MicroBlaze smoke system, XSDB MMIO smoke, Vitis-built ELF, UART smoke PASS transcript, test NSR case 0 full-record replay PASS transcript까지 포함한다.
+For the locked final model, the board replay status is:
 
-다만 전체 dataset board replay batch나 physical AFE/ADC 검증이 완료된 것은 아니다. 따라서 최종 보고서에서는 다음처럼 표현한다.
+| 항목 | 상태 |
+|---|---|
+| Locked bitstream/XSA/ELF build | 완료 |
+| Locked UART full-record replay | TODO |
+| Locked transcript | 없음 |
+| Locked expected-vs-board CSV | 없음 |
+| Locked board PASS/FAIL | pending |
 
-> 실제 FPGA board에서 1,800,000-sample full record 1건을 MicroBlaze/UART replay로 입력하고, board final_pred/final_mem이 Python/XSim expected와 exact match함을 확인했다. 전체 test split board replay와 physical AFE/ADC validation은 향후 보완이다.
+## 7. 남은 TODO
 
-## 5. 남은 TODO
-
-- non-NSR full-record board replay 추가
-- full test split board replay batch 자동화
-- AXI DMA/DDR 기반 faster replay 검토
-- board-level power/current measurement
+- 새 locked bitstream을 board에 program하고 full-record UART replay 수행.
+- `reports/board_replay/transcripts/locked_model_full_record_replay.txt` 저장.
+- `reports/board_replay/comparisons/locked_model_expected_vs_board.csv` 저장.
+- non-NSR locked board replay case 추가.
+- full final_test split board replay batch는 추가 검증으로 분리.

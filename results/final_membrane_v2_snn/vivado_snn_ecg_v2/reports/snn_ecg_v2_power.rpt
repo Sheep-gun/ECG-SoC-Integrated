@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date             : Thu Jul  2 20:19:07 2026
+| Date             : Sun Jul  5 20:24:24 2026
 | Host             : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
 | Command          : report_power -file {C:/Users/YangGeon/SNN ECG Classifier/results/final_membrane_v2_snn/vivado_snn_ecg_v2/reports/snn_ecg_v2_power.rpt}
 | Design           : snn_ecg_v2_nexys_a7_top
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.101        |
+| Total On-Chip Power (W)  | 0.099        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.004        |
+| Dynamic (W)              | 0.001        |
 | Device Static (W)        | 0.097        |
 | Effective TJA (C/W)      | 4.6          |
-| Max Ambient (C)          | 84.5         |
-| Junction Temperature (C) | 25.5         |
+| Max Ambient (C)          | 84.6         |
+| Junction Temperature (C) | 25.4         |
 | Confidence Level         | Medium       |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -49,22 +49,23 @@ Table of Contents
 1.1 On-Chip Components
 ----------------------
 
-+-------------------------+-----------+----------+-----------+-----------------+
-| On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
-+-------------------------+-----------+----------+-----------+-----------------+
-| Clocks                  |    <0.001 |        4 |       --- |             --- |
-| Slice Logic             |     0.002 |    37301 |       --- |             --- |
-|   LUT as Logic          |     0.002 |    20966 |     63400 |           33.07 |
-|   CARRY4                |    <0.001 |     5138 |     15850 |           32.42 |
-|   Register              |    <0.001 |     2803 |    126800 |            2.21 |
-|   F7/F8 Muxes           |    <0.001 |      251 |     63400 |            0.40 |
-|   LUT as Shift Register |    <0.001 |       36 |     19000 |            0.19 |
-|   Others                |     0.000 |       28 |       --- |             --- |
-| Signals                 |     0.002 |    31099 |       --- |             --- |
-| I/O                     |    <0.001 |       35 |       210 |           16.67 |
-| Static Power            |     0.097 |          |           |                 |
-| Total                   |     0.101 |          |           |                 |
-+-------------------------+-----------+----------+-----------+-----------------+
++--------------------------+-----------+----------+-----------+-----------------+
+| On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
++--------------------------+-----------+----------+-----------+-----------------+
+| Clocks                   |    <0.001 |        4 |       --- |             --- |
+| Slice Logic              |    <0.001 |    21137 |       --- |             --- |
+|   LUT as Logic           |    <0.001 |     9655 |     63400 |           15.23 |
+|   CARRY4                 |    <0.001 |     2165 |     15850 |           13.66 |
+|   Register               |    <0.001 |     5038 |    126800 |            3.97 |
+|   F7/F8 Muxes            |    <0.001 |      397 |     63400 |            0.63 |
+|   LUT as Distributed RAM |    <0.001 |       24 |     19000 |            0.13 |
+|   LUT as Shift Register  |    <0.001 |       40 |     19000 |            0.21 |
+|   Others                 |     0.000 |       28 |       --- |             --- |
+| Signals                  |    <0.001 |    13239 |       --- |             --- |
+| I/O                      |    <0.001 |       35 |       210 |           16.67 |
+| Static Power             |     0.097 |          |           |                 |
+| Total                    |     0.099 |          |           |                 |
++--------------------------+-----------+----------+-----------+-----------------+
 
 
 1.2 Power Supply Summary
@@ -73,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.019 |       0.004 |      0.015 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.016 |       0.001 |      0.015 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.018 |       0.000 |      0.018 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.004 |       0.000 |      0.004 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -143,10 +144,5 @@ Table of Contents
 +-------------------------+-----------+
 | Name                    | Power (W) |
 +-------------------------+-----------+
-| snn_ecg_v2_nexys_a7_top |     0.004 |
-|   u_dut                 |     0.003 |
-|     u_snapshot          |     0.002 |
-|       u_class           |     0.002 |
+| snn_ecg_v2_nexys_a7_top |     0.001 |
 +-------------------------+-----------+
-
-

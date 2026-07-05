@@ -64,6 +64,7 @@ set rtl_files [list \\
 ]
 
 add_files -fileset sources_1 $rtl_files
+set_property include_dirs [list "$repo_dir/rtl"] [current_fileset]
 add_files -fileset constrs_1 "constraints/nexys_a7_snn_ecg_v2.xdc"
 set_property top snn_ecg_v2_nexys_a7_top [current_fileset]
 update_compile_order -fileset sources_1

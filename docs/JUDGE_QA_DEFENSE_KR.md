@@ -9,7 +9,7 @@ true raw analog recovery가 아니다. 공개 ECG dataset은 이미 digitized re
 
 ## Q3. 임상적으로 유효한 진단기인가?
 
-아니다. 본 프로젝트는 clinical validation이 아니라 FPGA/VLSI engineering prototype이다. 목표는 ECG classification workload를 streaming RTL accelerator IP로 구현하고 검증하는 것이다.
+아니다. 본 프로젝트는 의료 유효성 검증이 아니라 FPGA/VLSI engineering prototype이다. 목표는 ECG classification workload를 streaming RTL accelerator IP로 구현하고 검증하는 것이다.
 
 ## Q4. 왜 Accelerator IP Core인가?
 
@@ -25,6 +25,6 @@ workload scale, HBM, 대형 accelerator optimization, 엄격한 baseline speedup
 
 ## Q7. 실제 board에서 돌렸나?
 
-현재 evidence는 bitstream programming, MicroBlaze smoke bit/XSA, XSDB MMIO smoke, Vitis-built ELF, UART bare-metal PASS transcript, 그리고 test NSR case 0 full-record board replay PASS transcript 수준이다. 전체 test split board replay나 physical AFE/ADC replay는 아직 TODO이다. 없는 것을 완료됐다고 말하지 않는다.
+현재 locked model evidence는 Python recheck, standalone Final Membrane XSim mismatch 0, Vivado bitstream/resource/timing, AXI/IP-XACT packaging, MicroBlaze full-record replay bitstream/XSA/ELF build 수준이다. actual locked UART full-record board replay transcript와 전체 test split board replay는 아직 TODO이다. 없는 것을 완료됐다고 말하지 않는다.
 
 ## Q8. 88.89%가 최종 성능인가?

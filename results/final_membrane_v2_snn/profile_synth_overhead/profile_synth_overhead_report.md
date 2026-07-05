@@ -4,8 +4,8 @@ Top: `snn_ecg_30min_final_top` out-of-context, part `xc7a100tcsg324-1`, 10 ns cl
 
 | PROFILE_EN | LUT | FF | BRAM tile | DSP | Setup WNS ns | Hold WHS ns |
 |---:|---:|---:|---:|---:|---:|---:|
-| 0 | 10020 | 5300 | 0 | 0 | 0.881 | 0.19 |
-| 1 | 10062 | 6008 | 0 | 0 | 0.881 | 0.19 |
+| 0 | 9863 | 5061 | 0 | 0 | 0.471 | 0.19 |
+| 1 | 9905 | 5769 | 0 | 0 | 0.471 | 0.19 |
 
 Delta `PROFILE_EN=1 - PROFILE_EN=0`:
 
@@ -22,12 +22,12 @@ Delta `PROFILE_EN=1 - PROFILE_EN=0`:
 
 | Instance | Module | LUT | FF |
 |---|---|---:|---:|
-| `snn_ecg_30min_final_top` | `(top)` | 10020 | 5300 |
+| `snn_ecg_30min_final_top` | `(top)` | 9863 | 5061 |
 | `u_snapshot` | `snn_ecg_3feat_top` | 8167 | 3551 |
 | `u_class` | `class_score_neurons` | 6814 | 2691 |
-| `u_final` | `final_membrane_layer` | 1495 | 1340 |
+| `u_final` | `final_membrane_layer` | 1329 | 1037 |
 | `u_qrs_maf` | `qrs_maf_neuron` | 407 | 349 |
-| `(snn_ecg_30min_final_top)` | `(top)` | 358 | 409 |
+| `(snn_ecg_30min_final_top)` | `(top)` | 367 | 473 |
 | `u_event_encoder` | `ecg_event_encoder_adaptive` | 330 | 237 |
 | `u_pnn` | `pnn_rhythm_predictor` | 155 | 77 |
 | `u_rbbb_qrs_delay` | `rbbb_qrs_delay_bank` | 155 | 83 |
@@ -39,16 +39,15 @@ Delta `PROFILE_EN=1 - PROFILE_EN=0`:
 
 | Instance | Module | LUT | FF |
 |---|---|---:|---:|
-| `snn_ecg_30min_final_top` | `(top)` | 10062 | 6008 |
+| `snn_ecg_30min_final_top` | `(top)` | 9905 | 5769 |
 | `u_snapshot` | `snn_ecg_3feat_top` | 8167 | 3551 |
 | `u_class` | `class_score_neurons` | 6814 | 2691 |
-| `u_final` | `final_membrane_layer` | 1495 | 1340 |
+| `u_final` | `final_membrane_layer` | 1329 | 1037 |
+| `(snn_ecg_30min_final_top)` | `(top)` | 409 | 1181 |
 | `u_qrs_maf` | `qrs_maf_neuron` | 407 | 349 |
-| `(snn_ecg_30min_final_top)` | `(top)` | 400 | 1117 |
 | `u_event_encoder` | `ecg_event_encoder_adaptive` | 330 | 237 |
 | `u_pnn` | `pnn_rhythm_predictor` | 155 | 77 |
 | `u_rbbb_qrs_delay` | `rbbb_qrs_delay_bank` | 155 | 83 |
 | `u_dscr` | `dscr_spike_counter` | 95 | 29 |
 | `u_ectopic` | `ectopic_pair_neuron` | 69 | 16 |
 | `u_ram` | `ram_peak_accumulator` | 43 | 24 |
-

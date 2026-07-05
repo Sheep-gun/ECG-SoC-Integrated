@@ -34,8 +34,8 @@ python tools\collect_vivado_metrics.py
 | total cycles / chunk | 1,800,480 |
 | cycles/sample total | 1.000267 |
 | AXI OOC WNS @10ns | 0.081 ns |
-| board top LUT/FF/BRAM/DSP | 21002 / 2803 / 0 / 0 |
-| Vivado estimated total power | 0.101 W |
+| locked pure RTL LUT/FF/BRAM/DSP | 9719 / 5038 / 0 / 0 |
+| Vivado estimated total power | 0.099 W |
 
 Vivado power는 post-implementation estimate이며 실제 보드 전류 측정값이 아니다.
 

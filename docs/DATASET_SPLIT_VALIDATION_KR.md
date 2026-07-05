@@ -29,7 +29,7 @@
 ```text
 strict train records
 -> candidate final membrane parameter grid 평가
--> ChatGPT 5.5 Pro 구조 제안 반영
+-> ChatGPT 5.5 Pro 구조 제안 참고(final_test record/result 제외)
 -> 3,000,000 structural-grid candidate 평가
 -> validation split으로 최종 후보 선택
 -> selected params lock

@@ -57,3 +57,14 @@
 | 최종 locked parameters | 포함 |
 | 최종 test result | 포함 |
 | 최종 채택 외 후보 / 비최종 split / 중간 산출물 | 제외 |
+
+## 7. RTL/Vivado 반영 상태
+
+| 항목 | 결과 |
+|---|---|
+| Python source of truth | `configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json` |
+| Generated RTL include | `rtl/strict_recordwise_locked_params.vh` |
+| RTL implementation | `rtl/final_membrane_layer.v` |
+| Standalone Final Membrane XSim | final_test 36 cases, final_pred mismatch 0, final_mem mismatch 0 |
+| Vivado locked pure RTL | LUT/FF/BRAM/DSP 9719/5038/0/0, WNS 8.184 ns |
+| Vitis/MicroBlaze board flow | bitstream/XSA/ELF rebuilt, actual locked UART replay pending |

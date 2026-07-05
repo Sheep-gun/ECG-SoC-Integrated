@@ -41,17 +41,17 @@ AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerato
 | Strict record-wise dataset | seed 20260808, source/physical overlap 0, class별 train/val/test 17/8/9 chunks |
 | Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
 | Strict final_test evaluation count | 1 |
-| Board full-record replay integration | test NSR case 0, 1,800,000 samples, exact match PASS |
-| Vivado LUT / FF / BRAM / DSP | 21002 / 2803 / 0 / 0 |
-| Vivado estimated total on-chip power | 0.101 W |
+| Locked Vitis/MicroBlaze board flow | bitstream/XSA/ELF rebuilt, actual locked UART full-record replay pending |
+| Locked pure RTL Vivado LUT / FF / BRAM / DSP | 9719 / 5038 / 0 / 0 |
+| Locked Vivado estimated total on-chip power | 0.099 W |
 
 ### 제출 직전 Executive Summary
 
 본 프로젝트는 ECG 4-class biomedical streaming accelerator IP이다. 입력은 공개 ECG dataset의 digitized record를 `code / 200000` 기준 analog-equivalent `vin`으로 재구성하고, HPF / IA gain x201 / 60 Hz notch / LPF 150 Hz / 12-bit ADC quantization으로 구성된 AFE+ADC XMODEL을 통과시킨 signed 12-bit stream이다.
 
-디지털 IP는 event/spike evidence extraction, 60초 snapshot, 30분 final membrane accumulation, WTA decision으로 구성된다. Python golden, XSim RTL replay, Vivado timing/resource/power estimate, AXI/IP-XACT packaging, Vitis/MicroBlaze board replay까지 engineering validation을 수행했다.
+디지털 IP는 event/spike evidence extraction, 60초 snapshot, 30분 final membrane accumulation, WTA decision으로 구성된다. Python golden, locked Final Membrane XSim, Vivado timing/resource/power estimate, AXI/IP-XACT packaging, Vitis/MicroBlaze bitstream/XSA/ELF build까지 engineering validation을 수행했다. 실제 locked full-record UART board replay transcript는 추가 확보가 필요하다.
 
-다만 본 결과는 실제 전극 기반 raw analog ECG acquisition, physical AFE PCB 측정, ADC silicon measurement, Virtuoso post-layout 검증, clinical validation을 의미하지 않는다. 또한 32/36 = 88.89%는 chunk-level functional benchmark이고, strict record-wise 최종 성능은 locked Final Membrane 기준 final_test 29/36 = 80.56%로 분리해 보고한다.
+다만 본 결과는 실제 전극 기반 raw ECG acquisition, physical AFE PCB 측정, ADC silicon measurement, Virtuoso post-layout 검증, 의료 유효성 검증을 의미하지 않는다. 또한 32/36 = 88.89%는 chunk-level functional benchmark이고, strict record-wise 최종 성능은 locked Final Membrane 기준 final_test 29/36 = 80.56%로 분리해 보고한다.
 
 ### 최종 System Flow
 
@@ -1097,8 +1097,8 @@ results/final_membrane_v2_snn/vivado_snn_ecg_v2/bitstream/snn_ecg_v2_nexys_a7_to
 
 | Resource | Used | Available | Utilization |
 |---|---:|---:|---:|
-| LUT | 21002 | 63400 | 33.13% |
-| FF | 2803 | 126800 | 2.21% |
+| LUT | 9719 | 63400 | 15.33% |
+| FF | 5038 | 126800 | 3.97% |
 | BRAM | 0 | 135 | 0.00% |
 | DSP | 0 | 240 | 0.00% |
 | Bonded IOB | 35 | 210 | 16.67% |
@@ -1108,8 +1108,8 @@ Vivado power estimate:
 
 | Power | W |
 |---|---:|
-| Total on-chip | 0.101 |
-| Dynamic | 0.004 |
+| Total on-chip | 0.099 |
+| Dynamic | 0.001 |
 | Static | 0.097 |
 
 Timing:
@@ -1118,7 +1118,7 @@ Timing:
 |---|---:|
 | sys_clk_pin | 100 MHz |
 | core_clk_1mhz | 1 MHz |
-| WNS | 7.873 ns |
+| WNS | 8.184 ns |
 | TNS | 0.000 ns |
 | WHS | 0.032 ns |
 | THS | 0.000 ns |
@@ -1144,8 +1144,8 @@ FPGA board programming:
 1. DSP 0개: multiplier 기반 dense classifier가 아님을 보여준다.
 2. BRAM 0개: final readout과 feature/counter path가 register/LUT 중심임을 보여준다.
 3. Dynamic power 0.004 W: datapath switching 추정 전력은 낮다.
-4. Total power 0.101 W는 Vivado post-implementation 추정값이며 실제 보드 전류 측정값은 아니다.
-5. 보드에는 bitstream이 정상적으로 올라갔고, Vitis/MicroBlaze + UART chunk-ACK full-record replay로 test NSR case 0의 1,800,000 samples를 실제 board에서 처리했다. board final_pred/final_mem은 Python/XSim expected와 exact match했다. 다만 전체 test split 정확도는 XSim dataset replay 기준이며, board full-record replay는 현재 1-case integration evidence로 제한한다.
+4. Total power 0.099 W는 Vivado post-implementation 추정값이며 실제 보드 전류 측정값은 아니다.
+5. Locked model 기준 MicroBlaze full-record replay bitstream/XSA/ELF는 새로 생성했다. 다만 actual UART full-record replay transcript와 expected-vs-board CSV는 아직 생성하지 않았으므로 board PASS로 보고하지 않는다.
 
 ## 12. 탐색 구조에서 최종 구조로의 정리
 
@@ -1272,15 +1272,15 @@ Strict final_test confusion matrix:
 
 | 항목 | 결과 |
 |---|---:|
-| Board LUT / FF / BRAM / DSP | 21002 / 2803 / 0 / 0 |
-| Board WNS | 7.873 ns |
-| Vivado estimated power | 0.101 W |
+| Locked pure RTL LUT / FF / BRAM / DSP | 9719 / 5038 / 0 / 0 |
+| Locked pure RTL WNS | 8.184 ns |
+| Locked Vivado estimated power | 0.099 W |
 | AXI OOC LUT / FF / BRAM / DSP | 10773 / 6931 / 0 / 0 |
 | AXI OOC WNS @10 ns | 0.081 ns |
 | MicroBlaze smoke LUT / FF / BRAM / DSP | 12650 / 8746 / 16 / 3 |
 | MicroBlaze smoke WNS | 0.185 ns |
 
-AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `component.xml` 및 `xgui`로 확인된다. MicroBlaze smoke system은 bit/XSA, XSDB MMIO transcript, Vitis-built ELF, UART PASS transcript까지 확인했다. Vitis MicroBlaze + UART chunk-ACK full-record replay는 test NSR case 0의 1,800,000 samples에 대해 Python/XSim expected-vs-board exact match를 확인한 board-level integration evidence이다.
+AXI/IP-XACT packaging 산출물과 feeder IP 산출물은 `ip_repo/` 아래 `component.xml` 및 `xgui`로 확인된다. Locked model 기준 MicroBlaze full-record replay system은 bit/XSA/ELF까지 다시 생성했고 timing을 만족했다. 실제 locked UART full-record replay transcript와 expected-vs-board CSV는 아직 없으므로 최종 board replay PASS로 쓰지 않는다.
 
 ### 14.4 AFE+ADC XMODEL 산출물
 
@@ -1332,7 +1332,7 @@ SNN-inspired hierarchical ECG classifier이다.
 
 최종 포지셔닝:
 
-> 본 프로젝트는 실제 전극 기반 의료기기 검증이 아니라, AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 생성한 signed 12-bit stream을 실제 RTL/IP에 입력하여 long-record ECG 4-class classification을 수행한다. 디지털 IP는 Python golden, XSim, Vivado implementation, AXI/IP packaging, Vitis/MicroBlaze smoke, 1-case full-record board replay를 통해 engineering validation을 수행하였다.
+> 본 프로젝트는 실제 전극 기반 의료기기 검증이 아니라, AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 생성한 signed 12-bit stream을 실제 RTL/IP에 입력하여 long-record ECG 4-class classification을 수행한다. 디지털 IP는 Python golden, locked Final Membrane XSim, Vivado implementation, AXI/IP packaging, Vitis/MicroBlaze bitstream/XSA/ELF build를 통해 engineering validation을 수행했다. 실제 locked full-record board replay는 다음 검증 단계이다.
 
 ## 17. 참고문헌 및 데이터 출처
 

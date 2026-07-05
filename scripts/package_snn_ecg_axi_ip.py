@@ -55,6 +55,7 @@ def write_tcl() -> Path:
     rtl_files.extend(REPO / "rtl" / "core" / src for src in CORE_SOURCES)
     rtl_files.extend(
         [
+            REPO / "rtl" / "strict_recordwise_locked_params.vh",
             REPO / "rtl" / "final_membrane_layer.v",
             REPO / "rtl" / "snn_ecg_30min_final_top.v",
             REPO / "rtl" / "axi" / "snn_ecg_axi_lite_stream_top.v",
@@ -104,6 +105,11 @@ set sim_files [list \\
 ]
 
 add_files -fileset sources_1 -norecurse $rtl_files
+set_property include_dirs [list "$repo_dir/rtl"] [current_fileset]
+set locked_param_header [get_files -quiet "$repo_dir/rtl/strict_recordwise_locked_params.vh"]
+if {{[llength $locked_param_header] > 0}} {{
+    set_property file_type {{Verilog Header}} $locked_param_header
+}}
 set_property top {TOP} [current_fileset]
 update_compile_order -fileset sources_1
 

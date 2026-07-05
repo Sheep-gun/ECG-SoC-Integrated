@@ -22,19 +22,19 @@
   "xsa_exists": true,
   "timing_constraints_met": true,
   "timing": {
-    "setup_worst_slack_ns": 0.192,
+    "setup_worst_slack_ns": 0.294,
     "setup_total_violation_ns": 0.0,
     "setup_failing_endpoints": 0,
-    "hold_worst_slack_ns": 0.026,
+    "hold_worst_slack_ns": 0.055,
     "hold_total_violation_ns": 0.0,
     "hold_failing_endpoints": 0
   },
   "check_timing_clean_markers": true,
   "cdc_clean_markers": true,
   "utilization": {
-    "slice_lut": "12638",
-    "slice_reg": "8746",
-    "ff": "8745",
+    "slice_lut": "12485",
+    "slice_reg": "8480",
+    "ff": "8479",
     "bram_tile": "16",
     "dsp": "3"
   },
@@ -51,28 +51,5 @@
     "ip_status": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\board_replay\\microblaze_full_replay\\reports\\system_ip_status.rpt"
   },
   "baremetal_elf": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\board_replay\\microblaze_full_replay\\snn_ecg_mb_full_replay_app.elf",
-  "baremetal_elf_exists": true,
-  "last_full_record_replay": {
-    "case_name": "test_case0_nsr",
-    "transcript": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\transcripts\\test_case0_nsr_uart_full_replay.txt",
-    "comparison": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\comparisons\\test_case0_nsr_expected_vs_board.csv",
-    "summary": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\board_replay\\comparisons\\test_case0_nsr_summary.md",
-    "board_internal_pass": true,
-    "expected_vs_board_pass": true,
-    "samples_received": 1800000,
-    "samples_sent_to_ip": 1800000,
-    "samples_accepted": 1800000,
-    "samples_consumed": 1800000,
-    "snapshot_count": 30,
-    "decision_count": 1,
-    "final_pred": 0,
-    "final_mem": {
-      "NSR": 31,
-      "CHF": 0,
-      "ARR": 1,
-      "AFF": 0
-    },
-    "snn_error": 0,
-    "feeder_error": 0
-  }
+  "baremetal_elf_exists": true
 }

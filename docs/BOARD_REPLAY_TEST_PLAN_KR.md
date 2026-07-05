@@ -59,18 +59,19 @@ python tools\board_replay\send_full_record_uart.py `
 | final_pred | 0 |
 | final_mem NSR/CHF/ARR/AFF | 31 / 0 / 1 / 0 |
 | snn_error / feeder_error | 0 / 0 |
-| board marker | `SNN_ECG_FULL_REPLAY_BOARD_PASS` |
-| expected-vs-board | PASS |
+| board marker | legacy `SNN_ECG_FULL_REPLAY_BOARD_PASS`, not locked result |
+| expected-vs-board | legacy PASS, locked comparison pending |
 
 비교 산출물:
 
-- `reports/board_replay/comparisons/test_case0_nsr_expected_vs_board.csv`
+- legacy: `reports/board_replay/comparisons/test_case0_nsr_expected_vs_board.csv`
+- locked target: `reports/board_replay/comparisons/locked_model_expected_vs_board.csv`
 - `reports/board_replay/comparisons/test_case0_nsr_summary.md`
 - `reports/board_replay/comparisons/test_case0_nsr_expected_result.json`
 
 ## 5. 남은 검증 계획
 
-현재 full replay 완료 범위는 test NSR case 0 한 건이다. 다음 단계는 같은 flow를 여러 class와 여러 split에 반복하는 것이다.
+현재 locked model 기준 full replay 완료 범위는 bitstream/XSA/ELF build까지이다. actual UART full-record replay transcript와 expected-vs-board comparison은 새 locked bitstream으로 다시 생성해야 한다.
 
 우선순위:
 

@@ -1,15 +1,20 @@
 `timescale 1ns / 1ps
 
-// SNN-style 30-minute final membrane readout for the 60s snapshot readout.
+// Locked strict record-wise 30-minute final membrane readout.
+//
+// Candidate:
+//   structural_guarded_silent_aff_1008710
+//
+// Python source of truth:
+//   configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json
 //
 // Structure:
-//   60s snapshot pred spike -> pred_count_* membranes
-//   60s feature evidence -> auxiliary evidence-neuron membranes
-//   comparator gates -> excitatory/inhibitory signed stimuli into class membranes
-//   final WTA -> 30-minute chunk class
+//   60s snapshot class spikes and evidence counters
+//   -> base SNN final membrane candidate balanced_0202881
+//   -> structural guard/rescue/silent-AFF overlay
+//   -> final WTA with strict ">" tie-break order NSR, CHF, ARR, AFF.
 //
-// Candidate frozen as internal engineering baseline:
-//   arr_focus_0042452 + margin_evidence_0038974
+// The module interface is unchanged from the previous Final Membrane layer.
 module final_membrane_layer(
     input clk,
     input rst,
@@ -51,28 +56,25 @@ module final_membrane_layer(
     output reg signed [31:0] final_mem_aff
 );
 
+    `include "strict_recordwise_locked_params.vh"
+
     localparam [1:0] CLS_NSR = 2'd0;
     localparam [1:0] CLS_CHF = 2'd1;
     localparam [1:0] CLS_ARR = 2'd2;
     localparam [1:0] CLS_AFF = 2'd3;
 
-    localparam [3:0] FM_IDLE      = 4'd0;
-    localparam [3:0] FM_BASE      = 4'd1;
-    localparam [3:0] FM_LOCAL     = 4'd2;
-    localparam [3:0] FM_LOCAL_WTA = 4'd3;
-    localparam [3:0] FM_POST      = 4'd4;
-    localparam [3:0] FM_POST_PAIR = 4'd5;
-    localparam [3:0] FM_POST_WTA  = 4'd6;
-    localparam [3:0] FM_FINAL     = 4'd7;
-    localparam [3:0] FM_FINAL_WTA = 4'd8;
-    localparam [3:0] FM_LOCAL_PAIR = 4'd9;
-    localparam [3:0] FM_FINAL_PAIR = 4'd10;
+    localparam [2:0] FM_IDLE       = 3'd0;
+    localparam [2:0] FM_BASE       = 3'd1;
+    localparam [2:0] FM_BASE_APPLY = 3'd2;
+    localparam [2:0] FM_STRUCT     = 3'd3;
+    localparam [2:0] FM_WTA        = 3'd4;
 
     reg [5:0] pred_count_nsr;
     reg [5:0] pred_count_chf;
     reg [5:0] pred_count_arr;
     reg [5:0] pred_count_aff;
 
+    reg [31:0] sum_beat;
     reg [31:0] sum_pnn_mismatch;
     reg [31:0] sum_ectopic_pair;
     reg [31:0] sum_qrs_maf;
@@ -83,30 +85,56 @@ module final_membrane_layer(
     reg [31:0] sum_morphology;
     reg [31:0] sum_rdm_valid;
     reg [31:0] sum_rdm_code;
+    reg [31:0] sum_ram_code;
 
-    reg [3:0] final_pipe_stage;
+    reg [2:0] final_pipe_stage;
     reg final_pipe_chunk;
 
-    reg [5:0] dec_count_nsr;
-    reg [5:0] dec_count_chf;
-    reg [5:0] dec_count_arr;
-    reg [5:0] dec_count_aff;
-    reg [31:0] dec_pnn_mismatch;
-    reg [31:0] dec_ectopic_pair;
-    reg [31:0] dec_qrs_maf;
-    reg [31:0] dec_rbbb_like;
-    reg [31:0] dec_pre_qrs;
-    reg [31:0] dec_abnormal;
-    reg [31:0] dec_rhythm;
-    reg [31:0] dec_morphology;
-    reg [31:0] dec_rdm_valid;
-    reg [31:0] dec_rdm_code;
+    (* keep = "true", dont_touch = "true" *) reg [5:0] dec_count_nsr;
+    (* keep = "true", dont_touch = "true" *) reg [5:0] dec_count_chf;
+    (* keep = "true", dont_touch = "true" *) reg [5:0] dec_count_arr;
+    (* keep = "true", dont_touch = "true" *) reg [5:0] dec_count_aff;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_beat;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_pnn_mismatch;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_ectopic_pair;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_qrs_maf;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_rbbb_like;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_pre_qrs;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_abnormal;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_rhythm;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_morphology;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_rdm_valid;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_rdm_code;
+    (* keep = "true", dont_touch = "true" *) reg [31:0] dec_ram_code;
+
+    reg signed [31:0] base_mem_nsr;
+    reg signed [31:0] base_mem_chf;
+    reg signed [31:0] base_mem_arr;
+    reg signed [31:0] base_mem_aff;
+
+    reg signed [31:0] base_seed_nsr;
+    reg signed [31:0] base_seed_chf;
+    reg signed [31:0] base_seed_arr;
+    reg signed [31:0] base_seed_aff;
+    reg gate_base_aff_low_r;
+    reg gate_base_nsr_from_chf_r;
+    reg gate_base_chf_from_aff_r;
+    reg gate_base_aff_r;
+    reg gate_base_arr_r;
+    reg gate_base_aff_rescue_r;
+    reg gate_base_arr_low_r;
+
+    reg signed [31:0] struct_mem_nsr;
+    reg signed [31:0] struct_mem_chf;
+    reg signed [31:0] struct_mem_arr;
+    reg signed [31:0] struct_mem_aff;
 
     wire [5:0] count_nsr_next = pred_count_nsr + ((pred_valid && (pred_class == CLS_NSR)) ? 6'd1 : 6'd0);
     wire [5:0] count_chf_next = pred_count_chf + ((pred_valid && (pred_class == CLS_CHF)) ? 6'd1 : 6'd0);
     wire [5:0] count_arr_next = pred_count_arr + ((pred_valid && (pred_class == CLS_ARR)) ? 6'd1 : 6'd0);
     wire [5:0] count_aff_next = pred_count_aff + ((pred_valid && (pred_class == CLS_AFF)) ? 6'd1 : 6'd0);
 
+    wire [31:0] beat_next = sum_beat + beat_count;
     wire [31:0] pnn_mismatch_next = sum_pnn_mismatch + pnn_mismatch_count;
     wire [31:0] ectopic_pair_next = sum_ectopic_pair + ectopic_pair_count;
     wire [31:0] qrs_maf_next = sum_qrs_maf + qrs_maf_count;
@@ -117,6 +145,7 @@ module final_membrane_layer(
     wire [31:0] morphology_next = sum_morphology + morphology_evidence_count;
     wire [31:0] rdm_valid_next = sum_rdm_valid + rdm_valid_count;
     wire [31:0] rdm_code_next = sum_rdm_code + rdm_code_sum;
+    wire [31:0] ram_code_next = sum_ram_code + ram_code_sum;
 
     function [1:0] argmax_count4;
         input [5:0] a;
@@ -148,351 +177,214 @@ module final_membrane_layer(
         end
     endfunction
 
-    function signed [31:0] margin_score4;
-        input signed [31:0] a;
-        input signed [31:0] b;
-        input signed [31:0] c;
-        input signed [31:0] d;
-        reg signed [31:0] best;
-        reg signed [31:0] second;
-        begin
-            best = a;
-            second = -32'sd2147483647;
-            if (b > best) begin second = best; best = b; end else if (b > second) begin second = b; end
-            if (c > best) begin second = best; best = c; end else if (c > second) begin second = c; end
-            if (d > best) begin second = best; best = d; end else if (d > second) begin second = d; end
-            margin_score4 = best - second;
-        end
-    endfunction
+    wire [1:0] base_pred_comb = argmax_count4(dec_count_nsr, dec_count_chf, dec_count_arr, dec_count_aff);
+    wire base_is_nsr = (base_pred_comb == CLS_NSR);
+    wire base_is_chf = (base_pred_comb == CLS_CHF);
+    wire base_is_arr = (base_pred_comb == CLS_ARR);
+    wire base_is_aff = (base_pred_comb == CLS_AFF);
 
-    reg [1:0] s1_base_pred;
-    reg signed [31:0] s1_nsr_arr_margin;
-    reg signed [31:0] s1_chf_aff_margin;
-    reg signed [31:0] s1_arr_aff_margin;
-    reg signed [31:0] s1_base_nsr;
-    reg signed [31:0] s1_base_chf;
-    reg signed [31:0] s1_base_arr;
-    reg signed [31:0] s1_base_aff;
-    reg [35:0] s1_rdm_code_ext;
-    reg [35:0] s1_rdm_valid_times10;
+    wire signed [31:0] dec_count_nsr_s = $signed({26'd0, dec_count_nsr});
+    wire signed [31:0] dec_count_chf_s = $signed({26'd0, dec_count_chf});
+    wire signed [31:0] dec_count_arr_s = $signed({26'd0, dec_count_arr});
+    wire signed [31:0] dec_count_aff_s = $signed({26'd0, dec_count_aff});
+    wire signed [31:0] dec_nsr_minus_arr_s = dec_count_nsr_s - dec_count_arr_s;
+    wire signed [31:0] dec_chf_minus_aff_s = dec_count_chf_s - dec_count_aff_s;
 
-    reg [1:0] p1_base_pred;
-    reg signed [31:0] p1_nsr_arr_margin;
-    reg signed [31:0] p1_chf_aff_margin;
-    reg signed [31:0] p1_arr_aff_margin;
-    reg signed [31:0] p1_base_nsr;
-    reg signed [31:0] p1_base_chf;
-    reg signed [31:0] p1_base_arr;
-    reg signed [31:0] p1_base_aff;
-    reg [35:0] p1_rdm_code_ext;
-    reg [35:0] p1_rdm_valid_times10;
+    wire [39:0] rdm_valid_ext = {8'd0, dec_rdm_valid};
+    wire [39:0] rdm_code_ext = {8'd0, dec_rdm_code};
+    wire [39:0] rdm_threshold_11 = (rdm_valid_ext << 3) + (rdm_valid_ext << 1) + rdm_valid_ext;
+    wire rdm_code_ge_base_aff_low = (dec_rdm_valid != 32'd0) && (rdm_code_ext >= rdm_threshold_11);
 
-    reg signed [31:0] s2_local_nsr;
-    reg signed [31:0] s2_local_chf;
-    reg signed [31:0] s2_local_arr;
-    reg signed [31:0] s2_local_aff;
-    reg s2_aff_low_rescue;
-    reg s2_nsr_from_chf_rescue;
-    reg s2_chf_from_aff_rescue;
-    reg s2_strong_chf;
-    reg s2_arr_rescue;
-    reg s2_arr_over_aff;
-    reg s2_aff_rescue;
-    reg s2_arr_low_rescue;
-    reg s2_arr_silent_rescue;
+    wire strong_nsr =
+        base_is_nsr &&
+        ((dec_count_nsr >= STRICT_RW_BASE_STRONG_NSR_COUNT_GE) ||
+         ((dec_nsr_minus_arr_s >= STRICT_RW_BASE_STRONG_NSR_MARGIN_GE) &&
+          (dec_morphology <= STRICT_RW_BASE_STRONG_NSR_MORPH_LE) &&
+          (dec_qrs_maf <= STRICT_RW_BASE_STRONG_NSR_QRS_LE)));
 
-    reg signed [31:0] p2_local_nsr;
-    reg signed [31:0] p2_local_chf;
-    reg signed [31:0] p2_local_arr;
-    reg signed [31:0] p2_local_aff;
-    reg [1:0] p2_local_pred;
-    reg signed [31:0] p2_nsr_chf_best_score;
-    reg signed [31:0] p2_arr_aff_best_score;
-    reg [1:0] p2_nsr_chf_best_class;
-    reg [1:0] p2_arr_aff_best_class;
+    wire strong_chf =
+        base_is_chf &&
+        ((dec_count_chf >= STRICT_RW_BASE_STRONG_CHF_COUNT_GE) ||
+         (dec_chf_minus_aff_s >= STRICT_RW_BASE_STRONG_CHF_MARGIN_GE));
 
-    reg signed [31:0] s3_post_nsr;
-    reg signed [31:0] s3_post_chf;
-    reg signed [31:0] s3_post_arr;
-    reg signed [31:0] s3_post_aff;
-    reg [1:0] s3_arr_focus_pred;
-    reg signed [31:0] s3_arr_focus_margin;
-    reg s3_arr_from_nsr;
-    reg s3_arr_from_chf;
-    reg s3_arr_from_aff;
-    reg signed [31:0] s3_nsr_chf_best_score;
-    reg signed [31:0] s3_nsr_chf_second_score;
-    reg signed [31:0] s3_arr_aff_best_score;
-    reg signed [31:0] s3_arr_aff_second_score;
-    reg [1:0] s3_nsr_chf_best_class;
-    reg [1:0] s3_arr_aff_best_class;
+    wire gate_base_aff_low =
+        (STRICT_RW_BASE_AFF_LOW_ENABLE != 0) &&
+        base_is_chf &&
+        (dec_abnormal <= STRICT_RW_BASE_AFF_LOW_ABN_LE) &&
+        (dec_morphology <= STRICT_RW_BASE_AFF_LOW_MORPH_LE) &&
+        (dec_rbbb_like <= STRICT_RW_BASE_AFF_LOW_RBBB_LE) &&
+        rdm_code_ge_base_aff_low &&
+        (dec_count_chf >= STRICT_RW_BASE_AFF_LOW_CHF_COUNT_GE);
 
-    reg signed [31:0] p3_post_nsr;
-    reg signed [31:0] p3_post_chf;
-    reg signed [31:0] p3_post_arr;
-    reg signed [31:0] p3_post_aff;
-    reg signed [31:0] p3_nsr_chf_best_score;
-    reg signed [31:0] p3_nsr_chf_second_score;
-    reg signed [31:0] p3_arr_aff_best_score;
-    reg signed [31:0] p3_arr_aff_second_score;
-    reg [1:0] p3_nsr_chf_best_class;
-    reg [1:0] p3_arr_aff_best_class;
-    reg [1:0] p3_arr_focus_pred;
-    reg signed [31:0] p3_arr_focus_margin;
+    wire gate_base_nsr_from_chf =
+        base_is_chf &&
+        (dec_count_nsr >= STRICT_RW_BASE_NSR_FROM_CHF_NSR_COUNT_GE) &&
+        (dec_abnormal <= STRICT_RW_BASE_NSR_FROM_CHF_ABN_LE) &&
+        (dec_qrs_maf <= STRICT_RW_BASE_NSR_FROM_CHF_QRS_LE) &&
+        (dec_rbbb_like <= STRICT_RW_BASE_NSR_FROM_CHF_RBBB_LE) &&
+        (dec_morphology <= STRICT_RW_BASE_NSR_FROM_CHF_MORPH_LE);
 
-    reg signed [31:0] s4_calc_nsr;
-    reg signed [31:0] s4_calc_chf;
-    reg signed [31:0] s4_calc_arr;
-    reg signed [31:0] s4_calc_aff;
-    reg s4_margin_evidence_rescue;
-    reg signed [31:0] p4_final_nsr;
-    reg signed [31:0] p4_final_chf;
-    reg signed [31:0] p4_final_arr;
-    reg signed [31:0] p4_final_aff;
-    reg signed [31:0] p4_nsr_chf_best_score;
-    reg signed [31:0] p4_arr_aff_best_score;
-    reg [1:0] p4_nsr_chf_best_class;
-    reg [1:0] p4_arr_aff_best_class;
+    wire gate_base_chf_from_aff =
+        base_is_aff &&
+        (dec_count_chf >= STRICT_RW_BASE_CHF_FROM_AFF_CHF_COUNT_GE) &&
+        (dec_morphology <= STRICT_RW_BASE_CHF_FROM_AFF_MORPH_LE) &&
+        (dec_qrs_maf <= STRICT_RW_BASE_CHF_FROM_AFF_QRS_LE) &&
+        (dec_rbbb_like <= STRICT_RW_BASE_CHF_FROM_AFF_RBBB_LE);
 
-    always @(*) begin
-        s1_base_pred = argmax_count4(dec_count_nsr, dec_count_chf, dec_count_arr, dec_count_aff);
-        s1_nsr_arr_margin = $signed({26'd0, dec_count_nsr}) - $signed({26'd0, dec_count_arr});
-        s1_chf_aff_margin = $signed({26'd0, dec_count_chf}) - $signed({26'd0, dec_count_aff});
-        s1_arr_aff_margin = $signed({26'd0, dec_count_arr}) - $signed({26'd0, dec_count_aff});
+    wire gate_base_aff =
+        (dec_count_arr < STRICT_RW_BASE_AFF_BLOCK_ARR_COUNT_GE) &&
+        (base_is_chf || base_is_arr) &&
+        (!strong_chf) &&
+        (dec_count_aff >= STRICT_RW_BASE_AFF_COUNT_GE) &&
+        (dec_chf_minus_aff_s <= STRICT_RW_BASE_AFF_CHF_MARGIN_LE) &&
+        (dec_rhythm >= STRICT_RW_BASE_AFF_RHYTHM_GE) &&
+        (dec_ectopic_pair >= STRICT_RW_BASE_AFF_ECP_GE) &&
+        (dec_ectopic_pair <= STRICT_RW_BASE_AFF_ECP_LE);
 
-        s1_base_nsr = $signed({26'd0, dec_count_nsr}) + 32'sd2;
-        s1_base_chf = $signed({26'd0, dec_count_chf});
-        s1_base_arr = $signed({26'd0, dec_count_arr});
-        s1_base_aff = $signed({26'd0, dec_count_aff});
+    wire gate_base_arr =
+        (!base_is_arr) &&
+        (!strong_nsr) &&
+        (dec_count_arr >= STRICT_RW_BASE_ARR_COUNT_GE) &&
+        (dec_count_aff <= STRICT_RW_BASE_ARR_AFF_COUNT_LE) &&
+        (dec_nsr_minus_arr_s <= STRICT_RW_BASE_ARR_NSR_MARGIN_LE) &&
+        (dec_morphology >= STRICT_RW_BASE_ARR_MORPH_GE) &&
+        (dec_qrs_maf >= STRICT_RW_BASE_ARR_QRS_GE) &&
+        (dec_rbbb_like >= STRICT_RW_BASE_ARR_RBBB_GE) &&
+        (dec_pre_qrs >= STRICT_RW_BASE_ARR_PRE_GE);
 
-        s1_rdm_code_ext = {4'd0, dec_rdm_code};
-        s1_rdm_valid_times10 = ({4'd0, dec_rdm_valid} << 3) + ({4'd0, dec_rdm_valid} << 1);
-    end
+    wire gate_base_aff_rescue_source_ok =
+        ((STRICT_RW_BASE_AFF_RESCUE_SOURCE_CHF != 0) && base_is_chf) ||
+        ((STRICT_RW_BASE_AFF_RESCUE_SOURCE_ARR != 0) && base_is_arr);
 
-    always @(*) begin
-        s2_local_nsr = p1_base_nsr;
-        s2_local_chf = p1_base_chf;
-        s2_local_arr = p1_base_arr;
-        s2_local_aff = p1_base_aff;
+    wire gate_base_aff_rescue =
+        (STRICT_RW_BASE_AFF_RESCUE_ENABLE != 0) &&
+        gate_base_aff_rescue_source_ok &&
+        (dec_count_arr < STRICT_RW_BASE_AFF_RESCUE_ARR_COUNT_LT) &&
+        (dec_count_aff >= STRICT_RW_BASE_AFF_RESCUE_COUNT_GE) &&
+        (dec_chf_minus_aff_s <= STRICT_RW_BASE_AFF_RESCUE_CHF_MARGIN_LE) &&
+        (dec_rhythm >= STRICT_RW_BASE_AFF_RESCUE_RHYTHM_GE) &&
+        (dec_ectopic_pair >= STRICT_RW_BASE_AFF_RESCUE_ECT_GE);
 
-        s2_aff_low_rescue = (p1_base_pred == CLS_CHF) &&
-                            (dec_abnormal <= 32'd50) &&
-                            (dec_morphology <= 32'd20) &&
-                            (dec_rbbb_like <= 32'd0) &&
-                            (((dec_rdm_valid > 32'd0) && (p1_rdm_code_ext >= p1_rdm_valid_times10)) ||
-                             ((dec_rdm_valid == 32'd0) && (dec_rdm_code == 32'd0) &&
-                              (dec_rhythm <= 32'd256) && (dec_qrs_maf <= 32'd8) && (dec_pre_qrs <= 32'd8))) &&
-                            (dec_count_chf >= 6'd18);
-        if (s2_aff_low_rescue) begin
-            s2_local_aff = s2_local_aff + 32'sd60;
-            s2_local_chf = s2_local_chf - 32'sd20;
-        end
+    wire gate_base_arr_low =
+        (STRICT_RW_BASE_ARR_LOW_ENABLE != 0) &&
+        (!base_is_arr) &&
+        (dec_count_arr >= STRICT_RW_BASE_ARR_LOW_COUNT_GE) &&
+        (dec_count_aff <= STRICT_RW_BASE_ARR_LOW_AFF_COUNT_LE) &&
+        (dec_pre_qrs >= STRICT_RW_BASE_ARR_LOW_PRE_GE) &&
+        (dec_qrs_maf >= STRICT_RW_BASE_ARR_LOW_QRS_GE) &&
+        (dec_rbbb_like >= STRICT_RW_BASE_ARR_LOW_RBBB_GE) &&
+        (dec_morphology >= STRICT_RW_BASE_ARR_LOW_MORPH_GE) &&
+        (dec_abnormal >= STRICT_RW_BASE_ARR_LOW_ABN_GE);
 
-        s2_nsr_from_chf_rescue = (p1_base_pred == CLS_CHF) &&
-                                 (dec_count_nsr >= 6'd3) &&
-                                 (dec_abnormal <= 32'd150) &&
-                                 (dec_qrs_maf <= 32'd64) &&
-                                 (dec_rbbb_like <= 32'd1) &&
-                                 (dec_morphology <= 32'd1500);
-        if (s2_nsr_from_chf_rescue) begin
-            s2_local_nsr = s2_local_nsr + 32'sd10;
-            s2_local_chf = s2_local_chf - 32'sd30;
-        end
+    wire signed [31:0] base_mem_nsr_comb =
+        base_seed_nsr +
+        (gate_base_nsr_from_chf_r ? STRICT_RW_BASE_NSR_FROM_CHF_BOOST : 32'sd0) -
+        (gate_base_arr_r ? STRICT_RW_BASE_ARR_INHIBIT_NSR : 32'sd0) -
+        (gate_base_arr_low_r ? STRICT_RW_BASE_ARR_LOW_INHIBIT_NSR : 32'sd0);
 
-        s2_chf_from_aff_rescue = (p1_base_pred == CLS_AFF) &&
-                                 (dec_count_chf >= 6'd5) &&
-                                 (dec_morphology <= 32'd100) &&
-                                 (dec_qrs_maf <= 32'd32) &&
-                                 (dec_rbbb_like <= 32'd2);
-        if (s2_chf_from_aff_rescue) begin
-            s2_local_chf = s2_local_chf + 32'sd20;
-            s2_local_aff = s2_local_aff - 32'sd10;
-        end
+    wire signed [31:0] base_mem_chf_comb =
+        base_seed_chf -
+        (gate_base_aff_low_r ? STRICT_RW_BASE_AFF_LOW_INHIBIT_CHF : 32'sd0) -
+        (gate_base_nsr_from_chf_r ? STRICT_RW_BASE_NSR_FROM_CHF_INHIBIT_CHF : 32'sd0) +
+        (gate_base_chf_from_aff_r ? STRICT_RW_BASE_CHF_FROM_AFF_BOOST : 32'sd0) -
+        (gate_base_aff_r ? STRICT_RW_BASE_AFF_INHIBIT_CHF : 32'sd0) -
+        (gate_base_arr_r ? STRICT_RW_BASE_ARR_INHIBIT_CHF : 32'sd0) -
+        (gate_base_aff_rescue_r ? STRICT_RW_BASE_AFF_RESCUE_INHIBIT_CHF : 32'sd0) -
+        (gate_base_arr_low_r ? STRICT_RW_BASE_ARR_LOW_INHIBIT_CHF : 32'sd0);
 
-        s2_strong_chf = (p1_base_pred == CLS_CHF) &&
-                        ((dec_count_chf >= 6'd30) || (p1_chf_aff_margin >= 32'sd24));
+    wire signed [31:0] base_mem_arr_comb =
+        base_seed_arr -
+        (gate_base_aff_r ? STRICT_RW_BASE_AFF_INHIBIT_ARR : 32'sd0) +
+        (gate_base_arr_r ? STRICT_RW_BASE_ARR_BOOST : 32'sd0) -
+        (gate_base_aff_rescue_r ? STRICT_RW_BASE_AFF_RESCUE_INHIBIT_ARR : 32'sd0) +
+        (gate_base_arr_low_r ? STRICT_RW_BASE_ARR_LOW_BOOST : 32'sd0);
 
-        s2_arr_rescue = ((p1_base_pred == CLS_NSR) || (p1_base_pred == CLS_CHF) || (p1_base_pred == CLS_AFF)) &&
-                        (dec_count_arr >= 6'd12) &&
-                        (dec_count_aff <= 6'd10) &&
-                        (p1_nsr_arr_margin <= 32'sd24) &&
-                        (dec_morphology >= 32'd180) &&
-                        (dec_qrs_maf >= 32'd40) &&
-                        (dec_rbbb_like >= 32'd8) &&
-                        (dec_pre_qrs >= 32'd1800);
-        if (s2_arr_rescue) begin
-            s2_local_arr = s2_local_arr + 32'sd50;
-            s2_local_nsr = s2_local_nsr - 32'sd30;
-            s2_local_chf = s2_local_chf - 32'sd10;
-            s2_local_aff = s2_local_aff - 32'sd5;
-        end
+    wire signed [31:0] base_mem_aff_comb =
+        base_seed_aff +
+        (gate_base_aff_low_r ? STRICT_RW_BASE_AFF_LOW_BOOST : 32'sd0) -
+        (gate_base_chf_from_aff_r ? STRICT_RW_BASE_CHF_FROM_AFF_INHIBIT_AFF : 32'sd0) +
+        (gate_base_aff_r ? STRICT_RW_BASE_AFF_BOOST : 32'sd0) -
+        (gate_base_arr_r ? STRICT_RW_BASE_ARR_INHIBIT_AFF : 32'sd0) +
+        (gate_base_aff_rescue_r ? STRICT_RW_BASE_AFF_RESCUE_BOOST : 32'sd0) -
+        (gate_base_arr_low_r ? STRICT_RW_BASE_ARR_LOW_INHIBIT_AFF : 32'sd0);
 
-        s2_arr_over_aff = (p1_base_pred == CLS_AFF) &&
-                          (dec_count_arr >= 6'd8) &&
-                          (dec_qrs_maf >= 32'd1000) &&
-                          (dec_morphology >= 32'd1500);
-        if (s2_arr_over_aff) begin
-            s2_local_arr = s2_local_arr + 32'sd20;
-            s2_local_aff = s2_local_aff - 32'sd10;
-        end
+    wire gate_struct_aff_persistence =
+        (dec_count_aff >= STRICT_RW_FINAL_AFF_CNT) &&
+        (dec_count_chf >= STRICT_RW_FINAL_AFF_CHF_CNT) &&
+        (dec_morphology <= STRICT_RW_FINAL_AFF_MORPH_LE) &&
+        (dec_rhythm >= STRICT_RW_FINAL_AFF_RHYTHM_GE) &&
+        (dec_qrs_maf <= STRICT_RW_FINAL_AFF_QRS_LE);
 
-        s2_aff_rescue = ((p1_base_pred == CLS_CHF) || (p1_base_pred == CLS_ARR)) &&
-                        !s2_strong_chf &&
-                        (dec_count_arr < 6'd15) &&
-                        (dec_count_aff >= 6'd6) &&
-                        (p1_chf_aff_margin <= 32'sd14) &&
-                        (dec_rhythm >= 32'd1800) &&
-                        (dec_ectopic_pair <= 32'd100);
-        if (s2_aff_rescue) begin
-            s2_local_aff = s2_local_aff + 32'sd25;
-            s2_local_chf = s2_local_chf - 32'sd15;
-        end
+    wire gate_struct_nsr_clean_chf =
+        (dec_count_nsr >= STRICT_RW_FINAL_NSR_CNT) &&
+        (dec_count_chf >= STRICT_RW_FINAL_NSR_CHF_CNT) &&
+        (dec_morphology <= STRICT_RW_FINAL_NSR_MORPH_LE) &&
+        (dec_abnormal <= STRICT_RW_FINAL_NSR_ABN_LE) &&
+        (dec_qrs_maf <= STRICT_RW_FINAL_NSR_QRS_LE) &&
+        (dec_ectopic_pair <= STRICT_RW_FINAL_NSR_ECT_LE);
 
-        if (s2_strong_chf) begin
-            s2_local_aff = s2_local_aff - 32'sd4;
-        end
+    wire gate_struct_arr_nsr_high =
+        (dec_count_arr >= STRICT_RW_FINAL_ARR_NSR_ARR_CNT) &&
+        (dec_qrs_maf <= STRICT_RW_FINAL_ARR_NSR_QRS_HIGH_LE) &&
+        (dec_rbbb_like <= STRICT_RW_FINAL_ARR_NSR_RBBB_HIGH_LE);
 
-        s2_arr_low_rescue = ((p1_base_pred == CLS_NSR) || (p1_base_pred == CLS_CHF) || (p1_base_pred == CLS_AFF)) &&
-                            (dec_count_arr >= 6'd4) &&
-                            (dec_count_aff <= 6'd3) &&
-                            (dec_pre_qrs >= 32'd3000) &&
-                            (dec_qrs_maf >= 32'd40) &&
-                            (dec_rbbb_like >= 32'd8) &&
-                            (dec_morphology >= 32'd350);
-        if (s2_arr_low_rescue) begin
-            s2_local_arr = s2_local_arr + 32'sd30;
-            s2_local_chf = s2_local_chf - 32'sd10;
-            s2_local_aff = s2_local_aff - 32'sd10;
-        end
+    wire gate_struct_arr_nsr_low =
+        (dec_count_arr <= STRICT_RW_FINAL_ARR_NSR_ARR_LOW_LE) &&
+        (dec_qrs_maf <= STRICT_RW_FINAL_ARR_NSR_QRS_LOW_LE) &&
+        (dec_ectopic_pair <= STRICT_RW_FINAL_ARR_NSR_ECT_LOW_LE) &&
+        (dec_rhythm <= STRICT_RW_FINAL_ARR_NSR_RHYTHM_LOW_LE);
 
-        s2_arr_silent_rescue = (p1_base_pred == CLS_NSR) &&
-                               (dec_count_nsr >= 6'd18) &&
-                               (dec_count_arr <= 6'd5) &&
-                               (dec_abnormal >= 32'd100) &&
-                               (dec_abnormal <= 32'd350) &&
-                               (dec_morphology >= 32'd1500) &&
-                               (dec_morphology <= 32'd6500) &&
-                               (dec_qrs_maf <= 32'd20) &&
-                               (dec_rbbb_like <= 32'd2) &&
-                               (dec_pnn_mismatch >= 32'd32) &&
-                               (dec_ectopic_pair >= 32'd8) &&
-                               (dec_rdm_code >= 32'd1500) &&
-                               (dec_rdm_code <= 32'd7000);
-        if (s2_arr_silent_rescue) begin
-            s2_local_arr = s2_local_arr + 32'sd30;
-            s2_local_nsr = s2_local_nsr - 32'sd50;
-        end
+    wire gate_struct_arr_over_nsr =
+        (dec_count_nsr >= STRICT_RW_FINAL_ARR_NSR_NSR_CNT) &&
+        (dec_morphology >= STRICT_RW_FINAL_ARR_NSR_MORPH_GE) &&
+        (dec_pre_qrs >= STRICT_RW_FINAL_ARR_NSR_PRE_GE) &&
+        (gate_struct_arr_nsr_high || gate_struct_arr_nsr_low);
 
-    end
+    wire gate_struct_arr_over_aff =
+        (dec_count_aff >= STRICT_RW_FINAL_ARR_AFF_AFF_CNT) &&
+        (dec_count_arr >= STRICT_RW_FINAL_ARR_AFF_ARR_CNT) &&
+        (dec_morphology >= STRICT_RW_FINAL_ARR_AFF_MORPH_GE) &&
+        (dec_ectopic_pair >= STRICT_RW_FINAL_ARR_AFF_ECT_GE) &&
+        (dec_qrs_maf <= STRICT_RW_FINAL_ARR_AFF_QRS_LE);
 
-    always @(*) begin
-        s3_post_nsr = p2_local_nsr;
-        s3_post_chf = p2_local_chf;
-        s3_post_arr = p2_local_arr;
-        s3_post_aff = p2_local_aff;
+    wire gate_struct_silent_aff =
+        (dec_count_chf >= STRICT_RW_SILENT_AFF_CHF_CNT_GE) &&
+        (dec_count_nsr <= STRICT_RW_SILENT_AFF_NSR_CNT_LE) &&
+        (dec_count_arr == STRICT_RW_SILENT_AFF_ARR_CNT_EQ) &&
+        (dec_count_aff == STRICT_RW_SILENT_AFF_AFF_CNT_EQ) &&
+        (dec_beat <= STRICT_RW_SILENT_AFF_BEAT_LE) &&
+        (dec_morphology <= STRICT_RW_SILENT_AFF_MORPH_LE) &&
+        (dec_rhythm <= STRICT_RW_SILENT_AFF_RHYTHM_LE) &&
+        (dec_abnormal <= STRICT_RW_SILENT_AFF_ABN_LE) &&
+        (dec_qrs_maf <= STRICT_RW_SILENT_AFF_QRS_LE) &&
+        (dec_ectopic_pair == STRICT_RW_SILENT_AFF_ECT_EQ) &&
+        (dec_ram_code == STRICT_RW_SILENT_AFF_RAM_EQ);
 
-        s3_arr_from_nsr = (p2_local_pred == CLS_NSR) &&
-                          (dec_count_nsr >= 6'd18) &&
-                          (dec_count_arr >= 6'd4) &&
-                          (dec_count_aff <= 6'd10) &&
-                          ((dec_count_nsr - dec_count_arr) <= 6'd30) &&
-                          (dec_morphology >= 32'd5500) &&
-                          (dec_rdm_code >= 32'd6500) &&
-                          (dec_pnn_mismatch >= 32'd64) &&
-                          (dec_ectopic_pair >= 32'd50) &&
-                          (dec_qrs_maf <= 32'd256) &&
-                          (dec_rbbb_like <= 32'd32);
-        if (s3_arr_from_nsr) begin
-            s3_post_arr = s3_post_arr + 32'sd16;
-            s3_post_nsr = s3_post_nsr - 32'sd12;
-            s3_post_aff = s3_post_aff - 32'sd4;
-        end
+    wire signed [31:0] struct_mem_nsr_comb =
+        base_mem_nsr +
+        (gate_struct_nsr_clean_chf ? STRICT_RW_FINAL_NSR_BOOST : 32'sd0) -
+        (gate_struct_arr_over_nsr ? STRICT_RW_FINAL_ARR_NSR_INH_NSR : 32'sd0);
 
-        s3_arr_from_chf = (p2_local_pred == CLS_CHF) &&
-                          (dec_count_arr >= 6'd9) &&
-                          (($signed({26'd0, dec_count_chf}) - $signed({26'd0, dec_count_arr})) <= 32'sd15) &&
-                          (dec_morphology >= 32'd650) &&
-                          (dec_qrs_maf >= 32'd64) &&
-                          (dec_rbbb_like >= 32'd12) &&
-                          (dec_rdm_code >= 32'd9500) &&
-                          (dec_ectopic_pair >= 32'd64);
-        if (s3_arr_from_chf) begin
-            s3_post_arr = s3_post_arr + 32'sd32;
-            s3_post_chf = s3_post_chf - 32'sd20;
-        end
+    wire signed [31:0] struct_mem_chf_comb =
+        base_mem_chf -
+        (gate_struct_aff_persistence ? STRICT_RW_FINAL_AFF_INH_CHF : 32'sd0) -
+        (gate_struct_nsr_clean_chf ? STRICT_RW_FINAL_NSR_INH_CHF : 32'sd0) -
+        (gate_struct_arr_over_nsr ? STRICT_RW_FINAL_ARR_NSR_INH_CHF : 32'sd0) -
+        (gate_struct_silent_aff ? STRICT_RW_SILENT_AFF_INH_CHF : 32'sd0);
 
-        s3_arr_from_aff = (p2_local_pred == CLS_AFF) &&
-                          (dec_count_arr >= 6'd5) &&
-                          (($signed({26'd0, dec_count_aff}) - $signed({26'd0, dec_count_arr})) <= 32'sd20) &&
-                          (dec_morphology >= 32'd1000) &&
-                          (dec_rdm_code >= 32'd20000) &&
-                          (dec_pnn_mismatch >= 32'd256) &&
-                          (dec_ectopic_pair >= 32'd64) &&
-                          (dec_qrs_maf <= 32'd512) &&
-                          (dec_rbbb_like <= 32'd10);
-        if (s3_arr_from_aff) begin
-            s3_post_arr = s3_post_arr + 32'sd24;
-            s3_post_aff = s3_post_aff - 32'sd8;
-        end
+    wire signed [31:0] struct_mem_arr_comb =
+        base_mem_arr -
+        (gate_struct_aff_persistence ? STRICT_RW_FINAL_AFF_INH_ARR : 32'sd0) -
+        (gate_struct_nsr_clean_chf ? STRICT_RW_FINAL_NSR_INH_ARR : 32'sd0) +
+        (gate_struct_arr_over_nsr ? STRICT_RW_FINAL_ARR_NSR_BOOST : 32'sd0) +
+        (gate_struct_arr_over_aff ? STRICT_RW_FINAL_ARR_AFF_BOOST : 32'sd0);
 
-    end
-
-    always @(*) begin
-        if (p3_post_chf > p3_post_nsr) begin
-            s3_nsr_chf_best_score = p3_post_chf;
-            s3_nsr_chf_second_score = p3_post_nsr;
-            s3_nsr_chf_best_class = CLS_CHF;
-        end else begin
-            s3_nsr_chf_best_score = p3_post_nsr;
-            s3_nsr_chf_second_score = p3_post_chf;
-            s3_nsr_chf_best_class = CLS_NSR;
-        end
-
-        if (p3_post_aff > p3_post_arr) begin
-            s3_arr_aff_best_score = p3_post_aff;
-            s3_arr_aff_second_score = p3_post_arr;
-            s3_arr_aff_best_class = CLS_AFF;
-        end else begin
-            s3_arr_aff_best_score = p3_post_arr;
-            s3_arr_aff_second_score = p3_post_aff;
-            s3_arr_aff_best_class = CLS_ARR;
-        end
-    end
-
-    always @(*) begin
-        if (p3_arr_aff_best_score > p3_nsr_chf_best_score) begin
-            s3_arr_focus_pred = p3_arr_aff_best_class;
-            if (p3_nsr_chf_best_score > p3_arr_aff_second_score)
-                s3_arr_focus_margin = p3_arr_aff_best_score - p3_nsr_chf_best_score;
-            else
-                s3_arr_focus_margin = p3_arr_aff_best_score - p3_arr_aff_second_score;
-        end else begin
-            s3_arr_focus_pred = p3_nsr_chf_best_class;
-            if (p3_arr_aff_best_score > p3_nsr_chf_second_score)
-                s3_arr_focus_margin = p3_nsr_chf_best_score - p3_arr_aff_best_score;
-            else
-                s3_arr_focus_margin = p3_nsr_chf_best_score - p3_nsr_chf_second_score;
-        end
-    end
-
-    always @(*) begin
-        s4_calc_nsr = p3_post_nsr;
-        s4_calc_chf = p3_post_chf;
-        s4_calc_arr = p3_post_arr;
-        s4_calc_aff = p3_post_aff;
-
-        s4_margin_evidence_rescue = (p3_arr_focus_pred == CLS_AFF) &&
-                                    (p3_arr_focus_margin <= 32'sd12) &&
-                                    (dec_count_arr >= 6'd3) &&
-                                    (dec_rdm_code >= 32'd512) &&
-                                    (dec_pnn_mismatch >= 32'd800) &&
-                                    (dec_ectopic_pair >= 32'd256) &&
-                                    (dec_abnormal >= 32'd256);
-        if (s4_margin_evidence_rescue) begin
-            s4_calc_arr = s4_calc_arr + 32'sd4;
-            s4_calc_aff = s4_calc_aff - 32'sd16;
-        end
-    end
+    wire signed [31:0] struct_mem_aff_comb =
+        base_mem_aff +
+        (gate_struct_aff_persistence ? STRICT_RW_FINAL_AFF_BOOST : 32'sd0) -
+        (gate_struct_arr_over_nsr ? STRICT_RW_FINAL_ARR_NSR_INH_AFF : 32'sd0) -
+        (gate_struct_arr_over_aff ? STRICT_RW_FINAL_ARR_AFF_INH_AFF : 32'sd0) +
+        (gate_struct_silent_aff ? STRICT_RW_SILENT_AFF_BOOST : 32'sd0);
 
     always @(posedge clk) begin
         if (rst || clear) begin
@@ -500,6 +392,7 @@ module final_membrane_layer(
             pred_count_chf <= 6'd0;
             pred_count_arr <= 6'd0;
             pred_count_aff <= 6'd0;
+            sum_beat <= 32'd0;
             sum_pnn_mismatch <= 32'd0;
             sum_ectopic_pair <= 32'd0;
             sum_qrs_maf <= 32'd0;
@@ -510,191 +403,142 @@ module final_membrane_layer(
             sum_morphology <= 32'd0;
             sum_rdm_valid <= 32'd0;
             sum_rdm_code <= 32'd0;
+            sum_ram_code <= 32'd0;
+            final_pipe_stage <= FM_IDLE;
+            final_pipe_chunk <= 1'b0;
+            dec_count_nsr <= 6'd0;
+            dec_count_chf <= 6'd0;
+            dec_count_arr <= 6'd0;
+            dec_count_aff <= 6'd0;
+            dec_beat <= 32'd0;
+            dec_pnn_mismatch <= 32'd0;
+            dec_ectopic_pair <= 32'd0;
+            dec_qrs_maf <= 32'd0;
+            dec_rbbb_like <= 32'd0;
+            dec_pre_qrs <= 32'd0;
+            dec_abnormal <= 32'd0;
+            dec_rhythm <= 32'd0;
+            dec_morphology <= 32'd0;
+            dec_rdm_valid <= 32'd0;
+            dec_rdm_code <= 32'd0;
+            dec_ram_code <= 32'd0;
+            base_mem_nsr <= 32'sd0;
+            base_mem_chf <= 32'sd0;
+            base_mem_arr <= 32'sd0;
+            base_mem_aff <= 32'sd0;
+            base_seed_nsr <= 32'sd0;
+            base_seed_chf <= 32'sd0;
+            base_seed_arr <= 32'sd0;
+            base_seed_aff <= 32'sd0;
+            gate_base_aff_low_r <= 1'b0;
+            gate_base_nsr_from_chf_r <= 1'b0;
+            gate_base_chf_from_aff_r <= 1'b0;
+            gate_base_aff_r <= 1'b0;
+            gate_base_arr_r <= 1'b0;
+            gate_base_aff_rescue_r <= 1'b0;
+            gate_base_arr_low_r <= 1'b0;
+            struct_mem_nsr <= 32'sd0;
+            struct_mem_chf <= 32'sd0;
+            struct_mem_arr <= 32'sd0;
+            struct_mem_aff <= 32'sd0;
             final_valid <= 1'b0;
             final_pred_class <= CLS_NSR;
             final_mem_nsr <= 32'sd0;
             final_mem_chf <= 32'sd0;
             final_mem_arr <= 32'sd0;
             final_mem_aff <= 32'sd0;
-            p2_nsr_chf_best_score <= 32'sd0;
-            p2_arr_aff_best_score <= 32'sd0;
-            p2_nsr_chf_best_class <= CLS_NSR;
-            p2_arr_aff_best_class <= CLS_ARR;
-            p3_nsr_chf_best_score <= 32'sd0;
-            p3_nsr_chf_second_score <= 32'sd0;
-            p3_arr_aff_best_score <= 32'sd0;
-            p3_arr_aff_second_score <= 32'sd0;
-            p3_nsr_chf_best_class <= CLS_NSR;
-            p3_arr_aff_best_class <= CLS_ARR;
-            p3_arr_focus_pred <= CLS_NSR;
-            p3_arr_focus_margin <= 32'sd0;
-            p4_final_nsr <= 32'sd0;
-            p4_final_chf <= 32'sd0;
-            p4_final_arr <= 32'sd0;
-            p4_final_aff <= 32'sd0;
-            p4_nsr_chf_best_score <= 32'sd0;
-            p4_arr_aff_best_score <= 32'sd0;
-            p4_nsr_chf_best_class <= CLS_NSR;
-            p4_arr_aff_best_class <= CLS_ARR;
-            final_pipe_stage <= FM_IDLE;
-            final_pipe_chunk <= 1'b0;
         end else begin
             final_valid <= 1'b0;
-            if (snapshot_done) begin
-                pred_count_nsr <= count_nsr_next;
-                pred_count_chf <= count_chf_next;
-                pred_count_arr <= count_arr_next;
-                pred_count_aff <= count_aff_next;
-                sum_pnn_mismatch <= pnn_mismatch_next;
-                sum_ectopic_pair <= ectopic_pair_next;
-                sum_qrs_maf <= qrs_maf_next;
-                sum_rbbb_like <= rbbb_like_next;
-                sum_pre_qrs <= pre_qrs_next;
-                sum_abnormal <= abnormal_next;
-                sum_rhythm <= rhythm_next;
-                sum_morphology <= morphology_next;
-                sum_rdm_valid <= rdm_valid_next;
-                sum_rdm_code <= rdm_code_next;
-                dec_count_nsr <= count_nsr_next;
-                dec_count_chf <= count_chf_next;
-                dec_count_arr <= count_arr_next;
-                dec_count_aff <= count_aff_next;
-                dec_pnn_mismatch <= pnn_mismatch_next;
-                dec_ectopic_pair <= ectopic_pair_next;
-                dec_qrs_maf <= qrs_maf_next;
-                dec_rbbb_like <= rbbb_like_next;
-                dec_pre_qrs <= pre_qrs_next;
-                dec_abnormal <= abnormal_next;
-                dec_rhythm <= rhythm_next;
-                dec_morphology <= morphology_next;
-                dec_rdm_valid <= rdm_valid_next;
-                dec_rdm_code <= rdm_code_next;
-                final_pipe_stage <= FM_BASE;
-                final_pipe_chunk <= chunk_done;
-            end else begin
-                case (final_pipe_stage)
-                    FM_BASE: begin
-                        p1_base_pred <= s1_base_pred;
-                        p1_nsr_arr_margin <= s1_nsr_arr_margin;
-                        p1_chf_aff_margin <= s1_chf_aff_margin;
-                        p1_arr_aff_margin <= s1_arr_aff_margin;
-                        p1_base_nsr <= s1_base_nsr;
-                        p1_base_chf <= s1_base_chf;
-                        p1_base_arr <= s1_base_arr;
-                        p1_base_aff <= s1_base_aff;
-                        p1_rdm_code_ext <= s1_rdm_code_ext;
-                        p1_rdm_valid_times10 <= s1_rdm_valid_times10;
-                        final_pipe_stage <= FM_LOCAL;
+
+            case (final_pipe_stage)
+                FM_IDLE: begin
+                    if (snapshot_done) begin
+                        pred_count_nsr <= count_nsr_next;
+                        pred_count_chf <= count_chf_next;
+                        pred_count_arr <= count_arr_next;
+                        pred_count_aff <= count_aff_next;
+                        sum_beat <= beat_next;
+                        sum_pnn_mismatch <= pnn_mismatch_next;
+                        sum_ectopic_pair <= ectopic_pair_next;
+                        sum_qrs_maf <= qrs_maf_next;
+                        sum_rbbb_like <= rbbb_like_next;
+                        sum_pre_qrs <= pre_qrs_next;
+                        sum_abnormal <= abnormal_next;
+                        sum_rhythm <= rhythm_next;
+                        sum_morphology <= morphology_next;
+                        sum_rdm_valid <= rdm_valid_next;
+                        sum_rdm_code <= rdm_code_next;
+                        sum_ram_code <= ram_code_next;
+
+                        dec_count_nsr <= count_nsr_next;
+                        dec_count_chf <= count_chf_next;
+                        dec_count_arr <= count_arr_next;
+                        dec_count_aff <= count_aff_next;
+                        dec_beat <= beat_next;
+                        dec_pnn_mismatch <= pnn_mismatch_next;
+                        dec_ectopic_pair <= ectopic_pair_next;
+                        dec_qrs_maf <= qrs_maf_next;
+                        dec_rbbb_like <= rbbb_like_next;
+                        dec_pre_qrs <= pre_qrs_next;
+                        dec_abnormal <= abnormal_next;
+                        dec_rhythm <= rhythm_next;
+                        dec_morphology <= morphology_next;
+                        dec_rdm_valid <= rdm_valid_next;
+                        dec_rdm_code <= rdm_code_next;
+                        dec_ram_code <= ram_code_next;
+                        final_pipe_chunk <= chunk_done;
+                        final_pipe_stage <= FM_BASE;
                     end
+                end
 
-                    FM_LOCAL: begin
-                        p2_local_nsr <= s2_local_nsr;
-                        p2_local_chf <= s2_local_chf;
-                        p2_local_arr <= s2_local_arr;
-                        p2_local_aff <= s2_local_aff;
-                        final_pipe_stage <= FM_LOCAL_PAIR;
+                FM_BASE: begin
+                    base_seed_nsr <= dec_count_nsr_s;
+                    base_seed_chf <= dec_count_chf_s;
+                    base_seed_arr <= dec_count_arr_s;
+                    base_seed_aff <= dec_count_aff_s;
+                    gate_base_aff_low_r <= gate_base_aff_low;
+                    gate_base_nsr_from_chf_r <= gate_base_nsr_from_chf;
+                    gate_base_chf_from_aff_r <= gate_base_chf_from_aff;
+                    gate_base_aff_r <= gate_base_aff;
+                    gate_base_arr_r <= gate_base_arr;
+                    gate_base_aff_rescue_r <= gate_base_aff_rescue;
+                    gate_base_arr_low_r <= gate_base_arr_low;
+                    final_pipe_stage <= FM_BASE_APPLY;
+                end
+
+                FM_BASE_APPLY: begin
+                    base_mem_nsr <= base_mem_nsr_comb;
+                    base_mem_chf <= base_mem_chf_comb;
+                    base_mem_arr <= base_mem_arr_comb;
+                    base_mem_aff <= base_mem_aff_comb;
+                    final_pipe_stage <= FM_STRUCT;
+                end
+
+                FM_STRUCT: begin
+                    struct_mem_nsr <= struct_mem_nsr_comb;
+                    struct_mem_chf <= struct_mem_chf_comb;
+                    struct_mem_arr <= struct_mem_arr_comb;
+                    struct_mem_aff <= struct_mem_aff_comb;
+                    final_pipe_stage <= FM_WTA;
+                end
+
+                FM_WTA: begin
+                    if (final_pipe_chunk) begin
+                        final_mem_nsr <= struct_mem_nsr;
+                        final_mem_chf <= struct_mem_chf;
+                        final_mem_arr <= struct_mem_arr;
+                        final_mem_aff <= struct_mem_aff;
+                        final_pred_class <= argmax_score4(struct_mem_nsr, struct_mem_chf, struct_mem_arr, struct_mem_aff);
+                        final_valid <= 1'b1;
                     end
+                    final_pipe_chunk <= 1'b0;
+                    final_pipe_stage <= FM_IDLE;
+                end
 
-                    FM_LOCAL_PAIR: begin
-                        if ($signed(p2_local_chf) > $signed(p2_local_nsr)) begin
-                            p2_nsr_chf_best_score <= p2_local_chf;
-                            p2_nsr_chf_best_class <= CLS_CHF;
-                        end else begin
-                            p2_nsr_chf_best_score <= p2_local_nsr;
-                            p2_nsr_chf_best_class <= CLS_NSR;
-                        end
-
-                        if ($signed(p2_local_aff) > $signed(p2_local_arr)) begin
-                            p2_arr_aff_best_score <= p2_local_aff;
-                            p2_arr_aff_best_class <= CLS_AFF;
-                        end else begin
-                            p2_arr_aff_best_score <= p2_local_arr;
-                            p2_arr_aff_best_class <= CLS_ARR;
-                        end
-
-                        final_pipe_stage <= FM_LOCAL_WTA;
-                    end
-
-                    FM_LOCAL_WTA: begin
-                        if ($signed(p2_arr_aff_best_score) > $signed(p2_nsr_chf_best_score))
-                            p2_local_pred <= p2_arr_aff_best_class;
-                        else
-                            p2_local_pred <= p2_nsr_chf_best_class;
-                        final_pipe_stage <= FM_POST;
-                    end
-
-                    FM_POST: begin
-                        p3_post_nsr <= s3_post_nsr;
-                        p3_post_chf <= s3_post_chf;
-                        p3_post_arr <= s3_post_arr;
-                        p3_post_aff <= s3_post_aff;
-                        final_pipe_stage <= FM_POST_PAIR;
-                    end
-
-                    FM_POST_PAIR: begin
-                        p3_nsr_chf_best_score <= s3_nsr_chf_best_score;
-                        p3_nsr_chf_second_score <= s3_nsr_chf_second_score;
-                        p3_arr_aff_best_score <= s3_arr_aff_best_score;
-                        p3_arr_aff_second_score <= s3_arr_aff_second_score;
-                        p3_nsr_chf_best_class <= s3_nsr_chf_best_class;
-                        p3_arr_aff_best_class <= s3_arr_aff_best_class;
-                        final_pipe_stage <= FM_POST_WTA;
-                    end
-
-                    FM_POST_WTA: begin
-                        p3_arr_focus_pred <= s3_arr_focus_pred;
-                        p3_arr_focus_margin <= s3_arr_focus_margin;
-                        final_pipe_stage <= FM_FINAL;
-                    end
-
-                    FM_FINAL: begin
-                        p4_final_nsr <= s4_calc_nsr;
-                        p4_final_chf <= s4_calc_chf;
-                        p4_final_arr <= s4_calc_arr;
-                        p4_final_aff <= s4_calc_aff;
-                        final_pipe_stage <= FM_FINAL_PAIR;
-                    end
-
-                    FM_FINAL_PAIR: begin
-                        if ($signed(p4_final_chf) > $signed(p4_final_nsr)) begin
-                            p4_nsr_chf_best_score <= p4_final_chf;
-                            p4_nsr_chf_best_class <= CLS_CHF;
-                        end else begin
-                            p4_nsr_chf_best_score <= p4_final_nsr;
-                            p4_nsr_chf_best_class <= CLS_NSR;
-                        end
-
-                        if ($signed(p4_final_aff) > $signed(p4_final_arr)) begin
-                            p4_arr_aff_best_score <= p4_final_aff;
-                            p4_arr_aff_best_class <= CLS_AFF;
-                        end else begin
-                            p4_arr_aff_best_score <= p4_final_arr;
-                            p4_arr_aff_best_class <= CLS_ARR;
-                        end
-
-                        final_pipe_stage <= FM_FINAL_WTA;
-                    end
-
-                    FM_FINAL_WTA: begin
-                        final_mem_nsr <= p4_final_nsr;
-                        final_mem_chf <= p4_final_chf;
-                        final_mem_arr <= p4_final_arr;
-                        final_mem_aff <= p4_final_aff;
-                        if ($signed(p4_arr_aff_best_score) > $signed(p4_nsr_chf_best_score))
-                            final_pred_class <= p4_arr_aff_best_class;
-                        else
-                            final_pred_class <= p4_nsr_chf_best_class;
-                        final_valid <= final_pipe_chunk;
-                        final_pipe_chunk <= 1'b0;
-                        final_pipe_stage <= FM_IDLE;
-                    end
-
-                    default: begin
-                        final_pipe_chunk <= 1'b0;
-                        final_pipe_stage <= FM_IDLE;
-                    end
-                endcase
-            end
+                default: begin
+                    final_pipe_stage <= FM_IDLE;
+                end
+            endcase
         end
     end
 

@@ -66,6 +66,6 @@
   },
   "rtl_profile_source": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\xsim_snn_ecg_v2_test_first1_profile.json",
   "cycles_per_sample_total": 1.0002666666666666,
-  "energy_note": "Vivado-estimated @1MHz: 101.03 nJ/sample using 0.101 W total on-chip power.",
+  "energy_note": "Vivado-estimated @1MHz: approximately 99 nJ/sample using 0.099 W total on-chip power.",
   "limitation": "CPU timing is local Python, not optimized C. RTL timing is derived from counters and Vivado reports, not a full 30-minute board replay transcript."
 }

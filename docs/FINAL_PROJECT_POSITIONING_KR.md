@@ -17,21 +17,21 @@
 | Low-resource digital classifier core | board wrapper BRAM 0 / DSP 0, AXI OOC BRAM 0 / DSP 0 |
 | Model-based AFE+ADC integration | `vin_v = signed_code / 200000`, HPF/gain/notch/LPF/ADC nominal model figures |
 | Board-level IP call | MicroBlaze smoke UART PASS transcript, XSDB MMIO transcript |
-| 1-case full-record board replay | test NSR case 0, 1,800,000 samples, expected-vs-board exact match PASS |
+| Locked board integration build | MicroBlaze full-record bitstream/XSA/ELF rebuilt, actual UART replay pending |
 
 ## 3. 주장하면 안 되는 것
 
 | 주장 금지 | 이유 |
 |---|---|
 | raw analog ECG acquisition | source DB는 already digitized record |
-| raw analog ECG recovered | PWL-equivalent reconstruction이지 원래 analog waveform 복원이 아님 |
+| raw analog ECG reconstruction completed | PWL-equivalent reconstruction이지 원래 analog waveform 복원이 아님 |
 | physical DAC replay | PC/UART digital `.mem` replay만 수행 |
 | actual ECG electrode measurement | 전극/환자/실측 환경 없음 |
 | physical AFE PCB validation | PCB 측정 없음 |
 | silicon ADC measured | ADC silicon 측정 없음 |
-| Virtuoso post-layout verified | layout/post-layout simulation 없음 |
+| Virtuoso post-layout verification completed | layout/post-layout simulation 없음 |
 | clinical diagnosis validation | engineering prototype이며 임상 validation 아님 |
-| full dataset board replay completed | board full replay는 현재 test NSR case 0 한 건 |
+| locked full dataset board replay completed | actual locked UART board replay transcript가 아직 없음 |
 
 ## 4. 심사 방어 논리
 
@@ -41,15 +41,15 @@
 
 ### 왜 Accelerator IP Core인가?
 
-범용 CPU software classifier가 아니라, ECG stream 처리와 class evidence accumulation을 RTL datapath로 고정했다. AXI4-Lite control/status, AXI4-Stream sample input, sample feeder, IP-XACT packaging 산출물이 있으며, MicroBlaze에서 IP register를 호출하고 실제 board full-record replay까지 수행했다.
+범용 CPU software classifier가 아니라, ECG stream 처리와 class evidence accumulation을 RTL datapath로 고정했다. AXI4-Lite control/status, AXI4-Stream sample input, sample feeder, IP-XACT packaging 산출물이 있으며, locked model 기준 MicroBlaze full-record replay bitstream/XSA/ELF build까지 수행했다. actual UART board replay는 pending이다.
 
 ### board full replay와 smoke의 차이는 무엇인가?
 
-Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final readback을 빠르게 확인한다. Full replay는 1 kSPS x 30분 = 1,800,000 samples를 실제 board에서 입력하고, 30 snapshots와 final decision을 Python/XSim expected와 비교한다.
+Smoke는 16 samples / 2 snapshots로 register map, feeder, interrupt, final readback을 빠르게 확인한다. Full replay는 1 kSPS x 30분 = 1,800,000 samples를 실제 board에서 입력하고, 30 snapshots와 final decision을 locked Python/XSim expected와 비교하는 단계이다. locked transcript는 아직 생성하지 않았다.
 
 ### 88.89% 성능을 어떻게 표현해야 하나?
 
 
 ## 5. 최종 제출용 안전 문장
 
-> 본 프로젝트는 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit stream을 생성한 뒤, SNN-inspired ECG Classification Accelerator IP Core에 입력하여 30분 long-record NSR/CHF/ARR/AFF classification을 수행하는 FPGA/VLSI engineering prototype이다. 디지털 IP는 Python golden, XSim, Vivado implementation, AXI/IP packaging, Vitis/MicroBlaze board replay를 통해 검증했다. 단, physical AFE/ADC 실측이나 clinical validation은 수행하지 않았다.
+> 본 프로젝트는 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit stream을 생성한 뒤, SNN-inspired ECG Classification Accelerator IP Core에 입력하여 30분 long-record NSR/CHF/ARR/AFF classification을 수행하는 FPGA/VLSI engineering prototype이다. 디지털 IP는 Python golden, locked Final Membrane XSim, Vivado implementation, AXI/IP packaging, Vitis/MicroBlaze bitstream/XSA/ELF build를 통해 검증했다. 단, physical AFE/ADC 실측이나 의료 유효성 검증은 수행하지 않았다.

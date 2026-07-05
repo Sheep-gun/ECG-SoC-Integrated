@@ -32,13 +32,13 @@ flowchart LR
 | Fully blind strict record-wise model lock | Snapshot fixed, Final Membrane train/validation-only selection, final_test one-shot |
 | Strict record-wise locked Final Membrane | train 61/68, validation 32/32, final_test 29/36 |
 | Strict final_test evaluation count | 1 |
-| Python-vs-XSim mismatch | final prediction 0/136, final membrane 0/136 |
+| Locked Final Membrane standalone XSim | final_test 36 cases, final prediction mismatch 0, final membrane mismatch 0 |
 | Strict dataset split audit | seed 20260808, source/physical overlap 0 |
 | Ablation full vs snapshot majority | 125/136 = 91.91% vs 103/136 = 75.74% |
-| Vivado board resource | LUT 21002, FF 2803, BRAM 0, DSP 0 |
-| Vivado board timing / power | WNS 7.873 ns, estimated total power 0.101 W |
+| Locked pure RTL Vivado resource | LUT 9719, FF 5038, BRAM 0, DSP 0 |
+| Locked pure RTL timing / power | WNS 8.184 ns, estimated total power 0.099 W |
 | AXI/IP packaging | accelerator IP-XACT `component.xml`, xgui, AXI wrapper, sample feeder 존재 |
-| Board replay | test NSR case 0 full-record PASS, 1,800,000 samples, final_pred 0, final_mem 31/0/1/0 |
+| Locked Vitis/MicroBlaze board flow | bitstream/XSA/ELF rebuilt, actual locked UART full-record replay pending |
 
 
 ## 4. 추가 문서 링크
@@ -63,8 +63,8 @@ flowchart LR
 - Source ECG는 already digitized public record이며, raw analog ECG acquisition이 아니다.
 - AFE+ADC는 XMODEL 기반 nominal model이며, physical AFE PCB나 ADC silicon measurement가 아니다.
 - Physical DAC replay나 실제 전극 측정은 수행하지 않았다.
-- Virtuoso layout/post-layout 검증과 clinical validation은 수행하지 않았다.
-- Full-record board replay는 test NSR case 0 한 건의 integration evidence이며, 전체 split board replay batch는 향후 과제이다.
+- Virtuoso layout/post-layout 검증과 의료 유효성 검증은 수행하지 않았다.
+- Locked full-record board replay는 bitstream/XSA/ELF build까지 완료했고, actual UART transcript/comparison은 향후 과제이다.
 
 대회 제출/최종 설명 기준의 상세 문서는 반드시 [FINAL_REPORT_KR.md](FINAL_REPORT_KR.md)를 먼저 읽으면 된다. 해당 문서에는 연구 목적, Holter-style 설계 동기, AFE+ADC 조건, Snapshot feature block의 뉴로모픽 동작 설명, 30분 Final Membrane Readout, XSim 성능, Vivado 자원량이 모두 포함되어 있다.
 
@@ -322,8 +322,8 @@ results/final_membrane_v2_snn/vivado_snn_ecg_v2/bitstream/snn_ecg_v2_nexys_a7_to
 
 | Resource | Used | Available | Utilization |
 |---|---:|---:|---:|
-| LUT | 21002 | 63400 | 33.13% |
-| FF | 2803 | 126800 | 2.21% |
+| LUT | 9719 | 63400 | 15.33% |
+| FF | 5038 | 126800 | 3.97% |
 | BRAM | 0 | 135 | 0.00% |
 | DSP | 0 | 240 | 0.00% |
 | Bonded IOB | 35 | 210 | 16.67% |
@@ -333,8 +333,8 @@ Vivado power estimate:
 
 | Power | W |
 |---|---:|
-| Total on-chip | 0.101 |
-| Dynamic | 0.004 |
+| Total on-chip | 0.099 |
+| Dynamic | 0.001 |
 | Static | 0.097 |
 
 Timing:
@@ -343,7 +343,7 @@ Timing:
 |---|---:|
 | sys_clk_pin | 100 MHz |
 | core_clk_1mhz | 1 MHz |
-| WNS | 7.873 ns |
+| WNS | 8.184 ns |
 | TNS | 0.000 ns |
 | WHS | 0.032 ns |
 | THS | 0.000 ns |
@@ -363,7 +363,7 @@ FPGA board programming:
 | Board report | `results/final_membrane_v2_snn/vivado_snn_ecg_v2/board_program_report.txt` |
 
 DSP 0개이므로 multiplier 기반 ML classifier가 아니라, comparator/counter/accumulator 기반 SNN-inspired RTL 구조임을 확인할 수 있다.
-보드에는 bitstream이 정상적으로 올라갔고, MicroBlaze/UART chunk-ACK replay로 test NSR case 0의 1,800,000-sample full record를 실제 board에서 끝까지 흘려 final_pred/final_mem exact match를 확인했다. 전체 test split 정확도는 여전히 XSim dataset replay 결과를 기준으로 보고하며, board full replay는 현재 1-case integration evidence로 구분한다.
+Locked model 기준 MicroBlaze full-record replay system은 bitstream/XSA/ELF까지 새로 build했다. 다만 새 locked bitstream으로 actual UART full-record replay transcript는 아직 생성하지 않았다. 기존 `test_case0_nsr` transcript는 board transport path legacy evidence로만 유지하고, locked result로 재사용하지 않는다.
 
 ## 주의사항
 

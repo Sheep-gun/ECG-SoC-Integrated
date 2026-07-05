@@ -260,6 +260,6 @@ flowchart LR
 | XMODEL simulation run log | stimulus generator 중심. 실제 XMODEL run evidence는 별도 확인 필요 |
 | SPICE/silicon correlation | 수행 근거 없음 |
 | ADC noise/corner/PVT sweep | 수행 근거 없음 |
-| clinical validation | 수행 근거 없음 |
+| medical validation | 수행 근거 없음 |
 
 정리하면, 현재 repo의 강점은 “digitized ECG source에서 XMODEL-ready analog-equivalent stimulus를 만들고, AFE+ADC 결과로 해석되는 signed 12-bit `.mem`을 RTL golden/XSim 검증에 연결하는 흐름”이 이미 설명 가능한 수준으로 갖춰졌다는 점이다. 남은 작업은 이 흐름의 각 중간 산출물, 특히 XMODEL 실행 결과와 `.mem` 생성 script 이름/metadata를 더 강하게 연결하는 것이다.

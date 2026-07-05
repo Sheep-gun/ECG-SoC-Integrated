@@ -338,7 +338,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>f6492fda</spirit:value>
+            <spirit:value>9ccaeb0f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -354,7 +354,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>f6492fda</spirit:value>
+            <spirit:value>9ccaeb0f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -903,6 +903,12 @@
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>src/strict_recordwise_locked_params.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>src/final_membrane_layer.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
@@ -963,6 +969,7 @@
         <spirit:userFileType>CHECKSUM_191bb2c9</spirit:userFileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
+      <spirit:dependency>c:/Users/YangGeon/SNN ECG Classifier/rtl</spirit:dependency>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:name>
@@ -990,6 +997,12 @@
         <spirit:name>src/ectopic_pair_neuron.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/strict_recordwise_locked_params.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
       </spirit:file>
       <spirit:file>
         <spirit:name>src/final_membrane_layer.v</spirit:name>
@@ -1051,6 +1064,7 @@
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
+      <spirit:dependency>c:/Users/YangGeon/SNN ECG Classifier/rtl</spirit:dependency>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_testbench_view_fileset</spirit:name>
@@ -1166,13 +1180,13 @@
       <xilinx:vendorDisplayName>User</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://user.org</xilinx:vendorURL>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2026-07-04T17:07:29Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2026-07-05T11:20:25Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2020.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="58ccd8b4"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="e5e3d388"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="f6fcd41f"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a79f80d8"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="047d1e64"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="ef168114"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="30ded452"/>

@@ -28,10 +28,10 @@
 |---|---:|---|
 | chunk-level Python/XSim test accuracy | 32/36 = 88.89% | `results/final_membrane_v2_snn/xsim_snn_ecg_v2_summary.json` |
 | Python-vs-XSim mismatch | pred 0, mem 0 / 136 | `results/final_membrane_v2_snn/xsim_snn_ecg_v2_summary.json` |
-| board LUT/FF/BRAM/DSP | 21002 / 2803 / 0 / 0 | `reports/award_readiness/vivado_metrics.md` |
-| board WNS | 7.873 ns | `reports/award_readiness/vivado_metrics.md` |
-| AXI OOC WNS @10ns | 0.081 ns | `reports/award_readiness/vivado_metrics.md` |
-| MicroBlaze smoke WNS | 0.185 ns | `reports/award_readiness/vivado_metrics.md` |
+| locked pure RTL LUT/FF/BRAM/DSP | 9719 / 5038 / 0 / 0 | `reports/award_readiness/vivado_metrics.md` |
+| locked pure RTL WNS | 8.184 ns | `reports/award_readiness/vivado_metrics.md` |
+| locked OOC/profile WNS @10ns | 0.471 ns | `reports/award_readiness/vivado_metrics.md` |
+| locked MicroBlaze full replay WNS | 0.294 ns | `reports/award_readiness/vivado_metrics.md` |
 | accepted samples per 30min chunk | 1,800,000 | `results/final_membrane_v2_snn/xsim_snn_ecg_v2_test_first1_profile.json` |
 | cycles/sample total | 1.000267 | `reports/award_readiness/cpu_vs_rtl_summary.md` |
 
@@ -51,5 +51,5 @@
 - Strict record-wise locked Final Membrane은 final_test 1회 평가까지 완료했으며, chunk-level 29/36 = 80.56%로 보고한다.
 - raw/AFE-off full-record `.mem` dataset이 없어 AFE on/off end-to-end accuracy ablation은 TODO이다.
 - HPF/notch/LPF off dataset 재생성은 아직 수행하지 않았다.
-- full 30분 board replay transcript는 test NSR case 0 한 건에 대해 존재한다. 현재 evidence는 MicroBlaze smoke bit/XSA, XSDB MMIO smoke, Vitis-built ELF, UART PASS transcript, full-record board replay PASS transcript이다. 전체 split board replay batch는 아직 없다.
+- locked model 기준 full-record replay bitstream/XSA/ELF는 재생성했지만, actual UART full-record transcript와 expected-vs-board comparison은 아직 없다. 기존 `test_case0_nsr` transcript는 legacy board transport evidence로만 유지한다.
 - AFE+ADC evidence figure는 nominal model 기반이며 PCB/silicon/Virtuoso post-layout 검증이 아니다.

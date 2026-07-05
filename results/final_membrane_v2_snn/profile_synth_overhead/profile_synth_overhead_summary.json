@@ -2,25 +2,25 @@
   "runs": {
     "0": {
       "utilization": {
-        "slice_lut": 10020,
-        "slice_reg": 5300,
-        "ff": 5300,
+        "slice_lut": 9863,
+        "slice_reg": 5061,
+        "ff": 5061,
         "bram_tile": 0,
         "dsp": 0
       },
       "timing": {
-        "setup_wns_ns": 0.881,
+        "setup_wns_ns": 0.471,
         "hold_whs_ns": 0.19
       },
       "top_hierarchy_by_lut": [
         {
           "instance": "snn_ecg_30min_final_top",
           "module": "(top)",
-          "lut": 10020,
-          "logic_lut": 9956,
+          "lut": 9863,
+          "logic_lut": 9799,
           "lutram": 24,
           "srl": 40,
-          "ff": 5300,
+          "ff": 5061,
           "ramb36": 0,
           "ramb18": 0,
           "dsp": 0
@@ -52,11 +52,11 @@
         {
           "instance": "u_final",
           "module": "final_membrane_layer",
-          "lut": 1495,
-          "logic_lut": 1495,
+          "lut": 1329,
+          "logic_lut": 1329,
           "lutram": 0,
           "srl": 0,
-          "ff": 1340,
+          "ff": 1037,
           "ramb36": 0,
           "ramb18": 0,
           "dsp": 0
@@ -76,11 +76,11 @@
         {
           "instance": "(snn_ecg_30min_final_top)",
           "module": "(top)",
-          "lut": 358,
-          "logic_lut": 358,
+          "lut": 367,
+          "logic_lut": 367,
           "lutram": 0,
           "srl": 0,
-          "ff": 409,
+          "ff": 473,
           "ramb36": 0,
           "ramb18": 0,
           "dsp": 0
@@ -161,25 +161,25 @@
     },
     "1": {
       "utilization": {
-        "slice_lut": 10062,
-        "slice_reg": 6008,
-        "ff": 6008,
+        "slice_lut": 9905,
+        "slice_reg": 5769,
+        "ff": 5769,
         "bram_tile": 0,
         "dsp": 0
       },
       "timing": {
-        "setup_wns_ns": 0.881,
+        "setup_wns_ns": 0.471,
         "hold_whs_ns": 0.19
       },
       "top_hierarchy_by_lut": [
         {
           "instance": "snn_ecg_30min_final_top",
           "module": "(top)",
-          "lut": 10062,
-          "logic_lut": 9998,
+          "lut": 9905,
+          "logic_lut": 9841,
           "lutram": 24,
           "srl": 40,
-          "ff": 6008,
+          "ff": 5769,
           "ramb36": 0,
           "ramb18": 0,
           "dsp": 0
@@ -211,11 +211,23 @@
         {
           "instance": "u_final",
           "module": "final_membrane_layer",
-          "lut": 1495,
-          "logic_lut": 1495,
+          "lut": 1329,
+          "logic_lut": 1329,
           "lutram": 0,
           "srl": 0,
-          "ff": 1340,
+          "ff": 1037,
+          "ramb36": 0,
+          "ramb18": 0,
+          "dsp": 0
+        },
+        {
+          "instance": "(snn_ecg_30min_final_top)",
+          "module": "(top)",
+          "lut": 409,
+          "logic_lut": 409,
+          "lutram": 0,
+          "srl": 0,
+          "ff": 1181,
           "ramb36": 0,
           "ramb18": 0,
           "dsp": 0
@@ -228,18 +240,6 @@
           "lutram": 24,
           "srl": 40,
           "ff": 349,
-          "ramb36": 0,
-          "ramb18": 0,
-          "dsp": 0
-        },
-        {
-          "instance": "(snn_ecg_30min_final_top)",
-          "module": "(top)",
-          "lut": 400,
-          "logic_lut": 400,
-          "lutram": 0,
-          "srl": 0,
-          "ff": 1117,
           "ramb36": 0,
           "ramb18": 0,
           "dsp": 0

@@ -4,7 +4,7 @@
 
 본 프로젝트는 **AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계**이다. 공개 ECG digitized record를 AFE+ADC 이후의 signed 12-bit stream으로 연결하고, FPGA RTL에서 NSR / CHF / ARR / AFF를 장시간 window로 분류한다.
 
-핵심 강점은 디지털 accelerator IP 관점이다. Python golden과 RTL/XSim 비교가 맞고, Vivado resource/timing, AXI wrapper, IP-XACT packaging, MicroBlaze smoke system, 1-case full-record board replay 산출물이 존재한다. 반면 수상권 경쟁에서 약한 부분은 dataset split 신뢰성, analog physical evidence, full-split board replay batch, baseline/ablation 해석이다.
+핵심 강점은 디지털 accelerator IP 관점이다. Python golden과 locked Final Membrane XSim 비교가 맞고, Vivado resource/timing, AXI wrapper, IP-XACT packaging, MicroBlaze full-record replay bitstream/XSA/ELF build 산출물이 존재한다. 반면 수상권 경쟁에서 약한 부분은 analog physical evidence, actual locked UART full-record replay transcript, full-split board replay batch, baseline/ablation 해석이다.
 
 | 항목 | 현재 상태 | 수상권 대비 평가 |
 |---|---|---|
@@ -14,7 +14,7 @@
 | IP packaging | `component.xml`, `xgui`, AXI wrapper, feeder 존재 | 강점 |
 | AFE/ADC physical verification | XMODEL/nominal model 중심 | 이화여대/SWIR 대비 약함 |
 | Dataset validation | seed 20260808 strict record-wise split, source/physical overlap 0 | 보강됨 |
-| Board-level demo | bit/XSA/XSDB smoke 있음, test NSR case 0 full replay PASS | 보강됨. full-split batch는 남음 |
+| Board-level demo | locked bit/XSA/ELF build 있음, actual locked UART full replay pending | 보강 중. transcript 확보 필요 |
 | Baseline comparison | 새로 일부 정리, energy는 추정 | 보강 필요 |
 
 ## 2. 수상작별 비교

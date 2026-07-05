@@ -4,35 +4,16 @@
   "bitstream": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\vivado_snn_ecg_v2\\bitstream\\snn_ecg_v2_nexys_a7_top.bit",
   "bitstream_exists": true,
   "utilization": {
-    "slice_lut": "21002",
-    "slice_reg": "2803",
-    "ff": "2803",
+    "slice_lut": "9719",
+    "slice_reg": "5038",
+    "ff": "5038",
     "bram_tile": "0",
     "dsp": "0"
   },
   "power": {
-    "total_on_chip_power_w": "0.101",
-    "dynamic_power_w": "0.004",
+    "total_on_chip_power_w": "0.099",
+    "dynamic_power_w": "0.001",
     "device_static_power_w": "0.097"
-  },
-  "timing": {
-    "sys_clk_pin_mhz": "100.000",
-    "core_clk_mhz": "1.000",
-    "wns_ns": "7.873",
-    "tns_ns": "0.000",
-    "whs_ns": "0.032",
-    "ths_ns": "0.000",
-    "wpws_ns": "4.500",
-    "tpws_ns": "0.000",
-    "constraints_met": true
-  },
-  "board_programming": {
-    "target": "Digilent Nexys A7",
-    "device": "xc7a100t_0",
-    "program_status": "OK",
-    "startup_status": "HIGH",
-    "programmed_at": "2026-07-02 20:19:25",
-    "report": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\vivado_snn_ecg_v2\\board_program_report.txt"
   },
   "reports": {
     "utilization": "C:\\Users\\YangGeon\\SNN ECG Classifier\\results\\final_membrane_v2_snn\\vivado_snn_ecg_v2\\reports\\snn_ecg_v2_impl_utilization.rpt",

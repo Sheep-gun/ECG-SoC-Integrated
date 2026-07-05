@@ -53,6 +53,7 @@ def write_tcl(profile_en: int) -> Path:
 set run_dir "{slash(run_dir)}"
 set env(SYNTH_COMMON) "C:/Xilinx/Vivado/2020.2/scripts/rt/data"
 cd $run_dir
+file copy -force "$repo_dir/rtl/strict_recordwise_locked_params.vh" "$run_dir/strict_recordwise_locked_params.vh"
 
 read_verilog [list \\
     {file_list} \\

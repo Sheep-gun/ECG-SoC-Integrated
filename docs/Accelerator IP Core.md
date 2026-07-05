@@ -32,10 +32,10 @@
 | 30분 chunk test XSim accuracy | 32 / 36 = 88.89% |
 | Python-vs-XSim final prediction mismatch | 0 / 136 |
 | Python-vs-XSim final membrane mismatch | 0 / 136 |
-| Board wrapper Vivado resource | LUT 21002 / FF 2803 / BRAM 0 / DSP 0 |
-| Board wrapper timing | 1 MHz core clock, WNS 7.873 ns |
-| Current OOC core 10 ns post-route | LUT 10219 / FF 5981 / BRAM 0 / DSP 0, WNS 0.044 ns |
-| Current AXI wrapper OOC 10 ns post-route | LUT 10773 / FF 6931 / BRAM 0 / DSP 0, WNS 0.081 ns |
+| Locked pure RTL Vivado resource | LUT 9719 / FF 5038 / BRAM 0 / DSP 0 |
+| Locked pure RTL timing | 1 MHz core clock, WNS 8.184 ns |
+| Locked OOC/profile 10 ns build | LUT 9905 / FF 5769 / BRAM 0 / DSP 0, WNS 0.471 ns |
+| Locked MicroBlaze full-replay system | LUT 12485 / reg 8480 / BRAM 16 / DSP 3, WNS 0.294 ns |
 
 ## 2. 왜 Accelerator IP Core인가
 
@@ -70,7 +70,7 @@ IP Core 관점에서 중요한 것은 독립적인 interface와 재사용 가능
 | Packaged feeder IP | `ip_repo/axi_lite_axis_sample_feeder/component.xml` |
 | Feeder VLNV | `user.org:user:axi_lite_axis_sample_feeder:1.0` |
 
-따라서 현재 상태는 단순한 testbench용 RTL만 있는 단계가 아니라, **Vivado-packaged custom FPGA accelerator IP**까지 진행된 상태로 볼 수 있다. 다만 이 표현은 production SoC IP, 의료기기 인증 IP, AXI formal-certified IP를 의미하지 않는다. formal AXI protocol proof나 clinical validation은 별도의 향후 작업이다.
+따라서 현재 상태는 단순한 testbench용 RTL만 있는 단계가 아니라, **Vivado-packaged custom FPGA accelerator IP**까지 진행된 상태로 볼 수 있다. 다만 이 표현은 production SoC IP, 의료기기 인증 IP, AXI formal-certified IP를 의미하지 않는다. formal AXI protocol proof나 의료 유효성 검증은 별도의 향후 작업이다.
 
 ## 3. 병목 원인 분석
 
@@ -98,7 +98,7 @@ CNN/RNN/MLP류를 그대로 RTL에 올리면 multiplier, DSP, BRAM, weight memor
 - excitatory/inhibitory signed update
 - WTA argmax
 
-Vivado 결과도 이 방향과 일치한다. board wrapper 결과는 LUT 21002 / FF 2803 / BRAM 0 / DSP 0이고, current AXI wrapper OOC 10 ns post-route 결과는 LUT 10773 / FF 6931 / BRAM 0 / DSP 0이다.
+Vivado 결과도 이 방향과 일치한다. locked pure RTL board top 결과는 LUT 9719 / FF 5038 / BRAM 0 / DSP 0이고, locked OOC/profile build 결과는 LUT 9905 / FF 5769 / BRAM 0 / DSP 0이다.
 
 ### 3.3 Per-sample streaming 처리 병목
 
@@ -331,10 +331,9 @@ limited regression인 `--split all --max-cases 2`에서도 train/val/test 각각
 
 | Target | LUT | FF | BRAM | DSP | Timing |
 |---|---:|---:|---:|---:|---|
-| Nexys A7 board wrapper, 1 MHz core | 21002 | 2803 | 0 | 0 | WNS 7.873 ns |
-| OOC core, 10 ns post-route | 10219 | 5981 | 0 | 0 | WNS 0.044 ns, WHS 0.050 ns |
-| OOC AXI wrapper, 10 ns post-route | 10773 | 6931 | 0 | 0 | WNS 0.081 ns, WHS 0.098 ns |
-| MicroBlaze smoke system | 12650 | 8746 | 16 | 3 | WNS 0.185 ns, WHS 0.037 ns |
+| Locked Nexys A7 pure RTL board top, 1 MHz core | 9719 | 5038 | 0 | 0 | WNS 8.184 ns |
+| Locked OOC/profile build, 10 ns | 9905 | 5769 | 0 | 0 | WNS 0.471 ns, WHS 0.190 ns |
+| Locked MicroBlaze full-replay system | 12485 | 8480 | 16 | 3 | WNS 0.294 ns, WHS 0.055 ns |
 
 MicroBlaze system에서 BRAM/DSP가 생기는 이유는 accelerator core가 아니라 MicroBlaze/LMB/BRAM/UART/interrupt 등 system infrastructure가 포함되기 때문이다.
 
@@ -368,9 +367,9 @@ Vitis 2020.2 설치 후 bare-metal C app도 빌드했고, `results/final_membran
 | 임상 검증 | 수행되지 않음. dataset split 기반 engineering validation임 |
 | formal equivalence | 수행되지 않음. Python-vs-XSim tested-vector mismatch 0으로 제한 |
 | formal AXI protocol proof | 수행되지 않음. RTL smoke/OOC timing/IP packaging 검증으로 제한 |
-| full 30분 hardware replay | Vitis MicroBlaze + UART chunk-ACK로 test NSR case 0 full record 1건 PASS |
+| locked full 30분 hardware replay | bitstream/XSA/ELF build 완료, actual UART transcript pending |
 | UART bare-metal smoke | Vitis-built ELF와 UART PASS transcript 확인 |
 | energy/sample | Vivado power estimate는 있으나 workload 기반 energy/sample 실측은 없음 |
 | production IP qualification | Vivado custom IP packaging 완료 수준이며 제품화 검증은 아님 |
 
-현재 문서에서 말하는 Accelerator IP Core는 “검증된 RTL datapath + AXI wrapper + Vivado packaged custom IP + smoke-level system integration + 1-case full-record board replay evidence”를 의미한다. 다음 단계는 non-NSR/full-split board replay batch와 throughput/power 측정이다.
+현재 문서에서 말하는 Accelerator IP Core는 “검증된 RTL datapath + AXI wrapper + Vivado packaged custom IP + locked MicroBlaze bitstream/XSA/ELF build evidence”를 의미한다. 다음 단계는 actual locked full-record board replay, non-NSR/full-split board replay batch, throughput/power 측정이다.

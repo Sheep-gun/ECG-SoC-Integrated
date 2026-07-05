@@ -1,0 +1,31 @@
+{
+  "script": "run_xsim_strict_recordwise",
+  "argv": [
+    "tools\\recordwise\\run_xsim_strict_recordwise.py",
+    "--split",
+    "test"
+  ],
+  "timestamp_utc": "2026-07-05T11:45:24.501732+00:00",
+  "git_commit": "3ed414e939a710f7b6cf21ec8fe8c79c920ab5d0",
+  "cwd": "C:\\Users\\YangGeon\\SNN ECG Classifier",
+  "outputs": [
+    "reports\\final_submission\\xsim_locked_model_summary.md",
+    "reports\\final_submission\\xsim_locked_model_mismatch.csv",
+    "reports\\final_submission\\xsim_locked_model_predictions.csv",
+    "reports\\final_submission\\xsim_locked_model_summary.json"
+  ],
+  "extra": {
+    "status": "pass",
+    "split": "test",
+    "case_count": 36,
+    "max_cases": null,
+    "final_pred_mismatch": 0,
+    "final_mem_mismatch": 0,
+    "mismatch_rows": 0,
+    "xvlog_log": "reports\\final_submission\\xsim_locked_model_work\\xvlog.log",
+    "xelab_log": "reports\\final_submission\\xsim_locked_model_work\\xelab.log",
+    "xsim_log": "reports\\final_submission\\xsim_locked_model_work\\xsim.log",
+    "predictions": "reports\\final_submission\\xsim_locked_model_predictions.csv",
+    "mismatch": "reports\\final_submission\\xsim_locked_model_mismatch.csv"
+  }
+}
