@@ -31,7 +31,11 @@
 | 항목 | 값 |
 |---|---:|
 | Final test 30분 chunk | 29 / 36 = 80.56% |
+| Final test 30분 chunk macro F1 / balanced accuracy | 80.44% / 80.56% |
+| Final test 30분 chunk weakest recall | CHF 66.67% |
 | Final test record-majority | 16 / 19 = 84.21% |
+| Final test record-majority macro F1 / balanced accuracy | 80.80% / 88.19% |
+| Final test record-majority weakest recall | CHF 75.00%, ARR 77.78% |
 
 Validation 32/32 = 100.00%는 Final Membrane 후보를 선택하는 단계의 성능이며, 최종 held-out 일반화 성능으로 쓰지 않는다.
 

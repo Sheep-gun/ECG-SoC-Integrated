@@ -17,11 +17,15 @@
 | Train | 61 / 68 = 89.71% |
 | Validation | 32 / 32 = 100.00% |
 | Final test 30분 chunk | 29 / 36 = 80.56% |
+| Final test 30분 chunk macro F1 / balanced accuracy | 80.44% / 80.56% |
+| Final test 30분 chunk class recall | NSR 100.00%, CHF 66.67%, ARR 77.78%, AFF 77.78% |
 | Final test record-majority | 16 / 19 = 84.21% |
+| Final test record-majority macro F1 / balanced accuracy | 80.80% / 88.19% |
+| Final test record-majority class recall | NSR 100.00%, CHF 75.00%, ARR 77.78%, AFF 100.00% |
 | Test evaluation count | 1 |
 | Test used for selection | false |
 
-Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-out 성능은 final_test 30분 chunk 80.56%와 record-majority 84.21% 기준으로 보고한다.
+Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-out 성능은 final_test accuracy, macro F1, balanced accuracy, class별 recall을 함께 기준으로 보고한다.
 
 ## 제출 포지션
 

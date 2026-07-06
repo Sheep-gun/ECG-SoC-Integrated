@@ -249,18 +249,18 @@ def result_summary(metrics: dict) -> None:
     card(
         draw,
         (110, 290, 560, 535),
-        "Final test chunk accuracy",
+        "Final test chunk metrics",
         f"{metrics['final_test_chunk']['accuracy_percent']:.2f}%",
-        f"{metrics['final_test_chunk']['correct']} / {metrics['final_test_chunk']['total']} 30-minute chunks matched the locked expected label.",
+        f"{metrics['final_test_chunk']['correct']} / {metrics['final_test_chunk']['total']} chunks. Macro F1 {metrics['final_test_chunk']['macro_f1_percent']:.2f}%, balanced {metrics['final_test_chunk']['balanced_accuracy_percent']:.2f}%, weakest recall CHF {metrics['final_test_chunk']['class_recall_percent']['CHF']:.2f}%.",
         ORANGE,
         "#fff8f3",
     )
     card(
         draw,
         (610, 290, 1060, 535),
-        "Final test record-majority accuracy",
+        "Record-majority metrics",
         f"{metrics['final_test_record_majority']['accuracy_percent']:.2f}%",
-        f"{metrics['final_test_record_majority']['correct']} / {metrics['final_test_record_majority']['total']} source records matched after record-level majority aggregation.",
+        f"{metrics['final_test_record_majority']['correct']} / {metrics['final_test_record_majority']['total']} records. Macro F1 {metrics['final_test_record_majority']['macro_f1_percent']:.2f}%, balanced {metrics['final_test_record_majority']['balanced_accuracy_percent']:.2f}%.",
         PURPLE,
         "#f8f6ff",
     )
@@ -291,7 +291,7 @@ def result_summary(metrics: dict) -> None:
         fill=WHITE,
         outline=RED,
     )
-    footnote(draw, "Do not interpret the validation 100.00% value as the final score; final_test chunk 80.56% and record-majority 84.21% are the final held-out results.")
+    footnote(draw, "Do not interpret validation 100.00% as final score; report final_test accuracy with macro F1, balanced accuracy, and class recall.")
     save(img, "final_result_summary.png")
 
 

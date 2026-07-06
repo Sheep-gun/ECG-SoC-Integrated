@@ -26,9 +26,18 @@ EXPECTED = {
     ("final_test_chunk", "correct"): 29,
     ("final_test_chunk", "total"): 36,
     ("final_test_chunk", "accuracy_percent"): 80.56,
+    ("final_test_chunk", "macro_f1_percent"): 80.44,
+    ("final_test_chunk", "balanced_accuracy_percent"): 80.56,
     ("final_test_record_majority", "correct"): 16,
     ("final_test_record_majority", "total"): 19,
     ("final_test_record_majority", "accuracy_percent"): 84.21,
+    ("final_test_record_majority", "macro_f1_percent"): 80.8,
+    ("final_test_record_majority", "balanced_accuracy_percent"): 88.19,
+}
+
+EXPECTED_RECALL = {
+    "final_test_chunk": {"NSR": 100.0, "CHF": 66.67, "ARR": 77.78, "AFF": 77.78},
+    "final_test_record_majority": {"NSR": 100.0, "CHF": 75.0, "ARR": 77.78, "AFF": 100.0},
 }
 
 REQUIRED_FILES = [
@@ -45,6 +54,9 @@ REQUIRED_FILES = [
     "docs/LIMITATIONS_KR.md",
     "reports/final/final_metrics.json",
     "reports/final/strict_recordwise_final_result.md",
+    "reports/final/strict_recordwise/strict_recordwise_metric_summary.json",
+    "reports/final/strict_recordwise/final_test_chunk_class_metrics.csv",
+    "reports/final/strict_recordwise/final_test_record_majority_class_metrics.csv",
     "reports/final/hardware_validation_result.md",
     "reports/final/xsim_locked_model_summary.md",
     "reports/final/vivado_locked_model_metrics.md",
@@ -348,6 +360,21 @@ def check_metrics(failures: list[str]) -> None:
             got = payload.get(section, {}).get(key)
             if got != expected:
                 fail(f"{name} {section}.{key} expected {expected}, got {got}", failures)
+        for section, expected_recall in EXPECTED_RECALL.items():
+            got_recall = payload.get(section, {}).get("class_recall_percent", {})
+            if got_recall != expected_recall:
+                fail(f"{name} {section}.class_recall_percent expected {expected_recall}, got {got_recall}", failures)
+    summary = read_json("reports/final/strict_recordwise/strict_recordwise_metric_summary.json")
+    for (section, key), expected in EXPECTED.items():
+        if section not in {"final_test_chunk", "final_test_record_majority"}:
+            continue
+        got = summary.get(section, {}).get(key)
+        if got != expected:
+            fail(f"strict_recordwise_metric_summary {section}.{key} expected {expected}, got {got}", failures)
+    for section, expected_recall in EXPECTED_RECALL.items():
+        got_recall = summary.get(section, {}).get("class_recall_percent", {})
+        if got_recall != expected_recall:
+            fail(f"strict_recordwise_metric_summary {section}.class_recall_percent expected {expected_recall}, got {got_recall}", failures)
     if locked.get("selected_candidate_id") != FINAL_MODEL:
         fail(f"locked JSON candidate mismatch: {locked.get('selected_candidate_id')}", failures)
     if locked.get("test_used_for_selection") is not False:

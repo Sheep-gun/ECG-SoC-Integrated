@@ -28,13 +28,27 @@
     "correct": 29,
     "total": 36,
     "accuracy_percent": 80.56,
-    "macro_f1_percent": 80.44
+    "macro_f1_percent": 80.44,
+    "balanced_accuracy_percent": 80.56,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 66.67,
+      "ARR": 77.78,
+      "AFF": 77.78
+    }
   },
   "final_test_record_majority": {
     "correct": 16,
     "total": 19,
     "accuracy_percent": 84.21,
-    "macro_f1_percent": 80.8
+    "macro_f1_percent": 80.8,
+    "balanced_accuracy_percent": 88.19,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 75.0,
+      "ARR": 77.78,
+      "AFF": 100.0
+    }
   },
   "hardware": {
     "rtl_xsim_locked_final_test_pred_mismatch": 0,
@@ -57,12 +71,12 @@
     "microblaze_full_replay_dsp": 3,
     "microblaze_full_replay_setup_wns_ns": 0.097,
     "microblaze_full_replay_hold_wns_ns": 0.019,
-    "vitis_board_replay_status": "strict_final_test_36_case_completed_final_pred_36_of_36_final_mem_35_of_36",
+    "vitis_board_replay_status": "strict_final_test_36_case_completed_final_pred_36_of_36_final_mem_36_of_36",
     "board_replay_cases": 36,
     "board_replay_samples_per_case": 1800000,
     "board_replay_snapshot_count_per_case": 30,
     "board_replay_final_pred_match": "36/36",
-    "board_replay_final_mem_match": "35/36",
+    "board_replay_final_mem_match": "36/36",
     "board_replay_classification_accuracy": "29/36 = 80.56%",
     "representative_board_replay_cases": 4,
     "representative_board_replay_final_pred_match": "4/4",

@@ -250,14 +250,22 @@ Validation 32/32 = 100.00%는 model-selection 성능이다. 최종 성능 주장
 
 ![Figure 4. Final result summary](reports/final/figures/final_result_summary.png)
 
-| Split | 정답 / 전체 | 정확도 |
-|---|---:|---:|
-| Train | 61 / 68 | 89.71% |
-| Validation | 32 / 32 | 100.00% |
-| Final test 30분 chunk | 29 / 36 | 80.56% |
-| Final test record-majority | 16 / 19 | 84.21% |
+| Split | 정답 / 전체 | Accuracy | Macro F1 | Balanced accuracy |
+|---|---:|---:|---:|---:|
+| Train | 61 / 68 | 89.71% | - | - |
+| Validation | 32 / 32 | 100.00% | - | - |
+| Final test 30분 chunk | 29 / 36 | 80.56% | 80.44% | 80.56% |
+| Final test record-majority | 16 / 19 | 84.21% | 80.80% | 88.19% |
+
+Class별 recall은 다음과 같다.
+
+| 평가 단위 | NSR recall | CHF recall | ARR recall | AFF recall |
+|---|---:|---:|---:|---:|
+| Final test 30분 chunk | 100.00% | 66.67% | 77.78% | 77.78% |
+| Final test record-majority | 100.00% | 75.00% | 77.78% | 100.00% |
 
 Final test confusion matrix는 `reports/final/strict_recordwise/structural_final_test_confusion_matrix.csv`에 저장되어 있다.
+Class별 precision/recall/F1 세부 표는 `reports/final/strict_recordwise/final_test_chunk_class_metrics.csv`와 `reports/final/strict_recordwise/final_test_record_majority_class_metrics.csv`에 저장되어 있다. Chunk 기준 weakest class는 CHF recall 66.67%이며, 이 값은 최종 성능 한계로 같이 보고한다.
 
 ![Figure 8. Final-test confusion matrix](reports/final/figures/final_test_confusion_matrix.png)
 
