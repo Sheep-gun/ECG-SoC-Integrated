@@ -23,6 +23,7 @@ REPO = Path(__file__).resolve().parents[2]
 RESULTS = REPO / "reports" / "final_submission" / "fulltop_xsim_locked_class_cases"
 DEFAULT_RESULTS = RESULTS
 BOARD_COMPARISONS = REPO / "reports" / "board_replay" / "comparisons"
+BOARD_36_COMPARISON = REPO / "reports" / "final" / "board_replay_36_expected_vs_board.csv"
 EXPECTED_DIR = REPO / "reports" / "board_replay" / "locked_expected"
 
 XVLOG = Path(r"C:\Xilinx\Vivado\2020.2\bin\xvlog.bat")
@@ -182,6 +183,26 @@ def write_project(work: Path, wrapper: Path) -> tuple[Path, Path]:
 def load_board_case(case_name: str) -> dict[str, int] | None:
     path = BOARD_COMPARISONS / f"{case_name}_expected_vs_board.csv"
     if not path.exists():
+        if not BOARD_36_COMPARISON.exists():
+            return None
+        for row in read_csv(BOARD_36_COMPARISON):
+            if row.get("case_id") != case_name:
+                continue
+            samples_sent = int(row["samples_sent"])
+            samples_accepted = int(row["samples_accepted"])
+            return {
+                "final_pred": int(row["board_final_pred"]),
+                "final_mem_NSR": int(row["board_final_mem_NSR"]),
+                "final_mem_CHF": int(row["board_final_mem_CHF"]),
+                "final_mem_ARR": int(row["board_final_mem_ARR"]),
+                "final_mem_AFF": int(row["board_final_mem_AFF"]),
+                "samples_received": samples_sent,
+                "samples_sent_to_ip": samples_sent,
+                "samples_accepted": samples_accepted,
+                "samples_consumed": samples_accepted,
+                "snapshot_count": int(row["snapshot_count"]),
+                "decision_count": 1,
+            }
         return None
     out: dict[str, int] = {}
     for row in read_csv(path):
@@ -290,8 +311,8 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
         "all_transport_ok": all_transport_ok,
         "all_final_pred_match": all_pred_match,
         "all_final_mem_match": all_mem_match,
-        "xsim_predictions": str(result_csv.relative_to(REPO)),
-        "xsim_vs_board": str(compare_csv.relative_to(REPO)),
+        "xsim_predictions": str(result_csv.relative_to(REPO)).replace("\\", "/"),
+        "xsim_vs_board": str(compare_csv.relative_to(REPO)).replace("\\", "/"),
     }
     summary_json.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
@@ -341,6 +362,7 @@ def main() -> int:
     result_csv = RESULTS / "locked_class_cases_fulltop_xsim_predictions.csv"
     summary_json = RESULTS / "locked_class_cases_xsim_vs_board_summary.json"
     summary_md = RESULTS / "locked_class_cases_xsim_vs_board_summary.md"
+    metadata_json = RESULTS / "locked_class_cases_fulltop_xsim_metadata.json"
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     if not args.skip_run:
@@ -357,6 +379,14 @@ def main() -> int:
     if not result_csv.exists():
         raise FileNotFoundError(result_csv)
     xsim_rows = read_csv(result_csv)
+    metadata = {
+        "source": "snn_ecg_30min_final_top full-top XSim",
+        "sample_gap_cycles": args.sample_gap_cycles,
+        "case_count": len(xsim_rows),
+        "cases_csv": None if args.cases_csv is None else str(args.cases_csv.resolve().relative_to(REPO)).replace("\\", "/"),
+        "result_csv": str(result_csv.relative_to(REPO)).replace("\\", "/"),
+    }
+    metadata_json.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     if args.sample_gap_cycles == 0 and RESULTS == DEFAULT_RESULTS.resolve():
         write_expected_jsons(xsim_rows)
     write_summary(result_csv, summary_json, summary_md)

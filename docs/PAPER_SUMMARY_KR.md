@@ -33,4 +33,4 @@ Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-
 - AFE+ADC는 XMODEL/nominal model 기반이다.
 - Physical AFE PCB, ADC silicon, transistor-level layout 검증은 수행하지 않았다.
 - Clinical diagnosis validation은 수행하지 않았다.
-- Board replay는 strict final_test 36개 30분 case 전체에 대해 수행했지만, physical analog validation은 아니며 final_mem exact match는 35/36으로 보고한다.
+- Board replay는 strict final_test 36개 30분 case 전체에 대해 수행했지만, physical analog validation은 아니며 final_pred/final_mem exact match는 모두 36/36으로 보고한다.

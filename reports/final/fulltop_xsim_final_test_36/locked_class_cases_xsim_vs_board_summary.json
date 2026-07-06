@@ -1,0 +1,8 @@
+{
+  "case_count": 36,
+  "all_transport_ok": true,
+  "all_final_pred_match": true,
+  "all_final_mem_match": true,
+  "xsim_predictions": "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv",
+  "xsim_vs_board": "reports/final/fulltop_xsim_final_test_36/locked_class_cases_xsim_vs_board.csv"
+}

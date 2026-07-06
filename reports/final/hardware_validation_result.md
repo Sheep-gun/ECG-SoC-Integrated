@@ -11,7 +11,7 @@ Locked RTL은 Python/XSim 비교, Vivado implementation, IP-XACT packaging, Viti
 | OOC/profile Vivado | LUT/FF/BRAM/DSP 9905/5769/0/0, WNS 0.471 ns |
 | IP packaging | AXI accelerator and sample feeder IP-XACT packages present |
 | MicroBlaze full replay build | bitstream/XSA/ELF generated, timing met |
-| Board replay | strict final_test 36 cases, final_pred 36/36, final_mem exact 35/36 |
+| Board replay | strict final_test 36 cases, final_pred 36/36, final_mem exact 36/36 |
 
 ## 주장 범위
 

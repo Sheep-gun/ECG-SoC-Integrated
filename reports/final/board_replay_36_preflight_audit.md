@@ -15,6 +15,6 @@
 | UART sender | 확인됨 | `tools/board_replay/run_full_record_batch_36.py` | 36-case batch runner |
 | existing board replay evidence | 확인됨 | `reports/final/board_replay/*_uart_full_replay.txt` | 기존 class-wise 4-case evidence와 36-case batch는 분리 |
 | 36-case board transcripts | 확인됨 | `reports/final/board_replay_36/transcripts/*.txt` | 36개 raw UART transcript |
-| 36-case comparison | 확인됨 | `reports/final/board_replay_36_expected_vs_board.csv` | final_pred 36/36, final_mem exact 35/36 |
+| 36-case comparison | 확인됨 | `reports/final/board_replay_36_expected_vs_board.csv` | final_pred 36/36, final_mem exact 36/36 |
 
 주의: `reports/final/strict_recordwise/structural_final_test_predictions.csv`는 locked software/final-layer 평가 source이고, board-level consistency 비교에는 full-top RTL XSim output을 사용한다. 실제 board bitstream은 full-top RTL datapath를 실행하므로, board-vs-expected evidence는 full-top XSim과 비교한다.

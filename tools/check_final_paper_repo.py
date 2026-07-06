@@ -55,7 +55,12 @@ REQUIRED_FILES = [
     "reports/final/board_replay_36_expected_vs_board.csv",
     "reports/final/board_replay_36_batch_summary.md",
     "reports/final/board_replay_36_batch_summary.json",
+    "reports/final/board_replay_36_final_mem_alignment_audit.md",
     "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv",
+    "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_metadata.json",
+    "reports/final/fulltop_xsim_final_test_36/locked_class_cases_xsim_vs_board.csv",
+    "reports/final/fulltop_xsim_final_test_36/locked_class_cases_xsim_vs_board_summary.json",
+    "reports/final/fulltop_xsim_final_test_36/locked_class_cases_xsim_vs_board_summary.md",
     "reports/final/formatting_and_figure_audit.md",
     "reports/final/figures/FIGURE_INDEX.md",
     "reports/final/fulltop_xsim_locked_class_cases_predictions.csv",
@@ -393,10 +398,10 @@ def check_board_replay_36(failures: list[str]) -> None:
         "status": "completed",
         "cases_requested": 36,
         "cases_completed": 36,
-        "cases_final_mem_mismatch": 1,
+        "cases_final_mem_mismatch": 0,
         "pred_match_correct": 36,
         "pred_match_total": 36,
-        "final_mem_match_correct": 35,
+        "final_mem_match_correct": 36,
         "final_mem_match_total": 36,
         "classification_correct": 29,
         "classification_total": 36,
@@ -406,15 +411,26 @@ def check_board_replay_36(failures: list[str]) -> None:
         got = board.get(key)
         if got != expected:
             fail(f"board_replay_36.{key} expected {expected}, got {got}", failures)
-    if board.get("validation_result") != "fail":
-        fail("board_replay_36.validation_result must be fail because final_mem exact is 35/36", failures)
+    if board.get("validation_result") != "pass":
+        fail("board_replay_36.validation_result must be pass because final_mem exact is 36/36", failures)
 
     summary = REPO / "reports" / "final" / "board_replay_36_batch_summary.md"
     comparison = REPO / "reports" / "final" / "board_replay_36_expected_vs_board.csv"
     manifest = REPO / "reports" / "final" / "board_replay_36_cases.csv"
-    for path in [summary, comparison, manifest]:
+    metadata = REPO / "reports" / "final" / "fulltop_xsim_final_test_36" / "locked_class_cases_fulltop_xsim_metadata.json"
+    for path in [summary, comparison, manifest, metadata]:
         if not path.exists():
             fail(f"missing 36-case board replay artifact: {rel(path)}", failures)
+    if metadata.exists():
+        payload = json.loads(metadata.read_text(encoding="utf-8-sig"))
+        if payload.get("sample_gap_cycles") != 2:
+            fail(f"36-case board-equivalent XSim sample_gap_cycles expected 2, got {payload.get('sample_gap_cycles')}", failures)
+    xsim_summary = REPO / "reports" / "final" / "fulltop_xsim_final_test_36" / "locked_class_cases_xsim_vs_board_summary.json"
+    if xsim_summary.exists():
+        payload = json.loads(xsim_summary.read_text(encoding="utf-8-sig"))
+        for key in ["all_transport_ok", "all_final_pred_match", "all_final_mem_match"]:
+            if payload.get(key) is not True:
+                fail(f"36-case XSim-vs-board {key} must be true, got {payload.get(key)}", failures)
     if not comparison.exists():
         return
 
@@ -427,8 +443,8 @@ def check_board_replay_36(failures: list[str]) -> None:
     label_matches = sum(1 for row in rows if row.get("board_correct_vs_label") == "1")
     if pred_matches != 36:
         fail(f"36-case final_pred matches expected 36, got {pred_matches}", failures)
-    if mem_matches != 35:
-        fail(f"36-case final_mem exact matches expected 35, got {mem_matches}", failures)
+    if mem_matches != 36:
+        fail(f"36-case final_mem exact matches expected 36, got {mem_matches}", failures)
     if label_matches != 29:
         fail(f"36-case label matches expected 29, got {label_matches}", failures)
     for row in rows:

@@ -390,9 +390,9 @@ def summarize(results: list[dict[str, Any]], args: argparse.Namespace) -> dict[s
         "output_dir": rel(args.output_dir.resolve()),
         "transcript_dir": rel((args.output_dir / "transcripts").resolve()),
         "parsed_dir": rel((args.output_dir / "parsed").resolve()),
-        "csv_path": rel(DEFAULT_COMPARISON),
-        "summary_path": rel(DEFAULT_SUMMARY_MD),
-        "summary_json_path": rel(DEFAULT_SUMMARY_JSON),
+        "csv_path": rel(args.comparison.resolve()),
+        "summary_path": rel(args.summary_md.resolve()),
+        "summary_json_path": rel(args.summary_json.resolve()),
         "uart_port": args.port,
         "baud": args.baud,
         "program_each_case": bool(args.program_each_case),
@@ -468,6 +468,10 @@ def update_final_metrics(summary: dict[str, Any]) -> None:
         "validation_result": summary["validation_result"],
         "cases_requested": summary["cases_requested"],
         "cases_completed": summary["cases_completed"],
+        "cases_passed": summary["cases_passed"],
+        "cases_failed_or_invalid": summary["cases_failed_or_invalid"],
+        "cases_final_mem_mismatch": summary["cases_final_mem_mismatch"],
+        "cases_pending": summary["cases_pending"],
         "samples_per_case": summary["samples_per_case"],
         "snapshots_per_case": summary["snapshots_per_case"],
         "pred_match_correct": summary["pred_match_correct"],
@@ -486,13 +490,15 @@ def update_final_metrics(summary: dict[str, Any]) -> None:
     }
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the strict final_test 36-case full-record board replay batch.")
     parser.add_argument("--cases", type=Path, default=DEFAULT_CASES)
     parser.add_argument("--port", "--uart", dest="port", default=None)
     parser.add_argument("--baud", type=int, default=SINGLE.DEFAULT_BAUD)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--comparison", type=Path, default=None)
+    parser.add_argument("--summary-md", type=Path, default=None)
+    parser.add_argument("--summary-json", type=Path, default=None)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--case-id", action="append", default=[])
     parser.add_argument("--max-cases", type=int, default=None)
@@ -514,6 +520,16 @@ def main() -> int:
 
     args.cases = args.cases.resolve()
     args.output_dir = args.output_dir.resolve()
+    using_default_output = args.output_dir == DEFAULT_OUTPUT_DIR.resolve()
+    if args.comparison is None:
+        args.comparison = DEFAULT_COMPARISON if using_default_output else args.output_dir / "expected_vs_board.csv"
+    if args.summary_md is None:
+        args.summary_md = DEFAULT_SUMMARY_MD if using_default_output else args.output_dir / "batch_summary.md"
+    if args.summary_json is None:
+        args.summary_json = DEFAULT_SUMMARY_JSON if using_default_output else args.output_dir / "batch_summary.json"
+    args.comparison = args.comparison.resolve()
+    args.summary_md = args.summary_md.resolve()
+    args.summary_json = args.summary_json.resolve()
     if not args.dry_run and not args.port:
         raise SystemExit("--port/--uart is required unless --dry-run is used")
     cases = read_csv(args.cases)
@@ -602,10 +618,11 @@ def main() -> int:
         "status",
         "notes",
     ]
-    write_csv(DEFAULT_COMPARISON, results, fields)
+    write_csv(args.comparison, results, fields)
     summary = summarize(results, args)
-    DEFAULT_SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    write_summary_md(DEFAULT_SUMMARY_MD, summary, results)
+    args.summary_json.parent.mkdir(parents=True, exist_ok=True)
+    args.summary_json.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    write_summary_md(args.summary_md, summary, results)
     if args.update_final_metrics:
         update_final_metrics(summary)
     print(json.dumps(summary, indent=2, ensure_ascii=False))

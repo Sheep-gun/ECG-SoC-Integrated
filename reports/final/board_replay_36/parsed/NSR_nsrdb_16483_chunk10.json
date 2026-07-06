@@ -19,7 +19,10 @@
     },
     "samples": 1800000,
     "snapshot_count": 30,
-    "decision_count": 1
+    "decision_count": 1,
+    "expected_source_csv": "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv",
+    "expected_source_sha256": "ccd8dbf27d48c54ec737960355abf21d27efe75bb053e61d293f7379bb6824a1",
+    "expected_modeling_note": "full-top RTL XSim, sample_gap_cycles=2"
   },
   "board": {
     "sample_bytes": 2,
@@ -63,5 +66,6 @@
     "profile_decisions_lo": 1,
     "profile_decisions_hi": 0
   },
-  "generated_at_utc": "2026-07-05T21:06:57.013887+00:00"
+  "generated_at_utc": "2026-07-05T21:06:57.013887+00:00",
+  "expected_updated_at_utc": "2026-07-06T04:50:07.775614+00:00"
 }

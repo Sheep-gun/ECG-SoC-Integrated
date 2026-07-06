@@ -54,7 +54,7 @@ Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-
 | MicroBlaze full replay system | LUT 12494, FF 8494, BRAM 16, DSP 3, setup WNS 0.097 ns |
 | IP packaging | AXI accelerator IP + MMIO-to-AXIS sample feeder IP-XACT |
 | Full-top RTL XSim final_test | 36 full-record cases, 29/36 = 80.56% |
-| Board replay | strict final_test 36-case full-record batch, final_pred 36/36, final_mem exact 35/36 |
+| Board replay | strict final_test 36-case full-record batch, final_pred 36/36, final_mem exact 36/36 |
 
 MicroBlaze system resource는 CPU, LMB/BRAM, UART, AXI interconnect, sample feeder, accelerator를 모두 포함한다. 따라서 pure RTL resource와 직접 비교하지 않고 integration proof로 분리해서 해석한다.
 
@@ -82,7 +82,7 @@ MicroBlaze system resource는 CPU, LMB/BRAM, UART, AXI interconnect, sample feed
 - AFE+ADC는 XMODEL/nominal model 기반이며 physical AFE PCB 또는 ADC silicon 측정이 아니다.
 - CMOS/transistor-level layout 및 post-layout verification은 수행하지 않았다.
 - Clinical diagnosis validation은 수행하지 않았으며, 본 결과는 engineering validation 범위에 머문다.
-- Board replay는 strict final_test 36개 30분 case 전체에 대해 수행했지만, physical analog validation은 아니며 final_mem exact match는 35/36으로 보고한다.
+- Board replay는 strict final_test 36개 30분 case 전체에 대해 수행했지만, physical analog validation은 아니며 final_pred/final_mem exact match는 모두 36/36으로 보고한다.
 
 ## 7. Main Report Link
 

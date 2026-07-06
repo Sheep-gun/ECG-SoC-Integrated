@@ -10,7 +10,7 @@
 | reports/final Markdown | evidence summary 문서 유지 | board replay, strict record-wise, Vivado, XSim 요약을 최종 제출 톤으로 정리 |
 | final result figure | final_test 중심 시각화 | validation 100.00%는 model-selection 영역으로 낮추고 final_test 80.56%/84.21%를 중심 배치 |
 | resource/timing figure | badge/card 기반 시각화 | BRAM/DSP 0 값이 사라지지 않도록 별도 resource badge로 표시 |
-| board replay evidence | 36개 strict final_test transcript/CSV 존재 | final_pred 36/36, final_mem exact 35/36으로 분리 보고 |
+| board replay evidence | 36개 strict final_test transcript/CSV 존재 | final_pred 36/36, final_mem exact 36/36으로 분리 보고 |
 | checker | 자동 consistency check | heading blank line, Mermaid fence, table row, image/link, figure 해상도, metric 일치성 검사 |
 
 ## Final-facing Documents

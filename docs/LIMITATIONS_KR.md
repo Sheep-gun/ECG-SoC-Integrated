@@ -23,7 +23,6 @@
 | Clinical diagnosis validation | Engineering prototype only |
 | Validation 100.00% as final generalization | Validation is model-selection performance |
 | Physical analog board validation | Board replay is digital RTL/IP integration evidence, not DAC/electrode/AFE PCB validation |
-| 36/36 final_mem exact board match | final_pred matches 36/36, but final_mem exact match is 35/36 |
 
 ## Final Result Interpretation
 

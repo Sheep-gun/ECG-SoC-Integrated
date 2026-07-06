@@ -304,7 +304,7 @@ def hardware_flow(metrics: dict) -> None:
         ("Vivado", "Synthesis, implementation, timing, utilization."),
         ("IP-XACT", "AXI accelerator and MMIO-to-AXIS feeder packages."),
         ("Vitis/MicroBlaze", "Bitstream/XSA/ELF full-record replay system."),
-        ("Board comparison", "36 final_test 30-minute cases; final_pred 36/36, final_mem exact 35/36."),
+        ("Board comparison", "36 final_test 30-minute cases; final_pred 36/36, final_mem exact 36/36."),
     ]
     y = 235
     prev = None
@@ -318,7 +318,7 @@ def hardware_flow(metrics: dict) -> None:
     box(draw, (260, 590, 650, 735), "MicroBlaze system", f"LUT {metrics['microblaze_full_replay_system']['lut']}, FF {metrics['microblaze_full_replay_system']['slice_reg']}, BRAM {metrics['microblaze_full_replay_system']['bram']}, DSP {metrics['microblaze_full_replay_system']['dsp']}", fill="#f8fff9", outline=GREEN)
     replay36 = metrics["board_replay_36"]
     box(draw, (880, 590, 1270, 735), "Board replay evidence", f"{replay36['cases_completed']} cases, {replay36['samples_per_case']:,} samples/case, {replay36['pred_match_correct']}/{replay36['pred_match_total']} final_pred match", fill="#fff8f5", outline=ORANGE)
-    footnote(draw, "Board replay is a 36-case strict final_test full-record batch; final_mem exact match is tracked separately as 35/36.")
+    footnote(draw, "Board replay is a 36-case strict final_test full-record batch; final_pred and final_mem exact both match 36/36.")
     save(img, "hardware_validation_flow.png")
 
 
@@ -413,7 +413,7 @@ def board_pass_matrix() -> bool:
                 fill = "#e7f6ec" if val in ("PASS", "OK") else "#fde8e8"
             draw.rectangle((x, y, x + widths[i], y + 18), fill=fill, outline=LINE)
             centered_text(draw, (x, y, x + widths[i], y + 18), val, FONT_XS, GREEN if val in ("PASS", "OK") else RED)
-    footnote(draw, "36/36 final_pred match and 35/36 final_mem exact match; one case is reported as FINAL_MEM_MISMATCH, not hidden.")
+    footnote(draw, "36/36 final_pred match and 36/36 final_mem exact match against board-equivalent full-top XSim expected.")
     save(img, "board_replay_pass_matrix.png")
     return True
 

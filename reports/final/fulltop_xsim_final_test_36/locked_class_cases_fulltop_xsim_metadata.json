@@ -1,0 +1,7 @@
+{
+  "source": "snn_ecg_30min_final_top full-top XSim",
+  "sample_gap_cycles": 2,
+  "case_count": 36,
+  "cases_csv": "reports/final/board_replay_36_cases.csv",
+  "result_csv": "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv"
+}

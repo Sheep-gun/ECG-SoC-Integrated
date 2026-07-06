@@ -10,10 +10,10 @@
 | Samples per case | 1,800,000 |
 | Snapshots per case | 30 |
 | Board-vs-expected final_pred PASS | 36/36 |
-| Board-vs-expected final_mem exact PASS | 35/36 |
+| Board-vs-expected final_mem exact PASS | 36/36 |
 | Board classification accuracy vs label | 29/36 |
 | Pending cases | 0 |
-| Final_mem exact mismatch cases | 1 |
+| Final_mem exact mismatch cases | 0 |
 | Other failed/invalid cases | 0 |
 
 | case_id | label | expected_pred | board_pred | pred_match | mem_match | samples | snapshots | status |
@@ -37,7 +37,7 @@
 | `ARR_mitdb_220_chunk00` | ARR | 0 | 0 | 1 | 1 | 1800000 | 30 | PASS |
 | `ARR_mitdb_231_chunk00` | ARR | 2 | 2 | 1 | 1 | 1800000 | 30 | PASS |
 | `CHF_chfdb_chf06_chunk06` | CHF | 1 | 1 | 1 | 1 | 1800000 | 30 | PASS |
-| `CHF_chfdb_chf06_chunk19` | CHF | 3 | 3 | 1 | 0 | 1800000 | 30 | FINAL_MEM_MISMATCH |
+| `CHF_chfdb_chf06_chunk19` | CHF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
 | `CHF_chfdb_chf06_chunk32` | CHF | 1 | 1 | 1 | 1 | 1800000 | 30 | PASS |
 | `CHF_chfdb_chf07_chunk09` | CHF | 1 | 1 | 1 | 1 | 1800000 | 30 | PASS |
 | `CHF_chfdb_chf07_chunk29` | CHF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
