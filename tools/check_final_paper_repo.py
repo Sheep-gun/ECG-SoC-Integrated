@@ -68,6 +68,8 @@ REQUIRED_FILES = [
     "reports/final/board_replay_36_batch_summary.md",
     "reports/final/board_replay_36_batch_summary.json",
     "reports/final/board_replay_36_final_mem_alignment_audit.md",
+    "reports/final/digital_ip_scope_and_handoff.md",
+    "reports/final/digital_input_contract.md",
     "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv",
     "reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_metadata.json",
     "reports/final/fulltop_xsim_final_test_36/locked_class_cases_xsim_vs_board.csv",
@@ -383,6 +385,112 @@ def check_metrics(failures: list[str]) -> None:
         fail("locked JSON test_used_for_parameter_search must be false", failures)
     if locked.get("test_used_for_chatgpt_context") is not False:
         fail("locked JSON test_used_for_chatgpt_context must be false", failures)
+    expected_claims = {
+        "SNN-inspired ECG Classification Accelerator IP Core",
+        "signed 12-bit AFE+ADC XMODEL stream input compatibility",
+        "fully blind strict record-wise locked final holdout evaluation",
+        "RTL/XSim locked-model equivalence",
+        "Vivado/IP-XACT packaged accelerator IP",
+        "Vitis/MicroBlaze 36-case full-record board replay",
+    }
+    claims_allowed = set(submission.get("claims_allowed", []))
+    missing_claims = sorted(expected_claims - claims_allowed)
+    if missing_claims:
+        fail(f"final_submission_locked_model missing digital allowed claims: {missing_claims}", failures)
+    deps = submission.get("external_dependencies", [])
+    dep_names = {dep.get("name") for dep in deps if isinstance(dep, dict)}
+    for expected_dep in [
+        "MATLAB AFE+ADC nominal pre-validation repo",
+        "SystemVerilog XMODEL AFE+ADC verification repo",
+    ]:
+        if expected_dep not in dep_names:
+            fail(f"final_submission_locked_model missing external dependency: {expected_dep}", failures)
+    for dep in deps:
+        if isinstance(dep, dict) and dep.get("owned_by_this_repo") is not False:
+            fail(f"external dependency must not be owned by this repo: {dep}", failures)
+
+
+def check_digital_scope_and_handoff(failures: list[str]) -> None:
+    readme = (REPO / "README.md").read_text(encoding="utf-8-sig", errors="replace")
+    final_report = (REPO / "FINAL_REPORT_KR.md").read_text(encoding="utf-8-sig", errors="replace")
+    handoff = (REPO / "reports/final/digital_ip_scope_and_handoff.md").read_text(encoding="utf-8-sig", errors="replace")
+    contract = (REPO / "reports/final/digital_input_contract.md").read_text(encoding="utf-8-sig", errors="replace")
+
+    required_texts = {
+        "README.md": [
+            "SNN-based Long-window ECG 4-Class Classification Accelerator IP Core",
+            "digital RTL/IP/FPGA validation",
+            "signed 12-bit ECG stream",
+            "locked strict record-wise protocol",
+            "RTL/XSim/Vivado/IP-XACT/Vitis/MicroBlaze board replay",
+            "MATLAB AFE+ADC nominal pre-validation",
+            "XMODEL AFE+ADC verification",
+            "sample_gap_cycles=2",
+            "Cross-Repo Ownership",
+            "Digital full-top XSim expected outputs",
+            "Vitis/MicroBlaze board replay vs expected outputs",
+            "Upstream AFE-to-locked RTL integration evidence",
+        ],
+        "FINAL_REPORT_KR.md": [
+            "SNN-based Long-window ECG 4-Class Classification Accelerator IP Core",
+            "digital RTL/IP/FPGA validation",
+            "signed 12-bit ECG stream",
+            "locked strict record-wise protocol",
+            "Vitis/MicroBlaze board replay",
+            "MATLAB AFE+ADC nominal pre-validation",
+            "XMODEL AFE+ADC verification",
+            "cross-repo ownership",
+            "Digital Input Contract and Upstream AFE Dependency",
+            "sample_gap_cycles=2",
+            "Digital full-top XSim expected outputs",
+            "Vitis/MicroBlaze board replay vs expected outputs",
+            "Upstream AFE-to-locked RTL integration evidence",
+        ],
+        "reports/final/digital_ip_scope_and_handoff.md": [
+            "digital SNN ECG 4-Class Classification Accelerator IP Core",
+            "What This Repo Owns",
+            "What Teammate Repos Own",
+            "MATLAB AFE+ADC nominal pre-validation",
+            "XMODEL AFE+ADC verification",
+            "sample_gap_cycles=2",
+            "Board replay is digital RTL/IP replay evidence",
+        ],
+        "reports/final/digital_input_contract.md": [
+            "signed 12-bit ECG stream",
+            "1 kSPS",
+            "60,000",
+            "1,800,000",
+            "sample_gap_cycles=2",
+            "Digital full-top XSim expected outputs",
+            "Vitis/MicroBlaze board replay vs expected outputs",
+            "Upstream AFE-to-locked RTL integration evidence",
+        ],
+    }
+    text_by_name = {
+        "README.md": readme,
+        "FINAL_REPORT_KR.md": final_report,
+        "reports/final/digital_ip_scope_and_handoff.md": handoff,
+        "reports/final/digital_input_contract.md": contract,
+    }
+    for name, needles in required_texts.items():
+        haystack = text_by_name[name]
+        for needle in needles:
+            if needle not in haystack:
+                fail(f"{name} missing digital scope wording: {needle}", failures)
+
+    forbidden_ownership_patterns = [
+        r"this repo owns[^\n.]*AFE\+ADC XMODEL stress",
+        r"this repo owns[^\n.]*MATLAB AFE",
+        r"본 repo가 소유[^\n.]*AFE\+ADC XMODEL stress",
+        r"본 repo가 소유[^\n.]*MATLAB",
+    ]
+    for name, haystack in {"README.md": readme, "FINAL_REPORT_KR.md": final_report}.items():
+        for pattern in forbidden_ownership_patterns:
+            if re.search(pattern, haystack, flags=re.IGNORECASE):
+                fail(f"{name} appears to claim upstream AFE/MATLAB/XMODEL ownership: {pattern}", failures)
+
+    if "sample_gap_cycles=0" in readme or "sample_gap_cycles=0" in final_report:
+        fail("final-facing README/FINAL_REPORT must not mention obsolete fast harness sample_gap_cycles=0", failures)
 
 
 def check_board_replay(failures: list[str]) -> None:
@@ -527,6 +635,7 @@ def main() -> int:
     check_markdown_heading_spacing(failures)
     check_markdown_tables(failures)
     check_metrics(failures)
+    check_digital_scope_and_handoff(failures)
     check_board_replay(failures)
     check_board_replay_36(failures)
     write_summary(failures)

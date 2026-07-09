@@ -96,12 +96,25 @@
     "board_replay_expected_vs_board": "reports/final/board_replay_36_expected_vs_board.csv",
     "board_replay_transcripts": "reports/final/board_replay_36/transcripts"
   },
+  "external_dependencies": [
+    {
+      "name": "MATLAB AFE+ADC nominal pre-validation repo",
+      "responsibility": "Nominal filter/gain/ADC behavior pre-validation before XMODEL verification",
+      "owned_by_this_repo": false
+    },
+    {
+      "name": "SystemVerilog XMODEL AFE+ADC verification repo",
+      "responsibility": "AFE+ADC XMODEL stress verification and AFE-to-locked RTL integration evidence",
+      "owned_by_this_repo": false
+    }
+  ],
   "claims_allowed": [
     "SNN-inspired ECG Classification Accelerator IP Core",
-    "AFE+ADC XMODEL-linked model-based mixed-signal-to-digital verification",
+    "signed 12-bit AFE+ADC XMODEL stream input compatibility",
     "fully blind strict record-wise locked final holdout evaluation",
+    "RTL/XSim locked-model equivalence",
     "Vivado/IP-XACT packaged accelerator IP",
-    "Vitis/MicroBlaze 36-case full-record board replay with transcript/comparison evidence"
+    "Vitis/MicroBlaze 36-case full-record board replay"
   ],
   "claims_forbidden": [
     "direct electrode ECG acquisition",
