@@ -413,8 +413,11 @@ def check_metrics(failures: list[str]) -> None:
 def check_digital_scope_and_handoff(failures: list[str]) -> None:
     readme = (REPO / "README.md").read_text(encoding="utf-8-sig", errors="replace")
     final_report = (REPO / "FINAL_REPORT_KR.md").read_text(encoding="utf-8-sig", errors="replace")
+    paper_summary = (REPO / "docs/PAPER_SUMMARY_KR.md").read_text(encoding="utf-8-sig", errors="replace")
+    system_architecture = (REPO / "docs/SYSTEM_ARCHITECTURE_KR.md").read_text(encoding="utf-8-sig", errors="replace")
     handoff = (REPO / "reports/final/digital_ip_scope_and_handoff.md").read_text(encoding="utf-8-sig", errors="replace")
     contract = (REPO / "reports/final/digital_input_contract.md").read_text(encoding="utf-8-sig", errors="replace")
+    figure_index = (REPO / "reports/final/figures/FIGURE_INDEX.md").read_text(encoding="utf-8-sig", errors="replace")
 
     required_texts = {
         "README.md": [
@@ -446,6 +449,21 @@ def check_digital_scope_and_handoff(failures: list[str]) -> None:
             "Vitis/MicroBlaze board replay vs expected outputs",
             "Upstream AFE-to-locked RTL integration evidence",
         ],
+        "docs/PAPER_SUMMARY_KR.md": [
+            "Upstream MATLAB/XMODEL teammate repositories",
+            "signed 12-bit stream",
+            "이 digital repo는",
+            "RTL/XSim/Vivado/IP-XACT/Vitis/board replay",
+            "teammate repositories에서 유지",
+        ],
+        "docs/SYSTEM_ARCHITECTURE_KR.md": [
+            "Upstream MATLAB/XMODEL teammate repositories",
+            "Upstream AFE Dependency and Digital Input Handoff",
+            "이 repo의 소유 범위는 signed 12-bit stream 경계부터",
+            "MATLAB teammate repo",
+            "XMODEL teammate repo",
+            "This digital repo",
+        ],
         "reports/final/digital_ip_scope_and_handoff.md": [
             "digital SNN ECG 4-Class Classification Accelerator IP Core",
             "What This Repo Owns",
@@ -465,12 +483,18 @@ def check_digital_scope_and_handoff(failures: list[str]) -> None:
             "Vitis/MicroBlaze board replay vs expected outputs",
             "Upstream AFE-to-locked RTL integration evidence",
         ],
+        "reports/final/figures/FIGURE_INDEX.md": [
+            "Ownership-labeled upstream MATLAB/XMODEL handoff to the digital accelerator validation flow.",
+        ],
     }
     text_by_name = {
         "README.md": readme,
         "FINAL_REPORT_KR.md": final_report,
+        "docs/PAPER_SUMMARY_KR.md": paper_summary,
+        "docs/SYSTEM_ARCHITECTURE_KR.md": system_architecture,
         "reports/final/digital_ip_scope_and_handoff.md": handoff,
         "reports/final/digital_input_contract.md": contract,
+        "reports/final/figures/FIGURE_INDEX.md": figure_index,
     }
     for name, needles in required_texts.items():
         haystack = text_by_name[name]
@@ -484,13 +508,23 @@ def check_digital_scope_and_handoff(failures: list[str]) -> None:
         r"본 repo가 소유[^\n.]*AFE\+ADC XMODEL stress",
         r"본 repo가 소유[^\n.]*MATLAB",
     ]
-    for name, haystack in {"README.md": readme, "FINAL_REPORT_KR.md": final_report}.items():
+    for name, haystack in text_by_name.items():
         for pattern in forbidden_ownership_patterns:
             if re.search(pattern, haystack, flags=re.IGNORECASE):
                 fail(f"{name} appears to claim upstream AFE/MATLAB/XMODEL ownership: {pattern}", failures)
 
-    if "sample_gap_cycles=0" in readme or "sample_gap_cycles=0" in final_report:
-        fail("final-facing README/FINAL_REPORT must not mention obsolete fast harness sample_gap_cycles=0", failures)
+    cadence_paths = [REPO / "README.md", REPO / "FINAL_REPORT_KR.md"]
+    cadence_paths.extend(sorted((REPO / "docs").rglob("*.md")))
+    cadence_paths.extend(sorted((REPO / "reports/final").rglob("*.md")))
+    cadence_pattern = re.compile(r"sample_gap_cycles\s*[=:]\s*(\d+)", flags=re.IGNORECASE)
+    for path in cadence_paths:
+        haystack = path.read_text(encoding="utf-8-sig", errors="replace")
+        for match in cadence_pattern.finditer(haystack):
+            if int(match.group(1)) != 2:
+                fail(
+                    f"{rel(path)} contains non-canonical sample_gap_cycles={match.group(1)}; expected 2",
+                    failures,
+                )
 
 
 def check_board_replay(failures: list[str]) -> None:

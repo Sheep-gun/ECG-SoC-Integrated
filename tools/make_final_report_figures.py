@@ -171,7 +171,7 @@ def save(img: Image.Image, name: str) -> None:
 
 def final_system_architecture(metrics: dict) -> None:
     img, draw = canvas()
-    title(draw, "Figure 1. Final System Architecture", "Model-based AFE+ADC input generation linked to the locked SNN accelerator IP")
+    title(draw, "Figure 1. Final System Architecture", "Upstream MATLAB/XMODEL handoff into the digital SNN accelerator IP")
     labels = [
         ("Digitized ECG record", "Public ECG database record; not raw electrode acquisition."),
         ("vin reconstruction", "code / 200000 to analog-equivalent PWL-style input."),
@@ -182,11 +182,20 @@ def final_system_architecture(metrics: dict) -> None:
         ("4-class output", "NSR / CHF / ARR / AFF"),
     ]
     x0, y0, w, h, gap = 70, 210, 190, 150, 22
+    upstream_band = (x0, 160, x0 + 3 * w + 2 * gap, 196)
+    digital_band = (x0 + 3 * (w + gap), 160, 1532, 196)
+    draw.rounded_rectangle(upstream_band, radius=12, fill="#fff5ec", outline=ORANGE, width=2)
+    draw.rounded_rectangle(digital_band, radius=12, fill="#edf5ff", outline=BLUE, width=2)
+    centered_text(draw, upstream_band, "UPSTREAM MATLAB / XMODEL TEAMMATE REPOS", FONT_S, ORANGE)
+    centered_text(draw, digital_band, "THIS DIGITAL RTL / IP / FPGA REPOSITORY", FONT_S, BLUE)
     boxes = []
     for i, (label, detail) in enumerate(labels):
         x = x0 + i * (w + gap)
         boxes.append((x, y0, x + w, y0 + h))
-        box(draw, boxes[-1], label, detail, fill="#f7fbff", outline=BLUE)
+        if i < 3:
+            box(draw, boxes[-1], label, detail, fill="#fffaf4", outline=ORANGE)
+        else:
+            box(draw, boxes[-1], label, detail, fill="#f7fbff", outline=BLUE)
         if i:
             arrow(draw, (boxes[i - 1][2], y0 + h // 2), (boxes[i][0], y0 + h // 2))
     box(draw, (430, 520, 720, 690), "Validation stack", "Python golden -> XSim -> Vivado implementation -> IP-XACT packaging", fill="#f8fff9", outline=GREEN)
@@ -465,7 +474,7 @@ def main() -> int:
     metrics = load_json(METRICS)
     created: list[tuple[str, str, str, str]] = []
     final_system_architecture(metrics)
-    created.append(("Figure 1", "reports/final/figures/final_system_architecture.png", "README, FINAL_REPORT, docs", "End-to-end AFE+ADC XMODEL to accelerator IP validation flow."))
+    created.append(("Figure 1", "reports/final/figures/final_system_architecture.png", "README, FINAL_REPORT, docs", "Ownership-labeled upstream MATLAB/XMODEL handoff to the digital accelerator validation flow."))
     snapshot_pipeline(metrics)
     created.append(("Figure 2", "reports/final/figures/snapshot_to_final_membrane_pipeline.png", "FINAL_REPORT, SYSTEM_ARCHITECTURE", "60-second snapshot evidence accumulated into the 30-minute final membrane."))
     strict_protocol(metrics)

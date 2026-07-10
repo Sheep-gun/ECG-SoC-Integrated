@@ -2,7 +2,7 @@
 
 | Figure | File | Used in | Description |
 |---|---|---|---|
-| Figure 1 | `reports/final/figures/final_system_architecture.png` | README, FINAL_REPORT, docs | End-to-end AFE+ADC XMODEL to accelerator IP validation flow. |
+| Figure 1 | `reports/final/figures/final_system_architecture.png` | README, FINAL_REPORT, docs | Ownership-labeled upstream MATLAB/XMODEL handoff to the digital accelerator validation flow. |
 | Figure 2 | `reports/final/figures/snapshot_to_final_membrane_pipeline.png` | FINAL_REPORT, SYSTEM_ARCHITECTURE | 60-second snapshot evidence accumulated into the 30-minute final membrane. |
 | Figure 3 | `reports/final/figures/strict_recordwise_protocol.png` | FINAL_REPORT, STRICT_RECORDWISE_PROTOCOL | Record-wise split, validation usage, and final-test lock boundary. |
 | Figure 4 | `reports/final/figures/final_result_summary.png` | README, FINAL_REPORT, docs | Train, validation, and locked final-test result separation. |

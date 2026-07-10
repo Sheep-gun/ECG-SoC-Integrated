@@ -2,7 +2,7 @@
 
 ## 핵심 요약
 
-본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 거쳐 signed 12-bit stream을 만든 뒤, RTL accelerator에서 60초 Snapshot Readout과 30분 Final Membrane Readout을 수행한다.
+본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. Upstream MATLAB/XMODEL teammate repositories가 공개 digitized ECG record의 analog-equivalent `vin` 해석, AFE+ADC nominal/XMODEL 검증, signed 12-bit stream 생성을 담당한다. 이 digital repo는 그 stream contract부터 시작하여 60초 Snapshot Readout, 30분 Final Membrane Readout, RTL/XSim/Vivado/IP-XACT/Vitis/board replay 검증을 담당한다.
 
 ![Final system architecture](../reports/final/figures/final_system_architecture.png)
 
@@ -29,12 +29,12 @@ Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-
 
 ## 제출 포지션
 
-본 결과는 실제 전극 기반 의료기기 검증이 아니라, AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. Digital IP 관점에서는 Python golden, XSim, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze board replay evidence를 갖는다.
+본 결과는 실제 전극 기반 의료기기 검증이 아니라, upstream AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 signed 12-bit stream contract로 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. MATLAB nominal pre-validation과 XMODEL stress/integration evidence는 teammate repositories에서 유지하며, 이 repo는 Python golden, XSim, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze board replay로 digital accelerator를 검증한다.
 
 ## 한계
 
 - Source ECG는 이미 digitized public record이다.
-- AFE+ADC는 XMODEL/nominal model 기반이다.
+- AFE+ADC는 upstream teammate repositories가 관리하는 XMODEL/nominal model 기반이다.
 - Physical AFE PCB, ADC silicon, transistor-level layout 검증은 수행하지 않았다.
 - Clinical diagnosis validation은 수행하지 않았다.
 - Board replay는 strict final_test 36개 30분 case 전체에 대해 수행했지만, physical analog validation은 아니며 final_pred/final_mem exact match는 모두 36/36으로 보고한다.

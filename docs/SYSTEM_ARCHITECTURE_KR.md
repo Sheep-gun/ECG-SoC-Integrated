@@ -15,23 +15,20 @@ flowchart LR
     G --> H["NSR / CHF / ARR / AFF"]
 ```
 
-본 시스템은 public ECG record에서 시작하지만, 이를 raw analog acquisition으로 주장하지 않는다. Digitized code를 analog-equivalent `vin`으로 재구성하고 AFE+ADC XMODEL을 통과시켜, digital accelerator가 실제로 받을 signed 12-bit stream을 만든다.
+전체 merged-paper 시스템은 public ECG record에서 시작하지만, 이를 raw analog acquisition으로 주장하지 않는다. Upstream MATLAB/XMODEL teammate repositories가 digitized code의 analog-equivalent `vin` 해석과 AFE+ADC XMODEL 검증을 담당하고, 그 결과를 signed 12-bit ECG stream으로 이 digital repo에 전달한다.
 
-그 뒤의 digital path는 fully streaming 구조다. 60초 Snapshot Readout이 ECG evidence를 만들고, 30개 snapshot을 Final Membrane Readout이 누적하여 30분 단위 final class를 출력한다.
+이 repo의 소유 범위는 signed 12-bit stream 경계부터 시작하는 fully streaming digital path이다. 60초 Snapshot Readout이 ECG evidence를 만들고, 30개 snapshot을 Final Membrane Readout이 누적하여 30분 단위 final class를 출력한다.
 
-## AFE+ADC XMODEL 입력 생성
+## Upstream AFE Dependency and Digital Input Handoff
 
-| 단계 | 의미 |
-|---|---|
-| `code / 200000` | public ECG code를 voltage-equivalent input으로 해석 |
-| PWL-equivalent reconstruction | physical DAC 대신 XMODEL 입력에 맞는 virtual waveform 구성 |
-| HPF | baseline drift 억제 |
-| IA gain x201 | ECG amplitude scaling |
-| 60 Hz notch | 전원성 간섭 억제 |
-| LPF 150 Hz | 고주파 잡음 제한 |
-| 12-bit ADC quantization | RTL 입력 signed 12-bit stream 생성 |
+| 범위 | 역할 | 소유 위치 |
+|---|---|---|
+| MATLAB AFE+ADC nominal pre-validation | Filter, gain, ADC nominal behavior와 analog-chain intent 확인 | MATLAB teammate repo |
+| AFE+ADC SystemVerilog XMODEL verification | `vin` reconstruction, stress verification, signed 12-bit stream 생성 | XMODEL teammate repo |
+| Digital input contract | signed 12-bit, 1 kSPS stream을 RTL/IP에 전달 | Cross-repo handoff boundary |
+| SNN accelerator validation | Snapshot/Final Membrane RTL, XSim, Vivado, IP-XACT, Vitis/board replay | This digital repo |
 
-이 flow는 physical analog board 검증이 아니라 model-based mixed-signal-to-digital verification이다. 핵심은 AFE+ADC nominal behavior를 digital RTL verification 앞단에 넣어, 단순 dataset scaling보다 더 명확한 입력 생성 과정을 만든 것이다.
+Upstream analog chain은 `HPF 0.482 Hz -> IA x201 -> 60 Hz notch -> LPF 150 Hz -> 12-bit ADC`로 연결된다. 해당 MATLAB nominal pre-validation과 XMODEL stress verification은 이 repo의 소유 범위가 아니다. 이 repo는 upstream에서 생성된 stream이 digital input contract를 만족한다고 전제하고, 그 이후의 locked RTL/IP/FPGA 동작을 검증한다.
 
 ## Snapshot-to-Final Pipeline
 
