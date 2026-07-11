@@ -1,0 +1,17 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+
+# Generated Python state
+__pycache__/
+*.py[cod]
+.venv/
+
+# Generated integration scratch files
+.integration-tmp/
+
+# The private report and application material must remain outside Git.
+private_submission/*
+!private_submission/.gitignore
