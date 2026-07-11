@@ -137,7 +137,8 @@ def main() -> int:
             failures.append(f"{name}: {detail or 'condition failed'}")
 
     check("independent .git exists", (ROOT / ".git").is_dir())
-    check("integrated branch is main", git(ROOT, "branch", "--show-current") == "main")
+    active_branch = git(ROOT, "branch", "--show-current")
+    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
     check("12 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 12)

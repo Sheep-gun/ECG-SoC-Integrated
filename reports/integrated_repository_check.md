@@ -2,14 +2,14 @@
 
 ## Result: PASS
 
-- Rules checked: 207
+- Rules checked: 211
 - Conflicts found: 0
 - Benchmark placeholder: PASS (all fields null)
 
 ## Rules checked
 
 - PASS — independent .git exists
-- PASS — integrated branch is main
+- PASS — integrated branch is approved
 - PASS — required path README.md
 - PASS — required path LICENSE_OR_PROVENANCE.md
 - PASS — required path INTEGRATION_AUDIT.md
@@ -168,6 +168,10 @@
 - PASS — claim evidence exists: CLM-016
 - PASS — claim evidence exists: CLM-017
 - PASS — claim evidence exists: CLM-023
+- PASS — claim evidence exists: CLM-024
+- PASS — claim evidence exists: CLM-025
+- PASS — claim evidence exists: CLM-026
+- PASS — claim evidence exists: CLM-027
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — streaming inventory columns

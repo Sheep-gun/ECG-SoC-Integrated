@@ -4,12 +4,14 @@
 
 ## 구조와 서술
 
-- [x] 제목, 초록, 1~10장, 참고문헌, 부록 A/B가 존재한다.
+- [x] 제목, 900~1,300자 초록, 핵심어, 1~11장, 참고문헌, 부록 A/B/C가 존재한다.
 - [x] 요구된 모든 subsection이 outline이 아닌 설명 문단을 포함한다.
 - [x] MATLAB, XMODEL, digital architecture, evaluation, RTL/IP/FPGA와 integration evidence가 하나의 연속 narrative로 합성됐다.
 - [x] Primary contribution을 long-window Snapshot/Final-Membrane architecture로 두고 speed를 primary novelty로 쓰지 않았다.
 - [x] Existing overview figures와 FIG-12 detailed digital architecture를 caption·scope·limitation과 함께 참조한다.
-- [x] 목표, interface, split, feature blocks, classification, MATLAB/XMODEL, resources, integration, limitations, benchmark 표가 존재한다.
+- [x] 목표, interface, dataset/license, split, feature blocks, MATLAB, XMODEL, classification, confusion, integration, resources, streaming, limitations, benchmark 표가 존재한다.
+- [x] 제8장은 결과를 종합하는 실질적 논의이고 제9장은 창의성·기술성·완성도를 심사 관점에서 구분한다.
+- [x] Final Membrane, guard/rescue/veto/silent-AFF와 deterministic WTA가 중심 구조로 설명된다.
 
 ## 수치 일치
 
@@ -20,6 +22,7 @@
 - [x] `final_test_evaluation_count=1`, `test_used_for_selection=false`를 명시했다.
 - [x] MATLAB representative clipping `0%`, minimum headroom 약 `1.0196 V`가 일치한다.
 - [x] Emulator–XMODEL mean RMS `1.95 LSB`, lag `0`을 correct scope로 썼다.
+- [x] PLI `0.92/118 mV`, mismatch CMRR `100.7/80.0 dB`, ADC stress `15/16`을 CLM-025~027로 분리했다.
 - [x] Pure RTL `9719 LUT / 5038 FF / 0 BRAM / 0 DSP / WNS 8.184 ns`가 일치한다.
 - [x] MicroBlaze system `12494 LUT / 8494 register / 16 BRAM / 3 DSP / setup WNS 0.097 ns`가 일치한다.
 - [x] Input SHA, AFE-to-RTL 및 board equivalence의 각 `36/36` scope를 분리했다.

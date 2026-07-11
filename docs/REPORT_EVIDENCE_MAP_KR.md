@@ -1,6 +1,6 @@
 # 향후 private HWP 보고서 evidence map
 
-본 파일은 보고서 본문을 작성하지 않고, 각 장에서 사용할 문장·artifact·claim 경계를 연결한다. 모든 wording은 `claim_registry.csv`의 status를 우선한다.
+본 파일은 11장 완성 원고와 향후 private HWP 사이에서 문장·artifact·claim 경계를 연결한다. 모든 wording은 `claim_registry.csv`의 status를 우선한다.
 
 ## 완성 원고와 향후 공식 제출물의 구분
 
@@ -20,7 +20,11 @@
 | 연구 방법 | strict source-record-wise lock / CLM-007,016 | `final_submission_locked_model.json`; `STRICT_RECORDWISE_PROTOCOL_KR.md` | digital c6b80de | 양건 | final-test 1회; confounding 미해소 |
 | 시스템 구성 | MATLAB→XMODEL→digital→FPGA | `SYSTEM_OVERVIEW_KR.md` | all three fixed commits | 서민우/이수환/양건 | layer ownership 분리 |
 | 아날로그 모델 검증 | 대표 nominal clipping 0% / CLM-015 | `afe_dynamic_range_headroom_summary.csv` | MATLAB 907f7e1 | 서민우 | 4 representative records; physical claim 금지 |
+| 아날로그 모델 검증 | 대표 nominal minimum headroom 1.019633440086 V / CLM-024 | `afe_dynamic_range_headroom_summary.csv` | MATLAB 907f7e1 | 서민우 | selected records only; physical rail 보증 금지 |
 | 아날로그 모델 검증 | emu↔XMODEL mean RMS 1.95 LSB / CLM-014 | `AFE_xmodel_verification.md` | XMODEL 4756a508 | 이수환 | model-to-model, not bit-exact |
+| XMODEL stress | 60/50 Hz PLI RMS residual 0.92/118 mV / CLM-025 | `AFE_xmodel_verification.md` | XMODEL 4756a508 | 이수환 | 60 Hz target; 50 Hz retuning 별도 |
+| XMODEL stress | 0.1%/1% mismatch CMRR 100.7/80.0 dB / CLM-026 | `AFE_xmodel_verification.md` | XMODEL 4756a508 | 이수환 | 30분 final_pred direct sweep 아님 |
+| XMODEL stress | ADC non-ideal representative final_pred 15/16 / CLM-027 | `adc_nonideal_finalpred_xsim.csv` | XMODEL 4756a508 | 이수환 | 2 LSB rms NSR 1건 변화; universal robustness 금지 |
 | 디지털 알고리즘 | 60초 Snapshot + 30분 Final Membrane / CLM-003 | `FINAL_REPORT_KR.md`; RTL sources | digital c6b80de | 양건 | architecture claim |
 | Snapshot/Final Membrane 구조 | event/state, integer streaming | `DIGITAL_ARCHITECTURE_KR.md`; `rtl/` | digital c6b80de | 양건 | trained deep SNN claim 금지 |
 | 데이터셋·평가 | four DB origins and strict split / CLM-016,017 | `DATASET_AND_EVALUATION_KR.md`; `DATASET_DOMAIN_CONFOUNDING_KR.md` | integrated + PhysioNet refs | 양건 | record leakage와 confounding 구분 |
