@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<rect width="1200" height="675" fill="#f7f9fc"/>
+<rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">Detailed SNN-inspired streaming digital architecture</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">fixed digital commit c6b80de · verified blocks and boundaries</text>
+<rect x="35" y="125" width="150" height="90" rx="14" fill="#e7f5ff" stroke="#486581" stroke-width="2"/>
+<text x="110.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Input</text>
+<text x="110.0" y="189" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed 12-bit</text>
+<text x="110.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">valid / ready</text>
+<rect x="225" y="115" width="185" height="110" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="317.5" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Adaptive event</text>
+<text x="317.5" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">delta / slope</text>
+<text x="317.5" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">up/down/strong</text>
+<rect x="450" y="115" width="180" height="110" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="540.0" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">QRS LIF</text>
+<text x="540.0" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">membrane</text>
+<text x="540.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">refractory / beat</text>
+<rect x="670" y="115" width="205" height="110" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="772.5" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Beat / RR + PNN</text>
+<text x="772.5" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">timing</text>
+<text x="772.5" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">match / mismatch</text>
+<rect x="915" y="115" width="250" height="110" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="1040.0" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">RDM variability</text>
+<text x="1040.0" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">RR difference</text>
+<text x="1040.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">level evidence</text>
+<line x1="185" y1="170" x2="225" y2="170" stroke="#486581" stroke-width="4"/>
+<polygon points="225,170 211,162 211,178" fill="#486581"/>
+<line x1="410" y1="170" x2="450" y2="170" stroke="#486581" stroke-width="4"/>
+<polygon points="450,170 436,162 436,178" fill="#486581"/>
+<line x1="630" y1="170" x2="670" y2="170" stroke="#486581" stroke-width="4"/>
+<polygon points="670,170 656,162 656,178" fill="#486581"/>
+<line x1="875" y1="170" x2="915" y2="170" stroke="#486581" stroke-width="4"/>
+<polygon points="915,170 901,162 901,178" fill="#486581"/>
+<rect x="55" y="280" width="165" height="92" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="137.5" y="314" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">DSCR</text>
+<text x="137.5" y="344" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">slope / sign flip</text>
+<rect x="245" y="280" width="165" height="92" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="327.5" y="314" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">RAM peak</text>
+<text x="327.5" y="344" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">R-peak amplitude</text>
+<rect x="435" y="280" width="165" height="92" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="517.5" y="314" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Ectopic pair</text>
+<text x="517.5" y="344" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">early / late RR</text>
+<rect x="625" y="280" width="165" height="92" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="707.5" y="314" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">QRS MAF</text>
+<text x="707.5" y="344" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">finite 120-sample lookback</text>
+<rect x="850" y="280" width="210" height="92" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="955.0" y="314" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">RBBB-like</text>
+<text x="955.0" y="344" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">QRS delay evidence</text>
+<line x1="110" y1="250" x2="1060" y2="250" stroke="#9fb3c8" stroke-width="3" stroke-dasharray="9 7"/>
+<text x="600" y="246" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="600" fill="#486581">parallel finite event/state paths</text>
+<rect x="75" y="420" width="240" height="105" rx="14" fill="#fff9db" stroke="#486581" stroke-width="2"/>
+<text x="195.0" y="454" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Snapshot aggregation</text>
+<text x="195.0" y="484" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">event counters</text>
+<text x="195.0" y="509" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">class-score/readout</text>
+<rect x="370" y="420" width="190" height="105" rx="14" fill="#fff3bf" stroke="#486581" stroke-width="2"/>
+<text x="465.0" y="454" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">60,000 samples</text>
+<text x="465.0" y="484" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">Snapshot boundary</text>
+<rect x="615" y="420" width="245" height="105" rx="14" fill="#e5dbff" stroke="#486581" stroke-width="2"/>
+<text x="737.5" y="454" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Final Membrane</text>
+<text x="737.5" y="484" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed class state</text>
+<text x="737.5" y="509" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">30 Snapshots</text>
+<rect x="915" y="410" width="250" height="125" rx="14" fill="#f3d9fa" stroke="#486581" stroke-width="2"/>
+<text x="1040.0" y="444" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Guard / rescue / veto</text>
+<text x="1040.0" y="474" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">silent-AFF logic</text>
+<text x="1040.0" y="499" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">final WTA</text>
+<text x="1040.0" y="524" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">final_pred + 4 final_mem</text>
+<line x1="315" y1="472" x2="370" y2="472" stroke="#486581" stroke-width="4"/>
+<polygon points="370,472 356,464 356,480" fill="#486581"/>
+<line x1="560" y1="472" x2="615" y2="472" stroke="#486581" stroke-width="4"/>
+<polygon points="615,472 601,464 601,480" fill="#486581"/>
+<line x1="860" y1="472" x2="915" y2="472" stroke="#486581" stroke-width="4"/>
+<polygon points="915,472 901,464 901,480" fill="#486581"/>
+<rect x="25" y="102" width="1150" height="450" rx="18" fill="none" stroke="#334e68" stroke-width="2" stroke-dasharray="12 8"/>
+<text x="42" y="576" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#102a43">Controller/FSM: accepted-sample control · 60,000-sample commit · 30-Snapshot final commit</text>
+<rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">CLM-023: fixed-size streaming state; no 1,800,000-sample raw-window buffer (avoided full raw-input window storage = 2.7 MB decimal)</text>
+</svg>

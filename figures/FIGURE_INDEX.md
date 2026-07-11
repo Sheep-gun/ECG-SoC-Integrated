@@ -122,3 +122,14 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Caption: Database-class confounding and claim boundary
 - Evidence scope: generalization interpretation
 - Limitations: does not invalidate RTL/IP evidence
+
+## FIG-12
+
+- File: `figures/final/FIG-12_detailed_digital_architecture.svg`
+- Owner: 양건(편집)
+- Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Detailed streaming digital architecture
+- Evidence scope: conceptual grouping of verified RTL blocks and boundaries
+- Limitations: not literal netlist connectivity; no threshold or benchmark value

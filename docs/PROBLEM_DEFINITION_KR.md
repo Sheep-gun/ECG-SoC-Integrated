@@ -14,7 +14,7 @@
 - 60초 수준: 국소 rhythm·morphology evidence의 Snapshot state/readout
 - 30분 수준: 30개 Snapshot에 걸친 persistence와 recurrence의 Final Membrane accumulation
 
-핵심 설계 문제는 전체 raw window buffer와 floating-point inference에 의존하지 않으면서 이 시간 계층을 정수 counter, comparator, signed accumulator와 fixed-size state로 실현하는 것이다.
+핵심 설계 문제는 전체 raw window buffer와 floating-point inference에 의존하지 않으면서 이 시간 계층을 정수 counter, comparator, signed accumulator와 fixed-size state로 실현하는 것이다. Direct RTL static audit와 `tables/streaming_state_inventory.csv`는 CLM-023을 지지한다. 회피한 full raw-input window 크기는 1,800,000×12=21,600,000 bit=2,700,000 byte≈2.7 MB decimal이며 정확한 synthesized inference-memory total은 아니다.
 
 ## 검증 문제
 

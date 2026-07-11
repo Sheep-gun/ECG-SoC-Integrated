@@ -26,5 +26,12 @@
   "xmodel": {
     "mean_rms_lsb": 1.95
   },
+  "streaming_memory": {
+    "raw_window_samples": 1800000,
+    "sample_width_bits": 12,
+    "avoided_raw_window_bits": 21600000,
+    "avoided_raw_window_bytes": 2700000,
+    "claim_id": "CLM-023"
+  },
   "benchmark_status": "PENDING_EXTERNAL_BENCHMARK_IMPORT"
 }

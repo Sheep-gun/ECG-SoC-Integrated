@@ -17,7 +17,7 @@
 
 ## 3. RTL-friendly streaming realization
 
-데이터패스는 floating-point 연산이나 전체-window raw buffer 대신 integer counter, comparator, signed accumulator와 fixed-size state를 사용한다. 입력은 sample-by-sample 처리되며 1,800,000개 sample 전체를 메모리에 보관한 뒤 추론할 필요가 없다. 이 성질은 장시간 ECG의 temporal persistence를 low-resource RTL IP로 옮기는 구조적 기여다.
+데이터패스는 floating-point 연산이나 전체-window raw buffer 대신 integer counter, comparator, signed accumulator와 fixed-size state를 사용한다. 입력은 sample-by-sample 처리되며 1,800,000개 sample 전체를 메모리에 보관한 뒤 추론할 필요가 없다 [CLM-023]. 이 `avoided full raw-input window storage`는 21,600,000 bit=2,700,000 byte≈2.7 MB decimal이다. Direct RTL 근거와 unresolved aggregate-width 경계는 `STREAMING_STATE_MEMORY_KR.md` 및 `streaming_state_inventory.csv`에 있다.
 
 ## 4. mixed-signal-to-digital verification chain
 
@@ -33,7 +33,7 @@ Classification accuracy는 별도로 29/36=80.56%이며 hardware equivalence와 
 
 ## 6. reproducible evidence and claim control
 
-세 upstream을 고정 commit으로 가져오고 모든 imported file에 SHA256을 기록했다. Strict source-record-wise split, locked final-test, owner matrix, global metric registry와 SAFE/CAREFUL/FORBIDDEN claim registry를 함께 제공한다. 성능 수치뿐 아니라 말할 수 없는 범위까지 source of truth로 만드는 것이 향후 보고서의 재현성과 심사 방어력을 높인다.
+세 upstream을 고정 commit의 curated technical snapshot으로 가져오고 모든 retained imported file에 SHA256을 기록했다. 생략한 upstream path는 exclusion registry에 기록하며, PhysioNet raw data는 fixed-version manifest와 expected hashes로 복원한다. Strict source-record-wise split, locked final-test, owner matrix, global metric registry와 SAFE/CAREFUL/FORBIDDEN claim registry를 함께 제공한다. 성능 수치뿐 아니라 말할 수 없는 범위까지 source of truth로 만드는 것이 향후 보고서의 재현성과 심사 방어력을 높인다.
 
 ## 차별성의 우선순위
 

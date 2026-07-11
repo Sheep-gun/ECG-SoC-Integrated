@@ -90,6 +90,13 @@ def main() -> int:
         },
         "matlab": {"clipping_percent": m["matlab_representative_clipping_ratio"]["value"], "minimum_headroom_v": m["matlab_minimum_representative_headroom"]["value"]},
         "xmodel": {"mean_rms_lsb": m["xmodel_emulator_mean_rms"]["value"]},
+        "streaming_memory": {
+            "raw_window_samples": 1800000,
+            "sample_width_bits": 12,
+            "avoided_raw_window_bits": 21600000,
+            "avoided_raw_window_bytes": 2700000,
+            "claim_id": "CLM-023",
+        },
         "benchmark_status": gm["benchmark"]["status"],
     }
     source_path = SRC / "figure_data.json"
@@ -194,6 +201,33 @@ def main() -> int:
     footer(s, "Future: same-acquisition multi-class cohort or explicit cross-domain protocol")
     write_svg("FIG-11_confounding_claim_boundary.svg", s)
 
+    # FIG-12: conceptual grouping of verified RTL blocks, not a literal netlist.
+    s = canvas("Detailed SNN-inspired streaming digital architecture", "fixed digital commit c6b80de · verified blocks and boundaries")
+    s += box(35, 125, 150, 90, "Input", ["signed 12-bit", "valid / ready"], fill="#e7f5ff")
+    s += box(225, 115, 185, 110, "Adaptive event", ["delta / slope", "up/down/strong"], fill="#e6fcf5")
+    s += box(450, 115, 180, 110, "QRS LIF", ["membrane", "refractory / beat"], fill="#e6fcf5")
+    s += box(670, 115, 205, 110, "Beat / RR + PNN", ["timing", "match / mismatch"], fill="#e6fcf5")
+    s += box(915, 115, 250, 110, "RDM variability", ["RR difference", "level evidence"], fill="#e6fcf5")
+    s += arrow(185,170,225,170) + arrow(410,170,450,170) + arrow(630,170,670,170) + arrow(875,170,915,170)
+    morphology = [
+        (55,"DSCR","slope / sign flip"), (245,"RAM peak","R-peak amplitude"),
+        (435,"Ectopic pair","early / late RR"), (625,"QRS MAF","finite 120-sample lookback"),
+        (850,"RBBB-like","QRS delay evidence"),
+    ]
+    for x,title,line in morphology:
+        s += box(x,280,165 if x != 850 else 210,92,title,[line],fill="#fff4e6")
+    s.append('<line x1="110" y1="250" x2="1060" y2="250" stroke="#9fb3c8" stroke-width="3" stroke-dasharray="9 7"/>')
+    s.append(txt(600,246,"parallel finite event/state paths",14,"#486581",600,"middle"))
+    s += box(75,420,240,105,"Snapshot aggregation",["event counters", "class-score/readout"],fill="#fff9db")
+    s += box(370,420,190,105,"60,000 samples",["Snapshot boundary"],fill="#fff3bf")
+    s += box(615,420,245,105,"Final Membrane",["signed class state", "30 Snapshots"],fill="#e5dbff")
+    s += box(915,410,250,125,"Guard / rescue / veto",["silent-AFF logic", "final WTA", "final_pred + 4 final_mem"],fill="#f3d9fa")
+    s += arrow(315,472,370,472) + arrow(560,472,615,472) + arrow(860,472,915,472)
+    s.append('<rect x="25" y="102" width="1150" height="450" rx="18" fill="none" stroke="#334e68" stroke-width="2" stroke-dasharray="12 8"/>')
+    s.append(txt(42,576,"Controller/FSM: accepted-sample control · 60,000-sample commit · 30-Snapshot final commit",15,"#102a43",700))
+    footer(s, "CLM-023: fixed-size streaming state; no 1,800,000-sample raw-window buffer (avoided full raw-input window storage = 2.7 MB decimal)")
+    write_svg("FIG-12_detailed_digital_architecture.svg", s)
+
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
         ("FIG-02", "figures/final/FIG-02_complete_system_flow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml"], [MATLAB,XMODEL,DIGITAL], "MATLAB–XMODEL–digital–FPGA 전체 흐름", "component roles and handoffs", "analog layers are model-based"),
@@ -206,6 +240,7 @@ def main() -> int:
         ("FIG-09", "figures/final/FIG-09_digital_validation_hierarchy.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Digital validation hierarchy", "integer reference through board replay", "physical analog not included"),
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
+        ("FIG-12", "figures/final/FIG-12_detailed_digital_architecture.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "Detailed streaming digital architecture", "conceptual grouping of verified RTL blocks and boundaries", "not literal netlist connectivity; no threshold or benchmark value"),
     ]
     index = ["# Integrated figure index", "", "All figures are generated from verified non-benchmark evidence. Source data: `figures/source/figure_data.json`.", ""]
     for fid, path, owner, files, commits, caption, scope, limits in figures:

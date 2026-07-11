@@ -397,6 +397,42 @@
       "owner": "양건",
       "limitation": "corresponds to a 30-minute decision window",
       "verification_status": "VERIFIED"
+    },
+    "raw_input_window_samples": {
+      "value": 1800000,
+      "unit": "samples",
+      "scope": "one 30-minute final-decision input at 1 kSPS",
+      "evidence_type": "interface and top-level RTL parameters",
+      "evidence_path": "components/digital_accelerator/rtl/snn_ecg_30min_final_top.v",
+      "upstream_repository": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier",
+      "upstream_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
+      "owner": "양건",
+      "limitation": "input-window size, not stored runtime memory",
+      "verification_status": "VERIFIED"
+    },
+    "avoided_full_raw_input_window_bits": {
+      "value": 21600000,
+      "unit": "bits",
+      "scope": "1800000 signed 12-bit samples",
+      "evidence_type": "derived arithmetic from verified interface/window",
+      "evidence_path": "docs/STREAMING_STATE_MEMORY_KR.md",
+      "upstream_repository": "INTEGRATED",
+      "upstream_commit": "INTEGRATED",
+      "owner": "양건",
+      "limitation": "avoided full raw-input window storage; not exact synthesized memory saving",
+      "verification_status": "VERIFIED_DERIVED"
+    },
+    "avoided_full_raw_input_window_bytes": {
+      "value": 2700000,
+      "unit": "bytes decimal",
+      "scope": "21600000 bits divided by 8",
+      "evidence_type": "derived arithmetic from verified interface/window",
+      "evidence_path": "docs/STREAMING_STATE_MEMORY_KR.md",
+      "upstream_repository": "INTEGRATED",
+      "upstream_commit": "INTEGRATED",
+      "owner": "양건",
+      "limitation": "approximately 2.7 MB decimal; not MicroBlaze runtime memory",
+      "verification_status": "VERIFIED_DERIVED"
     }
   },
   "benchmark": {

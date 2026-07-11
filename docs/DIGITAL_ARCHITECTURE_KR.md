@@ -14,6 +14,8 @@ Digital top은 1 kSPS signed 12-bit sample, valid/segment control을 받아 samp
 
 연산은 정수 counter, comparator, shift/add, signed accumulator와 deterministic control로 구성된다. Floating-point, inference-time learning memory와 전체-window buffer를 요구하지 않는다.
 
+이 architecture claim은 `CLM-023`으로 등록돼 있으며, direct RTL signal/group inventory는 `tables/streaming_state_inventory.csv`, 상세 해석은 `docs/STREAMING_STATE_MEMORY_KR.md`에 있다. 회피한 full raw-input window는 `1,800,000×12=21,600,000 bit=2,700,000 byte≈2.7 MB decimal`이다. 이는 MicroBlaze runtime memory나 정확한 synthesized memory 절감량이 아니다. 보고서용 상세 블록도는 `figures/final/FIG-12_detailed_digital_architecture.svg`이며 conceptual grouping임을 caption에 명시한다.
+
 ## 60-second Snapshot Readout
 
 1 kSPS 조건에서 60,000 samples가 한 Snapshot interval을 이룬다. Interval 동안 누적된 rhythm/morphology evidence가 네 class의 local score/readout으로 변환된다. Snapshot은 일시적인 local evidence를 보존하지만 단독으로 최종 long-window decision을 확정하지 않는다.
@@ -36,3 +38,5 @@ RTL output은 accepted sample sequence와 control timing에 대해 deterministic
 - Locked parameters: `components/digital_accelerator/configs/final_submission_locked_model.json`
 - Architecture narrative: `components/digital_accelerator/FINAL_REPORT_KR.md`
 - Final equivalence: `components/digital_accelerator/reports/final/final_metrics.json`
+- Persistent-state inventory: `tables/streaming_state_inventory.csv`
+- Detailed architecture: `figures/final/FIG-12_detailed_digital_architecture.svg`
