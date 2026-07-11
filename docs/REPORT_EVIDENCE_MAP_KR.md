@@ -2,6 +2,15 @@
 
 본 파일은 보고서 본문을 작성하지 않고, 각 장에서 사용할 문장·artifact·claim 경계를 연결한다. 모든 wording은 `claim_registry.csv`의 status를 우선한다.
 
+## 완성 원고와 향후 공식 제출물의 구분
+
+- 완성된 통합 기술 원고: `reports/INTEGRATED_TECHNICAL_REPORT_KR.md`
+- 원고 검토표: `reports/INTEGRATED_TECHNICAL_REPORT_REVIEW_CHECKLIST.md`
+- Machine-readable report evidence map: `reports/INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv`
+- 향후 official private HWP/application form: 이 Git 밖에서 작성하며 아직 생성하지 않음
+
+통합 기술 원고는 report-ready technical source이지만 공식 양식의 page limit, 개인정보, 서명과 application field를 포함하지 않는다. 향후 HWP는 아래 chapter mapping과 completed manuscript를 사용해 축약·재배치하되 claim boundary를 유지한다.
+
 | 보고서 장 | 핵심 statement / Claim ID | Supporting artifact | Source/commit | Owner | Status / limitation |
 |---|---|---|---|---|---|
 | 연구 배경 | wearable ECG의 대표 기능 범위는 AF/sinus screening 중심이며 본 평가와 직접 비교 불가 / EXT-001 | `external_reference_registry.csv` | FDA DEN180044 | 양건(편집) | authoritative background; 제품 성능 수치 비교 금지 |

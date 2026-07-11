@@ -150,6 +150,17 @@ When the independent benchmark work is complete, pin its repository/branch commi
 
 Use `docs/REPORT_EVIDENCE_MAP_KR.md` as the chapter-by-chapter evidence map and `claim_registry.csv` as the wording gate. Keep the contest HWP/PDF, application forms, signatures, student IDs, addresses, phone numbers and private email data outside Git. The private report should foreground the long-window multi-timescale classification architecture, then use accelerator benchmark results only as supporting evidence after their independent import is verified.
 
+## Post-integration technical manuscript
+
+The complete Korean technical source manuscript was added after the base integration audit:
+
+- `reports/INTEGRATED_TECHNICAL_REPORT_KR.md`
+- `reports/INTEGRATED_TECHNICAL_REPORT_REVIEW_CHECKLIST.md`
+- `reports/INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv`
+- `tools/check_integrated_technical_report.py`
+
+The manuscript synthesizes the fixed MATLAB, XMODEL and digital evidence into one continuous report-ready narrative while preserving the official private HWP/application as a future out-of-Git deliverable. The report-specific checker passed 199 rules with zero conflicts, and the unchanged repository checker passed 163 rules with zero conflicts before the manuscript commit.
+
 ## Phased integration commits
 
 1. `f0fd18c` — initialize independent integration repository

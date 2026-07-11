@@ -4,6 +4,10 @@
 
 본 프로젝트는 Holter형 장시간 ECG 분석을 위해 60초 Snapshot과 30분 Final Membrane을 결합한 다중 시간축 SNN-inspired 분류 구조를 제안하고, 이를 signed 12-bit streaming RTL accelerator IP로 구현·검증한 연구이다.
 
+**완성된 통합 기술보고서 핵심 원고:** [`reports/INTEGRATED_TECHNICAL_REPORT_KR.md`](reports/INTEGRATED_TECHNICAL_REPORT_KR.md)
+
+이 원고는 MATLAB–XMODEL–digital–RTL/IP/FPGA evidence를 하나의 연속 연구 narrative로 합성한 report-ready source manuscript다. 공식 대회 HWP/신청서와 개인정보는 이 Git에 포함하지 않는다.
+
 ## 2. 연구 배경
 
 Wearable·portable ECG는 일상에서 single-lead waveform과 rhythm screening 정보를 제공할 수 있다. 대표 소비자 기능은 AF/sinus 중심의 제한된 scope를 갖지만, 본 연구 문제는 공개 digitized ECG의 장시간 stream에서 local morphology와 long-term persistence를 함께 다루는 투명한 hardware architecture다. 제품별 clinical 성능과 본 project의 public-dataset accuracy는 조건이 달라 직접 비교하지 않는다.
