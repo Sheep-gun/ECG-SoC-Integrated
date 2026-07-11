@@ -138,10 +138,10 @@ def main() -> int:
 
     check("independent .git exists", (ROOT / ".git").is_dir())
     active_branch = git(ROOT, "branch", "--show-current")
-    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report"}, active_branch)
+    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
-    check("12 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 12)
+    check("14 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 14)
     check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
     check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
 

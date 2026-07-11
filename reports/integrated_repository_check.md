@@ -61,7 +61,7 @@
 - PASS — required path reports/HISTORY_REWRITE_RESULT.md
 - PASS — required path reports/PUBLISH_REWRITTEN_HISTORY.md
 - PASS — required path private_submission/.gitignore
-- PASS — 12 non-benchmark figures
+- PASS — 14 non-benchmark figures
 - PASS — verified tables present
 - PASS — public remote configured
 - PASS — before state recorded: matlab_prevalidation

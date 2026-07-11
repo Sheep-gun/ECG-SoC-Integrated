@@ -130,6 +130,28 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Detailed streaming digital architecture
-- Evidence scope: conceptual grouping of verified RTL blocks and boundaries
+- Caption: 독자 개념 중심 디지털 아키텍처
+- Evidence scope: functional Korean grouping of verified RTL blocks and boundaries
 - Limitations: not literal netlist connectivity; no threshold or benchmark value
+
+## FIG-13
+
+- File: `figures/final/FIG-13_beat_rhythm_path.svg`
+- Owner: 양건(편집)
+- Source files: `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v`, `components/digital_accelerator/rtl/core/rdm_variability_neuron.v`, `components/digital_accelerator/rtl/core/ectopic_pair_neuron.v`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
+- Source-data path: `figures/source/figure_data.json`
+- Caption: 박동·리듬 state-transition 경로
+- Evidence scope: reader-facing grouping of fixed RTL state transitions
+- Limitations: conceptual dataflow; literal timing remains in RTL
+
+## FIG-14
+
+- File: `figures/final/FIG-14_morphology_path.svg`
+- Owner: 양건(편집)
+- Source files: `components/digital_accelerator/rtl/core/dscr_spike_counter.v`, `components/digital_accelerator/rtl/core/ram_peak_accumulator.v`, `components/digital_accelerator/rtl/core/qrs_maf_neuron.v`, `components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
+- Source-data path: `figures/source/figure_data.json`
+- Caption: 파형 형태 finite-state 경로
+- Evidence scope: reader-facing grouping of fixed RTL morphology mechanisms
+- Limitations: engineering proxies; not clinical morphology measurement

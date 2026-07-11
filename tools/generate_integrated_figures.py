@@ -97,6 +97,16 @@ def main() -> int:
             "avoided_raw_window_bytes": 2700000,
             "claim_id": "CLM-023",
         },
+        "architecture": {
+            "sample_period_ms": 1,
+            "snapshot_samples": 60000,
+            "snapshots_per_decision": 30,
+            "qrs_maf_pre_samples": 120,
+            "qrs_maf_post_samples": 100,
+            "rhythm_path": ["adjacent-sample difference", "QRS membrane/refractory", "RR timing", "PNN prediction", "RDM variability", "early-late pair"],
+            "morphology_path": ["filtered slope/sign retention", "beat-window maximum amplitude code", "QRS width/complexity/energy/pre-activity", "terminal-window repeated delay"],
+            "evidence_commit": DIGITAL,
+        },
         "benchmark_status": gm["benchmark"]["status"],
     }
     source_path = SRC / "figure_data.json"
@@ -201,32 +211,60 @@ def main() -> int:
     footer(s, "Future: same-acquisition multi-class cohort or explicit cross-domain protocol")
     write_svg("FIG-11_confounding_claim_boundary.svg", s)
 
-    # FIG-12: conceptual grouping of verified RTL blocks, not a literal netlist.
-    s = canvas("Detailed SNN-inspired streaming digital architecture", "fixed digital commit c6b80de · verified blocks and boundaries")
-    s += box(35, 125, 150, 90, "Input", ["signed 12-bit", "valid / ready"], fill="#e7f5ff")
-    s += box(225, 115, 185, 110, "Adaptive event", ["delta / slope", "up/down/strong"], fill="#e6fcf5")
-    s += box(450, 115, 180, 110, "QRS LIF", ["membrane", "refractory / beat"], fill="#e6fcf5")
-    s += box(670, 115, 205, 110, "Beat / RR + PNN", ["timing", "match / mismatch"], fill="#e6fcf5")
-    s += box(915, 115, 250, 110, "RDM variability", ["RR difference", "level evidence"], fill="#e6fcf5")
+    # FIG-12: functional Korean labels are primary; module names are secondary.
+    s = canvas("디지털 아키텍처", "표본값 → 사건 신호 → 박동·파형 증거 → 60초·30분 상태")
+    s += box(35, 125, 150, 90, "입력 ECG 표본값", ["signed 12-bit", "valid / ready"], fill="#e7f5ff")
+    s += box(225, 115, 185, 110, "파형 변화 사건", ["인접 표본값 차이", "event encoder"], fill="#e6fcf5")
+    s += box(450, 115, 180, 110, "박동 검출", ["막전위·문턱값", "QRS LIF"], fill="#e6fcf5")
+    s += box(670, 115, 205, 110, "박동 간격 측정", ["RR timing", "PNN match/mismatch"], fill="#e6fcf5")
+    s += box(915, 115, 250, 110, "리듬 분석", ["RR 변화 level", "RDM · early/late"], fill="#e6fcf5")
     s += arrow(185,170,225,170) + arrow(410,170,450,170) + arrow(630,170,670,170) + arrow(875,170,915,170)
     morphology = [
-        (55,"DSCR","slope / sign flip"), (245,"RAM peak","R-peak amplitude"),
-        (435,"Ectopic pair","early / late RR"), (625,"QRS MAF","finite 120-sample lookback"),
-        (850,"RBBB-like","QRS delay evidence"),
+        (55,"기울기 방향 전환","DSCR · sign retention"), (245,"박동 진폭 압축","RAM · maximum code"),
+        (435,"Early–late 조합","adaptive RR reference"), (625,"파형 형태 분석","QRS MAF · finite lookback"),
+        (850,"말단 지연 증거","RBBB-like delay"),
     ]
     for x,title,line in morphology:
         s += box(x,280,165 if x != 850 else 210,92,title,[line],fill="#fff4e6")
     s.append('<line x1="110" y1="250" x2="1060" y2="250" stroke="#9fb3c8" stroke-width="3" stroke-dasharray="9 7"/>')
-    s.append(txt(600,246,"parallel finite event/state paths",14,"#486581",600,"middle"))
-    s += box(75,420,240,105,"Snapshot aggregation",["event counters", "class-score/readout"],fill="#fff9db")
-    s += box(370,420,190,105,"60,000 samples",["Snapshot boundary"],fill="#fff3bf")
-    s += box(615,420,245,105,"Final Membrane",["signed class state", "30 Snapshots"],fill="#e5dbff")
-    s += box(915,410,250,125,"Guard / rescue / veto",["silent-AFF logic", "final WTA", "final_pred + 4 final_mem"],fill="#f3d9fa")
+    s.append(txt(600,246,"병렬 finite event/state 경로",14,"#486581",600,"middle"))
+    s += box(75,420,240,105,"60초 증거 누적",["사건·code counter", "Snapshot class state"],fill="#fff9db")
+    s += box(370,420,190,105,"60초 상태 확정",["60,000 표본값", "local winner"],fill="#fff3bf")
+    s += box(615,420,245,105,"30분 class 상태",["signed Final Membrane", "30 Snapshots"],fill="#e5dbff")
+    s += box(915,410,250,125,"최종 class 선택",["guard/rescue/veto", "silent-AFF · WTA", "pred + 4 membranes"],fill="#f3d9fa")
     s += arrow(315,472,370,472) + arrow(560,472,615,472) + arrow(860,472,915,472)
     s.append('<rect x="25" y="102" width="1150" height="450" rx="18" fill="none" stroke="#334e68" stroke-width="2" stroke-dasharray="12 8"/>')
-    s.append(txt(42,576,"Controller/FSM: accepted-sample control · 60,000-sample commit · 30-Snapshot final commit",15,"#102a43",700))
-    footer(s, "CLM-023: fixed-size streaming state; no 1,800,000-sample raw-window buffer (avoided full raw-input window storage = 2.7 MB decimal)")
+    s.append(txt(42,576,"제어 FSM: accepted sample · 60,000표본 Snapshot 확정 · 30-Snapshot final 확정",15,"#102a43",700))
+    footer(s, "CLM-023: 전체 1,800,000표본 raw window 대신 fixed-size streaming state를 갱신")
     write_svg("FIG-12_detailed_digital_architecture.svg", s)
+
+    # FIG-13: beat/rhythm path with old-state, next-state, and commit boundaries.
+    s = canvas("박동·리듬 경로", "인접 표본값 차이에서 RR pattern evidence까지")
+    s += box(35, 125, 170, 115, "현재·이전 표본값", ["1 ms 간격", "previous_sample"], fill="#e7f5ff")
+    s += box(245, 125, 180, 115, "파형 변화 사건", ["signed difference", "up/down/strong"], fill="#e6fcf5")
+    s += box(465, 115, 190, 135, "박동 검출", ["old membrane", "event add→threshold", "refractory"], fill="#e6fcf5")
+    s += box(695, 125, 175, 115, "RR interval", ["accepted tick count", "beat에서 확정"], fill="#fff9db")
+    s += box(910, 115, 255, 135, "리듬 증거", ["PNN: predictor match", "RDM: consecutive diff", "early↔late pair"], fill="#e5dbff")
+    s += arrow(205,182,245,182) + arrow(425,182,465,182) + arrow(655,182,695,182) + arrow(870,182,910,182)
+    s += box(70, 330, 300, 170, "상태 전이", ["old state 읽기", "next state 계산", "clock에서 commit"], fill="#fff4e6")
+    s += box(450, 330, 300, 170, "60초 누적", ["beat/match/mismatch", "RDM code", "pair count"], fill="#fff3bf")
+    s += box(830, 330, 300, 170, "다음 단계", ["Snapshot class state", "Final rhythm aggregate"], fill="#d3f9d8")
+    s += arrow(370,415,450,415) + arrow(750,415,830,415)
+    footer(s, "설명용 state flow이며 clinical beat/RR annotation을 뜻하지 않음")
+    write_svg("FIG-13_beat_rhythm_path.svg", s)
+
+    # FIG-14: morphology path with finite windows and compressed outputs.
+    s = canvas("파형 형태 경로", "박동 주변 파형을 finite register/counter/code로 압축")
+    s += box(40, 120, 250, 145, "기울기 방향", ["filtered reference", "valid sign retention", "방향 전환 pulse"], fill="#e6fcf5")
+    s += box(325, 120, 250, 145, "Peak 진폭", ["predicted beat window", "threshold-bank code", "maximum+post hold"], fill="#e7f5ff")
+    s += box(610, 110, 270, 165, "QRS MAF", ["pre 120 + post 100", "width · flip · energy", "pre-QRS activity"], fill="#fff4e6")
+    s += box(915, 110, 250, 165, "말단 지연", ["activity onset/age", "terminal window", "repeated wide+delay"], fill="#e5dbff")
+    s += box(110, 360, 270, 145, "작은 출력 상태", ["flip pulse", "maximum amplitude code", "abnormal flags"], fill="#fff9db")
+    s += box(465, 360, 270, 145, "60초 파형 증거", ["code sum/count", "width/energy events", "repeated delay count"], fill="#fff3bf")
+    s += box(820, 360, 270, 145, "Class 상태 입력", ["signed contribution", "Snapshot morphology", "Final aggregate"], fill="#d3f9d8")
+    s += arrow(380,432,465,432) + arrow(735,432,820,432)
+    footer(s, "전체 beat waveform을 저장하지 않고 finite observation state만 유지")
+    write_svg("FIG-14_morphology_path.svg", s)
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
@@ -240,7 +278,9 @@ def main() -> int:
         ("FIG-09", "figures/final/FIG-09_digital_validation_hierarchy.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Digital validation hierarchy", "integer reference through board replay", "physical analog not included"),
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
-        ("FIG-12", "figures/final/FIG-12_detailed_digital_architecture.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "Detailed streaming digital architecture", "conceptual grouping of verified RTL blocks and boundaries", "not literal netlist connectivity; no threshold or benchmark value"),
+        ("FIG-12", "figures/final/FIG-12_detailed_digital_architecture.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "독자 개념 중심 디지털 아키텍처", "functional Korean grouping of verified RTL blocks and boundaries", "not literal netlist connectivity; no threshold or benchmark value"),
+        ("FIG-13", "figures/final/FIG-13_beat_rhythm_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v", "components/digital_accelerator/rtl/core/rdm_variability_neuron.v", "components/digital_accelerator/rtl/core/ectopic_pair_neuron.v"], [DIGITAL], "박동·리듬 state-transition 경로", "reader-facing grouping of fixed RTL state transitions", "conceptual dataflow; literal timing remains in RTL"),
+        ("FIG-14", "figures/final/FIG-14_morphology_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/dscr_spike_counter.v", "components/digital_accelerator/rtl/core/ram_peak_accumulator.v", "components/digital_accelerator/rtl/core/qrs_maf_neuron.v", "components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v"], [DIGITAL], "파형 형태 finite-state 경로", "reader-facing grouping of fixed RTL morphology mechanisms", "engineering proxies; not clinical morphology measurement"),
     ]
     index = ["# Integrated figure index", "", "All figures are generated from verified non-benchmark evidence. Source data: `figures/source/figure_data.json`.", ""]
     for fid, path, owner, files, commits, caption, scope, limits in figures:

@@ -1,53 +1,28 @@
-# 향후 private HWP 보고서 evidence map
+# 통합 기술보고서 evidence map
 
-본 파일은 11장 완성 원고와 향후 private HWP 사이에서 문장·artifact·claim 경계를 연결한다. 모든 wording은 `claim_registry.csv`의 status를 우선한다.
+공식 보고서의 설명 순서와 실제 artifact의 추적 관계를 정의한다. 본문은 처음 읽는 심사자가 표본→사건→박동→RR/파형 특징→60초 Snapshot→30분 Final Membrane→최종 class를 따라가도록 일곱 장으로 구성한다. 세부 경로·commit·owner·limitation은 `reports/INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv`가 machine-readable authority다.
 
-## 완성 원고와 향후 공식 제출물의 구분
+| 보고서 장 | 핵심 질문 | 주 근거 | 해석 경계 |
+|---|---|---|---|
+| 1. 서론 | 무엇을 왜 설계했는가 | `docs/PROBLEM_DEFINITION_KR.md`, `docs/CONTRIBUTIONS_AND_NOVELTY_KR.md` | 임상 진단이나 상용 우월성 주장이 아님 |
+| 2. 전체 시스템과 평가 방법 | 데이터와 세 component가 어떻게 연결되는가 | `source_of_truth/upstream_commits.yaml`, `source_of_truth/ownership_matrix.csv`, dataset·split artifact | record-wise split이 database–class confounding을 제거하지 않음 |
+| 3. 디지털 아키텍처 | 표본이 어떤 RTL state transition을 거쳐 class가 되는가 | digital `rtl/`, FIG-12~14, `tables/streaming_state_inventory.csv` | trained deep SNN·STDP·online learning이 아닌 SNN-inspired event/state architecture |
+| 4. 구현 | MATLAB/XMODEL intent와 RTL/IP/FPGA가 어떻게 검증되는가 | MATLAB/XMODEL 결과, Vivado/IP-XACT/MicroBlaze artifact | model-based analog 검증은 physical AFE/ADC 검증이 아님 |
+| 5. 결과 | 정확도·등가성·자원이 각각 무엇을 뜻하는가 | `final_metrics.json`, SHA/equivalence/board result | 36/36 기능 등가성을 100% label accuracy로 해석하지 않음 |
+| 6. 논의와 한계 | 기여가 무엇이며 어디까지 유효한가 | claim registry, confounding/limitation 문서 | benchmark는 독립 import 전까지 pending |
+| 7. 결론 | 무엇을 완성했고 무엇이 남았는가 | 앞 장의 registered evidence | physical·clinical·ASIC claim 금지 |
 
-- 완성된 통합 기술 원고: `reports/INTEGRATED_TECHNICAL_REPORT_KR.md`
-- 원고 검토표: `reports/INTEGRATED_TECHNICAL_REPORT_REVIEW_CHECKLIST.md`
-- Machine-readable report evidence map: `reports/INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv`
-- 향후 official private HWP/application form: 이 Git 밖에서 작성하며 아직 생성하지 않음
+## 제3장 직접 RTL 감사 범위
 
-통합 기술 원고는 report-ready technical source이지만 공식 양식의 page limit, 개인정보, 서명과 application field를 포함하지 않는다. 향후 HWP는 아래 chapter mapping과 completed manuscript를 사용해 축약·재배치하되 claim boundary를 유지한다.
+- 박동·리듬: `ecg_event_encoder_adaptive.v`, `qrs_lif_detector.v`, `pnn_rhythm_predictor.v`, `rdm_variability_neuron.v`, `ectopic_pair_neuron.v`
+- 파형·진폭: `dscr_spike_counter.v`, `ram_peak_accumulator.v`, `qrs_maf_neuron.v`, `rbbb_qrs_delay_bank.v`
+- 계층적 판정: `class_score_neurons.v`, `snn_ecg_30min_final_top.v`, `final_membrane_layer.v`
 
-| 보고서 장 | 핵심 statement / Claim ID | Supporting artifact | Source/commit | Owner | Status / limitation |
-|---|---|---|---|---|---|
-| 연구 배경 | 대표적인 소비자용 단일유도 ECG 앱의 규제 문서 사례는 sinus rhythm/AF 중심 screening이며 모든 wearable의 공통 기능으로 일반화하지 않음 / EXT-001 | `external_reference_registry.csv` | FDA DEN180044 | 양건(편집) | product-specific authoritative example; 성능 수치 비교 금지 |
-| 연구 배경 | 장시간 ambulatory monitoring motivation / EXT-002 | `external_reference_registry.csv` | ACC/AHA/HRS guideline | 양건(편집) | conservative context only |
-| 문제 정의 | 네 public-dataset class 장시간 분류 / CLM-001 | `PROBLEM_DEFINITION_KR.md` | integrated + digital c6b80de | 양건 | CAREFUL; 임상 확진 금지 |
-| 연구 목표 | signed stream을 받는 streaming SNN-inspired IP / CLM-001,002 | `RESEARCH_OBJECTIVES_KR.md` | digital c6b80de | 양건 | SNN-inspired 경계 유지 |
-| 연구 방법 | strict source-record-wise lock / CLM-007,016 | `final_submission_locked_model.json`; `STRICT_RECORDWISE_PROTOCOL_KR.md` | digital c6b80de | 양건 | final-test 1회; confounding 미해소 |
-| 시스템 구성 | MATLAB→XMODEL→digital→FPGA | `SYSTEM_OVERVIEW_KR.md` | all three fixed commits | 서민우/이수환/양건 | layer ownership 분리 |
-| 아날로그 모델 검증 | 대표 nominal clipping 0% / CLM-015 | `afe_dynamic_range_headroom_summary.csv` | MATLAB 907f7e1 | 서민우 | 4 representative records; physical claim 금지 |
-| 아날로그 모델 검증 | 대표 nominal minimum headroom 1.019633440086 V / CLM-024 | `afe_dynamic_range_headroom_summary.csv` | MATLAB 907f7e1 | 서민우 | selected records only; physical rail 보증 금지 |
-| 아날로그 모델 검증 | emu↔XMODEL mean RMS 1.95 LSB / CLM-014 | `AFE_xmodel_verification.md` | XMODEL 4756a508 | 이수환 | model-to-model, not bit-exact |
-| XMODEL stress | 60/50 Hz PLI RMS residual 0.92/118 mV / CLM-025 | `AFE_xmodel_verification.md` | XMODEL 4756a508 | 이수환 | 60 Hz target; 50 Hz retuning 별도 |
-| XMODEL stress | 0.1%/1% mismatch CMRR 100.7/80.0 dB / CLM-026 | `AFE_xmodel_verification.md` | XMODEL 4756a508 | 이수환 | 30분 final_pred direct sweep 아님 |
-| XMODEL stress | ADC non-ideal representative final_pred 15/16 / CLM-027 | `adc_nonideal_finalpred_xsim.csv` | XMODEL 4756a508 | 이수환 | 2 LSB rms NSR 1건 변화; universal robustness 금지 |
-| 디지털 알고리즘 | 60초 Snapshot + 30분 Final Membrane / CLM-003 | `FINAL_REPORT_KR.md`; RTL sources | digital c6b80de | 양건 | architecture claim |
-| Snapshot/Final Membrane 구조 | event/state, integer streaming | `DIGITAL_ARCHITECTURE_KR.md`; `rtl/` | digital c6b80de | 양건 | trained deep SNN claim 금지 |
-| 데이터셋·평가 | four DB origins and strict split / CLM-016,017 | `DATASET_AND_EVALUATION_KR.md`; `DATASET_DOMAIN_CONFOUNDING_KR.md` | integrated + PhysioNet refs | 양건 | record leakage와 confounding 구분 |
-| 데이터셋·재현성 | raw data 미번들·고정 버전 fetch/hash/license | `datasets/dataset_manifest.yaml`; `datasets/DATASET_LICENSES.md`; `datasets/SHA256SUMS_EXPECTED.txt` | PhysioNet v1.0.0 ×4 | 양건(편집) | retained derived evidence와 raw source를 구분 |
-| 분류 결과 | final-test 29/36=80.56% / CLM-004 | `final_metrics.json` | digital c6b80de | 양건 | primary held-out engineering result |
-| 분류 결과 | record-majority 16/19=84.21% / CLM-005 | `final_metrics.json` | digital c6b80de | 양건 | same partition aggregation |
-| RTL 회로 구성 | 9719 LUT/5038 FF/0 BRAM/0 DSP / CLM-008 | `final_metrics.json`; Vivado reports | digital c6b80de | 양건 | device/tool specific |
-| RTL 메모리 구조 | full raw-input window 미저장·fixed-size streaming state / CLM-023 | `STREAMING_STATE_MEMORY_KR.md`; `streaming_state_inventory.csv`; `FIG-12_detailed_digital_architecture.svg` | digital c6b80de | 양건 | 2.7 MB는 avoided window 비교; exact state total/MB runtime memory 아님 |
-| FPGA/IP 구현 | MicroBlaze system and timing / CLM-010 | `final_metrics.json`; `ip_repo/` | digital c6b80de | 양건 | whole-system scope |
-| 통합 검증 | input SHA256 36/36 / CLM-012 | `afe36_sha256_bitidentity.csv` | XMODEL 4756a508 | 이수환 | byte identity only |
-| 통합 검증 | gap=2 AFE-to-RTL pred/mem 36/36 / CLM-013 | `afe_locked_rtl_integration_36case_compare.csv` | XMODEL 4756a508 | 이수환 | canonical cadence only |
-| 통합 검증 | board pred/mem 36/36 / CLM-011 | `board_replay_36_batch_summary.json` | digital c6b80de | 양건 | functional equivalence, accuracy 아님 |
-| 창의성 | multi-timescale temporal hierarchy | `CONTRIBUTIONS_AND_NOVELTY_KR.md` | digital c6b80de | 양건 | speed를 primary novelty로 쓰지 않음 |
-| 기술성 | integer streaming + full verification chain | `DIGITAL_ARCHITECTURE_KR.md`; `INTEGRATION_VERIFICATION_KR.md` | all fixed commits | team | engineering prototype |
-| 완성도 | commit/hash/claim/ownership control | `artifact_manifest.csv`; `claim_registry.csv` | integrated | 양건 | reproducibility evidence |
-| 사업화 가능성 | wearable/edge integration potential | architecture/resource evidence | digital c6b80de | 양건 | commercial/clinical superiority 금지; benchmark 대기 |
-| 한계·향후 과제 | confounding, physical gap, benchmark pending | `LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md` | integrated | team | 반드시 명시 |
+본문은 module 이름을 목차로 노출하지 않고 기능 질문으로 묶는다. 다만 각 설명의 마지막에는 실제 module과 evidence path를 남겨 구현 사실을 추적할 수 있게 한다.
 
-## HWP 작성 규칙
+## 공식 HWP 이관 규칙
 
-1. `SAFE` claim만 단정형으로 쓰고 `CAREFUL`은 scope/limitation을 같은 문단에 둔다.
-2. `FORBIDDEN` claim은 본문·caption·표·발표 문구 모두에서 사용하지 않는다.
-3. 분류 결과 표에서 validation 100%를 primary result로 배치하지 않는다.
-4. Board 36/36 표에는 반드시 `functional equivalence`를 표시하고 29/36 accuracy를 별도 행에 둔다.
-5. Benchmark package가 import되기 전에는 latency/throughput/speedup/power/energy 칸을 비우거나 pending으로 둔다.
-6. 신청서·서명·학번·전화·주소·private email과 최종 HWP/PDF는 이 Git 밖에 둔다.
+1. SAFE claim만 단정형으로 쓰며 CAREFUL claim은 같은 문단에서 범위를 제한한다.
+2. Board 36/36은 기능 등가성, final 29/36은 label 정확도로 분리한다.
+3. Benchmark 값은 `PENDING_EXTERNAL_BENCHMARK_IMPORT`가 해제되기 전까지 넣지 않는다.
+4. 개인정보·서명·공식 신청서 필드는 private HWP에서만 작성한다.

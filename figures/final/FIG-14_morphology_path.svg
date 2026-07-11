@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<rect width="1200" height="675" fill="#f7f9fc"/>
+<rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">파형 형태 경로</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">박동 주변 파형을 finite register/counter/code로 압축</text>
+<rect x="40" y="120" width="250" height="145" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="165.0" y="154" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">기울기 방향</text>
+<text x="165.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">filtered reference</text>
+<text x="165.0" y="209" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">valid sign retention</text>
+<text x="165.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">방향 전환 pulse</text>
+<rect x="325" y="120" width="250" height="145" rx="14" fill="#e7f5ff" stroke="#486581" stroke-width="2"/>
+<text x="450.0" y="154" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Peak 진폭</text>
+<text x="450.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">predicted beat window</text>
+<text x="450.0" y="209" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">threshold-bank code</text>
+<text x="450.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">maximum+post hold</text>
+<rect x="610" y="110" width="270" height="165" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="745.0" y="144" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">QRS MAF</text>
+<text x="745.0" y="174" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">pre 120 + post 100</text>
+<text x="745.0" y="199" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">width · flip · energy</text>
+<text x="745.0" y="224" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">pre-QRS activity</text>
+<rect x="915" y="110" width="250" height="165" rx="14" fill="#e5dbff" stroke="#486581" stroke-width="2"/>
+<text x="1040.0" y="144" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">말단 지연</text>
+<text x="1040.0" y="174" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">activity onset/age</text>
+<text x="1040.0" y="199" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">terminal window</text>
+<text x="1040.0" y="224" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">repeated wide+delay</text>
+<rect x="110" y="360" width="270" height="145" rx="14" fill="#fff9db" stroke="#486581" stroke-width="2"/>
+<text x="245.0" y="394" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">작은 출력 상태</text>
+<text x="245.0" y="424" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">flip pulse</text>
+<text x="245.0" y="449" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">maximum amplitude code</text>
+<text x="245.0" y="474" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">abnormal flags</text>
+<rect x="465" y="360" width="270" height="145" rx="14" fill="#fff3bf" stroke="#486581" stroke-width="2"/>
+<text x="600.0" y="394" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">60초 파형 증거</text>
+<text x="600.0" y="424" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">code sum/count</text>
+<text x="600.0" y="449" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">width/energy events</text>
+<text x="600.0" y="474" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">repeated delay count</text>
+<rect x="820" y="360" width="270" height="145" rx="14" fill="#d3f9d8" stroke="#486581" stroke-width="2"/>
+<text x="955.0" y="394" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Class 상태 입력</text>
+<text x="955.0" y="424" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed contribution</text>
+<text x="955.0" y="449" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">Snapshot morphology</text>
+<text x="955.0" y="474" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">Final aggregate</text>
+<line x1="380" y1="432" x2="465" y2="432" stroke="#486581" stroke-width="4"/>
+<polygon points="465,432 451,424 451,440" fill="#486581"/>
+<line x1="735" y1="432" x2="820" y2="432" stroke="#486581" stroke-width="4"/>
+<polygon points="820,432 806,424 806,440" fill="#486581"/>
+<rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">전체 beat waveform을 저장하지 않고 finite observation state만 유지</text>
+</svg>

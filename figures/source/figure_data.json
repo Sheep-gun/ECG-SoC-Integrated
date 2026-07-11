@@ -33,5 +33,27 @@
     "avoided_raw_window_bytes": 2700000,
     "claim_id": "CLM-023"
   },
+  "architecture": {
+    "sample_period_ms": 1,
+    "snapshot_samples": 60000,
+    "snapshots_per_decision": 30,
+    "qrs_maf_pre_samples": 120,
+    "qrs_maf_post_samples": 100,
+    "rhythm_path": [
+      "adjacent-sample difference",
+      "QRS membrane/refractory",
+      "RR timing",
+      "PNN prediction",
+      "RDM variability",
+      "early-late pair"
+    ],
+    "morphology_path": [
+      "filtered slope/sign retention",
+      "beat-window maximum amplitude code",
+      "QRS width/complexity/energy/pre-activity",
+      "terminal-window repeated delay"
+    ],
+    "evidence_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75"
+  },
   "benchmark_status": "PENDING_EXTERNAL_BENCHMARK_IMPORT"
 }
