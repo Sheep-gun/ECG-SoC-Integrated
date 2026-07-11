@@ -1,0 +1,4 @@
+implementation,power_w,energy_per_decision_j,status,evidence_type,scope,evidence_path
+Pure RTL,0.099,0.005347247400,ESTIMATED_DERIVED,Vivado-estimated power * cycle-derived stored-data processing latency,accelerator implementation estimate,reports/final/vivado_locked_model_metrics.md; benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
+Physical FPGA board,PENDING_BOARD,PENDING_BOARD,PENDING_BOARD,pending physical measurement,board-level idle/active/active-minus-idle,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
+CPU,N/A,N/A,N/A_NO_DEFENSIBLE_COUNTER,none,CPU,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md

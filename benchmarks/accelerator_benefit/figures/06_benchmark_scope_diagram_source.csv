@@ -1,0 +1,5 @@
+label,value,status
+CPU kernel,loaded samples -> result,AUDIT
+RTL cycles,accelerator start -> final_valid,CYCLE_DERIVED
+Existing board,functional equivalence only,AUDIT
+Future board,timer-based scopes,PENDING_BOARD

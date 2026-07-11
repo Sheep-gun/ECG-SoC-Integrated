@@ -1,0 +1,26 @@
+{
+  "status": "CYCLE_DERIVED",
+  "case_count": 36,
+  "sample_gap_cycles": 2,
+  "clock_frequency_hz": 100000000,
+  "clock_evidence": [
+    "constraints/snn_ecg_axi_ooc.xdc: create_clock period 10.000 ns",
+    "constraints/nexys_a7_microblaze_full_replay.xdc: create_clock period 10.000 ns",
+    "results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt: 100.000 MHz"
+  ],
+  "total_latency_ms": {
+    "median": 54.0126,
+    "mean": 54.0126,
+    "std": 0.0,
+    "min": 54.0126,
+    "max": 54.0126,
+    "iqr": 0.0
+  },
+  "throughput_samples_per_s": 33325557.369947,
+  "throughput_msamples_per_s": 33.325557369947,
+  "realtime_margin_vs_1ksps": 33325.557369947004,
+  "active_snapshot_latency_ms": 1.80038,
+  "active_decision_latency_ms": 54.0126,
+  "maximum_validated_stream_acceptance_rate_samples_per_s": 33325557.369947,
+  "equivalence": "final_pred 36/36; final_mem 36/36"
+}

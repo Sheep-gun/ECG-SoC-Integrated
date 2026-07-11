@@ -1,0 +1,10 @@
+{
+  "starting_commit_sha": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
+  "branch": "codex/accelerator-benefit-benchmark",
+  "mode": "NO_BOARD",
+  "protocol_sha256": "09d4fff305b74af3934db1aafc08dc9a6e3b9085da835b6944d4b89bbd8ce241",
+  "locked_config_sha256": "3ed5fa3399b99cace22a5cd7821be2c598a58ef27012da11a4e213a0f4c5672d",
+  "locked_params_file_sha256": "e0c1a649515ea50bbccc7c72d2dada9080c136e9d0e23de84dcc07f93744ae53",
+  "locked_params_payload_sha256": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
+  "dataset_manifest_sha256": "4965b8a098617d6138e4e56e2b45febda20706b031e9bbaa2558d874517dee72"
+}

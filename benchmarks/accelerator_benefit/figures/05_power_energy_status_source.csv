@@ -1,0 +1,5 @@
+label,value,status
+Pure RTL power,0.099 W Vivado estimate,ESTIMATED
+Estimated energy,0.005347247 J,ESTIMATED
+Physical board,PENDING_BOARD,PENDING_BOARD
+CPU energy,N/A,N/A

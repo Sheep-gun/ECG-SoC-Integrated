@@ -1,0 +1,8 @@
+{
+  "status": "BUILD_FAILED_TOOLCHAIN_INCOMPLETE",
+  "physical_execution": "NOT_EXECUTED_NO_BOARD",
+  "toolchain": "Vitis 2020.2 / MicroBlaze GCC found",
+  "failure": "Vitis installation is missing microblazeeb libgloss.a during BSP generation",
+  "log": "benchmarks/accelerator_benefit/board/build/build_instrumented_app.log",
+  "instrumented_elf": "NOT_GENERATED"
+}

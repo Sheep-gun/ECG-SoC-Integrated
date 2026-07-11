@@ -1,0 +1,3 @@
+label,value,status
+Python integer kernel,NOT COMPLETED (equivalence gate),AUDIT
+Pure RTL,54.012600 ms,CYCLE_DERIVED

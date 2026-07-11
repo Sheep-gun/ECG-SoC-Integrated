@@ -1,0 +1,17 @@
+{
+  "environment_id": "windows_no_board_2026-07-12",
+  "cpu_model": "AMD Ryzen 9 7940HX with Radeon Graphics",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python_version": "3.12.13",
+  "python_executable": "C:\\Users\\YangGeon\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "numpy_version": "2.3.5",
+  "processes": 1,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1 (benchmark-required)",
+    "MKL_NUM_THREADS": "1 (benchmark-required)",
+    "OPENBLAS_NUM_THREADS": "1 (benchmark-required)",
+    "NUMEXPR_NUM_THREADS": "1 (benchmark-required)"
+  },
+  "status": "NOT_COMPLETED_NO_CURRENT_EXACT_PYTHON_PATH",
+  "evidence": "reports/PYTHON_BASELINE_NOT_COMPLETED.md"
+}

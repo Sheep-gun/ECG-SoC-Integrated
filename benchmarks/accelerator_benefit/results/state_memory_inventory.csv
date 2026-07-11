@@ -1,0 +1,7 @@
+item,category,bits,bytes,status,evidence,notes
+hypothetical_full_30min_raw_input,avoided_input_buffer,21600000,2700000,derived,1800000 samples * 12 bits,not instantiated
+pure_rtl_total_flip_flops,all_sequential_state_upper_bound,5038,629.75,synthesis_reported,reports/final/vivado_locked_model_metrics.md,"includes persistent, pipeline, control, and interface state; not exact inference memory"
+persistent_inference_state,persistent_state,<=5038,<=629.75,upper_bound,pure RTL FF count plus RTL inspection,exact post-synthesis category split unavailable
+pipeline_control_interface_state,nonpersistent_or_control,included_in_5038,included_in_629.75,not_separately_quantified,RTL declarations and synthesis total,not misreported as inference memory
+BRAM,resource,0,0,synthesis_reported,reports/final/vivado_locked_model_metrics.md,pure RTL
+DSP,resource,N/A,N/A,synthesis_reported,reports/final/vivado_locked_model_metrics.md,0 DSP

@@ -1,0 +1,3 @@
+label,value,status
+Full raw window avoided,"2,700,000 bytes",CYCLE_DERIVED
+All pure-RTL FF state upper bound,<=629.75 bytes,AUDIT

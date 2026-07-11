@@ -1,0 +1,21 @@
+Opening the hardware design, this may take few seconds.
+INFO: [Hsi 55-2053] elapsed time for repository (C:/Xilinx/Vitis/2020.2/data\embeddedsw) loading 0 seconds
+Starting vitis.bat. This could take few seconds...done
+C:/Xilinx/Vitis/2020.2/gnu/microblaze/nt
+error copying "C:/Xilinx/Vitis/2020.2/gnu/microblaze/nt/microblazeeb-xilinx-elf/usr/lib/le/bs/m/libgloss.a" to "../../lib/libgloss.a": no such file or directory
+ERROR: [Hsi 55-1545] Problem running tcl command ::sw_cpu_v2_12::generate : error copying "C:/Xilinx/Vitis/2020.2/gnu/microblaze/nt/microblazeeb-xilinx-elf/usr/lib/le/bs/m/libgloss.a" to "../../lib/libgloss.a": no such file or directory
+    while executing
+"file copy -force $libxil_path $libxilfilename"
+    (procedure "::sw_cpu_v2_12::generate" line 180)
+    invoked from within
+"::sw_cpu_v2_12::generate microblaze_0"
+ERROR: [Hsi 55-1442] Error(s) while running TCL procedure generate()
+Could not create platform for standalone and microblaze_0
+ Failed to generate the bsp sources for domain.standalone_domain
+    while executing
+"error "Could not create platform for $params(os) and $params(proc) \n $msg""
+    (procedure "platform" line 421)
+    invoked from within
+"platform create -name snn_ecg_mb_full_replay_platform -hw "C:/Users/YangGeon/_snn_ecg_accelerator_benchmark_app_work/hw/snn_ecg_mb_full_replay.xsa" -p..."
+    (file "C:\Users\YangGeon\SNN ECG Classifier\benchmarks\accelerator_benefit\board\build\build_instrumented_app.tcl" line 2)
+nchmarks\accelerator_benefit\board\build\build_instrumented_app.tcl" line 2)

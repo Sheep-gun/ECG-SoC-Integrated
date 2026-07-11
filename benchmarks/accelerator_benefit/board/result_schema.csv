@@ -1,0 +1,1 @@
+case_id,sample_count,core_cycles,core_latency_ms,system_cycles,system_latency_ms,samples_per_second,realtime_margin,final_pred,final_mem_NSR,final_mem_CHF,final_mem_ARR,final_mem_AFF,pred_match,mem_match,timing_source,timer_frequency_hz
