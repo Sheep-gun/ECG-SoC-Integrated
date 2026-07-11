@@ -1,0 +1,6 @@
+record_name,input_file,format,original_fs_Hz,target_fs_Hz,original_samples,resampled_samples,duration_s,input_min_V,input_max_V,input_pp_V,input_rms_V
+NSR,afe_input_dataset\afe_input_NSR.csv,csv,1000.00000000055,1000,60000,60000,60,-0.00049,0.00212,0.00261,0.000260780468018601
+CHF,afe_input_dataset\afe_input_CHF.csv,csv,1000.00000000055,1000,60000,60000,60,-0.00159,0.00313,0.00472,0.000642192902288707
+ARR,afe_input_dataset\afe_input_ARR.csv,csv,1000.00000000055,1000,60000,60000,60,-0.00302,0.00251,0.00553,0.000491960811870892
+AFF,afe_input_dataset\afe_input_AFF.csv,csv,1000.00000000055,1000,60000,60000,60,-0.001945,0.00184,0.003785,0.000395919698823721
+record100_NSR,afe_input_dataset\afe_input_record100_NSR.csv,csv,359.971202303823,1000,3600,10000,10,-0.000645,0.00096,0.001605,0.000362389465906502

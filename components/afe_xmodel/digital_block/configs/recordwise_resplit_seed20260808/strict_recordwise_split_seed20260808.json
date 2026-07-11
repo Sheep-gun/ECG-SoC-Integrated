@@ -1,0 +1,136 @@
+{
+  "seed": 20260808,
+  "policy": "source_record_id grouped split; exact original per-class train/val/test chunk counts",
+  "balance_chunks": true,
+  "target_chunk_counts": {
+    "NSR": {
+      "train": 17,
+      "val": 8,
+      "test": 9
+    },
+    "CHF": {
+      "train": 17,
+      "val": 8,
+      "test": 9
+    },
+    "ARR": {
+      "train": 17,
+      "val": 8,
+      "test": 9
+    },
+    "AFF": {
+      "train": 17,
+      "val": 8,
+      "test": 9
+    }
+  },
+  "record_lists": {
+    "train": [
+      "AFF_afdb_06426",
+      "AFF_afdb_07162",
+      "ARR_mitdb_100",
+      "ARR_mitdb_104",
+      "ARR_mitdb_106",
+      "ARR_mitdb_107",
+      "ARR_mitdb_108",
+      "ARR_mitdb_109",
+      "ARR_mitdb_111",
+      "ARR_mitdb_114",
+      "ARR_mitdb_116",
+      "ARR_mitdb_119",
+      "ARR_mitdb_205",
+      "ARR_mitdb_212",
+      "ARR_mitdb_213",
+      "ARR_mitdb_215",
+      "ARR_mitdb_222",
+      "ARR_mitdb_223",
+      "ARR_mitdb_233",
+      "CHF_chfdb_chf01",
+      "CHF_chfdb_chf02",
+      "CHF_chfdb_chf03",
+      "CHF_chfdb_chf04",
+      "CHF_chfdb_chf05",
+      "CHF_chfdb_chf13",
+      "NSR_nsrdb_16273",
+      "NSR_nsrdb_16420",
+      "NSR_nsrdb_16539",
+      "NSR_nsrdb_16773",
+      "NSR_nsrdb_16795",
+      "NSR_nsrdb_17453",
+      "NSR_nsrdb_18184",
+      "NSR_nsrdb_19090",
+      "NSR_nsrdb_19830"
+    ],
+    "val": [
+      "AFF_afdb_07859",
+      "ARR_mitdb_124",
+      "ARR_mitdb_200",
+      "ARR_mitdb_207",
+      "ARR_mitdb_209",
+      "ARR_mitdb_219",
+      "ARR_mitdb_228",
+      "ARR_mitdb_232",
+      "ARR_mitdb_234",
+      "CHF_chfdb_chf08",
+      "CHF_chfdb_chf10",
+      "CHF_chfdb_chf11",
+      "CHF_chfdb_chf14",
+      "NSR_nsrdb_16265",
+      "NSR_nsrdb_17052",
+      "NSR_nsrdb_18177",
+      "NSR_nsrdb_19088"
+    ],
+    "test": [
+      "AFF_afdb_06995",
+      "ARR_mitdb_102",
+      "ARR_mitdb_105",
+      "ARR_mitdb_118",
+      "ARR_mitdb_202",
+      "ARR_mitdb_208",
+      "ARR_mitdb_214",
+      "ARR_mitdb_217",
+      "ARR_mitdb_220",
+      "ARR_mitdb_231",
+      "CHF_chfdb_chf06",
+      "CHF_chfdb_chf07",
+      "CHF_chfdb_chf09",
+      "CHF_chfdb_chf15",
+      "NSR_nsrdb_16272",
+      "NSR_nsrdb_16483",
+      "NSR_nsrdb_16786",
+      "NSR_nsrdb_19093",
+      "NSR_nsrdb_19140"
+    ]
+  },
+  "test_records_readable_by_search": true,
+  "test_records_used_for_search": false,
+  "physical_record_overlap_checked": true,
+  "split_hash": "9514200bcbe3a57a120ff135eee905405edac396a1a464327b9247e059ff47a0",
+  "record_list_hashes": {
+    "train": "1e19ce7901c320c846dead43c005c408ea3cde825317d0270a7e3e059fb4bf39",
+    "val": "051509cb5c811559a5e97685ec95b57722eb49bf32bd554f19a21d9e18fecb7c",
+    "test": "fdfa7ddefede2e212ed2fe77c268542afdde0737ac65ffd6817d83b912723ea3"
+  },
+  "class_chunk_counts": {
+    "NSR": {
+      "val": 8,
+      "test": 9,
+      "train": 17
+    },
+    "CHF": {
+      "train": 17,
+      "test": 9,
+      "val": 8
+    },
+    "ARR": {
+      "train": 17,
+      "test": 9,
+      "val": 8
+    },
+    "AFF": {
+      "train": 17,
+      "test": 9,
+      "val": 8
+    }
+  }
+}

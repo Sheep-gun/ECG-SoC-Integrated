@@ -1,0 +1,29 @@
+{
+  "final_model_id": "structural_guarded_silent_aff_1008710",
+  "final_test_chunk": {
+    "correct": 29,
+    "total": 36,
+    "accuracy_percent": 80.56,
+    "macro_f1_percent": 80.44,
+    "balanced_accuracy_percent": 80.56,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 66.67,
+      "ARR": 77.78,
+      "AFF": 77.78
+    }
+  },
+  "final_test_record_majority": {
+    "correct": 16,
+    "total": 19,
+    "accuracy_percent": 84.21,
+    "macro_f1_percent": 80.8,
+    "balanced_accuracy_percent": 88.19,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 75.0,
+      "ARR": 77.78,
+      "AFF": 100.0
+    }
+  }
+}

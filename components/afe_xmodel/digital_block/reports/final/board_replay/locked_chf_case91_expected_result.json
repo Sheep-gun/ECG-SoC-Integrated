@@ -1,0 +1,15 @@
+{
+  "source": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\final\\fulltop_xsim_locked_class_cases_predictions.csv",
+  "case_id": "91",
+  "expected_class": 1,
+  "final_pred": 1,
+  "final_mem": {
+    "NSR": 0,
+    "CHF": 29,
+    "ARR": 0,
+    "AFF": 1
+  },
+  "samples": 1800000,
+  "snapshot_count": 30,
+  "decision_count": 1
+}

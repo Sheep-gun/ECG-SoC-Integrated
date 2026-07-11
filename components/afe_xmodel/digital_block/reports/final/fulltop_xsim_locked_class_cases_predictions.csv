@@ -1,0 +1,5 @@
+case_id,expected_class,final_pred_class,correct,final_valid,samples_driven,final_mem_NSR,final_mem_CHF,final_mem_ARR,final_mem_AFF,cycles,prof_total_cycles,prof_busy_cycles,prof_run_cycles,prof_input_wait_cycles,prof_accepted_samples,prof_windows,prof_decisions,prof_last_window_latency,prof_max_window_latency,prof_last_decision_latency
+117,0,0,1,1,1800000,29,0,1,0,3601293,3601290,3601290,3599970,0,1800000,30,1,120039,120039,3601290
+91,1,1,1,1,1800000,0,29,0,1,3601293,3601290,3601290,3599970,0,1800000,30,1,120039,120039,3601290
+45,2,2,1,1,1800000,7,1,21,1,3601293,3601290,3601290,3599970,0,1800000,30,1,120039,120039,3601290
+16,3,3,1,1,1800000,0,0,0,30,3601293,3601290,3601290,3599970,0,1800000,30,1,120039,120039,3601290

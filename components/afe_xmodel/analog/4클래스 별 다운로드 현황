@@ -1,0 +1,39 @@
+=======================================================
+  클래스: NSR  |  DB: nsrdb  |  Fs: 128 Hz
+=======================================================
+  ✅  16265  |   1280 samples  |  Vpp=3.840 mV  →  real_ecg_NSR_16265.pwl
+  ✅  16272  |   1280 samples  |  Vpp=2.290 mV  →  real_ecg_NSR_16272.pwl
+  ✅  16773  |   1280 samples  |  Vpp=4.230 mV  →  real_ecg_NSR_16773.pwl
+  ✅  16786  |   1280 samples  |  Vpp=3.750 mV  →  real_ecg_NSR_16786.pwl
+  ✅  17052  |   1280 samples  |  Vpp=1.940 mV  →  real_ecg_NSR_17052.pwl
+  ✅  19088  |   1280 samples  |  Vpp=1.280 mV  →  real_ecg_NSR_19088.pwl
+
+=======================================================
+  클래스: ARR  |  DB: mitdb  |  Fs: 360 Hz
+=======================================================
+  ✅    106  |   3600 samples  |  Vpp=3.125 mV  →  real_ecg_ARR_106.pwl
+  ✅    119  |   3600 samples  |  Vpp=4.320 mV  →  real_ecg_ARR_119.pwl
+  ✅    200  |   3600 samples  |  Vpp=3.415 mV  →  real_ecg_ARR_200.pwl
+  ✅    208  |   3600 samples  |  Vpp=3.085 mV  →  real_ecg_ARR_208.pwl
+  ✅    213  |   3600 samples  |  Vpp=3.710 mV  →  real_ecg_ARR_213.pwl
+  ✅    221  |   3600 samples  |  Vpp=2.195 mV  →  real_ecg_ARR_221.pwl
+
+=======================================================
+  클래스: AFF  |  DB: afdb  |  Fs: 250 Hz
+=======================================================
+  ✅  04015  |   2500 samples  |  Vpp=3.680 mV  →  real_ecg_AFF_04015.pwl
+  ✅  04043  |   2500 samples  |  Vpp=1.850 mV  →  real_ecg_AFF_04043.pwl
+  ✅  04746  |   2500 samples  |  Vpp=0.755 mV  →  real_ecg_AFF_04746.pwl
+  ✅  05091  |   2500 samples  |  Vpp=2.175 mV  →  real_ecg_AFF_05091.pwl
+  ✅  06453  |   2500 samples  |  Vpp=1.935 mV  →  real_ecg_AFF_06453.pwl
+  ✅  08405  |   2500 samples  |  Vpp=4.715 mV  →  real_ecg_AFF_08405.pwl
+
+=======================================================
+  클래스: CHF  |  DB: chfdb  |  Fs: 250 Hz
+=======================================================
+  ✅  chf01  |   2500 samples  |  Vpp=1.865 mV  →  real_ecg_CHF_chf01.pwl
+  ✅  chf02  |   2500 samples  |  Vpp=2.030 mV  →  real_ecg_CHF_chf02.pwl
+  ✅  chf03  |   2500 samples  |  Vpp=1.305 mV  →  real_ecg_CHF_chf03.pwl
+  ✅  chf05  |   2500 samples  |  Vpp=3.015 mV  →  real_ecg_CHF_chf05.pwl
+  ✅  chf08  |   2500 samples  |  Vpp=1.180 mV  →  real_ecg_CHF_chf08.pwl
+  ✅  chf13  |   2500 samples  |  Vpp=3.955 mV  →  real_ecg_CHF_chf13.pwl

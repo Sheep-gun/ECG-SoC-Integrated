@@ -1,0 +1,4 @@
+upstream_repo=https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
+commit=91cad84
+date=2026-07-06 14:44:54 +0900
+imported=2026-07-06

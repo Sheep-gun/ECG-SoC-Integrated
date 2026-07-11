@@ -1,0 +1,5 @@
+case_name,case_id,class_id,xsim_final_pred,board_final_pred,final_pred_match,xsim_final_mem_NSR,xsim_final_mem_CHF,xsim_final_mem_ARR,xsim_final_mem_AFF,board_final_mem_NSR,board_final_mem_CHF,board_final_mem_ARR,board_final_mem_AFF,final_mem_match,transport_ok
+locked_nsr_case117,117,0,0,0,1,29,0,1,0,29,0,1,0,1,1
+locked_chf_case91,91,1,1,1,1,0,29,0,1,0,29,0,1,1,1
+locked_arr_case45,45,2,2,2,1,7,1,21,1,7,1,21,1,1,1
+locked_aff_case16,16,3,3,3,1,0,0,0,30,0,0,0,30,1,1

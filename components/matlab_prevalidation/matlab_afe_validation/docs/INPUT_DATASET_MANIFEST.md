@@ -1,0 +1,23 @@
+# 입력 데이터셋 Manifest
+
+이 문서는 MATLAB nominal pre-validation에 사용한 source input dataset의 재현성 정보를 정리한다. 새로 clone한 환경에서 raw ECG input부터 완전 재생성하려면 `afe_input_dataset/`이 필요하다. 해당 폴더가 없으면 top-level script는 checked-in `results_dataset/` artifact를 기반으로 secondary report, figure, manifest를 재생성한다.
+
+아래 source traceability column은 대표 NSR/CHF/ARR/AFF 입력이 어느 database/record/segment에서 왔는지 추적하기 위한 정보이다. 현재 MATLAB repo에서는 exact segment start를 복구하지 않고, checked-in reference input과 SHA256 hash를 기준으로 동일성을 추적한다. 따라서 source start가 불명확한 항목은 추측하지 않고 `not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided`로 명시한다.
+
+## Source traceability column 정의
+
+| Column | 의미 |
+|---|---|
+| `source_database` | upstream source database 약어 (`nsrdb`, `chfdb`, `mitdb`, `afdb`) |
+| `source_record_id` | source record ID |
+| `source_segment_start_s` | 대표 60초 segment 시작 시각. 현재 repo에서 추적되지 않으면 not tracked로 명시 |
+| `source_segment_duration_s` | reference input segment duration. 현재 대표 입력은 60초 기준 |
+| `source_selection_note` | 대표 입력 선택 목적과 주의사항 |
+| `source_traceability_status` | exact / partial / not tracked 중 traceability 상태. 현재는 record까지는 추적되나 exact segment start는 추적되지 않으므로 partial |
+
+| input_class | source_database | source_record_id | source_segment_start_s | source_segment_duration_s | source_selection_note | source_traceability_status | expected_input_path | raw_source_file_in_repo | raw_source_input_sha256 | checked_in_reference_input_path | checked_in_reference_input_sha256 | sample_count | sampling_rate_Hz | duration_s | voltage_min_V | voltage_max_V | checked_in_reference_copy_in_repo | regeneration_method |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| NSR | nsrdb | 16539 | not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | 60 | nominal headroom/reference-vector 검증용 대표 NSR 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음 | partial: source database/record tracked; exact segment start not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | afe_input_dataset/afe_input_NSR.csv | No | N/A; raw source input not checked in | reference_vectors/NSR/input.csv | f2ac2abd15b15836898089b998561f36cd60f2d08c649ae76c8e9ffab553bb30 | 60000 | 1000 | 60 | -0.00049 | 0.00212 | Yes | Full regeneration requires afe_input_dataset/; without it, rebuild secondary reports/figures/manifests from checked-in results_dataset artifacts. |
+| CHF | chfdb | chf05 | not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | 60 | nominal headroom/reference-vector 검증용 대표 CHF 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음 | partial: source database/record tracked; exact segment start not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | afe_input_dataset/afe_input_CHF.csv | No | N/A; raw source input not checked in | reference_vectors/CHF/input.csv | 1887226971c87366c7c9116398c89757a4b953562337334c8f1510cf945e5e59 | 60000 | 1000 | 60 | -0.00159 | 0.00313 | Yes | Full regeneration requires afe_input_dataset/; without it, rebuild secondary reports/figures/manifests from checked-in results_dataset artifacts. |
+| ARR | mitdb | 105 | not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | 60 | nominal headroom/reference-vector 검증용 대표 ARR 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음 | partial: source database/record tracked; exact segment start not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | afe_input_dataset/afe_input_ARR.csv | No | N/A; raw source input not checked in | reference_vectors/ARR/input.csv | 027cd0b0540baf34eaf2c8cd6056dc5ce8d4a8857841df6921556714b04c4646 | 60000 | 1000 | 60 | -0.00302 | 0.00251 | Yes | Full regeneration requires afe_input_dataset/; without it, rebuild secondary reports/figures/manifests from checked-in results_dataset artifacts. |
+| AFF | afdb | 04015 | not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | 60 | nominal headroom/reference-vector 검증용 대표 AFF 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음 | partial: source database/record tracked; exact segment start not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided | afe_input_dataset/afe_input_AFF.csv | No | N/A; raw source input not checked in | reference_vectors/AFF/input.csv | d55bba730a8c2a0dd521a1c880ac56dd587182ab981f454686d43ea56bec4d7f | 60000 | 1000 | 60 | -0.001945 | 0.00184 | Yes | Full regeneration requires afe_input_dataset/; without it, rebuild secondary reports/figures/manifests from checked-in results_dataset artifacts. |

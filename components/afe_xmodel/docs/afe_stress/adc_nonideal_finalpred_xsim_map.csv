@@ -1,0 +1,19 @@
+manifest_id,base_case_id,class_label,record_id,chunk_id,perturb_type,perturb_value,clean_pred,pert_pred,flipped,final_mem_drift_NSR,final_mem_drift_CHF,final_mem_drift_ARR,final_mem_drift_AFF
+1000,37,ARR,105,0,offset,+5 LSB,ARR,ARR,false,0,0,0,0
+1001,37,ARR,105,0,gain,+1 %,ARR,ARR,false,2,-1,-1,0
+1002,37,ARR,105,0,noise,2 LSB rms,ARR,ARR,false,-6,3,3,0
+1003,37,ARR,105,0,jitter,100 us,ARR,ARR,false,1,0,-1,0
+1004,110,NSR,16483,10,offset,+5 LSB,NSR,NSR,false,0,0,0,0
+1005,110,NSR,16483,10,gain,+1 %,NSR,NSR,false,0,0,0,0
+1006,110,NSR,16483,10,noise,2 LSB rms,NSR,CHF,true,-30,25,5,0
+1007,110,NSR,16483,10,jitter,100 us,NSR,NSR,false,0,0,0,0
+1008,91,CHF,chf09,29,offset,+5 LSB,CHF,CHF,false,0,0,0,0
+1009,91,CHF,chf09,29,gain,+1 %,CHF,CHF,false,0,0,0,0
+1010,91,CHF,chf09,29,noise,2 LSB rms,CHF,CHF,false,0,-1,0,1
+1011,91,CHF,chf09,29,jitter,100 us,CHF,CHF,false,0,0,0,0
+1012,16,AFF,06995,16,offset,+5 LSB,AFF,AFF,false,0,0,0,0
+1013,16,AFF,06995,16,gain,+1 %,AFF,AFF,false,0,0,0,0
+1014,16,AFF,06995,16,noise,2 LSB rms,AFF,AFF,false,0,0,0,0
+1015,16,AFF,06995,16,jitter,100 us,AFF,AFF,false,0,0,0,0
+2000,110,NSR,16483,10,noise,0.5 LSB rms,NSR,NSR,false,0,0,0,0
+2001,110,NSR,16483,10,noise,1.0 LSB rms,NSR,NSR,false,0,0,0,0

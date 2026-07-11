@@ -1,0 +1,2 @@
+HPF_fc_Hz,IA_Gain,Total_Gain,Notch_f0_Hz,Bootstrap_k,Notch_Q,LPF_fc_Hz,ADC_Vref_N,ADC_Vref_P,ADC_bits,Opamp_AOL_dB,Opamp_CMRR_dB
+0.482287706339077,201,201,60,0.95,5,150.146172728203,-1.65,1.65,12,100,110

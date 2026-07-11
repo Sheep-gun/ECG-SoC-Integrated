@@ -1,0 +1,91 @@
+{
+  "captured_at_utc": "2026-07-11T16:16:02.838873+00:00",
+  "policy": "fixed-commit git archive; worktree bytes are never imported",
+  "repositories": [
+    {
+      "component": "matlab_prevalidation",
+      "repository_root": "C:\\Users\\YangGeon\\Desktop\\Analog\\ECG-SoC-MATLAB-AFE-ADC-Prevalidation",
+      "origin": "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation.git",
+      "active_branch": "main",
+      "active_head": "907f7e1f081a9d6a5703a32095d962143315a192",
+      "fixed_imported_commit": "907f7e1f081a9d6a5703a32095d962143315a192",
+      "status_porcelain": [],
+      "tracked_status": [],
+      "untracked_paths": [],
+      "dirty_tracked_exception": false
+    },
+    {
+      "component": "afe_xmodel",
+      "repository_root": "C:\\Users\\YangGeon\\Desktop\\Analog\\ECG-SoC",
+      "origin": "https://github.com/Hwan-22/ECG-SoC.git",
+      "active_branch": "main",
+      "active_head": "4756a5086023547328ef44fd5fd87da3c250dc39",
+      "fixed_imported_commit": "4756a5086023547328ef44fd5fd87da3c250dc39",
+      "status_porcelain": [],
+      "tracked_status": [],
+      "untracked_paths": [],
+      "dirty_tracked_exception": false
+    },
+    {
+      "component": "digital_accelerator",
+      "repository_root": "C:\\Users\\YangGeon\\SNN ECG Classifier",
+      "origin": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier.git",
+      "active_branch": "codex/accelerator-benefit-benchmark",
+      "active_head": "5b6f01192dd84cc02022a85449a917532c1b3dca",
+      "fixed_imported_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
+      "status_porcelain": [
+        "M benchmarks/accelerator_benefit/results/cpu_cpp_kernel_runs.csv",
+        " M benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py",
+        "?? benchmarks/accelerator_benefit/tools/cpp/bin/cpp_baseline.exe",
+        "?? benchmarks/accelerator_benefit/tools/cpp/build_cpp_baseline.py",
+        "?? benchmarks/accelerator_benefit/tools/cpp/cpp_baseline.cpp",
+        "?? benchmarks/accelerator_benefit/tools/cpp/cpp_build_environment.json",
+        "?? benchmarks/accelerator_benefit/tools/cpp/run_cpp_benchmark.py",
+        "?? obj/Vsnn_ecg_30min_final_top.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top.h",
+        "?? obj/Vsnn_ecg_30min_final_top.mk",
+        "?? obj/Vsnn_ecg_30min_final_top__ConstPool__0__Slow.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top__Syms.h",
+        "?? obj/Vsnn_ecg_30min_final_top__Syms__Slow.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top___024root.h",
+        "?? obj/Vsnn_ecg_30min_final_top___024root__0.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top___024root__0__Slow.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top___024root__1.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top___024root__Slow.cpp",
+        "?? obj/Vsnn_ecg_30min_final_top__pch.h",
+        "?? obj/Vsnn_ecg_30min_final_top__ver.d",
+        "?? obj/Vsnn_ecg_30min_final_top__verFiles.dat",
+        "?? obj/Vsnn_ecg_30min_final_top_classes.mk",
+        "?? tmp/oss-cad/oss-cad-suite.exe"
+      ],
+      "tracked_status": [
+        "M benchmarks/accelerator_benefit/results/cpu_cpp_kernel_runs.csv",
+        " M benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py"
+      ],
+      "untracked_paths": [
+        "benchmarks/accelerator_benefit/tools/cpp/bin/cpp_baseline.exe",
+        "benchmarks/accelerator_benefit/tools/cpp/build_cpp_baseline.py",
+        "benchmarks/accelerator_benefit/tools/cpp/cpp_baseline.cpp",
+        "benchmarks/accelerator_benefit/tools/cpp/cpp_build_environment.json",
+        "benchmarks/accelerator_benefit/tools/cpp/run_cpp_benchmark.py",
+        "obj/Vsnn_ecg_30min_final_top.cpp",
+        "obj/Vsnn_ecg_30min_final_top.h",
+        "obj/Vsnn_ecg_30min_final_top.mk",
+        "obj/Vsnn_ecg_30min_final_top__ConstPool__0__Slow.cpp",
+        "obj/Vsnn_ecg_30min_final_top__Syms.h",
+        "obj/Vsnn_ecg_30min_final_top__Syms__Slow.cpp",
+        "obj/Vsnn_ecg_30min_final_top___024root.h",
+        "obj/Vsnn_ecg_30min_final_top___024root__0.cpp",
+        "obj/Vsnn_ecg_30min_final_top___024root__0__Slow.cpp",
+        "obj/Vsnn_ecg_30min_final_top___024root__1.cpp",
+        "obj/Vsnn_ecg_30min_final_top___024root__Slow.cpp",
+        "obj/Vsnn_ecg_30min_final_top__pch.h",
+        "obj/Vsnn_ecg_30min_final_top__ver.d",
+        "obj/Vsnn_ecg_30min_final_top__verFiles.dat",
+        "obj/Vsnn_ecg_30min_final_top_classes.mk",
+        "tmp/oss-cad/oss-cad-suite.exe"
+      ],
+      "dirty_tracked_exception": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+class_label,support,predicted,tp,fp,fn,precision_percent,recall_percent,f1_percent
+NSR,9,12,9,3,0,75.0,100.0,85.71
+CHF,9,6,6,0,3,100.0,66.67,80.0
+ARR,9,8,7,1,2,87.5,77.78,82.35
+AFF,9,10,7,3,2,70.0,77.78,73.68

@@ -1,0 +1,37 @@
+﻿scope,feature_group,metric,plot_type,png
+all,pNN125,pnn125_mismatch_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\pnn125_mismatch_rate.png
+all,RDM,rdm_avg_code,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\rdm_avg_code.png
+all,DSCR,dscr_sign_flip_per_beat,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\dscr_sign_flip_per_beat.png
+all,DSCR,dscr_slope_event_per_beat,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\dscr_slope_event_per_beat.png
+all,RAM,ram_avg_peak_code,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\ram_avg_peak_code.png
+all,ECP,ecp_pair_per_beat,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\ecp_pair_per_beat.png
+all,QRS MAF,qrs_maf_width_abn_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\qrs_maf_width_abn_ratio.png
+all,QRS MAF,qrs_maf_complex_abn_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\qrs_maf_complex_abn_ratio.png
+all,QRS MAF,qrs_maf_energy_abn_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\qrs_maf_energy_abn_ratio.png
+all,RBBB Bank,rbbb_like_beat_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\rbbb_like_beat_ratio.png
+all,RBBB Bank,rbbb_terminal_delay_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\rbbb_terminal_delay_ratio.png
+all,RBBB Bank,rbbb_max_last_width,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\rbbb_max_last_width.png
+all,EERG,eerg_pre_qrs_bump_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\eerg_pre_qrs_bump_rate.png
+all,EERG,eerg_early_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\eerg_early_rate.png
+all,EERG,eerg_rtl_ecp_pair_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\eerg_rtl_ecp_pair_rate.png
+all,AFF context,aff_rhythm_fraction,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\aff_rhythm_fraction.png
+all,EERG,eerg_gate,bar,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\eerg_gate_firing_rate.png
+test,pNN125,pnn125_mismatch_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\pnn125_mismatch_rate.png
+test,RDM,rdm_avg_code,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\rdm_avg_code.png
+test,DSCR,dscr_sign_flip_per_beat,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\dscr_sign_flip_per_beat.png
+test,DSCR,dscr_slope_event_per_beat,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\dscr_slope_event_per_beat.png
+test,RAM,ram_avg_peak_code,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\ram_avg_peak_code.png
+test,ECP,ecp_pair_per_beat,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\ecp_pair_per_beat.png
+test,QRS MAF,qrs_maf_width_abn_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\qrs_maf_width_abn_ratio.png
+test,QRS MAF,qrs_maf_complex_abn_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\qrs_maf_complex_abn_ratio.png
+test,QRS MAF,qrs_maf_energy_abn_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\qrs_maf_energy_abn_ratio.png
+test,RBBB Bank,rbbb_like_beat_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\rbbb_like_beat_ratio.png
+test,RBBB Bank,rbbb_terminal_delay_ratio,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\rbbb_terminal_delay_ratio.png
+test,RBBB Bank,rbbb_max_last_width,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\rbbb_max_last_width.png
+test,EERG,eerg_pre_qrs_bump_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\eerg_pre_qrs_bump_rate.png
+test,EERG,eerg_early_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\eerg_early_rate.png
+test,EERG,eerg_rtl_ecp_pair_rate,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\eerg_rtl_ecp_pair_rate.png
+test,AFF context,aff_rhythm_fraction,boxplot,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\aff_rhythm_fraction.png
+test,EERG,eerg_gate,bar,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\eerg_gate_firing_rate.png
+all,overview,all_metrics,overview,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\all_segments\model_s_feature_boxplot_overview.png
+test,overview,all_metrics,overview,C:\Users\YangGeon\Desktop\작업물\학업\한양대학교 문서\스펙\대회 관련\2026 전국 반도체 설계대전\actual project\model_s_feature_graphs\test_segments\model_s_feature_boxplot_overview.png

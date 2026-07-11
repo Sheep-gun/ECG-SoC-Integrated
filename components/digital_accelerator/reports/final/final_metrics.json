@@ -1,0 +1,104 @@
+{
+  "final_model_id": "structural_guarded_silent_aff_1008710",
+  "locked_params_hash": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
+  "protocol": "fully_blind_strict_recordwise_locked_final_holdout",
+  "train": {
+    "correct": 61,
+    "total": 68,
+    "accuracy_percent": 89.71
+  },
+  "validation": {
+    "correct": 32,
+    "total": 32,
+    "accuracy_percent": 100.0,
+    "interpretation": "model_selection_only"
+  },
+  "final_test_chunk": {
+    "correct": 29,
+    "total": 36,
+    "accuracy_percent": 80.56,
+    "macro_f1_percent": 80.44,
+    "balanced_accuracy_percent": 80.56,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 66.67,
+      "ARR": 77.78,
+      "AFF": 77.78
+    }
+  },
+  "final_test_record_majority": {
+    "correct": 16,
+    "total": 19,
+    "accuracy_percent": 84.21,
+    "macro_f1_percent": 80.8,
+    "balanced_accuracy_percent": 88.19,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 75.0,
+      "ARR": 77.78,
+      "AFF": 100.0
+    }
+  },
+  "test_evaluation_count": 1,
+  "test_used_for_selection": false,
+  "xsim_locked_final_test": {
+    "cases": 36,
+    "final_pred_mismatch": 0,
+    "final_mem_mismatch": 0
+  },
+  "pure_rtl_vivado": {
+    "lut": 9719,
+    "ff": 5038,
+    "bram": 0,
+    "dsp": 0,
+    "wns_ns": 8.184,
+    "estimated_total_power_w": 0.099
+  },
+  "microblaze_full_replay_system": {
+    "lut": 12494,
+    "slice_reg": 8494,
+    "bram": 16,
+    "dsp": 3,
+    "setup_wns_ns": 0.097,
+    "hold_wns_ns": 0.019,
+    "timing_constraints_met": true
+  },
+  "board_replay": {
+    "cases": 4,
+    "classes": [
+      "NSR",
+      "CHF",
+      "ARR",
+      "AFF"
+    ],
+    "samples_per_case": 1800000,
+    "snapshots_per_case": 30,
+    "final_pred_match": "4/4",
+    "final_mem_match": "4/4"
+  },
+  "board_replay_36": {
+    "status": "completed",
+    "validation_result": "pass",
+    "cases_requested": 36,
+    "cases_completed": 36,
+    "cases_passed": 36,
+    "cases_failed_or_invalid": 0,
+    "cases_final_mem_mismatch": 0,
+    "cases_pending": 0,
+    "samples_per_case": 1800000,
+    "snapshots_per_case": 30,
+    "pred_match_correct": 36,
+    "pred_match_total": 36,
+    "final_mem_match_correct": 36,
+    "final_mem_match_total": 36,
+    "classification_correct": 29,
+    "classification_total": 36,
+    "classification_accuracy_percent": 80.56,
+    "summary_path": "reports/final/board_replay_36_batch_summary.md",
+    "csv_path": "reports/final/board_replay_36_expected_vs_board.csv",
+    "manifest_csv": "reports/final/board_replay_36_cases.csv",
+    "manifest_json": "reports/final/board_replay_36_cases.json",
+    "transcript_dir": "reports/final/board_replay_36/transcripts",
+    "parsed_dir": "reports/final/board_replay_36/parsed"
+  }
+}

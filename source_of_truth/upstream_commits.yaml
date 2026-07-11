@@ -1,0 +1,49 @@
+schema_version: 1
+integration_capture_utc: "2026-07-11T16:16:02.838873+00:00"
+import_policy: "fixed-commit git archive; upstream worktree bytes are never imported"
+parent_nested_repository_exclude: "/ECG-SoC-Integrated/"
+
+repositories:
+  matlab_prevalidation:
+    name: ECG-SoC-MATLAB-AFE-ADC-Prevalidation
+    normalized_origin_url: https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation
+    absolute_local_path: "C:/Users/YangGeon/Desktop/Analog/ECG-SoC-MATLAB-AFE-ADC-Prevalidation"
+    active_branch_at_integration: main
+    active_head_at_integration: 907f7e1f081a9d6a5703a32095d962143315a192
+    fixed_imported_commit: 907f7e1f081a9d6a5703a32095d962143315a192
+    imported_commit_title: "Move package contents to repository root"
+    contributor: 서민우
+    tracked_worktree_status: CLEAN
+    untracked_paths: []
+    import_method: "git archive <fixed_commit>; application/private exclusions are recorded separately"
+
+  afe_xmodel:
+    name: ECG-SoC
+    normalized_origin_url: https://github.com/Hwan-22/ECG-SoC
+    absolute_local_path: "C:/Users/YangGeon/Desktop/Analog/ECG-SoC"
+    active_branch_at_integration: main
+    active_head_at_integration: 4756a5086023547328ef44fd5fd87da3c250dc39
+    fixed_imported_commit: 4756a5086023547328ef44fd5fd87da3c250dc39
+    imported_commit_title: "2차 리뷰 반영: claim 강도 조정 + threshold artifact + path portability"
+    contributor: 이수환
+    tracked_worktree_status: CLEAN
+    untracked_paths: []
+    import_method: "git archive <fixed_commit>; application/private exclusions are recorded separately"
+
+  digital_accelerator:
+    name: SNN-ECG-4-Class-Classifier
+    normalized_origin_url: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
+    absolute_local_path: "C:/Users/YangGeon/SNN ECG Classifier"
+    active_branch_at_integration: codex/accelerator-benefit-benchmark
+    active_head_at_integration: 5b6f01192dd84cc02022a85449a917532c1b3dca
+    fixed_imported_commit: c6b80de19cdcad5b7e43fe7835588b629d847f75
+    imported_commit_title: "Clarify digital ownership across final documentation"
+    contributor: 양건
+    tracked_worktree_status: "CONCURRENT_BENCHMARK_MODIFICATION; explicitly permitted by user; see integration_evidence/upstream_status_before.json"
+    untracked_paths_summary:
+      - benchmarks/accelerator_benefit/tools/cpp/
+      - obj/
+      - tmp/oss-cad/oss-cad-suite.exe
+    import_method: "git archive c6b80de19cdcad5b7e43fe7835588b629d847f75; current HEAD/worktree excluded"
+
+intentional_exclusions_registry: integration_evidence/excluded_upstream_paths.csv

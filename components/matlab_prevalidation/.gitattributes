@@ -1,0 +1,6 @@
+# Keep reference-vector text files byte-stable across Windows/macOS/Linux checkouts.
+matlab_afe_validation/reference_vectors/**/*.mem text eol=lf
+matlab_afe_validation/reference_vectors/**/*.txt text eol=lf
+matlab_afe_validation/reference_vectors/**/*.csv text eol=lf
+matlab_afe_validation/reference_vectors/*.csv text eol=lf
+matlab_afe_validation/reference_vectors/*.md text eol=lf

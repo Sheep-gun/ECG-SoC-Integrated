@@ -1,0 +1,34 @@
+# AFE+ADC Parameter Reference
+
+이 문서는 XMODEL 구현자가 그대로 참고할 nominal AFE+ADC parameter reference이다.
+실제 transistor-level 또는 post-layout 검증 완료를 의미하지 않는다.
+
+| block | parameter | value | unit | note |
+|---|---|---|---|---|
+| Sampling | fs | 1000 | Hz | Nominal MATLAB/XMODEL stream sampling rate |
+| HPF | R_hpf | 10000000 | Ohm | Schematic-derived high-pass resistor |
+| HPF | C_hpf | 3.3e-08 | F | Schematic-derived high-pass capacitor |
+| HPF | fc_hpf | 0.482287706339 | Hz | 1/(2*pi*R*C), baseline drift reference |
+| Instrumentation Amplifier | Rfb | 100000 | Ohm | IA feedback resistor |
+| Instrumentation Amplifier | Rg | 1000 | Ohm | IA gain-setting resistor |
+| Instrumentation Amplifier | Av_ia | 201 | V/V | 1 + 2*Rfb/Rg |
+| Differential Amplifier | Av_diff | 1 | V/V | Unity differential stage in nominal model |
+| Instrumentation Amplifier | Av_total | 201 | V/V | Av_ia * Av_diff |
+| Notch | f_notch | 60 | Hz | 60 Hz mains target |
+| Notch | R_twin | 26526 | Ohm | Active Twin-T nominal resistor |
+| Notch | C_twin | 1e-07 | F | Active Twin-T nominal capacitor reference |
+| Notch | Rk1 | 5000 | Ohm | Bootstrap feedback resistor |
+| Notch | Rk2 | 95000 | Ohm | Bootstrap feedback resistor |
+| Notch | k_boot | 0.95 | V/V | Rk2/(Rk1+Rk2) |
+| Notch | configured_Q | 5 | - | Nominal configured Q = 1/(4*(1-k)) |
+| LPF | R_lpf | 1000 | Ohm | Schematic-derived low-pass resistor |
+| LPF | C_lpf | 1.06e-06 | F | Schematic-derived low-pass capacitor |
+| LPF | fc_lpf | 150.146172728 | Hz | 1/(2*pi*R*C), anti-aliasing reference |
+| ADC | adc_bits | 12 | bit | Nominal ADC output width |
+| ADC | vref_n | -1.65 | V | Negative ADC input reference |
+| ADC | vref_p | 1.65 | V | Positive ADC input reference |
+| ADC | adc_max | 4095 | code | 2^12 - 1 |
+| ADC | lsb | 0.000805860805861 | V/LSB | 3.3/4095 |
+| Output stream | offset_binary_mem | %03X per line | hex | Physical ADC code reference; not canonical signed RTL replay format |
+| Output stream | signed_decimal_txt | adc_offset_binary - 2048 | decimal | Signed stream reference; final digital input contract is signed 12-bit ECG stream |
+| Output stream | signed_twos_complement_mem | %03X per line | hex | Canonical downstream replay format: signed 12-bit two's-complement hex .mem, encoded as mod(adc_signed,4096) |

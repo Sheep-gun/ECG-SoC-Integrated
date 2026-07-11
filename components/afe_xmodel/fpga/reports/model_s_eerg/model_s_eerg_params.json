@@ -1,0 +1,12 @@
+{
+  "name": "EERG",
+  "full_name": "Episodic Ectopic Rescue Gate",
+  "rbbb_like_beat_count_eq": 0,
+  "rbbb_segment_spike_count_eq": 0,
+  "pre_qrs_bump_count_ge": 1,
+  "early_count_ge": 10,
+  "ecp_count_ge": 3,
+  "pnn_mismatch_rate_le": 0.15,
+  "rdm_avg_code_le": 5,
+  "arr_boost": 25000
+}

@@ -1,0 +1,113 @@
+{
+  "project_title_kr": "AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계",
+  "project_title_en": "AFE+ADC XMODEL-linked SNN ECG 4-Class Classification Accelerator IP Core",
+  "final_model_id": "structural_guarded_silent_aff_1008710",
+  "locked_params_hash": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
+  "protocol": "fully_blind_strict_recordwise_locked_final_holdout",
+  "split_unit": "source_record_id",
+  "selected_before_test": true,
+  "test_used_for_selection": false,
+  "test_used_for_parameter_search": false,
+  "test_used_for_chatgpt_context": false,
+  "final_test_evaluation_count": 1,
+  "validation_used_for_model_selection": true,
+  "validation_accuracy_is_final_claim": false,
+  "post_test_parameter_change_allowed": false,
+  "train": {
+    "correct": 61,
+    "total": 68,
+    "accuracy_percent": 89.71
+  },
+  "validation": {
+    "correct": 32,
+    "total": 32,
+    "accuracy_percent": 100.0,
+    "interpretation": "model_selection_only"
+  },
+  "final_test_chunk": {
+    "correct": 29,
+    "total": 36,
+    "accuracy_percent": 80.56,
+    "macro_f1_percent": 80.44,
+    "balanced_accuracy_percent": 80.56,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 66.67,
+      "ARR": 77.78,
+      "AFF": 77.78
+    }
+  },
+  "final_test_record_majority": {
+    "correct": 16,
+    "total": 19,
+    "accuracy_percent": 84.21,
+    "macro_f1_percent": 80.8,
+    "balanced_accuracy_percent": 88.19,
+    "class_recall_percent": {
+      "NSR": 100.0,
+      "CHF": 75.0,
+      "ARR": 77.78,
+      "AFF": 100.0
+    }
+  },
+  "hardware": {
+    "rtl_xsim_locked_final_test_pred_mismatch": 0,
+    "rtl_xsim_locked_final_test_mem_mismatch": 0,
+    "rtl_xsim_locked_final_test_cases": 36,
+    "pure_rtl_lut": 9719,
+    "pure_rtl_ff": 5038,
+    "pure_rtl_bram": 0,
+    "pure_rtl_dsp": 0,
+    "pure_rtl_wns_ns": 8.184,
+    "pure_rtl_estimated_total_power_w": 0.099,
+    "ooc_profile_lut": 9905,
+    "ooc_profile_ff": 5769,
+    "ooc_profile_bram": 0,
+    "ooc_profile_dsp": 0,
+    "ooc_profile_wns_ns": 0.471,
+    "microblaze_full_replay_lut": 12494,
+    "microblaze_full_replay_reg": 8494,
+    "microblaze_full_replay_bram": 16,
+    "microblaze_full_replay_dsp": 3,
+    "microblaze_full_replay_setup_wns_ns": 0.097,
+    "microblaze_full_replay_hold_wns_ns": 0.019,
+    "vitis_board_replay_status": "strict_final_test_36_case_completed_final_pred_36_of_36_final_mem_36_of_36",
+    "board_replay_cases": 36,
+    "board_replay_samples_per_case": 1800000,
+    "board_replay_snapshot_count_per_case": 30,
+    "board_replay_final_pred_match": "36/36",
+    "board_replay_final_mem_match": "36/36",
+    "board_replay_classification_accuracy": "29/36 = 80.56%",
+    "representative_board_replay_cases": 4,
+    "representative_board_replay_final_pred_match": "4/4",
+    "representative_board_replay_final_mem_match": "4/4"
+  },
+  "artifact_paths": {
+    "locked_records": "configs/recordwise_resplit_seed20260808/final_test_records_locked.json",
+    "locked_params": "configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json",
+    "final_metrics": "reports/final/final_metrics.json",
+    "strict_recordwise_result": "reports/final/strict_recordwise_final_result.md",
+    "xsim_summary": "reports/final/xsim_locked_model_summary.md",
+    "vivado_metrics": "reports/final/vivado_locked_model_metrics.md",
+    "board_replay_result": "reports/final/board_replay_36_batch_summary.md",
+    "microblaze_bitstream": "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit",
+    "microblaze_xsa": "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa",
+    "microblaze_elf": "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf",
+    "board_replay_expected_vs_board": "reports/final/board_replay_36_expected_vs_board.csv",
+    "board_replay_transcripts": "reports/final/board_replay_36/transcripts"
+  },
+  "claims_allowed": [
+    "SNN-inspired ECG Classification Accelerator IP Core",
+    "AFE+ADC XMODEL-linked model-based mixed-signal-to-digital verification",
+    "fully blind strict record-wise locked final holdout evaluation",
+    "Vivado/IP-XACT packaged accelerator IP",
+    "Vitis/MicroBlaze 36-case full-record board replay with transcript/comparison evidence"
+  ],
+  "claims_forbidden": [
+    "direct electrode ECG acquisition",
+    "physical AFE board measurement",
+    "CMOS or transistor-level layout verification",
+    "medical diagnosis validation",
+    "validation 100% as final generalization"
+  ]
+}

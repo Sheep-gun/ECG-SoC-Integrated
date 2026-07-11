@@ -1,0 +1,17 @@
+split,subtype,total,model_a_plus_correct,model_s_correct,delta,gate_applied,success,damage
+train,RBBB-heavy,10,4,4,0,1,0,0
+train,PVC-heavy,17,14,14,0,0,0,0
+train,PAC-heavy,8,6,6,0,1,0,0
+train,weak/boundary ARR,41,29,29,0,0,0,0
+train,mixed,22,15,15,0,0,0,0
+train,unknown,2,2,2,0,0,0,0
+val,PVC-heavy,11,10,10,0,0,0,0
+val,PAC-heavy,1,1,1,0,0,0,0
+val,weak/boundary ARR,17,16,16,0,1,0,0
+val,mixed,3,3,3,0,0,0,0
+val,unknown,8,8,8,0,0,0,0
+test,RBBB-heavy,10,6,6,0,0,0,0
+test,PVC-heavy,14,10,10,0,0,0,0
+test,PAC-heavy,3,0,1,1,3,1,0
+test,weak/boundary ARR,10,7,8,1,2,1,0
+test,mixed,3,3,3,0,0,0,0

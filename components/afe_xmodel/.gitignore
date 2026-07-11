@@ -1,0 +1,45 @@
+# Vivado 빌드 파일
+*.jou
+*.log
+*.str
+*.xpr
+*.bit
+.Xil/
+.cache/
+.runs/
+.sim/
+.hw/
+.ip_user_files/
+
+# LTspice
+*.raw
+*.op.raw
+*.fft
+
+# Python
+__pycache__/
+*.pyc
+*.pkl
+.ipynb_checkpoints/
+
+# MATLAB
+*.asv
+*.m~
+
+# XModel 시뮬레이션 결과
+xmodel.jez
+work/
+```
+
+# === 통합 대용량 데이터 (2026-06-26, 커밋 제외) ===
+datasets/
+sim_out/
+fpga/vivado_project/
+*.zip
+*.adc
+
+# 대용량 생성 데이터/부산물 (data/) - 커밋 제외 (ROM용 fpga *.mem은 유지)
+data/*.pwl
+data/*.mem
+*.wlf
+transcript
