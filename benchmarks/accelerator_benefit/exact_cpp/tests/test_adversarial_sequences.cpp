@@ -59,8 +59,13 @@ int main(int argc,char** argv) {
     record("readout_busy_event_capture","flush","class_score_neurons:c24_event_group_pending","0",s(score.c24_mem!=before));
 
     snn::ExactModel one; one.reset(); for(int i=0;i<60000;++i)one.process_sample(0);
+#if EXACT_CPP_TRACE
     record("snapshot_last_sample","boundary","snn_ecg_30min_final_top:accepted/window_count","60000/1",s(one.get_snapshot_trace().back().accepted_samples)+"/"+s(one.get_snapshot_trace().size()));
     record("snapshot_flush_visible_updates","flush","snn_ecg_30min_final_top:POST_DONE_TICKS=37 pre-NBA commit","1",s(one.get_snapshot_trace().size()==1));
+#else
+    record("snapshot_last_sample","boundary","snn_ecg_30min_final_top:accepted/window_count","60000/1",s(one.get_final_result().accepted_samples)+"/"+s(one.get_final_result().snapshot_count));
+    record("snapshot_flush_visible_updates","flush","snn_ecg_30min_final_top:POST_DONE_TICKS=37 pre-NBA commit","1",s(one.get_final_result().snapshot_count==1));
+#endif
 
     snn::FinalMembrane fm; fm.reset(); fm.pred_count={{0,1,1,1}}; snn::SnapshotTrace tied; tied.snapshot_pred=0;
     const auto tied_result=fm.commit(tied,true,0,30);
