@@ -2,14 +2,14 @@
 
 ## 상태
 
-- Revision status: `PENDING_REPORT_COMMIT`
+- Revision status: `COMPLETE`
 - Branch: `codex/award-level-integrated-report`
 - Pre-revision HEAD: `4bd8c51d4b15de0b45410db84ab52a29e5082893`
 - Pre-revision commit title: `Finalize publication-readiness audit`
-- Final report revision commit: `PENDING`
-- Audit-finalization commit: `PENDING_BRANCH_HEAD`
+- Final report revision commit: `4a62eda8afc1041fe4d6b7446a5d790d5cf611f4`
+- Audit-finalization commit: 이 완료 audit를 포함하는 `codex/award-level-integrated-report` branch HEAD
 
-본 audit는 보고서 변경을 먼저 커밋한 뒤 final report revision commit을 기록하고 완료 상태로 전환한다.
+보고서 변경을 먼저 커밋한 뒤 해당 content commit을 고정하고 audit를 완료 상태로 전환하였다.
 
 ## 분량과 구조
 

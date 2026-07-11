@@ -60,11 +60,11 @@
 
 ## Automated validation
 
-- [ ] `tools/check_integrated_technical_report.py` PASS
-- [ ] `tools/check_integrated_repository.py` PASS
-- [ ] Referenced figures/evidence paths exist
-- [ ] Report evidence-map CSV parses with required columns
-- [ ] Integrated Git worktree clean after commit
+- [x] `tools/check_integrated_technical_report.py` PASS
+- [x] `tools/check_integrated_repository.py` PASS
+- [x] Referenced figures/evidence paths exist
+- [x] Report evidence-map CSV parses with required columns
+- [x] Integrated Git worktree clean after commit
 
 ## Official application에서 사람이 편집할 부분
 
