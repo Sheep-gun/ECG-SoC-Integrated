@@ -15,6 +15,8 @@ cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release -DEXACT_CPP_TRACE=OFF
 cmake --build build-release
 ```
 
+The portable baseline leaves `EXACT_CPP_NATIVE=OFF`. A separate benchmark-phase build may add `-DEXACT_CPP_NATIVE=ON`, which maps to `-march=native` on the supported GNU toolchain; its outputs must be revalidated before measurement.
+
 `EXACT_CPP_TRACE=ON` retains Snapshot traces and enables verification-prefix/sample-hash options. `OFF` retains only the state required for inference and rejects those options. Both modes use the same fixed-width and transition code.
 
 ## Inference contract

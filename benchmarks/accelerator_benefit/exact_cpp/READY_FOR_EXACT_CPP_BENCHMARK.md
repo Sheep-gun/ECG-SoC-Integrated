@@ -17,7 +17,7 @@ cmake -S benchmarks/accelerator_benefit/exact_cpp \
 cmake --build benchmarks/accelerator_benefit/exact_cpp/build-release
 ```
 
-Portable Release uses the compiler's CMake `Release` flags (GNU: `-O3 -DNDEBUG`). A separate later build may add `-march=native`, but the portable build must remain the comparison baseline and both builds must re-pass deterministic output identity. No SIMD, multithreading, approximation, or parallel case processing is authorized by this handoff.
+Portable Release uses the compiler's CMake `Release` flags (GNU: `-O3 -DNDEBUG`) with `EXACT_CPP_NATIVE=OFF`. A separate later build may set `-DEXACT_CPP_NATIVE=ON` to add `-march=native`, but the portable build must remain the comparison baseline and both builds must re-pass deterministic output identity. No handwritten SIMD, multithreading, approximation, or parallel case processing is authorized by this handoff.
 
 Benchmark executable: `build-release/exact_cpp_ecg`. Release mode rejects trace output, accepted-sample hash, and incomplete-prefix options. Normal inference depends only on the executable and input stream.
 

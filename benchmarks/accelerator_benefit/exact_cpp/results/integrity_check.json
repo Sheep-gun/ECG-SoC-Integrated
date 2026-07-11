@@ -72,6 +72,11 @@
       "detail": ""
     },
     {
+      "check": "portable_and_native_release_options",
+      "status": "pass",
+      "detail": ""
+    },
+    {
       "check": "fixed_width_helper_surface",
       "status": "pass",
       "detail": ""

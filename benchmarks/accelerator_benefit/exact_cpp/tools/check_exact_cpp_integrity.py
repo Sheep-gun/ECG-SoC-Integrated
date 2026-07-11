@@ -51,6 +51,7 @@ def main()->int:
     check("flush_semantics", "for (int i=0;i<36;++i)" in model_src and "c24_readout_busy_ticks = 35" in (EXACT/"src/snapshot_readout.cpp").read_text())
     cmake=(EXACT/"CMakeLists.txt").read_text();maincpp=(EXACT/"src/main.cpp").read_text()
     check("trace_mode_separation","EXACT_CPP_TRACE" in cmake and "#if EXACT_CPP_TRACE" in model_src and "#if !EXACT_CPP_TRACE" in maincpp)
+    check("portable_and_native_release_options","EXACT_CPP_NATIVE" in cmake and "-march=native" in cmake and "EXACT_CPP_NATIVE=OFF" in (EXACT/"READY_FOR_EXACT_CPP_BENCHMARK.md").read_text())
 
     fw=(EXACT/"include/fixed_width.hpp").read_text();required=("wrap_add","wrap_sub","wrap_mul","arithmetic_right","logical_right","saturating_signed_add","saturating_signed_sub","wrapping_abs","concat","slice")
     check("fixed_width_helper_surface",all(x in fw for x in required))
