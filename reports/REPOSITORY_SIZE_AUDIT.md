@@ -19,4 +19,17 @@ The four raw directory groups total 2,165,559,918 bytes in the working tree: nsr
 - Replace source availability with `datasets/dataset_manifest.yaml`, 1,025 expected official SHA256 entries, resume-capable fetch, read-only verification, license/citation documentation and exclusion registries.
 - Retain derived/locked `.mem`, evaluation CSV/JSON, final metrics, XMODEL/RTL comparisons and board-replay evidence.
 
-Per-file decisions are in `raw_dataset_inventory.csv`, `large_file_disposition.csv`, `largest_current_files_before.csv` and `largest_git_blobs_before.csv`. After rewrite, this document will record the measured reduction and link the `*_after.csv` files.
+Per-file decisions are in `raw_dataset_inventory.csv`, `large_file_disposition.csv`, `largest_current_files_before.csv` and `largest_git_blobs_before.csv`.
+
+## Post-rewrite measurement
+
+- Working tree excluding `.git`: 140,346,925 bytes
+- `.git`: 48,243,693 bytes
+- Total: 188,590,618 bytes
+- Reachable objects: one 45.83 MiB pack
+- Tracked files ≥10 MiB: 0
+- Tracked files ≥50 MiB: 0
+- Largest retained file/blob: 7,514,904-byte project-derived MATLAB stage-output CSV
+- Raw-data prefix matches in reachable history: 0
+
+The detailed result and percentage reduction are in `HISTORY_REWRITE_RESULT.md`; machine-readable lists are `largest_current_files_after.csv` and `largest_git_blobs_after.csv`.

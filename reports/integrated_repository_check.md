@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 163
+- Rules checked: 207
 - Conflicts found: 0
 - Benchmark placeholder: PASS (all fields null)
 
@@ -43,9 +43,27 @@
 - PASS — required path tools/build_global_metrics.py
 - PASS — required path tools/check_integrated_repository.py
 - PASS — required path tools/generate_integrated_figures.py
+- PASS — required path tools/check_integrated_technical_report.py
+- PASS — required path tools/fetch_physionet_datasets.py
+- PASS — required path tools/verify_physionet_datasets.py
+- PASS — required path datasets/README.md
+- PASS — required path datasets/dataset_manifest.yaml
+- PASS — required path datasets/DATASET_LICENSES.md
+- PASS — required path datasets/SHA256SUMS_EXPECTED.txt
+- PASS — required path docs/STREAMING_STATE_MEMORY_KR.md
+- PASS — required path tables/streaming_state_inventory.csv
+- PASS — required path figures/final/FIG-12_detailed_digital_architecture.svg
+- PASS — required path integration_evidence/excluded_upstream_paths.csv
+- PASS — required path integration_evidence/excluded_large_dataset_paths.csv
+- PASS — required path reports/INTEGRATED_TECHNICAL_REPORT_KR.md
+- PASS — required path reports/PUBLICATION_READINESS_PREFLIGHT.md
+- PASS — required path reports/HISTORY_REWRITE_PLAN.md
+- PASS — required path reports/HISTORY_REWRITE_RESULT.md
+- PASS — required path reports/PUBLISH_REWRITTEN_HISTORY.md
 - PASS — required path private_submission/.gitignore
-- PASS — 11 non-benchmark figures
+- PASS — 12 non-benchmark figures
 - PASS — verified tables present
+- PASS — public remote configured
 - PASS — before state recorded: matlab_prevalidation
 - PASS — upstream exists: matlab_prevalidation
 - PASS — origin matches: matlab_prevalidation
@@ -68,16 +86,24 @@
 - PASS — upstream branch unchanged: digital_accelerator
 - PASS — upstream HEAD unchanged: digital_accelerator
 - PASS — tracked status unchanged or authorized benchmark-only drift: digital_accelerator
-- PASS — artifact manifest has 1890 rows
+- PASS — curated artifact manifest has 913 rows
 - PASS — all manifest files exist and SHA256-match
 - PASS — component trees exactly match manifest
-- PASS — component counts
+- PASS — curated component counts
 - PASS — no upstream .git metadata copied
 - PASS — digital benchmark tmp not imported
 - PASS — digital benchmark obj not imported
 - PASS — incomplete accelerator benchmark not imported
 - PASS — application/private upstream files excluded
-- PASS — intentional exclusion registry has four rows
+- PASS — intentional exclusion registry has 981 rows
+- PASS — raw-dataset exclusion registry has 977 rows
+- PASS — retained+excluded cover upstream tree: matlab_prevalidation
+- PASS — retained+excluded cover upstream tree: afe_xmodel
+- PASS — retained+excluded cover upstream tree: digital_accelerator
+- PASS — raw third-party datasets are not tracked
+- PASS — raw dataset paths absent from reachable history
+- PASS — download paths ignored
+- PASS — curated provenance wording
 - PASS — no personal absolute paths in final-facing files
 - PASS — private submission tracks only guard
 - PASS — final chunk metric exact
@@ -116,6 +142,9 @@
 - PASS — metric evidence exists: signed_stream_sample_rate
 - PASS — metric evidence exists: snapshot_duration
 - PASS — metric evidence exists: final_membrane_snapshots
+- PASS — metric evidence exists: raw_input_window_samples
+- PASS — metric evidence exists: avoided_full_raw_input_window_bits
+- PASS — metric evidence exists: avoided_full_raw_input_window_bytes
 - PASS — benchmark status pending
 - PASS — all benchmark values null not zero
 - PASS — benchmark placeholder explicit
@@ -138,6 +167,13 @@
 - PASS — claim evidence exists: CLM-015
 - PASS — claim evidence exists: CLM-016
 - PASS — claim evidence exists: CLM-017
+- PASS — claim evidence exists: CLM-023
+- PASS — CLM-023 registered safe
+- PASS — CLM-023 direct RTL evidence
+- PASS — streaming inventory columns
+- PASS — streaming inventory substantive
+- PASS — unresolved widths explicit
+- PASS — avoided window arithmetic exact
 - PASS — three canonical contributors
 - PASS — MATLAB ownership correct
 - PASS — XMODEL ownership correct
@@ -163,6 +199,14 @@
 - PASS — external references registered
 - PASS — external references authoritative
 - PASS — no unsupported commercial-product figures
+- PASS — wearable wording is product-specific
+- PASS — unsupported broad wearable wording absent
+- PASS — four fixed-version datasets
+- PASS — dataset licenses explicit
+- PASS — dataset hashes populated
+- PASS — FIG-12 indexed
+- PASS — FIG-12 referenced by manuscript
+- PASS — manuscript raw-data policy
 - PASS — benchmark value not promoted: 54.01 ms
 - PASS — benchmark value not promoted: 33.3 MSPS
 - PASS — benchmark value not promoted: 33,300

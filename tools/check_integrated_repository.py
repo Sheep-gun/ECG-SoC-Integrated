@@ -189,6 +189,18 @@ def main() -> int:
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
     repo_by_component = {component: Path(before_map[component]["repository_root"]) for component in SPECS}
+    upstream_blob_maps = {}
+    for component, spec in SPECS.items():
+        tree = git(repo_by_component[component], "-c", "core.quotepath=false", "ls-tree", "-r", spec["commit"])
+        mapping = {}
+        for line in tree.splitlines():
+            metadata, path = line.split("\t", 1)
+            mapping[path] = metadata.split()[2]
+        upstream_blob_maps[component] = mapping
+    local_index_blobs = {}
+    for line in git(ROOT, "-c", "core.quotepath=false", "ls-files", "--stage", "components").splitlines():
+        metadata, path = line.split("\t", 1)
+        local_index_blobs[path] = metadata.split()[1]
     for row in manifest:
         rel = row["integrated_path"]
         manifest_paths.add(rel)
@@ -202,10 +214,10 @@ def main() -> int:
             failures.append(f"manifest hash mismatch: {rel}")
         if row["upstream_commit"] != SPECS[row["component"]]["commit"]:
             failures.append(f"manifest commit mismatch: {rel}")
-        upstream_blob = git(repo_by_component[row["component"]], "rev-parse", f"{row['upstream_commit']}:{row['upstream_path']}")
-        local_blob = git(ROOT, "hash-object", "--no-filters", rel)
-        if upstream_blob != local_blob:
-            failures.append(f"retained file differs from upstream Git object: {rel}")
+        upstream_blob = upstream_blob_maps[row["component"]].get(row["upstream_path"], "")
+        index_blob = local_index_blobs.get(rel, "")
+        if upstream_blob != index_blob:
+            failures.append(f"retained integrated Git blob differs from upstream Git object: {rel}")
     checked.append("all manifest files exist and SHA256-match")
     actual_paths = set()
     for component in SPECS:
@@ -235,7 +247,7 @@ def main() -> int:
     for row in manifest:
         manifest_by_component[row["component"]].add(row["upstream_path"])
     for component, spec in SPECS.items():
-        upstream_all = set(git(repo_by_component[component], "-c", "core.quotepath=false", "ls-tree", "-r", "--name-only", spec["commit"]).splitlines())
+        upstream_all = set(upstream_blob_maps[component])
         accounted = manifest_by_component[component] | excluded_by_component[component]
         check(f"retained+excluded cover upstream tree: {component}", accounted == upstream_all, f"missing={len(upstream_all-accounted)} extra={len(accounted-upstream_all)}")
     raw_prefixes = [f"components/afe_xmodel/algorithm/person_data/{name}/1.0.0/" for name in ("nsrdb", "chfdb", "mitdb", "afdb")]

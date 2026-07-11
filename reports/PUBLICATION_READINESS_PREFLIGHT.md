@@ -23,9 +23,9 @@ Captured before repository-content changes and history rewriting.
 
 ## Measured size
 
-- Working-tree bytes excluding `.git`: 2307320436
-- `.git` bytes: 1535085885
-- Repository total bytes: 3842406321
+- Working-tree bytes excluding `.git`: 2307174104
+- `.git` bytes: 1535086190
+- Repository total bytes: 3842260294
 - Tracked files ≥10 MiB: 56
 - Tracked files ≥50 MiB: 15
 - Largest tracked file: `components/afe_xmodel/algorithm/person_data/chfdb/1.0.0/chf03.dat` (53996544 bytes)

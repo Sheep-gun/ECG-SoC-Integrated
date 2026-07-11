@@ -70,6 +70,8 @@ def run_git(repo: Path, *args: str, binary: bool = False):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=not binary,
+        encoding="utf-8" if not binary else None,
+        errors="strict" if not binary else None,
     )
     return result.stdout if binary else result.stdout.strip()
 
@@ -205,12 +207,19 @@ def remove_tree(path: Path) -> None:
 def restore_exact_git_blobs(component: str, repo: Path, destination: Path, excluded: list[dict]) -> None:
     """Replace archive-converted bytes and exclusion hashes with exact Git blobs."""
     commit = COMPONENTS[component]["commit"]
-    for path in destination.rglob("*"):
-        if not path.is_file():
+    tree_lines = run_git(repo, "-c", "core.quotepath=false", "ls-tree", "-r", commit).splitlines()
+    for line in tree_lines:
+        metadata, rel = line.split("\t", 1)
+        blob_sha = metadata.split()[2]
+        if exclusion_reason(component, rel):
             continue
-        rel = path.relative_to(destination).as_posix()
-        payload = run_git(repo, "show", f"{commit}:{rel}", binary=True)
-        path.write_bytes(payload)
+        ordinary_path = destination / PurePosixPath(rel)
+        extended_path = "\\\\?\\" + str(ordinary_path.resolve())
+        if not os.path.isfile(extended_path):
+            continue
+        payload = run_git(repo, "cat-file", "blob", blob_sha, binary=True)
+        with open(extended_path, "wb") as handle:
+            handle.write(payload)
     for row in excluded:
         if row["component"] != component:
             continue
@@ -284,6 +293,11 @@ def main() -> int:
         choices=sorted(COMPONENTS),
         help="Explicit, audited exception for a concurrent worktree; fixed Git objects are still exported.",
     )
+    parser.add_argument(
+        "--restore-retained-only",
+        action="store_true",
+        help="Rewrite existing retained component files from exact fixed-commit blobs without re-extracting or touching exclusions.",
+    )
     args = parser.parse_args()
     repos = discover_repositories()
     before = []
@@ -298,6 +312,13 @@ def main() -> int:
             raise RuntimeError(f"{component}: tracked worktree/index is not clean: {state['tracked_status']}")
         state["dirty_tracked_exception"] = component in args.allow_dirty_tracked
         before.append(state)
+
+    if args.restore_retained_only:
+        for component, repo in repos.items():
+            restore_exact_git_blobs(component, repo, ROOT / "components" / component, [])
+        write_manifest()
+        print("restored exact retained Git blobs")
+        return 0
 
     evidence = ROOT / "integration_evidence"
     evidence.mkdir(parents=True, exist_ok=True)

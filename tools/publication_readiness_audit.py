@@ -53,10 +53,11 @@ def file_sha256(path: Path) -> str:
 
 def all_files() -> tuple[list[Path], list[Path]]:
     work, dotgit = [], []
-    for path in ROOT.rglob("*"):
+    scan_root = Path("\\\\?\\" + str(ROOT.resolve())) if os.name == "nt" else ROOT
+    for path in scan_root.rglob("*"):
         if not path.is_file():
             continue
-        (dotgit if ".git" in path.relative_to(ROOT).parts else work).append(path)
+        (dotgit if ".git" in path.relative_to(scan_root).parts else work).append(path)
     return work, dotgit
 
 
