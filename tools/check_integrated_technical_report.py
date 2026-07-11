@@ -41,12 +41,12 @@ REQUIRED_FIGURES = [
     "FIG-13_beat_rhythm_path.svg", "FIG-14_morphology_path.svg",
 ]
 MECHANISM_TERMS = [
-    "previous_sample_next", "old `qrs_mem`", "refractory_old", "46개 hypothesis center",
+    "previous_sample_next", "이전 `qrs_mem`", "refractory_old", "46개 가설 중심",
     "abs(current_rr-prev_rr)", "early→late", "filter_update", "prev_slope_sign",
-    "ram_window_open", "최대 amplitude code", "박동 전 120표본", "박동 후 100표본",
-    "width proxy", "Complexity", "Pre-QRS activity", "activity onset", "terminal window",
-    "repeated", "*_count_next", "Base seed", "guard", "rescue", "veto", "silent-AFF",
-    "strict `>`", "IDLE→CORE_RESET→SEG_START→RUN→SEG_DONE→FLUSH→COMMIT→DONE",
+    "ram_window_open", "최대 진폭 코드", "박동 전 120표본", "박동 후 100표본",
+    "폭 대리지표", "복잡도(complexity)", "Pre-QRS 활동", "활동 시작", "말단 관찰 구간",
+    "반복", "*_count_next", "Base seed", "guard", "rescue", "veto", "silent-AFF",
+    "엄격한 `>`", "IDLE→CORE_RESET→SEG_START→RUN→SEG_DONE→FLUSH→COMMIT→DONE",
 ]
 
 
@@ -92,7 +92,7 @@ def main() -> int:
     check("chapter 3 is longest", len(section(text, "3. 제안 SNN-Inspired 디지털 아키텍처", 1)) == max(len(section(text, h[2:], 1)) for h in MAIN_HEADINGS), "chapter lengths")
 
     primer = section(text, "3.1 핵심 개념과 다중 시간축 처리", 2)
-    for term in ["표본값(sample)", "사건 신호(event)", "막전위형 상태(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR interval", "Snapshot", "Final Membrane"]:
+    for term in ["표본값(sample)", "사건 신호(event)", "막전위형 상태(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
         check(f"concept defined {term}", term in primer)
     check("concepts precede module detail", text.index("**표본값(sample).**") < text.index("ecg_event_encoder_adaptive"))
     check("running signal example", all(token in text for token in ["+  →  +  →  -", "+  →  +  →  +", "비임상 설명 예"]))
@@ -100,8 +100,17 @@ def main() -> int:
         check(f"mechanism {term}", term.lower() in text.lower())
     for block in ["ecg_event_encoder_adaptive", "qrs_lif_detector", "pnn_rhythm_predictor", "rdm_variability_neuron", "ectopic_pair_neuron", "dscr_spike_counter", "ram_peak_accumulator", "qrs_maf_neuron", "rbbb_qrs_delay_bank", "class_score_neurons", "final_membrane_layer"]:
         check(f"direct RTL block {block}", block in text)
-    check("locked QRS leak nuance", "QRS leak 값은 0" in text)
-    check("SNN boundary", all(term in text for term in ["trained deep SNN", "STDP", "online learning", "biophysical neuron simulation"]))
+    check("locked QRS leak nuance", "QRS 누설값은 0" in text)
+    check("SNN boundary", all(term in text for term in ["학습된 심층 SNN", "STDP", "온라인 학습", "생물물리 뉴런 시뮬레이션", "생물학적 등가성"]))
+    cleaned = re.sub(r"```.*?```|`[^`]*`", "", text, flags=re.S)
+    # `commit` is intentionally excluded: provenance metadata and Appendix B/C
+    # use the Git term, while state updates in the engineering prose are Korean.
+    unnecessary_english = ["sample", "event", "state", "window", "baseline", "slope", "sign flip", "amplitude", "morphology", "activity", "readout", "winner", "evidence", "class", "code", "counter", "module", "detector", "output", "input", "pipeline", "reset"]
+    english_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", cleaned)) for term in unnecessary_english}
+    check("Korean-first prose vocabulary", sum(english_counts.values()) <= 25 and max(english_counts.values()) <= 6, english_counts)
+    corruption_markers = ["클래스ifier", "상태s", "표본값s", "계수기s", "관찰 구간를", "진폭가", "사건 신호s"]
+    check("no mixed-language replacement corruption", not any(marker in text for marker in corruption_markers), [m for m in corruption_markers if m in text])
+    check("two consolidated architecture boundaries", text.count("**통합 해석 경계.**") == 2, text.count("**통합 해석 경계.**"))
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
     check("eight reader-facing figures", len(report_images) == 8, len(report_images))
