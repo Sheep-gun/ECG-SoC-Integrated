@@ -1,6 +1,6 @@
 schema_version: 1
 integration_capture_utc: "2026-07-11T16:16:02.838873+00:00"
-import_policy: "fixed-commit git archive; upstream worktree bytes are never imported"
+import_policy: "curated fixed-commit git archive; retained bytes are identical to upstream Git objects; registered raw-dataset/private/temporary paths are omitted"
 parent_nested_repository_exclude: "/ECG-SoC-Integrated/"
 
 repositories:
@@ -15,7 +15,7 @@ repositories:
     contributor: 서민우
     tracked_worktree_status: CLEAN
     untracked_paths: []
-    import_method: "git archive <fixed_commit>; application/private exclusions are recorded separately"
+    import_method: "curated git archive <fixed_commit>; intentional exclusions are recorded separately"
 
   afe_xmodel:
     name: ECG-SoC
@@ -28,7 +28,7 @@ repositories:
     contributor: 이수환
     tracked_worktree_status: CLEAN
     untracked_paths: []
-    import_method: "git archive <fixed_commit>; application/private exclusions are recorded separately"
+    import_method: "curated git archive <fixed_commit>; fixed-version PhysioNet raw data and application/private exclusions are recorded separately"
 
   digital_accelerator:
     name: SNN-ECG-4-Class-Classifier
@@ -47,3 +47,6 @@ repositories:
     import_method: "git archive c6b80de19cdcad5b7e43fe7835588b629d847f75; current HEAD/worktree excluded"
 
 intentional_exclusions_registry: integration_evidence/excluded_upstream_paths.csv
+large_dataset_exclusions_registry: integration_evidence/excluded_large_dataset_paths.csv
+dataset_reconstruction_manifest: datasets/dataset_manifest.yaml
+provenance_model: "curated technical snapshot, not a byte-for-byte mirror of every upstream tracked path"

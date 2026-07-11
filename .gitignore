@@ -12,6 +12,12 @@ __pycache__/
 # Generated integration scratch files
 .integration-tmp/
 
+# Fixed-version PhysioNet downloads are kept outside Git.
+_ecg_soc_physionet/
+datasets/downloads/
+datasets/raw/
+*.part
+
 # The private report and application material must remain outside Git.
 private_submission/*
 !private_submission/.gitignore

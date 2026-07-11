@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recreate fixed component snapshots from local Git objects.
+"""Recreate curated fixed-component snapshots from local Git objects.
 
 The default safety policy rejects staged or modified tracked files. An explicit
 component-name exception exists only for a concurrently edited benchmark
@@ -55,6 +55,10 @@ COMPONENTS = {
 EXCLUDED_PREFIXES = {
     "afe_xmodel": {
         "docs/submission/": "contest notice/application forms are forbidden in the integrated Git repository",
+        "algorithm/person_data/nsrdb/1.0.0/": "fixed-version third-party PhysioNet raw dataset is restored through datasets/dataset_manifest.yaml",
+        "algorithm/person_data/chfdb/1.0.0/": "fixed-version third-party PhysioNet raw dataset is restored through datasets/dataset_manifest.yaml",
+        "algorithm/person_data/mitdb/1.0.0/": "fixed-version third-party PhysioNet raw dataset is restored through datasets/dataset_manifest.yaml",
+        "algorithm/person_data/afdb/1.0.0/": "fixed-version third-party PhysioNet raw dataset is restored through datasets/dataset_manifest.yaml",
     },
 }
 
@@ -198,6 +202,23 @@ def remove_tree(path: Path) -> None:
         shutil.rmtree("\\\\?\\" + str(path.resolve()))
 
 
+def restore_exact_git_blobs(component: str, repo: Path, destination: Path, excluded: list[dict]) -> None:
+    """Replace archive-converted bytes and exclusion hashes with exact Git blobs."""
+    commit = COMPONENTS[component]["commit"]
+    for path in destination.rglob("*"):
+        if not path.is_file():
+            continue
+        rel = path.relative_to(destination).as_posix()
+        payload = run_git(repo, "show", f"{commit}:{rel}", binary=True)
+        path.write_bytes(payload)
+    for row in excluded:
+        if row["component"] != component:
+            continue
+        payload = run_git(repo, "show", f"{commit}:{row['upstream_path']}", binary=True)
+        row["size_bytes"] = len(payload)
+        row["sha256"] = hashlib.sha256(payload).hexdigest()
+
+
 def status_snapshot(component: str, repo: Path, spec: dict) -> dict:
     porcelain = run_git(repo, "status", "--porcelain=v1", "--untracked-files=all")
     tracked = run_git(repo, "status", "--porcelain=v1", "--untracked-files=no")
@@ -244,8 +265,8 @@ def write_manifest() -> None:
                 "artifact_type": classify(path),
                 "claim_supported": "component snapshot provenance; see claim registry for promoted claims",
                 "report_section": "component evidence as mapped by REPORT_EVIDENCE_MAP_KR.md",
-                "verification_status": "HASH_VERIFIED",
-                "notes": "byte content exported from fixed Git commit",
+                "verification_status": "HASH_VERIFIED_CURATED_EXPORT",
+                "notes": "retained byte content exported from fixed Git commit; intentionally omitted paths are in exclusion registries",
             })
             artifact_id += 1
     with out.open("w", encoding="utf-8-sig", newline="") as handle:
@@ -293,7 +314,9 @@ def main() -> int:
         target = ROOT / "components" / component
         remove_tree(target)
         archive = run_git(repo, "archive", "--format=tar", COMPONENTS[component]["commit"], binary=True)
-        excluded_rows.extend(safe_extract_tar(component, archive, target))
+        component_excluded = safe_extract_tar(component, archive, target)
+        restore_exact_git_blobs(component, repo, target, component_excluded)
+        excluded_rows.extend(component_excluded)
 
     excluded_path = evidence / "excluded_upstream_paths.csv"
     with excluded_path.open("w", encoding="utf-8-sig", newline="") as handle:
@@ -301,6 +324,27 @@ def main() -> int:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows(excluded_rows)
+
+    large_dataset_rows = []
+    for row in excluded_rows:
+        if "PhysioNet raw dataset" not in row["reason"]:
+            continue
+        upstream_path = row["upstream_path"]
+        dataset = next(
+            name for name in ("nsrdb", "chfdb", "mitdb", "afdb")
+            if f"/person_data/{name}/" in f"/{upstream_path}"
+        )
+        large_dataset_rows.append({
+            **row,
+            "integrated_path": f"components/{row['component']}/{upstream_path}",
+            "dataset": dataset,
+        })
+    large_path = evidence / "excluded_large_dataset_paths.csv"
+    with large_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        fields = ["component", "upstream_commit", "upstream_path", "integrated_path", "size_bytes", "sha256", "dataset", "reason"]
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(large_dataset_rows)
 
     write_manifest()
     print(json.dumps({k: str(v) for k, v in repos.items()}, ensure_ascii=False, indent=2))

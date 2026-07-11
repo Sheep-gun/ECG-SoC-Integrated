@@ -63,6 +63,7 @@
         " M benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py",
         " M benchmarks/accelerator_benefit/tools/locked_integer_inference.py",
         " M benchmarks/accelerator_benefit/tools/snapshot_c24_rtl_exact.py",
+        "?? ECG-SoC-Integrated-before-slimming.bundle",
         "?? benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf",
         "?? benchmarks/accelerator_benefit/reports/CPP_BASELINE_MEASURED.md",
         "?? benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.csv",
@@ -128,6 +129,7 @@
         " M benchmarks/accelerator_benefit/tools/snapshot_c24_rtl_exact.py"
       ],
       "untracked_paths": [
+        "ECG-SoC-Integrated-before-slimming.bundle",
         "benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf",
         "benchmarks/accelerator_benefit/reports/CPP_BASELINE_MEASURED.md",
         "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.csv",
