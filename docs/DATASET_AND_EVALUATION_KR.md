@@ -1,5 +1,9 @@
 # 데이터셋과 평가 방법
 
+## Raw-source reconstruction policy
+
+네 PhysioNet raw database는 public Git history에 번들하지 않는다. Version 1.0.0, DOI, records used, sample-rate metadata, official URL, ODC-By 1.0 attribution, expected SHA256와 preprocessing entry는 `datasets/dataset_manifest.yaml`, `datasets/DATASET_LICENSES.md`, `datasets/SHA256SUMS_EXPECTED.txt`에 고정한다. `tools/fetch_physionet_datasets.py`는 저장소 밖에 resume download하고 `verify_physionet_datasets.py`는 data를 변경하지 않고 missing/unexpected/hash mismatch를 JSON으로 보고한다. Locked derived `.mem`, split/evaluation 및 integration evidence는 유지한다.
+
 ## Public-dataset classes
 
 | Class | Source DB | Engineering interpretation |

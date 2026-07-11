@@ -13,7 +13,7 @@
 
 | 보고서 장 | 핵심 statement / Claim ID | Supporting artifact | Source/commit | Owner | Status / limitation |
 |---|---|---|---|---|---|
-| 연구 배경 | wearable ECG의 대표 기능 범위는 AF/sinus screening 중심이며 본 평가와 직접 비교 불가 / EXT-001 | `external_reference_registry.csv` | FDA DEN180044 | 양건(편집) | authoritative background; 제품 성능 수치 비교 금지 |
+| 연구 배경 | 대표적인 소비자용 단일유도 ECG 앱의 규제 문서 사례는 sinus rhythm/AF 중심 screening이며 모든 wearable의 공통 기능으로 일반화하지 않음 / EXT-001 | `external_reference_registry.csv` | FDA DEN180044 | 양건(편집) | product-specific authoritative example; 성능 수치 비교 금지 |
 | 연구 배경 | 장시간 ambulatory monitoring motivation / EXT-002 | `external_reference_registry.csv` | ACC/AHA/HRS guideline | 양건(편집) | conservative context only |
 | 문제 정의 | 네 public-dataset class 장시간 분류 / CLM-001 | `PROBLEM_DEFINITION_KR.md` | integrated + digital c6b80de | 양건 | CAREFUL; 임상 확진 금지 |
 | 연구 목표 | signed stream을 받는 streaming SNN-inspired IP / CLM-001,002 | `RESEARCH_OBJECTIVES_KR.md` | digital c6b80de | 양건 | SNN-inspired 경계 유지 |
@@ -24,9 +24,11 @@
 | 디지털 알고리즘 | 60초 Snapshot + 30분 Final Membrane / CLM-003 | `FINAL_REPORT_KR.md`; RTL sources | digital c6b80de | 양건 | architecture claim |
 | Snapshot/Final Membrane 구조 | event/state, integer streaming | `DIGITAL_ARCHITECTURE_KR.md`; `rtl/` | digital c6b80de | 양건 | trained deep SNN claim 금지 |
 | 데이터셋·평가 | four DB origins and strict split / CLM-016,017 | `DATASET_AND_EVALUATION_KR.md`; `DATASET_DOMAIN_CONFOUNDING_KR.md` | integrated + PhysioNet refs | 양건 | record leakage와 confounding 구분 |
+| 데이터셋·재현성 | raw data 미번들·고정 버전 fetch/hash/license | `datasets/dataset_manifest.yaml`; `datasets/DATASET_LICENSES.md`; `datasets/SHA256SUMS_EXPECTED.txt` | PhysioNet v1.0.0 ×4 | 양건(편집) | retained derived evidence와 raw source를 구분 |
 | 분류 결과 | final-test 29/36=80.56% / CLM-004 | `final_metrics.json` | digital c6b80de | 양건 | primary held-out engineering result |
 | 분류 결과 | record-majority 16/19=84.21% / CLM-005 | `final_metrics.json` | digital c6b80de | 양건 | same partition aggregation |
 | RTL 회로 구성 | 9719 LUT/5038 FF/0 BRAM/0 DSP / CLM-008 | `final_metrics.json`; Vivado reports | digital c6b80de | 양건 | device/tool specific |
+| RTL 메모리 구조 | full raw-input window 미저장·fixed-size streaming state / CLM-023 | `STREAMING_STATE_MEMORY_KR.md`; `streaming_state_inventory.csv`; `FIG-12_detailed_digital_architecture.svg` | digital c6b80de | 양건 | 2.7 MB는 avoided window 비교; exact state total/MB runtime memory 아님 |
 | FPGA/IP 구현 | MicroBlaze system and timing / CLM-010 | `final_metrics.json`; `ip_repo/` | digital c6b80de | 양건 | whole-system scope |
 | 통합 검증 | input SHA256 36/36 / CLM-012 | `afe36_sha256_bitidentity.csv` | XMODEL 4756a508 | 이수환 | byte identity only |
 | 통합 검증 | gap=2 AFE-to-RTL pred/mem 36/36 / CLM-013 | `afe_locked_rtl_integration_36case_compare.csv` | XMODEL 4756a508 | 이수환 | canonical cadence only |

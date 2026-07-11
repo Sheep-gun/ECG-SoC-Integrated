@@ -58,6 +58,17 @@ REQUIRED = [
     "figures/FIGURE_INDEX.md", "figures/source/figure_data.json",
     "tools/import_upstream_repositories.py", "tools/build_global_metrics.py",
     "tools/check_integrated_repository.py", "tools/generate_integrated_figures.py",
+    "tools/check_integrated_technical_report.py", "tools/fetch_physionet_datasets.py",
+    "tools/verify_physionet_datasets.py", "datasets/README.md",
+    "datasets/dataset_manifest.yaml", "datasets/DATASET_LICENSES.md",
+    "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
+    "tables/streaming_state_inventory.csv",
+    "figures/final/FIG-12_detailed_digital_architecture.svg",
+    "integration_evidence/excluded_upstream_paths.csv",
+    "integration_evidence/excluded_large_dataset_paths.csv",
+    "reports/INTEGRATED_TECHNICAL_REPORT_KR.md",
+    "reports/PUBLICATION_READINESS_PREFLIGHT.md", "reports/HISTORY_REWRITE_PLAN.md",
+    "reports/HISTORY_REWRITE_RESULT.md", "reports/PUBLISH_REWRITTEN_HISTORY.md",
     "private_submission/.gitignore",
 ]
 
@@ -107,8 +118,9 @@ def capture_state(component: str, repo: Path) -> dict:
 
 
 def authored_text() -> str:
-    paths = [ROOT / "README.md", ROOT / "benchmarks" / "accelerator_benefit" / "README.md"]
+    paths = [ROOT / "README.md", ROOT / "LICENSE_OR_PROVENANCE.md", ROOT / "INTEGRATION_AUDIT.md", ROOT / "benchmarks" / "accelerator_benefit" / "README.md", ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md"]
     paths += sorted((ROOT / "docs").glob("*.md"))
+    paths += sorted((ROOT / "datasets").glob("*.md"))
     paths += [ROOT / "figures" / "FIGURE_INDEX.md"]
     paths += sorted((ROOT / "tables").glob("*.csv"))
     return "\n".join(p.read_text(encoding="utf-8-sig", errors="replace") for p in paths if p.exists())
@@ -128,8 +140,9 @@ def main() -> int:
     check("integrated branch is main", git(ROOT, "branch", "--show-current") == "main")
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
-    check("11 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 11)
-    check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 3)
+    check("12 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 12)
+    check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
+    check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
 
     before = json.loads((ROOT / "integration_evidence" / "upstream_status_before.json").read_text(encoding="utf-8-sig"))
     before_map = {x["component"]: x for x in before["repositories"]}
@@ -172,9 +185,10 @@ def main() -> int:
     (ROOT / "integration_evidence" / "upstream_status_after.json").write_text(json.dumps(after_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     manifest = read_csv("source_of_truth/artifact_manifest.csv")
-    check("artifact manifest has 1890 rows", len(manifest) == 1890, str(len(manifest)))
+    check("curated artifact manifest has 913 rows", len(manifest) == 913, str(len(manifest)))
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
+    repo_by_component = {component: Path(before_map[component]["repository_root"]) for component in SPECS}
     for row in manifest:
         rel = row["integrated_path"]
         manifest_paths.add(rel)
@@ -188,6 +202,10 @@ def main() -> int:
             failures.append(f"manifest hash mismatch: {rel}")
         if row["upstream_commit"] != SPECS[row["component"]]["commit"]:
             failures.append(f"manifest commit mismatch: {rel}")
+        upstream_blob = git(repo_by_component[row["component"]], "rev-parse", f"{row['upstream_commit']}:{row['upstream_path']}")
+        local_blob = git(ROOT, "hash-object", "--no-filters", rel)
+        if upstream_blob != local_blob:
+            failures.append(f"retained file differs from upstream Git object: {rel}")
     checked.append("all manifest files exist and SHA256-match")
     actual_paths = set()
     for component in SPECS:
@@ -198,7 +216,7 @@ def main() -> int:
                 rel = path.relative_to(extended_base).as_posix()
                 actual_paths.add(f"components/{component}/{rel}")
     check("component trees exactly match manifest", actual_paths == manifest_paths, f"extra={len(actual_paths-manifest_paths)} missing={len(manifest_paths-actual_paths)}")
-    check("component counts", component_counts == {"matlab_prevalidation": 136, "afe_xmodel": 1497, "digital_accelerator": 257}, str(component_counts))
+    check("curated component counts", component_counts == {"matlab_prevalidation": 136, "afe_xmodel": 520, "digital_accelerator": 257}, str(component_counts))
     nested_git = [p for p in (ROOT / "components").rglob(".git") if p.is_dir()]
     check("no upstream .git metadata copied", not nested_git, str(nested_git[:3]))
     check("digital benchmark tmp not imported", not (ROOT / "components" / "digital_accelerator" / "tmp").exists())
@@ -207,7 +225,28 @@ def main() -> int:
     prohibited_imports = [p for p in (ROOT / "components").rglob("*") if p.is_file() and (p.suffix.lower() == ".hwp" or "참가신청서" in p.name or "docs\\submission" in str(p))]
     check("application/private upstream files excluded", not prohibited_imports, str(prohibited_imports))
     excluded = read_csv("integration_evidence/excluded_upstream_paths.csv")
-    check("intentional exclusion registry has four rows", len(excluded) == 4, str(len(excluded)))
+    large_excluded = read_csv("integration_evidence/excluded_large_dataset_paths.csv")
+    check("intentional exclusion registry has 981 rows", len(excluded) == 981, str(len(excluded)))
+    check("raw-dataset exclusion registry has 977 rows", len(large_excluded) == 977, str(len(large_excluded)))
+    excluded_by_component = {component: set() for component in SPECS}
+    for row in excluded:
+        excluded_by_component[row["component"]].add(row["upstream_path"])
+    manifest_by_component = {component: set() for component in SPECS}
+    for row in manifest:
+        manifest_by_component[row["component"]].add(row["upstream_path"])
+    for component, spec in SPECS.items():
+        upstream_all = set(git(repo_by_component[component], "-c", "core.quotepath=false", "ls-tree", "-r", "--name-only", spec["commit"]).splitlines())
+        accounted = manifest_by_component[component] | excluded_by_component[component]
+        check(f"retained+excluded cover upstream tree: {component}", accounted == upstream_all, f"missing={len(upstream_all-accounted)} extra={len(accounted-upstream_all)}")
+    raw_prefixes = [f"components/afe_xmodel/algorithm/person_data/{name}/1.0.0/" for name in ("nsrdb", "chfdb", "mitdb", "afdb")]
+    tracked_paths = git(ROOT, "ls-files").splitlines()
+    check("raw third-party datasets are not tracked", not any(path.startswith(tuple(raw_prefixes)) for path in tracked_paths))
+    reachable_objects = git(ROOT, "rev-list", "--objects", "--all")
+    check("raw dataset paths absent from reachable history", not any(prefix in reachable_objects for prefix in raw_prefixes))
+    ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    check("download paths ignored", all(term in ignore for term in ["_ecg_soc_physionet/", "datasets/downloads/", "datasets/raw/"]))
+    provenance = (ROOT / "LICENSE_OR_PROVENANCE.md").read_text(encoding="utf-8")
+    check("curated provenance wording", "curated technical snapshot" in provenance and "not a complete" in provenance)
 
     text = authored_text()
     check("no personal absolute paths in final-facing files", not re.search(r"(?i)[A-Z]:[\\/]Users[\\/]", text))
@@ -236,6 +275,15 @@ def main() -> int:
     for row in claims:
         if row["status"] not in {"FORBIDDEN", "PENDING_EXTERNAL_WORK"}:
             check(f"claim evidence exists: {row['claim_id']}", (ROOT / row["evidence_path"]).exists(), row["evidence_path"])
+    claim_map = {row["claim_id"]: row for row in claims}
+    check("CLM-023 registered safe", claim_map.get("CLM-023", {}).get("status") == "SAFE")
+    check("CLM-023 direct RTL evidence", "direct RTL" in claim_map.get("CLM-023", {}).get("evidence_type", ""))
+    state_rows = read_csv("tables/streaming_state_inventory.csv")
+    required_state_columns = {"state_id", "RTL_module", "RTL_signal_or_group", "state_category", "count", "width_bits", "estimated_total_bits", "reset_scope", "update_condition", "persistent_across_samples", "persistent_across_snapshots", "evidence_path", "notes"}
+    check("streaming inventory columns", bool(state_rows) and set(state_rows[0]) == required_state_columns)
+    check("streaming inventory substantive", len(state_rows) >= 20, str(len(state_rows)))
+    check("unresolved widths explicit", any(row["width_bits"] == "UNRESOLVED_FROM_STATIC_AUDIT" for row in state_rows))
+    check("avoided window arithmetic exact", metrics["avoided_full_raw_input_window_bits"]["value"] == 21600000 and metrics["avoided_full_raw_input_window_bytes"]["value"] == 2700000)
 
     owners = read_csv("source_of_truth/ownership_matrix.csv")
     owner_map = {row["contributor"]: row for row in owners}
@@ -267,6 +315,17 @@ def main() -> int:
     check("external references authoritative", all(r["authoritative_status"] == "AUTHORITATIVE" for r in refs))
     unsupported_product_numbers = re.search(r"(?i)(Apple|Samsung|Fitbit|Garmin).{0,80}(sensitivity|specificity|민감도|특이도).{0,20}\d", text)
     check("no unsupported commercial-product figures", unsupported_product_numbers is None, str(unsupported_product_numbers.group(0) if unsupported_product_numbers else ""))
+    check("wearable wording is product-specific", "특정 제품 문서의 사례" in (ROOT / "README.md").read_text(encoding="utf-8"))
+    check("unsupported broad wearable wording absent", "대표 소비자 ECG" not in text and "representative consumer ECG functions" not in text.lower())
+    dataset_manifest = json.loads((ROOT / "datasets" / "dataset_manifest.yaml").read_text(encoding="utf-8"))
+    check("four fixed-version datasets", len(dataset_manifest["databases"]) == 4 and all(db["version"] == "1.0.0" for db in dataset_manifest["databases"]))
+    check("dataset licenses explicit", all(db["license"] == "Open Data Commons Attribution License v1.0" for db in dataset_manifest["databases"]))
+    check("dataset hashes populated", sum(1 for line in (ROOT / "datasets" / "SHA256SUMS_EXPECTED.txt").read_text(encoding="utf-8").splitlines() if line and not line.startswith("#")) >= 1000)
+    fig_index = (ROOT / "figures" / "FIGURE_INDEX.md").read_text(encoding="utf-8")
+    manuscript = (ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md").read_text(encoding="utf-8")
+    check("FIG-12 indexed", "FIG-12_detailed_digital_architecture.svg" in fig_index)
+    check("FIG-12 referenced by manuscript", "FIG-12_detailed_digital_architecture.svg" in manuscript)
+    check("manuscript raw-data policy", "raw waveform을 번들하지 않는다" in manuscript)
     for forbidden in ["54.01 ms", "33.3 MSPS", "33,300", "5.35 mJ", "0.099 W"]:
         check(f"benchmark value not promoted: {forbidden}", forbidden not in text)
 

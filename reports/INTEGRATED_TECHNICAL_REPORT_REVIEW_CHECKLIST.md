@@ -8,7 +8,7 @@
 - [x] 요구된 모든 subsection이 outline이 아닌 설명 문단을 포함한다.
 - [x] MATLAB, XMODEL, digital architecture, evaluation, RTL/IP/FPGA와 integration evidence가 하나의 연속 narrative로 합성됐다.
 - [x] Primary contribution을 long-window Snapshot/Final-Membrane architecture로 두고 speed를 primary novelty로 쓰지 않았다.
-- [x] Existing integrated figures 10개를 본문 앞문장·caption·evidence scope·limitation과 함께 참조한다.
+- [x] Existing overview figures와 FIG-12 detailed digital architecture를 caption·scope·limitation과 함께 참조한다.
 - [x] 목표, interface, split, feature blocks, classification, MATLAB/XMODEL, resources, integration, limitations, benchmark 표가 존재한다.
 
 ## 수치 일치
@@ -23,6 +23,7 @@
 - [x] Pure RTL `9719 LUT / 5038 FF / 0 BRAM / 0 DSP / WNS 8.184 ns`가 일치한다.
 - [x] MicroBlaze system `12494 LUT / 8494 register / 16 BRAM / 3 DSP / setup WNS 0.097 ns`가 일치한다.
 - [x] Input SHA, AFE-to-RTL 및 board equivalence의 각 `36/36` scope를 분리했다.
+- [x] `1,800,000×12=21,600,000 bit=2,700,000 byte≈2.7 MB decimal`을 avoided full raw-input window storage로만 표시했다.
 
 ## Claim 및 ownership
 
@@ -42,12 +43,15 @@
 - [x] Confounding이 classification generalization을 제한하지만 RTL/IP/board evidence를 무효화하지 않음을 밝혔다.
 - [x] MATLAB/XMODEL을 physical, transistor-level, post-layout, silicon validation으로 표현하지 않았다.
 - [x] Clinical diagnosis, commercial superiority, fabricated-SoC claim을 하지 않았다.
+- [x] CLM-023은 direct RTL/state inventory로 지지하며 BRAM=0 또는 total FF만을 단독 근거로 쓰지 않았다.
+- [x] 소비자 ECG 배경은 특정 규제 문서 사례로 한정하고 모든 wearable에 일반화하지 않았다.
 
 ## Benchmark·참고문헌·privacy
 
 - [x] Benchmark section은 `PENDING_EXTERNAL_BENCHMARK_IMPORT`와 pending table만 포함한다.
 - [x] 금지된 latency/throughput/speedup/power/energy 수치를 삽입하지 않았다.
-- [x] 참고문헌 6건은 모두 `external_reference_registry.csv`에 등록된 authoritative source다.
+- [x] 참고문헌은 authoritative product/guideline/dataset/license source와 dataset DOI/citation을 포함한다.
+- [x] Raw PhysioNet data 미번들, fixed-version fetch/hash/license policy를 본문에 명시했다.
 - [x] Student ID, private email, phone number, address, signature를 포함하지 않았다.
 - [x] Official private HWP/application form과 본 integrated technical manuscript를 구분했다.
 

@@ -72,6 +72,7 @@ REQUIRED_FIGURES = [
     "FIG-06_matlab_nominal_summary.svg", "FIG-07_xmodel_scope.svg",
     "FIG-08_signed_stream_handoff.svg", "FIG-09_digital_validation_hierarchy.svg",
     "FIG-10_classification_summary.svg", "FIG-11_confounding_claim_boundary.svg",
+    "FIG-12_detailed_digital_architecture.svg",
 ]
 
 
@@ -140,6 +141,14 @@ def main() -> int:
     check("physical boundary explicit", "physical mixed-signal SoC를 의미하지 않는다" in text and "fabricated SoC" in text)
     check("SNN-inspired boundary explicit", all(term in text for term in ["backpropagation-through-time", "STDP", "online learning", "biophysical equivalence"]))
     check("streaming raw-storage equation", all(term in text for term in ["21,600,000 bits", "2,700,000 bytes", "2.7 MB"]), "missing storage calculation")
+    check("CLM-023 streaming claim present", "CLM-023" in text and "fixed-size event/state" in text)
+    check("streaming inventory cited", "tables/streaming_state_inventory.csv" in text)
+    check("dataset manifest cited", "datasets/dataset_manifest.yaml" in text)
+    check("dataset license cited", "datasets/DATASET_LICENSES.md" in text)
+    check("raw data not bundled", "raw waveform을 번들하지 않는다" in text)
+    check("curated provenance present", "curated technical snapshot" in text)
+    check("unsupported broad wearable wording absent", "대표 소비자 ECG" not in text and "representative consumer ECG functions" not in text.lower())
+    check("product-specific wearable boundary", "모든 wearable 제품이 동일한 기능을 가진다는 뜻이 아니다" in text)
 
     forbidden_benchmark = ["54.01 ms", "33.3 MSPS", "33,300", "0.099 W", "5.35 mJ"]
     for value in forbidden_benchmark:
@@ -148,7 +157,7 @@ def main() -> int:
 
     refs_text = (ROOT / "source_of_truth" / "external_reference_registry.csv").read_text(encoding="utf-8-sig")
     report_urls = re.findall(r"https?://[^\s)]+", text[text.index("# 참고문헌"):text.index("# 부록 A")])
-    check("six registered references", len(report_urls) == 6, str(report_urls))
+    check("eight registered references", len(report_urls) == 8, str(report_urls))
     for url in report_urls:
         check(f"reference registered: {url}", url in refs_text)
 
