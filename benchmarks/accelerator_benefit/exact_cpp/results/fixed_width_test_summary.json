@@ -1,0 +1,7 @@
+{
+  "suite": "fixed_width",
+  "exhaustive_widths": "1..8",
+  "checks": 793595,
+  "failures": 0,
+  "status": "pass"
+}
