@@ -1,0 +1,19 @@
+scenario,category,rtl_reference,expected,actual,exact_match
+event_threshold_minus_one,threshold,ecg_event_encoder_adaptive:strong_event,0,0,1
+event_threshold_equal,threshold,ecg_event_encoder_adaptive:strong_event,0,0,1
+event_threshold_plus_one,threshold,ecg_event_encoder_adaptive:strong_event/up_event,1/1,1/1,1
+negative_slope_plus_one,signed_slope,ecg_event_encoder_adaptive:strong_event/down_event,1/1,1/1,1
+qrs_threshold_crossing,threshold,qrs_lif_detector:beat_spike/refractory_cnt,1/280,1/280,1
+refractory_expiry_old_state,old_new_order,qrs_lif_detector:qrs_mem/refractory_cnt/beat_spike,0/0/0,0/0/0,1
+pnn_idle_scan_hold,cadence,pnn_rhythm_predictor:evaluating/eval_idx,1/0,1/0,1
+pnn_rhythm_scan_complete,cadence,pnn_rhythm_predictor:predictor_valid/evaluating,1/0,1/0,1
+rdm_threshold_ladder_equal,threshold,rdm_variability_neuron:level_code/level_spike,15/32767,15/32767,1
+ectopic_early_late_pair,pair_transition,ectopic_pair_neuron:late_rr_spike/ectopic_pair_spike,1/1,1/1,1
+dscr_positive_to_negative_flip,signed_slope,dscr_spike_counter:valid_slope/sign_flip,1/1,1/1,1
+segment_counter_rollover,wrap,class_score_neurons:beat_seg_count[15:0],0,0,1
+simultaneous_pnn_events,simultaneous,class_score_neurons:pnn_match_seg/pnn_mis_seg,1/1,1/1,1
+readout_busy_event_capture,flush,class_score_neurons:c24_event_group_pending,0,0,1
+snapshot_last_sample,boundary,snn_ecg_30min_final_top:accepted/window_count,60000/1,60000/1,1
+snapshot_flush_visible_updates,flush,snn_ecg_30min_final_top:POST_DONE_TICKS=37 pre-NBA commit,1,1,1
+wta_equal_first_wins,tie_break,final_membrane_layer:strict-greater WTA,0,0,1
+final_snapshot_last_sample,boundary,snn_ecg_30min_final_top:final_valid,1800000/30/1,1800000/30/1,1
