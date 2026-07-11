@@ -1,0 +1,151 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "check": "locked_commit_to_head_diff",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "locked_worktree_diff",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "locked_index_diff",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "artifact_sha256:benchmarks/accelerator_benefit/results/benchmark_dataset_manifest.csv",
+      "status": "pass",
+      "detail": "4965b8a098617d6138e4e56e2b45febda20706b031e9bbaa2558d874517dee72"
+    },
+    {
+      "check": "artifact_sha256:reports/final/board_replay_36_cases.csv",
+      "status": "pass",
+      "detail": "f01d4afb4a67ba06b768ac99891868f9cbc2061a3d28ddf67d800b5b56d9f324"
+    },
+    {
+      "check": "artifact_sha256:reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv",
+      "status": "pass",
+      "detail": "3c2312416b39474053a0cd4bde5f7fe9c2c9f4d81777c169f8c78107c2e0b757"
+    },
+    {
+      "check": "model_id",
+      "status": "pass",
+      "detail": "structural_guarded_silent_aff_1008710"
+    },
+    {
+      "check": "parameter_payload",
+      "status": "pass",
+      "detail": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b"
+    },
+    {
+      "check": "locked_final_test_inputs",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "parameter_regeneration",
+      "status": "pass",
+      "detail": "generated C:\\Users\\YangGeon\\SNN-ECG-Exact-CPP\\benchmarks\\accelerator_benefit\\exact_cpp\\include\\locked_parameters.hpp with 529 score constants and 126 final constants"
+    },
+    {
+      "check": "header_identity",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "canonical_two_idle_transitions",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "flush_semantics",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "trace_mode_separation",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "fixed_width_helper_surface",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "no_known_signed_overflow_patterns",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "no_final_test_tuning_in_classifier",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "fixed_width_tests",
+      "status": "pass",
+      "detail": "{'suite': 'fixed_width', 'exhaustive_widths': '1..8', 'checks': 793595, 'failures': 0, 'status': 'pass'}"
+    },
+    {
+      "check": "module_microtraces",
+      "status": "pass",
+      "detail": "18"
+    },
+    {
+      "check": "sample_state_hashes",
+      "status": "pass",
+      "detail": "4"
+    },
+    {
+      "check": "golden_snapshot_hash",
+      "status": "pass",
+      "detail": "7fbdaf2a4a182a3c2757e7c7f923ff857b79d96756b509f75c588db515717a13"
+    },
+    {
+      "check": "snapshot_1080",
+      "status": "pass",
+      "detail": "1080"
+    },
+    {
+      "check": "final_36",
+      "status": "pass",
+      "detail": "36"
+    },
+    {
+      "check": "final_membrane_144",
+      "status": "pass",
+      "detail": "144"
+    },
+    {
+      "check": "debug_release_identity",
+      "status": "pass",
+      "detail": "36"
+    },
+    {
+      "check": "summary_status",
+      "status": "pass",
+      "detail": "pass"
+    },
+    {
+      "check": "required_documentation",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "no_premature_benchmark_values",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "benchmark_pending_status",
+      "status": "pass",
+      "detail": ""
+    }
+  ],
+  "failures": []
+}
