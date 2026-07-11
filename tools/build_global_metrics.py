@@ -1,0 +1,134 @@
+#!/usr/bin/env python3
+"""Build the integrated metric registry only from pinned component evidence."""
+
+from __future__ import annotations
+
+import csv
+import json
+from pathlib import Path
+import re
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
+XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
+MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
+
+
+def read_json(rel: str):
+    return json.loads((ROOT / rel).read_text(encoding="utf-8-sig"))
+
+
+def read_csv(rel: str):
+    with (ROOT / rel).open(encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def metric(value, unit, scope, evidence_type, evidence_path, repo, commit, owner, limitation, status="VERIFIED"):
+    return {
+        "value": value,
+        "unit": unit,
+        "scope": scope,
+        "evidence_type": evidence_type,
+        "evidence_path": evidence_path,
+        "upstream_repository": repo,
+        "upstream_commit": commit,
+        "owner": owner,
+        "limitation": limitation,
+        "verification_status": status,
+    }
+
+
+def main() -> int:
+    digital_path = "components/digital_accelerator/reports/final/final_metrics.json"
+    d = read_json(digital_path)
+    assert d["final_model_id"] == "structural_guarded_silent_aff_1008710"
+    assert d["final_test_chunk"] == {
+        "correct": 29, "total": 36, "accuracy_percent": 80.56,
+        "macro_f1_percent": 80.44, "balanced_accuracy_percent": 80.56,
+        "class_recall_percent": {"NSR": 100.0, "CHF": 66.67, "ARR": 77.78, "AFF": 77.78},
+    }
+    assert d["board_replay_36"]["pred_match_correct"] == 36
+    assert d["board_replay_36"]["final_mem_match_correct"] == 36
+
+    xmodel_compare_path = "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv"
+    xr = read_csv(xmodel_compare_path)
+    assert len(xr) == 36
+    assert {row["sample_gap_cycles"] for row in xr} == {"2"}
+    assert all(row["pred_match"].lower() == "true" for row in xr)
+    assert all(row["mem_match"].lower() == "true" for row in xr)
+    assert all(row["input_sha256_match"].lower() == "true" for row in xr)
+
+    xmodel_verification_path = "components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md"
+    verification_text = (ROOT / xmodel_verification_path).read_text(encoding="utf-8-sig")
+    if not re.search(r"1\.95\s*LSB", verification_text):
+        raise RuntimeError("XMODEL mean RMS evidence not found")
+
+    matlab_path = "components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv"
+    mr = [row for row in read_csv(matlab_path) if row["record_name"] in {"NSR", "CHF", "ARR", "AFF"}]
+    assert len(mr) == 4
+    assert all(float(row["clipping_ratio_percent"]) == 0.0 for row in mr)
+    minimum_headroom = min(float(row["minimum_headroom_to_rail_V"]) for row in mr)
+
+    dr = "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier"
+    xr_name = "https://github.com/Hwan-22/ECG-SoC"
+    mr_name = "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation"
+    metrics = {
+        "schema_version": 1,
+        "project_identity": "Holter-oriented long-window, multi-timescale, SNN-inspired ECG four-class classification accelerator IP",
+        "metrics": {
+            "locked_model_id": metric(d["final_model_id"], "identifier", "locked digital classifier", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "SNN-inspired event/state model; not a trained deep SNN claim"),
+            "train_accuracy": metric(d["train"]["accuracy_percent"], "percent", f"{d['train']['correct']}/{d['train']['total']} train chunks", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "training fit; not held-out generalization"),
+            "validation_accuracy": metric(d["validation"]["accuracy_percent"], "percent", f"{d['validation']['correct']}/{d['validation']['total']} validation chunks", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "model-selection split only; must not be promoted as final generalization"),
+            "final_test_chunk_accuracy": metric(d["final_test_chunk"]["accuracy_percent"], "percent", "29/36 locked final-test 30-minute chunks", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "public-dataset engineering result; database-class confounding remains"),
+            "final_test_chunk_macro_f1": metric(d["final_test_chunk"]["macro_f1_percent"], "percent", "36 locked final-test 30-minute chunks", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "public-dataset engineering result; class sample counts are limited"),
+            "final_test_record_majority_accuracy": metric(d["final_test_record_majority"]["accuracy_percent"], "percent", "16/19 final-test source records after chunk-majority aggregation", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "aggregation result; not an independent second test"),
+            "final_test_record_majority_macro_f1": metric(d["final_test_record_majority"]["macro_f1_percent"], "percent", "19 final-test source records", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "record-majority aggregation on the same locked final-test partition"),
+            "final_test_evaluation_count": metric(d["test_evaluation_count"], "count", "locked final-test protocol", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "repository-declared protocol evidence"),
+            "test_used_for_selection": metric(d["test_used_for_selection"], "boolean", "locked final-test protocol", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "repository-declared protocol evidence"),
+            "pure_rtl_lut": metric(d["pure_rtl_vivado"]["lut"], "LUT", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "device/tool/configuration specific"),
+            "pure_rtl_ff": metric(d["pure_rtl_vivado"]["ff"], "FF", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "device/tool/configuration specific"),
+            "pure_rtl_bram": metric(d["pure_rtl_vivado"]["bram"], "BRAM", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "resource count, not benchmark performance"),
+            "pure_rtl_dsp": metric(d["pure_rtl_vivado"]["dsp"], "DSP", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "resource count, not benchmark performance"),
+            "pure_rtl_wns": metric(d["pure_rtl_vivado"]["wns_ns"], "ns", "pure RTL implementation timing closure", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "positive WNS under recorded constraints; not processing latency"),
+            "microblaze_system_lut": metric(d["microblaze_full_replay_system"]["lut"], "LUT", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource, not pure accelerator resource"),
+            "microblaze_system_ff": metric(d["microblaze_full_replay_system"]["slice_reg"], "slice register", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource"),
+            "microblaze_system_bram": metric(d["microblaze_full_replay_system"]["bram"], "BRAM", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource"),
+            "microblaze_system_dsp": metric(d["microblaze_full_replay_system"]["dsp"], "DSP", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource"),
+            "microblaze_system_setup_wns": metric(d["microblaze_full_replay_system"]["setup_wns_ns"], "ns", "MicroBlaze full-replay system timing closure", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "positive WNS under recorded constraints; not board latency"),
+            "board_final_pred_equivalence": metric("36/36", "cases", "FPGA board replay vs full-top XSim expected output", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "functional equivalence, not classification accuracy"),
+            "board_final_mem_equivalence": metric("36/36", "cases", "FPGA board replay vs full-top XSim expected membrane", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "functional equivalence, not classification accuracy"),
+            "board_label_accuracy": metric("29/36", "cases", "board outputs compared with locked final-test labels", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "same classification result as locked final-test chunks"),
+            "xmodel_emulator_mean_rms": metric(1.95, "LSB", "36 representative 60-second segments; emulator vs Questa/XMODEL after settling", "verification report", xmodel_verification_path, xr_name, XMODEL_COMMIT, "이수환", "model-to-model waveform agreement; max local deviations and solver differences remain"),
+            "afe_input_sha256_identity": metric("36/36", "chunks", "AFE-generated final-test chunks vs digital board-replay inputs", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "proves byte identity only, not label correctness"),
+            "canonical_sample_gap_cycles": metric(2, "cycles", "board-facing full-top XSim integration cadence", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "canonical integration condition; noncanonical debug cadence excluded"),
+            "afe_to_rtl_final_pred_equivalence": metric("36/36", "chunks", "AFE-generated chunks at canonical cadence vs digital golden", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "functional reproduction, not 100% classification accuracy"),
+            "afe_to_rtl_final_mem_equivalence": metric("36/36", "chunks", "AFE-generated chunks at canonical cadence vs digital golden", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "functional reproduction, not clinical validation"),
+            "matlab_representative_clipping_ratio": metric(0.0, "percent", "NSR/CHF/ARR/AFF representative 60-second nominal MATLAB records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal model-based pre-validation; not physical measurement"),
+            "matlab_minimum_representative_headroom": metric(round(minimum_headroom, 12), "V", "minimum across NSR/CHF/ARR/AFF representative nominal records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal MATLAB chain and selected representative records only"),
+            "signed_stream_width": metric(12, "bits", "MATLAB/XMODEL-to-digital interface", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "two's-complement signed digital handoff"),
+            "signed_stream_sample_rate": metric(1000, "samples/s", "canonical ECG stream contract", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "input stream convention, not accelerator throughput"),
+            "snapshot_duration": metric(60, "s", "Snapshot Readout interval", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "architecture time scale at 1 kSPS"),
+            "final_membrane_snapshots": metric(30, "snapshots", "Final Membrane accumulation", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "corresponds to a 30-minute decision window"),
+        },
+        "benchmark": {
+            "status": "PENDING_EXTERNAL_BENCHMARK_IMPORT",
+            "cpu_kernel_latency_ms": None,
+            "cpu_end_to_end_latency_ms": None,
+            "rtl_processing_latency_ms": None,
+            "rtl_throughput_samples_per_s": None,
+            "realtime_headroom": None,
+            "estimated_power_w": None,
+            "measured_board_power_w": None,
+            "estimated_energy_per_decision_j": None,
+            "measured_energy_per_decision_j": None,
+        },
+    }
+    out = ROOT / "source_of_truth" / "global_metrics.yaml"
+    out.write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"wrote {out} with {len(metrics['metrics'])} verified metrics")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
