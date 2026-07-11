@@ -1,0 +1,11 @@
+profile,metric,value,evidence_path,owner,limitation
+pure_rtl,LUT,9719,components/digital_accelerator/reports/final/final_metrics.json,양건,device/tool/configuration specific
+pure_rtl,FF,5038,components/digital_accelerator/reports/final/final_metrics.json,양건,device/tool/configuration specific
+pure_rtl,BRAM,0,components/digital_accelerator/reports/final/final_metrics.json,양건,resource count not benchmark performance
+pure_rtl,DSP,0,components/digital_accelerator/reports/final/final_metrics.json,양건,resource count not benchmark performance
+pure_rtl,WNS_ns,8.184,components/digital_accelerator/reports/final/final_metrics.json,양건,timing closure not processing latency
+microblaze_system,LUT,12494,components/digital_accelerator/reports/final/final_metrics.json,양건,whole replay system
+microblaze_system,slice_register,8494,components/digital_accelerator/reports/final/final_metrics.json,양건,whole replay system
+microblaze_system,BRAM,16,components/digital_accelerator/reports/final/final_metrics.json,양건,whole replay system
+microblaze_system,DSP,3,components/digital_accelerator/reports/final/final_metrics.json,양건,whole replay system
+microblaze_system,setup_WNS_ns,0.097,components/digital_accelerator/reports/final/final_metrics.json,양건,timing closure not board latency

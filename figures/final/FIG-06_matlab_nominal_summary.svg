@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<rect width="1200" height="675" fill="#f7f9fc"/>
+<rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">MATLAB nominal pre-validation summary</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">대표 NSR/CHF/ARR/AFF 60초 record</text>
+<rect x="80" y="170" width="430" height="260" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="295.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Representative clipping</text>
+<text x="295.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">0.0%</text>
+<text x="295.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">4 / 4 classes</text>
+<text x="295.0" y="284" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">no rail hits</text>
+<rect x="690" y="170" width="430" height="260" rx="14" fill="#e7f5ff" stroke="#486581" stroke-width="2"/>
+<text x="905.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Minimum rail headroom</text>
+<text x="905.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1.0196 V</text>
+<text x="905.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">minimum across 4 records</text>
+<text x="905.0" y="284" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">nominal MATLAB model</text>
+<rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">Selected nominal records only; not physical AFE/ADC measurement</text>
+</svg>

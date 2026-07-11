@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<rect width="1200" height="675" fill="#f7f9fc"/>
+<rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">Contributor ownership and handoff</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">구현 owner·verification owner·integration owner를 분리</text>
+<rect x="70" y="150" width="300" height="310" rx="14" fill="#fff4e6" stroke="#486581" stroke-width="2"/>
+<text x="220.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">서민우 · MATLAB</text>
+<text x="220.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">nominal AFE/ADC</text>
+<text x="220.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">headroom/clipping</text>
+<text x="220.0" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed vectors</text>
+<text x="220.0" y="289" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">manifest/hash</text>
+<rect x="450" y="150" width="300" height="310" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
+<text x="600.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">이수환 · XMODEL</text>
+<text x="600.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">non-ideal/stress</text>
+<text x="600.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">full-record AFE</text>
+<text x="600.0" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">SHA256 handoff</text>
+<text x="600.0" y="289" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">AFE→RTL compare</text>
+<rect x="830" y="150" width="300" height="310" rx="14" fill="#e7f5ff" stroke="#486581" stroke-width="2"/>
+<text x="980.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">양건 · Digital/Lead</text>
+<text x="980.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">architecture/evaluation</text>
+<text x="980.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">RTL/Vivado/IP-XACT</text>
+<text x="980.0" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">Vitis/board</text>
+<text x="980.0" y="289" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">final integration</text>
+<line x1="370" y1="305" x2="450" y2="305" stroke="#486581" stroke-width="4"/>
+<polygon points="450,305 436,297 436,313" fill="#486581"/>
+<line x1="750" y1="305" x2="830" y2="305" stroke="#486581" stroke-width="4"/>
+<polygon points="830,305 816,297 816,313" fill="#486581"/>
+<rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">Collaborative chain does not transfer one contributor&#x27;s implementation ownership to another</text>
+</svg>

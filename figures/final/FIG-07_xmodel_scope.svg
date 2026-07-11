@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<rect width="1200" height="675" fill="#f7f9fc"/>
+<rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">XMODEL verification scope</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">model-based waveform, stress, and handoff evidence</text>
+<rect x="70" y="150" width="320" height="290" rx="14" fill="#edf2ff" stroke="#486581" stroke-width="2"/>
+<text x="230.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Waveform match</text>
+<text x="230.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">mean RMS 1.95 LSB</text>
+<text x="230.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">36 segments · lag 0</text>
+<rect x="440" y="150" width="320" height="290" rx="14" fill="#edf2ff" stroke="#486581" stroke-width="2"/>
+<text x="600.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Stress scope</text>
+<text x="600.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">PLI · offset/wander</text>
+<text x="600.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">R/C · GBW/VOS · ADC</text>
+<rect x="810" y="150" width="320" height="290" rx="14" fill="#edf2ff" stroke="#486581" stroke-width="2"/>
+<text x="970.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Integration</text>
+<text x="970.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">input SHA 36/36</text>
+<text x="970.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">gap=2 pred/mem 36/36</text>
+<rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">Not transistor-level, post-layout, PCB, ADC-silicon, or clinical validation</text>
+</svg>

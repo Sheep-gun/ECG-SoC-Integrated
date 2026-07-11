@@ -1,0 +1,30 @@
+{
+  "classification": {
+    "final_chunk_accuracy_percent": 80.56,
+    "final_record_majority_accuracy_percent": 84.21,
+    "validation_model_selection_percent": 100.0
+  },
+  "hardware": {
+    "pure_rtl_lut": 9719,
+    "pure_rtl_ff": 5038,
+    "pure_rtl_bram": 0,
+    "pure_rtl_dsp": 0,
+    "pure_rtl_wns_ns": 8.184
+  },
+  "integration": {
+    "input_sha256": "36/36",
+    "afe_rtl_pred": "36/36",
+    "afe_rtl_mem": "36/36",
+    "board_pred": "36/36",
+    "board_mem": "36/36",
+    "canonical_sample_gap_cycles": 2
+  },
+  "matlab": {
+    "clipping_percent": 0.0,
+    "minimum_headroom_v": 1.019633440086
+  },
+  "xmodel": {
+    "mean_rms_lsb": 1.95
+  },
+  "benchmark_status": "PENDING_EXTERNAL_BENCHMARK_IMPORT"
+}

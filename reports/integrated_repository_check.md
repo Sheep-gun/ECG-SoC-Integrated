@@ -1,0 +1,189 @@
+# Integrated repository check
+
+## Result: PASS
+
+- Rules checked: 163
+- Conflicts found: 0
+- Benchmark placeholder: PASS (all fields null)
+
+## Rules checked
+
+- PASS — independent .git exists
+- PASS — integrated branch is main
+- PASS — required path README.md
+- PASS — required path LICENSE_OR_PROVENANCE.md
+- PASS — required path INTEGRATION_AUDIT.md
+- PASS — required path .gitignore
+- PASS — required path source_of_truth/upstream_commits.yaml
+- PASS — required path source_of_truth/global_metrics.yaml
+- PASS — required path source_of_truth/claim_registry.csv
+- PASS — required path source_of_truth/artifact_manifest.csv
+- PASS — required path source_of_truth/ownership_matrix.csv
+- PASS — required path source_of_truth/terminology.yaml
+- PASS — required path source_of_truth/external_reference_registry.csv
+- PASS — required path docs/RESEARCH_BACKGROUND_KR.md
+- PASS — required path docs/PROBLEM_DEFINITION_KR.md
+- PASS — required path docs/RESEARCH_OBJECTIVES_KR.md
+- PASS — required path docs/CONTRIBUTIONS_AND_NOVELTY_KR.md
+- PASS — required path docs/SYSTEM_OVERVIEW_KR.md
+- PASS — required path docs/OWNERSHIP_AND_HANDOFF_KR.md
+- PASS — required path docs/DATASET_AND_EVALUATION_KR.md
+- PASS — required path docs/DATASET_DOMAIN_CONFOUNDING_KR.md
+- PASS — required path docs/MIXED_SIGNAL_VERIFICATION_KR.md
+- PASS — required path docs/DIGITAL_ARCHITECTURE_KR.md
+- PASS — required path docs/HARDWARE_IMPLEMENTATION_KR.md
+- PASS — required path docs/INTEGRATION_VERIFICATION_KR.md
+- PASS — required path docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md
+- PASS — required path docs/REPORT_EVIDENCE_MAP_KR.md
+- PASS — required path docs/INTEGRATION_METHOD.md
+- PASS — required path benchmarks/accelerator_benefit/README.md
+- PASS — required path figures/FIGURE_INDEX.md
+- PASS — required path figures/source/figure_data.json
+- PASS — required path tools/import_upstream_repositories.py
+- PASS — required path tools/build_global_metrics.py
+- PASS — required path tools/check_integrated_repository.py
+- PASS — required path tools/generate_integrated_figures.py
+- PASS — required path private_submission/.gitignore
+- PASS — 11 non-benchmark figures
+- PASS — verified tables present
+- PASS — before state recorded: matlab_prevalidation
+- PASS — upstream exists: matlab_prevalidation
+- PASS — origin matches: matlab_prevalidation
+- PASS — fixed commit exists: matlab_prevalidation
+- PASS — upstream branch unchanged: matlab_prevalidation
+- PASS — upstream HEAD unchanged: matlab_prevalidation
+- PASS — tracked status unchanged or authorized benchmark-only drift: matlab_prevalidation
+- PASS — before state recorded: afe_xmodel
+- PASS — upstream exists: afe_xmodel
+- PASS — origin matches: afe_xmodel
+- PASS — fixed commit exists: afe_xmodel
+- PASS — upstream branch unchanged: afe_xmodel
+- PASS — upstream HEAD unchanged: afe_xmodel
+- PASS — tracked status unchanged or authorized benchmark-only drift: afe_xmodel
+- PASS — before state recorded: digital_accelerator
+- PASS — upstream exists: digital_accelerator
+- PASS — origin matches: digital_accelerator
+- PASS — fixed commit exists: digital_accelerator
+- PASS — digital fixed commit exact
+- PASS — upstream branch unchanged: digital_accelerator
+- PASS — upstream HEAD unchanged: digital_accelerator
+- PASS — tracked status unchanged or authorized benchmark-only drift: digital_accelerator
+- PASS — artifact manifest has 1890 rows
+- PASS — all manifest files exist and SHA256-match
+- PASS — component trees exactly match manifest
+- PASS — component counts
+- PASS — no upstream .git metadata copied
+- PASS — digital benchmark tmp not imported
+- PASS — digital benchmark obj not imported
+- PASS — incomplete accelerator benchmark not imported
+- PASS — application/private upstream files excluded
+- PASS — intentional exclusion registry has four rows
+- PASS — no personal absolute paths in final-facing files
+- PASS — private submission tracks only guard
+- PASS — final chunk metric exact
+- PASS — board equivalence metric exact
+- PASS — canonical cadence exact
+- PASS — metric evidence exists: locked_model_id
+- PASS — metric evidence exists: train_accuracy
+- PASS — metric evidence exists: validation_accuracy
+- PASS — metric evidence exists: final_test_chunk_accuracy
+- PASS — metric evidence exists: final_test_chunk_macro_f1
+- PASS — metric evidence exists: final_test_record_majority_accuracy
+- PASS — metric evidence exists: final_test_record_majority_macro_f1
+- PASS — metric evidence exists: final_test_evaluation_count
+- PASS — metric evidence exists: test_used_for_selection
+- PASS — metric evidence exists: pure_rtl_lut
+- PASS — metric evidence exists: pure_rtl_ff
+- PASS — metric evidence exists: pure_rtl_bram
+- PASS — metric evidence exists: pure_rtl_dsp
+- PASS — metric evidence exists: pure_rtl_wns
+- PASS — metric evidence exists: microblaze_system_lut
+- PASS — metric evidence exists: microblaze_system_ff
+- PASS — metric evidence exists: microblaze_system_bram
+- PASS — metric evidence exists: microblaze_system_dsp
+- PASS — metric evidence exists: microblaze_system_setup_wns
+- PASS — metric evidence exists: board_final_pred_equivalence
+- PASS — metric evidence exists: board_final_mem_equivalence
+- PASS — metric evidence exists: board_label_accuracy
+- PASS — metric evidence exists: xmodel_emulator_mean_rms
+- PASS — metric evidence exists: afe_input_sha256_identity
+- PASS — metric evidence exists: canonical_sample_gap_cycles
+- PASS — metric evidence exists: afe_to_rtl_final_pred_equivalence
+- PASS — metric evidence exists: afe_to_rtl_final_mem_equivalence
+- PASS — metric evidence exists: matlab_representative_clipping_ratio
+- PASS — metric evidence exists: matlab_minimum_representative_headroom
+- PASS — metric evidence exists: signed_stream_width
+- PASS — metric evidence exists: signed_stream_sample_rate
+- PASS — metric evidence exists: snapshot_duration
+- PASS — metric evidence exists: final_membrane_snapshots
+- PASS — benchmark status pending
+- PASS — all benchmark values null not zero
+- PASS — benchmark placeholder explicit
+- PASS — claim registry columns
+- PASS — claim statuses controlled
+- PASS — claim evidence exists: CLM-001
+- PASS — claim evidence exists: CLM-002
+- PASS — claim evidence exists: CLM-003
+- PASS — claim evidence exists: CLM-004
+- PASS — claim evidence exists: CLM-005
+- PASS — claim evidence exists: CLM-006
+- PASS — claim evidence exists: CLM-007
+- PASS — claim evidence exists: CLM-008
+- PASS — claim evidence exists: CLM-009
+- PASS — claim evidence exists: CLM-010
+- PASS — claim evidence exists: CLM-011
+- PASS — claim evidence exists: CLM-012
+- PASS — claim evidence exists: CLM-013
+- PASS — claim evidence exists: CLM-014
+- PASS — claim evidence exists: CLM-015
+- PASS — claim evidence exists: CLM-016
+- PASS — claim evidence exists: CLM-017
+- PASS — three canonical contributors
+- PASS — MATLAB ownership correct
+- PASS — XMODEL ownership correct
+- PASS — digital/project lead ownership correct
+- PASS — confounding disclosure: nsrdb
+- PASS — confounding disclosure: chfdb
+- PASS — confounding disclosure: mitdb
+- PASS — confounding disclosure: afdb
+- PASS — confounding disclosure: direct record leakage
+- PASS — confounding disclosure: database-to-class confounding
+- PASS — confounding disclosure: 서로 다른 문제
+- PASS — confounding disclosure: 공통 1 kSPS signed 12-bit
+- PASS — confounding disclosure: clinical disease generalization
+- PASS — confounding disclosure: same-acquisition
+- PASS — confounding disclosure: RTL correctness
+- PASS — board equivalence not called classification accuracy
+- PASS — validation 100 is labeled selection-only
+- PASS — clinical claim boundary present
+- PASS — physical claim boundary present
+- PASS — no positive clinical-validation claim
+- PASS — no positive physical-silicon claim
+- PASS — no canonical cadence contradiction
+- PASS — external references registered
+- PASS — external references authoritative
+- PASS — no unsupported commercial-product figures
+- PASS — benchmark value not promoted: 54.01 ms
+- PASS — benchmark value not promoted: 33.3 MSPS
+- PASS — benchmark value not promoted: 33,300
+- PASS — benchmark value not promoted: 5.35 mJ
+- PASS — benchmark value not promoted: 0.099 W
+- PASS — integrated repo absent from parent index
+- PASS — parent local exclude installed
+- PASS — parent tracked gitignore untouched by integration
+
+## Conflicts found
+
+- None.
+
+## Unresolved evidence / bounded scope
+
+- Accelerator-benefit benchmark remains pending external import by design.
+- Physical AFE/ADC/silicon and clinical validation are outside the completed scope.
+- Database-class confounding requires future same-acquisition or cross-domain validation.
+
+## Benchmark-placeholder verification
+
+- Status is `PENDING_EXTERNAL_BENCHMARK_IMPORT`.
+- Latency, throughput, speedup, power and energy fields are null, not zero.
+- No benchmark figure or integrated benchmark conclusion is present.

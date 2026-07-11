@@ -1,0 +1,6 @@
+boundary,verified_result,evidence_path,owner,meaning,limitation
+MATLAB_nominal,representative clipping 0% and minimum headroom 1.019633440086 V,components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv,서민우,nominal dynamic-range evidence,selected model-based records only
+emulator_to_XMODEL,mean RMS 1.95 LSB and lag 0 over 36 segments,components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md,이수환,model-to-model waveform agreement,not bit-exact and not physical measurement
+AFE_to_digital_input,SHA256 36/36,components/afe_xmodel/docs/integration_latest/afe36_sha256_bitidentity.csv,이수환,byte-identical input handoff,not label correctness
+AFE_to_locked_RTL,pred 36/36 and mem 36/36 at sample_gap_cycles=2,components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv,이수환,canonical functional reproduction,noncanonical cadence excluded
+RTL_to_board,pred 36/36 and mem 36/36,components/digital_accelerator/reports/final/board_replay_36_batch_summary.json,양건,FPGA functional equivalence,classification accuracy remains 29/36

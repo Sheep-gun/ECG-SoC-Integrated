@@ -6,7 +6,7 @@ The integrated repository is an independent nested Git repository. It imports th
 
 ## Discovery and safety
 
-MATLAB and XMODEL clones are discovered below `C:/Users/YangGeon/Desktop/Analog` by normalized `origin` URL. The digital repository is identified by its own origin. For each source the integration records current branch, current HEAD, fixed import SHA, tracked status, and untracked paths.
+MATLAB and XMODEL clones are discovered below the configured analog search root by normalized `origin` URL. The digital repository is identified by its own origin. Exact machine-local paths are confined to `source_of_truth/upstream_commits.yaml` and audit JSON rather than final-facing prose. For each source the integration records current branch, current HEAD, fixed import SHA, tracked status, and untracked paths.
 
 The digital benchmark branch was active during integration. The user explicitly authorized concurrent work because the export reads fixed commit `c6b80de19cdcad5b7e43fe7835588b629d847f75`, not the current worktree. The concurrent status is preserved in `integration_evidence/upstream_status_before.json`. No upstream checkout, switch, reset, clean, stash, pull, merge, add, or commit is performed.
 
