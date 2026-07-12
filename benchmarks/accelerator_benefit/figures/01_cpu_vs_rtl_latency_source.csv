@@ -1,4 +1,5 @@
 label,value,status
 Python integer kernel,123621.090 ms,MEASURED_NOW
-C++ exact RTL translation,2456.708 ms,MEASURED_NOW
+Exact C++ native CPU kernel,1777.700 ms,MEASURED_NOW
+Verilator-generated RTL simulation,2456.708 ms,MEASURED_NOW
 Pure RTL,54.012600 ms,CYCLE_DERIVED

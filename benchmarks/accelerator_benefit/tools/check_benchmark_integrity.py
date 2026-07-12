@@ -48,6 +48,7 @@ def main() -> int:
     hashes = {row["artifact"]: row["sha256"] for row in read_csv(RESULTS / "immutable_artifact_hashes.csv")}
     protected_prefixes = (
         "configs/", "rtl/", "reports/final/", "results/board_replay/",
+        "benchmarks/accelerator_benefit/exact_cpp/",
     )
     for rel, expected in hashes.items():
         if not rel.startswith(protected_prefixes):
@@ -94,8 +95,14 @@ def main() -> int:
             failures.append(f"{row.get('case_id')}: old transcript incorrectly used as timing")
 
     summary = read_csv(RESULTS / "accelerator_benefit_summary.csv")
-    if len(summary) != 8:
-        failures.append(f"comparison row count {len(summary)} != 8")
+    if len(summary) != 10:
+        failures.append(f"comparison row count {len(summary)} != 10")
+    summary_by_name = {row.get("implementation"): row for row in summary}
+    if "Exact C++ native CPU kernel" not in summary_by_name:
+        failures.append("Exact C++ native CPU baseline row missing")
+    verilator_row = summary_by_name.get("Verilator-generated RTL simulation")
+    if not verilator_row or verilator_row.get("speedup_vs_python_kernel") != "N/A":
+        failures.append("Verilator runtime is missing or incorrectly treated as a CPU speedup baseline")
     for row in summary:
         if not row.get("evidence_path"):
             failures.append(f"{row.get('implementation')}: missing evidence path")
@@ -108,7 +115,8 @@ def main() -> int:
                 failures.append(f"{row.get('implementation')}: pending equivalence misreported")
         speedup = row.get("speedup_vs_python_kernel")
         compatible_speedup = row.get("implementation") in {
-            "Python integer kernel", "C/C++ exact RTL translation", "Pure RTL canonical cycle-derived",
+            "Python integer kernel", "Exact C++ native CPU kernel",
+            "Pure RTL canonical cycle-derived",
         }
         if speedup not in ("", "N/A") and not compatible_speedup:
             failures.append(f"{row.get('implementation')}: incompatible-scope speedup present")
@@ -167,6 +175,34 @@ def main() -> int:
         for row in cpp_rows:
             if row.get("output_match") != "true":
                 failures.append(f"C++ output mismatch: {row.get('case_id')}")
+
+    exact_cpp = BENCH / "exact_cpp"
+    native_raw = read_csv(exact_cpp / "results/exact_cpp_cpu_raw.csv")
+    native_performance = json.loads((exact_cpp / "results/performance_integrity.json").read_text(encoding="utf-8"))
+    native_post = json.loads((exact_cpp / "results/post_benchmark_equivalence.json").read_text(encoding="utf-8"))
+    if native_performance.get("status") != "pass" or native_post.get("status") != "pass":
+        failures.append("transaction-level Exact C++ package gate failed")
+    if len(native_raw) != 720 or len({row.get("case_id") for row in native_raw}) != 36:
+        failures.append(f"transaction-level Exact C++ rows/cases {len(native_raw)}/{len({row.get('case_id') for row in native_raw})}, expected 720/36")
+    native_groups: dict[tuple[str, str], list[dict[str, str]]] = {}
+    for row in native_raw:
+        native_groups.setdefault((row.get("case_id", ""), row.get("mode", "")), []).append(row)
+        if (
+            row.get("output_exact") != "1"
+            or row.get("samples") != "1800000"
+            or row.get("accepted_samples") != "1800000"
+            or row.get("snapshots") != "30"
+            or row.get("decisions") != "1"
+        ):
+            failures.append(f"transaction-level Exact C++ invariant failed: {row.get('case_id')}/{row.get('mode')}/{row.get('repetition')}")
+    if len(native_groups) != 72:
+        failures.append(f"transaction-level Exact C++ case/mode group count {len(native_groups)} != 72")
+    for (case_id, mode), mode_rows in native_groups.items():
+        if len(mode_rows) != 10 or {row.get("repetition") for row in mode_rows} != {str(i) for i in range(1, 11)}:
+            failures.append(f"transaction-level Exact C++ repetitions invalid: {case_id}/{mode}")
+    native_comparison = read_csv(exact_cpp / "results/cpu_fpga_comparison.csv")
+    if len(native_comparison) != 1 or native_comparison[0].get("ratio_cpu_over_fpga") != "32.912687040":
+        failures.append("transaction-level Exact C++ FPGA-core comparison mismatch")
 
     state = json.loads((RESULTS / "repository_start_state.json").read_text(encoding="utf-8"))
     dataset = RESULTS / "benchmark_dataset_manifest.csv"

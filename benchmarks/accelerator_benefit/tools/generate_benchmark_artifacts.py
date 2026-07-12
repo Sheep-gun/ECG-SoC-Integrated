@@ -25,6 +25,7 @@ REPORTS = BENCH / "reports"
 FIGURES = BENCH / "figures"
 BOARD = BENCH / "board"
 REFERENCE = BENCH / "reference"
+EXACT_CPP = BENCH / "exact_cpp"
 CASES_CSV = REPO / "reports" / "final" / "board_replay_36_cases.csv"
 BOARD_CSV = REPO / "reports" / "final" / "board_replay_36_expected_vs_board.csv"
 XSIM_CSV = REPO / "reports" / "final" / "fulltop_xsim_final_test_36" / "locked_class_cases_fulltop_xsim_predictions.csv"
@@ -138,6 +139,11 @@ def generate_hashes(protocol_hash: str) -> None:
         BENCH / "tools/run_python_benchmark.py",
         BENCH / "tools/check_python_equivalence.py",
     ) if path.exists()]
+    if EXACT_CPP.exists():
+        paths += sorted(
+            path for path in EXACT_CPP.rglob("*")
+            if path.is_file() and path.name not in {"integrity_check.json", "performance_integrity.json"}
+        )
     rows = [{"artifact": repo_rel(path), "sha256": sha256(path), "bytes": path.stat().st_size} for path in paths]
     rows.append({"artifact": repo_rel(RESULTS / "benchmark_dataset_manifest.csv"), "sha256": sha256(RESULTS / "benchmark_dataset_manifest.csv"), "bytes": (RESULTS / "benchmark_dataset_manifest.csv").stat().st_size})
     rows.append({"artifact": repo_rel(REPORTS / "BENCHMARK_PROTOCOL.md"), "sha256": protocol_hash, "bytes": (REPORTS / "BENCHMARK_PROTOCOL.md").stat().st_size})
@@ -332,7 +338,7 @@ The optional exact C/C++ baseline has not been run. No approximate translation o
     case_medians = [float(row["latency_ms_median"]) for row in per_case]
     summary = {
         "status": "MEASURED_NOW",
-        "implementation": "Verilator exact cycle-accurate C++ translation of locked RTL",
+        "implementation": "Verilator-generated cycle-accurate RTL simulation model",
         "scope": "loaded samples to final result; single generated model; host wall time",
         "warmups_per_case": 3, "measured_repetitions_per_case": 10,
         "case_count": 36, "measured_run_count": 360, "sample_count_per_case": 1_800_000,
@@ -354,11 +360,11 @@ The optional exact C/C++ baseline has not been run. No approximate translation o
         "run_evidence": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_runs.csv",
     }
     write_json(RESULTS / "cpu_cpp_kernel_summary.json", summary)
-    write_text(REPORTS / "CPP_BASELINE_MEASURED.md", f"""# Exact C/C++ Baseline
+    write_text(REPORTS / "CPP_BASELINE_MEASURED.md", f"""# Verilator RTL Simulation Host Timing
 
 Status: **MEASURED_NOW**.
 
-This is a Verilator-generated, cycle-accurate C++ translation of the unchanged locked RTL. It is not a hand-optimized algorithmic implementation and is not used as a substitute for the required Python reference path.
+This is host timing of a Verilator-generated, cycle-accurate simulation model of the unchanged locked RTL. It is **not** the hand-written Exact C++ native CPU inference baseline and is not treated as an optimized CPU implementation.
 
 - Functional gate: 36/36 `final_pred` and 36/36 all four `final_mem` values.
 - Timing: 3 untimed warmups followed by 10 measured runs per case (360 measured runs).
@@ -366,12 +372,86 @@ This is a Verilator-generated, cycle-accurate C++ translation of the unchanged l
 - Per-case-median aggregate latency: median {summary['per_case_median_latency_ms']['median']:.6f} ms, mean {summary['per_case_median_latency_ms']['mean']:.6f} ms, population standard deviation {summary['per_case_median_latency_ms']['std']:.6f} ms, IQR {summary['per_case_median_latency_ms']['iqr']:.6f} ms.
 - Median measured throughput: {summary['throughput_samples_per_s_median'] / 1e6:.6f} MSamples/s.
 
-This host timing is reported independently. It is not combined with the RTL's cycle-derived stored-data latency to claim a Python speedup.
+This simulation-runtime timing is reported independently and has no CPU-baseline speedup claim. The native CPU baseline is documented under `exact_cpp/`.
 """)
     stale = REPORTS / "CPP_BASELINE_NOT_COMPLETED.md"
     if stale.exists():
         stale.unlink()
     return summary
+
+
+def generate_native_cpp_status() -> dict[str, Any] | None:
+    summary_path = EXACT_CPP / "results/exact_cpp_cpu_summary.csv"
+    raw_path = EXACT_CPP / "results/exact_cpp_cpu_raw.csv"
+    performance_path = EXACT_CPP / "results/performance_integrity.json"
+    post_path = EXACT_CPP / "results/post_benchmark_equivalence.json"
+    comparison_path = EXACT_CPP / "results/cpu_fpga_comparison.csv"
+    if not EXACT_CPP.exists():
+        return None
+    required = (summary_path, raw_path, performance_path, post_path, comparison_path)
+    if not all(path.exists() for path in required):
+        raise SystemExit("incomplete transaction-level Exact C++ benchmark package")
+    performance = json.loads(performance_path.read_text(encoding="utf-8"))
+    post = json.loads(post_path.read_text(encoding="utf-8"))
+    if performance.get("status") != "pass" or post.get("status") != "pass":
+        raise SystemExit("transaction-level Exact C++ equivalence/performance gate failed")
+    raw = read_csv(raw_path)
+    if len(raw) != 720 or len({row["case_id"] for row in raw}) != 36:
+        raise SystemExit("transaction-level Exact C++ raw result cardinality failed")
+    if any(
+        row.get("output_exact") != "1"
+        or row.get("accepted_samples") != "1800000"
+        or row.get("snapshots") != "30"
+        or row.get("decisions") != "1"
+        for row in raw
+    ):
+        raise SystemExit("transaction-level Exact C++ raw equivalence failed")
+    summary_rows = read_csv(summary_path)
+
+    def mode_summary(mode: str) -> dict[str, Any]:
+        cases = [row for row in summary_rows if row["scope"] == "case" and row["mode"] == mode]
+        aggregate = [row for row in summary_rows if row["scope"] == "all_cases" and row["mode"] == mode]
+        if len(cases) != 36 or len(aggregate) != 1:
+            raise SystemExit(f"transaction-level Exact C++ {mode} summary cardinality failed")
+        if any(row["runs"] != "10" or row["output_exact_count"] != "10" for row in cases):
+            raise SystemExit(f"transaction-level Exact C++ {mode} summary equivalence failed")
+        medians = [float(row["latency_median_ms"]) for row in cases]
+        all_row = aggregate[0]
+        return {
+            "scope": mode,
+            "all_run_latency_ms": {
+                "median": float(all_row["latency_median_ms"]),
+                "mean": float(all_row["latency_mean_ms"]),
+                "std": float(all_row["latency_stddev_ms"]),
+                "min": float(all_row["latency_min_ms"]),
+                "max": float(all_row["latency_max_ms"]),
+            },
+            "per_case_median_latency_ms": {
+                "median": statistics.median(medians),
+                "mean": statistics.mean(medians),
+                "std": statistics.pstdev(medians),
+                "min": min(medians),
+                "max": max(medians),
+                "q1": quantile(medians, 0.25),
+                "q3": quantile(medians, 0.75),
+                "iqr": quantile(medians, 0.75) - quantile(medians, 0.25),
+            },
+            "throughput_samples_per_s_median": float(all_row["samples_per_s_median"]),
+        }
+
+    comparison = read_csv(comparison_path)
+    if len(comparison) != 1:
+        raise SystemExit("transaction-level Exact C++ FPGA comparison cardinality failed")
+    return {
+        "status": "MEASURED_NOW",
+        "implementation": "hand-written single-thread transaction-level exact C++",
+        "kernel": mode_summary("kernel"),
+        "end_to_end": mode_summary("end_to_end"),
+        "fpga_core_speedup_estimate": float(comparison[0]["ratio_cpu_over_fpga"]),
+        "output_equivalence": "36/36 final_pred; 144/144 final_mem; 1080/1080 snapshots",
+        "run_evidence": repo_rel(raw_path),
+        "report_evidence": repo_rel(EXACT_CPP / "reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md"),
+    }
 
 
 def generate_rtl() -> dict[str, Any]:
@@ -500,7 +580,7 @@ Runtime alone is never converted into energy-efficiency speedup.
 """)
 
 
-def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None) -> None:
+def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None, native_cpp: dict[str, Any] | None) -> None:
     fields = ["implementation", "measurement_scope", "status", "evidence_type", "sample_count", "latency_ms_median", "latency_ms_mean", "latency_ms_std", "throughput_samples_per_s", "realtime_margin_vs_1ksps", "speedup_vs_python_kernel", "power_w", "power_evidence", "energy_per_decision_j", "energy_evidence", "LUT", "FF", "BRAM", "DSP", "full_input_buffer_required", "output_equivalence", "evidence_path", "notes"]
     na_cpu = {
         "sample_count": 1_800_000, "latency_ms_median": "N/A", "latency_ms_mean": "N/A", "latency_ms_std": "N/A",
@@ -516,9 +596,19 @@ def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp:
         {"implementation": "Python end-to-end", "measurement_scope": "file parse plus inference", "status": "NOT_COMPLETED_EQUIVALENCE_FAILED", "evidence_type": "audit", **na_cpu, "evidence_path": "benchmarks/accelerator_benefit/reports/PYTHON_BASELINE_NOT_COMPLETED.md", "notes": "No latency claimed"},
     ])
     py_kernel_ms = python["kernel"]["per_case_median_latency_ms"]["median"] if python else None
+    py_all_run_ms = python["kernel"]["all_run_latency_ms"]["median"] if python else None
+    native_rows = []
+    if native_cpp:
+        native_kernel = native_cpp["kernel"]
+        native_e2e = native_cpp["end_to_end"]
+        native_rows = [
+            {"implementation": "Exact C++ native CPU kernel", "measurement_scope": "preloaded signed-12 samples to final result", "status": "MEASURED_NOW", "evidence_type": "QueryPerformanceCounter after full exact-equivalence gate", "sample_count": 1_800_000, "latency_ms_median": f"{native_kernel['all_run_latency_ms']['median']:.6f}", "latency_ms_mean": f"{native_kernel['all_run_latency_ms']['mean']:.6f}", "latency_ms_std": f"{native_kernel['all_run_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{native_kernel['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{native_kernel['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": (f"{py_all_run_ms / native_kernel['all_run_latency_ms']['median']:.6f}" if py_all_run_ms else "N/A"), "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 144/144 mem; 1080/1080 snapshots", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md", "notes": f"hand-written transaction-level CPU code; single thread; fixed affinity; -O3 -march=native; all-360-run median; CPU/FPGA-core estimate {native_cpp['fpga_core_speedup_estimate']:.6f}x"},
+            {"implementation": "Exact C++ native CPU end-to-end", "measurement_scope": "file open/parse through flushed result JSON", "status": "MEASURED_NOW", "evidence_type": "QueryPerformanceCounter after full exact-equivalence gate", "sample_count": 1_800_000, "latency_ms_median": f"{native_e2e['all_run_latency_ms']['median']:.6f}", "latency_ms_mean": f"{native_e2e['all_run_latency_ms']['mean']:.6f}", "latency_ms_std": f"{native_e2e['all_run_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{native_e2e['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{native_e2e['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": "N/A", "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 144/144 mem; 1080/1080 snapshots", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md", "notes": "hand-written transaction-level CPU code; includes file open, signed-12 parsing, inference, and result JSON write/flush"},
+        ]
     rows = [
         *measured_python_rows,
-        ({"implementation": "C/C++ exact RTL translation", "measurement_scope": "loaded samples to final result", "status": "MEASURED_NOW", "evidence_type": "host steady-clock timing after exact 36/36 equivalence", "sample_count": 1_800_000, "latency_ms_median": f"{cpp['per_case_median_latency_ms']['median']:.6f}", "latency_ms_mean": f"{cpp['per_case_median_latency_ms']['mean']:.6f}", "latency_ms_std": f"{cpp['per_case_median_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{cpp['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{cpp['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / cpp['per_case_median_latency_ms']['median']:.6f}" if py_kernel_ms else "N/A"), "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 36/36 mem", "evidence_path": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json", "notes": "Verilator-generated cycle-accurate RTL translation; not a hand-optimized algorithm and not Python"} if cpp else
+        *native_rows,
+        ({"implementation": "Verilator-generated RTL simulation", "measurement_scope": "host runtime of generated cycle-accurate RTL model", "status": "MEASURED_NOW", "evidence_type": "host steady-clock simulation timing after exact 36/36 equivalence", "sample_count": 1_800_000, "latency_ms_median": f"{cpp['per_case_median_latency_ms']['median']:.6f}", "latency_ms_mean": f"{cpp['per_case_median_latency_ms']['mean']:.6f}", "latency_ms_std": f"{cpp['per_case_median_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{cpp['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{cpp['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": "N/A", "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 36/36 mem", "evidence_path": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json", "notes": "Verilator-generated RTL simulation/verification runtime; explicitly not the Exact C++ native CPU baseline"} if cpp else
          {"implementation": "C/C++ integer kernel", "measurement_scope": "loaded samples to final result", "status": "NOT_COMPLETED", "evidence_type": "blocker", **na_cpu, "evidence_path": "benchmarks/accelerator_benefit/reports/CPP_BASELINE_NOT_COMPLETED.md", "notes": "Approximate translation forbidden"}),
         {"implementation": "Pure RTL canonical cycle-derived", "measurement_scope": "stored-data accelerator start to final decision", "status": "CYCLE_DERIVED", "evidence_type": "validated RTL cycle counters", "sample_count": 1_800_000, "latency_ms_median": f"{rtl['total_latency_ms']['median']:.9f}", "latency_ms_mean": f"{rtl['total_latency_ms']['mean']:.9f}", "latency_ms_std": f"{rtl['total_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{rtl['throughput_samples_per_s']:.6f}", "realtime_margin_vs_1ksps": f"{rtl['realtime_margin_vs_1ksps']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / rtl['total_latency_ms']['median']:.6f}" if py_kernel_ms else "N/A"), "power_w": "0.099", "power_evidence": "Vivado estimated", "energy_per_decision_j": f"{0.099 * rtl['total_latency_ms']['median'] / 1000:.12f}", "energy_evidence": "estimated power * cycle-derived latency", "LUT": 9719, "FF": 5038, "BRAM": 0, "DSP": 0, "full_input_buffer_required": "no", "output_equivalence": "36/36 pred; 36/36 mem", "evidence_path": "benchmarks/accelerator_benefit/results/rtl_cycle_benchmark.csv", "notes": "Stored-data processing scope aligned to Python kernel; live observation remains 30 minutes"},
         {"implementation": "Existing FPGA functional replay", "measurement_scope": "functional board replay only", "status": "EXISTING_FUNCTIONAL_EVIDENCE", "evidence_type": "UART transcript functional audit", "sample_count": 1_800_000, "latency_ms_median": "N/A", "latency_ms_mean": "N/A", "latency_ms_std": "N/A", "throughput_samples_per_s": "N/A", "realtime_margin_vs_1ksps": "N/A", "speedup_vs_python_kernel": "N/A", "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": 12494, "FF": 8494, "BRAM": 16, "DSP": 3, "full_input_buffer_required": "host streamed", "output_equivalence": "36/36 pred; 36/36 mem", "evidence_path": "benchmarks/accelerator_benefit/results/existing_board_functional_audit.csv", "notes": "Resources are complete MicroBlaze system, not bare core"},
@@ -567,15 +657,17 @@ def figure(name: str, title: str, lines: list[str], boxes: list[tuple[str, str, 
     img.save(pdf, "PDF", resolution=180.0)
 
 
-def generate_figures(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None) -> None:
+def generate_figures(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None, native_cpp: dict[str, Any] | None) -> None:
     cpu_boxes = ([
         ("Python integer kernel", f"{python['kernel']['per_case_median_latency_ms']['median']:.3f} ms", "MEASURED_NOW"),
     ] if python else [("Python integer kernel", "NOT COMPLETED (equivalence gate)", "AUDIT")])
+    if native_cpp:
+        cpu_boxes.append(("Exact C++ native CPU kernel", f"{native_cpp['kernel']['all_run_latency_ms']['median']:.3f} ms", "MEASURED_NOW"))
     if cpp:
-        cpu_boxes.append(("C++ exact RTL translation", f"{cpp['per_case_median_latency_ms']['median']:.3f} ms", "MEASURED_NOW"))
+        cpu_boxes.append(("Verilator-generated RTL simulation", f"{cpp['per_case_median_latency_ms']['median']:.3f} ms", "MEASURED_NOW"))
     cpu_boxes.append(("Pure RTL", f"{rtl['total_latency_ms']['median']:.6f} ms", "CYCLE_DERIVED"))
     specs = [
-        ("01_cpu_vs_rtl_latency", "Host and RTL stored-data latency", cpu_boxes, ("Python and RTL stored-data scopes are compared; C++ remains a generated RTL translation." if python else "Python latency and Python speedup remain absent.")),
+        ("01_cpu_vs_rtl_latency", "CPU baselines, RTL simulation, and RTL latency", cpu_boxes, ("Exact C++ is the native CPU baseline; Verilator is separately labeled RTL simulation runtime." if python else "Python latency and Python speedup remain absent.")),
         ("02_throughput_realtime_margin", "Throughput and real-time margin", [("Pure RTL acceptance", f"{rtl['throughput_msamples_per_s']:.6f} MSamples/s", "CYCLE_DERIVED"), ("Margin versus 1 kSPS", f"{rtl['realtime_margin_vs_1ksps']:.2f}x", "CYCLE_DERIVED")], "Stored-data processing; live final decision still needs 30 minutes."),
         ("03_resource_scope", "Resource scope comparison", [("Pure RTL accelerator", "9719 LUT / 5038 FF / 0 BRAM / 0 DSP", "AUDIT"), ("MicroBlaze replay system", "12494 LUT / 8494 FF / 16 BRAM / 3 DSP", "AUDIT")], "Scopes differ: the latter includes CPU, memory, UART, interconnect, and feeder."),
         ("04_streaming_memory", "Streaming-memory benefit", [("Full raw window avoided", "2,700,000 bytes", "CYCLE_DERIVED"), ("All pure-RTL FF state upper bound", "<=629.75 bytes", "AUDIT")], "The FF upper bound includes pipeline, control, and interface state."),
@@ -724,13 +816,15 @@ python benchmarks/accelerator_benefit/tools/check_benchmark_integrity.py
 """)
 
 
-def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None) -> None:
+def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None, native_cpp: dict[str, Any] | None) -> None:
     latency = rtl["total_latency_ms"]["median"]
     throughput = rtl["throughput_msamples_per_s"]
     margin = rtl["realtime_margin_vs_1ksps"]
     energy = 0.099 * latency / 1000
-    cpp_kr = (f"Verilator 기반 exact C++ RTL 변환은 36/36 출력 동등성 검증 후 3회 warm-up과 case당 10회 측정했다. Per-case median의 중앙값은 {cpp['per_case_median_latency_ms']['median']:.6f} ms이다. 이는 Python 대체물이 아니며 별도 scope로 보고한다." if cpp else "Optional C/C++ baseline은 완료되지 않았다.")
-    cpp_en = (f"The Verilator-generated exact C++ RTL translation passed 36/36 output equivalence and was measured after three warmups with 10 repetitions per case. The median of per-case median latencies is {cpp['per_case_median_latency_ms']['median']:.6f} ms. It is reported as an independent host scope, not as a Python substitute." if cpp else "The optional C/C++ baseline was not completed.")
+    cpp_kr = (f"Verilator-generated RTL simulation은 36/36 출력 동등성 검증 후 host runtime을 별도 측정했다. Per-case median의 중앙값은 {cpp['per_case_median_latency_ms']['median']:.6f} ms이다. 이는 Exact C++ native CPU baseline이 아니라 RTL simulation/verification runtime이다." if cpp else "Verilator RTL simulation timing은 완료되지 않았다.")
+    cpp_en = (f"The Verilator-generated RTL simulation passed 36/36 output equivalence and its host runtime was measured separately. The median of per-case median latencies is {cpp['per_case_median_latency_ms']['median']:.6f} ms. This is an RTL simulation/verification runtime, not the Exact C++ native CPU baseline." if cpp else "The Verilator RTL simulation timing was not completed.")
+    native_kr = (f"Hand-written single-thread transaction-level Exact C++는 final prediction 36/36, final membrane 144/144, Snapshot boundary 1080/1080 동등성 검증 후 측정했다. Kernel 360-run median은 {native_cpp['kernel']['all_run_latency_ms']['median']:.6f} ms이고, measured CPU와 cycle-derived FPGA core를 결합한 명시적 scope의 speedup estimate는 {native_cpp['fpga_core_speedup_estimate']:.6f}x이다." if native_cpp else "")
+    native_en = (f"The hand-written single-thread transaction-level Exact C++ baseline passed 36/36 final predictions, 144/144 final membranes, and 1080/1080 Snapshot boundaries. Its kernel median over 360 runs is {native_cpp['kernel']['all_run_latency_ms']['median']:.6f} ms. The explicitly scoped measured-CPU versus cycle-derived FPGA-core speedup estimate is {native_cpp['fpga_core_speedup_estimate']:.6f}x." if native_cpp else "")
     python_kr = (f"Benchmark-scoped Python 정수 clock model은 delayed valid/data staging을 locked RTL과 동일하게 복원하여 pred/mem 36/36 동등성을 통과했다. 1 process/1 thread, 3 warm-up, case당 10회 측정의 kernel per-case median 중앙값은 {python['kernel']['per_case_median_latency_ms']['median']:.6f} ms이며, 동일한 stored-data scope에서 RTL speedup은 {python['kernel']['per_case_median_latency_ms']['median'] / latency:.2f}×이다." if python else "Python equivalence gate와 timing은 아직 완료되지 않았으므로 CPU latency와 speedup을 주장하지 않는다.")
     python_en = (f"The benchmark-scoped exact Python integer clock model passed 36/36 prediction and membrane equivalence. With one process/thread, three warmups, and 10 repetitions per case, its median per-case-median kernel latency is {python['kernel']['per_case_median_latency_ms']['median']:.6f} ms; the like-for-like stored-data RTL speedup is {python['kernel']['per_case_median_latency_ms']['median'] / latency:.2f}×." if python else "The Python equivalence gate and timings are incomplete, so Python latency and speedup are not claimed.")
     kr = f"""# SNN ECG Accelerator Benefit (KR)
@@ -749,6 +843,8 @@ Locked SNN ECG 4-class IP의 실행 이점을 모델 변경 없이 정량화한�
 
 ## 5. CPU 방법
 {python_kr}
+
+{native_kr}
 
 {cpp_kr}
 
@@ -793,7 +889,7 @@ core/system/host latency 및 physical power는 모두 PENDING_BOARD이다.
 
 This NO_BOARD study protects the locked classifier and uses the same 36 streams. Canonical RTL is cycle-derived at a verified 100 MHz and sample_gap_cycles=2: {latency:.6f} ms per stored 30-minute stream, {throughput:.6f} MSamples/s, and {margin:.2f}× the 1 kSPS input rate. In live operation, the final result still requires the 30-minute observation window.
 
-Existing FPGA evidence is functional only: 36/36 pred and membrane matches, while classification accuracy remains 29/36. {python_en} {cpp_en}
+Existing FPGA evidence is functional only: 36/36 pred and membrane matches, while classification accuracy remains 29/36. {python_en} {native_en} {cpp_en}
 
 Pure RTL resources are 9719 LUT, 5038 FF, 0 BRAM, and 0 DSP. The design avoids a 2.7 MB raw full-window buffer. The 0.099 W figure is Vivado-estimated power; estimated energy ({energy:.12f} J) is estimated power times cycle-derived stored-data latency, not measured board energy.
 
@@ -805,7 +901,9 @@ All timer-based board latency and physical board power remain PENDING_BOARD. The
 
 - No physical board was available; board timing and physical power are pending.
 {python_limitation}
-- The measured C++ path is a Verilator-generated cycle-accurate RTL translation, not a hand-optimized CPU algorithm and not a Python substitute.
+- The native Exact C++ baseline is a hand-written transaction-level implementation with formally audited cadence compression; it is not a literal event-driven RTL simulation.
+- Its 32.912687x FPGA-core estimate combines measured CPU latency with cycle-derived accelerator-core latency and is not measured board speedup.
+- The separately reported Verilator host runtime is RTL simulation/verification evidence, not an Exact C++ or optimized CPU inference baseline; no CPU-baseline speedup is assigned to it.
 - The raw Vivado power report is not committed; 0.099 W is traceable only through the locked final metrics/report summary.
 - Total FF is only an all-state upper bound, not exact persistent inference memory.
 - Pure RTL and complete MicroBlaze resource scopes are not directly equivalent.
@@ -821,7 +919,10 @@ All timer-based board latency and physical board power remain PENDING_BOARD. The
         {"claim_id": "C6", "claim": "Board timer latency.", "status": "PENDING_BOARD", "evidence_type": "pending", "evidence_path": "benchmarks/accelerator_benefit/READY_FOR_BOARD_BENCHMARK.md", "limitation": "no board in this run"},
     ]
     if cpp:
-        claims.append({"claim_id": "C7", "claim": f"Exact C++ RTL translation per-case-median aggregate latency is {cpp['per_case_median_latency_ms']['median']:.6f} ms.", "status": "SUPPORTED", "evidence_type": "MEASURED_NOW", "evidence_path": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json", "limitation": "generated cycle-accurate host model; not hand-optimized C++ and not Python"})
+        claims.append({"claim_id": "C7", "claim": f"Verilator-generated RTL simulation per-case-median host runtime is {cpp['per_case_median_latency_ms']['median']:.6f} ms.", "status": "SUPPORTED", "evidence_type": "MEASURED_NOW", "evidence_path": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json", "limitation": "RTL simulation/verification runtime; not the Exact C++ native CPU baseline; no CPU speedup claim"})
+    if native_cpp:
+        claims.append({"claim_id": "C8", "claim": f"Transaction-level Exact C++ kernel all-run median latency is {native_cpp['kernel']['all_run_latency_ms']['median']:.6f} ms.", "status": "SUPPORTED", "evidence_type": "MEASURED_NOW", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md", "limitation": "single thread; fixed affinity; -O3 -march=native; transaction-level cadence compression"})
+        claims.append({"claim_id": "C9", "claim": f"Transaction-level Exact C++ versus cycle-derived FPGA-core speedup estimate is {native_cpp['fpga_core_speedup_estimate']:.6f}x.", "status": "SUPPORTED", "evidence_type": "MEASURED_NOW / CYCLE_DERIVED", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/results/cpu_fpga_comparison.csv", "limitation": "not measured FPGA/board speedup; excludes host, MicroBlaze, UART, and board system scope"})
     write_csv(REPORTS / "CLAIM_REGISTRY.csv", claims, list(claims[0]))
 
 
@@ -832,14 +933,15 @@ def main() -> int:
     generate_hashes(protocol_hash)
     python = generate_cpu_status()
     cpp = generate_cpp_status()
+    native_cpp = generate_native_cpp_status()
     rtl = generate_rtl()
     generate_board_audit()
     generate_memory_power(rtl)
-    generate_comparison(rtl, python, cpp)
-    generate_figures(rtl, python, cpp)
+    generate_comparison(rtl, python, cpp, native_cpp)
+    generate_figures(rtl, python, cpp, native_cpp)
     generate_board_docs()
     ready_doc()
-    reports(rtl, python, cpp)
+    reports(rtl, python, cpp, native_cpp)
     print(json.dumps({"status": "generated", "rtl_latency_ms": rtl["total_latency_ms"]["median"], "throughput_msps": rtl["throughput_msamples_per_s"]}, indent=2))
     return 0
 

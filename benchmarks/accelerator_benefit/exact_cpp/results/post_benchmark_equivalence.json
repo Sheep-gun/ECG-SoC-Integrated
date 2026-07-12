@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "fixed_width_checks": 793595,
+  "module_microtraces": "18/18",
+  "final_predictions": "36/36",
+  "final_membranes": "144/144",
+  "debug_release_identity": "36/36",
+  "snapshot_boundaries": "1080/1080",
+  "first_snapshot_mismatch": [],
+  "accepted_sample_state_hashes": "240000/240000",
+  "accepted_sample_state_hash_cases": 4,
+  "sample_state_hash_equivalence_sha256": "24797fabf21eada3aa9b149036893e9b7aedbbf9c6652e1135fac3fafc61ab1b"
+}

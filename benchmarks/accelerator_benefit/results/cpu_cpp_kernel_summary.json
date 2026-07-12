@@ -1,6 +1,6 @@
 {
   "status": "MEASURED_NOW",
-  "implementation": "Verilator exact cycle-accurate C++ translation of locked RTL",
+  "implementation": "Verilator-generated cycle-accurate RTL simulation model",
   "scope": "loaded samples to final result; single generated model; host wall time",
   "warmups_per_case": 3,
   "measured_repetitions_per_case": 10,
