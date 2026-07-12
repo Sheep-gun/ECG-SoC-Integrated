@@ -9,12 +9,12 @@
 
 ## 이번 개정 범위
 
-기존 7장 구조와 디지털 RTL 설명의 깊이는 유지하였다. 제4장을 `AFE·ADC 설계`, `MATLAB/XMODEL 검증`, `RTL/IP/FPGA 구현과 End-to-end 검증`으로 재편하고, 앞단 회로를 디지털 설명과 같은 수준으로 확장하였다.
+디지털 RTL 설명의 깊이는 유지하되, 기존 디지털-first 7장 배열을 연구 수행 순서에 맞는 9장 구조로 재편하였다. 본론은 `MATLAB 공칭 사전검증 → AFE·ADC 회로 설계와 XMODEL 검증 → 디지털 가속기 IP → benchmark와 AFE·디지털 통합 검증 → 결과 → 종합 논의와 한계` 순서로 읽힌다.
 
 | 항목 | 개정 결과 |
 |---|---:|
-| 본문 장 | 7 |
-| 본문 문자 수 | 50,110 |
+| 본문 장 | 9 |
+| 본문 문자 수 | 50,861 |
 | 생성 SVG | 15 |
 | 상속 MATLAB PNG | 7 |
 | 본문 참조 그림 | 16 |
@@ -47,7 +47,7 @@
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 15 SVG + 상속 MATLAB PNG 7개
-- `tools/check_integrated_technical_report.py`: PASS — 494 rules, 0 conflicts, chars 50,110, figures 16, evidence rows 53
+- `tools/check_integrated_technical_report.py`: PASS — 507 rules, 0 conflicts, chars 50,861, figures 16, evidence rows 53
 - `tools/check_integrated_repository.py`: PASS — 227 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

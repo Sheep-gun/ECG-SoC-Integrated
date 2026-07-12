@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed checks for the reader-centred seven-chapter technical report."""
+"""Fail-closed checks for the reader-centred research-flow technical report."""
 
 from __future__ import annotations
 
@@ -19,21 +19,26 @@ UNRESOLVED_ARTIFACTS = ROOT / "source_of_truth" / "unresolved_artifacts.csv"
 MAIN_HEADINGS = [
     "# 1. 서론",
     "# 2. 관련 기술과 시스템 설계",
-    "# 3. 제안 SNN-Inspired 디지털 아키텍처",
-    "# 4. 구현 및 검증 방법",
-    "# 5. 실험 결과",
-    "# 6. 종합 논의와 한계",
-    "# 7. 결론",
+    "# 3. MATLAB 공칭 AFE·ADC 사전검증",
+    "# 4. AFE·ADC 회로 설계와 XMODEL 검증",
+    "# 5. 디지털 가속기 IP 설계 및 구현",
+    "# 6. 가속기 Benchmark와 아날로그·디지털 통합 검증",
+    "# 7. 실험 결과",
+    "# 8. 종합 논의와 한계",
+    "# 9. 결론",
 ]
 SUBHEADINGS = [
     "1.1 연구 배경과 문제 정의", "1.2 연구 목표와 주요 기여",
     "2.1 기존 접근의 한계와 설계 요구", "2.2 데이터셋과 평가 프로토콜",
-    "3.1 핵심 개념과 다중 시간축 처리", "3.2 박동 및 리듬 정보 추출",
-    "3.3 파형 형태 및 진폭 정보 추출", "3.4 60초 Snapshot과 30분 Final Membrane",
-    "3.5 Streaming state와 하드웨어 구현 방식",
-    "4.1 AFE·ADC 설계", "4.2 MATLAB/XMODEL 검증", "4.3 RTL/IP/FPGA 구현과 End-to-end 검증",
-    "5.1 분류 성능", "5.2 Mixed-signal 및 디지털 통합 결과", "5.3 하드웨어 구현 결과",
-    "6.1 설계적 차별성과 기술적 의의", "6.2 결과의 해석 범위와 향후 과제",
+    "3.1 MATLAB 사전검증의 역할과 흐름", "3.2 공칭 주파수응답과 동적 범위 검증",
+    "3.3 기준 벡터 생성과 XMODEL 인계",
+    "4.1 AFE·ADC 신호 경로와 회로 설계", "4.2 XMODEL 비이상성 및 설계 수정 검증",
+    "5.1 핵심 개념과 다중 시간축 처리", "5.2 박동 및 리듬 정보 추출",
+    "5.3 파형 형태 및 진폭 정보 추출", "5.4 60초 Snapshot과 30분 Final Membrane",
+    "5.5 Streaming state와 하드웨어 구현 방식", "5.6 RTL/IP/FPGA 구현",
+    "6.1 가속기 Benchmark 범위와 현재 상태", "6.2 AFE·디지털 통합 XMODEL 검증",
+    "7.1 분류 성능", "7.2 Mixed-signal 및 디지털 통합 결과", "7.3 하드웨어 구현 결과",
+    "8.1 설계적 차별성과 기술적 의의", "8.2 결과의 해석 범위와 향후 과제",
 ]
 REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS]
 REQUIRED_FIGURES = [
@@ -90,7 +95,7 @@ def main() -> int:
 
     text = REPORT.read_text(encoding="utf-8-sig")
     numbered = re.findall(r"(?m)^# ([1-9]\d*)\. .+$", text)
-    check("exactly seven main chapters", len(numbered) == 7, numbered)
+    check("exactly nine main chapters", len(numbered) == 9, numbered)
     for heading in MAIN_HEADINGS:
         check(f"main heading {heading}", heading in text)
     for heading in SUBHEADINGS:
@@ -102,20 +107,22 @@ def main() -> int:
     check("grouped subsection count", len(numbered_subs) == len(SUBHEADINGS), len(numbered_subs))
     module_names = ["ecg_event_encoder", "qrs_lif", "pnn_rhythm", "rdm_", "dscr_", "ram_peak", "qrs_maf", "rbbb_"]
     check("no module-name headings", not any(name in h.lower() for h in numbered_subs for name in module_names))
-    chapter3 = section(text, "3. 제안 SNN-Inspired 디지털 아키텍처", 1)
-    chapter4 = section(text, "4. 구현 및 검증 방법", 1)
-    check("digital architecture remains substantive", len(chapter3) >= 12000, len(chapter3))
-    check("AFE ADC depth comparable to digital", len(chapter4) >= int(len(chapter3) * 0.70), (len(chapter3), len(chapter4)))
+    chapter3 = section(text, "3. MATLAB 공칭 AFE·ADC 사전검증", 1)
+    chapter4 = section(text, "4. AFE·ADC 회로 설계와 XMODEL 검증", 1)
+    chapter5 = section(text, "5. 디지털 가속기 IP 설계 및 구현", 1)
+    check("digital architecture remains substantive", len(chapter5) >= 12000, len(chapter5))
+    check("MATLAB plus AFE XMODEL depth comparable to digital", len(chapter3) + len(chapter4) >= int(len(chapter5) * 0.65), (len(chapter3), len(chapter4), len(chapter5)))
+    check("research-flow chapter order", [text.index(h) for h in MAIN_HEADINGS] == sorted(text.index(h) for h in MAIN_HEADINGS))
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
     for term in ["전체 파형을 저장", "짧은 구간의 파형", "학습된 심층 SNN", "설계 요구", "전체 신호 흐름"]:
         check(f"related-work design gap {term}", term in chapter2)
-    numbered_details = re.findall(r"(?m)^### 3\.[234]\.\d+ .+$", text)
+    numbered_details = re.findall(r"(?m)^### 5\.[234]\.\d+ .+$", text)
     check("numbered circuit-detail subsections", len(numbered_details) == 14, numbered_details)
     baseline_text = BASELINE_REVIEW.read_text(encoding="utf-8-sig") if BASELINE_REVIEW.is_file() else ""
     for term in ["총 19쪽", "초록", "관련 연구", "회로 설명", "문장과 단락의 공통 형태", "통합 보고서에 적용한 구조"]:
         check(f"baseline-paper audit {term}", term in baseline_text)
 
-    primer = section(text, "3.1 핵심 개념과 다중 시간축 처리", 2)
+    primer = section(text, "5.1 핵심 개념과 다중 시간축 처리", 2)
     for term in ["표본값(sample)", "사건 신호(event)", "막전위형 누적값(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
         check(f"concept defined {term}", term in primer)
     check("concepts precede module detail", text.index("**표본값(sample).**") < text.index("ecg_event_encoder_adaptive"))
@@ -143,7 +150,7 @@ def main() -> int:
     expanded_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", body_cleaned)) for term in expanded_english}
     check("expanded Korean-first body vocabulary", sum(expanded_counts.values()) <= 35 and max(expanded_counts.values()) <= 4, expanded_counts)
 
-    morphology = section(text, "3.3 파형 형태 및 진폭 정보 추출", 2)
+    morphology = section(text, "5.3 파형 형태 및 진폭 정보 추출", 2)
     block_order = [
         ("DSCR purpose before module", "파형이 꺾인 횟수", "`dscr_spike_counter`"),
         ("RAM purpose before module", "30분 전체에서 최고점 하나만 찾으면", "`ram_peak_accumulator`"),
@@ -187,7 +194,7 @@ def main() -> int:
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
     check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])
 
-    afe = section(text, "4.1 AFE·ADC 설계", 2)
+    afe = section(text, "4.1 AFE·ADC 신호 경로와 회로 설계", 2)
     for term in [
         "ECG 입력 → HPF → 3-op-amp IA → active Twin-T 60 Hz notch와 buffer → 150 Hz LPF와 buffer → 12-bit ADC → offset-binary → signed two’s-complement stream",
         "Av_IA = 1 + 2Rfb/Rg", "100 kΩ", "1 kΩ", "0.482287706339 Hz", "10 MΩ", "33 nF",
@@ -200,7 +207,11 @@ def main() -> int:
     for term in ["이산 relaxation", "vcvs", "loading", "실효이득이 36", "약 17 Hz", "110 dB", "off-by-one", "수동 Twin-T", "active Twin-T"]:
         check(f"AFE correction history {term}", term.lower() in afe.lower())
 
-    analog_validation = section(text, "4.2 MATLAB/XMODEL 검증", 2)
+    analog_validation = "\n".join([
+        section(text, "3. MATLAB 공칭 AFE·ADC 사전검증", 1),
+        section(text, "4.2 XMODEL 비이상성 및 설계 수정 검증", 2),
+        section(text, "6.2 AFE·디지털 통합 XMODEL 검증", 2),
+    ])
     for term in [
         "MATLAB은 공칭", "XMODEL은", "평균 RMS 차이는 1.95 LSB", "60 Hz에서 RMS 0.92 mV",
         "50 Hz에서 118 mV", "100.7 dB", "80.0 dB", "100 kHz", "2.04 code",
@@ -214,7 +225,7 @@ def main() -> int:
         "fig_reference_vector_handoff.png", "fig_matlab_prevalidation_flow.png",
     ]:
         check(f"fixed MATLAB figure cited {source_name}", source_name in text)
-    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:7|8|9|10|11|12|13|14|15)\..*\[직접 근거:.*\]\*$", text)
+    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4|5|6|7|8|9|10|15)\..*\[직접 근거:.*\]\*$", text)
     check("AFE figures have direct evidence captions", len(direct_evidence_captions) == 9, len(direct_evidence_captions))
     check("original schematic claim forbidden", "원본 LTspice schematic이 아니다" in text and "UNRESOLVED_NOT_PRESENT" in UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig"))
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
@@ -239,7 +250,7 @@ def main() -> int:
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}
     check("evidence-map schema", bool(rows) and set(rows[0]) == required_columns)
     check("evidence-map coverage", len(rows) >= 53, len(rows))
-    valid_sections = {"초록", "부록"} | {str(i) for i in range(1, 8)} | {s.split()[0] for s in SUBHEADINGS}
+    valid_sections = {"초록", "부록"} | {str(i) for i in range(1, 10)} | {s.split()[0] for s in SUBHEADINGS}
     for row in rows:
         check(f"map section {row['statement_id']}", row["section"] in valid_sections, row["section"])
         check(f"map path {row['statement_id']}", (ROOT / row["evidence_path"]).exists(), row["evidence_path"])
