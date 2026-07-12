@@ -4,7 +4,7 @@
 
 - 개정 상태: `COMPLETE`
 - 작업 branch: `main`
-- 작업 시작 기준: `b0d2f203da7c2ffda9f38a08d9ff8d34e870f3c8` (`origin/main`과 일치 확인)
+- 작업 시작 기준: `a3c4fd284e134d5b23281284c40d2a37043811cc` (`origin/main`과 일치 확인)
 - 고정 upstream: MATLAB `907f7e1f081a9d6a5703a32095d962143315a192`, XMODEL `4756a5086023547328ef44fd5fd87da3c250dc39`, digital `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
 ## 이번 개정 범위
@@ -14,7 +14,7 @@
 | 항목 | 개정 결과 |
 |---|---:|
 | 본문 장 | 9 |
-| 본문 문자 수 | 58,948 |
+| 본문 문자 수 | 59,988 |
 | 생성 SVG | 15 |
 | 상속 MATLAB PNG | 7 |
 | 본문 참조 그림 | 16 |
@@ -34,11 +34,13 @@
 ## 장시간 ECG 관련 연구 보강 내용
 
 - Amirshahi–Hashemi의 STDP/R-STDP 논문을 R-peak 주위 개별 심박 분류로 한정하고, 진폭 스파이크 변환·STDP 특징 학습·보상/벌점 출력 학습을 원 논문에서 확인하였다.
-- Bauer의 연속 사건 구동형 이상 검출과 Chen의 LC-ADC+SCNN 개별 심박 분류를 기록 단위 다중 질환 누적과 구분하였다.
+- 사건 구동형을 “파형이 기준보다 크게 변한 순간을 사건으로 만들어 처리하는 방식”으로 풀고, Bauer의 이상 구간 알림과 본 연구의 기록 단위 네 클래스 판정을 거시적으로 구분하였다.
+- Chen의 LC-ADC+SCNN은 변화 순간을 이용하지만 최종 질문이 개별 심박의 N·SVEB·VEB·F 분류임을 분명히 하였다.
 - Shanmugam의 약 48시간 ECG multiple instance learning이 높은 위험 인스턴스 20%를 환자 단위 이진 예후로 집계한다는 점을 확인하였다.
 - Zihlmann의 가변 길이 네 클래스 ECG 분류가 CNN 특징을 평균 또는 양방향 LSTM으로 통합하므로, “4개 클래스” 자체를 차별성으로 주장하지 않았다.
-- DeepHHF의 실제 제목·저자·2026년 npj Digital Medicine 정식 출판과 DOI를 확인하고, 24시간 Holter의 30초 인코더 특징을 Transformer로 통합하는 5년 HF 위험 예후 모델로 반영하였다.
-- 비교표는 정확도를 넣지 않고 판정 단위·국소 처리·장시간 집계·구현 형태를 비교한다. 최초성은 검토한 여섯 대표 연구 범위의 제한된 문장으로만 표현한다.
+- DeepHHF를 24시간 ECG→30초 구간→구간별 요약→Transformer→5년 HF 위험으로 풀어 설명하고, 본 연구와 장시간 구간 통합 흐름이 가장 유사함을 명시하였다.
+- DeepHHF는 미래 심부전 위험을, 본 연구는 현재 기록의 NSR·CHF·ARR·AFF 클래스를 묻는다는 목적 차이를 주 비교축으로 두었다.
+- 비교표는 정확도나 미시적 구현 차이 대신 각 연구가 최종적으로 답하는 질문을 비교한다. 최초성은 검토한 여섯 대표 연구 범위의 제한된 문장으로만 표현한다.
 
 ## 그림과 원본 회로도 경계
 
@@ -59,7 +61,7 @@
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 15 SVG + 상속 MATLAB PNG 7개
-- `tools/check_integrated_technical_report.py`: PASS — 590 rules, 0 conflicts, chars 58,948, figures 16, evidence rows 61
+- `tools/check_integrated_technical_report.py`: PASS — 595 rules, 0 conflicts, chars 59,988, figures 16, evidence rows 61
 - `tools/check_integrated_repository.py`: PASS — 237 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

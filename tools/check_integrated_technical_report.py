@@ -117,18 +117,23 @@ def main() -> int:
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
     related_work = section(text, "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", 2)
     related_work_terms = [
-        "R-peak 전 0.25초와 후 0.45초", "Poisson spike train", "STDP 계층", "보상", "벌점", "개별 심박",
-        "비동기 이진 사건열", "recurrent SNN reservoir", "저역통과", "이진 검출 신호",
-        "레벨 교차 ADC(level-crossing ADC, LC-ADC)", "N·SVEB·VEB·F", "장시간 기록",
-        "약 48시간 ECG", "높은 20%의 평균", "대부분의 심박은 정상처럼 보이고", "환자 단위",
-        "9–61초", "시간축 평균", "양방향 LSTM", "네 클래스로 분류",
+        "ECG를 어느 범위까지 보고, 마지막에 어떤 질문에 답하는가",
+        "장시간 기록의 일부 구간에서 나타난 질환 증거", "기록 전체는 NSR·CHF·ARR·AFF 가운데 어느 클래스인가",
+        "R-peak 전 0.25초와 후 0.45초", "Poisson spike train", "STDP 계층", "보상", "벌점", "심박 하나와 장시간 기록 전체",
+        "사건 구동형(event-driven)", "파형이 기준보다 크게 변한 순간", "QRS처럼 짧은 시간에 크게 오르내리면",
+        "지금 ECG에 평소와 다른 병리 패턴이 나타났는가", "이상 구간을 발견해 알리는 단계", "기록 전체의 네 클래스를 구분하는 단계",
+        "레벨 교차 ADC(level-crossing ADC, LC-ADC)", "N·SVEB·VEB·F", "개별 심박의 종류",
+        "약 48시간 ECG", "위험도가 높은 상위 20%", "대부분의 심박은 정상처럼 보일 수 있지만", "향후 심혈관 사망 위험",
+        "9–61초", "시간 평균", "양방향 LSTM", "긴 연속 기록에서 일부 질환성 구간",
         "Modeling day-long ECG signals to predict heart failure risk with explainable AI",
-        "10.1038/s41746-026-02835-8", "24시간 단일유도 Holter", "30초 구간", "Transformer 순차 통합부",
-        "증거의 강도·출현 빈도·반복성과 장시간 일관성", "고정 폭 RTL 상태", "24시간 이상의 정확도, 실시간 처리시간과 전력은 아직 검증하지 않았다",
+        "24시간 Holter ECG를 30초 구간으로 나눈다", "Transformer가 시간 순서대로", "5년 안에 심부전으로 진행할 위험 점수",
+        "구간 분할과 장시간 통합 흐름은 가장 유사", "본 연구의 현재 검증 입력은 공개 데이터 길이 제약에 따른 30분",
+        "이상 구간 탐지와 장시간 구간 통합을 기록 단위 다중 클래스 분류로 연결",
+        "24시간 이상의 정확도, 실시간 처리시간과 전력은 아직 검증하지 않았다",
     ]
     for term in related_work_terms:
         check(f"related-work verified content {term}", term in related_work)
-    comparison_header = "| 연구 | 최종 판정 단위 | 국소 ECG 처리 | 장시간 집계 방식 | 구현 형태 | 본 연구와의 차이 |"
+    comparison_header = "| 연구 | 이 연구가 묻는 핵심 질문 | ECG를 보는 범위 | 최종 출력 | 본 연구와의 거시적 관계 |"
     check("related-work comparison table", comparison_header in related_work)
     for row_name in ["Amirshahi–Hashemi", "Bauer et al.", "Chen et al.", "Shanmugam et al.", "Zihlmann et al.", "DeepHHF", "본 연구"]:
         check(f"related-work comparison row {row_name}", f"| {row_name}" in related_work)
@@ -154,7 +159,7 @@ def main() -> int:
         check(f"baseline-paper audit {term}", term in baseline_text)
 
     primer = section(text, "5.1 핵심 개념과 다중 시간축 처리", 2)
-    for term in ["표본값(sample)", "사건 신호(event)", "막전위형 누적값(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
+    for term in ["표본값(sample)", "파형 변화 사건 신호", "막전위형 누적값(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
         check(f"concept defined {term}", term in primer)
     check("concepts precede module detail", text.index("**표본값(sample).**") < text.index("ecg_event_encoder_adaptive"))
     check("running signal example", all(token in text for token in ["+  →  +  →  -", "+  →  +  →  +", "회로 흐름을 설명하기 위한 예"]))
