@@ -76,9 +76,9 @@ REQUIRED = [
     "datasets/dataset_manifest.yaml", "datasets/DATASET_LICENSES.md",
     "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
     "tables/streaming_state_inventory.csv",
-    "figures/final/FIG-12_digital_signal_flow.svg",
-    "figures/final/FIG-15_analog_signal_flow_nonideal_models.svg",
-    "figures/final/FIG-02_recordwise_validation_workflow.svg",
+    "figures/final/FIG-12_digital_processing_flow.svg",
+    "figures/final/FIG-15_afe_adc_signal_flow.svg",
+    "figures/final/FIG-02_research_workflow.svg",
     "figures/final/MAT-01_afe_chain_overview.png",
     "figures/final/MAT-02_total_frequency_response.png",
     "figures/final/MAT-03_notch_dense_sweep.png",
@@ -163,7 +163,7 @@ def main() -> int:
     check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
-    check("15 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 15)
+    check("12 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 12)
     check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
     check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
     check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
@@ -387,14 +387,19 @@ def main() -> int:
     check("dataset hashes populated", sum(1 for line in (ROOT / "datasets" / "SHA256SUMS_EXPECTED.txt").read_text(encoding="utf-8").splitlines() if line and not line.startswith("#")) >= 1000)
     fig_index = (ROOT / "figures" / "FIGURE_INDEX.md").read_text(encoding="utf-8")
     manuscript = (ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md").read_text(encoding="utf-8")
-    check("FIG-12 indexed", "FIG-12_digital_signal_flow.svg" in fig_index)
-    check("FIG-12 referenced by manuscript", "FIG-12_digital_signal_flow.svg" in manuscript)
-    check("FIG-15 indexed", "FIG-15_analog_signal_flow_nonideal_models.svg" in fig_index)
-    check("FIG-15 referenced by manuscript", "FIG-15_analog_signal_flow_nonideal_models.svg" in manuscript)
-    check("legacy FIG-15 manuscript reference removed", "FIG-15_analog_signal_flow.svg" not in manuscript)
-    check("FIG-02 workflow indexed", "FIG-02_recordwise_validation_workflow.svg" in fig_index)
-    check("FIG-02 workflow referenced by manuscript", "FIG-02_recordwise_validation_workflow.svg" in manuscript)
-    check("legacy FIG-02 removed from manuscript", "FIG-02_complete_system_flow.svg" not in manuscript)
+    check("FIG-12 indexed", "FIG-12_digital_processing_flow.svg" in fig_index)
+    check("FIG-12 referenced by manuscript", "FIG-12_digital_processing_flow.svg" in manuscript)
+    check("FIG-15 indexed", "FIG-15_afe_adc_signal_flow.svg" in fig_index)
+    check("FIG-15 referenced by manuscript", "FIG-15_afe_adc_signal_flow.svg" in manuscript)
+    check("FIG-02 workflow indexed", "FIG-02_research_workflow.svg" in fig_index)
+    check("FIG-02 workflow referenced by manuscript", "FIG-02_research_workflow.svg" in manuscript)
+    superseded_flows = [
+        "FIG-02_recordwise_validation_workflow.svg", "FIG-04_multitimescale_architecture.svg",
+        "FIG-12_digital_signal_flow.svg", "FIG-13_beat_rhythm_path.svg",
+        "FIG-14_morphology_path.svg", "FIG-15_analog_signal_flow_nonideal_models.svg",
+    ]
+    check("superseded flow figures removed from manuscript and index", not any(name in manuscript or name in fig_index for name in superseded_flows), [name for name in superseded_flows if name in manuscript or name in fig_index])
+    check("superseded flow figure files deleted", not any((ROOT / "figures" / "final" / name).exists() for name in superseded_flows), [name for name in superseded_flows if (ROOT / "figures" / "final" / name).exists()])
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
     for required in ["1,777.699800 ms", "54.012600 ms", "32.912687", "0.099 W", "PENDING_BOARD"]:
         check(f"benchmark value promoted with scope: {required}", required in text)

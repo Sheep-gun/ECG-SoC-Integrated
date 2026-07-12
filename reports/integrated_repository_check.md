@@ -65,9 +65,9 @@
 - PASS — required path datasets/SHA256SUMS_EXPECTED.txt
 - PASS — required path docs/STREAMING_STATE_MEMORY_KR.md
 - PASS — required path tables/streaming_state_inventory.csv
-- PASS — required path figures/final/FIG-12_digital_signal_flow.svg
-- PASS — required path figures/final/FIG-15_analog_signal_flow_nonideal_models.svg
-- PASS — required path figures/final/FIG-02_recordwise_validation_workflow.svg
+- PASS — required path figures/final/FIG-12_digital_processing_flow.svg
+- PASS — required path figures/final/FIG-15_afe_adc_signal_flow.svg
+- PASS — required path figures/final/FIG-02_research_workflow.svg
 - PASS — required path figures/final/MAT-01_afe_chain_overview.png
 - PASS — required path figures/final/MAT-02_total_frequency_response.png
 - PASS — required path figures/final/MAT-03_notch_dense_sweep.png
@@ -83,7 +83,7 @@
 - PASS — required path reports/HISTORY_REWRITE_RESULT.md
 - PASS — required path reports/PUBLISH_REWRITTEN_HISTORY.md
 - PASS — required path private_submission/.gitignore
-- PASS — 15 generated SVG figures
+- PASS — 12 generated SVG figures
 - PASS — 7 inherited MATLAB PNG figures
 - PASS — verified tables present
 - PASS — public remote configured
@@ -291,10 +291,10 @@
 - PASS — FIG-12 referenced by manuscript
 - PASS — FIG-15 indexed
 - PASS — FIG-15 referenced by manuscript
-- PASS — legacy FIG-15 manuscript reference removed
 - PASS — FIG-02 workflow indexed
 - PASS — FIG-02 workflow referenced by manuscript
-- PASS — legacy FIG-02 removed from manuscript
+- PASS — superseded flow figures removed from manuscript and index
+- PASS — superseded flow figure files deleted
 - PASS — manuscript raw-data policy
 - PASS — benchmark value promoted with scope: 1,777.699800 ms
 - PASS — benchmark value promoted with scope: 54.012600 ms

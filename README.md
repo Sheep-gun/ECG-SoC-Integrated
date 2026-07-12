@@ -20,13 +20,11 @@
 
 `public ECG → MATLAB nominal AFE+ADC pre-validation → SystemVerilog XMODEL verification → signed 12-bit stream → integer event/state → 60초 Snapshot → 30개 Snapshot의 Final Membrane → RTL/XSim → Vivado/IP-XACT → Vitis/MicroBlaze → FPGA replay`
 
-![전체 연구·검증 workflow](figures/final/FIG-02_recordwise_validation_workflow.svg)
+![전체 연구·검증 workflow](figures/final/FIG-02_research_workflow.svg)
 
 Digital core는 beat timing, RR variability, slope/morphology, R-peak amplitude, ectopic-like pair와 QRS-related evidence를 sample-by-sample 정수 상태로 갱신한다. 60,000 samples마다 국소 증거를 Snapshot으로 요약하고, 30개 Snapshot의 signed evidence를 Final Membrane에 누적한 뒤 승자독식 방식(WTA)으로 30분 class를 결정한다.
 
-![60초 Snapshot과 30분 Final Membrane](figures/final/FIG-04_multitimescale_architecture.svg)
-
-![Digital signal flow](figures/final/FIG-12_digital_signal_flow.svg)
+![Digital signal flow](figures/final/FIG-12_digital_processing_flow.svg)
 
 Direct RTL audit에 따르면 pure accelerator는 1,800,000-sample raw input window를 저장하지 않고 고정 크기 event/state와 Final Membrane을 갱신한다 [CLM-023]. 전체 raw window에 해당하는 21,600,000 bit=2,700,000 byte≈2.7 MB decimal은 **회피한 raw-input window storage**이며 측정된 runtime memory 절감량이 아니다. `SNN-inspired`는 event와 membrane-like state를 뜻하며 trained deep SNN 또는 생물학적 등가를 뜻하지 않는다.
 

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="700" viewBox="0 0 1700 700" role="img" aria-label="Differential ECG passes through paired HPFs, a 3-op-amp instrumentation amplifier, active 60 Hz notch, buffered 150 Hz low-pass filter, 12-bit ADC, and signed digital handoff; separate dashed paths identify the XMODEL stress sources">
+<defs><marker id="paper-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#364152"/></marker></defs>
+<rect width="1700" height="700" fill="#ffffff"/>
+<rect x="65" y="45" width="300" height="78" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="215.0" y="91.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Input Disturbance Injection</text>
+<rect x="500" y="45" width="255" height="78" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="627.5" y="91.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">R/C Mismatch Model</text>
+<rect x="830" y="45" width="300" height="78" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="980.0" y="91.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Op-Amp GBW / VOS Model</text>
+<rect x="1260" y="45" width="300" height="78" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="1410.0" y="91.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">ADC Non-Ideality Injection</text>
+<text x="30" y="330" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">ECG+</text>
+<text x="30" y="470" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">ECG−</text>
+<circle cx="125" cy="323" r="7" fill="#2563a8"/>
+<circle cx="125" cy="463" r="7" fill="#2563a8"/>
+<polyline points="132,323 200,323" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="132,463 200,463" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="200" y="270" width="165" height="106" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="282.5" y="330.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">HPF (+)</text>
+<rect x="200" y="410" width="165" height="106" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="282.5" y="470.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">HPF (−)</text>
+<polygon points="450,245 450,540 635,393" fill="#ecfdf3" stroke="#2f855a" stroke-width="2.5"/>
+<text x="515" y="382" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">3-op-amp</text>
+<text x="515" y="409" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">IA</text>
+<polyline points="365,323 450,323" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="365,463 450,463" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="685" y="333" width="190" height="120" rx="4" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+<text x="780.0" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Active Twin-T</text>
+<text x="780.0" y="413.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">60 Hz Notch</text>
+<rect x="925" y="333" width="210" height="120" rx="4" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+<text x="1030.0" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">150 Hz LPF</text>
+<text x="1030.0" y="413.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">+ Buffer</text>
+<rect x="1185" y="333" width="150" height="120" rx="4" fill="#f5f3ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="1260.0" y="400.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">12-bit ADC</text>
+<rect x="1385" y="333" width="175" height="120" rx="4" fill="#f5f3ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="1472.5" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Signed 12-bit</text>
+<text x="1472.5" y="413.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Stream</text>
+<polyline points="635,393 685,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="875,393 925,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1135,393 1185,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1335,393 1385,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1560,393 1615,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<text x="1622" y="400" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#182230">Digital</text>
+<text x="1622" y="423" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#182230">RTL</text>
+<polyline points="215,123 215,185 125,185 125,316" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="215,185 160,185 160,463 193,463" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="628,123 628,190 540,190 540,275" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="628,190 780,190 780,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="980,123 980,205 555,205 555,285" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="980,205 800,205 800,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="980,205 1030,205 1030,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="1410,123 1410,245 1260,245 1260,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="1410,245 1472,245 1472,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<text x="850" y="625" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="600" fill="#344054">Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model</text>
+</svg>

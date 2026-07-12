@@ -44,7 +44,7 @@
 
 ## 그림과 원본 회로도 경계
 
-고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 보고서 그림 7은 캐시된 이전 Figure와 구분되도록 `FIG-15_analog_signal_flow_nonideal_models.svg`를 직접 참조한다. ECG+·ECG−의 두 HPF 경로가 IA에서 합류하고 비이상성 주입은 점선 경로로 분리되도록 구성하였다. 상단 비이상성 블록은 `Input Disturbance Injection`, `R/C Tolerance & Op-Amp Error Model`, `ADC Error Model`로 통일하고 하단 한 줄 범례에서 실선과 점선의 의미를 정의하였다. `FIG-12_digital_signal_flow.svg`는 Strong-Event와 QRS LIF의 feature 출력을 별도 선으로 유지하고, rhythm·morphology 경로를 `Feature Accumulation & Class Scoring`에서 합친 뒤 30개 Snapshot을 30분 Final Membrane으로 누적하도록 수정하였다.
+고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 사용자가 수정한 세 흐름의 구조를 해상도에 독립적인 SVG로 다시 구성해 `FIG-02_research_workflow.svg`, `FIG-15_afe_adc_signal_flow.svg`, `FIG-12_digital_processing_flow.svg`에 반영하였다. Analog Flow는 ECG+·ECG−의 두 HPF 경로가 IA에서 합류하고 `Input Disturbance Injection`, `R/C Mismatch Model`, `Op-Amp GBW / VOS Model`, `ADC Non-Ideality Injection`이 점선 경로로 분리된다. Digital Flow는 rhythm·morphology 경로를 `Feature Accumulation & Class Scoring`에서 합친 뒤 30개 Snapshot을 30분 Final Membrane으로 누적한다. 같은 내용을 반복하던 `FIG-04`, `FIG-13`, `FIG-14`는 보고서와 Figure index에서 제거하였다.
 
 고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 analog signal flow와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
 

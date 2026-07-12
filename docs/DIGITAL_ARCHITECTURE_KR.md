@@ -28,7 +28,7 @@ Digital top은 1 kSPS signed 12-bit sample, valid/segment control을 받아 samp
 
 이는 구조 대응표이지 실제 dense 기준선과의 측정 비교가 아니다. 정확도·속도·전력·면적 우월성, sparse event rate 또는 전력 절감률을 주장하지 않는다. 2.7 MB는 측정 절감량이 아니라 회피한 30분 raw-input window storage다 [CLM-008, CLM-023].
 
-이 architecture claim은 `CLM-023`으로 등록돼 있으며, direct RTL signal/group inventory는 `tables/streaming_state_inventory.csv`, 상세 해석은 `docs/STREAMING_STATE_MEMORY_KR.md`에 있다. 회피한 full raw-input window는 `1,800,000×12=21,600,000 bit=2,700,000 byte≈2.7 MB decimal`이다. 이는 MicroBlaze runtime memory나 정확한 synthesized memory 절감량이 아니다. 보고서용 흐름도는 `figures/final/FIG-12_digital_signal_flow.svg`이며 conceptual grouping임을 caption에 명시한다.
+이 architecture claim은 `CLM-023`으로 등록돼 있으며, direct RTL signal/group inventory는 `tables/streaming_state_inventory.csv`, 상세 해석은 `docs/STREAMING_STATE_MEMORY_KR.md`에 있다. 회피한 full raw-input window는 `1,800,000×12=21,600,000 bit=2,700,000 byte≈2.7 MB decimal`이다. 이는 MicroBlaze runtime memory나 정확한 synthesized memory 절감량이 아니다. 보고서용 흐름도는 `figures/final/FIG-12_digital_processing_flow.svg`이며 conceptual grouping임을 caption에 명시한다.
 
 ## 60-second Snapshot Readout
 
@@ -57,4 +57,4 @@ RTL output은 accepted sample sequence와 control timing에 대해 deterministic
 - Architecture narrative: `components/digital_accelerator/FINAL_REPORT_KR.md`
 - Final equivalence: `components/digital_accelerator/reports/final/final_metrics.json`
 - Persistent-state inventory: `tables/streaming_state_inventory.csv`
-- Digital signal flow: `figures/final/FIG-12_digital_signal_flow.svg`
+- Digital signal flow: `figures/final/FIG-12_digital_processing_flow.svg`

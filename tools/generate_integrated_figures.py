@@ -172,72 +172,41 @@ def main() -> int:
     footer(s, "설계 동기를 설명하는 그림이며 임상 진단을 뜻하지 않음")
     write_svg("FIG-01_long_window_motivation.svg", s)
 
-    # FIG-02: data-separated workflow with an explicit pre-lock correction loop.
-    s = paper_canvas(1500, 1450, "Public ECG data are split record-wise; train and validation data feed MATLAB, parallel XMODEL and RTL work, and three verification tracks, while locked test data remain isolated until one final test after design lock")
-    s += paper_box(550, 30, 400, 70, "공개 ECG 데이터", "#eff6ff", "#2563a8")
-    s += paper_box(450, 130, 600, 90, ["Record-wise Train / Validation /", "Locked Test Split"], "#eff6ff", "#2563a8")
-    s += paper_path([(750, 100), (750, 130)])
+    # FIG-02: user-approved research workflow, redrawn as a lossless vector.
+    s = paper_canvas(1200, 1700, "Public ECG data are split record-wise; front-end and digital development use development data, the digital design is locked before one held-out final test, and implementation plus analog-digital integration verification lead to the final report")
+    s += paper_box(250, 30, 600, 90, "Public ECG Data", "#eff6ff", "#2563a8")
+    s += paper_box(250, 170, 600, 105, ["Record-wise Train / Validation /", "Locked Test Split"], "#eff6ff", "#2563a8")
+    s += paper_path([(550, 120), (550, 170)])
+    s += paper_box(250, 330, 600, 105, ["Front End Verification", "(MATLAB, XMODEL)"], "#eff6ff", "#2563a8")
+    s += paper_path([(550, 275), (550, 330)])
+    s += paper_box(250, 490, 600, 95, "Digital Model / RTL Development", "#ecfdf3", "#2f855a")
+    s += paper_path([(550, 435), (550, 490)])
 
-    # Only train/validation data enter MATLAB and every pre-lock design/verification stage.
-    s += paper_box(540, 255, 420, 60, "Train / Validation Data Only", "#dbeafe", "#2563a8")
-    s += paper_path([(750, 220), (750, 255)])
-    s += paper_box(540, 355, 420, 80, "MATLAB AFE·ADC 사전검증", "#dbeafe", "#2563a8")
-    s += paper_path([(750, 315), (750, 355)])
+    s += paper_box(920, 330, 250, 105, ["Locked Test Data", "(Held-out)"], "#fef3c7", "#b7791f")
+    s += paper_path([(850, 222), (1045, 222), (1045, 330)])
 
-    # The locked test branch is parked at the right edge and has no pre-lock connection.
-    s += paper_box(1190, 255, 260, 70, ["Locked Test Data", "설계 단계 미사용"], "#fef3c7", "#b7791f")
-    s += paper_path([(1050, 175), (1320, 175), (1320, 255)])
+    s += paper_path([(550, 585), (550, 650)])
+    s.append('<polygon points="550,650 790,750 550,850 310,750" fill="#ecfdf3" stroke="#2f855a" stroke-width="2.5"/>')
+    s.append(txt(550, 743, "Digital Validation", 20, "#182230", 700, "middle"))
+    s.append(txt(550, 771, "Criteria Met?", 20, "#182230", 700, "middle"))
+    s += paper_path([(310, 750), (120, 750), (120, 537), (250, 537)])
+    s.append(txt(150, 735, "No", 17, "#182230", 700))
 
-    # MATLAB output starts two parallel implementation/model paths.
-    s.append(paper_dot(750, 485))
-    s += paper_path([(750, 435), (750, 485)], arrow=False)
-    s += paper_path([(750, 485), (370, 485), (370, 525)])
-    s += paper_path([(750, 485), (1030, 485), (1030, 525)])
-    s += paper_box(180, 525, 380, 85, "AFE–ADC XMODEL 검증", "#dbeafe", "#2563a8")
-    s += paper_box(840, 525, 380, 85, "Digital SNN RTL IP", "#dbeafe", "#2563a8")
+    s += paper_box(250, 920, 600, 90, "Design Lock", "#eff6ff", "#2563a8")
+    s += paper_path([(550, 850), (550, 920)])
+    s.append(txt(580, 890, "Yes", 17, "#182230", 700))
+    s += paper_box(250, 1060, 600, 105, ["Locked Final Test", "(Used Once Only)"], "#fef3c7", "#b7791f")
+    s += paper_path([(550, 1010), (550, 1060)])
+    s += paper_path([(1045, 435), (1045, 1112), (850, 1112)])
 
-    # Integration accepts both XMODEL and RTL. Benchmark and FPGA branches accept RTL only.
-    s += paper_box(270, 710, 440, 90, "AFE–RTL 통합 검증", "#ede9fe", "#6b46c1")
-    s += paper_box(760, 710, 280, 90, "Accelerator Benchmark", "#ede9fe", "#6b46c1")
-    s += paper_box(1090, 710, 330, 90, ["FPGA Implementation", "& Board Replay"], "#ede9fe", "#6b46c1")
-    s += paper_path([(370, 610), (370, 680), (400, 680), (400, 710)])
-    s += paper_path([(1030, 610), (1030, 655)], arrow=False)
-    s += paper_path([(620, 655), (1255, 655)], arrow=False)
-    for x in (620, 900, 1030, 1255):
-        s.append(paper_dot(x, 655))
-    s += paper_path([(620, 655), (620, 710)])
-    s += paper_path([(900, 655), (900, 710)])
-    s += paper_path([(1255, 655), (1255, 710)])
-
-    # Three verification results converge on one pre-lock engineering gate.
-    for x in (490, 900, 1255):
-        s += paper_path([(x, 800), (x, 850)], arrow=False)
-        s.append(paper_dot(x, 850))
-    s += paper_path([(490, 850), (1255, 850)], arrow=False)
-    s.append(paper_dot(750, 850))
-    s += paper_path([(750, 850), (750, 890)])
-    s.append(txt(750, 840, "세 검증 결과", 15, "#475467", 700, "middle"))
-    s.append('<polygon points="750,890 1000,980 750,1070 500,980" fill="#dcfce7" stroke="#2f855a" stroke-width="2.5"/>')
-    s.append(txt(750, 973, "설계·통합", 19, "#182230", 700, "middle"))
-    s.append(txt(750, 1001, "검증 기준 충족?", 19, "#182230", 700, "middle"))
-
-    # A failed gate returns to the XMODEL/RTL fork, never to MATLAB pre-validation.
-    s += paper_box(80, 940, 320, 80, "XMODEL / RTL 수정", "#fee2e2", "#c53030")
-    s += paper_path([(500, 980), (400, 980)])
-    s.append(txt(450, 962, "아니오", 15, "#475467", 700, "middle"))
-    s += paper_path([(80, 980), (30, 980), (30, 485), (750, 485)])
-
-    # Only a passed and locked design can consume the isolated test branch once.
-    s += paper_box(570, 1120, 360, 70, "Design Lock", "#dbeafe", "#2563a8")
-    s += paper_path([(750, 1070), (750, 1120)])
-    s.append(txt(780, 1100, "예", 15, "#475467", 700))
-    s += paper_box(490, 1230, 520, 90, ["Locked Final Test", "잠금된 Test 데이터만 최초 1회 사용"], "#fef3c7", "#b7791f")
-    s += paper_path([(750, 1190), (750, 1230)])
-    s += paper_path([(1320, 325), (1460, 325), (1460, 1275), (1010, 1275)])
-    s += paper_box(570, 1360, 360, 65, "최종 결과·보고서", "#dbeafe", "#2563a8")
-    s += paper_path([(750, 1320), (750, 1360)])
+    s += paper_box(250, 1225, 600, 105, ["Implementation Verification", "(RTL / IP / FPGA)"], "#f5f3ff", "#6b46c1")
+    s += paper_path([(550, 1165), (550, 1225)])
+    s += paper_box(250, 1390, 600, 105, ["Analog-Digital Integration Verification", "(XMODEL – RTL End-to-End)"], "#eff6ff", "#2563a8")
+    s += paper_path([(550, 1330), (550, 1390)])
+    s += paper_box(250, 1550, 600, 90, "Final Results & Report", "#eff6ff", "#2563a8")
+    s += paper_path([(550, 1495), (550, 1550)])
     s.append('</svg>')
-    write_svg("FIG-02_recordwise_validation_workflow.svg", s)
+    write_svg("FIG-02_research_workflow.svg", s)
 
     # FIG-03 ownership
     s = canvas("Contributor ownership and handoff", "구현 owner·verification owner·integration owner를 분리")
@@ -247,16 +216,6 @@ def main() -> int:
     s += arrow(370, 305, 450, 305) + arrow(750, 305, 830, 305)
     footer(s, "Collaborative chain does not transfer one contributor's implementation ownership to another")
     write_svg("FIG-03_ownership_handoff.svg", s)
-
-    # FIG-04 architecture
-    s = canvas("다중 시간축 구조", "표본값·박동·60초·30분으로 이어지는 상태 계층")
-    s += box(50, 180, 220, 220, "12-bit 입력 스트림", ["1 kSPS", "표본값 단위 처리"])
-    s += box(335, 150, 250, 280, "사건과 지속 상태", ["박동 시점", "RR 변동", "파형 형태", "최고점 · 조기/지연"])
-    s += box(650, 180, 210, 220, "60초 Snapshot", ["60,000표본", "국소 판독"])
-    s += box(925, 150, 225, 280, "30분 Final Membrane", ["Snapshot 30개", "부호 누적", "4-Class 승자독식"])
-    s += arrow(270, 290, 335, 290) + arrow(585, 290, 650, 290) + arrow(860, 290, 925, 290)
-    footer(s, "1,800,000표본 전체를 저장하지 않고 고정 크기 지속 상태만 유지")
-    write_svg("FIG-04_multitimescale_architecture.svg", s)
 
     # FIG-05 split
     s = canvas("Strict source-record-wise evaluation", "record leakage 방지와 database confounding은 서로 다른 문제")
@@ -317,140 +276,109 @@ def main() -> int:
     footer(s, "Future: same-acquisition multi-class cohort or explicit cross-domain protocol")
     write_svg("FIG-11_confounding_claim_boundary.svg", s)
 
-    # FIG-12: event path splits into rhythm and morphology evidence, then merges.
-    s = paper_canvas(2050, 850, "Signed ECG samples pass through delta calculation and separate Strong-Event and QRS LIF paths, generate rhythm and morphology features, merge at class scoring, and accumulate thirty Snapshot membranes into a thirty-minute Final Membrane")
-    s += paper_box(30, 330, 140, 100, "Signed ECG", "#eff6ff", "#2563a8")
-    s += paper_box(200, 330, 180, 100, "ΔECG Calculation", "#ecfdf3", "#2f855a")
-    s += paper_box(410, 330, 190, 100, ("Strong-Event", "Detector"), "#ecfdf3", "#2f855a")
-    s += paper_box(640, 330, 180, 100, ("QRS LIF", "Neuron"), "#fffbeb", "#b7791f")
-    s += paper_path([(170, 380), (200, 380)])
-    s += paper_path([(380, 380), (410, 380)])
-    s += paper_path([(600, 380), (640, 380)])
+    # FIG-12: user-approved digital flow, redrawn as a lossless vector.
+    s = paper_canvas(1700, 720, "Signed ECG passes through delta calculation, Strong-Event detection and a QRS LIF neuron; rhythm and morphology evidence merge at class scoring before Snapshot and Final Membrane accumulation")
+    s += paper_box(20, 270, 130, 90, "Signed ECG", "#eff6ff", "#2563a8")
+    s += paper_box(190, 270, 150, 90, ["ΔECG", "Calculation"], "#ecfdf3", "#2f855a")
+    s += paper_box(380, 270, 170, 90, ["Strong-Event", "Detector"], "#ecfdf3", "#2f855a")
+    s += paper_box(590, 270, 140, 90, ["QRS LIF", "Neuron"], "#fffbeb", "#b7791f")
+    s += paper_path([(150, 315), (190, 315)])
+    s += paper_path([(340, 315), (380, 315)])
+    s += paper_path([(550, 315), (590, 315)])
 
-    s.append(txt(1080, 65, "Rhythm Feature Path", 17, "#475467", 700, "middle"))
-    s += paper_box(880, 110, 150, 90, "RR Counter", "#ecfeff", "#0e7490")
-    s += paper_box(1060, 110, 250, 90, ("PNN / RDM /", "Ectopic Evidence"), "#ecfeff", "#0e7490")
-    s += paper_path([(820, 380), (850, 380), (850, 155), (880, 155)])
-    s += paper_path([(1030, 155), (1060, 155)])
+    s.append(txt(930, 38, "Rhythm Feature Path", 19, "#182230", 700, "middle"))
+    s.append('<line x1="760" y1="52" x2="1100" y2="52" stroke="#364152" stroke-width="1.5"/>')
+    s += paper_box(780, 75, 150, 85, "RR Counter", "#ecfeff", "#0e7490")
+    s += paper_box(970, 75, 190, 85, ["PNN / RDM /", "Ectopic Evidence"], "#ecfeff", "#0e7490")
+    s += paper_path([(660, 270), (660, 117), (780, 117)])
+    s += paper_path([(930, 117), (970, 117)])
 
-    s.append(txt(1020, 485, "Morphology Feature Path", 17, "#475467", 700, "middle"))
-    s += paper_path([(730, 430), (730, 500), (1130, 500)], arrow=False)
-    s.append(paper_dot(730, 500, "#667085", 4))
-    s += paper_path([(505, 430), (505, 660), (1075, 660)], arrow=False)
-    s.append(paper_dot(505, 660, "#667085", 4))
+    s.append(txt(825, 410, "Morphology Feature Path", 19, "#182230", 700, "middle"))
+    s.append('<line x1="650" y1="424" x2="1005" y2="424" stroke="#364152" stroke-width="1.5"/>')
+    s += paper_path([(660, 360), (660, 450), (920, 450)], arrow=False)
+    s.append(paper_dot(720, 450, "#364152", 4))
+    s.append(paper_dot(920, 450, "#364152", 4))
+    s += paper_box(650, 470, 140, 75, "QRS MAF", "#fff7ed", "#c05621")
+    s += paper_box(850, 470, 150, 75, "RBBB-like", "#fff7ed", "#c05621")
+    s += paper_path([(720, 450), (720, 470)])
+    s += paper_path([(920, 450), (920, 470)])
+    s += paper_box(655, 580, 130, 70, "DSCR", "#fff7ed", "#c05621")
+    s += paper_box(855, 580, 130, 70, "RAM", "#fff7ed", "#c05621")
+    s += paper_path([(720, 545), (720, 580)])
+    s += paper_path([(925, 545), (925, 580)])
+    s += paper_path([(720, 650), (720, 680), (1100, 680)], arrow=False)
+    s += paper_path([(920, 650), (920, 680)], arrow=False)
+    s.append(paper_dot(1100, 680))
 
-    qrs_morphology = [(850, 120, "QRS MAF"), (1000, 130, "RBBB-like")]
-    for x, w, title in qrs_morphology:
-        center = x + w / 2
-        s.append(paper_dot(center, 500, "#667085", 4))
-        s += paper_path([(center, 500), (center, 545)])
-        s += paper_box(x, 545, w, 70, title, "#fff7ed", "#c05621")
-        s += paper_path([(center, 615), (center, 630)], arrow=False)
-
-    strong_morphology = [(850, 100, "DSCR"), (975, 100, "RAM")]
-    for x, w, title in strong_morphology:
-        center = x + w / 2
-        s.append(paper_dot(center, 660, "#667085", 4))
-        s += paper_path([(center, 660), (center, 685)])
-        s += paper_box(x, 685, w, 70, title, "#fff7ed", "#c05621")
-        s += paper_path([(center, 755), (center, 790)], arrow=False)
-
-    s += paper_path([(910, 630), (1250, 630)], arrow=False)
-    s += paper_path([(900, 790), (1250, 790), (1250, 630)], arrow=False)
-    s.append(paper_dot(1250, 630))
-
-    s += paper_box(1350, 300, 280, 140, ("Feature Accumulation", "& Class Scoring"), "#eef2ff", "#4f46e5")
-    s += paper_path([(1310, 155), (1325, 155), (1325, 340), (1350, 340)])
-    s += paper_path([(1250, 630), (1310, 630), (1310, 400), (1350, 400)])
-
-    s += paper_box(1680, 300, 210, 140, ("60 s Snapshot", "Membrane"), "#f5f3ff", "#6b46c1")
-    s += paper_path([(1630, 370), (1680, 370)])
-    s += paper_box(1690, 485, 190, 60, ("30-Snapshot", "Accumulation"), "#f5f3ff", "#6b46c1")
-    s += paper_path([(1785, 440), (1785, 485)])
-    s += paper_box(1680, 585, 210, 140, ("30 min Final", "Membrane"), "#fdf4ff", "#9c36b5")
-    s += paper_path([(1785, 545), (1785, 585)])
-
-    s += paper_path([(1890, 610), (1920, 610)], arrow=False)
-    s += paper_path([(1890, 645), (1920, 645)], arrow=False)
-    s += paper_path([(1890, 680), (1920, 680)], arrow=False)
-    s += paper_path([(1890, 715), (1920, 715)], arrow=False)
-    s.append(txt(1930, 616, "NSR", 16, "#182230", 700))
-    s.append(txt(1930, 651, "CHF", 16, "#182230", 700))
-    s.append(txt(1930, 686, "ARR", 16, "#182230", 700))
-    s.append(txt(1930, 721, "AFF", 16, "#182230", 700))
+    s += paper_box(1180, 245, 220, 140, ["Feature Accumulation", "& Class Scoring"], "#eef2ff", "#4f46e5")
+    s += paper_path([(1160, 117), (1165, 117), (1165, 285), (1180, 285)])
+    s += paper_path([(1100, 680), (1145, 680), (1145, 345), (1180, 345)])
+    s += paper_box(1430, 260, 190, 110, ["60 s Snapshot", "Membrane"], "#f5f3ff", "#6b46c1")
+    s += paper_path([(1400, 315), (1430, 315)])
+    s += paper_box(1450, 420, 150, 75, ["30-Snapshot", "Accumulation"], "#f5f3ff", "#6b46c1")
+    s += paper_path([(1525, 370), (1525, 420)])
+    s += paper_box(1430, 545, 190, 120, ["30 min Final", "Membrane"], "#fdf4ff", "#9c36b5")
+    s += paper_path([(1525, 495), (1525, 545)])
+    for y, label in [(565, "NSR"), (595, "CHF"), (625, "ARR"), (655, "AFF")]:
+        s += paper_path([(1620, y), (1645, y)], arrow=False)
+        s.append(txt(1652, y + 6, label, 16, "#182230", 700))
     s.append('</svg>')
-    write_svg("FIG-12_digital_signal_flow.svg", s)
+    write_svg("FIG-12_digital_processing_flow.svg", s)
 
-    # FIG-13: beat/rhythm path with old-state, next-state, and commit boundaries.
-    s = canvas("박동·리듬 경로", "ECG 숫자 나열에서 QRS 박동과 RR 간격까지")
-    s += box(35, 125, 170, 115, "ECG 숫자 입력", ["… -18, -12, 5, 41 …", "1 ms마다 한 값"], fill="#e7f5ff")
-    s += box(245, 125, 180, 115, "현재값-직전값", ["부호 있는 변화량", "상승 / 하강"], fill="#e6fcf5")
-    s += box(465, 115, 190, 135, "강한 사건", ["변화 크기>문턱값", "한 클록 펄스"], fill="#e6fcf5")
-    s += box(695, 115, 175, 135, "QRS 누적·발화", ["사건 가산", "문턱 발화·초기화", "불응기"], fill="#fff9db")
-    s += box(910, 115, 255, 135, "RR·리듬 증거", ["박동 이후 표본 계수", "PNN / RDM", "early↔late 쌍"], fill="#e5dbff")
-    s += arrow(205,182,245,182) + arrow(425,182,465,182) + arrow(655,182,695,182) + arrow(870,182,910,182)
-    s += box(70, 330, 300, 170, "상태 전이", ["이전 상태 읽기", "다음 상태 계산", "클록에서 확정"], fill="#fff4e6")
-    s += box(450, 330, 300, 170, "60초 누적", ["박동/일치/불일치", "RDM 코드", "쌍 횟수"], fill="#fff3bf")
-    s += box(830, 330, 300, 170, "다음 단계", ["Snapshot 클래스 상태", "Final 리듬 집계"], fill="#d3f9d8")
-    s += arrow(370,415,450,415) + arrow(750,415,830,415)
-    footer(s, "설명용 상태 흐름이며 임상 박동·RR annotation을 뜻하지 않음")
-    write_svg("FIG-13_beat_rhythm_path.svg", s)
+    # FIG-15: user-approved AFE/ADC flow, redrawn as a lossless vector. Solid
+    # arrows carry the signal; dashed arrows inject disturbances/non-idealities.
+    s = paper_canvas(1700, 700, "Differential ECG passes through paired HPFs, a 3-op-amp instrumentation amplifier, active 60 Hz notch, buffered 150 Hz low-pass filter, 12-bit ADC, and signed digital handoff; separate dashed paths identify the XMODEL stress sources")
 
-    # FIG-14: morphology path with finite windows and compressed outputs.
-    s = canvas("파형 형태 경로", "박동 주변 파형을 유한 레지스터·계수기·코드로 압축")
-    s += box(40, 120, 250, 145, "기울기 방향", ["필터 기준", "이전 유효 부호 유지", "방향 전환 펄스"], fill="#e6fcf5")
-    s += box(325, 120, 250, 145, "최대 진폭", ["예측 박동 관찰 구간", "문턱 bank 코드", "최댓값+후속 유지"], fill="#e7f5ff")
-    s += box(610, 110, 270, 165, "QRS MAF", ["박동 전 120 + 후 100", "폭 · 전환 · 에너지", "pre-QRS 활동"], fill="#fff4e6")
-    s += box(915, 110, 250, 165, "말단 지연", ["활동 시작/나이", "말단 관찰 구간", "반복 폭+지연"], fill="#e5dbff")
-    s += box(110, 360, 270, 145, "작은 출력 상태", ["전환 펄스", "최대 진폭 코드", "이상 표시"], fill="#fff9db")
-    s += box(465, 360, 270, 145, "60초 파형 증거", ["코드 합/횟수", "폭/에너지 사건", "반복 지연 횟수"], fill="#fff3bf")
-    s += box(820, 360, 270, 145, "클래스 상태 입력", ["부호 기여값", "Snapshot 파형 형태", "Final 집계"], fill="#d3f9d8")
-    s += arrow(380,432,465,432) + arrow(735,432,820,432)
-    footer(s, "전체 박동 파형을 저장하지 않고 유한 관찰 상태만 유지")
-    write_svg("FIG-14_morphology_path.svg", s)
+    # Non-ideal model row.
+    s += paper_box(65, 45, 300, 78, "Input Disturbance Injection", "#faf5ff", "#6b46c1")
+    s += paper_box(500, 45, 255, 78, "R/C Mismatch Model", "#faf5ff", "#6b46c1")
+    s += paper_box(830, 45, 300, 78, "Op-Amp GBW / VOS Model", "#faf5ff", "#6b46c1")
+    s += paper_box(1260, 45, 300, 78, "ADC Non-Ideality Injection", "#faf5ff", "#6b46c1")
 
-    # FIG-15: differential input branches merge at the IA; model stresses are
-    # shown as separate injection paths rather than as inline signal stages.
-    s = paper_canvas(1700, 650, "Differential ECG inputs pass through paired HPFs, merge at the instrumentation amplifier, and continue through notch, low-pass, ADC, and signed digital handoff with separate model-stress injection paths")
-    s.append(txt(55, 226, "ECG+", 17, "#182230", 700))
-    s.append(txt(55, 386, "ECG−", 17, "#182230", 700))
-    s.append(paper_dot(125, 220, "#2563a8", 6))
-    s.append(paper_dot(125, 380, "#2563a8", 6))
-    s += paper_box(190, 170, 170, 100, "HPF (+)", "#ecfdf3", "#2f855a")
-    s += paper_box(190, 330, 170, 100, "HPF (−)", "#ecfdf3", "#2f855a")
-    s += paper_path([(131, 220), (190, 220)])
-    s += paper_path([(131, 380), (190, 380)])
+    # Differential signal entry and paired high-pass filters.
+    s.append(txt(30, 330, "ECG+", 18, "#182230", 700))
+    s.append(txt(30, 470, "ECG−", 18, "#182230", 700))
+    s.append(paper_dot(125, 323, "#2563a8", 7))
+    s.append(paper_dot(125, 463, "#2563a8", 7))
+    s += paper_path([(132, 323), (200, 323)])
+    s += paper_path([(132, 463), (200, 463)])
+    s += paper_box(200, 270, 165, 106, "HPF (+)", "#ecfdf3", "#2f855a")
+    s += paper_box(200, 410, 165, 106, "HPF (−)", "#ecfdf3", "#2f855a")
 
-    s.append('<polygon points="450,145 450,455 650,300" fill="#ecfdf3" stroke="#2f855a" stroke-width="2.5"/>')
-    s.append(txt(515, 292, "3-op-amp", 18, "#182230", 700, "middle"))
-    s.append(txt(515, 318, "IA", 18, "#182230", 700, "middle"))
-    s += paper_path([(360, 220), (450, 220)])
-    s += paper_path([(360, 380), (450, 380)])
+    # Paired HPF outputs merge at the instrumentation amplifier.
+    s.append('<polygon points="450,245 450,540 635,393" fill="#ecfdf3" stroke="#2f855a" stroke-width="2.5"/>')
+    s.append(txt(515, 382, "3-op-amp", 18, "#182230", 700, "middle"))
+    s.append(txt(515, 409, "IA", 18, "#182230", 700, "middle"))
+    s += paper_path([(365, 323), (450, 323)])
+    s += paper_path([(365, 463), (450, 463)])
 
-    s += paper_box(700, 240, 200, 120, ("Active Twin-T", "60 Hz Notch"), "#fff7ed", "#c05621")
-    s += paper_box(950, 240, 160, 120, "150 Hz LPF", "#fff7ed", "#c05621")
-    s += paper_box(1160, 240, 160, 120, "12-bit ADC", "#f5f3ff", "#6b46c1")
-    s += paper_box(1360, 240, 190, 120, ("Signed 12-bit", "Stream"), "#f5f3ff", "#6b46c1")
-    s += paper_path([(650, 300), (700, 300)])
-    s += paper_path([(900, 300), (950, 300)])
-    s += paper_path([(1110, 300), (1160, 300)])
-    s += paper_path([(1320, 300), (1360, 300)])
-    s += paper_path([(1550, 300), (1590, 300)])
-    s.append(txt(1600, 307, "Digital RTL", 18, "#182230", 700))
+    # Main AFE/ADC signal chain.
+    s += paper_box(685, 333, 190, 120, ("Active Twin-T", "60 Hz Notch"), "#fff7ed", "#c05621")
+    s += paper_box(925, 333, 210, 120, ("150 Hz LPF", "+ Buffer"), "#fff7ed", "#c05621")
+    s += paper_box(1185, 333, 150, 120, "12-bit ADC", "#f5f3ff", "#6b46c1")
+    s += paper_box(1385, 333, 175, 120, ("Signed 12-bit", "Stream"), "#f5f3ff", "#6b46c1")
+    s += paper_path([(635, 393), (685, 393)])
+    s += paper_path([(875, 393), (925, 393)])
+    s += paper_path([(1135, 393), (1185, 393)])
+    s += paper_path([(1335, 393), (1385, 393)])
+    s += paper_path([(1560, 393), (1615, 393)])
+    s.append(txt(1622, 400, "Digital", 17, "#182230", 700))
+    s.append(txt(1622, 423, "RTL", 17, "#182230", 700))
 
-    s += paper_box(60, 20, 290, 70, "Input Disturbance Injection", "#faf5ff", "#805ad5")
-    s += paper_path([(205, 90), (205, 120)], arrow=False, dashed=True, color="#805ad5")
-    s += paper_path([(205, 120), (125, 120), (125, 210)], dashed=True, color="#805ad5")
-    s += paper_path([(205, 120), (105, 120), (105, 380), (119, 380)], dashed=True, color="#805ad5")
-    s += paper_box(650, 20, 380, 70, "R/C Tolerance & Op-Amp Error Model", "#faf5ff", "#805ad5")
-    s += paper_path([(840, 90), (840, 125), (550, 125), (550, 160)], dashed=True, color="#805ad5")
-    s += paper_path([(840, 125), (800, 125), (800, 240)], dashed=True, color="#805ad5")
-    s += paper_path([(840, 125), (1030, 125), (1030, 240)], dashed=True, color="#805ad5")
-    s += paper_box(1150, 20, 240, 70, "ADC Error Model", "#faf5ff", "#805ad5")
-    s += paper_path([(1270, 90), (1270, 240)], dashed=True, color="#805ad5")
-    s.append(txt(850, 600, "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model", 16, "#475467", 600, "middle"))
+    # Dashed model-injection paths are kept visually separate from signal flow.
+    s += paper_path([(215, 123), (215, 185), (125, 185), (125, 316)], dashed=True, color="#6b46c1")
+    s += paper_path([(215, 185), (160, 185), (160, 463), (193, 463)], dashed=True, color="#6b46c1")
+    s += paper_path([(628, 123), (628, 190), (540, 190), (540, 275)], dashed=True, color="#6b46c1")
+    s += paper_path([(628, 190), (780, 190), (780, 326)], dashed=True, color="#6b46c1")
+    s += paper_path([(980, 123), (980, 205), (555, 205), (555, 285)], dashed=True, color="#6b46c1")
+    s += paper_path([(980, 205), (800, 205), (800, 326)], dashed=True, color="#6b46c1")
+    s += paper_path([(980, 205), (1030, 205), (1030, 326)], dashed=True, color="#6b46c1")
+    s += paper_path([(1410, 123), (1410, 245), (1260, 245), (1260, 326)], dashed=True, color="#6b46c1")
+    s += paper_path([(1410, 245), (1472, 245), (1472, 326)], dashed=True, color="#6b46c1")
+
+    s.append(txt(850, 625, "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model", 17, "#344054", 600, "middle"))
     s.append('</svg>')
-    write_svg("FIG-15_analog_signal_flow_nonideal_models.svg", s)
+    write_svg("FIG-15_afe_adc_signal_flow.svg", s)
 
     # Preserve the seven fixed MATLAB figures byte-for-byte in the integrated
     # figure package. Their captions and limitations remain owned by MATLAB.
@@ -469,9 +397,8 @@ def main() -> int:
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
-        ("FIG-02", "figures/final/FIG-02_recordwise_validation_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation만 MATLAB과 XMODEL·RTL 설계·검증에 사용하고, 잠금 Test는 Design Lock 뒤 최초 1회 최종시험에만 사용하는 전체 workflow", "data-separated portrait validation flow with parallel XMODEL/RTL paths and one pre-lock correction loop", "analog layers are model-based; locked test data remain isolated until the one-time final test after design lock"),
+        ("FIG-02", "figures/final/FIG-02_research_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation으로 Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 검증으로 이어지는 전체 workflow", "data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test", "analog layers are model-based; locked test data remain isolated until the one-time final test after design lock"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
-        ("FIG-04", "figures/final/FIG-04_multitimescale_architecture.svg", "양건", ["components/digital_accelerator/FINAL_REPORT_KR.md"], [DIGITAL], "60초 Snapshot과 30분 Final Membrane 구조", "locked digital architecture", "SNN-inspired, not trained deep SNN"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),
         ("FIG-06", "figures/final/FIG-06_matlab_nominal_summary.svg", "서민우", ["components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv"], [MATLAB], "MATLAB representative nominal clipping/headroom", "four selected nominal 60-second records", "not physical measurement"),
         ("FIG-07", "figures/final/FIG-07_xmodel_scope.svg", "이수환", ["components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md"], [XMODEL], "XMODEL waveform/stress/integration scope", "model-based verification", "not transistor/post-layout/PCB/silicon"),
@@ -479,10 +406,8 @@ def main() -> int:
         ("FIG-09", "figures/final/FIG-09_digital_validation_hierarchy.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Digital validation hierarchy", "integer reference through board replay", "physical analog not included"),
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
-        ("FIG-12", "figures/final/FIG-12_digital_signal_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "분리된 rhythm·morphology feature 경로가 class scoring에서 합류하고 30개 Snapshot이 Final Membrane으로 누적되는 digital signal flow", "separate Strong-Event and QRS branches, shared feature scoring, and explicit 30-Snapshot accumulation", "not literal post-synthesis netlist connectivity; block internals remain in the body"),
-        ("FIG-13", "figures/final/FIG-13_beat_rhythm_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v", "components/digital_accelerator/rtl/core/rdm_variability_neuron.v", "components/digital_accelerator/rtl/core/ectopic_pair_neuron.v"], [DIGITAL], "박동·리듬 state-transition 경로", "reader-facing grouping of fixed RTL state transitions", "conceptual dataflow; literal timing remains in RTL"),
-        ("FIG-14", "figures/final/FIG-14_morphology_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/dscr_spike_counter.v", "components/digital_accelerator/rtl/core/ram_peak_accumulator.v", "components/digital_accelerator/rtl/core/qrs_maf_neuron.v", "components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v"], [DIGITAL], "파형 형태 finite-state 경로", "reader-facing grouping of fixed RTL morphology mechanisms", "engineering proxies; not clinical morphology measurement"),
-        ("FIG-15", "figures/final/FIG-15_analog_signal_flow_nonideal_models.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "ECG 차동 입력의 두 HPF 경로가 IA에서 합류하고 비이상성 주입 경로가 분리된 analog AFE·ADC signal flow", "differential-input reconstruction with separate XMODEL stress injection paths", "not the missing original LTspice schematic; component values and stress details remain in the body"),
+        ("FIG-12", "figures/final/FIG-12_digital_processing_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 두 증거가 class scoring에서 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow", "reader-facing digital architecture with explicit rhythm/morphology branches and 30-Snapshot accumulation", "not literal post-synthesis netlist connectivity; block internals remain in the body"),
+        ("FIG-15", "figures/final/FIG-15_afe_adc_signal_flow.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 점선 경로로 주입되는 AFE·ADC signal flow", "differential AFE/ADC reconstruction with four separate XMODEL stress-source groups", "not the missing original LTspice schematic; component values and stress details remain in the body"),
     ]
     for fid, source_name, output_name, caption in inherited_matlab_figures:
         figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence"))
@@ -513,7 +438,7 @@ def main() -> int:
     for fid, path, owner, files, commits, caption, scope, limits in figures:
         index += [f"## {fid}", "", f"- File: `{path}`", f"- Owner: {owner}", f"- Source files: {', '.join(f'`{x}`' for x in files)}", f"- Source commits: {', '.join(commits)}", "- Source-data path: `figures/source/figure_data.json`", f"- Caption: {caption}", f"- Evidence scope: {scope}", f"- Limitations: {limits}", ""]
     (ROOT / "figures" / "FIGURE_INDEX.md").write_text("\n".join(index), encoding="utf-8")
-    print(f"generated 22 figures (15 SVG + 7 inherited MATLAB PNG); indexed {len(figures)} including FIG-P05")
+    print(f"generated 19 figures (12 SVG + 7 inherited MATLAB PNG); indexed {len(figures)} including FIG-P05")
     return 0
 
 

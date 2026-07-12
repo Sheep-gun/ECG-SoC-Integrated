@@ -15,13 +15,13 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-02
 
-- File: `figures/final/FIG-02_recordwise_validation_workflow.svg`
+- File: `figures/final/FIG-02_research_workflow.svg`
 - Owner: 서민우·이수환·양건
 - Source files: `source_of_truth/upstream_commits.yaml`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Record-wise 분할 뒤 Train·Validation만 MATLAB과 XMODEL·RTL 설계·검증에 사용하고, 잠금 Test는 Design Lock 뒤 최초 1회 최종시험에만 사용하는 전체 workflow
-- Evidence scope: data-separated portrait validation flow with parallel XMODEL/RTL paths and one pre-lock correction loop
+- Caption: Record-wise 분할 뒤 Train·Validation으로 Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 검증으로 이어지는 전체 workflow
+- Evidence scope: data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test
 - Limitations: analog layers are model-based; locked test data remain isolated until the one-time final test after design lock
 
 ## FIG-03
@@ -34,17 +34,6 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Caption: Contributor ownership과 handoff
 - Evidence scope: ownership
 - Limitations: collaboration does not transfer implementation ownership
-
-## FIG-04
-
-- File: `figures/final/FIG-04_multitimescale_architecture.svg`
-- Owner: 양건
-- Source files: `components/digital_accelerator/FINAL_REPORT_KR.md`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
-- Source-data path: `figures/source/figure_data.json`
-- Caption: 60초 Snapshot과 30분 Final Membrane 구조
-- Evidence scope: locked digital architecture
-- Limitations: SNN-inspired, not trained deep SNN
 
 ## FIG-05
 
@@ -125,46 +114,24 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-12
 
-- File: `figures/final/FIG-12_digital_signal_flow.svg`
+- File: `figures/final/FIG-12_digital_processing_flow.svg`
 - Owner: 양건(편집)
 - Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: 분리된 rhythm·morphology feature 경로가 class scoring에서 합류하고 30개 Snapshot이 Final Membrane으로 누적되는 digital signal flow
-- Evidence scope: separate Strong-Event and QRS branches, shared feature scoring, and explicit 30-Snapshot accumulation
+- Caption: Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 두 증거가 class scoring에서 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow
+- Evidence scope: reader-facing digital architecture with explicit rhythm/morphology branches and 30-Snapshot accumulation
 - Limitations: not literal post-synthesis netlist connectivity; block internals remain in the body
-
-## FIG-13
-
-- File: `figures/final/FIG-13_beat_rhythm_path.svg`
-- Owner: 양건(편집)
-- Source files: `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v`, `components/digital_accelerator/rtl/core/rdm_variability_neuron.v`, `components/digital_accelerator/rtl/core/ectopic_pair_neuron.v`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
-- Source-data path: `figures/source/figure_data.json`
-- Caption: 박동·리듬 state-transition 경로
-- Evidence scope: reader-facing grouping of fixed RTL state transitions
-- Limitations: conceptual dataflow; literal timing remains in RTL
-
-## FIG-14
-
-- File: `figures/final/FIG-14_morphology_path.svg`
-- Owner: 양건(편집)
-- Source files: `components/digital_accelerator/rtl/core/dscr_spike_counter.v`, `components/digital_accelerator/rtl/core/ram_peak_accumulator.v`, `components/digital_accelerator/rtl/core/qrs_maf_neuron.v`, `components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
-- Source-data path: `figures/source/figure_data.json`
-- Caption: 파형 형태 finite-state 경로
-- Evidence scope: reader-facing grouping of fixed RTL morphology mechanisms
-- Limitations: engineering proxies; not clinical morphology measurement
 
 ## FIG-15
 
-- File: `figures/final/FIG-15_analog_signal_flow_nonideal_models.svg`
+- File: `figures/final/FIG-15_afe_adc_signal_flow.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
-- Caption: ECG 차동 입력의 두 HPF 경로가 IA에서 합류하고 비이상성 주입 경로가 분리된 analog AFE·ADC signal flow
-- Evidence scope: differential-input reconstruction with separate XMODEL stress injection paths
+- Caption: 차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 점선 경로로 주입되는 AFE·ADC signal flow
+- Evidence scope: differential AFE/ADC reconstruction with four separate XMODEL stress-source groups
 - Limitations: not the missing original LTspice schematic; component values and stress details remain in the body
 
 ## MAT-01

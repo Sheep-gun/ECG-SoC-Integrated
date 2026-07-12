@@ -32,7 +32,7 @@ Four fixed-version PhysioNet trees (nsrdb, chfdb, mitdb, afdb version 1.0.0) are
 - Direct streaming-state inventory: `tables/streaming_state_inventory.csv`
 - Claim `CLM-023`: no complete 1,800,000-sample raw-window storage in pure RTL
 - Derived comparison: 21,600,000 bit = 2,700,000 byte ≈ 2.7 MB decimal, labelled `avoided full raw-input window storage`
-- Digital signal flow: `figures/final/FIG-12_digital_signal_flow.svg`
+- Digital signal flow: `figures/final/FIG-12_digital_processing_flow.svg`
 
 ## Claim and benchmark status
 

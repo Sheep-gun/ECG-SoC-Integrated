@@ -51,11 +51,9 @@ REQUIRED_FILES = [
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
 ]
 REQUIRED_FIGURES = [
-    "FIG-01_long_window_motivation.svg", "FIG-02_recordwise_validation_workflow.svg",
-    "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
-    "FIG-10_classification_summary.svg", "FIG-12_digital_signal_flow.svg",
-    "FIG-13_beat_rhythm_path.svg", "FIG-14_morphology_path.svg",
-    "FIG-15_analog_signal_flow_nonideal_models.svg",
+    "FIG-01_long_window_motivation.svg", "FIG-02_research_workflow.svg",
+    "FIG-08_signed_stream_handoff.svg", "FIG-10_classification_summary.svg",
+    "FIG-12_digital_processing_flow.svg", "FIG-15_afe_adc_signal_flow.svg",
     "MAT-01_afe_chain_overview.png", "MAT-02_total_frequency_response.png",
     "MAT-03_notch_dense_sweep.png", "MAT-04_dynamic_range_headroom.png",
     "MAT-05_adc_code_distribution.png", "MAT-06_reference_vector_handoff.png",
@@ -241,7 +239,7 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("nineteen reader-facing figures", len(report_images) == 19, len(report_images))
+    check("sixteen reader-facing figures", len(report_images) == 16, len(report_images))
     p05_root = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation"
     for vector_name in ["device_placement_map.svg", "device_view_annotated_publication.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
         check(f"Vivado implementation vector {vector_name}", (p05_root / vector_name).is_file(), str(p05_root / vector_name))
@@ -260,32 +258,29 @@ def main() -> int:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)
         check(f"figure exists {filename}", (ROOT / "figures" / "final" / filename).is_file())
-    figure12 = (ROOT / "figures" / "final" / "FIG-12_digital_signal_flow.svg").read_text(encoding="utf-8")
-    for label in ["Signed ECG", "ΔECG Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60 s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
+    figure12 = (ROOT / "figures" / "final" / "FIG-12_digital_processing_flow.svg").read_text(encoding="utf-8")
+    for label in ["Signed ECG", "ΔECG", "Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60 s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
-    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 24 and figure12.count("<circle") >= 6)
-    check("FIG-12 Strong-Event and QRS morphology outputs separated", 'points="505,430 505,660' in figure12 and 'points="730,430 730,500' in figure12)
+    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 20 and figure12.count("<circle") >= 3)
+    check("FIG-12 QRS output branches to rhythm and morphology", 'points="660,270 660,117 780,117' in figure12 and 'points="660,360 660,450 920,450' in figure12)
     check("FIG-12 scoring and 30-Snapshot accumulation explicit", "Feature Accumulation" in figure12 and "30-Snapshot" in figure12 and "30 min Final" in figure12)
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
-        "FIG-02_recordwise_validation_workflow.svg": ["공개 ECG 데이터", "Record-wise Train / Validation /", "Locked Test Split", "Train / Validation Data Only", "MATLAB AFE·ADC 사전검증", "AFE–ADC XMODEL 검증", "Digital SNN RTL IP", "AFE–RTL 통합 검증", "Accelerator Benchmark", "FPGA Implementation", "&amp; Board Replay", "세 검증 결과", "설계·통합", "검증 기준 충족?", "XMODEL / RTL 수정", "아니오", "예", "Design Lock", "Locked Final Test", "잠금된 Test 데이터만 최초 1회 사용", "최종 결과·보고서"],
-        "FIG-04_multitimescale_architecture.svg": ["다중 시간축 구조", "사건과 지속 상태", "60초 Snapshot", "30분 Final Membrane"],
+        "FIG-02_research_workflow.svg": ["Public ECG Data", "Record-wise Train / Validation /", "Locked Test Split", "Front End Verification", "(MATLAB, XMODEL)", "Digital Model / RTL Development", "Digital Validation", "Criteria Met?", "No", "Yes", "Design Lock", "Locked Test Data", "(Held-out)", "Locked Final Test", "(Used Once Only)", "Implementation Verification", "(RTL / IP / FPGA)", "Analog-Digital Integration Verification", "(XMODEL – RTL End-to-End)", "Final Results &amp; Report"],
         "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
-        "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "ECG 숫자 입력", "현재값-직전값", "강한 사건", "QRS 누적·발화", "박동 이후 표본 계수"],
-        "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
-        "FIG-15_analog_signal_flow_nonideal_models.svg": ["ECG+", "ECG−", "HPF (+)", "HPF (−)", "3-op-amp", "IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "12-bit ADC", "Signed 12-bit", "Stream", "Digital RTL", "Input Disturbance Injection", "R/C Tolerance &amp; Op-Amp Error Model", "ADC Error Model", "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model"],
+        "FIG-15_afe_adc_signal_flow.svg": ["ECG+", "ECG−", "HPF (+)", "HPF (−)", "3-op-amp", "IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "+ Buffer", "12-bit ADC", "Signed 12-bit", "Stream", "Digital", "RTL", "Input Disturbance Injection", "R/C Mismatch Model", "Op-Amp GBW / VOS Model", "ADC Non-Ideality Injection", "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model"],
     }
     for filename, labels in reader_figure_requirements.items():
         svg = (ROOT / "figures" / "final" / filename).read_text(encoding="utf-8")
         for label in labels:
             check(f"reader-facing figure label {filename}: {label}", label in svg)
-    figure02 = (ROOT / "figures" / "final" / "FIG-02_recordwise_validation_workflow.svg").read_text(encoding="utf-8")
-    figure15 = (ROOT / "figures" / "final" / "FIG-15_analog_signal_flow_nonideal_models.svg").read_text(encoding="utf-8")
-    check("FIG-02 data-separated validation flow with pre-lock correction loop", "<polygon" in figure02 and figure02.count("<polyline") >= 24 and figure02.count("<circle") >= 9)
-    check("FIG-02 locked test first appears after Design Lock", figure02.index("Design Lock") < figure02.index("Locked Final Test") and "잠금된 Test 데이터만 최초 1회 사용" in figure02)
-    check("FIG-02 correction loop returns to XMODEL and RTL rather than MATLAB", "XMODEL / RTL 수정" in figure02 and "MATLAB / RTL 수정" not in figure02)
-    check("FIG-15 differential merge and stress injection", "<polygon" in figure15 and figure15.count('stroke-dasharray="8 7"') >= 6)
+    figure02 = (ROOT / "figures" / "final" / "FIG-02_research_workflow.svg").read_text(encoding="utf-8")
+    figure15 = (ROOT / "figures" / "final" / "FIG-15_afe_adc_signal_flow.svg").read_text(encoding="utf-8")
+    check("FIG-02 data-separated validation flow with pre-lock correction loop", "<polygon" in figure02 and figure02.count("<polyline") >= 12)
+    check("FIG-02 locked test follows Design Lock in the main path", figure02.index("Design Lock") < figure02.index("Locked Final Test") and "(Used Once Only)" in figure02)
+    check("FIG-02 correction loop returns to digital development", 'points="310,750 120,750 120,537 250,537' in figure02 and "Digital Model / RTL Development" in figure02)
+    check("FIG-15 differential merge and stress injection", "<polygon" in figure15 and figure15.count('stroke-dasharray="8 7"') >= 8)
     old_english_figure_phrases = ["Sample / Beat", "60-second Snapshot", "Event / State", "Signed-stream handoff integrity", "Locked classification result", "old state 읽기", "Peak 진폭", "Class 상태 입력"]
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
     check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])
@@ -321,7 +316,7 @@ def main() -> int:
         "fig_reference_vector_handoff.png", "fig_matlab_prevalidation_flow.png",
     ]:
         check(f"fixed MATLAB figure cited {source_name}", source_name in text)
-    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4|5|6|7|8|9|10|15)\..*\[직접 근거:.*\]\*$", text)
+    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4|5|6|7|8|9|10|12)\..*\[직접 근거:.*\]\*$", text)
     check("AFE figures have direct evidence captions", len(direct_evidence_captions) == 9, len(direct_evidence_captions))
     check("original schematic claim forbidden", "원본 LTspice schematic이 아니다" in text and "UNRESOLVED_NOT_PRESENT" in UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig"))
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
