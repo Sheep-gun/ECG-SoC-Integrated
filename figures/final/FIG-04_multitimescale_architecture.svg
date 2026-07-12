@@ -1,27 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <rect width="1200" height="675" fill="#f7f9fc"/>
 <rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
-<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">60초 Snapshot + 30분 Final Membrane</text>
-<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">integer event/state streaming architecture</text>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">다중 시간축 구조</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">표본값·박동·60초·30분으로 이어지는 상태 계층</text>
 <rect x="50" y="180" width="220" height="220" rx="14" fill="#e8f1fb" stroke="#486581" stroke-width="2"/>
-<text x="160.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">12-bit stream</text>
+<text x="160.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">12-bit 입력 스트림</text>
 <text x="160.0" y="244" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1 kSPS</text>
-<text x="160.0" y="269" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">sample-by-sample</text>
+<text x="160.0" y="269" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">표본값 단위 처리</text>
 <rect x="335" y="150" width="250" height="280" rx="14" fill="#e8f1fb" stroke="#486581" stroke-width="2"/>
-<text x="460.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Event / State</text>
-<text x="460.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">beat timing</text>
-<text x="460.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">RR variability</text>
-<text x="460.0" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">morphology</text>
-<text x="460.0" y="289" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">R-peak / ectopic</text>
+<text x="460.0" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">사건과 지속 상태</text>
+<text x="460.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">박동 시점</text>
+<text x="460.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">RR 변동</text>
+<text x="460.0" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">파형 형태</text>
+<text x="460.0" y="289" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">최고점 · 조기/지연</text>
 <rect x="650" y="180" width="210" height="220" rx="14" fill="#e8f1fb" stroke="#486581" stroke-width="2"/>
-<text x="755.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Snapshot</text>
-<text x="755.0" y="244" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">60,000 samples</text>
-<text x="755.0" y="269" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">local readout</text>
+<text x="755.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">60초 Snapshot</text>
+<text x="755.0" y="244" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">60,000표본</text>
+<text x="755.0" y="269" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">국소 판독</text>
 <rect x="925" y="150" width="225" height="280" rx="14" fill="#e8f1fb" stroke="#486581" stroke-width="2"/>
-<text x="1037.5" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Final Membrane</text>
-<text x="1037.5" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">30 snapshots</text>
-<text x="1037.5" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed accumulate</text>
-<text x="1037.5" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">WTA 4-class</text>
+<text x="1037.5" y="184" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">30분 Final Membrane</text>
+<text x="1037.5" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">Snapshot 30개</text>
+<text x="1037.5" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">부호 누적</text>
+<text x="1037.5" y="264" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">4-Class 승자독식</text>
 <line x1="270" y1="290" x2="335" y2="290" stroke="#486581" stroke-width="4"/>
 <polygon points="335,290 321,282 321,298" fill="#486581"/>
 <line x1="585" y1="290" x2="650" y2="290" stroke="#486581" stroke-width="4"/>
@@ -29,5 +29,5 @@
 <line x1="860" y1="290" x2="925" y2="290" stroke="#486581" stroke-width="4"/>
 <polygon points="925,290 911,282 911,298" fill="#486581"/>
 <rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
-<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">No full 1,800,000-sample raw-window buffer; fixed-size persistent state</text>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">1,800,000표본 전체를 저장하지 않고 고정 크기 지속 상태만 유지</text>
 </svg>

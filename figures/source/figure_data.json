@@ -40,18 +40,18 @@
     "qrs_maf_pre_samples": 120,
     "qrs_maf_post_samples": 100,
     "rhythm_path": [
-      "adjacent-sample difference",
-      "QRS membrane/refractory",
-      "RR timing",
-      "PNN prediction",
-      "RDM variability",
-      "early-late pair"
+      "인접 표본값 차이",
+      "QRS 막전위·불응기",
+      "RR 틱 계수",
+      "PNN 예측 일치",
+      "RDM 연속 변화",
+      "early-late 쌍"
     ],
     "morphology_path": [
-      "filtered slope/sign retention",
-      "beat-window maximum amplitude code",
-      "QRS width/complexity/energy/pre-activity",
-      "terminal-window repeated delay"
+      "필터 기울기·이전 부호",
+      "박동 구간 최대 진폭 코드",
+      "QRS 폭·복잡도·에너지·선행 활동",
+      "말단 구간 반복 지연"
     ],
     "evidence_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75"
   },

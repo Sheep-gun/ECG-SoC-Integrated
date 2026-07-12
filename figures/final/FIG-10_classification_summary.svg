@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <rect width="1200" height="675" fill="#f7f9fc"/>
 <rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
-<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">Locked classification result</text>
-<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">final-test를 중심에 두고 validation은 model-selection로 분리</text>
-<text x="150" y="182" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="600" fill="#243b53">Final-test 30-minute chunk</text>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">분류 결과</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">검증 결과는 모델 선택용으로 분리하고 최종 시험을 중심에 표시</text>
+<text x="150" y="182" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="600" fill="#243b53">최종 시험 30분 구간</text>
 <rect x="150" y="190" width="720" height="30" rx="6" fill="#d9e2ec"/>
 <rect x="150" y="190" width="580.0" height="30" rx="6" fill="#2f80ed"/>
 <text x="888" y="212" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">80.56%</text>
-<text x="150" y="292" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="600" fill="#243b53">Final-test record-majority</text>
+<text x="150" y="292" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="600" fill="#243b53">최종 record-majority</text>
 <rect x="150" y="300" width="720" height="30" rx="6" fill="#d9e2ec"/>
 <rect x="150" y="300" width="606.3" height="30" rx="6" fill="#12b886"/>
 <text x="888" y="322" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">84.21%</text>
-<text x="150" y="402" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="600" fill="#243b53">Validation (model selection only)</text>
+<text x="150" y="402" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="600" fill="#243b53">검증 결과(모델 선택 전용)</text>
 <rect x="150" y="410" width="720" height="30" rx="6" fill="#d9e2ec"/>
 <rect x="150" y="410" width="720.0" height="30" rx="6" fill="#adb5bd"/>
 <text x="888" y="432" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">100.00%</text>
-<text x="600" y="545" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="26" font-weight="700" fill="#102a43">Primary claim: 29/36 = 80.56%</text>
+<text x="600" y="545" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="26" font-weight="700" fill="#102a43">주 결과: 29/36 = 80.56%</text>
 <rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
-<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">Public-dataset engineering result; database-class confounding remains</text>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">공개 데이터셋 공학 결과이며 데이터베이스와 클래스의 결합이 남음</text>
 </svg>

@@ -1,25 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <rect width="1200" height="675" fill="#f7f9fc"/>
 <rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
-<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">Signed-stream handoff integrity</text>
-<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">same bytes → canonical cadence → same digital state</text>
+<text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">기능 등가성</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">같은 입력 byte → 같은 표본 간격 → 같은 디지털 상태</text>
 <rect x="65" y="170" width="280" height="240" rx="14" fill="#e8f1fb" stroke="#486581" stroke-width="2"/>
-<text x="205.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">AFE-generated chunks</text>
+<text x="205.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">AFE 생성 구간</text>
 <text x="205.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed 12-bit</text>
-<text x="205.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1,800,000 samples</text>
+<text x="205.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1,800,000표본</text>
 <rect x="460" y="170" width="280" height="240" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
-<text x="600.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">SHA256 identity</text>
+<text x="600.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">SHA256 동일성</text>
 <text x="600.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">36/36</text>
-<text x="600.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">byte-for-byte</text>
+<text x="600.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">모든 byte 일치</text>
 <rect x="855" y="170" width="280" height="240" rx="14" fill="#e7f5ff" stroke="#486581" stroke-width="2"/>
-<text x="995.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">Locked RTL</text>
+<text x="995.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">고정 RTL</text>
 <text x="995.0" y="234" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">sample_gap_cycles=2</text>
-<text x="995.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">pred 36/36</text>
-<text x="995.0" y="284" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">mem 36/36</text>
+<text x="995.0" y="259" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">예측 36/36</text>
+<text x="995.0" y="284" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">막전위 36/36</text>
 <line x1="345" y1="290" x2="460" y2="290" stroke="#486581" stroke-width="4"/>
 <polygon points="460,290 446,282 446,298" fill="#486581"/>
 <line x1="740" y1="290" x2="855" y2="290" stroke="#486581" stroke-width="4"/>
 <polygon points="855,290 841,282 841,298" fill="#486581"/>
 <rect x="40" y="625" width="1120" height="32" rx="8" fill="#e1e8f0"/>
-<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">Input/output identity is integration evidence, not 100% label accuracy</text>
+<text x="600" y="647" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="400" fill="#486581">입출력 동일성은 통합 증거이며 정답 표지 100%를 뜻하지 않음</text>
 </svg>

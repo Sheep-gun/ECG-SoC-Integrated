@@ -45,7 +45,7 @@ MECHANISM_TERMS = [
     "abs(current_rr-prev_rr)", "early→late", "filter_update", "prev_slope_sign",
     "ram_window_open", "최대 진폭 코드", "박동 전 120표본", "박동 후 100표본",
     "폭 대리지표", "복잡도(complexity)", "Pre-QRS 활동", "활동 시작", "말단 관찰 구간",
-    "반복", "*_count_next", "Base seed", "guard", "rescue", "veto", "silent-AFF",
+    "반복", "*_count_next", "기본 막전위의 시작값", "guard", "rescue", "veto", "silent-AFF",
     "엄격한 `>`", "IDLE→CORE_RESET→SEG_START→RUN→SEG_DONE→FLUSH→COMMIT→DONE",
 ]
 
@@ -111,6 +111,27 @@ def main() -> int:
     corruption_markers = ["클래스ifier", "상태s", "표본값s", "계수기s", "관찰 구간를", "진폭가", "사건 신호s"]
     check("no mixed-language replacement corruption", not any(marker in text for marker in corruption_markers), [m for m in corruption_markers if m in text])
     check("two consolidated architecture boundaries", text.count("**통합 해석 경계.**") == 2, text.count("**통합 해석 경계.**"))
+    body_cleaned = cleaned.split("# 참고문헌", 1)[0]
+    expanded_english = ["pattern", "reference", "valid", "strong", "threshold", "current", "previous", "locked", "fixed", "local", "digital", "model", "source", "label", "clinical", "physical", "implementation", "evaluation", "result", "test", "chunk", "segment", "bank", "gate"]
+    expanded_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", body_cleaned)) for term in expanded_english}
+    check("expanded Korean-first body vocabulary", sum(expanded_counts.values()) <= 35 and max(expanded_counts.values()) <= 4, expanded_counts)
+
+    morphology = section(text, "3.3 파형 형태 및 진폭 정보 추출", 2)
+    block_order = [
+        ("DSCR purpose before module", "파형이 한 방향으로만 움직이는지", "`dscr_spike_counter`"),
+        ("RAM purpose before module", "모든 표본을 대상으로 최고점을 찾으면", "`ram_peak_accumulator`"),
+        ("QRS MAF purpose before module", "같은 RR 간격을 가진 박동이라도", "`qrs_maf_neuron`"),
+        ("RBBB-like mechanism before module", "가장 늦게 표시된 가설", "`rbbb_qrs_delay_bank`"),
+    ]
+    for name, purpose, module in block_order:
+        check(name, purpose in morphology and module in morphology and morphology.index(purpose) < morphology.index(module))
+    for name, anchor, required in [
+        ("DSCR downstream flow", "`dscr_spike_counter`", ["Snapshot의 파형 형태 클래스 상태"]),
+        ("RAM downstream flow", "`ram_peak_accumulator`", ["Snapshot의 진폭 증거", "Final Membrane"]),
+        ("QRS MAF downstream flow", "`qrs_maf_neuron`", ["Snapshot의 파형 형태 점수", "Final Membrane"]),
+        ("RBBB-like downstream flow", "`rbbb_qrs_delay_bank`", ["Snapshot 클래스 점수", "Final Membrane"]),
+    ]:
+        check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
     check("eight reader-facing figures", len(report_images) == 8, len(report_images))
@@ -119,18 +140,34 @@ def main() -> int:
         check(f"figure referenced {filename}", len(matches) == 1, matches)
         check(f"figure exists {filename}", (ROOT / "figures" / "final" / filename).is_file())
     figure12 = (ROOT / "figures" / "final" / "FIG-12_detailed_digital_architecture.svg").read_text(encoding="utf-8")
-    for label in ["입력 ECG 표본값", "파형 변화 사건", "박동 검출", "박동 간격 측정", "리듬 분석", "60초 증거 누적", "30분 class 상태", "최종 class 선택"]:
+    for label in ["입력 ECG 표본값", "파형 변화 사건", "박동 검출", "박동 간격 측정", "리듬 분석", "60초 증거 누적", "30분 클래스 상태", "최종 클래스 선택"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
+    reader_figure_requirements = {
+        "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
+        "FIG-02_complete_system_flow.svg": ["전체 시스템 흐름", "공개 ECG", "디지털 RTL", "FPGA 재생"],
+        "FIG-04_multitimescale_architecture.svg": ["다중 시간축 구조", "사건과 지속 상태", "60초 Snapshot", "30분 Final Membrane"],
+        "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
+        "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
+        "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "이전 상태 읽기", "다음 상태 계산", "클록에서 확정"],
+        "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
+    }
+    for filename, labels in reader_figure_requirements.items():
+        svg = (ROOT / "figures" / "final" / filename).read_text(encoding="utf-8")
+        for label in labels:
+            check(f"reader-facing figure label {filename}: {label}", label in svg)
+    old_english_figure_phrases = ["Sample / Beat", "60-second Snapshot", "Event / State", "Signed-stream handoff integrity", "Locked classification result", "old state 읽기", "Peak 진폭", "Class 상태 입력"]
+    used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
+    check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])
 
     for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits"]:
         check(f"required result {value}", value in text)
     for value in ["54.01 ms", "33.3 MSPS", "33,300", "0.099 W", "5.35 mJ"]:
         check(f"unverified benchmark absent {value}", value not in text)
     check("benchmark pending", "PENDING_EXTERNAL_BENCHMARK_IMPORT" in text)
-    check("validation boundary", "Validation 32/32=100.00%는 Final Membrane model selection" in text and "final generalization으로 승격하지 않는다" in text)
-    check("equivalence not accuracy", "classifier의 label accuracy를 100%로 만들지 않는다" in text)
-    check("dataset confounding", "record-wise split은 direct leakage를 막지만" in text.lower())
-    check("physical boundary", "physical AFE/ADC" in text and ("fabricated SoC" in text or "fabricated silicon" in text))
+    check("validation boundary", "검증 결과 32/32=100.00%는 Final Membrane 모델 선택" in text and "최종 일반화 성능으로 승격하지 않는다" in text)
+    check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
+    check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
+    check("physical boundary", "실제 AFE/ADC" in text and ("fabricated SoC" in text or "fabricated silicon" in text))
 
     metrics = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
     check("global final metric", metrics["metrics"]["final_test_chunk_accuracy"]["value"] == 80.56)
@@ -152,7 +189,7 @@ def main() -> int:
     inline_paths = re.findall(r"`((?:components|datasets|docs|tables|figures|source_of_truth|benchmarks|reports)/[^`]+)`", text)
     for relative in inline_paths:
         check(f"inline path {relative}", (ROOT / relative).exists())
-    check("owners", all(term in text for term in ["서민우(MATLAB", "이수환(XMODEL", "양건(digital"]))
+    check("owners", all(term in text for term in ["서민우(MATLAB", "이수환(XMODEL", "양건(디지털"]))
     check("no private email", re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", text, re.I) is None)
     check("no personal path", re.search(r"[A-Z]:[\\/]Users[\\/]", text, re.I) is None)
 

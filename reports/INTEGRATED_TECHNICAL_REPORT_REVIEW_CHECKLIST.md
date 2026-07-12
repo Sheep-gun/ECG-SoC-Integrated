@@ -10,6 +10,7 @@
 - [x] 하나의 비임상 신호 예시가 event→beat→RR/파형→Snapshot→Final 흐름을 연결한다.
 - [x] FIG-12는 한국어 기능명을 1차 label, module명을 2차 label로 사용한다.
 - [x] FIG-13은 old state→next calculation→clock commit을, FIG-14는 finite morphology window를 보여준다.
+- [x] 본문에서 사용하는 FIG-01·02·04·08·10·12·13·14의 제목과 내부 설명은 짧은 한국어 기능 문구를 우선한다.
 
 ## RTL mechanism 직접 감사
 
@@ -23,6 +24,7 @@
 - [x] QRS MAF의 pre 120/post 100 sample, width/complexity/energy/pre-QRS 및 pipeline을 설명한다.
 - [x] RBBB-like path의 independent onset, observation/terminal window와 repeated segment evidence를 설명한다.
 - [x] Snapshot counter의 current `*_next` capture와 Final base/guard/rescue/veto/silent-AFF/WTA를 설명한다.
+- [x] DSCR·RAM·QRS MAF·RBBB-like 설명은 관찰 목적→실제 계산→상태/계수→출력→Snapshot/Final 전달 순서를 따른다.
 
 ## 결과와 claim 경계
 

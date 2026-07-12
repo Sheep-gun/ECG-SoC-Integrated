@@ -138,7 +138,7 @@ def main() -> int:
 
     check("independent .git exists", (ROOT / ".git").is_dir())
     active_branch = git(ROOT, "branch", "--show-current")
-    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report"}, active_branch)
+    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
     check("14 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 14)
@@ -338,7 +338,7 @@ def main() -> int:
     manuscript = (ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md").read_text(encoding="utf-8")
     check("FIG-12 indexed", "FIG-12_detailed_digital_architecture.svg" in fig_index)
     check("FIG-12 referenced by manuscript", "FIG-12_detailed_digital_architecture.svg" in manuscript)
-    check("manuscript raw-data policy", "raw waveform을 번들하지 않는다" in manuscript)
+    check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
     for forbidden in ["54.01 ms", "33.3 MSPS", "33,300", "5.35 mJ", "0.099 W"]:
         check(f"benchmark value not promoted: {forbidden}", forbidden not in text)
 

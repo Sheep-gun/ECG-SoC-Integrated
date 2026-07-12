@@ -103,8 +103,8 @@ def main() -> int:
             "snapshots_per_decision": 30,
             "qrs_maf_pre_samples": 120,
             "qrs_maf_post_samples": 100,
-            "rhythm_path": ["adjacent-sample difference", "QRS membrane/refractory", "RR timing", "PNN prediction", "RDM variability", "early-late pair"],
-            "morphology_path": ["filtered slope/sign retention", "beat-window maximum amplitude code", "QRS width/complexity/energy/pre-activity", "terminal-window repeated delay"],
+            "rhythm_path": ["인접 표본값 차이", "QRS 막전위·불응기", "RR 틱 계수", "PNN 예측 일치", "RDM 연속 변화", "early-late 쌍"],
+            "morphology_path": ["필터 기울기·이전 부호", "박동 구간 최대 진폭 코드", "QRS 폭·복잡도·에너지·선행 활동", "말단 구간 반복 지연"],
             "evidence_commit": DIGITAL,
         },
         "benchmark_status": gm["benchmark"]["status"],
@@ -113,24 +113,24 @@ def main() -> int:
     source_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     # FIG-01: motivation
-    s = canvas("장시간 ECG 분류 문제", "국소 evidence와 장기 persistence를 함께 다루는 Holter-oriented 구조")
-    s += box(70, 170, 270, 220, "Sample / Beat", ["slope · timing", "QRS · R-peak", "local event"])
-    s += box(465, 170, 270, 220, "60-second Snapshot", ["rhythm + morphology", "local class evidence", "30 readouts"])
-    s += box(860, 170, 270, 220, "30-minute Final", ["signed membrane", "persistence", "WTA class"])
+    s = canvas("장시간 ECG 분류 문제", "짧은 박동 정보와 장시간 지속성을 함께 반영")
+    s += box(70, 170, 270, 220, "표본값과 박동", ["기울기 · 박동 시점", "QRS · 최고점", "국소 사건 신호"])
+    s += box(465, 170, 270, 220, "60초 Snapshot", ["리듬 + 파형 형태", "국소 클래스 증거", "30회 판독"])
+    s += box(860, 170, 270, 220, "30분 최종 상태", ["부호 막전위", "장시간 지속성", "승자독식 클래스"])
     s += arrow(340, 280, 465, 280) + arrow(735, 280, 860, 280)
     s.append(txt(600, 500, "핵심: 빠르기 자체가 아니라 시간 계층을 streaming state로 구조화", 24, "#0b7285", 700, "middle"))
-    footer(s, "Architecture motivation only; no clinical-diagnosis claim")
+    footer(s, "설계 동기를 설명하는 그림이며 임상 진단을 뜻하지 않음")
     write_svg("FIG-01_long_window_motivation.svg", s)
 
     # FIG-02: system flow
-    s = canvas("MATLAB → XMODEL → Digital → FPGA", "세 고정 commit의 end-to-end evidence flow")
+    s = canvas("전체 시스템 흐름", "모델 기반 AFE·ADC에서 디지털 IP와 FPGA까지")
     xs = [45, 285, 525, 765, 1005]
-    titles = ["Public ECG", "MATLAB", "XMODEL", "Digital RTL", "FPGA replay"]
-    desc = [["4 source DBs"],["nominal AFE/ADC","reference vectors"],["stress/non-ideal","signed stream"],["Snapshot + Final","IP-XACT"],["36-case","equivalence"]]
+    titles = ["공개 ECG", "MATLAB", "XMODEL", "디지털 RTL", "FPGA 재생"]
+    desc = [["4개 원천 DB"],["공칭 AFE/ADC","기준 벡터"],["교란·비이상성","부호 스트림"],["Snapshot + Final","IP-XACT"],["36개 사례","기능 등가성"]]
     for i,x in enumerate(xs):
         s += box(x, 210, 160, 190, titles[i], desc[i], fill="#e6fffa" if i in (1,2) else "#e8f1fb")
         if i < 4: s += arrow(x+160, 305, xs[i+1], 305)
-    footer(s, "Analog layers are model-based; FPGA layer is digital integration proof")
+    footer(s, "아날로그 계층은 모델 기반이며 FPGA는 디지털 통합 증거")
     write_svg("FIG-02_complete_system_flow.svg", s)
 
     # FIG-03 ownership
@@ -143,13 +143,13 @@ def main() -> int:
     write_svg("FIG-03_ownership_handoff.svg", s)
 
     # FIG-04 architecture
-    s = canvas("60초 Snapshot + 30분 Final Membrane", "integer event/state streaming architecture")
-    s += box(50, 180, 220, 220, "12-bit stream", ["1 kSPS", "sample-by-sample"])
-    s += box(335, 150, 250, 280, "Event / State", ["beat timing", "RR variability", "morphology", "R-peak / ectopic"])
-    s += box(650, 180, 210, 220, "Snapshot", ["60,000 samples", "local readout"])
-    s += box(925, 150, 225, 280, "Final Membrane", ["30 snapshots", "signed accumulate", "WTA 4-class"])
+    s = canvas("다중 시간축 구조", "표본값·박동·60초·30분으로 이어지는 상태 계층")
+    s += box(50, 180, 220, 220, "12-bit 입력 스트림", ["1 kSPS", "표본값 단위 처리"])
+    s += box(335, 150, 250, 280, "사건과 지속 상태", ["박동 시점", "RR 변동", "파형 형태", "최고점 · 조기/지연"])
+    s += box(650, 180, 210, 220, "60초 Snapshot", ["60,000표본", "국소 판독"])
+    s += box(925, 150, 225, 280, "30분 Final Membrane", ["Snapshot 30개", "부호 누적", "4-Class 승자독식"])
     s += arrow(270, 290, 335, 290) + arrow(585, 290, 650, 290) + arrow(860, 290, 925, 290)
-    footer(s, "No full 1,800,000-sample raw-window buffer; fixed-size persistent state")
+    footer(s, "1,800,000표본 전체를 저장하지 않고 고정 크기 지속 상태만 유지")
     write_svg("FIG-04_multitimescale_architecture.svg", s)
 
     # FIG-05 split
@@ -177,12 +177,12 @@ def main() -> int:
     write_svg("FIG-07_xmodel_scope.svg", s)
 
     # FIG-08 handoff
-    s = canvas("Signed-stream handoff integrity", "same bytes → canonical cadence → same digital state")
-    s += box(65, 170, 280, 240, "AFE-generated chunks", ["signed 12-bit", "1,800,000 samples"])
-    s += box(460, 170, 280, 240, "SHA256 identity", [data['integration']['input_sha256'], "byte-for-byte"] ,fill="#e6fcf5")
-    s += box(855, 170, 280, 240, "Locked RTL", ["sample_gap_cycles=2", "pred 36/36", "mem 36/36"], fill="#e7f5ff")
+    s = canvas("기능 등가성", "같은 입력 byte → 같은 표본 간격 → 같은 디지털 상태")
+    s += box(65, 170, 280, 240, "AFE 생성 구간", ["signed 12-bit", "1,800,000표본"])
+    s += box(460, 170, 280, 240, "SHA256 동일성", [data['integration']['input_sha256'], "모든 byte 일치"] ,fill="#e6fcf5")
+    s += box(855, 170, 280, 240, "고정 RTL", ["sample_gap_cycles=2", "예측 36/36", "막전위 36/36"], fill="#e7f5ff")
     s += arrow(345, 290, 460, 290) + arrow(740, 290, 855, 290)
-    footer(s, "Input/output identity is integration evidence, not 100% label accuracy")
+    footer(s, "입출력 동일성은 통합 증거이며 정답 표지 100%를 뜻하지 않음")
     write_svg("FIG-08_signed_stream_handoff.svg", s)
 
     # FIG-09 hierarchy
@@ -195,12 +195,12 @@ def main() -> int:
     write_svg("FIG-09_digital_validation_hierarchy.svg", s)
 
     # FIG-10 classification
-    s = canvas("Locked classification result", "final-test를 중심에 두고 validation은 model-selection로 분리")
-    bar(s, 150, 190, 720, data['classification']['final_chunk_accuracy_percent'], "Final-test 30-minute chunk", "#2f80ed")
-    bar(s, 150, 300, 720, data['classification']['final_record_majority_accuracy_percent'], "Final-test record-majority", "#12b886")
-    bar(s, 150, 410, 720, data['classification']['validation_model_selection_percent'], "Validation (model selection only)", "#adb5bd")
-    s.append(txt(600, 545, "Primary claim: 29/36 = 80.56%", 26, "#102a43", 700, "middle"))
-    footer(s, "Public-dataset engineering result; database-class confounding remains")
+    s = canvas("분류 결과", "검증 결과는 모델 선택용으로 분리하고 최종 시험을 중심에 표시")
+    bar(s, 150, 190, 720, data['classification']['final_chunk_accuracy_percent'], "최종 시험 30분 구간", "#2f80ed")
+    bar(s, 150, 300, 720, data['classification']['final_record_majority_accuracy_percent'], "최종 record-majority", "#12b886")
+    bar(s, 150, 410, 720, data['classification']['validation_model_selection_percent'], "검증 결과(모델 선택 전용)", "#adb5bd")
+    s.append(txt(600, 545, "주 결과: 29/36 = 80.56%", 26, "#102a43", 700, "middle"))
+    footer(s, "공개 데이터셋 공학 결과이며 데이터베이스와 클래스의 결합이 남음")
     write_svg("FIG-10_classification_summary.svg", s)
 
     # FIG-11 confounding
@@ -213,57 +213,57 @@ def main() -> int:
 
     # FIG-12: functional Korean labels are primary; module names are secondary.
     s = canvas("디지털 아키텍처", "표본값 → 사건 신호 → 박동·파형 증거 → 60초·30분 상태")
-    s += box(35, 125, 150, 90, "입력 ECG 표본값", ["signed 12-bit", "valid / ready"], fill="#e7f5ff")
-    s += box(225, 115, 185, 110, "파형 변화 사건", ["인접 표본값 차이", "event encoder"], fill="#e6fcf5")
+    s += box(35, 125, 150, 90, "입력 ECG 표본값", ["signed 12-bit", "유효 / 준비"], fill="#e7f5ff")
+    s += box(225, 115, 185, 110, "파형 변화 사건", ["인접 표본값 차이", "사건 인코더"], fill="#e6fcf5")
     s += box(450, 115, 180, 110, "박동 검출", ["막전위·문턱값", "QRS LIF"], fill="#e6fcf5")
-    s += box(670, 115, 205, 110, "박동 간격 측정", ["RR timing", "PNN match/mismatch"], fill="#e6fcf5")
-    s += box(915, 115, 250, 110, "리듬 분석", ["RR 변화 level", "RDM · early/late"], fill="#e6fcf5")
+    s += box(670, 115, 205, 110, "박동 간격 측정", ["RR 틱 계수", "PNN 일치/불일치"], fill="#e6fcf5")
+    s += box(915, 115, 250, 110, "리듬 분석", ["RR 변화 수준", "RDM · early/late"], fill="#e6fcf5")
     s += arrow(185,170,225,170) + arrow(410,170,450,170) + arrow(630,170,670,170) + arrow(875,170,915,170)
     morphology = [
-        (55,"기울기 방향 전환","DSCR · sign retention"), (245,"박동 진폭 압축","RAM · maximum code"),
-        (435,"Early–late 조합","adaptive RR reference"), (625,"파형 형태 분석","QRS MAF · finite lookback"),
+        (55,"기울기 방향 전환","DSCR · 이전 부호 유지"), (245,"박동 진폭 압축","RAM · 최대 코드"),
+        (435,"Early–late 조합","적응형 RR 기준"), (625,"파형 형태 분석","QRS MAF · 유한 이력"),
         (850,"말단 지연 증거","RBBB-like delay"),
     ]
     for x,title,line in morphology:
         s += box(x,280,165 if x != 850 else 210,92,title,[line],fill="#fff4e6")
     s.append('<line x1="110" y1="250" x2="1060" y2="250" stroke="#9fb3c8" stroke-width="3" stroke-dasharray="9 7"/>')
-    s.append(txt(600,246,"병렬 finite event/state 경로",14,"#486581",600,"middle"))
-    s += box(75,420,240,105,"60초 증거 누적",["사건·code counter", "Snapshot class state"],fill="#fff9db")
-    s += box(370,420,190,105,"60초 상태 확정",["60,000 표본값", "local winner"],fill="#fff3bf")
-    s += box(615,420,245,105,"30분 class 상태",["signed Final Membrane", "30 Snapshots"],fill="#e5dbff")
-    s += box(915,410,250,125,"최종 class 선택",["guard/rescue/veto", "silent-AFF · WTA", "pred + 4 membranes"],fill="#f3d9fa")
+    s.append(txt(600,246,"병렬 유한 사건·상태 경로",14,"#486581",600,"middle"))
+    s += box(75,420,240,105,"60초 증거 누적",["사건·코드 계수", "Snapshot 클래스 상태"],fill="#fff9db")
+    s += box(370,420,190,105,"60초 상태 확정",["60,000표본", "국소 승자"],fill="#fff3bf")
+    s += box(615,420,245,105,"30분 클래스 상태",["부호 Final Membrane", "Snapshot 30개"],fill="#e5dbff")
+    s += box(915,410,250,125,"최종 클래스 선택",["guard/rescue/veto", "silent-AFF · WTA", "예측 + 막전위 4개"],fill="#f3d9fa")
     s += arrow(315,472,370,472) + arrow(560,472,615,472) + arrow(860,472,915,472)
     s.append('<rect x="25" y="102" width="1150" height="450" rx="18" fill="none" stroke="#334e68" stroke-width="2" stroke-dasharray="12 8"/>')
-    s.append(txt(42,576,"제어 FSM: accepted sample · 60,000표본 Snapshot 확정 · 30-Snapshot final 확정",15,"#102a43",700))
-    footer(s, "CLM-023: 전체 1,800,000표본 raw window 대신 fixed-size streaming state를 갱신")
+    s.append(txt(42,576,"제어 FSM: 수락 표본 · 60,000표본 Snapshot 확정 · 30번째 최종 확정",15,"#102a43",700))
+    footer(s, "전체 1,800,000표본 대신 고정 크기 지속 상태를 갱신")
     write_svg("FIG-12_detailed_digital_architecture.svg", s)
 
     # FIG-13: beat/rhythm path with old-state, next-state, and commit boundaries.
-    s = canvas("박동·리듬 경로", "인접 표본값 차이에서 RR pattern evidence까지")
+    s = canvas("박동·리듬 경로", "인접 표본값 차이에서 RR 패턴 증거까지")
     s += box(35, 125, 170, 115, "현재·이전 표본값", ["1 ms 간격", "previous_sample"], fill="#e7f5ff")
-    s += box(245, 125, 180, 115, "파형 변화 사건", ["signed difference", "up/down/strong"], fill="#e6fcf5")
-    s += box(465, 115, 190, 135, "박동 검출", ["old membrane", "event add→threshold", "refractory"], fill="#e6fcf5")
-    s += box(695, 125, 175, 115, "RR interval", ["accepted tick count", "beat에서 확정"], fill="#fff9db")
-    s += box(910, 115, 255, 135, "리듬 증거", ["PNN: predictor match", "RDM: consecutive diff", "early↔late pair"], fill="#e5dbff")
+    s += box(245, 125, 180, 115, "파형 변화 사건", ["부호 있는 차이", "상승/하강/강한 사건"], fill="#e6fcf5")
+    s += box(465, 115, 190, 135, "박동 검출", ["이전 막전위", "사건 가산→문턱값", "불응기"], fill="#e6fcf5")
+    s += box(695, 125, 175, 115, "RR 간격", ["수락 틱 계수", "박동에서 확정"], fill="#fff9db")
+    s += box(910, 115, 255, 135, "리듬 증거", ["PNN: 예측 일치", "RDM: 연속 차이", "early↔late 쌍"], fill="#e5dbff")
     s += arrow(205,182,245,182) + arrow(425,182,465,182) + arrow(655,182,695,182) + arrow(870,182,910,182)
-    s += box(70, 330, 300, 170, "상태 전이", ["old state 읽기", "next state 계산", "clock에서 commit"], fill="#fff4e6")
-    s += box(450, 330, 300, 170, "60초 누적", ["beat/match/mismatch", "RDM code", "pair count"], fill="#fff3bf")
-    s += box(830, 330, 300, 170, "다음 단계", ["Snapshot class state", "Final rhythm aggregate"], fill="#d3f9d8")
+    s += box(70, 330, 300, 170, "상태 전이", ["이전 상태 읽기", "다음 상태 계산", "클록에서 확정"], fill="#fff4e6")
+    s += box(450, 330, 300, 170, "60초 누적", ["박동/일치/불일치", "RDM 코드", "쌍 횟수"], fill="#fff3bf")
+    s += box(830, 330, 300, 170, "다음 단계", ["Snapshot 클래스 상태", "Final 리듬 집계"], fill="#d3f9d8")
     s += arrow(370,415,450,415) + arrow(750,415,830,415)
-    footer(s, "설명용 state flow이며 clinical beat/RR annotation을 뜻하지 않음")
+    footer(s, "설명용 상태 흐름이며 임상 박동·RR annotation을 뜻하지 않음")
     write_svg("FIG-13_beat_rhythm_path.svg", s)
 
     # FIG-14: morphology path with finite windows and compressed outputs.
-    s = canvas("파형 형태 경로", "박동 주변 파형을 finite register/counter/code로 압축")
-    s += box(40, 120, 250, 145, "기울기 방향", ["filtered reference", "valid sign retention", "방향 전환 pulse"], fill="#e6fcf5")
-    s += box(325, 120, 250, 145, "Peak 진폭", ["predicted beat window", "threshold-bank code", "maximum+post hold"], fill="#e7f5ff")
-    s += box(610, 110, 270, 165, "QRS MAF", ["pre 120 + post 100", "width · flip · energy", "pre-QRS activity"], fill="#fff4e6")
-    s += box(915, 110, 250, 165, "말단 지연", ["activity onset/age", "terminal window", "repeated wide+delay"], fill="#e5dbff")
-    s += box(110, 360, 270, 145, "작은 출력 상태", ["flip pulse", "maximum amplitude code", "abnormal flags"], fill="#fff9db")
-    s += box(465, 360, 270, 145, "60초 파형 증거", ["code sum/count", "width/energy events", "repeated delay count"], fill="#fff3bf")
-    s += box(820, 360, 270, 145, "Class 상태 입력", ["signed contribution", "Snapshot morphology", "Final aggregate"], fill="#d3f9d8")
+    s = canvas("파형 형태 경로", "박동 주변 파형을 유한 레지스터·계수기·코드로 압축")
+    s += box(40, 120, 250, 145, "기울기 방향", ["필터 기준", "이전 유효 부호 유지", "방향 전환 펄스"], fill="#e6fcf5")
+    s += box(325, 120, 250, 145, "최대 진폭", ["예측 박동 관찰 구간", "문턱 bank 코드", "최댓값+후속 유지"], fill="#e7f5ff")
+    s += box(610, 110, 270, 165, "QRS MAF", ["박동 전 120 + 후 100", "폭 · 전환 · 에너지", "pre-QRS 활동"], fill="#fff4e6")
+    s += box(915, 110, 250, 165, "말단 지연", ["활동 시작/나이", "말단 관찰 구간", "반복 폭+지연"], fill="#e5dbff")
+    s += box(110, 360, 270, 145, "작은 출력 상태", ["전환 펄스", "최대 진폭 코드", "이상 표시"], fill="#fff9db")
+    s += box(465, 360, 270, 145, "60초 파형 증거", ["코드 합/횟수", "폭/에너지 사건", "반복 지연 횟수"], fill="#fff3bf")
+    s += box(820, 360, 270, 145, "클래스 상태 입력", ["부호 기여값", "Snapshot 파형 형태", "Final 집계"], fill="#d3f9d8")
     s += arrow(380,432,465,432) + arrow(735,432,820,432)
-    footer(s, "전체 beat waveform을 저장하지 않고 finite observation state만 유지")
+    footer(s, "전체 박동 파형을 저장하지 않고 유한 관찰 상태만 유지")
     write_svg("FIG-14_morphology_path.svg", s)
 
     figures = [
