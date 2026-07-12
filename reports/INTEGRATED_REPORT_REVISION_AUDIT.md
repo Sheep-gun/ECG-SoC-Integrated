@@ -82,14 +82,14 @@
 
 ## 전체 연구·검증 workflow 정리
 
-- 전체 workflow는 MATLAB 기준 stream에서 XMODEL과 Digital SNN RTL IP로 개발 경로가 분기되고, 통합·benchmark·FPGA 근거가 최종 보고서로 합류하도록 구성하였다.
-- 단순 일렬 배치를 제거하고 실제 산출물 의존관계에 맞는 fork와 merge를 표시하였다. 블록 내부 설명은 제목 수준으로 유지하였다.
+- 전체 workflow는 세로형 flowchart로 바꾸고 XMODEL·Digital SNN RTL 개발, AFE–RTL 통합·benchmark·FPGA 검증과 최종 보고서까지 한 화면에 배치하였다.
+- 세 검증 근거는 하나의 설계·통합 판단 마름모로 모이며, 불충족 시 모델·RTL 수정 loop로 돌아가고 충족 시 잠금 최종시험으로 내려간다.
 - final-test 재튜닝 금지, physical AFE, 24시간 성능과 clinical validation 경계는 본문과 caption에 유지하였다.
 
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 693 rules, 0 conflicts, chars 64,695, figures 19, evidence rows 68
+- `tools/check_integrated_technical_report.py`: PASS — 696 rules, 0 conflicts, chars 64,729, figures 19, evidence rows 68
 - `tools/check_integrated_repository.py`: PASS — 293 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증
