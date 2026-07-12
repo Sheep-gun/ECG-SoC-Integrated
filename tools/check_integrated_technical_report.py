@@ -236,7 +236,7 @@ def main() -> int:
     check("FIG-12 scoring and 30-Snapshot accumulation explicit", "Feature Accumulation" in figure12 and "30-Snapshot" in figure12 and "30 min Final" in figure12)
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
-        "FIG-02_overall_workflow.svg": ["공개 ECG 데이터", "MATLAB AFE·ADC 사전검증", "AFE·ADC XMODEL 검증", "Digital SNN RTL IP", "AFE–RTL 통합 검증", "Accelerator Benchmark", "FPGA·IP 구현 검증", "설계·통합", "검증 기준 충족?", "모델·RTL 수정", "아니오", "예", "Locked Final Test", "최종 결과·보고서"],
+        "FIG-02_overall_workflow.svg": ["공개 ECG 데이터", "Record-wise Train / Validation /", "Locked Test Split", "Train / Validation Data Only", "MATLAB AFE·ADC 사전검증", "AFE–ADC XMODEL 검증", "Digital SNN RTL IP", "AFE–RTL 통합 검증", "Accelerator Benchmark", "FPGA Implementation", "&amp; Board Replay", "세 검증 결과", "설계·통합", "검증 기준 충족?", "XMODEL / RTL 수정", "아니오", "예", "Design Lock", "Locked Final Test", "잠금된 Test 데이터만 최초 1회 사용", "최종 결과·보고서"],
         "FIG-04_multitimescale_architecture.svg": ["다중 시간축 구조", "사건과 지속 상태", "60초 Snapshot", "30분 Final Membrane"],
         "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
@@ -250,7 +250,9 @@ def main() -> int:
             check(f"reader-facing figure label {filename}: {label}", label in svg)
     figure02 = (ROOT / "figures" / "final" / "FIG-02_overall_workflow.svg").read_text(encoding="utf-8")
     figure15 = (ROOT / "figures" / "final" / "FIG-15_analog_signal_flow_nonideal_models.svg").read_text(encoding="utf-8")
-    check("FIG-02 compact validation flow with correction loop", "<polygon" in figure02 and figure02.count("<polyline") >= 16 and figure02.count("<circle") >= 4)
+    check("FIG-02 data-separated validation flow with pre-lock correction loop", "<polygon" in figure02 and figure02.count("<polyline") >= 24 and figure02.count("<circle") >= 9)
+    check("FIG-02 locked test first appears after Design Lock", figure02.index("Design Lock") < figure02.index("Locked Final Test") and "잠금된 Test 데이터만 최초 1회 사용" in figure02)
+    check("FIG-02 correction loop returns to XMODEL and RTL rather than MATLAB", "XMODEL / RTL 수정" in figure02 and "MATLAB / RTL 수정" not in figure02)
     check("FIG-15 differential merge and stress injection", "<polygon" in figure15 and figure15.count('stroke-dasharray="8 7"') >= 6)
     old_english_figure_phrases = ["Sample / Beat", "60-second Snapshot", "Event / State", "Signed-stream handoff integrity", "Locked classification result", "old state 읽기", "Peak 진폭", "Class 상태 입력"]
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)

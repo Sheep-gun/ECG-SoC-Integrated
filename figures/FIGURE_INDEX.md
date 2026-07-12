@@ -20,9 +20,9 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `source_of_truth/upstream_commits.yaml`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: MATLAB 이후 XMODEL·RTL 개발과 세 검증 경로가 단일 판단 gate로 모이고 잠금 최종시험으로 이어지는 전체 workflow
-- Evidence scope: compact portrait validation flow with one engineering correction loop
-- Limitations: analog layers are model-based; the locked final test remains outside the correction loop
+- Caption: Record-wise 분할 뒤 Train·Validation만 MATLAB과 XMODEL·RTL 설계·검증에 사용하고, 잠금 Test는 Design Lock 뒤 최초 1회 최종시험에만 사용하는 전체 workflow
+- Evidence scope: data-separated portrait validation flow with parallel XMODEL/RTL paths and one pre-lock correction loop
+- Limitations: analog layers are model-based; locked test data remain isolated until the one-time final test after design lock
 
 ## FIG-03
 

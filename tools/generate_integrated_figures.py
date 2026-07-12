@@ -172,50 +172,70 @@ def main() -> int:
     footer(s, "설계 동기를 설명하는 그림이며 임상 진단을 뜻하지 않음")
     write_svg("FIG-01_long_window_motivation.svg", s)
 
-    # FIG-02: compact portrait flowchart following the report's validation flow.
-    s = paper_canvas(1200, 1150, "Public ECG data pass through MATLAB prevalidation, parallel XMODEL and RTL development, three verification tracks, a single engineering gate, locked final test, and final reporting")
-    s += paper_box(430, 35, 340, 70, "공개 ECG 데이터", "#eff6ff", "#2563a8")
-    s += paper_box(400, 145, 400, 75, "MATLAB AFE·ADC 사전검증", "#dbeafe", "#2563a8")
-    s += paper_path([(600, 105), (600, 145)])
+    # FIG-02: data-separated workflow with an explicit pre-lock correction loop.
+    s = paper_canvas(1500, 1450, "Public ECG data are split record-wise; train and validation data feed MATLAB, parallel XMODEL and RTL work, and three verification tracks, while locked test data remain isolated until one final test after design lock")
+    s += paper_box(550, 30, 400, 70, "공개 ECG 데이터", "#eff6ff", "#2563a8")
+    s += paper_box(450, 130, 600, 90, ["Record-wise Train / Validation /", "Locked Test Split"], "#eff6ff", "#2563a8")
+    s += paper_path([(750, 100), (750, 130)])
 
-    s.append(paper_dot(600, 270))
-    s += paper_path([(600, 220), (600, 270)], arrow=False)
-    s += paper_path([(600, 270), (330, 270), (330, 315)])
-    s += paper_path([(600, 270), (870, 270), (870, 315)])
-    s += paper_box(160, 315, 340, 80, "AFE·ADC XMODEL 검증", "#dbeafe", "#2563a8")
-    s += paper_box(700, 315, 340, 80, "Digital SNN RTL IP", "#dbeafe", "#2563a8")
+    # Only train/validation data enter MATLAB and every pre-lock design/verification stage.
+    s += paper_box(540, 255, 420, 60, "Train / Validation Data Only", "#dbeafe", "#2563a8")
+    s += paper_path([(750, 220), (750, 255)])
+    s += paper_box(540, 355, 420, 80, "MATLAB AFE·ADC 사전검증", "#dbeafe", "#2563a8")
+    s += paper_path([(750, 315), (750, 355)])
 
-    s.append(paper_dot(870, 440))
-    s += paper_path([(870, 395), (870, 440)], arrow=False)
-    s.append(paper_dot(220, 455))
-    s += paper_path([(330, 395), (330, 455), (220, 455)], arrow=False)
-    s += paper_path([(870, 440), (220, 440), (220, 455)], arrow=False)
-    s += paper_box(70, 485, 300, 75, "AFE–RTL 통합 검증", "#ede9fe", "#6b46c1")
-    s += paper_box(450, 485, 300, 75, "Accelerator Benchmark", "#ede9fe", "#6b46c1")
-    s += paper_box(830, 485, 300, 75, "FPGA·IP 구현 검증", "#ede9fe", "#6b46c1")
-    s += paper_path([(220, 455), (220, 485)])
-    s += paper_path([(870, 440), (600, 440), (600, 485)])
-    s += paper_path([(870, 440), (980, 440), (980, 485)])
+    # The locked test branch is parked at the right edge and has no pre-lock connection.
+    s += paper_box(1190, 255, 260, 70, ["Locked Test Data", "설계 단계 미사용"], "#fef3c7", "#b7791f")
+    s += paper_path([(1050, 175), (1320, 175), (1320, 255)])
 
-    s += paper_path([(220, 560), (220, 610), (600, 610)], arrow=False)
-    s += paper_path([(600, 560), (600, 610)], arrow=False)
-    s += paper_path([(980, 560), (980, 610), (600, 610)], arrow=False)
-    s.append(paper_dot(600, 610))
-    s += paper_path([(600, 610), (600, 635)])
-    s.append('<polygon points="600,635 820,720 600,805 380,720" fill="#dcfce7" stroke="#2f855a" stroke-width="2.5"/>')
-    s.append(txt(600, 713, "설계·통합", 19, "#182230", 700, "middle"))
-    s.append(txt(600, 741, "검증 기준 충족?", 19, "#182230", 700, "middle"))
+    # MATLAB output starts two parallel implementation/model paths.
+    s.append(paper_dot(750, 485))
+    s += paper_path([(750, 435), (750, 485)], arrow=False)
+    s += paper_path([(750, 485), (370, 485), (370, 525)])
+    s += paper_path([(750, 485), (1030, 485), (1030, 525)])
+    s += paper_box(180, 525, 380, 85, "AFE–ADC XMODEL 검증", "#dbeafe", "#2563a8")
+    s += paper_box(840, 525, 380, 85, "Digital SNN RTL IP", "#dbeafe", "#2563a8")
 
-    s += paper_box(900, 680, 250, 80, "모델·RTL 수정", "#fee2e2", "#c53030")
-    s += paper_path([(820, 720), (900, 720)])
-    s.append(txt(852, 704, "아니오", 15, "#475467", 700, "middle"))
-    s += paper_path([(1150, 720), (1170, 720), (1170, 250), (600, 250), (600, 270)])
+    # Integration accepts both XMODEL and RTL. Benchmark and FPGA branches accept RTL only.
+    s += paper_box(270, 710, 440, 90, "AFE–RTL 통합 검증", "#ede9fe", "#6b46c1")
+    s += paper_box(760, 710, 280, 90, "Accelerator Benchmark", "#ede9fe", "#6b46c1")
+    s += paper_box(1090, 710, 330, 90, ["FPGA Implementation", "& Board Replay"], "#ede9fe", "#6b46c1")
+    s += paper_path([(370, 610), (370, 680), (400, 680), (400, 710)])
+    s += paper_path([(1030, 610), (1030, 655)], arrow=False)
+    s += paper_path([(620, 655), (1255, 655)], arrow=False)
+    for x in (620, 900, 1030, 1255):
+        s.append(paper_dot(x, 655))
+    s += paper_path([(620, 655), (620, 710)])
+    s += paper_path([(900, 655), (900, 710)])
+    s += paper_path([(1255, 655), (1255, 710)])
 
-    s += paper_box(430, 855, 340, 70, "Locked Final Test", "#fef3c7", "#b7791f")
-    s += paper_path([(600, 805), (600, 855)])
-    s.append(txt(630, 835, "예", 15, "#475467", 700))
-    s += paper_box(430, 985, 340, 70, "최종 결과·보고서", "#dbeafe", "#2563a8")
-    s += paper_path([(600, 925), (600, 985)])
+    # Three verification results converge on one pre-lock engineering gate.
+    for x in (490, 900, 1255):
+        s += paper_path([(x, 800), (x, 850)], arrow=False)
+        s.append(paper_dot(x, 850))
+    s += paper_path([(490, 850), (1255, 850)], arrow=False)
+    s.append(paper_dot(750, 850))
+    s += paper_path([(750, 850), (750, 890)])
+    s.append(txt(750, 840, "세 검증 결과", 15, "#475467", 700, "middle"))
+    s.append('<polygon points="750,890 1000,980 750,1070 500,980" fill="#dcfce7" stroke="#2f855a" stroke-width="2.5"/>')
+    s.append(txt(750, 973, "설계·통합", 19, "#182230", 700, "middle"))
+    s.append(txt(750, 1001, "검증 기준 충족?", 19, "#182230", 700, "middle"))
+
+    # A failed gate returns to the XMODEL/RTL fork, never to MATLAB pre-validation.
+    s += paper_box(80, 940, 320, 80, "XMODEL / RTL 수정", "#fee2e2", "#c53030")
+    s += paper_path([(500, 980), (400, 980)])
+    s.append(txt(450, 962, "아니오", 15, "#475467", 700, "middle"))
+    s += paper_path([(80, 980), (30, 980), (30, 485), (750, 485)])
+
+    # Only a passed and locked design can consume the isolated test branch once.
+    s += paper_box(570, 1120, 360, 70, "Design Lock", "#dbeafe", "#2563a8")
+    s += paper_path([(750, 1070), (750, 1120)])
+    s.append(txt(780, 1100, "예", 15, "#475467", 700))
+    s += paper_box(490, 1230, 520, 90, ["Locked Final Test", "잠금된 Test 데이터만 최초 1회 사용"], "#fef3c7", "#b7791f")
+    s += paper_path([(750, 1190), (750, 1230)])
+    s += paper_path([(1320, 325), (1460, 325), (1460, 1275), (1010, 1275)])
+    s += paper_box(570, 1360, 360, 65, "최종 결과·보고서", "#dbeafe", "#2563a8")
+    s += paper_path([(750, 1320), (750, 1360)])
     s.append('</svg>')
     write_svg("FIG-02_overall_workflow.svg", s)
 
@@ -449,7 +469,7 @@ def main() -> int:
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
-        ("FIG-02", "figures/final/FIG-02_overall_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "MATLAB 이후 XMODEL·RTL 개발과 세 검증 경로가 단일 판단 gate로 모이고 잠금 최종시험으로 이어지는 전체 workflow", "compact portrait validation flow with one engineering correction loop", "analog layers are model-based; the locked final test remains outside the correction loop"),
+        ("FIG-02", "figures/final/FIG-02_overall_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation만 MATLAB과 XMODEL·RTL 설계·검증에 사용하고, 잠금 Test는 Design Lock 뒤 최초 1회 최종시험에만 사용하는 전체 workflow", "data-separated portrait validation flow with parallel XMODEL/RTL paths and one pre-lock correction loop", "analog layers are model-based; locked test data remain isolated until the one-time final test after design lock"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
         ("FIG-04", "figures/final/FIG-04_multitimescale_architecture.svg", "양건", ["components/digital_accelerator/FINAL_REPORT_KR.md"], [DIGITAL], "60초 Snapshot과 30분 Final Membrane 구조", "locked digital architecture", "SNN-inspired, not trained deep SNN"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),

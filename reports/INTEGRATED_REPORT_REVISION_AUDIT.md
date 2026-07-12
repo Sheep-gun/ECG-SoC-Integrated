@@ -82,8 +82,9 @@
 
 ## 전체 연구·검증 workflow 정리
 
-- 전체 workflow는 세로형 flowchart로 바꾸고 XMODEL·Digital SNN RTL 개발, AFE–RTL 통합·benchmark·FPGA 검증과 최종 보고서까지 한 화면에 배치하였다.
-- 세 검증 근거는 하나의 설계·통합 판단 마름모로 모이며, 불충족 시 모델·RTL 수정 loop로 돌아가고 충족 시 잠금 최종시험으로 내려간다.
+- 전체 workflow는 공개 ECG 직후 Record-wise Train·Validation·Locked Test 분할을 표시하고, Train·Validation만 MATLAB과 사전 잠금 설계·검증 단계에 들어가도록 정리하였다.
+- XMODEL과 Digital SNN RTL은 병렬로 분기한다. AFE–RTL 통합 검증은 두 경로를 함께 받고, Accelerator Benchmark와 FPGA Implementation & Board Replay는 Digital RTL에서만 분기한다.
+- 세 검증 결과는 하나의 설계·통합 판단 마름모로 모인다. 불충족 시 MATLAB이 아니라 XMODEL·RTL 수정 단계로 돌아가며, 충족 시 Design Lock을 거쳐 격리된 Locked Test를 최초 1회만 사용한다.
 - final-test 재튜닝 금지, physical AFE, 24시간 성능과 clinical validation 경계는 본문과 caption에 유지하였다.
 
 ## 최종 자동 검증

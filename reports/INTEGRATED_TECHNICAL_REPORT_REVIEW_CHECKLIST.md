@@ -70,8 +70,10 @@
 
 ## Artifact와 자동 검증
 
-- [x] 전체 workflow 그림은 XMODEL·RTL 개발, 통합·benchmark·FPGA 검증, 단일 판단 gate, 수정 loop와 잠금 최종시험을 한 화면에 표시한다.
-- [x] 세부 검증 조건과 final-test 재튜닝 금지는 그림 안에 반복하지 않고 본문과 caption에서 명시한다.
+- [x] 전체 workflow 그림은 공개 ECG 직후 Record-wise Train·Validation·Locked Test 분할을 표시한다.
+- [x] Train·Validation만 MATLAB과 사전 잠금 설계·검증에 사용하고, Locked Test는 Design Lock 뒤 최초 1회 최종시험에만 사용함을 표시한다.
+- [x] XMODEL·RTL 병렬 분기, 두 경로가 입력되는 AFE–RTL 통합, RTL 전용 benchmark·FPGA board replay 분기를 교차 배선 없이 표시한다.
+- [x] 세 검증 결과를 단일 판단 gate로 모으고, 불충족 loop가 MATLAB이 아니라 XMODEL·RTL 단계로 돌아가도록 표시한다.
 - [x] MATLAB `907f7e1`, XMODEL `4756a508`, digital `c6b80de` provenance를 유지한다.
 - [x] evidence map의 모든 path와 claim ID가 유효하다.
 - [x] figure generator가 15개 SVG와 상속 MATLAB PNG 7개, index와 data를 생성한다.
