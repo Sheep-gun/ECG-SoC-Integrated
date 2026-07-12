@@ -44,6 +44,8 @@
 - [x] 입력 SHA, AFE→RTL과 FPGA의 36/36 scope를 분리하고 기능 등가성을 분류 정확도 100%로 표현하지 않는다.
 - [x] database–class confounding과 physical PCB/silicon/post-layout/clinical gap을 명시한다.
 - [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
+- [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
+- [x] 30분 prototype 결과를 임상적 24시간 Holter의 대체·동등성으로 해석하지 않고, 24시간 확장 시 Final Membrane 재검증이 필요함을 명시한다.
 - [x] accelerator benchmark 수치는 `PENDING_EXTERNAL_BENCHMARK_IMPORT` 상태를 유지한다.
 
 ## Artifact와 자동 검증

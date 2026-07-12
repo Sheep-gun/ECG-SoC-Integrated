@@ -238,6 +238,18 @@ def main() -> int:
     check("validation boundary", "검증 결과 32/32=100.00%는 Final Membrane 모델 선택" in text and "최종 일반화 성능으로 승격하지 않는다" in text)
     check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
     check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
+    for term in [
+        "원래 설계 목표는 이러한 24시간 Holter",
+        "48개의 **30분 excerpt**",
+        "현재 공통 비교 단위로 선택",
+        "padding·반복·추정 데이터를 만들지 않도록",
+        "30분 결과가 임상적 24시간 Holter를 대체하거나 동등하다는 뜻은 아니다",
+        "24시간 동안 드물게 나타나는 사건을 검증하지는 못한다",
+        "CLM-035",
+    ]:
+        check(f"30-minute window rationale {term}", term in text)
+    dataset_method = (ROOT / "docs" / "DATASET_AND_EVALUATION_KR.md").read_text(encoding="utf-8-sig")
+    check("dataset method records 30-minute rationale", all(term in dataset_method for term in ["24/48시간 Holter형", "48개의 half-hour", "1,800,000 samples", "임상적 24시간 Holter를 대체하거나 동등"]), "dataset window rationale incomplete")
     check("physical boundary", "실제 AFE/ADC" in text and ("fabricated SoC" in text or "fabricated silicon" in text))
 
     metrics = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
@@ -249,7 +261,7 @@ def main() -> int:
         rows = list(csv.DictReader(handle))
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}
     check("evidence-map schema", bool(rows) and set(rows[0]) == required_columns)
-    check("evidence-map coverage", len(rows) >= 53, len(rows))
+    check("evidence-map coverage", len(rows) >= 54, len(rows))
     valid_sections = {"초록", "부록"} | {str(i) for i in range(1, 10)} | {s.split()[0] for s in SUBHEADINGS}
     for row in rows:
         check(f"map section {row['statement_id']}", row["section"] in valid_sections, row["section"])

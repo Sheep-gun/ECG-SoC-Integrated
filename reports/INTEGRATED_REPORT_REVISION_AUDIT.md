@@ -14,12 +14,12 @@
 | 항목 | 개정 결과 |
 |---|---:|
 | 본문 장 | 9 |
-| 본문 문자 수 | 50,861 |
+| 본문 문자 수 | 52,463 |
 | 생성 SVG | 15 |
 | 상속 MATLAB PNG | 7 |
 | 본문 참조 그림 | 16 |
-| Evidence map 행 | 53 |
-| Claim registry 행 | 34 |
+| Evidence map 행 | 54 |
+| Claim registry 행 | 35 |
 | Unresolved artifact | 1 |
 
 ## AFE·ADC 보강 내용
@@ -38,6 +38,8 @@
 
 ## 유지한 결과와 경계
 
+- 24시간 Holter형 관찰은 설계 동기이고, MIT-BIH Arrhythmia의 30분 excerpt를 포함한 서로 다른 길이의 공개 원천을 같은 실제 시간으로 비교하기 위해 현재 공통 창을 30분으로 고정했음을 명시
+- 30분 prototype을 임상적 24시간 Holter와 동등하거나 이를 대체하는 결과로 해석하지 않으며, 24시간 확장 시 Final Membrane 누적 폭·문턱값·간헐 사건 영향을 재검증
 - 최종 30분 구간 29/36=80.56%, record-majority 16/19=84.21%
 - Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns
 - AFE 입력 SHA256, canonical AFE→RTL pred/mem, FPGA pred/mem의 각 36/36 범위
@@ -47,7 +49,7 @@
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 15 SVG + 상속 MATLAB PNG 7개
-- `tools/check_integrated_technical_report.py`: PASS — 507 rules, 0 conflicts, chars 50,861, figures 16, evidence rows 53
-- `tools/check_integrated_repository.py`: PASS — 227 rules, 0 conflicts
+- `tools/check_integrated_technical_report.py`: PASS — 518 rules, 0 conflicts, chars 52,463, figures 16, evidence rows 54
+- `tools/check_integrated_repository.py`: PASS — 228 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

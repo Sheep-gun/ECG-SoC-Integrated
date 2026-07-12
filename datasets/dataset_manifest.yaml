@@ -51,6 +51,7 @@
       "records_used": ["100", "102", "104", "105", "106", "107", "108", "109", "111", "114", "116", "118", "119", "124", "200", "202", "205", "207", "208", "209", "212", "213", "214", "215", "217", "219", "220", "222", "223", "228", "231", "232", "233", "234"],
       "expected_source_files": "all mitdb/1.0.0 entries in datasets/SHA256SUMS_EXPECTED.txt",
       "source_sample_rate_hz": 360,
+      "source_record_duration_note": "48 half-hour excerpts selected from a set of 24-hour ambulatory ECG recordings; this constrains the current common four-class evaluation window to 30 minutes",
       "local_expected_destination": "mitdb/1.0.0",
       "preprocessing_entry_point": "components/afe_xmodel/algorithm/make_60s_wfdb_chunks.py",
       "derived_artifacts_retained": ["components/afe_xmodel/docs/integration_latest", "components/digital_accelerator/data/final_test", "components/digital_accelerator/reports/final"],

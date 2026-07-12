@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 227
+- Rules checked: 228
 - Conflicts found: 0
 - Benchmark placeholder: PASS (all fields null)
 
@@ -188,6 +188,7 @@
 - PASS — claim evidence exists: CLM-031
 - PASS — claim evidence exists: CLM-032
 - PASS — claim evidence exists: CLM-033
+- PASS — claim evidence exists: CLM-035
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — streaming inventory columns

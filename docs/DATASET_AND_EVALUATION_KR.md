@@ -15,6 +15,12 @@
 
 이 label은 현재 engineering evaluation의 target이며 동일 acquisition cohort의 네 임상 진단을 의미하지 않는다.
 
+## 30분 공통 평가 창의 선택
+
+프로젝트의 원래 동기는 24/48시간 Holter형 장시간 관찰을 streaming state로 처리하는 것이다. 그러나 네 클래스는 길이가 같은 단일 cohort가 아니라 서로 다른 공개 데이터베이스에서 왔고, ARR 원천인 MIT-BIH Arrhythmia Database v1.0.0은 48개의 half-hour ambulatory ECG excerpt로 구성된다. 이 excerpt들은 원래 24시간 ambulatory ECG 집합에서 선택된 자료다. 근거는 `EXT-002`, `EXT-005`와 고정 PhysioNet 페이지다.
+
+특정 클래스에만 없는 시간을 0으로 채우거나 같은 신호를 반복하지 않고 모든 클래스에 동일한 실제 관찰 길이를 적용하기 위해 현재 공통 창은 30분으로 고정했다. 구현 조건은 `60초 Snapshot × 30개`, 1 kSPS 기준 1,800,000 samples이며 `components/digital_accelerator/configs/final_submission_locked_model.json`과 `components/digital_accelerator/reports/final/final_metrics.json`에 고정되어 있다. 이는 데이터셋 제약에 따른 공학적 비교 단위이며 30분이 임상적 24시간 Holter를 대체하거나 동등하다는 주장이 아니다. 24시간으로 확장할 때는 누적 counter 폭만 늘리는 것이 아니라 Final Membrane 문턱값과 간헐 사건의 시간 희석을 다시 검증해야 한다.
+
 ## Split protocol
 
 Split unit은 `source_record_id`이다. 한 physical source record에서 생성된 모든 chunk는 train, validation, final-test 중 하나에만 속한다. 이 strict source-record-wise 원칙은 같은 record의 waveform characteristics가 여러 partition에 직접 중복되는 leakage를 방지한다.
