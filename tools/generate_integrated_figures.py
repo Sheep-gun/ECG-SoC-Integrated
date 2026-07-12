@@ -342,11 +342,26 @@ def main() -> int:
     ]
     for fid, source_name, output_name, caption in inherited_matlab_figures:
         figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence"))
+    figures.append((
+        "FIG-P05",
+        "figures/publication/FIG-P05_vivado_implementation/vivado_implementation_composite.svg",
+        "양건(통합 편집)",
+        [
+            "figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl",
+            "figures/publication/FIG-P05_vivado_implementation/evidence_paths.md",
+            "components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt",
+            "components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt",
+        ],
+        [DIGITAL, "INTEGRATED"],
+        "Vivado post-route Device View, MicroBlaze Block Design, worst setup path와 hierarchy별 자원/timing 요약",
+        "Vivado 2020.2, xc7a100tcsg324-1, FPGA placement/routing",
+        "not ASIC layout; pure RTL and MicroBlaze system timing are different scopes",
+    ))
     index = ["# Integrated figure index", "", "All figures are generated from verified non-benchmark evidence. Source data: `figures/source/figure_data.json`.", ""]
     for fid, path, owner, files, commits, caption, scope, limits in figures:
         index += [f"## {fid}", "", f"- File: `{path}`", f"- Owner: {owner}", f"- Source files: {', '.join(f'`{x}`' for x in files)}", f"- Source commits: {', '.join(commits)}", "- Source-data path: `figures/source/figure_data.json`", f"- Caption: {caption}", f"- Evidence scope: {scope}", f"- Limitations: {limits}", ""]
     (ROOT / "figures" / "FIGURE_INDEX.md").write_text("\n".join(index), encoding="utf-8")
-    print(f"generated/indexed {len(figures)} figures (15 SVG + 7 inherited MATLAB PNG)")
+    print(f"generated 22 figures (15 SVG + 7 inherited MATLAB PNG); indexed {len(figures)} including FIG-P05")
     return 0
 
 

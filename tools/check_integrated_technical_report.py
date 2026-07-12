@@ -211,7 +211,9 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("sixteen reader-facing figures", len(report_images) == 16, len(report_images))
+    check("seventeen reader-facing figures", len(report_images) == 17, len(report_images))
+    p05 = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation" / "vivado_implementation_composite.svg"
+    check("Vivado implementation publication figure", p05.is_file(), str(p05))
     for filename in REQUIRED_FIGURES:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)

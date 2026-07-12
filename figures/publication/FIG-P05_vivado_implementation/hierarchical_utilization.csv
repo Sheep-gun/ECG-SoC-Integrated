@@ -1,0 +1,9 @@
+﻿scope,hierarchy,instance,module,LUT,FF,BRAM_36K_equivalent,DSP,WNS_ns,claim_note
+MicroBlaze integrated post-route,MicroBlaze system,snn_ecg_mb_full_replay_i,snn_ecg_mb_full_replay,12494,8494,16,3,0.097,Reproduced integrated-system post-route scope
+MicroBlaze integrated post-route,MicroBlaze processor,microblaze_0,snn_ecg_mb_full_replay_microblaze_0_0,1477,1212,0,3,,Hierarchical resources within integrated-system run
+MicroBlaze integrated post-route,AXI sample feeder,sample_feeder_0,snn_ecg_mb_full_replay_sample_feeder_0_0,122,176,0,0,,Hierarchical resources within integrated-system run
+MicroBlaze integrated post-route,SNN accelerator AXI wrapper,snn_ecg_axi_accelerator_0,snn_ecg_mb_full_replay_snn_ecg_axi_accelerator_0_0,10485,6652,0,0,,Hierarchical resources within integrated-system run
+MicroBlaze integrated post-route,Pure classifier core in system,u_core,snn_ecg_mb_full_replay_snn_ecg_axi_accelerator_0_0_snn_ecg_30min_final_top,9712,5789,0,0,,Hierarchical resources within integrated-system run
+MicroBlaze integrated post-route,60 s Snapshot hierarchy,u_snapshot,snn_ecg_mb_full_replay_snn_ecg_axi_accelerator_0_0_snn_ecg_3feat_top,7689,3565,0,0,,Hierarchical resources within integrated-system run
+MicroBlaze integrated post-route,Final Membrane hierarchy,u_final,snn_ecg_mb_full_replay_snn_ecg_axi_accelerator_0_0_final_membrane_layer,1798,1042,0,0,,Hierarchical resources within integrated-system run
+Fixed standalone pure RTL reference,Pure RTL accelerator total,standalone implemented design,snn_ecg_30min_final_top,9719,5038,0,0,8.184,Fixed pure RTL claim; not MicroBlaze system timing

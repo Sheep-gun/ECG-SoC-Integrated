@@ -243,3 +243,14 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Caption: MATLAB nominal pre-validation role
 - Evidence scope: fixed MATLAB nominal reference figure
 - Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## FIG-P05
+
+- File: `figures/publication/FIG-P05_vivado_implementation/vivado_implementation_composite.svg`
+- Owner: 양건(통합 편집)
+- Source files: `figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl`, `figures/publication/FIG-P05_vivado_implementation/evidence_paths.md`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Vivado post-route Device View, MicroBlaze Block Design, worst setup path와 hierarchy별 자원/timing 요약
+- Evidence scope: Vivado 2020.2, xc7a100tcsg324-1, FPGA placement/routing
+- Limitations: not ASIC layout; pure RTL and MicroBlaze system timing are different scopes

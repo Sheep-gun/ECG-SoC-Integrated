@@ -1,0 +1,129 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sun Jul 12 21:41:04 2026
+| Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
+| Command      : report_timing -of_objects {{snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/qrs_energy_abn_count_reg[3]/C --> snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[29]/D}} -path_type full -file {C:/Users/YangGeon/SNN ECG Classifier/ECG-SoC-Integrated/figures/publication/FIG-P05_vivado_implementation/worst_setup_path.rpt}
+| Design       : snn_ecg_mb_full_replay_wrapper
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.097ns  (required time - arrival time)
+  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/qrs_energy_abn_count_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[29]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             sys_clk_pin
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (sys_clk_pin rise@10.000ns - sys_clk_pin rise@0.000ns)
+  Data Path Delay:        9.810ns  (logic 4.892ns (49.869%)  route 4.918ns (50.131%))
+  Logic Levels:           15  (CARRY4=9 LUT3=2 LUT4=2 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.120ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.927ns = ( 14.927 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.234ns
+    Clock Pessimism Removal (CPR):    0.187ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk_pin rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                                                                r  CLK100MHZ_IBUF_inst/I
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, routed)           2.025     3.506    CLK100MHZ_IBUF
+    BUFGCTRL_X0Y16                                                    r  CLK100MHZ_IBUF_BUFG_inst/I
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.096     3.602 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=8586, routed)        1.631     5.234    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/s_axi_aclk
+    SLICE_X51Y57         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/qrs_energy_abn_count_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X51Y57         FDRE (Prop_fdre_C_Q)         0.456     5.690 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/qrs_energy_abn_count_reg[3]/Q
+                         net (fo=5, routed)           0.833     6.523    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/qrs_energy_abn_count_reg[3]
+    SLICE_X50Y56                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[4]_i_23/I1
+    SLICE_X50Y56         LUT3 (Prop_lut3_I1_O)        0.157     6.680 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[4]_i_23/O
+                         net (fo=2, routed)           0.816     7.496    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[4]_i_23_n_0
+    SLICE_X50Y57                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[4]_i_27/I3
+    SLICE_X50Y57         LUT4 (Prop_lut4_I3_O)        0.355     7.851 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[4]_i_27/O
+                         net (fo=1, routed)           0.000     7.851    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[4]_i_27_n_0
+    SLICE_X50Y57                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[4]_i_15/S[0]
+    SLICE_X50Y57         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.513     8.364 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[4]_i_15/CO[3]
+                         net (fo=1, routed)           0.000     8.364    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[4]_i_15_n_0
+    SLICE_X50Y58                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[8]_i_15/CI
+    SLICE_X50Y58         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.481 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[8]_i_15/CO[3]
+                         net (fo=1, routed)           0.000     8.481    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[8]_i_15_n_0
+    SLICE_X50Y59                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[12]_i_15/CI
+    SLICE_X50Y59         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219     8.700 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[12]_i_15/O[0]
+                         net (fo=3, routed)           1.119     9.819    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[12]_i_15_n_7
+    SLICE_X49Y48                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_18/I1
+    SLICE_X49Y48         LUT3 (Prop_lut3_I1_O)        0.295    10.114 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_18/O
+                         net (fo=2, routed)           0.610    10.724    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_18_n_0
+    SLICE_X51Y47                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_9/I4
+    SLICE_X51Y47         LUT5 (Prop_lut5_I4_O)        0.149    10.873 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_9/O
+                         net (fo=2, routed)           0.807    11.680    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_9_n_0
+    SLICE_X51Y52                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_13/I0
+    SLICE_X51Y52         LUT6 (Prop_lut6_I0_O)        0.332    12.012 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_13/O
+                         net (fo=1, routed)           0.000    12.012    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology[12]_i_13_n_0
+    SLICE_X51Y52                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[12]_i_2/S[1]
+    SLICE_X51Y52         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    12.562 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[12]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    12.562    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[12]_i_2_n_0
+    SLICE_X51Y53                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[16]_i_2/CI
+    SLICE_X51Y53         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.676 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[16]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    12.676    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[16]_i_2_n_0
+    SLICE_X51Y54                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[20]_i_2/CI
+    SLICE_X51Y54         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.790 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[20]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    12.790    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[20]_i_2_n_0
+    SLICE_X51Y55                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[24]_i_2/CI
+    SLICE_X51Y55         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.124 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/sum_morphology_reg[24]_i_2/O[1]
+                         net (fo=4, routed)           0.733    13.856    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/morphology_evidence_count[25]
+    SLICE_X53Y54                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology[27]_i_8/I0
+    SLICE_X53Y54         LUT4 (Prop_lut4_I0_O)        0.303    14.159 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology[27]_i_8/O
+                         net (fo=1, routed)           0.000    14.159    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology[27]_i_8_n_0
+    SLICE_X53Y54                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[27]_i_1/S[1]
+    SLICE_X53Y54         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    14.709 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[27]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    14.709    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[27]_i_1_n_0
+    SLICE_X53Y55                                                      r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[31]_i_1/CI
+    SLICE_X53Y55         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    15.043 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[31]_i_1/O[1]
+                         net (fo=1, routed)           0.000    15.043    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[31]_i_1_n_6
+    SLICE_X53Y55         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[29]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk_pin rise edge)
+                                                     10.000    10.000 r  
+    E3                                                0.000    10.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    10.000    CLK100MHZ
+    E3                                                                r  CLK100MHZ_IBUF_inst/I
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    11.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, routed)           1.920    13.331    CLK100MHZ_IBUF
+    BUFGCTRL_X0Y16                                                    r  CLK100MHZ_IBUF_BUFG_inst/I
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    13.422 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=8586, routed)        1.504    14.927    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/s_axi_aclk
+    SLICE_X53Y55         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[29]/C
+                         clock pessimism              0.187    15.114    
+                         clock uncertainty           -0.035    15.078    
+    SLICE_X53Y55         FDRE (Setup_fdre_C_D)        0.062    15.140    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[29]
+  -------------------------------------------------------------------
+                         required time                         15.140    
+                         arrival time                         -15.043    
+  -------------------------------------------------------------------
+                         slack                                  0.097    
+
+
+
+

@@ -1,0 +1,6 @@
+field,value
+startpoint,snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/qrs_energy_abn_count_reg[3]/C
+endpoint,snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_morphology_reg[29]/D
+path_delay,9.810
+requirement,10.000
+slack,0.097
