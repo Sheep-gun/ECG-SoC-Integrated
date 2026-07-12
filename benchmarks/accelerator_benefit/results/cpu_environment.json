@@ -1,17 +1,23 @@
 {
-  "environment_id": "windows_no_board_2026-07-12",
+  "environment_id": "python_exact_single_process_windows",
+  "status": "COMPLETED",
   "cpu_model": "AMD Ryzen 9 7940HX with Radeon Graphics",
   "os": "Windows-11-10.0.26200-SP0",
   "python_version": "3.12.13",
   "python_executable": "C:\\Users\\YangGeon\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
   "numpy_version": "2.3.5",
   "processes": 1,
+  "warmups_per_case": 3,
+  "measured_repetitions_per_case": 10,
+  "timer": "time.perf_counter_ns",
+  "canonical_sample_gap_cycles": 2,
+  "post_done_ticks": 37,
   "thread_environment": {
-    "OMP_NUM_THREADS": "1 (benchmark-required)",
-    "MKL_NUM_THREADS": "1 (benchmark-required)",
-    "OPENBLAS_NUM_THREADS": "1 (benchmark-required)",
-    "NUMEXPR_NUM_THREADS": "1 (benchmark-required)"
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
   },
-  "status": "NOT_COMPLETED_NO_CURRENT_EXACT_PYTHON_PATH",
-  "evidence": "reports/PYTHON_BASELINE_NOT_COMPLETED.md"
+  "kernel_scope": "samples already loaded in RAM through final result",
+  "end_to_end_scope": "input file open/read/parse through final result"
 }

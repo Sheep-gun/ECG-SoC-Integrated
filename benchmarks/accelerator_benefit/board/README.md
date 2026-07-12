@@ -10,7 +10,7 @@ Build:
 python benchmarks/accelerator_benefit/board/build_instrumented_app.py
 ```
 
-The local Vitis 2020.2 build was attempted but BSP generation failed because the installed toolchain lacks `microblazeeb-xilinx-elf/usr/lib/le/bs/m/libgloss.a`. See `build/build_status.json`.
+The instrumented ELF was built with Vitis 2020.2 (`benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf`, SHA256 `c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16`). Physical execution remains PENDING_BOARD.
 
 Future execution after repairing the Vitis installation and connecting a Nexys A7-100T:
 

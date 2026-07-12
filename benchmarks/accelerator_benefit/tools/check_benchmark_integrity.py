@@ -29,6 +29,20 @@ def digest(path: Path) -> str:
     return h.hexdigest()
 
 
+def check_repetitions(rows: list[dict[str, str]], scope: str, failures: list[str]) -> None:
+    by_case: dict[str, list[dict[str, str]]] = {}
+    for row in rows:
+        by_case.setdefault(row.get("case_id", ""), []).append(row)
+        if row.get("sample_count") != "1800000":
+            failures.append(f"{scope} {row.get('case_id')}: sample_count != 1800000")
+    if len(by_case) != 36:
+        failures.append(f"{scope} case count {len(by_case)} != 36")
+    expected_repeats = {str(i) for i in range(10)}
+    for case_id, case_rows in by_case.items():
+        if len(case_rows) != 10 or {row.get("repeat_id") for row in case_rows} != expected_repeats:
+            failures.append(f"{scope} {case_id}: repetitions are not exactly 0..9")
+
+
 def main() -> int:
     failures: list[str] = []
     hashes = {row["artifact"]: row["sha256"] for row in read_csv(RESULTS / "immutable_artifact_hashes.csv")}
@@ -93,7 +107,10 @@ def main() -> int:
             if row.get("output_equivalence") != "PENDING_BOARD":
                 failures.append(f"{row.get('implementation')}: pending equivalence misreported")
         speedup = row.get("speedup_vs_python_kernel")
-        if speedup not in ("", "N/A"):
+        compatible_speedup = row.get("implementation") in {
+            "Python integer kernel", "C/C++ exact RTL translation", "Pure RTL canonical cycle-derived",
+        }
+        if speedup not in ("", "N/A") and not compatible_speedup:
             failures.append(f"{row.get('implementation')}: incompatible-scope speedup present")
         if row.get("implementation") == "Existing FPGA functional replay" and row.get("latency_ms_median") != "N/A":
             failures.append("existing UART evidence incorrectly reports latency")
@@ -108,14 +125,48 @@ def main() -> int:
         if row["implementation"] == "CPU" and not row["status"].startswith("N/A"):
             failures.append("CPU energy reported without counter")
 
+    board_build_status = json.loads((BENCH / "board/build/build_status.json").read_text(encoding="utf-8"))
+    if board_build_status.get("status") == "built":
+        built_elf = BENCH / "board/build/snn_ecg_mb_full_replay_benchmark.elf"
+        if not built_elf.exists() or digest(built_elf) != board_build_status.get("elf_sha256"):
+            failures.append("instrumented board ELF missing or hash mismatch")
+
     cpu_env = json.loads((RESULTS / "cpu_environment.json").read_text(encoding="utf-8"))
     cpu_rows = read_csv(RESULTS / "cpu_python_kernel_runs.csv")
+    e2e_rows = read_csv(RESULTS / "cpu_python_end_to_end_runs.csv")
+    if cpu_env["status"] != "COMPLETED":
+        failures.append(f"Python benchmark status is {cpu_env['status']}, not COMPLETED")
     if cpu_env["status"].startswith("NOT_COMPLETED") and cpu_rows:
         failures.append("CPU timings exist despite failed equivalence gate")
-    if not cpu_env["status"].startswith("NOT_COMPLETED"):
-        for row in cpu_rows:
+    if cpu_env["status"].startswith("NOT_COMPLETED"):
+        audit = read_csv(RESULTS / "historical_python_equivalence_audit.csv")
+        if len(audit) != 36:
+            failures.append(f"historical Python audit row count {len(audit)} != 36")
+        if sum(row.get("pred_match") == "false" for row in audit) != 2:
+            failures.append("historical Python prediction divergence is misreported")
+        if sum(row.get("mem_match") == "false" for row in audit) != 22:
+            failures.append("historical Python membrane divergence is misreported")
+    if cpu_env["status"] == "COMPLETED":
+        if len(cpu_rows) != 360 or len(e2e_rows) != 360:
+            failures.append(f"Python measured rows kernel={len(cpu_rows)} end_to_end={len(e2e_rows)}, expected 360 each")
+        check_repetitions(cpu_rows, "Python kernel", failures)
+        check_repetitions(e2e_rows, "Python end-to-end", failures)
+        for row in cpu_rows + e2e_rows:
             if row.get("output_match") not in ("1", "true"):
                 failures.append(f"Python output mismatch: {row.get('case_id')}")
+        equivalence = read_csv(RESULTS / "python_equivalence_gate.csv")
+        if len(equivalence) != 36 or any(row.get("pred_match") != "true" or row.get("mem_match") != "true" for row in equivalence):
+            failures.append("Python 36-case equivalence gate incomplete or mismatched")
+
+    cpp_build = BENCH / "tools/cpp/cpp_build_environment.json"
+    cpp_rows = read_csv(RESULTS / "cpu_cpp_kernel_runs.csv") if (RESULTS / "cpu_cpp_kernel_runs.csv").exists() else []
+    if cpp_build.exists() and json.loads(cpp_build.read_text(encoding="utf-8"))["status"] == "BUILT":
+        if len(cpp_rows) != 360:
+            failures.append(f"C++ measured row count {len(cpp_rows)} != 360")
+        check_repetitions(cpp_rows, "C++ kernel", failures)
+        for row in cpp_rows:
+            if row.get("output_match") != "true":
+                failures.append(f"C++ output mismatch: {row.get('case_id')}")
 
     state = json.loads((RESULTS / "repository_start_state.json").read_text(encoding="utf-8"))
     dataset = RESULTS / "benchmark_dataset_manifest.csv"

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Locked integer-equivalent SNN inference used only by the benchmark.
 
-The cycle model is preserved from historical commit ef48850c and reads the
-current locked RTL constants.  This module does not search or modify params.
+The cycle model was recovered from historical commit ef48850c, reads the
+current locked RTL constants, and models the final delayed valid/data staging.
+This module does not search or modify parameters.
 """
 
 from __future__ import annotations
@@ -70,6 +71,11 @@ def _window_result(front: SnapshotFrontEnd) -> dict[str, int]:
         "class_mem_CHF": int(front.score.c24_mem[1]),
         "class_mem_ARR": int(front.score.c24_mem[2]),
         "class_mem_AFF": int(front.score.c24_mem[3]),
+        "score_NSR": int(front.score.score_mem[0]),
+        "score_CHF": int(front.score.score_mem[1]),
+        "score_ARR": int(front.score.score_mem[2]),
+        "score_AFF": int(front.score.score_mem[3]),
+        "rbbb_qrs_delay_applied": int(front.score.rbbb_qrs_delay_applied),
         "beat_count": front.qrs_count,
         "pnn_match_count": front.pnn_match_count,
         "pnn_mismatch_count": front.pnn_mismatch_count,
@@ -111,10 +117,15 @@ def run_snapshot(
         sample = int(raw)
         front.tick(sample_valid=1, rhythm_tick=1, segment_start=0, adc_data=sample)
         for _ in range(inter_sample_idle_cycles):
-            front.tick(sample_valid=0, rhythm_tick=0, segment_start=0, adc_data=0)
-    front.tick(sample_valid=0, rhythm_tick=0, segment_start=0, segment_done=1, adc_data=0)
+            # qrs_sample_valid is delayed by one cycle in the RTL and is paired
+            # with a held sample-data pipeline register.  Keep the last
+            # accepted sample stable here so the Python clock model observes
+            # the same valid/data pair during the first idle cycle.
+            front.tick(sample_valid=0, rhythm_tick=0, segment_start=0, adc_data=sample)
+    last_sample = int(samples[-1])
+    front.tick(sample_valid=0, rhythm_tick=0, segment_start=0, segment_done=1, adc_data=last_sample)
     for _ in range(post_done_ticks):
-        front.tick(sample_valid=0, rhythm_tick=0, segment_start=0, segment_done=0, adc_data=0)
+        front.tick(sample_valid=0, rhythm_tick=0, segment_start=0, segment_done=0, adc_data=last_sample)
     return _window_result(front)
 
 

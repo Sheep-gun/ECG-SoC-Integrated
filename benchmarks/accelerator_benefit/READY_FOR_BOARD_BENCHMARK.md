@@ -15,14 +15,14 @@ Vivado/Vitis 2020.2, Digilent cable/UART drivers, Python 3 with NumPy, Pillow, a
 - BIT `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit`: `61dfb3dddee1f55b9e2ce42009cb9693bb1c8ff9c7b65b71f0d59d6b2a34dd58`
 - XSA `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa`: `8ff2a1ed537c27bd6d8117313c274aa79de8f11b4e6df54fa1b9fa10ca5942a3`
 - existing ELF `results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay_app.elf`: `5bb947f62a322765f79b6bf013da0d70b4c068165b1faaccd59c41264b7e05c3` (functional replay only)
-- instrumented ELF: **PENDING_BUILD** after repairing missing Vitis `libgloss.a`
+- instrumented ELF `benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf`: `c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16`
 - dataset manifest: `4965b8a098617d6138e4e56e2b45febda20706b031e9bbaa2558d874517dee72`
 - locked config: `3ed5fa3399b99cace22a5cd7821be2c598a58ef27012da11a4e213a0f4c5672d`
 - locked params file: `e0c1a649515ea50bbccc7c72d2dada9080c136e9d0e23de84dcc07f93744ae53`
 
 ## 4. Programming
 
-Repair/reinstall the MicroBlaze Vitis 2020.2 libraries, run:
+The instrumented ELF is already built. Rebuild only when intentionally verifying the same source/XSA:
 
 ```powershell
 python benchmarks/accelerator_benefit/board/build_instrumented_app.py

@@ -3,5 +3,6 @@ C1,Canonical RTL matches locked board-facing expected outputs 36/36.,SUPPORTED,c
 C2,Stored-data RTL latency is 54.012600 ms at 100 MHz.,SUPPORTED,CYCLE_DERIVED,benchmarks/accelerator_benefit/results/rtl_cycle_summary.json,not live observation latency
 C3,Live final decision requires a 30-minute observation window.,SUPPORTED,input contract,configs/final_submission_locked_model.json,none
 C4,0.099 W is measured board power.,FORBIDDEN,none,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md,Vivado estimate only
-C5,CPU speedup versus RTL.,NOT_CLAIMED,equivalence failure,benchmarks/accelerator_benefit/reports/PYTHON_BASELINE_NOT_COMPLETED.md,no exact CPU latency
+C5,Python-kernel to canonical RTL stored-data speedup is 2288.745397x.,SUPPORTED,MEASURED_NOW / CYCLE_DERIVED,benchmarks/accelerator_benefit/results/accelerator_benefit_summary.csv,stored-data processing only; not live decision latency
 C6,Board timer latency.,PENDING_BOARD,pending,benchmarks/accelerator_benefit/READY_FOR_BOARD_BENCHMARK.md,no board in this run
+C7,Exact C++ RTL translation per-case-median aggregate latency is 2456.708125 ms.,SUPPORTED,MEASURED_NOW,benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json,generated cycle-accurate host model; not hand-optimized C++ and not Python

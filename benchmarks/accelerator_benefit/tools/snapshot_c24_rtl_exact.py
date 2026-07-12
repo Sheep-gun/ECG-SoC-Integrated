@@ -1725,7 +1725,9 @@ class C24ScoreNeurons:
                 score_next[0] -= 100000
                 score_next[2] += 100000
                 self.rbbb_qrs_delay_applied = 1
-                self.add_c24(c24_next, "C24_W_RBBB_APPLIED")
+                # The locked pipelined RTL applies the local score correction
+                # here, but its C24 readout path does not commit the historical
+                # C24_W_RBBB_APPLIED vector at the canonical segment flush.
             else:
                 self.rbbb_qrs_delay_applied = 0
         else:
@@ -1958,6 +1960,7 @@ class SnapshotFrontEnd:
     rbbb: RbbbQrsDelayBank = field(default_factory=RbbbQrsDelayBank)
     score: C24ScoreNeurons = field(default_factory=C24ScoreNeurons)
     qrs_sample_valid: int = 0
+    qrs_sample_data: int = 0
     rdm_rr_valid_delay: int = 0
     qrs_count: int = 0
     pnn_match_count: int = 0
@@ -2002,6 +2005,7 @@ class SnapshotFrontEnd:
         self.rbbb.reset()
         self.score.reset()
         self.qrs_sample_valid = 0
+        self.qrs_sample_data = 0
         self.rdm_rr_valid_delay = 0
         self.qrs_count = 0
         self.pnn_match_count = 0
@@ -2036,6 +2040,7 @@ class SnapshotFrontEnd:
 
     def tick(self, sample_valid: int, rhythm_tick: int, segment_start: int, segment_done: int = 0, adc_data: int = 0) -> None:
         old_qrs_sample_valid = self.qrs_sample_valid
+        old_qrs_sample_data = self.qrs_sample_data
         old_rdm_rr_valid_delay = self.rdm_rr_valid_delay
         old_strong_event = self.event.strong_event
         old_slope_valid = self.event.slope_valid
@@ -2163,12 +2168,12 @@ class SnapshotFrontEnd:
         self.pnn.tick(clear=segment_start, rhythm_tick=rhythm_tick, beat_spike=old_beat_spike)
         self.rdm.tick(clear=segment_start, rr_interval_valid_spike=old_rdm_rr_valid_delay, rr_interval_in=old_pnn_rr_interval)
         self.ectopic.tick(clear=segment_start, rr_interval_valid_spike=old_rdm_rr_valid_delay, rr_interval_in=old_pnn_rr_interval)
-        self.dscr.tick(clear=segment_start, sample_valid=old_qrs_sample_valid, adc_data=adc_data)
+        self.dscr.tick(clear=segment_start, sample_valid=sample_valid, adc_data=adc_data)
         self.ram.tick(clear=segment_start, sample_valid=sample_valid, ram_window_open=old_ram_window_open, beat_spike=old_beat_spike, adc_data=adc_data, baseline=0)
         self.qrs_maf.tick(
             clear=segment_start,
-            sample_valid=sample_valid,
-            adc_data=adc_data,
+            sample_valid=old_qrs_sample_valid,
+            adc_data=old_qrs_sample_data,
             strong_event=old_strong_event,
             dscr_sign_flip_spike=old_dscr_flip,
             beat_spike=old_beat_spike,
@@ -2176,7 +2181,7 @@ class SnapshotFrontEnd:
         )
         self.rbbb.tick(
             clear=segment_start,
-            sample_valid=sample_valid,
+            sample_valid=old_qrs_sample_valid,
             segment_done=segment_done,
             strong_event=old_strong_event,
             slope_valid=old_slope_valid,
@@ -2188,6 +2193,8 @@ class SnapshotFrontEnd:
             rdm_level_code=old_rdm_code,
         )
         self.qrs_sample_valid = 1 if sample_valid else 0
+        if sample_valid:
+            self.qrs_sample_data = int(adc_data)
         self.rdm_rr_valid_delay = 1 if (old_beat_spike and old_pnn_token_active and not segment_start) else 0
 
         if self.event.strong_event:

@@ -1,3 +1,4 @@
 label,value,status
-Python integer kernel,NOT COMPLETED (equivalence gate),AUDIT
+Python integer kernel,123621.090 ms,MEASURED_NOW
+C++ exact RTL translation,2456.708 ms,MEASURED_NOW
 Pure RTL,54.012600 ms,CYCLE_DERIVED

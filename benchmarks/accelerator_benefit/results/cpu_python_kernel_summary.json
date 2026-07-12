@@ -1,0 +1,32 @@
+{
+  "status": "MEASURED_NOW",
+  "scope": "samples already loaded in RAM through final result",
+  "warmups_per_case": 3,
+  "measured_repetitions_per_case": 10,
+  "case_count": 36,
+  "measured_run_count": 360,
+  "sample_count_per_case": 1800000,
+  "all_run_latency_ms": {
+    "median": 123733.00140000001,
+    "mean": 126566.18825444444,
+    "std": 13178.515312100106,
+    "min": 117330.5988,
+    "max": 303399.67,
+    "q1": 122280.29755,
+    "q3": 126008.43605,
+    "iqr": 3728.138500000001
+  },
+  "per_case_median_latency_ms": {
+    "median": 123621.089625,
+    "mean": 124842.57904583334,
+    "std": 5978.646000354736,
+    "min": 118065.86435,
+    "max": 143083.77755,
+    "q1": 121863.4166,
+    "q3": 125123.614575,
+    "iqr": 3260.1979750000028
+  },
+  "throughput_samples_per_s_median": 14547.4528195,
+  "output_equivalence": "36/36 final_pred; 36/36 all four final_mem",
+  "run_evidence": "benchmarks/accelerator_benefit/results/cpu_python_kernel_runs.csv"
+}
