@@ -6,6 +6,8 @@
 
 **[최종 통합 기술보고서 핵심 원고 보기](reports/INTEGRATED_TECHNICAL_REPORT_KR.md)**
 
+[기준 논문 서술 구조 분석 및 적용 기록](reports/BASELINE_PAPER_STRUCTURE_REVIEW_KR.md)
+
 대회 제출용 HWP는 본 원고를 기반으로 별도 편집합니다. 공식 신청서·개인정보·서명과 최종 HWP/PDF는 이 공개 Git에 포함하지 않습니다.
 
 ## 1. 프로젝트 정체성

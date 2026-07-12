@@ -13,19 +13,20 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md"
 CHECKLIST = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_REVIEW_CHECKLIST.md"
 EVIDENCE_MAP = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv"
+BASELINE_REVIEW = ROOT / "reports" / "BASELINE_PAPER_STRUCTURE_REVIEW_KR.md"
 
 MAIN_HEADINGS = [
     "# 1. 서론",
-    "# 2. 전체 시스템과 평가 방법",
+    "# 2. 관련 기술과 시스템 설계",
     "# 3. 제안 SNN-Inspired 디지털 아키텍처",
-    "# 4. MATLAB/XMODEL 및 FPGA 구현",
+    "# 4. 구현 및 검증 방법",
     "# 5. 실험 결과",
     "# 6. 종합 논의와 한계",
     "# 7. 결론",
 ]
 SUBHEADINGS = [
     "1.1 연구 배경과 문제 정의", "1.2 연구 목표와 주요 기여",
-    "2.1 신호 처리 및 구현 흐름", "2.2 데이터셋과 평가 프로토콜",
+    "2.1 기존 접근의 한계와 설계 요구", "2.2 데이터셋과 평가 프로토콜",
     "3.1 핵심 개념과 다중 시간축 처리", "3.2 박동 및 리듬 정보 추출",
     "3.3 파형 형태 및 진폭 정보 추출", "3.4 60초 Snapshot과 30분 Final Membrane",
     "3.5 Streaming state와 하드웨어 구현 방식",
@@ -33,7 +34,7 @@ SUBHEADINGS = [
     "5.1 분류 성능", "5.2 Mixed-signal 및 디지털 통합 결과", "5.3 하드웨어 구현 결과",
     "6.1 설계적 차별성과 기술적 의의", "6.2 결과의 해석 범위와 향후 과제",
 ]
-REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP]
+REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW]
 REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_complete_system_flow.svg",
     "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
@@ -96,6 +97,14 @@ def main() -> int:
     module_names = ["ecg_event_encoder", "qrs_lif", "pnn_rhythm", "rdm_", "dscr_", "ram_peak", "qrs_maf", "rbbb_"]
     check("no module-name headings", not any(name in h.lower() for h in numbered_subs for name in module_names))
     check("chapter 3 is longest", len(section(text, "3. 제안 SNN-Inspired 디지털 아키텍처", 1)) == max(len(section(text, h[2:], 1)) for h in MAIN_HEADINGS), "chapter lengths")
+    chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
+    for term in ["전체 파형을 저장", "짧은 구간의 파형", "학습된 심층 SNN", "설계 요구", "전체 신호 흐름"]:
+        check(f"related-work design gap {term}", term in chapter2)
+    numbered_details = re.findall(r"(?m)^### 3\.[234]\.\d+ .+$", text)
+    check("numbered circuit-detail subsections", len(numbered_details) == 14, numbered_details)
+    baseline_text = BASELINE_REVIEW.read_text(encoding="utf-8-sig") if BASELINE_REVIEW.is_file() else ""
+    for term in ["총 19쪽", "초록", "관련 연구", "회로 설명", "문장과 단락의 공통 형태", "통합 보고서에 적용한 구조"]:
+        check(f"baseline-paper audit {term}", term in baseline_text)
 
     primer = section(text, "3.1 핵심 개념과 다중 시간축 처리", 2)
     for term in ["표본값(sample)", "사건 신호(event)", "막전위형 누적값(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
@@ -127,7 +136,7 @@ def main() -> int:
 
     morphology = section(text, "3.3 파형 형태 및 진폭 정보 추출", 2)
     block_order = [
-        ("DSCR purpose before module", "파형이 몇 번 꺾였는지", "`dscr_spike_counter`"),
+        ("DSCR purpose before module", "파형이 꺾인 횟수", "`dscr_spike_counter`"),
         ("RAM purpose before module", "30분 전체에서 최고점 하나만 찾으면", "`ram_peak_accumulator`"),
         ("QRS MAF purpose before module", "같은 RR 간격을 가진 박동이라도", "`qrs_maf_neuron`"),
         ("RBBB-like mechanism before module", "활동이 나타난 가장 늦은 위치", "`rbbb_qrs_delay_bank`"),

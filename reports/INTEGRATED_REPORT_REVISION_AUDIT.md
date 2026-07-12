@@ -4,7 +4,7 @@
 
 - Revision status: `COMPLETE`
 - Branch: `main`
-- Current revision base: `4a00d79e0ad198eebccc2262dbec3a1b2b1f3b70`
+- Current revision base: `6d54a3fde79ccef6d87fb38cc473a7f12d45d88c`
 - Original seven-chapter revision base: `4fbe1a9407b7b5d21decbeb38339aa43e18f049a`
 - Fixed upstream: MATLAB `907f7e1f081a9d6a5703a32095d962143315a192`, XMODEL `4756a5086023547328ef44fd5fd87da3c250dc39`, digital `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
@@ -14,7 +14,7 @@
 |---|---:|---:|
 | 본문 장 | 11 | 7 |
 | 번호가 있는 하위 절 | 90개 이상 | 17 |
-| 본문 문자 수 | 38,542 | 37,502 |
+| 본문 문자 수 | 38,542 | 38,901 |
 | 생성 그림 | 12 | 14 |
 | 본문 참조 그림 | 12 | 8 |
 
@@ -25,6 +25,8 @@
 이번 재개정에서는 제3장뿐 아니라 초록·서론·AFE/FPGA 구현·실험 결과·논의·결론도 처음 보는 심사자의 질문 순서에 맞췄다. 결과 문단은 각 수치가 무엇을 평가하고 무엇을 증명하며 무엇을 증명하지 않는지 설명하도록 고쳤다. DSCR·RAM·QRS MAF·RBBB-like 설명은 모듈명보다 관찰 목적과 계산 과정을 먼저 제시하고, 생성 상태가 Snapshot 및 Final Membrane으로 전달되는 위치를 명시했다.
 
 최종 직관성 개정에서는 ECG 입력을 “시간 순서대로 들어오는 부호 있는 숫자 나열”로 시작하고 `현재값-직전값→강한 사건→QRS 막전위 누적→발화·초기화·불응기` 순서로 다시 썼다. `token age`, 내부 평가 레지스터명과 같은 신호 중심 용어는 “직전 박동 이후 들어온 표본값 개수”, “먼저 저장하고 다음 클록에 비교”처럼 회로 동작으로 풀었다. Strong Event는 뉴런 발화로 해석할 수 있지만 실제 RTL은 별도 막전위가 아닌 차분·절댓값·문턱 비교기임을 명시했고, 일반 LIF 누설 원리와 고정 `QRS_LEAK=0` 설정을 구분했다.
+
+Micromachines 2025 기준 논문 19쪽 전체를 본문 추출과 페이지 렌더링으로 검토했다. 초록은 배경·제안·구조·검증·결과·한계 순서로 다시 구성하고, 제2장은 전체 저장 방식·짧은 구간 회로·학습형 SNN의 한계에서 설계 요구를 도출하도록 바꿨다. 제3장의 박동·리듬·파형·Snapshot/Final 설명은 목적별 3단계 절 번호로 나눴다. 제4장과 제5장에는 각 장이 답하는 질문을 먼저 제시했다. 세부 분석과 적용 기준은 `reports/BASELINE_PAPER_STRUCTURE_REVIEW_KR.md`에 남겼다.
 
 ## 직접 RTL 감사에서 반영한 핵심
 
@@ -52,7 +54,7 @@ Final 29/36, record-majority 16/19, Pure RTL 자원/WNS, three-way 36/36 evidenc
 ## 최종 검사
 
 - `tools/generate_integrated_figures.py`: PASS — 14 SVG figures generated
-- `tools/check_integrated_technical_report.py`: PASS — 324 rules, 0 conflicts, chars 37,502, figures 8, evidence rows 38
+- `tools/check_integrated_technical_report.py`: PASS — 337 rules, 0 conflicts, chars 38,901, figures 8, evidence rows 38
 - `tools/check_integrated_repository.py`: PASS — 211 rules, 0 conflicts
 - `git diff --check`: PASS
 
