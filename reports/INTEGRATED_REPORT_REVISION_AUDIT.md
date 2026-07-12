@@ -4,22 +4,22 @@
 
 - 개정 상태: `COMPLETE`
 - 작업 branch: `main`
-- 작업 시작 기준: `a3c4fd284e134d5b23281284c40d2a37043811cc` (`origin/main`과 일치 확인)
+- 작업 시작 기준: `f756bcf84dd6f15476bf347b2791a3ba9a64e6f5` (`origin/main`과 일치 확인)
 - 고정 upstream: MATLAB `907f7e1f081a9d6a5703a32095d962143315a192`, XMODEL `4756a5086023547328ef44fd5fd87da3c250dc39`, digital `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
 ## 이번 개정 범위
 
-기존 9장 연구 흐름과 디지털 RTL 설명의 깊이는 유지하면서 제2.1절을 실제 선행연구 인용 기반으로 개정하였다. 개별 심박 SNN, 연속 ECG 사건 구동형 탐지, multiple instance 집계, 가변 길이 CNN/LSTM과 24시간 Holter Transformer 통합을 최종 판정 단위별로 비교하고, 본 연구의 핵심을 특정 60초·30분 숫자가 아닌 간헐적 질환 증거의 순차 포착과 고정 폭 RTL 누적으로 정의하였다.
+기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital `main`의 완료된 NO_BOARD accelerator-benefit benchmark를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 benchmark evidence commit `09e4d840...`을 별도 provenance로 등록하였다.
 
 | 항목 | 개정 결과 |
 |---|---:|
 | 본문 장 | 9 |
-| 본문 문자 수 | 59,988 |
+| 본문 문자 수 | 62,448 |
 | 생성 SVG | 15 |
 | 상속 MATLAB PNG | 7 |
 | 본문 참조 그림 | 16 |
-| Evidence map 행 | 61 |
-| Claim registry 행 | 42 |
+| Evidence map 행 | 66 |
+| Claim registry 행 | 47 |
 | 참고문헌 | 14 |
 | Unresolved artifact | 1 |
 
@@ -48,6 +48,15 @@
 
 고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 FIG-15와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
 
+## 가속기 Benchmark 반입 내용
+
+- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`으로 고정하였다.
+- 대표 CPU 기준선은 hand-written single-thread transaction-level Exact C++로 두고 Python cycle model과 Verilator simulation runtime은 speedup 기준선에서 제외하였다.
+- Exact C++ timing 전 pred 36/36, membrane 144/144, Snapshot 1,080/1,080과 post-benchmark equivalence를 확인하였다.
+- Exact C++ kernel 1,777.699800 ms, end-to-end 2,007.549250 ms와 cycle-derived FPGA core 54.012600 ms를 반영하였다.
+- 같은 저장 데이터 kernel 범위의 처리시간 비율 32.912687배를 `speedup estimate`로 제한하고 measured board speedup으로 표현하지 않았다.
+- 0.099 W와 0.005347247400 J/decision은 estimated/derived로, physical board timing·power·energy는 `PENDING_BOARD`로 분리하였다.
+
 ## 유지한 결과와 경계
 
 - 24시간 Holter형 관찰은 설계 동기이고, MIT-BIH Arrhythmia의 30분 excerpt를 포함한 서로 다른 길이의 공개 원천을 같은 실제 시간으로 비교하기 위해 현재 공통 창을 30분으로 고정했음을 명시
@@ -56,12 +65,15 @@
 - Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns
 - AFE 입력 SHA256, canonical AFE→RTL pred/mem, FPGA pred/mem의 각 36/36 범위
 - Database–class confounding, physical/clinical/ASIC 한계
-- Accelerator benchmark `PENDING_EXTERNAL_BENCHMARK_IMPORT`; 수치 미인용
+- Accelerator benchmark는 digital `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`에서 반입
+- Exact C++ kernel 1,777.699800 ms, cycle-derived FPGA core 54.012600 ms, 처리시간 비율 32.912687배
+- 32.912687배는 measured board speedup이 아니며 live 판정은 여전히 30분 관찰 필요
+- 0.099 W와 0.005347247400 J/decision은 estimated/derived; physical board timing·power·energy는 `PENDING_BOARD`
 
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 15 SVG + 상속 MATLAB PNG 7개
-- `tools/check_integrated_technical_report.py`: PASS — 595 rules, 0 conflicts, chars 59,988, figures 16, evidence rows 61
-- `tools/check_integrated_repository.py`: PASS — 237 rules, 0 conflicts
+- `tools/check_integrated_technical_report.py`: PASS — 638 rules, 0 conflicts, chars 62,448, figures 16, evidence rows 66
+- `tools/check_integrated_repository.py`: PASS — 287 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

@@ -16,7 +16,7 @@
 
 ## 성공 기준
 
-분류 목표는 locked final-test 결과를 있는 그대로 보고하고, 구현 목표는 같은 input에서 Python/RTL/board가 같은 final_pred와 final_mem을 재현하는 것이다. Resource와 timing closure는 hardware feasibility evidence로 사용한다. Latency, throughput, speedup, power와 energy benefit은 별도 benchmark 완료 전에는 성공 기준이나 핵심 기여로 선언하지 않는다.
+분류 목표는 locked final-test 결과를 있는 그대로 보고하고, 구현 목표는 같은 input에서 기준 모델/RTL/board가 같은 final_pred와 final_mem을 재현하는 것이다. Resource와 timing closure는 hardware feasibility evidence로 사용한다. 완료된 NO_BOARD benchmark는 구현 효과를 보조하지만 분류 구조보다 앞선 핵심 기여로 선언하지 않는다. Physical board timing·power·energy는 별도 측정 전까지 미완료다.
 
 ## 전체 연구 흐름
 

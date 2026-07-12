@@ -1,0 +1,6 @@
+implementation,scope,status,latency_ms,throughput_samples_per_s,realtime_margin_vs_1ksps,speedup_estimate,power_w,energy_per_decision_j,equivalence,limitation
+Exact C++ native CPU kernel,preloaded samples to final result,MEASURED,1777.699800,1012544.413,1012.544413,N/A,N/A,N/A,"36/36 pred; 144/144 mem; 1080/1080 snapshots","single thread; fixed affinity; transaction-level implementation"
+Exact C++ native CPU end-to-end,file open through result JSON flush,MEASURED,2007.549250,896615.633,896.615633,N/A,N/A,N/A,"36/36 pred; 144/144 mem; 1080/1080 snapshots","includes file parsing and result serialization"
+Pure RTL FPGA core,stored-data accelerator start to final decision,CYCLE_DERIVED,54.012600,33325557.369947,33325.557370,32.912687,0.099,0.005347247400,"36/36 pred; 36/36 mem","speedup is measured Exact C++ divided by cycle-derived core latency; power and energy are estimated"
+Existing FPGA board replay,functional replay only,FUNCTIONAL_ONLY,N/A,N/A,N/A,N/A,N/A,N/A,"36/36 pred; 36/36 mem","no timer-based board latency or physical power"
+Future physical board measurement,board core/system/host timing and power,PENDING_BOARD,PENDING_BOARD,PENDING_BOARD,PENDING_BOARD,N/A,PENDING_BOARD,PENDING_BOARD,PENDING_BOARD,"not represented as zero"

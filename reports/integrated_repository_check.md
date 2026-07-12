@@ -2,9 +2,9 @@
 
 ## Result: PASS
 
-- Rules checked: 237
+- Rules checked: 287
 - Conflicts found: 0
-- Benchmark placeholder: PASS (all fields null)
+- Benchmark import: PASS (verified NO_BOARD scope)
 
 ## Rules checked
 
@@ -18,6 +18,7 @@
 - PASS — required path source_of_truth/global_metrics.yaml
 - PASS — required path source_of_truth/claim_registry.csv
 - PASS — required path source_of_truth/artifact_manifest.csv
+- PASS — required path source_of_truth/benchmark_import_manifest.csv
 - PASS — required path source_of_truth/unresolved_artifacts.csv
 - PASS — required path source_of_truth/ownership_matrix.csv
 - PASS — required path source_of_truth/terminology.yaml
@@ -38,7 +39,16 @@
 - PASS — required path docs/REPORT_EVIDENCE_MAP_KR.md
 - PASS — required path docs/RELATED_WORK_HOLTER_ECG_KR.md
 - PASS — required path docs/INTEGRATION_METHOD.md
+- PASS — required path docs/BENCHMARK_IMPORT_AUDIT_KR.md
 - PASS — required path benchmarks/accelerator_benefit/README.md
+- PASS — required path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — required path benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
+- PASS — required path benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — required path benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
+- PASS — required path benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
+- PASS — required path benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
+- PASS — required path benchmarks/accelerator_benefit/results/power_energy_summary.csv
+- PASS — required path benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
 - PASS — required path figures/FIGURE_INDEX.md
 - PASS — required path figures/source/figure_data.json
 - PASS — required path tools/import_upstream_repositories.py
@@ -98,6 +108,26 @@
 - PASS — upstream HEAD unchanged or authorized benchmark advance: digital_accelerator
 - PASS — tracked status unchanged or authorized benchmark-only drift: digital_accelerator
 - PASS — curated artifact manifest has 913 rows
+- PASS — benchmark evidence commit exists
+- PASS — benchmark import manifest has 9 rows
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/README.md
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/README.md
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/power_energy_summary.csv
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/power_energy_summary.csv
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
 - PASS — all manifest files exist and SHA256-match
 - PASS — component trees exactly match manifest
 - PASS — curated component counts
@@ -156,9 +186,21 @@
 - PASS — metric evidence exists: raw_input_window_samples
 - PASS — metric evidence exists: avoided_full_raw_input_window_bits
 - PASS — metric evidence exists: avoided_full_raw_input_window_bytes
-- PASS — benchmark status pending
-- PASS — all benchmark values null not zero
-- PASS — benchmark placeholder explicit
+- PASS — benchmark status imported NO_BOARD
+- PASS — benchmark source commit exact
+- PASS — benchmark Exact C++ values
+- PASS — benchmark RTL values
+- PASS — benchmark speedup estimate
+- PASS — benchmark power values estimated
+- PASS — benchmark physical values pending
+- PASS — benchmark README boundary 32.912687
+- PASS — benchmark README boundary 측정한 speedup이 아니다
+- PASS — benchmark README boundary 30분 관찰
+- PASS — benchmark README boundary PENDING_BOARD
+- PASS — benchmark README boundary 0.099 W
+- PASS — benchmark comparison one row
+- PASS — benchmark comparison formula values
+- PASS — benchmark equivalence gate
 - PASS — claim registry columns
 - PASS — claim statuses controlled
 - PASS — claim evidence exists: CLM-001
@@ -178,6 +220,7 @@
 - PASS — claim evidence exists: CLM-015
 - PASS — claim evidence exists: CLM-016
 - PASS — claim evidence exists: CLM-017
+- PASS — claim evidence exists: CLM-018
 - PASS — claim evidence exists: CLM-023
 - PASS — claim evidence exists: CLM-024
 - PASS — claim evidence exists: CLM-025
@@ -197,6 +240,11 @@
 - PASS — claim evidence exists: CLM-040
 - PASS — claim evidence exists: CLM-041
 - PASS — claim evidence exists: CLM-042
+- PASS — claim evidence exists: CLM-043
+- PASS — claim evidence exists: CLM-044
+- PASS — claim evidence exists: CLM-045
+- PASS — claim evidence exists: CLM-046
+- PASS — claim evidence exists: CLM-047
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — streaming inventory columns
@@ -237,11 +285,13 @@
 - PASS — FIG-12 indexed
 - PASS — FIG-12 referenced by manuscript
 - PASS — manuscript raw-data policy
-- PASS — benchmark value not promoted: 54.01 ms
-- PASS — benchmark value not promoted: 33.3 MSPS
-- PASS — benchmark value not promoted: 33,300
-- PASS — benchmark value not promoted: 5.35 mJ
-- PASS — benchmark value not promoted: 0.099 W
+- PASS — benchmark value promoted with scope: 1,777.699800 ms
+- PASS — benchmark value promoted with scope: 54.012600 ms
+- PASS — benchmark value promoted with scope: 32.912687
+- PASS — benchmark value promoted with scope: 0.099 W
+- PASS — benchmark value promoted with scope: PENDING_BOARD
+- PASS — benchmark live boundary
+- PASS — benchmark board-speedup boundary
 - PASS — integrated repo absent from parent index
 - PASS — parent local exclude installed
 - PASS — parent tracked gitignore untouched by integration
@@ -252,12 +302,12 @@
 
 ## Unresolved evidence / bounded scope
 
-- Accelerator-benefit benchmark remains pending external import by design.
+- Physical board timing, power and energy remain PENDING_BOARD; imported benchmark is NO_BOARD.
 - Physical AFE/ADC/silicon and clinical validation are outside the completed scope.
 - Database-class confounding requires future same-acquisition or cross-domain validation.
 
-## Benchmark-placeholder verification
+## Benchmark-import verification
 
-- Status is `PENDING_EXTERNAL_BENCHMARK_IMPORT`.
-- Latency, throughput, speedup, power and energy fields are null, not zero.
-- No benchmark figure or integrated benchmark conclusion is present.
+- Status is `IMPORTED_VERIFIED_NO_BOARD`.
+- Exact C++ measurement, cycle-derived FPGA-core timing and estimated power are distinguished.
+- Physical board timing, power and energy remain `PENDING_BOARD`.

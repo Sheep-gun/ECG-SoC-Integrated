@@ -15,6 +15,14 @@ PhysioNet raw databases are additionally enumerated in
 fetch/verification tools. The fixed upstream commits remain the authoritative
 complete component snapshots.
 
+The selected accelerator-benefit reports and result summaries under
+`benchmarks/accelerator_benefit/` are a curated integration of evidence from
+`Sheep-gun/SNN-ECG-4-Class-Classifier` commit
+`09e4d840827ad20856f5e23be4743ddd01565e30`. The full benchmark code, raw run
+tables, executables, and board package remain authoritative in that upstream
+commit. This benchmark evidence does not change the locked classifier/RTL
+authority at `c6b80de19cdcad5b7e43fe7835588b629d847f75`.
+
 The original copyright and license notices inside each component snapshot
 remain controlling for that component. If an upstream file has no explicit
 license, its presence here documents provenance only and grants no additional

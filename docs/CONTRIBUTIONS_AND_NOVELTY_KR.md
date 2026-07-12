@@ -42,6 +42,6 @@ Classification accuracy는 별도로 29/36=80.56%이며 hardware equivalence와 
 3. 정수형 event/state streaming realization
 4. MATLAB–XMODEL–digital handoff와 bit identity
 5. RTL/IP/FPGA 구현 완결성
-6. resource, timing과 향후 accelerator benefit benchmark
+6. resource, timing과 완료된 NO_BOARD accelerator benefit benchmark; physical board timing·power는 향후 검증
 
 즉 속도는 지원 증거이며 본 연구의 주된 novelty가 아니다.

@@ -19,6 +19,7 @@
 | MATLAB nominal pre-validation | `907f7e1f081a9d6a5703a32095d962143315a192` | 서민우 | retained files byte-identical to fixed Git objects |
 | AFE+ADC XMODEL | `4756a5086023547328ef44fd5fd87da3c250dc39` | 이수환 | retained files byte-identical; raw PhysioNet/submission/temp paths registered and omitted |
 | Digital accelerator | `c6b80de19cdcad5b7e43fe7835588b629d847f75` | 양건 | retained files byte-identical to fixed Git objects |
+| Digital benchmark evidence | `09e4d840827ad20856f5e23be4743ddd01565e30` | 양건 | curated NO_BOARD reports/results; locked digital authority remains `c6b80de` |
 
 The repository is a curated technical snapshot, not a complete mirror of every upstream tracked path. Fixed upstream commits remain the authoritative complete snapshots. `artifact_manifest.csv` covers all retained files; `excluded_upstream_paths.csv` covers every omission.
 
@@ -35,7 +36,7 @@ Four fixed-version PhysioNet trees (nsrdb, chfdb, mitdb, afdb version 1.0.0) are
 
 ## Claim and benchmark status
 
-The report keeps public-dataset classification separate from product/clinical screening, board equivalence separate from label accuracy, and model-based analog evidence separate from physical silicon. Accelerator benefit remains `PENDING_EXTERNAL_BENCHMARK_IMPORT`; all latency/throughput/speedup/power/energy fields remain null.
+The report keeps public-dataset classification separate from product/clinical screening, board equivalence separate from label accuracy, and model-based analog evidence separate from physical silicon. The imported NO_BOARD benchmark records measured Exact C++ latency, cycle-derived FPGA-core latency, their scoped 32.912687x estimate, and estimated power/energy. Physical board timing, power and energy remain `PENDING_BOARD`.
 
 ## Size and integrity
 

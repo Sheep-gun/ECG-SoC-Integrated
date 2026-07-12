@@ -76,5 +76,5 @@
     ],
     "evidence_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75"
   },
-  "benchmark_status": "PENDING_EXTERNAL_BENCHMARK_IMPORT"
+  "benchmark_status": "IMPORTED_VERIFIED_NO_BOARD"
 }

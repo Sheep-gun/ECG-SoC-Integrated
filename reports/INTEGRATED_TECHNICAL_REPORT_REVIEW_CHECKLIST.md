@@ -7,12 +7,12 @@
 - [x] 본문은 9개 장으로 구성하고, 연구 진행 순서가 MATLAB→AFE·ADC/XMODEL→디지털 IP→benchmark→통합 검증→결과→논의·한계로 이어진다.
 - [x] MATLAB 공칭 사전검증을 디지털 아키텍처보다 먼저 제시하고, 그 출력 파라미터와 기준 벡터가 AFE·ADC XMODEL의 입력 기준이 됨을 설명한다.
 - [x] AFE·ADC XMODEL 검증 뒤에 signed stream을 소비하는 디지털 가속기 IP를 배치하여 아날로그 앞단과 디지털 뒷단의 인과관계를 유지한다.
-- [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, 정량 benchmark는 외부 근거 반입 전까지 pending으로 둔다.
+- [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, NO_BOARD 수치와 physical board pending을 구분한다.
 - [x] 초록은 배경→문제→제안 구조→검증→결과→한계 순서로 전개한다.
 - [x] 디지털 설명은 전압 숫자열→차분 사건→QRS 누적·발화→리듬·파형 증거→Snapshot→Final Membrane 순서로 읽힌다.
 - [x] AFE 설명은 필요성→구성→설계값→검증→다음 블록 연결 순서를 각 블록에 적용한다.
 - [x] `token age`와 같은 내부 신호명은 직관적인 한국어 기능 설명 뒤에 필요한 경우만 제시한다.
-- [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, 외부 근거 반입 전까지 pending으로 유지한다.
+- [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, Exact C++ 측정·cycle-derived core·estimated power를 구분한다.
 
 ## 장시간 ECG 관련 연구와 본 연구의 위치
 
@@ -62,7 +62,11 @@
 - [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
 - [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
 - [x] 30분 prototype 결과를 임상적 24시간 Holter의 대체·동등성으로 해석하지 않고, 24시간 확장 시 Final Membrane 재검증이 필요함을 명시한다.
-- [x] accelerator benchmark 수치는 `PENDING_EXTERNAL_BENCHMARK_IMPORT` 상태를 유지한다.
+- [x] accelerator benchmark는 `09e4d840...`의 Exact C++ 1,777.699800 ms, cycle-derived core 54.012600 ms와 32.912687배 추정 비교를 사용한다.
+- [x] Exact C++ timing 전에 pred 36/36, membrane 144/144와 Snapshot 1,080/1,080 등가성을 확인한다.
+- [x] Python cycle model과 Verilator simulation runtime을 대표 CPU inference 기준선으로 사용하지 않는다.
+- [x] 54.012600 ms를 live 30분 판정시간으로 표현하지 않고, 32.912687배를 measured board speedup으로 표현하지 않는다.
+- [x] 0.099 W와 0.005347247400 J/decision을 estimated/derived로 표시하고 physical board 측정값과 구분한다.
 
 ## Artifact와 자동 검증
 
@@ -77,5 +81,5 @@
 ## 공식 신청서에서만 사람이 편집할 부분
 
 - HWP page/field 제한에 맞춘 축약과 그림 배치
-- 검증된 외부 benchmark 산출물이 들어온 뒤의 supporting table
+- physical board timer·idle/active power 측정이 완료된 뒤의 supporting table
 - 지도교수·소속·개인정보·서명 등 private 제출 정보

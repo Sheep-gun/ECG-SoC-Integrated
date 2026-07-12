@@ -43,4 +43,4 @@ Nexys A7 replay는 digital IP integration proof다. External electrode, physical
 
 ## Benchmark 분리
 
-Resource와 timing closure는 본 문서에 포함하지만 CPU/RTL latency, throughput, speedup, power와 energy는 별도 benchmark package가 완료될 때까지 공란이다.
+Resource와 timing closure에 더해 완료된 NO_BOARD benchmark의 Exact C++ kernel 1,777.699800 ms, cycle-derived RTL core 54.012600 ms와 32.912687배 처리시간 비율을 반영한다. 이 비율은 측정 CPU와 cycle-derived core의 저장 데이터 비교이며 physical board speedup이 아니다. 0.099 W와 에너지는 추정값이고 board timing·power·energy는 `PENDING_BOARD`다.

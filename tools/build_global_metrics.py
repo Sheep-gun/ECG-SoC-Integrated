@@ -11,6 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
+BENCHMARK_COMMIT = "09e4d840827ad20856f5e23be4743ddd01565e30"
 XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
 
@@ -70,6 +71,17 @@ def main() -> int:
     assert all(float(row["clipping_ratio_percent"]) == 0.0 for row in mr)
     minimum_headroom = min(float(row["minimum_headroom_to_rail_V"]) for row in mr)
 
+    benchmark_comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
+    assert len(benchmark_comparison) == 1
+    bc = benchmark_comparison[0]
+    rtl_benchmark = read_json("benchmarks/accelerator_benefit/results/rtl_cycle_summary.json")
+    power_benchmark = read_csv("benchmarks/accelerator_benefit/results/power_energy_summary.csv")
+    pure_rtl_power = next(row for row in power_benchmark if row["implementation"] == "Pure RTL")
+    assert float(bc["cpu_latency_ms"]) == 1777.6998
+    assert float(bc["fpga_latency_ms"]) == 54.0126
+    assert round(float(bc["ratio_cpu_over_fpga"]), 6) == 32.912687
+    assert rtl_benchmark["sample_gap_cycles"] == 2 and rtl_benchmark["profile_total_cycles"] == 5401260
+
     dr = "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier"
     xr_name = "https://github.com/Hwan-22/ECG-SoC"
     mr_name = "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation"
@@ -109,19 +121,28 @@ def main() -> int:
             "signed_stream_width": metric(12, "bits", "MATLAB/XMODEL-to-digital interface", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "two's-complement signed digital handoff"),
             "signed_stream_sample_rate": metric(1000, "samples/s", "canonical ECG stream contract", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "input stream convention, not accelerator throughput"),
             "snapshot_duration": metric(60, "s", "Snapshot Readout interval", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "architecture time scale at 1 kSPS"),
-            "final_membrane_snapshots": metric(30, "snapshots", "Final Membrane accumulation", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "corresponds to a 30-minute decision window"),
+            "final_membrane_snapshots": metric(30, "snapshots", "Final Membrane accumulation", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "30-minute common public-data window constrained by MIT-BIH Arrhythmia half-hour excerpts; not equivalent to 24-hour Holter validation"),
+            "raw_input_window_samples": metric(1800000, "samples", "one 30-minute final-decision input at 1 kSPS", "interface and top-level RTL parameters", "components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", dr, DIGITAL_COMMIT, "양건", "input-window size, not stored runtime memory"),
+            "avoided_full_raw_input_window_bits": metric(21600000, "bits", "1800000 signed 12-bit samples", "derived arithmetic from verified interface/window", "docs/STREAMING_STATE_MEMORY_KR.md", "INTEGRATED", "INTEGRATED", "양건", "avoided full raw-input window storage; not exact synthesized memory saving", "VERIFIED_DERIVED"),
+            "avoided_full_raw_input_window_bytes": metric(2700000, "bytes decimal", "21600000 bits divided by 8", "derived arithmetic from verified interface/window", "docs/STREAMING_STATE_MEMORY_KR.md", "INTEGRATED", "INTEGRATED", "양건", "approximately 2.7 MB decimal; not MicroBlaze runtime memory", "VERIFIED_DERIVED"),
         },
         "benchmark": {
-            "status": "PENDING_EXTERNAL_BENCHMARK_IMPORT",
-            "cpu_kernel_latency_ms": None,
-            "cpu_end_to_end_latency_ms": None,
-            "rtl_processing_latency_ms": None,
-            "rtl_throughput_samples_per_s": None,
-            "realtime_headroom": None,
-            "estimated_power_w": None,
+            "status": "IMPORTED_VERIFIED_NO_BOARD",
+            "upstream_commit": BENCHMARK_COMMIT,
+            "cpu_baseline": "single-thread hand-written transaction-level Exact C++",
+            "cpu_kernel_latency_ms": float(bc["cpu_latency_ms"]),
+            "cpu_end_to_end_latency_ms": 2007.549250,
+            "rtl_processing_latency_ms": float(bc["fpga_latency_ms"]),
+            "rtl_throughput_samples_per_s": rtl_benchmark["throughput_samples_per_s"],
+            "realtime_headroom": rtl_benchmark["realtime_margin_vs_1ksps"],
+            "exact_cpp_to_rtl_speedup_estimate": float(bc["ratio_cpu_over_fpga"]),
+            "estimated_power_w": float(pure_rtl_power["power_w"]),
             "measured_board_power_w": None,
-            "estimated_energy_per_decision_j": None,
+            "estimated_energy_per_decision_j": float(pure_rtl_power["energy_per_decision_j"]),
             "measured_energy_per_decision_j": None,
+            "board_timing_status": "PENDING_BOARD",
+            "board_power_status": "PENDING_BOARD",
+            "scope_limitation": "stored-data FPGA accelerator-core comparison; live decision still requires the 30-minute observation window; not measured board speedup",
         },
     }
     out = ROOT / "source_of_truth" / "global_metrics.yaml"

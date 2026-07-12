@@ -58,7 +58,7 @@ docs/                   research positioning and technical integration narrative
 integration_evidence/   upstream status and intentional exclusions
 figures/                12 evidence-scoped report figures
 tables/                 result, integration and streaming-state tables
-benchmarks/             pending external benchmark placeholder only
+benchmarks/             verified NO_BOARD benchmark summary and claim boundaries
 reports/                definitive manuscript, evidence map and audits
 tools/                  import, generation and fail-closed integrity checks
 private_submission/     Git-blocked private-report area
@@ -97,8 +97,8 @@ python tools/check_integrated_repository.py
 
 ## 7. Accelerator benchmark 상태
 
-Status: `PENDING_EXTERNAL_BENCHMARK_IMPORT`
+Status: `IMPORTED_VERIFIED_NO_BOARD`
 
-Placeholder: [`benchmarks/accelerator_benefit/README.md`](benchmarks/accelerator_benefit/README.md)
+Summary: [`benchmarks/accelerator_benefit/README.md`](benchmarks/accelerator_benefit/README.md)
 
-Exact C++ baseline, RTL processing latency·throughput, speedup, power·energy와 board timing은 별도 작업 중이다. 현재 integrated benchmark field는 모두 `null`이며 zero가 아니다. 외부 package의 commit, input hash, 측정 환경, raw/result CSV와 measured/cycle-derived/estimated 범위를 검증한 뒤에만 가져온다. 속도는 본 연구의 주 기여가 아니라 장시간 네 class 분류 구조를 보조하는 구현 평가 항목이다.
+Digital `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`의 완료된 NO_BOARD package를 반영했다. 저장 데이터 기준 Exact C++ kernel 중앙값은 1,777.699800 ms, cycle-derived FPGA core는 54.012600 ms이며 처리시간 비율은 32.912687배다. 이는 측정 board speedup이 아니고 live 최종 판정은 현재 30분 관찰 창을 필요로 한다. 0.099 W와 0.005347247400 J/decision은 추정값이며 physical board timing·power·energy는 `PENDING_BOARD`다. 속도는 본 연구의 주 기여가 아니라 장시간 네 class 분류 구조를 보조하는 구현 평가 항목이다.

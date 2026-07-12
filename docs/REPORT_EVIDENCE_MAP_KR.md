@@ -9,7 +9,7 @@
 | 3. 디지털 아키텍처 | 표본이 어떤 RTL state transition을 거쳐 class가 되는가 | digital `rtl/`, FIG-12~14, `tables/streaming_state_inventory.csv` | trained deep SNN·STDP·online learning이 아닌 SNN-inspired event/state architecture |
 | 4. 구현 | MATLAB/XMODEL intent와 RTL/IP/FPGA가 어떻게 검증되는가 | MATLAB/XMODEL 결과, Vivado/IP-XACT/MicroBlaze artifact | model-based analog 검증은 physical AFE/ADC 검증이 아님 |
 | 5. 결과 | 정확도·등가성·자원이 각각 무엇을 뜻하는가 | `final_metrics.json`, SHA/equivalence/board result | 36/36 기능 등가성을 100% label accuracy로 해석하지 않음 |
-| 6. 논의와 한계 | 기여가 무엇이며 어디까지 유효한가 | claim registry, confounding/limitation 문서 | benchmark는 독립 import 전까지 pending |
+| 6. 논의와 한계 | 기여가 무엇이며 어디까지 유효한가 | claim registry, benchmark import audit, confounding/limitation 문서 | NO_BOARD 결과와 physical board pending을 분리 |
 | 7. 결론 | 무엇을 완성했고 무엇이 남았는가 | 앞 장의 registered evidence | physical·clinical·ASIC claim 금지 |
 
 ## 제3장 직접 RTL 감사 범위
@@ -24,5 +24,5 @@
 
 1. SAFE claim만 단정형으로 쓰며 CAREFUL claim은 같은 문단에서 범위를 제한한다.
 2. Board 36/36은 기능 등가성, final 29/36은 label 정확도로 분리한다.
-3. Benchmark 값은 `PENDING_EXTERNAL_BENCHMARK_IMPORT`가 해제되기 전까지 넣지 않는다.
+3. Benchmark 값은 `09e4d840...`의 measured/cycle-derived/estimated 범위를 유지하고 physical board 값으로 확대하지 않는다.
 4. 개인정보·서명·공식 신청서 필드는 private HWP에서만 작성한다.

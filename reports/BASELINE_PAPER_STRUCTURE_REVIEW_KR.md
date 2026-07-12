@@ -47,7 +47,7 @@
 | 회로 설명 | 표본값→사건→박동→리듬·파형→Snapshot→Final Membrane |
 | post-layout/algorithm verification | 공칭 AFE, XMODEL, RTL/XSim, Vivado와 FPGA 기능 등가성 |
 | 결과 표 | 분류, 혼합신호 인계와 하드웨어 구현 결과의 분리 |
-| discussion | 차별성, 데이터 한계, 물리·임상·benchmark 공백 |
+| discussion | 차별성, 데이터 한계, 물리·임상·physical board benchmark 공백 |
 
 다음 편집 원칙도 반영하였다.
 
@@ -66,7 +66,7 @@
 - 같은 수치의 반복을 줄이고 상세 경로는 부록과 evidence map으로 보냈다.
 - 모델 기반 AFE 검증을 physical analog 또는 post-layout 결과로 표현하지 않았다.
 - FPGA 기능 등가성 36/36을 분류 정확도 100%로 해석하지 않았다.
-- 미완료 benchmark와 임상·ASIC 공백을 결론에서도 숨기지 않았다.
+- NO_BOARD benchmark의 범위와 physical board·임상·ASIC 공백을 결론에서도 숨기지 않았다.
 - 영어 전문용어는 처음 정의할 때만 병기하고 이후에는 가능한 한 한글 설명을 먼저 사용하였다.
 
 따라서 이번 개정의 목표는 기준 논문의 외형을 모방하는 것이 아니라, 독자가 기술적 필요성에서 회로 구조와 검증 결과까지 끊김 없이 따라가게 만드는 데 있다.

@@ -16,6 +16,7 @@ EVIDENCE_MAP = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv"
 BASELINE_REVIEW = ROOT / "reports" / "BASELINE_PAPER_STRUCTURE_REVIEW_KR.md"
 UNRESOLVED_ARTIFACTS = ROOT / "source_of_truth" / "unresolved_artifacts.csv"
 RELATED_WORK_AUDIT = ROOT / "docs" / "RELATED_WORK_HOLTER_ECG_KR.md"
+BENCHMARK_AUDIT = ROOT / "docs" / "BENCHMARK_IMPORT_AUDIT_KR.md"
 
 MAIN_HEADINGS = [
     "# 1. 서론",
@@ -37,11 +38,17 @@ SUBHEADINGS = [
     "5.1 핵심 개념과 다중 시간축 처리", "5.2 박동 및 리듬 정보 추출",
     "5.3 파형 형태 및 진폭 정보 추출", "5.4 60초 Snapshot과 30분 Final Membrane",
     "5.5 Streaming state와 하드웨어 구현 방식", "5.6 RTL/IP/FPGA 구현",
-    "6.1 가속기 Benchmark 범위와 현재 상태", "6.2 AFE·디지털 통합 XMODEL 검증",
+    "6.1 가속기 Benchmark 결과와 해석 범위", "6.2 AFE·디지털 통합 XMODEL 검증",
     "7.1 분류 성능", "7.2 Mixed-signal 및 디지털 통합 결과", "7.3 하드웨어 구현 결과",
     "8.1 설계적 차별성과 기술적 의의", "8.2 결과의 해석 범위와 향후 과제",
 ]
-REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS, RELATED_WORK_AUDIT]
+REQUIRED_FILES = [
+    REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS,
+    RELATED_WORK_AUDIT, BENCHMARK_AUDIT,
+    ROOT / "benchmarks" / "accelerator_benefit" / "results" / "cpu_fpga_comparison.csv",
+    ROOT / "benchmarks" / "accelerator_benefit" / "results" / "rtl_cycle_summary.json",
+    ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
+]
 REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_complete_system_flow.svg",
     "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
@@ -266,11 +273,17 @@ def main() -> int:
     check("original schematic claim forbidden", "원본 LTspice schematic이 아니다" in text and "UNRESOLVED_NOT_PRESENT" in UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig"))
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "−83.5557 dB", "11.721 Hz", "5.119", "2.04 code", "0.00007%"]:
+    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "−83.5557 dB", "11.721 Hz", "5.119", "2.04 code", "0.00007%", "1,777.699800 ms", "2,007.549250 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "0.099 W", "0.005347247400 J/decision"]:
         check(f"required result {value}", value in text)
-    for value in ["54.01 ms", "33.3 MSPS", "33,300", "0.099 W", "5.35 mJ"]:
-        check(f"unverified benchmark absent {value}", value not in text)
-    check("benchmark pending", "PENDING_EXTERNAL_BENCHMARK_IMPORT" in text)
+    benchmark_section = section(text, "6.1 가속기 Benchmark 결과와 해석 범위", 2)
+    for term in [
+        "09e4d840", "최종 예측 36/36", "네 막전위 144/144", "Snapshot 경계 1,080/1,080",
+        "hand-written single-thread transaction-level Exact C++", "Python 주기 모델은 검증용", "Verilator host runtime도 RTL simulation",
+        "5,401,260 cycles", "100 MHz", "speedup estimate", "측정 보드 speedup", "30분이 걸리므로 live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다",
+        "Vivado 추정 전력", "PENDING_BOARD",
+    ]:
+        check(f"benchmark scope {term}", term in benchmark_section)
+    check("old benchmark import placeholder absent", "PENDING_EXTERNAL_BENCHMARK_IMPORT" not in text)
     check("validation boundary", "검증 결과 32/32=100.00%는 Final Membrane 모델 선택" in text and "최종 일반화 성능으로 승격하지 않는다" in text)
     check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
     check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
@@ -290,7 +303,14 @@ def main() -> int:
 
     metrics = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
     check("global final metric", metrics["metrics"]["final_test_chunk_accuracy"]["value"] == 80.56)
-    check("benchmark values remain null", all(v is None for k, v in metrics["benchmark"].items() if k != "status"))
+    benchmark = metrics["benchmark"]
+    check("benchmark imported status", benchmark["status"] == "IMPORTED_VERIFIED_NO_BOARD")
+    check("benchmark commit exact", benchmark["upstream_commit"] == "09e4d840827ad20856f5e23be4743ddd01565e30")
+    check("benchmark Exact C++ latency exact", benchmark["cpu_kernel_latency_ms"] == 1777.6998 and benchmark["cpu_end_to_end_latency_ms"] == 2007.54925)
+    check("benchmark RTL exact", benchmark["rtl_processing_latency_ms"] == 54.0126 and benchmark["rtl_throughput_samples_per_s"] == 33325557.369947)
+    check("benchmark speedup exact", round(benchmark["exact_cpp_to_rtl_speedup_estimate"], 6) == 32.912687)
+    check("benchmark estimated power exact", benchmark["estimated_power_w"] == 0.099 and benchmark["estimated_energy_per_decision_j"] == 0.0053472474)
+    check("physical board metrics pending", benchmark["measured_board_power_w"] is None and benchmark["measured_energy_per_decision_j"] is None and benchmark["board_timing_status"] == "PENDING_BOARD")
     with (ROOT / "source_of_truth" / "claim_registry.csv").open(encoding="utf-8-sig", newline="") as handle:
         claim_rows = list(csv.DictReader(handle))
     known = {row["claim_id"] for row in claim_rows}
@@ -298,7 +318,7 @@ def main() -> int:
         rows = list(csv.DictReader(handle))
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}
     check("evidence-map schema", bool(rows) and set(rows[0]) == required_columns)
-    check("evidence-map coverage", len(rows) >= 61, len(rows))
+    check("evidence-map coverage", len(rows) >= 66, len(rows))
     valid_sections = {"초록", "부록"} | {str(i) for i in range(1, 10)} | {s.split()[0] for s in SUBHEADINGS}
     for row in rows:
         check(f"map section {row['statement_id']}", row["section"] in valid_sections, row["section"])

@@ -38,4 +38,4 @@ Persistent state는 다음과 같이 유한하다.
 - QRS MAF의 120-sample finite lookback과 adaptive histogram은 raw 30분 window buffer가 아니다.
 - MicroBlaze replay의 processor/local memory/UART는 pure accelerator 밖에 있으므로 본 claim에 포함하지 않는다.
 - `BRAM=0`은 implementation consistency evidence일 뿐 단독 proof가 아니다.
-- benchmark는 계속 `PENDING_EXTERNAL_BENCHMARK_IMPORT`이며 본 분석에서 latency, throughput, power 또는 energy 값을 만들지 않는다.
+- Benchmark 수치는 별도 반입 근거를 사용한다. 본 메모리 분석의 2.7 MB 회피값만으로 latency, throughput, power 또는 energy를 계산하지 않는다.

@@ -436,15 +436,21 @@
     }
   },
   "benchmark": {
-    "status": "PENDING_EXTERNAL_BENCHMARK_IMPORT",
-    "cpu_kernel_latency_ms": null,
-    "cpu_end_to_end_latency_ms": null,
-    "rtl_processing_latency_ms": null,
-    "rtl_throughput_samples_per_s": null,
-    "realtime_headroom": null,
-    "estimated_power_w": null,
+    "status": "IMPORTED_VERIFIED_NO_BOARD",
+    "upstream_commit": "09e4d840827ad20856f5e23be4743ddd01565e30",
+    "cpu_baseline": "single-thread hand-written transaction-level Exact C++",
+    "cpu_kernel_latency_ms": 1777.6998,
+    "cpu_end_to_end_latency_ms": 2007.54925,
+    "rtl_processing_latency_ms": 54.0126,
+    "rtl_throughput_samples_per_s": 33325557.369947,
+    "realtime_headroom": 33325.557369947004,
+    "exact_cpp_to_rtl_speedup_estimate": 32.91268704,
+    "estimated_power_w": 0.099,
     "measured_board_power_w": null,
-    "estimated_energy_per_decision_j": null,
-    "measured_energy_per_decision_j": null
+    "estimated_energy_per_decision_j": 0.0053472474,
+    "measured_energy_per_decision_j": null,
+    "board_timing_status": "PENDING_BOARD",
+    "board_power_status": "PENDING_BOARD",
+    "scope_limitation": "stored-data FPGA accelerator-core comparison; live decision still requires the 30-minute observation window; not measured board speedup"
   }
 }

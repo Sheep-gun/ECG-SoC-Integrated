@@ -46,6 +46,16 @@ repositories:
       - tmp/oss-cad/oss-cad-suite.exe
     import_method: "git archive c6b80de19cdcad5b7e43fe7835588b629d847f75; current HEAD/worktree excluded"
 
+  digital_benchmark_evidence:
+    name: SNN-ECG-4-Class-Classifier
+    normalized_origin_url: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
+    remote_branch: main
+    fixed_evidence_commit: 09e4d840827ad20856f5e23be4743ddd01565e30
+    imported_commit_title: "Merge Exact C++ native CPU baseline"
+    contributor: 양건
+    scope: "accelerator-benefit evidence only; locked classifier RTL remains c6b80de19cdcad5b7e43fe7835588b629d847f75"
+    import_method: "curated report/result snapshot with integrated claim boundaries"
+
 intentional_exclusions_registry: integration_evidence/excluded_upstream_paths.csv
 large_dataset_exclusions_registry: integration_evidence/excluded_large_dataset_paths.csv
 dataset_reconstruction_manifest: datasets/dataset_manifest.yaml

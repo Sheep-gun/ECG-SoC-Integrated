@@ -45,6 +45,7 @@ REQUIRED = [
     "README.md", "LICENSE_OR_PROVENANCE.md", "INTEGRATION_AUDIT.md", ".gitignore",
     "source_of_truth/upstream_commits.yaml", "source_of_truth/global_metrics.yaml",
     "source_of_truth/claim_registry.csv", "source_of_truth/artifact_manifest.csv",
+    "source_of_truth/benchmark_import_manifest.csv",
     "source_of_truth/unresolved_artifacts.csv",
     "source_of_truth/ownership_matrix.csv", "source_of_truth/terminology.yaml",
     "source_of_truth/external_reference_registry.csv",
@@ -56,7 +57,16 @@ REQUIRED = [
     "docs/HARDWARE_IMPLEMENTATION_KR.md", "docs/INTEGRATION_VERIFICATION_KR.md",
     "docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md", "docs/REPORT_EVIDENCE_MAP_KR.md",
     "docs/RELATED_WORK_HOLTER_ECG_KR.md",
-    "docs/INTEGRATION_METHOD.md", "benchmarks/accelerator_benefit/README.md",
+    "docs/INTEGRATION_METHOD.md", "docs/BENCHMARK_IMPORT_AUDIT_KR.md",
+    "benchmarks/accelerator_benefit/README.md",
+    "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md",
+    "benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md",
+    "benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md",
+    "benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv",
+    "benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv",
+    "benchmarks/accelerator_benefit/results/rtl_cycle_summary.json",
+    "benchmarks/accelerator_benefit/results/power_energy_summary.csv",
+    "benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json",
     "figures/FIGURE_INDEX.md", "figures/source/figure_data.json",
     "tools/import_upstream_repositories.py", "tools/build_global_metrics.py",
     "tools/check_integrated_repository.py", "tools/generate_integrated_figures.py",
@@ -207,6 +217,14 @@ def main() -> int:
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
     repo_by_component = {component: Path(before_map[component]["repository_root"]) for component in SPECS}
+    benchmark_commit = "09e4d840827ad20856f5e23be4743ddd01565e30"
+    benchmark_commit_check = subprocess.run([GIT, "-C", str(repo_by_component["digital_accelerator"]), "cat-file", "-e", f"{benchmark_commit}^{{commit}}"])
+    check("benchmark evidence commit exists", benchmark_commit_check.returncode == 0, benchmark_commit)
+    benchmark_manifest = read_csv("source_of_truth/benchmark_import_manifest.csv")
+    check("benchmark import manifest has 9 rows", len(benchmark_manifest) == 9, str(len(benchmark_manifest)))
+    for row in benchmark_manifest:
+        check(f"benchmark manifest commit {row['integrated_path']}", row["source_commit"] == benchmark_commit)
+        check(f"benchmark manifest path {row['integrated_path']}", (ROOT / row["integrated_path"]).is_file(), row["integrated_path"])
     upstream_blob_maps = {}
     for component, spec in SPECS.items():
         tree = git(repo_by_component[component], "-c", "core.quotepath=false", "ls-tree", "-r", spec["commit"])
@@ -292,11 +310,21 @@ def main() -> int:
         path = ROOT / item["evidence_path"]
         check(f"metric evidence exists: {name}", path.exists(), item["evidence_path"])
     benchmark = gm["benchmark"]
-    expected_benchmark_fields = ["cpu_kernel_latency_ms", "cpu_end_to_end_latency_ms", "rtl_processing_latency_ms", "rtl_throughput_samples_per_s", "realtime_headroom", "estimated_power_w", "measured_board_power_w", "estimated_energy_per_decision_j", "measured_energy_per_decision_j"]
-    check("benchmark status pending", benchmark.get("status") == "PENDING_EXTERNAL_BENCHMARK_IMPORT")
-    check("all benchmark values null not zero", all(benchmark.get(k) is None for k in expected_benchmark_fields), str({k: benchmark.get(k) for k in expected_benchmark_fields}))
-    placeholder = (ROOT / "benchmarks" / "accelerator_benefit" / "README.md").read_text(encoding="utf-8")
-    check("benchmark placeholder explicit", "PENDING_EXTERNAL_BENCHMARK_IMPORT" in placeholder and "No integrated latency, throughput, speedup, power, or energy conclusion" in placeholder)
+    check("benchmark status imported NO_BOARD", benchmark.get("status") == "IMPORTED_VERIFIED_NO_BOARD")
+    check("benchmark source commit exact", benchmark.get("upstream_commit") == "09e4d840827ad20856f5e23be4743ddd01565e30")
+    check("benchmark Exact C++ values", benchmark.get("cpu_kernel_latency_ms") == 1777.6998 and benchmark.get("cpu_end_to_end_latency_ms") == 2007.54925)
+    check("benchmark RTL values", benchmark.get("rtl_processing_latency_ms") == 54.0126 and benchmark.get("rtl_throughput_samples_per_s") == 33325557.369947)
+    check("benchmark speedup estimate", round(benchmark.get("exact_cpp_to_rtl_speedup_estimate", 0), 6) == 32.912687)
+    check("benchmark power values estimated", benchmark.get("estimated_power_w") == 0.099 and benchmark.get("estimated_energy_per_decision_j") == 0.0053472474)
+    check("benchmark physical values pending", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "PENDING_BOARD")
+    benchmark_readme = (ROOT / "benchmarks" / "accelerator_benefit" / "README.md").read_text(encoding="utf-8")
+    for phrase in ["32.912687", "측정한 speedup이 아니다", "30분 관찰", "PENDING_BOARD", "0.099 W"]:
+        check(f"benchmark README boundary {phrase}", phrase in benchmark_readme)
+    comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
+    check("benchmark comparison one row", len(comparison) == 1)
+    check("benchmark comparison formula values", comparison[0]["cpu_latency_ms"] == "1777.699800000" and comparison[0]["fpga_latency_ms"] == "54.012600000" and comparison[0]["ratio_cpu_over_fpga"] == "32.912687040")
+    post_equivalence = json.loads((ROOT / "benchmarks" / "accelerator_benefit" / "results" / "post_benchmark_equivalence.json").read_text(encoding="utf-8"))
+    check("benchmark equivalence gate", post_equivalence["status"] == "pass" and post_equivalence["final_predictions"] == "36/36" and post_equivalence["final_membranes"] == "144/144" and post_equivalence["snapshot_boundaries"] == "1080/1080")
 
     claims = read_csv("source_of_truth/claim_registry.csv")
     required_claim_columns = {"claim_id","category","proposed_claim_kr","proposed_claim_en","status","evidence_type","owner","upstream_repository","upstream_commit","evidence_path","scope","limitations","allowed_report_sections"}
@@ -358,8 +386,10 @@ def main() -> int:
     check("FIG-12 indexed", "FIG-12_detailed_digital_architecture.svg" in fig_index)
     check("FIG-12 referenced by manuscript", "FIG-12_detailed_digital_architecture.svg" in manuscript)
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
-    for forbidden in ["54.01 ms", "33.3 MSPS", "33,300", "5.35 mJ", "0.099 W"]:
-        check(f"benchmark value not promoted: {forbidden}", forbidden not in text)
+    for required in ["1,777.699800 ms", "54.012600 ms", "32.912687", "0.099 W", "PENDING_BOARD"]:
+        check(f"benchmark value promoted with scope: {required}", required in text)
+    check("benchmark live boundary", "live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다" in text)
+    check("benchmark board-speedup boundary", "측정 보드 speedup" in text or "측정 board speedup" in text)
 
     parent_index = git(PARENT, "ls-files", "--stage", "--", "ECG-SoC-Integrated")
     check("integrated repo absent from parent index", not parent_index, parent_index)
@@ -371,8 +401,7 @@ def main() -> int:
     ]
     check("parent tracked gitignore untouched by integration", not parent_gitignore_changes, str(parent_gitignore_changes))
 
-    if benchmark["status"] == "PENDING_EXTERNAL_BENCHMARK_IMPORT":
-        unresolved.append("Accelerator-benefit benchmark remains pending external import by design.")
+    unresolved.append("Physical board timing, power and energy remain PENDING_BOARD; imported benchmark is NO_BOARD.")
     unresolved.append("Physical AFE/ADC/silicon and clinical validation are outside the completed scope.")
     unresolved.append("Database-class confounding requires future same-acquisition or cross-domain validation.")
 
@@ -383,14 +412,14 @@ def main() -> int:
         "",
         f"- Rules checked: {len(checked)}",
         f"- Conflicts found: {len(failures)}",
-        "- Benchmark placeholder: " + ("PASS (all fields null)" if benchmark.get("status") == "PENDING_EXTERNAL_BENCHMARK_IMPORT" and all(benchmark.get(k) is None for k in expected_benchmark_fields) else "FAIL"),
+        "- Benchmark import: " + ("PASS (verified NO_BOARD scope)" if benchmark.get("status") == "IMPORTED_VERIFIED_NO_BOARD" else "FAIL"),
         "",
         "## Rules checked",
         "",
     ] + [f"- {'PASS' if not any(f.startswith(name + ':') for f in failures) else 'FAIL'} — {name}" for name in checked]
     report += ["", "## Conflicts found", ""] + ([f"- {f}" for f in failures] if failures else ["- None."])
     report += ["", "## Unresolved evidence / bounded scope", ""] + [f"- {u}" for u in unresolved]
-    report += ["", "## Benchmark-placeholder verification", "", "- Status is `PENDING_EXTERNAL_BENCHMARK_IMPORT`.", "- Latency, throughput, speedup, power and energy fields are null, not zero.", "- No benchmark figure or integrated benchmark conclusion is present.", ""]
+    report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_NO_BOARD`.", "- Exact C++ measurement, cycle-derived FPGA-core timing and estimated power are distinguished.", "- Physical board timing, power and energy remain `PENDING_BOARD`.", ""]
     reports = ROOT / "reports"
     reports.mkdir(exist_ok=True)
     (reports / "integrated_repository_check.md").write_text("\n".join(report), encoding="utf-8")

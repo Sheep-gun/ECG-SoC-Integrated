@@ -1,0 +1,13 @@
+{
+  "status": "CYCLE_DERIVED",
+  "case_count": 36,
+  "sample_gap_cycles": 2,
+  "clock_frequency_hz": 100000000,
+  "profile_total_cycles": 5401260,
+  "total_latency_ms": 54.0126,
+  "throughput_samples_per_s": 33325557.369947,
+  "throughput_msamples_per_s": 33.325557369947,
+  "realtime_margin_vs_1ksps": 33325.557369947004,
+  "equivalence": "final_pred 36/36; final_mem 36/36",
+  "limitation": "stored-data FPGA accelerator-core scope; not live observation or measured board system latency"
+}
