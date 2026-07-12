@@ -20,8 +20,8 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `source_of_truth/upstream_commits.yaml`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: 공개 ECG에서 MATLAB–XMODEL–RTL–benchmark–통합–FPGA–최종 보고서까지의 전체 workflow
-- Evidence scope: high-level sequential workflow; details remain in the report body
+- Caption: 공개 ECG에서 모델·디지털 개발 경로가 분기되고 통합·benchmark·FPGA 근거가 최종 보고서로 합류하는 workflow
+- Evidence scope: branched development and evidence-merging workflow; details remain in the report body
 - Limitations: analog layers are model-based; final-test tuning remains forbidden by the written protocol
 
 ## FIG-03
@@ -130,9 +130,9 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: signed ECG에서 4-class 출력까지의 digital signal flow
-- Evidence scope: high-level left-to-right grouping of verified RTL stages
-- Limitations: not literal post-synthesis netlist connectivity; detailed parallel evidence paths remain in the body
+- Caption: signed ECG의 사건 경로가 박동·리듬과 파형 형태 경로로 분기된 뒤 Snapshot에서 합류하는 digital signal flow
+- Evidence scope: branched rhythm and morphology evidence paths with a shared Snapshot merge
+- Limitations: not literal post-synthesis netlist connectivity; block internals remain in the body
 
 ## FIG-13
 
@@ -163,8 +163,8 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
-- Caption: ECG 차동 입력에서 signed RTL stream까지의 analog AFE·ADC signal flow
-- Evidence scope: high-level reconstruction from fixed parameter documentation and XMODEL RTL
+- Caption: ECG 차동 입력의 두 HPF 경로가 IA에서 합류하고 비이상성 주입 경로가 분리된 analog AFE·ADC signal flow
+- Evidence scope: differential-input reconstruction with separate XMODEL stress injection paths
 - Limitations: not the missing original LTspice schematic; component values and stress details remain in the body
 
 ## MAT-01

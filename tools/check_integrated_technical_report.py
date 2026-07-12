@@ -229,18 +229,18 @@ def main() -> int:
         check(f"figure referenced {filename}", len(matches) == 1, matches)
         check(f"figure exists {filename}", (ROOT / "figures" / "final" / filename).is_file())
     figure12 = (ROOT / "figures" / "final" / "FIG-12_digital_signal_flow.svg").read_text(encoding="utf-8")
-    for label in ["Signed ECG", "변화량 계산", "Strong Event", "QRS LIF", "리듬·파형", "증거 생성", "60초 Snapshot", "Final Membrane", "NSR·CHF·ARR·AFF"]:
+    for label in ["Signed ECG", "변화량 계산", "Strong Event", "QRS LIF", "박동·리듬 경로", "RR Counter", "PNN·RDM", "Ectopic Evidence", "파형 형태 경로", "DSCR", "RAM", "QRS MAF", "RBBB-like", "60초", "Snapshot", "Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
-    check("FIG-12 arrows are straight left-to-right", "<polyline" not in figure12 and figure12.count('marker-end="url(#flow-arrow)"') == 7)
+    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 20 and figure12.count("<circle") >= 6)
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
-        "FIG-02_overall_workflow.svg": ["전체 연구 workflow", "공개 ECG 데이터", "MATLAB AFE·ADC 검증", "AFE·ADC XMODEL 검증", "Digital SNN RTL IP", "Accelerator Benchmark", "AFE–RTL 통합 검증", "FPGA·IP 구현 검증", "최종 결과·보고서"],
+        "FIG-02_overall_workflow.svg": ["공개 ECG 데이터", "MATLAB AFE·ADC 사전검증", "Signed 12-bit 기준 Stream", "혼합신호 모델", "디지털 가속기", "AFE·ADC XMODEL 검증", "Digital SNN RTL IP", "Accelerator Benchmark", "AFE–RTL 통합 검증", "FPGA·IP 구현 검증", "최종 결과·보고서"],
         "FIG-04_multitimescale_architecture.svg": ["다중 시간축 구조", "사건과 지속 상태", "60초 Snapshot", "30분 Final Membrane"],
         "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
         "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "ECG 숫자 입력", "현재값-직전값", "강한 사건", "QRS 누적·발화", "박동 이후 표본 계수"],
         "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
-        "FIG-15_analog_signal_flow.svg": ["Analog AFE·ADC signal flow", "ECG 입력", "HPF", "3-op-amp IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "12-bit ADC", "Signed 변환", "Digital RTL", "원본 LTspice schematic"],
+        "FIG-15_analog_signal_flow.svg": ["ECG+", "ECG−", "HPF (+)", "HPF (−)", "3-op-amp", "IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "12-bit ADC", "Signed 12-bit", "Stream", "Digital RTL", "입력 교란", "R/C·Op-Amp 비이상성", "ADC 비이상성"],
     }
     for filename, labels in reader_figure_requirements.items():
         svg = (ROOT / "figures" / "final" / filename).read_text(encoding="utf-8")
@@ -248,8 +248,8 @@ def main() -> int:
             check(f"reader-facing figure label {filename}: {label}", label in svg)
     figure02 = (ROOT / "figures" / "final" / "FIG-02_overall_workflow.svg").read_text(encoding="utf-8")
     figure15 = (ROOT / "figures" / "final" / "FIG-15_analog_signal_flow.svg").read_text(encoding="utf-8")
-    check("FIG-02 arrows are straight top-to-bottom", "<polyline" not in figure02 and figure02.count('marker-end="url(#flow-arrow)"') == 7)
-    check("FIG-15 arrows are straight left-to-right", "<polyline" not in figure15 and figure15.count('marker-end="url(#flow-arrow)"') == 7)
+    check("FIG-02 branched development and evidence merge", figure02.count("<polyline") >= 14 and figure02.count("<circle") >= 4)
+    check("FIG-15 differential merge and stress injection", "<polygon" in figure15 and figure15.count('stroke-dasharray="8 7"') >= 6)
     old_english_figure_phrases = ["Sample / Beat", "60-second Snapshot", "Event / State", "Signed-stream handoff integrity", "Locked classification result", "old state 읽기", "Peak 진폭", "Class 상태 입력"]
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
     check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])

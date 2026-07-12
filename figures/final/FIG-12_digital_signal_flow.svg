@@ -1,41 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
-<defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#34495e"/></marker></defs>
-<rect width="1600" height="900" fill="#ffffff"/>
-<rect x="0" y="0" width="1600" height="100" fill="#102a43"/>
-<text x="54" y="56" font-family="Arial, Noto Sans KR, sans-serif" font-size="34" font-weight="700" fill="white">Digital signal flow</text>
-<text x="54" y="83" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#d9e2ec">signed ECG stream에서 4-class 기록 판정까지</text>
-<rect x="25" y="350" width="150" height="120" rx="8" fill="#f4f8ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="25" y="350" width="150" height="8" rx="4" fill="#2f80ed"/>
-<text x="100.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Signed ECG</text>
-<line x1="175" y1="410.0" x2="200" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="200" y="350" width="150" height="120" rx="8" fill="#f1fbf7" stroke="#829ab1" stroke-width="2"/>
-<rect x="200" y="350" width="150" height="8" rx="4" fill="#12b886"/>
-<text x="275.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">변화량 계산</text>
-<line x1="350" y1="410.0" x2="375" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="375" y="350" width="170" height="120" rx="8" fill="#f1fbf7" stroke="#829ab1" stroke-width="2"/>
-<rect x="375" y="350" width="170" height="8" rx="4" fill="#12b886"/>
-<text x="460.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Strong Event</text>
-<line x1="545" y1="410.0" x2="570" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="570" y="350" width="150" height="120" rx="8" fill="#fff9e8" stroke="#829ab1" stroke-width="2"/>
-<rect x="570" y="350" width="150" height="8" rx="4" fill="#f59f00"/>
-<text x="645.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">QRS LIF</text>
-<line x1="720" y1="410.0" x2="745" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="745" y="350" width="220" height="120" rx="8" fill="#eefafa" stroke="#829ab1" stroke-width="2"/>
-<rect x="745" y="350" width="220" height="8" rx="4" fill="#0b7285"/>
-<text x="855.0" y="404.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">리듬·파형</text>
-<text x="855.0" y="430.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">증거 생성</text>
-<line x1="965" y1="410.0" x2="990" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="990" y="350" width="170" height="120" rx="8" fill="#f5f0ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="990" y="350" width="170" height="8" rx="4" fill="#7950f2"/>
-<text x="1075.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">60초 Snapshot</text>
-<line x1="1160" y1="410.0" x2="1185" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="1185" y="350" width="180" height="120" rx="8" fill="#fbf2ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="1185" y="350" width="180" height="8" rx="4" fill="#ae3ec9"/>
-<text x="1275.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Final Membrane</text>
-<line x1="1365" y1="410.0" x2="1390" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<rect x="1390" y="350" width="185" height="120" rx="8" fill="#f3f9ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="1390" y="350" width="185" height="8" rx="4" fill="#1971c2"/>
-<text x="1482.5" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">NSR·CHF·ARR·AFF</text>
-<line x1="40" y1="838" x2="1560" y2="838" stroke="#d9e2ec" stroke-width="2"/>
-<text x="800" y="870" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#486581">세부 뉴런 상태, 리듬·파형 특징과 누적 규칙은 본문에서 설명한다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="780" viewBox="0 0 1600 780" role="img" aria-label="Signed ECG samples create events and QRS spikes, split into rhythm and morphology evidence paths, and merge into Snapshot and Final Membrane classification">
+<defs><marker id="paper-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#364152"/></marker></defs>
+<rect width="1600" height="780" fill="#ffffff"/>
+<rect x="30" y="330" width="140" height="100" rx="4" fill="#eff6ff" stroke="#2563a8" stroke-width="2"/>
+<text x="100.0" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Signed ECG</text>
+<rect x="200" y="330" width="140" height="100" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="270.0" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">변화량 계산</text>
+<rect x="370" y="330" width="160" height="100" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="450.0" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Strong Event</text>
+<rect x="570" y="330" width="150" height="100" rx="4" fill="#fffbeb" stroke="#b7791f" stroke-width="2"/>
+<text x="645.0" y="387.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">QRS LIF</text>
+<polyline points="170,380 200,380" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="340,380 370,380" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="530,380 570,380" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<text x="900" y="80" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#475467">박동·리듬 경로</text>
+<rect x="760" y="120" width="140" height="90" rx="4" fill="#ecfeff" stroke="#0e7490" stroke-width="2"/>
+<text x="830.0" y="172.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">RR Counter</text>
+<rect x="930" y="120" width="190" height="90" rx="4" fill="#ecfeff" stroke="#0e7490" stroke-width="2"/>
+<text x="1025.0" y="159.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">PNN·RDM</text>
+<text x="1025.0" y="185.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Ectopic Evidence</text>
+<polyline points="720,380 740,380 740,165 760,165" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="900,165 930,165" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<text x="960" y="480" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#475467">파형 형태 경로</text>
+<polyline points="450,430 450,500 1130,500" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="645,430 645,500" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="450" cy="500" r="4" fill="#667085"/>
+<circle cx="645" cy="500" r="4" fill="#667085"/>
+<circle cx="785.0" cy="500" r="4" fill="#667085"/>
+<polyline points="785.0,500 785.0,550" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="740" y="550" width="90" height="70" rx="4" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+<text x="785.0" y="592.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">DSCR</text>
+<polyline points="785.0,620 785.0,660" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="895.0" cy="500" r="4" fill="#667085"/>
+<polyline points="895.0,500 895.0,550" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="850" y="550" width="90" height="70" rx="4" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+<text x="895.0" y="592.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">RAM</text>
+<polyline points="895.0,620 895.0,660" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1010.0" cy="500" r="4" fill="#667085"/>
+<polyline points="1010.0,500 1010.0,550" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="960" y="550" width="100" height="70" rx="4" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+<text x="1010.0" y="592.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">QRS MAF</text>
+<polyline points="1010.0,620 1010.0,660" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1130.0" cy="500" r="4" fill="#667085"/>
+<polyline points="1130.0,500 1130.0,550" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="1080" y="550" width="100" height="70" rx="4" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+<text x="1130.0" y="592.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">RBBB-like</text>
+<polyline points="1130.0,620 1130.0,660" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="785,660 1130,660" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1130" cy="660" r="5" fill="#364152"/>
+<rect x="1180" y="310" width="150" height="140" rx="4" fill="#f5f3ff" stroke="#6b46c1" stroke-width="2"/>
+<text x="1255.0" y="374.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">60초</text>
+<text x="1255.0" y="400.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Snapshot</text>
+<polyline points="1120,165 1150,165 1150,350 1180,350" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1130,660 1150,660 1150,410 1180,410" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<rect x="1370" y="300" width="150" height="160" rx="4" fill="#fdf4ff" stroke="#9c36b5" stroke-width="2"/>
+<text x="1445.0" y="374.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Final</text>
+<text x="1445.0" y="400.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Membrane</text>
+<polyline points="1330,380 1370,380" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1520,330 1540,330" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1520,370 1540,370" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1520,410 1540,410" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1520,450 1540,450" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1550" y="336" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#182230">NSR</text>
+<text x="1550" y="376" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#182230">CHF</text>
+<text x="1550" y="416" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#182230">ARR</text>
+<text x="1550" y="456" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#182230">AFF</text>
 </svg>

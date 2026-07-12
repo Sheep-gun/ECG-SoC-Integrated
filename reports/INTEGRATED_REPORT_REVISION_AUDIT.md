@@ -44,7 +44,7 @@
 
 ## 그림과 원본 회로도 경계
 
-고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. `FIG-15_analog_signal_flow.svg`는 ECG 입력부터 signed RTL stream까지의 블록명만 남긴 직선 흐름으로 단순화하였다. `FIG-12_digital_signal_flow.svg`도 변화량·Strong Event·QRS LIF·리듬/파형 증거·Snapshot·Final Membrane을 왼쪽에서 오른쪽으로 한 번만 진행하도록 정리하였다. 세부 파라미터와 병렬 상태 경로는 본문에서 설명한다.
+고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. `FIG-15_analog_signal_flow.svg`는 ECG+·ECG−의 두 HPF 경로가 IA에서 합류하고 비이상성 주입은 점선 경로로 분리되도록 구성하였다. `FIG-12_digital_signal_flow.svg`는 사건·QRS 경로에서 박동·리듬과 파형 형태 경로가 분기되고 Snapshot에서 다시 합류하는 실제 상위 구조를 반영하였다.
 
 고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 analog signal flow와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
 
@@ -82,14 +82,14 @@
 
 ## 전체 연구·검증 workflow 정리
 
-- 전체 workflow는 공개 ECG, MATLAB, XMODEL, Digital SNN RTL IP, benchmark, AFE–RTL 통합, FPGA·IP 검증과 최종 보고서의 여덟 단계만 남겼다.
-- 판단 마름모, 수정 loop, 블록 내부 설명을 제거하고 모든 화살표를 위에서 아래로 정렬하였다.
-- final-test 재튜닝 금지, physical AFE, 24시간 성능과 clinical validation 경계는 그림 안에 반복하지 않고 본문과 caption에 유지하였다.
+- 전체 workflow는 MATLAB 기준 stream에서 XMODEL과 Digital SNN RTL IP로 개발 경로가 분기되고, 통합·benchmark·FPGA 근거가 최종 보고서로 합류하도록 구성하였다.
+- 단순 일렬 배치를 제거하고 실제 산출물 의존관계에 맞는 fork와 merge를 표시하였다. 블록 내부 설명은 제목 수준으로 유지하였다.
+- final-test 재튜닝 금지, physical AFE, 24시간 성능과 clinical validation 경계는 본문과 caption에 유지하였다.
 
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 674 rules, 0 conflicts, chars 64,618, figures 19, evidence rows 68
+- `tools/check_integrated_technical_report.py`: PASS — 693 rules, 0 conflicts, chars 64,695, figures 19, evidence rows 68
 - `tools/check_integrated_repository.py`: PASS — 293 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증
