@@ -240,7 +240,7 @@ def main() -> int:
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
         "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "ECG 숫자 입력", "현재값-직전값", "강한 사건", "QRS 누적·발화", "박동 이후 표본 계수"],
         "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
-        "FIG-15_analog_signal_flow.svg": ["ECG+", "ECG−", "HPF (+)", "HPF (−)", "3-op-amp", "IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "12-bit ADC", "Signed 12-bit", "Stream", "Digital RTL", "입력 교란", "R/C·Op-Amp 비이상성", "ADC 비이상성"],
+        "FIG-15_analog_signal_flow.svg": ["ECG+", "ECG−", "HPF (+)", "HPF (−)", "3-op-amp", "IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "12-bit ADC", "Signed 12-bit", "Stream", "Digital RTL", "Input Disturbance Injection", "R/C Tolerance &amp; Op-Amp Error Model", "ADC Error Model", "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model"],
     }
     for filename, labels in reader_figure_requirements.items():
         svg = (ROOT / "figures" / "final" / filename).read_text(encoding="utf-8")
