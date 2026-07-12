@@ -44,7 +44,7 @@
 
 ## 그림과 원본 회로도 경계
 
-고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 기존 AFE 재구성 블록도는 `FIG-15_analog_signal_flow.svg`로 교체해 ECG 입력부터 signed RTL stream까지의 순서와 XMODEL 비이상성 주입 위치를 한 방향으로 읽도록 했다. 기존 디지털 아키텍처 그림은 `FIG-12_digital_signal_flow.svg`로 교체해 변화량·강한 사건·QRS 발화에서 병렬 리듬/파형 경로, Snapshot과 Final Membrane까지 연결했다.
+고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. `FIG-15_analog_signal_flow.svg`는 ECG 입력부터 signed RTL stream까지의 블록명만 남긴 직선 흐름으로 단순화하였다. `FIG-12_digital_signal_flow.svg`도 변화량·Strong Event·QRS LIF·리듬/파형 증거·Snapshot·Final Membrane을 왼쪽에서 오른쪽으로 한 번만 진행하도록 정리하였다. 세부 파라미터와 병렬 상태 경로는 본문에서 설명한다.
 
 고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 analog signal flow와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
 
@@ -80,17 +80,16 @@
 - pure RTL 9,719 LUT/5,038 FF/0 BRAM/0 DSP/WNS 8.184 ns와 MicroBlaze system 12,494 LUT/8,494 FF/16 BRAM/3 DSP/WNS 0.097 ns를 서로 다른 구현 범위로 유지했다.
 - 승인된 reader-facing Figure는 실제 Device View, `SNN accelerator에 속한 배치 셀만 분리 표시`, hierarchy 범례와 자원·timing 요약을 한 페이지에 결합한다. 기존 3페이지 vector package는 보조 evidence로 유지한다.
 
-## 전체 연구·검증 workflow 보강
+## 전체 연구·검증 workflow 정리
 
-- 기존의 단순한 MATLAB→XMODEL→RTL→FPGA 직선 블록도를 입력 고정, 단계별 판단, 수정 후 재검증, 잠금 최종시험과 결과 통합까지 포함하는 전체 workflow로 교체하였다.
-- 공개 ECG와 세 component commit·manifest·SHA256을 함께 시작점으로 두어 데이터와 구현 provenance가 동시에 고정됨을 나타냈다.
-- MATLAB 공칭 검증, XMODEL stress·인계 검증, reference↔XSim 일치, FPGA 통합 등가성의 수정 반복은 허용하되 LOCK 아래 final-test 결과가 설계 단계로 되먹임되지 않도록 화살표를 분리하였다.
-- physical AFE, 24시간 성능과 clinical validation은 최종 결과 상자에서도 미검증 범위로 유지하였다.
+- 전체 workflow는 공개 ECG, MATLAB, XMODEL, Digital SNN RTL IP, benchmark, AFE–RTL 통합, FPGA·IP 검증과 최종 보고서의 여덟 단계만 남겼다.
+- 판단 마름모, 수정 loop, 블록 내부 설명을 제거하고 모든 화살표를 위에서 아래로 정렬하였다.
+- final-test 재튜닝 금지, physical AFE, 24시간 성능과 clinical validation 경계는 그림 안에 반복하지 않고 본문과 caption에 유지하였다.
 
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 658 rules, 0 conflicts, chars 63,936, figures 19, evidence rows 67
-- `tools/check_integrated_repository.py`: PASS — 289 rules, 0 conflicts
+- `tools/check_integrated_technical_report.py`: PASS — 674 rules, 0 conflicts, chars 64,618, figures 19, evidence rows 68
+- `tools/check_integrated_repository.py`: PASS — 293 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

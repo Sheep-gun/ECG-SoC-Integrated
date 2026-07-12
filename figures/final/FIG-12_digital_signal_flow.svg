@@ -3,96 +3,39 @@
 <rect width="1600" height="900" fill="#ffffff"/>
 <rect x="0" y="0" width="1600" height="100" fill="#102a43"/>
 <text x="54" y="56" font-family="Arial, Noto Sans KR, sans-serif" font-size="34" font-weight="700" fill="white">Digital signal flow</text>
-<text x="54" y="83" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#d9e2ec">signed ECG 표본 → 강한 변화 사건 → 박동·리듬/파형 증거 → Snapshot → Final Membrane</text>
-<rect x="25" y="330" width="140" height="170" rx="7" fill="#f4f8ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="25" y="330" width="140" height="8" rx="4" fill="#2f80ed"/>
-<text x="95.0" y="372" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">ECG 표본 입력</text>
-<text x="95.0" y="406" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">signed 12-bit</text>
-<text x="95.0" y="431" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1 kSPS</text>
-<text x="95.0" y="456" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">sample_valid</text>
-<rect x="195" y="330" width="160" height="170" rx="7" fill="#f1fbf7" stroke="#829ab1" stroke-width="2"/>
-<rect x="195" y="330" width="160" height="8" rx="4" fill="#12b886"/>
-<text x="275.0" y="372" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">변화량 계산</text>
-<text x="275.0" y="406" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">현재값 - 직전값</text>
-<text x="275.0" y="431" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">상승 / 하강</text>
-<text x="275.0" y="456" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">표본별 갱신</text>
-<rect x="385" y="330" width="170" height="170" rx="7" fill="#f1fbf7" stroke="#829ab1" stroke-width="2"/>
-<rect x="385" y="330" width="170" height="8" rx="4" fill="#12b886"/>
-<text x="470.0" y="372" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">강한 변화 사건</text>
-<text x="470.0" y="406" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">적응형 문턱값</text>
-<text x="470.0" y="431" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">rise / fall pulse</text>
-<text x="470.0" y="456" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">별도 막전위 없음</text>
-<rect x="585" y="330" width="170" height="170" rx="7" fill="#fff9e8" stroke="#829ab1" stroke-width="2"/>
-<rect x="585" y="330" width="170" height="8" rx="4" fill="#f59f00"/>
-<text x="670.0" y="372" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">QRS LIF</text>
-<text x="670.0" y="406" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">사건 가중치 누적</text>
-<text x="670.0" y="431" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">문턱 발화</text>
-<text x="670.0" y="456" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">초기화 · 불응기</text>
-<line x1="165" y1="415" x2="195" y2="415" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="180.0" y="405" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">표본</text>
-<line x1="355" y1="415" x2="385" y2="415" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="370.0" y="405" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">delta</text>
-<line x1="555" y1="415" x2="585" y2="415" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="570.0" y="405" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">event</text>
-<text x="805" y="135" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#0b7285">박동·리듬 경로</text>
-<rect x="805" y="160" width="145" height="150" rx="7" fill="#eefafa" stroke="#829ab1" stroke-width="2"/>
-<rect x="805" y="160" width="145" height="8" rx="4" fill="#0b7285"/>
-<text x="877.5" y="202" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">RR 간격</text>
-<text x="877.5" y="236" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">박동 이후</text>
-<text x="877.5" y="261" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">표본 수 계수</text>
-<text x="877.5" y="286" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">beat tick</text>
-<rect x="980" y="150" width="195" height="170" rx="7" fill="#eefafa" stroke="#829ab1" stroke-width="2"/>
-<rect x="980" y="150" width="195" height="8" rx="4" fill="#0b7285"/>
-<text x="1077.5" y="192" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">리듬 증거</text>
-<text x="1077.5" y="226" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">PNN 일치/불일치</text>
-<text x="1077.5" y="251" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">RDM 변화 수준</text>
-<text x="1077.5" y="276" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">early↔late 쌍</text>
-<polyline points="755,415 780,415 780,235 805,235" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="780" y="225" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">qrs_spike</text>
-<line x1="950" y1="235" x2="980" y2="235" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="965.0" y="225" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">RR</text>
-<text x="805" y="520" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#c2410c">파형 형태 병렬 경로</text>
-<rect x="805" y="540" width="370" height="205" rx="8" fill="#fff8f1" stroke="#f08c46" stroke-width="2"/>
-<rect x="825" y="568" width="150" height="62" rx="6" fill="#ffffff" stroke="#f08c46"/>
-<text x="900" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">DSCR</text>
-<text x="900" y="615" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="12" font-weight="400" fill="#486581">기울기 방향 전환</text>
-<rect x="995" y="568" width="150" height="62" rx="6" fill="#ffffff" stroke="#f08c46"/>
-<text x="1070" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">RAM</text>
-<text x="1070" y="615" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="12" font-weight="400" fill="#486581">박동 최대 진폭 코드</text>
-<rect x="825" y="650" width="150" height="62" rx="6" fill="#ffffff" stroke="#f08c46"/>
-<text x="900" y="674" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">QRS MAF</text>
-<text x="900" y="697" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="12" font-weight="400" fill="#486581">폭·복잡도·에너지</text>
-<rect x="995" y="650" width="150" height="62" rx="6" fill="#ffffff" stroke="#f08c46"/>
-<text x="1070" y="674" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#102a43">RBBB-like</text>
-<text x="1070" y="697" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="12" font-weight="400" fill="#486581">말단 반복 지연</text>
-<polyline points="555,415 780,415 780,642 805,642" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="780" y="632" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">표본·event·qrs</text>
-<rect x="1210" y="300" width="170" height="230" rx="7" fill="#f5f0ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="1210" y="300" width="170" height="8" rx="4" fill="#7950f2"/>
-<text x="1295.0" y="342" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">60초 Snapshot</text>
-<text x="1295.0" y="376" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">60,000표본</text>
-<text x="1295.0" y="401" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">리듬+파형 증거</text>
-<text x="1295.0" y="426" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">NSR/CHF/ARR/AFF</text>
-<text x="1295.0" y="451" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">국소 클래스 상태</text>
-<polyline points="1175,235 1192,235 1192,365 1210,365" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="1192" y="355" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">rhythm</text>
-<polyline points="1175,642 1192,642 1192,465 1210,465" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="1192" y="455" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">morphology</text>
-<rect x="1410" y="300" width="165" height="230" rx="7" fill="#fbf2ff" stroke="#829ab1" stroke-width="2"/>
-<rect x="1410" y="300" width="165" height="8" rx="4" fill="#ae3ec9"/>
-<text x="1492.5" y="342" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Final Membrane</text>
-<text x="1492.5" y="376" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">Snapshot 30개</text>
-<text x="1492.5" y="401" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">반복·지속성 누적</text>
-<text x="1492.5" y="426" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">guard/rescue/veto</text>
-<text x="1492.5" y="451" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">WTA → 4-class</text>
-<line x1="1380" y1="415" x2="1410" y2="415" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
-<text x="1395.0" y="405" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">snapshot</text>
-<text x="1492" y="566" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#7b2cbf">final_pred + final_mem[4]</text>
-<rect x="120" y="780" width="1360" height="44" rx="6" fill="#edf2f7" stroke="#9fb3c8"/>
-<text x="800" y="808" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="600" fill="#334e68">제어 FSM: 표본 수락 → 60,000표본 확정 → 30번째 Snapshot 확정 → 최종 출력</text>
-<polyline points="260,780 260,520 95,520 95,500" fill="none" stroke="#829ab1" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
-<polyline points="1295,780 1295,530" fill="none" stroke="#829ab1" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
-<polyline points="1492,780 1492,530" fill="none" stroke="#829ab1" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
+<text x="54" y="83" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#d9e2ec">signed ECG stream에서 4-class 기록 판정까지</text>
+<rect x="25" y="350" width="150" height="120" rx="8" fill="#f4f8ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="25" y="350" width="150" height="8" rx="4" fill="#2f80ed"/>
+<text x="100.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Signed ECG</text>
+<line x1="175" y1="410.0" x2="200" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="200" y="350" width="150" height="120" rx="8" fill="#f1fbf7" stroke="#829ab1" stroke-width="2"/>
+<rect x="200" y="350" width="150" height="8" rx="4" fill="#12b886"/>
+<text x="275.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">변화량 계산</text>
+<line x1="350" y1="410.0" x2="375" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="375" y="350" width="170" height="120" rx="8" fill="#f1fbf7" stroke="#829ab1" stroke-width="2"/>
+<rect x="375" y="350" width="170" height="8" rx="4" fill="#12b886"/>
+<text x="460.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Strong Event</text>
+<line x1="545" y1="410.0" x2="570" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="570" y="350" width="150" height="120" rx="8" fill="#fff9e8" stroke="#829ab1" stroke-width="2"/>
+<rect x="570" y="350" width="150" height="8" rx="4" fill="#f59f00"/>
+<text x="645.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">QRS LIF</text>
+<line x1="720" y1="410.0" x2="745" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="745" y="350" width="220" height="120" rx="8" fill="#eefafa" stroke="#829ab1" stroke-width="2"/>
+<rect x="745" y="350" width="220" height="8" rx="4" fill="#0b7285"/>
+<text x="855.0" y="404.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">리듬·파형</text>
+<text x="855.0" y="430.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">증거 생성</text>
+<line x1="965" y1="410.0" x2="990" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="990" y="350" width="170" height="120" rx="8" fill="#f5f0ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="990" y="350" width="170" height="8" rx="4" fill="#7950f2"/>
+<text x="1075.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">60초 Snapshot</text>
+<line x1="1160" y1="410.0" x2="1185" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="1185" y="350" width="180" height="120" rx="8" fill="#fbf2ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="1185" y="350" width="180" height="8" rx="4" fill="#ae3ec9"/>
+<text x="1275.0" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Final Membrane</text>
+<line x1="1365" y1="410.0" x2="1390" y2="410.0" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<rect x="1390" y="350" width="185" height="120" rx="8" fill="#f3f9ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="1390" y="350" width="185" height="8" rx="4" fill="#1971c2"/>
+<text x="1482.5" y="417.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">NSR·CHF·ARR·AFF</text>
 <line x1="40" y1="838" x2="1560" y2="838" stroke="#d9e2ec" stroke-width="2"/>
-<text x="800" y="870" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#486581">전체 1,800,000표본을 저장하지 않고 표본별 고정 폭 상태를 갱신하는 설명용 signal flow</text>
+<text x="800" y="870" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#486581">세부 뉴런 상태, 리듬·파형 특징과 누적 규칙은 본문에서 설명한다.</text>
 </svg>

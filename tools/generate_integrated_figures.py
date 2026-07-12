@@ -74,33 +74,11 @@ def signal_canvas(title: str, subtitle: str) -> list[str]:
     ]
 
 
-def signal_box(x, y, w, h, title, lines=(), accent="#2f80ed", fill="#ffffff") -> list[str]:
-    out = [
-        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="7" fill="{fill}" stroke="#829ab1" stroke-width="2"/>',
-        f'<rect x="{x}" y="{y}" width="{w}" height="8" rx="4" fill="{accent}"/>',
-        txt(x + w / 2, y + 42, title, 18, "#102a43", 700, "middle"),
-    ]
-    start_y = y + 76
-    for i, line in enumerate(lines):
-        out.append(txt(x + w / 2, start_y + i * 25, line, 15, "#334e68", 400, "middle"))
-    return out
-
-
 def signal_arrow(x1, y1, x2, y2, label="", dashed=False) -> list[str]:
     dash = ' stroke-dasharray="8 7"' if dashed else ""
     out = [f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"{dash}/>' ]
     if label:
         out.append(txt((x1 + x2) / 2, min(y1, y2) - 10, label, 13, "#486581", 600, "middle"))
-    return out
-
-
-def signal_path(points, label="", dashed=False, color="#34495e") -> list[str]:
-    dash = ' stroke-dasharray="8 7"' if dashed else ""
-    point_text = " ".join(f"{x},{y}" for x, y in points)
-    out = [f'<polyline points="{point_text}" fill="none" stroke="{color}" stroke-width="3" marker-end="url(#flow-arrow)"{dash}/>' ]
-    if label:
-        x, y = points[len(points) // 2]
-        out.append(txt(x, y - 10, label, 13, "#486581", 600, "middle"))
     return out
 
 
@@ -121,23 +99,15 @@ def workflow_canvas(title: str, subtitle: str) -> list[str]:
     ]
 
 
-def workflow_decision(x, y, w, h, lines) -> list[str]:
-    points = f"{x + w/2},{y} {x + w},{y + h/2} {x + w/2},{y + h} {x},{y + h/2}"
-    out = [f'<polygon points="{points}" fill="#e6fcf5" stroke="#2f9e44" stroke-width="2.5"/>']
-    first_y = y + h / 2 - (len(lines) - 1) * 11 + 6
-    for i, line in enumerate(lines):
-        out.append(txt(x + w / 2, first_y + i * 22, line, 15, "#1b4332", 700, "middle"))
-    return out
-
-
-def workflow_box(x, y, w, h, title, lines=(), accent="#2f80ed", fill="#ffffff") -> list[str]:
+def simple_title_box(x, y, w, h, title, accent="#2f80ed", fill="#ffffff") -> list[str]:
+    title_lines = [title] if isinstance(title, str) else list(title)
     out = [
-        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="7" fill="{fill}" stroke="#829ab1" stroke-width="2"/>',
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{fill}" stroke="#829ab1" stroke-width="2"/>',
         f'<rect x="{x}" y="{y}" width="{w}" height="8" rx="4" fill="{accent}"/>',
-        txt(x + w / 2, y + 34, title, 18, "#102a43", 700, "middle"),
     ]
-    for i, line in enumerate(lines):
-        out.append(txt(x + w / 2, y + 62 + i * 21, line, 14, "#334e68", 400, "middle"))
+    start_y = y + h / 2 - (len(title_lines) - 1) * 13 + 7
+    for i, line in enumerate(title_lines):
+        out.append(txt(x + w / 2, start_y + i * 26, line, 18, "#102a43", 700, "middle"))
     return out
 
 
@@ -228,45 +198,26 @@ def main() -> int:
     footer(s, "설계 동기를 설명하는 그림이며 임상 진단을 뜻하지 않음")
     write_svg("FIG-01_long_window_motivation.svg", s)
 
-    # FIG-02: overall research and validation workflow. Iteration arrows stop
-    # before the locked final test so the figure cannot imply test-set tuning.
-    s = workflow_canvas("전체 연구·검증 workflow", "입력과 provenance 고정 → AFE·ADC 모델 검증 → streaming RTL → FPGA 통합 → 잠금 최종시험")
-    s += workflow_box(170, 125, 400, 90, "공개 ECG 데이터", ["NSR·CHF·ARR·AFF 원천 record"], accent="#2f80ed", fill="#f7fbff")
-    s += workflow_box(1030, 125, 400, 90, "고정 provenance", ["세 component commit · manifest · SHA256"], accent="#5f3dc4", fill="#faf8ff")
-    s += workflow_box(510, 250, 580, 95, "평가 입력과 기준을 먼저 고정", ["record-wise split · 공통 30분 window", "final test는 모델 선택에 사용하지 않음"], accent="#486581", fill="#f5f7fa")
-    s += signal_path([(370, 215), (370, 235), (675, 235), (675, 250)])
-    s += signal_path([(1230, 215), (1230, 235), (925, 235), (925, 250)])
-
-    rows = [
-        (385, "MATLAB 공칭 pre-validation", ["필터·이득·headroom·clipping", "signed 기준 벡터 생성"], ["공칭 기준", "충족?"], "AFE·ADC 파라미터 수정", ["공칭 모델 단계"], "#0ca678", "#f0fff8"),
-        (525, "SystemVerilog AFE+ADC XMODEL", ["PLI·R/C mismatch·GBW/VOS", "ADC 비이상성·장시간 stream"], ["stress와 인계", "기준 충족?"], "모델 구현 수정", ["물리 회로 검증 아님"], "#f08c00", "#fff9f0"),
-        (665, "정수 reference와 streaming RTL", ["사건·QRS·리듬·형태 → Snapshot", "30개 Snapshot → Final Membrane"], ["reference↔XSim", "일치?"], "RTL 구현 수정", ["locked 구조는 재튜닝하지 않음"], "#7950f2", "#faf7ff"),
-        (805, "Vivado implementation · IP · FPGA replay", ["pure RTL → IP-XACT → MicroBlaze", "final_pred·final_mem 비교"], ["통합 등가성", "통과?"], "통합 구현 수정", ["입출력·cadence·연결 교정"], "#1971c2", "#f3f9ff"),
+    # FIG-02: intentionally high-level workflow; details remain in the report.
+    s = workflow_canvas("전체 연구 workflow", "공개 ECG에서 통합 결과까지")
+    stages = [
+        ("공개 ECG 데이터", "#2f80ed", "#f4f8ff"),
+        ("MATLAB AFE·ADC 검증", "#0ca678", "#f0fff8"),
+        ("AFE·ADC XMODEL 검증", "#f08c00", "#fff9f0"),
+        ("Digital SNN RTL IP", "#7950f2", "#faf7ff"),
+        ("Accelerator Benchmark", "#5f3dc4", "#f8f5ff"),
+        ("AFE–RTL 통합 검증", "#0b7285", "#eefafa"),
+        ("FPGA·IP 구현 검증", "#1971c2", "#f3f9ff"),
+        ("최종 결과·보고서", "#f59f00", "#fff9db"),
     ]
-    for index, (y, title, details, decision, fix_title, fix_lines, accent, fill) in enumerate(rows):
-        s.append(f'<circle cx="130" cy="{y + 47.5}" r="22" fill="{accent}"/>')
-        s.append(txt(130, y + 54, str(index + 1), 17, "#ffffff", 700, "middle"))
-        s += workflow_box(170, y, 500, 95, title, details, accent=accent, fill=fill)
-        s += workflow_decision(780, y - 5, 260, 105, decision)
-        s += workflow_box(1140, y + 5, 300, 85, fix_title, fix_lines, accent="#e03131", fill="#fff5f5")
-        s += signal_arrow(670, y + 47.5, 780, y + 47.5)
-        s += signal_arrow(1040, y + 47.5, 1140, y + 47.5, "아니오")
-        s += signal_path([(1290, y + 5), (1290, y - 22), (910, y - 22), (910, y - 5)], dashed=True, color="#c92a2a")
-        s.append(txt(1100, y - 29, "수정 후 재검증", 13, "#c92a2a", 600, "middle"))
-        if index == 0:
-            s += signal_path([(800, 345), (800, 365), (420, 365), (420, 385)], "시작")
-        else:
-            previous_y = rows[index - 1][0]
-            s += signal_path([(910, previous_y + 100), (910, y - 18), (420, y - 18), (420, y)], "예")
-
-    s.append(txt(600, 922, "LOCK — 이 아래 결과는 위 설계 단계로 되먹임하지 않음", 15, "#c92a2a", 700, "middle"))
-    s.append('<line x1="140" y1="932" x2="1060" y2="932" stroke="#c92a2a" stroke-width="2.5" stroke-dasharray="10 8"/>')
-    s += signal_path([(910, 905), (910, 942), (500, 942), (500, 960)])
-    s.append(txt(930, 918, "예", 13, "#486581", 600, "start"))
-    s += workflow_box(220, 960, 560, 95, "Locked final-test 1회", ["30분 chunk 29/36 · record-majority 16/19", "결과를 모델 선택에 되먹임하지 않음"], accent="#f59f00", fill="#fff9db")
-    s += workflow_box(900, 960, 500, 95, "결과·근거·한계 통합", ["성능·자원·benchmark·claim registry", "24시간·physical AFE·clinical validation은 미검증"], accent="#2f80ed", fill="#f3f9ff")
-    s += signal_arrow(780, 1007.5, 900, 1007.5)
-    workflow_footer(s, "반복 화살표는 공칭·모델·구현 검증에만 적용되며 locked final-test를 이용한 재튜닝 경로는 없다.")
+    for index, (title, accent, fill) in enumerate(stages):
+        y = 120 + index * 118
+        s.append(f'<circle cx="430" cy="{y + 37.5}" r="22" fill="{accent}"/>')
+        s.append(txt(430, y + 44, str(index + 1), 17, "#ffffff", 700, "middle"))
+        s += simple_title_box(480, y, 640, 75, title, accent, fill)
+        if index < len(stages) - 1:
+            s += signal_arrow(800, y + 75, 800, y + 118)
+    workflow_footer(s, "세부 회로값, 검증 조건과 결과 수치는 본문에서 설명한다.")
     write_svg("FIG-02_overall_workflow.svg", s)
 
     # FIG-03 ownership
@@ -347,49 +298,25 @@ def main() -> int:
     footer(s, "Future: same-acquisition multi-class cohort or explicit cross-domain protocol")
     write_svg("FIG-11_confounding_claim_boundary.svg", s)
 
-    # FIG-12: report-facing digital signal flow. The paths are conceptual
-    # groupings of fixed RTL state transitions, not a literal post-synthesis netlist.
-    s = signal_canvas("Digital signal flow", "signed ECG 표본 → 강한 변화 사건 → 박동·리듬/파형 증거 → Snapshot → Final Membrane")
-    s += signal_box(25, 330, 140, 170, "ECG 표본 입력", ["signed 12-bit", "1 kSPS", "sample_valid"], "#2f80ed", "#f4f8ff")
-    s += signal_box(195, 330, 160, 170, "변화량 계산", ["현재값 - 직전값", "상승 / 하강", "표본별 갱신"], "#12b886", "#f1fbf7")
-    s += signal_box(385, 330, 170, 170, "강한 변화 사건", ["적응형 문턱값", "rise / fall pulse", "별도 막전위 없음"], "#12b886", "#f1fbf7")
-    s += signal_box(585, 330, 170, 170, "QRS LIF", ["사건 가중치 누적", "문턱 발화", "초기화 · 불응기"], "#f59f00", "#fff9e8")
-    s += signal_arrow(165, 415, 195, 415, "표본")
-    s += signal_arrow(355, 415, 385, 415, "delta")
-    s += signal_arrow(555, 415, 585, 415, "event")
-
-    s.append(txt(805, 135, "박동·리듬 경로", 18, "#0b7285", 700))
-    s += signal_box(805, 160, 145, 150, "RR 간격", ["박동 이후", "표본 수 계수", "beat tick"], "#0b7285", "#eefafa")
-    s += signal_box(980, 150, 195, 170, "리듬 증거", ["PNN 일치/불일치", "RDM 변화 수준", "early↔late 쌍"], "#0b7285", "#eefafa")
-    s += signal_path([(755, 415), (780, 415), (780, 235), (805, 235)], "qrs_spike")
-    s += signal_arrow(950, 235, 980, 235, "RR")
-
-    s.append(txt(805, 520, "파형 형태 병렬 경로", 18, "#c2410c", 700))
-    s.append('<rect x="805" y="540" width="370" height="205" rx="8" fill="#fff8f1" stroke="#f08c46" stroke-width="2"/>')
-    for x, y, title, line in [
-        (825, 568, "DSCR", "기울기 방향 전환"),
-        (995, 568, "RAM", "박동 최대 진폭 코드"),
-        (825, 650, "QRS MAF", "폭·복잡도·에너지"),
-        (995, 650, "RBBB-like", "말단 반복 지연"),
-    ]:
-        s.append(f'<rect x="{x}" y="{y}" width="150" height="62" rx="6" fill="#ffffff" stroke="#f08c46"/>')
-        s.append(txt(x + 75, y + 24, title, 16, "#102a43", 700, "middle"))
-        s.append(txt(x + 75, y + 47, line, 12, "#486581", 400, "middle"))
-    s += signal_path([(555, 415), (780, 415), (780, 642), (805, 642)], "표본·event·qrs")
-
-    s += signal_box(1210, 300, 170, 230, "60초 Snapshot", ["60,000표본", "리듬+파형 증거", "NSR/CHF/ARR/AFF", "국소 클래스 상태"], "#7950f2", "#f5f0ff")
-    s += signal_path([(1175, 235), (1192, 235), (1192, 365), (1210, 365)], "rhythm")
-    s += signal_path([(1175, 642), (1192, 642), (1192, 465), (1210, 465)], "morphology")
-    s += signal_box(1410, 300, 165, 230, "Final Membrane", ["Snapshot 30개", "반복·지속성 누적", "guard/rescue/veto", "WTA → 4-class"], "#ae3ec9", "#fbf2ff")
-    s += signal_arrow(1380, 415, 1410, 415, "snapshot")
-    s.append(txt(1492, 566, "final_pred + final_mem[4]", 15, "#7b2cbf", 700, "middle"))
-
-    s.append('<rect x="120" y="780" width="1360" height="44" rx="6" fill="#edf2f7" stroke="#9fb3c8"/>')
-    s.append(txt(800, 808, "제어 FSM: 표본 수락 → 60,000표본 확정 → 30번째 Snapshot 확정 → 최종 출력", 15, "#334e68", 600, "middle"))
-    s += signal_path([(260, 780), (260, 520), (95, 520), (95, 500)], dashed=True, color="#829ab1")
-    s += signal_path([(1295, 780), (1295, 530)], dashed=True, color="#829ab1")
-    s += signal_path([(1492, 780), (1492, 530)], dashed=True, color="#829ab1")
-    signal_footer(s, "전체 1,800,000표본을 저장하지 않고 표본별 고정 폭 상태를 갱신하는 설명용 signal flow")
+    # FIG-12: high-level digital flow. Every arrow advances left-to-right once.
+    s = signal_canvas("Digital signal flow", "signed ECG stream에서 4-class 기록 판정까지")
+    blocks = [
+        (25, 150, "Signed ECG", "#2f80ed", "#f4f8ff"),
+        (200, 150, "변화량 계산", "#12b886", "#f1fbf7"),
+        (375, 170, "Strong Event", "#12b886", "#f1fbf7"),
+        (570, 150, "QRS LIF", "#f59f00", "#fff9e8"),
+        (745, 220, ("리듬·파형", "증거 생성"), "#0b7285", "#eefafa"),
+        (990, 170, "60초 Snapshot", "#7950f2", "#f5f0ff"),
+        (1185, 180, "Final Membrane", "#ae3ec9", "#fbf2ff"),
+        (1390, 185, "NSR·CHF·ARR·AFF", "#1971c2", "#f3f9ff"),
+    ]
+    y, h = 350, 120
+    for index, (x, w, title, accent, fill) in enumerate(blocks):
+        s += simple_title_box(x, y, w, h, title, accent, fill)
+        if index < len(blocks) - 1:
+            next_x = blocks[index + 1][0]
+            s += signal_arrow(x + w, y + h / 2, next_x, y + h / 2)
+    signal_footer(s, "세부 뉴런 상태, 리듬·파형 특징과 누적 규칙은 본문에서 설명한다.")
     write_svg("FIG-12_digital_signal_flow.svg", s)
 
     # FIG-13: beat/rhythm path with old-state, next-state, and commit boundaries.
@@ -420,42 +347,25 @@ def main() -> int:
     footer(s, "전체 박동 파형을 저장하지 않고 유한 관찰 상태만 유지")
     write_svg("FIG-14_morphology_path.svg", s)
 
-    # FIG-15: analog signal flow reconstructed from the fixed MATLAB parameter
-    # reference and XMODEL RTL. This is intentionally not the missing LTspice schematic.
-    s = signal_canvas("Analog AFE·ADC signal flow", "공개 ECG 차동 전압 → 필터·증폭 → 12-bit 변환 → signed RTL stream")
-    s.append(txt(800, 130, "XMODEL에서 가하는 비이상성·교란 입력", 17, "#7c3aed", 700, "middle"))
-    s += signal_box(175, 150, 300, 105, "입력 교란", ["baseline wander · 50/60 Hz PLI"], "#8b5cf6", "#faf7ff")
-    s += signal_box(650, 150, 300, 105, "아날로그 비이상성", ["R/C mismatch · GBW · VOS"], "#8b5cf6", "#faf7ff")
-    s += signal_box(1125, 150, 300, 105, "ADC 비이상성", ["offset · noise · INL/DNL"], "#8b5cf6", "#faf7ff")
-
+    # FIG-15: high-level analog handoff. Component values remain in the body.
+    s = signal_canvas("Analog AFE·ADC signal flow", "ECG 입력에서 signed digital stream까지")
     blocks = [
-        (25, 330, 120, "ECG 입력", ["차동 전압", "공개 ECG"], "#2f80ed", "#f4f8ff"),
-        (170, 330, 140, "HPF", ["10 MΩ · 33 nF", "fc=0.482 Hz", "기준선 이동 억제"], "#12b886", "#f1fbf7"),
-        (335, 330, 160, "3-op-amp IA", ["Rfb=100 kΩ", "Rg=1 kΩ", "Av=201"], "#12b886", "#f1fbf7"),
-        (520, 330, 200, "Active Twin-T", ["R=26.526 kΩ", "C=100 nF", "k=0.95 · Q≈5", "60 Hz notch+buffer"], "#f59f00", "#fff9e8"),
-        (745, 330, 145, "LPF+buffer", ["1 kΩ · 1.06 µF", "fc=150.1 Hz", "ADC 구동"], "#f59f00", "#fff9e8"),
-        (915, 330, 155, "12-bit ADC", ["±1.65 V", "1 kSPS", "0.806 mV/LSB"], "#7950f2", "#f5f0ff"),
-        (1095, 330, 180, "코드 중심 이동", ["offset 0…4095", "signed=code−2048", "two's-complement"], "#7950f2", "#f5f0ff"),
-        (1300, 330, 275, "Digital RTL 인계", ["signed adc_data[11:0]", "sample_valid", "3-digit hex canonical .mem"], "#0b7285", "#eefafa"),
+        (25, 140, "ECG 입력", "#2f80ed", "#f4f8ff"),
+        (190, 140, "HPF", "#12b886", "#f1fbf7"),
+        (355, 180, "3-op-amp IA", "#12b886", "#f1fbf7"),
+        (560, 210, ("Active Twin-T", "60 Hz Notch"), "#f59f00", "#fff9e8"),
+        (795, 160, "150 Hz LPF", "#f59f00", "#fff9e8"),
+        (980, 160, "12-bit ADC", "#7950f2", "#f5f0ff"),
+        (1165, 180, "Signed 변환", "#7950f2", "#f5f0ff"),
+        (1370, 205, "Digital RTL", "#0b7285", "#eefafa"),
     ]
-    for x, y, w, title, desc, accent, fill in blocks:
-        s += signal_box(x, y, w, 205, title, desc, accent, fill)
-    for x1, x2 in [
-        (145, 170), (310, 335), (495, 520), (720, 745),
-        (890, 915), (1070, 1095), (1275, 1300),
-    ]:
-        s += signal_arrow(x1, 432, x2, 432)
-
-    s += signal_path([(325, 255), (325, 292), (240, 292), (240, 330)], dashed=True, color="#8b5cf6")
-    s += signal_path([(800, 255), (800, 292), (620, 292), (620, 330)], dashed=True, color="#8b5cf6")
-    s += signal_path([(1275, 255), (1275, 292), (992, 292), (992, 330)], dashed=True, color="#8b5cf6")
-
-    s.append('<rect x="120" y="650" width="1360" height="98" rx="8" fill="#f7f9fc" stroke="#bcccdc"/>')
-    s.append(txt(150, 682, "MATLAB 공칭 기준", 17, "#102a43", 700))
-    s.append(txt(150, 712, "이득·주파수 응답·headroom·ADC code·reference vector", 15, "#486581"))
-    s.append(txt(820, 682, "XMODEL 검증", 17, "#102a43", 700))
-    s.append(txt(820, 712, "교란·mismatch·op-amp·ADC stress와 장시간 signed stream", 15, "#486581"))
-    signal_footer(s, "문서·파라미터·XMODEL RTL 기반 설명용 signal flow이며 원본 LTspice schematic, 물리 PCB 또는 silicon 결과가 아님")
+    y, h = 350, 120
+    for index, (x, w, title, accent, fill) in enumerate(blocks):
+        s += simple_title_box(x, y, w, h, title, accent, fill)
+        if index < len(blocks) - 1:
+            next_x = blocks[index + 1][0]
+            s += signal_arrow(x + w, y + h / 2, next_x, y + h / 2)
+    signal_footer(s, "원본 LTspice schematic이 아닌 설명용 흐름도이며 세부 파라미터와 XMODEL stress는 본문에서 설명한다.")
     write_svg("FIG-15_analog_signal_flow.svg", s)
 
     # Preserve the seven fixed MATLAB figures byte-for-byte in the integrated
@@ -475,7 +385,7 @@ def main() -> int:
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
-        ("FIG-02", "figures/final/FIG-02_overall_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "입력 고정부터 MATLAB–XMODEL–RTL–FPGA–locked final-test까지의 전체 workflow", "component handoffs, engineering correction loops, and one-way locked evaluation", "analog layers are model-based; iteration does not include final-test tuning"),
+        ("FIG-02", "figures/final/FIG-02_overall_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "공개 ECG에서 MATLAB–XMODEL–RTL–benchmark–통합–FPGA–최종 보고서까지의 전체 workflow", "high-level sequential workflow; details remain in the report body", "analog layers are model-based; final-test tuning remains forbidden by the written protocol"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
         ("FIG-04", "figures/final/FIG-04_multitimescale_architecture.svg", "양건", ["components/digital_accelerator/FINAL_REPORT_KR.md"], [DIGITAL], "60초 Snapshot과 30분 Final Membrane 구조", "locked digital architecture", "SNN-inspired, not trained deep SNN"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),
@@ -485,10 +395,10 @@ def main() -> int:
         ("FIG-09", "figures/final/FIG-09_digital_validation_hierarchy.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Digital validation hierarchy", "integer reference through board replay", "physical analog not included"),
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
-        ("FIG-12", "figures/final/FIG-12_digital_signal_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "signed ECG에서 4-class 출력까지의 digital signal flow", "conceptual grouping of verified RTL state transitions and parallel evidence paths", "not literal post-synthesis netlist connectivity; not clinical feature measurement"),
+        ("FIG-12", "figures/final/FIG-12_digital_signal_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "signed ECG에서 4-class 출력까지의 digital signal flow", "high-level left-to-right grouping of verified RTL stages", "not literal post-synthesis netlist connectivity; detailed parallel evidence paths remain in the body"),
         ("FIG-13", "figures/final/FIG-13_beat_rhythm_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v", "components/digital_accelerator/rtl/core/rdm_variability_neuron.v", "components/digital_accelerator/rtl/core/ectopic_pair_neuron.v"], [DIGITAL], "박동·리듬 state-transition 경로", "reader-facing grouping of fixed RTL state transitions", "conceptual dataflow; literal timing remains in RTL"),
         ("FIG-14", "figures/final/FIG-14_morphology_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/dscr_spike_counter.v", "components/digital_accelerator/rtl/core/ram_peak_accumulator.v", "components/digital_accelerator/rtl/core/qrs_maf_neuron.v", "components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v"], [DIGITAL], "파형 형태 finite-state 경로", "reader-facing grouping of fixed RTL morphology mechanisms", "engineering proxies; not clinical morphology measurement"),
-        ("FIG-15", "figures/final/FIG-15_analog_signal_flow.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "ECG 차동 입력에서 signed RTL stream까지의 analog AFE·ADC signal flow", "reconstruction from fixed parameter documentation and XMODEL RTL", "not the missing original LTspice schematic; not physical or post-layout evidence"),
+        ("FIG-15", "figures/final/FIG-15_analog_signal_flow.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "ECG 차동 입력에서 signed RTL stream까지의 analog AFE·ADC signal flow", "high-level reconstruction from fixed parameter documentation and XMODEL RTL", "not the missing original LTspice schematic; component values and stress details remain in the body"),
     ]
     for fid, source_name, output_name, caption in inherited_matlab_figures:
         figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence"))
