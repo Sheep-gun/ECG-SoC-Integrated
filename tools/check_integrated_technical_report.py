@@ -41,12 +41,18 @@ REQUIRED_FIGURES = [
     "FIG-13_beat_rhythm_path.svg", "FIG-14_morphology_path.svg",
 ]
 MECHANISM_TERMS = [
-    "previous_sample_next", "이전 `qrs_mem`", "refractory_old", "46개 가설 중심",
-    "abs(current_rr-prev_rr)", "early→late", "filter_update", "prev_slope_sign",
-    "ram_window_open", "최대 진폭 코드", "박동 전 120표본", "박동 후 100표본",
-    "폭 대리지표", "복잡도(complexity)", "Pre-QRS 활동", "활동 시작", "말단 관찰 구간",
-    "반복", "*_count_next", "기본 막전위의 시작값", "guard", "rescue", "veto", "silent-AFF",
-    "엄격한 `>`", "IDLE→CORE_RESET→SEG_START→RUN→SEG_DONE→FLUSH→COMMIT→DONE",
+    "변화량 = 현재 표본값 - 직전 표본값", "Strong Event 뉴런이 발화했다",
+    "별도의 Strong Event 막전위가 있는 것이 아니라", "사건 가중치가 시냅스 가중치 역할",
+    "현재 고정 설정의 QRS 누설량은 0", "불응기 계수기를 채워",
+    "직전 박동 이후 들어온 표본값의 개수", "46개의 기준 눈금",
+    "예상과 일치", "현재 RR 간격과 바로 직전 RR 간격의 절대 차이",
+    "최근 RR 간격을 천천히 따라가는 기준값", "early→late",
+    "현재 표본값 - 필터 기준값", "직전 유효 방향", "최대 진폭 코드",
+    "박동 전 120표본", "박동 후 100표본", "첫 강한 사건 위치", "방향 전환 횟수",
+    "기준선에서 떨어진 거리", "박동 전 활동 사건", "경과 80~160표본", "90~170표본",
+    "여러 번 반복", "승자 횟수", "충돌 억제(guard)", "구조 보강(rescue)",
+    "반대 증거 억제(veto)", "조용한 AFF 보정(silent-AFF)", "클 때만",
+    "IDLE→CORE_RESET→SEG_START→RUN→SEG_DONE→FLUSH→COMMIT→DONE",
 ]
 
 
@@ -92,15 +98,18 @@ def main() -> int:
     check("chapter 3 is longest", len(section(text, "3. 제안 SNN-Inspired 디지털 아키텍처", 1)) == max(len(section(text, h[2:], 1)) for h in MAIN_HEADINGS), "chapter lengths")
 
     primer = section(text, "3.1 핵심 개념과 다중 시간축 처리", 2)
-    for term in ["표본값(sample)", "사건 신호(event)", "막전위형 상태(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
+    for term in ["표본값(sample)", "사건 신호(event)", "막전위형 누적값(membrane state)", "누설(leak)", "문턱값(threshold)", "불응기(refractory", "박동(beat)", "RR 간격", "Snapshot", "Final Membrane"]:
         check(f"concept defined {term}", term in primer)
     check("concepts precede module detail", text.index("**표본값(sample).**") < text.index("ecg_event_encoder_adaptive"))
-    check("running signal example", all(token in text for token in ["+  →  +  →  -", "+  →  +  →  +", "비임상 설명 예"]))
+    check("running signal example", all(token in text for token in ["+  →  +  →  -", "+  →  +  →  +", "회로 흐름을 설명하기 위한 예"]))
     for term in MECHANISM_TERMS:
         check(f"mechanism {term}", term.lower() in text.lower())
     for block in ["ecg_event_encoder_adaptive", "qrs_lif_detector", "pnn_rhythm_predictor", "rdm_variability_neuron", "ectopic_pair_neuron", "dscr_spike_counter", "ram_peak_accumulator", "qrs_maf_neuron", "rbbb_qrs_delay_bank", "class_score_neurons", "final_membrane_layer"]:
         check(f"direct RTL block {block}", block in text)
-    check("locked QRS leak nuance", "QRS 누설값은 0" in text)
+    check("numeric ECG input introduced intuitively", "시간 순서대로 들어오는 부호 있는 숫자의 나열" in text and "회로에는 이 숫자가 P파인지 QRS파인지 알려 주는 표지가 없다" in text)
+    internal_jargon = ["token_age", "token age", "토큰 나이", "eval_idx", "age_eval", "qrs_age", "ram_window_open", "prev_slope_sign", "qrs_mem"]
+    check("internal signal jargon absent from manuscript", not any(term.lower() in text.lower() for term in internal_jargon), [term for term in internal_jargon if term.lower() in text.lower()])
+    check("locked QRS leak nuance", "현재 고정 설정의 QRS 누설량은 0" in text and "현재 설정의 누설이 그 시간 간격을 강제하는 것은 아니다" in text)
     check("SNN boundary", all(term in text for term in ["학습된 심층 SNN", "STDP", "온라인 학습", "생물물리 뉴런 시뮬레이션", "생물학적 등가성"]))
     cleaned = re.sub(r"```.*?```|`[^`]*`", "", text, flags=re.S)
     # `commit` is intentionally excluded: provenance metadata and Appendix B/C
@@ -118,15 +127,15 @@ def main() -> int:
 
     morphology = section(text, "3.3 파형 형태 및 진폭 정보 추출", 2)
     block_order = [
-        ("DSCR purpose before module", "파형이 한 방향으로만 움직이는지", "`dscr_spike_counter`"),
-        ("RAM purpose before module", "모든 표본을 대상으로 최고점을 찾으면", "`ram_peak_accumulator`"),
+        ("DSCR purpose before module", "파형이 몇 번 꺾였는지", "`dscr_spike_counter`"),
+        ("RAM purpose before module", "30분 전체에서 최고점 하나만 찾으면", "`ram_peak_accumulator`"),
         ("QRS MAF purpose before module", "같은 RR 간격을 가진 박동이라도", "`qrs_maf_neuron`"),
-        ("RBBB-like mechanism before module", "가장 늦게 표시된 가설", "`rbbb_qrs_delay_bank`"),
+        ("RBBB-like mechanism before module", "활동이 나타난 가장 늦은 위치", "`rbbb_qrs_delay_bank`"),
     ]
     for name, purpose, module in block_order:
         check(name, purpose in morphology and module in morphology and morphology.index(purpose) < morphology.index(module))
     for name, anchor, required in [
-        ("DSCR downstream flow", "`dscr_spike_counter`", ["Snapshot의 파형 형태 클래스 상태"]),
+        ("DSCR downstream flow", "`dscr_spike_counter`", ["Snapshot의 파형 형태 클래스 누적값"]),
         ("RAM downstream flow", "`ram_peak_accumulator`", ["Snapshot의 진폭 증거", "Final Membrane"]),
         ("QRS MAF downstream flow", "`qrs_maf_neuron`", ["Snapshot의 파형 형태 점수", "Final Membrane"]),
         ("RBBB-like downstream flow", "`rbbb_qrs_delay_bank`", ["Snapshot 클래스 점수", "Final Membrane"]),
@@ -148,7 +157,7 @@ def main() -> int:
         "FIG-04_multitimescale_architecture.svg": ["다중 시간축 구조", "사건과 지속 상태", "60초 Snapshot", "30분 Final Membrane"],
         "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
-        "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "이전 상태 읽기", "다음 상태 계산", "클록에서 확정"],
+        "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "ECG 숫자 입력", "현재값-직전값", "강한 사건", "QRS 누적·발화", "박동 이후 표본 계수"],
         "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
     }
     for filename, labels in reader_figure_requirements.items():

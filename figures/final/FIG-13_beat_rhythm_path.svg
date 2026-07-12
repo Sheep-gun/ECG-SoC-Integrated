@@ -2,28 +2,28 @@
 <rect width="1200" height="675" fill="#f7f9fc"/>
 <rect x="0" y="0" width="1200" height="92" fill="#102a43"/>
 <text x="54" y="52" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="white">박동·리듬 경로</text>
-<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">인접 표본값 차이에서 RR 패턴 증거까지</text>
+<text x="54" y="78" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#bcccdc">ECG 숫자 나열에서 QRS 박동과 RR 간격까지</text>
 <rect x="35" y="125" width="170" height="115" rx="14" fill="#e7f5ff" stroke="#486581" stroke-width="2"/>
-<text x="120.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">현재·이전 표본값</text>
-<text x="120.0" y="189" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1 ms 간격</text>
-<text x="120.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">previous_sample</text>
+<text x="120.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">ECG 숫자 입력</text>
+<text x="120.0" y="189" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">… -18, -12, 5, 41 …</text>
+<text x="120.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">1 ms마다 한 값</text>
 <rect x="245" y="125" width="180" height="115" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
-<text x="335.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">파형 변화 사건</text>
-<text x="335.0" y="189" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">부호 있는 차이</text>
-<text x="335.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">상승/하강/강한 사건</text>
+<text x="335.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">현재값-직전값</text>
+<text x="335.0" y="189" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">부호 있는 변화량</text>
+<text x="335.0" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">상승 / 하강</text>
 <rect x="465" y="115" width="190" height="135" rx="14" fill="#e6fcf5" stroke="#486581" stroke-width="2"/>
-<text x="560.0" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">박동 검출</text>
-<text x="560.0" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">이전 막전위</text>
-<text x="560.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">사건 가산→문턱값</text>
-<text x="560.0" y="229" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">불응기</text>
-<rect x="695" y="125" width="175" height="115" rx="14" fill="#fff9db" stroke="#486581" stroke-width="2"/>
-<text x="782.5" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">RR 간격</text>
-<text x="782.5" y="189" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">수락 틱 계수</text>
-<text x="782.5" y="214" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">박동에서 확정</text>
+<text x="560.0" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">강한 사건</text>
+<text x="560.0" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">변화 크기&gt;문턱값</text>
+<text x="560.0" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">한 클록 펄스</text>
+<rect x="695" y="115" width="175" height="135" rx="14" fill="#fff9db" stroke="#486581" stroke-width="2"/>
+<text x="782.5" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">QRS 누적·발화</text>
+<text x="782.5" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">사건 가산</text>
+<text x="782.5" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">문턱 발화·초기화</text>
+<text x="782.5" y="229" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">불응기</text>
 <rect x="910" y="115" width="255" height="135" rx="14" fill="#e5dbff" stroke="#486581" stroke-width="2"/>
-<text x="1037.5" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">리듬 증거</text>
-<text x="1037.5" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">PNN: 예측 일치</text>
-<text x="1037.5" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">RDM: 연속 차이</text>
+<text x="1037.5" y="149" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#102a43">RR·리듬 증거</text>
+<text x="1037.5" y="179" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">박동 이후 표본 계수</text>
+<text x="1037.5" y="204" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">PNN / RDM</text>
 <text x="1037.5" y="229" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#334e68">early↔late 쌍</text>
 <line x1="205" y1="182" x2="245" y2="182" stroke="#486581" stroke-width="4"/>
 <polygon points="245,182 231,174 231,190" fill="#486581"/>

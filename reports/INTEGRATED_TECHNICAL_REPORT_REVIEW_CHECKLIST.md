@@ -8,6 +8,8 @@
 - [x] 제3장이 가장 긴 기술 핵심 장이다.
 - [x] sample, event, membrane, leak, threshold, refractory, beat, RR, Snapshot, Final Membrane을 세부 module 전에 정의한다.
 - [x] 하나의 비임상 신호 예시가 event→beat→RR/파형→Snapshot→Final 흐름을 연결한다.
+- [x] ECG 입력을 곡선이 아닌 부호 있는 숫자 나열로 제시하고 현재값-직전값→강한 사건→QRS 누적·발화 흐름을 먼저 설명한다.
+- [x] `token age` 같은 내부 신호명은 본문에서 “직전 박동 이후 들어온 표본값 개수”처럼 풀어 쓴다.
 - [x] FIG-12는 한국어 기능명을 1차 label, module명을 2차 label로 사용한다.
 - [x] FIG-13은 old state→next calculation→clock commit을, FIG-14는 finite morphology window를 보여준다.
 - [x] 본문에서 사용하는 FIG-01·02·04·08·10·12·13·14의 제목과 내부 설명은 짧은 한국어 기능 문구를 우선한다.
@@ -16,6 +18,7 @@
 
 - [x] Event encoder의 signed 차분, one-cycle pulse와 adaptive bank 선택을 설명한다.
 - [x] QRS의 leak→event add→threshold→reset/refractory 순서와 locked leak=0을 구분한다.
+- [x] Strong Event를 뉴런 발화처럼 해석할 수 있음을 설명하되 실제 RTL은 별도 막전위가 아닌 차분·절댓값·문턱 비교기임을 밝힌다.
 - [x] PNN의 46-center sequential scan, tie 처리와 previous-winner prediction을 설명한다.
 - [x] RDM의 consecutive RR absolute difference와 level/code를 설명한다.
 - [x] Ectopic path의 adaptive reference와 early/late 교대 state를 설명한다.
