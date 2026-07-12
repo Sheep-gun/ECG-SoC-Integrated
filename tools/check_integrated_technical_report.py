@@ -213,12 +213,17 @@ def main() -> int:
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
     check("nineteen reader-facing figures", len(report_images) == 19, len(report_images))
     p05_root = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation"
-    for vector_name in ["device_placement_map.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
+    for vector_name in ["device_placement_map.svg", "device_view_annotated_publication.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
         check(f"Vivado implementation vector {vector_name}", (p05_root / vector_name).is_file(), str(p05_root / vector_name))
+    for annotated_name in ["device_view_full_original.png", "device_view_annotated_publication.pdf", "device_view_annotated_publication.png", "hierarchy_tile_occupancy.csv", "device_grid_bounds.csv"]:
+        check(f"annotated Device View evidence {annotated_name}", (p05_root / annotated_name).is_file(), str(p05_root / annotated_name))
+    annotated_svg = (p05_root / "device_view_annotated_publication.svg").read_text(encoding="utf-8")
+    check("annotated Device View accelerator-only title", "SNN accelerator에 속한 배치 셀만 분리 표시" in annotated_svg)
+    check("annotated Device View pblock boundary", "pblock으로 고정했다는 의미는 아니다" in annotated_svg)
     for native_name in ["microblaze_block_design_vivado_native.pdf", "worst_setup_path_vivado_native.pdf"]:
         check(f"Vivado native PDF {native_name}", (p05_root / native_name).is_file(), str(p05_root / native_name))
     legacy_captures = [p05_root / name for name in ["device_view_full.png", "device_view_accelerator_zoom.png", "worst_setup_path.png"]]
-    check("no FIG-P05 GUI screenshots", not any(path.exists() for path in legacy_captures), [str(path) for path in legacy_captures if path.exists()])
+    check("no legacy cropped FIG-P05 captures", not any(path.exists() for path in legacy_captures), [str(path) for path in legacy_captures if path.exists()])
     for filename in REQUIRED_FIGURES:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)

@@ -246,11 +246,11 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-P05
 
-- File: `figures/publication/FIG-P05_vivado_implementation/vivado_implementation_composite.svg`
+- File: `figures/publication/FIG-P05_vivado_implementation/device_view_annotated_publication.svg`
 - Owner: 양건(통합 편집)
-- Source files: `figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl`, `figures/publication/FIG-P05_vivado_implementation/build_vector_publication.py`, `figures/publication/FIG-P05_vivado_implementation/evidence_paths.md`, `figures/publication/FIG-P05_vivado_implementation/placed_tile_occupancy.csv`, `figures/publication/FIG-P05_vivado_implementation/microblaze_block_design_vivado_native.pdf`, `figures/publication/FIG-P05_vivado_implementation/worst_setup_path_vivado_native.pdf`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt`
+- Source files: `figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl`, `figures/publication/FIG-P05_vivado_implementation/extract_hierarchy_placement.tcl`, `figures/publication/FIG-P05_vivado_implementation/build_annotated_device_figure.py`, `figures/publication/FIG-P05_vivado_implementation/build_vector_publication.py`, `figures/publication/FIG-P05_vivado_implementation/evidence_paths.md`, `figures/publication/FIG-P05_vivado_implementation/device_view_full_original.png`, `figures/publication/FIG-P05_vivado_implementation/hierarchy_tile_occupancy.csv`, `figures/publication/FIG-P05_vivado_implementation/placed_tile_occupancy.csv`, `figures/publication/FIG-P05_vivado_implementation/microblaze_block_design_vivado_native.pdf`, `figures/publication/FIG-P05_vivado_implementation/worst_setup_path_vivado_native.pdf`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Routed tile vector map, Vivado native MicroBlaze Block Design와 worst setup path
-- Evidence scope: Vivado 2020.2, xc7a100tcsg324-1, screenshot-free FPGA placement/timing evidence
-- Limitations: Device View itself is not exported; tile map uses routed GRID_POINT_X/Y; not ASIC layout
+- Caption: Actual post-route Device View with hierarchy placement overlay, Vivado native MicroBlaze Block Design와 worst setup path
+- Evidence scope: Vivado 2020.2, xc7a100tcsg324-1, actual Device View plus routed hierarchy/timing evidence
+- Limitations: Hierarchy colors use placed primitive coordinates and are not pblock boundaries; not ASIC layout

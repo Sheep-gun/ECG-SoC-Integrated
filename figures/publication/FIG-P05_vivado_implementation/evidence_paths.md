@@ -26,6 +26,13 @@
 
 ## Device 배치 데이터
 
+- `device_view_full_original.png`
+  - Vivado 2020.2 `Open Implemented Design → Device`의 실제 전체 Device View 캡처
+  - SHA256 `84d51a6326636918f56da2315d9c6e97e90fc7cbe43bb02c904e3a230b48c924`
+- `extract_hierarchy_placement.tcl`
+  - 고정 `system_routed.dcp`에서 hierarchy별 placed primitive의 tile 좌표 추출
+- `hierarchy_tile_occupancy.csv`, `device_grid_bounds.csv`
+  - accelerator, MicroBlaze, local memory, sample feeder, control/interconnect 범위와 device grid 기록
 - `placed_tile_occupancy.csv`
   - routed checkpoint의 tile `GRID_POINT_X/Y`별 primitive cell 수를 기록
   - `accelerator_core`와 `system_other` 범위를 분리
@@ -35,6 +42,11 @@
 
 ## Publication 산출물
 
+- `device_view_annotated_publication.pdf/.svg/.png`
+  - 실제 Device View와 hierarchy별 routed tile 좌표를 결합한 reader-facing Figure
+  - (b) 제목: `SNN accelerator에 속한 배치 셀만 분리 표시`
+- `device_view_accelerator_inset.png`: 동일 Device View의 accelerator 표시용 inset
+- `build_annotated_device_figure.py`: 좌표 정합, 색상 overlay, 범례와 자원·timing 요약 재생성
 - `microblaze_block_design.pdf/.svg`: native vector에서 회전·여백만 정규화
 - `worst_setup_path.pdf/.svg`: native vector에서 회전·여백만 정규화
 - `vivado_implementation_composite.pdf`: placement map + 두 native vector의 3페이지 package
@@ -46,3 +58,4 @@
 - `pure RTL WNS 8.184 ns`는 standalone pure RTL 구현 범위다.
 - `MicroBlaze system WNS 0.097 ns`와 worst setup path는 processor·interconnect·memory·UART·표본 공급기·accelerator를 포함한 통합 system 범위다.
 - 물리 AFE PCB, ADC silicon, fabricated ASIC, ASIC post-layout 또는 clinical validation 근거로 사용하지 않는다.
+- 색상 overlay는 placed primitive 위치를 나타내며 pblock, floorplan constraint 또는 기능 블록의 배타적 물리 경계를 뜻하지 않는다.
