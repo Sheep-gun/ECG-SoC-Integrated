@@ -44,7 +44,7 @@
 
 ## 그림과 원본 회로도 경계
 
-고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. `FIG-15_analog_signal_flow.svg`는 ECG+·ECG−의 두 HPF 경로가 IA에서 합류하고 비이상성 주입은 점선 경로로 분리되도록 구성하였다. 상단 비이상성 블록은 `Input Disturbance Injection`, `R/C Tolerance & Op-Amp Error Model`, `ADC Error Model`로 통일하고 하단 한 줄 범례에서 실선과 점선의 의미를 정의하였다. `FIG-12_digital_signal_flow.svg`는 사건·QRS 경로에서 박동·리듬과 파형 형태 경로가 분기되고 Snapshot에서 다시 합류하는 실제 상위 구조를 반영하였다.
+고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 보고서 그림 7은 캐시된 이전 Figure와 구분되도록 `FIG-15_analog_signal_flow_nonideal_models.svg`를 직접 참조한다. ECG+·ECG−의 두 HPF 경로가 IA에서 합류하고 비이상성 주입은 점선 경로로 분리되도록 구성하였다. 상단 비이상성 블록은 `Input Disturbance Injection`, `R/C Tolerance & Op-Amp Error Model`, `ADC Error Model`로 통일하고 하단 한 줄 범례에서 실선과 점선의 의미를 정의하였다. `FIG-12_digital_signal_flow.svg`는 사건·QRS 경로에서 박동·리듬과 파형 형태 경로가 분기되고 Snapshot에서 다시 합류하는 실제 상위 구조를 반영하였다.
 
 고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 analog signal flow와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
 
@@ -89,7 +89,7 @@
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 697 rules, 0 conflicts, chars 64,729, figures 19, evidence rows 68
-- `tools/check_integrated_repository.py`: PASS — 293 rules, 0 conflicts
+- `tools/check_integrated_technical_report.py`: PASS — 697 rules, 0 conflicts, chars 64,820, figures 19, evidence rows 68
+- `tools/check_integrated_repository.py`: PASS — 294 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

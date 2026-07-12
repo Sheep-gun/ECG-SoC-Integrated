@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 293
+- Rules checked: 294
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
@@ -65,7 +65,7 @@
 - PASS — required path docs/STREAMING_STATE_MEMORY_KR.md
 - PASS — required path tables/streaming_state_inventory.csv
 - PASS — required path figures/final/FIG-12_digital_signal_flow.svg
-- PASS — required path figures/final/FIG-15_analog_signal_flow.svg
+- PASS — required path figures/final/FIG-15_analog_signal_flow_nonideal_models.svg
 - PASS — required path figures/final/FIG-02_overall_workflow.svg
 - PASS — required path figures/final/MAT-01_afe_chain_overview.png
 - PASS — required path figures/final/MAT-02_total_frequency_response.png
@@ -287,6 +287,7 @@
 - PASS — FIG-12 referenced by manuscript
 - PASS — FIG-15 indexed
 - PASS — FIG-15 referenced by manuscript
+- PASS — legacy FIG-15 manuscript reference removed
 - PASS — FIG-02 workflow indexed
 - PASS — FIG-02 workflow referenced by manuscript
 - PASS — legacy FIG-02 removed from manuscript

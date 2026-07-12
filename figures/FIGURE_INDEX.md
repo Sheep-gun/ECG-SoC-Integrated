@@ -158,7 +158,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-15
 
-- File: `figures/final/FIG-15_analog_signal_flow.svg`
+- File: `figures/final/FIG-15_analog_signal_flow_nonideal_models.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED

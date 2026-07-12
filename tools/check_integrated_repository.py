@@ -76,7 +76,7 @@ REQUIRED = [
     "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
     "tables/streaming_state_inventory.csv",
     "figures/final/FIG-12_digital_signal_flow.svg",
-    "figures/final/FIG-15_analog_signal_flow.svg",
+    "figures/final/FIG-15_analog_signal_flow_nonideal_models.svg",
     "figures/final/FIG-02_overall_workflow.svg",
     "figures/final/MAT-01_afe_chain_overview.png",
     "figures/final/MAT-02_total_frequency_response.png",
@@ -386,8 +386,9 @@ def main() -> int:
     manuscript = (ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md").read_text(encoding="utf-8")
     check("FIG-12 indexed", "FIG-12_digital_signal_flow.svg" in fig_index)
     check("FIG-12 referenced by manuscript", "FIG-12_digital_signal_flow.svg" in manuscript)
-    check("FIG-15 indexed", "FIG-15_analog_signal_flow.svg" in fig_index)
-    check("FIG-15 referenced by manuscript", "FIG-15_analog_signal_flow.svg" in manuscript)
+    check("FIG-15 indexed", "FIG-15_analog_signal_flow_nonideal_models.svg" in fig_index)
+    check("FIG-15 referenced by manuscript", "FIG-15_analog_signal_flow_nonideal_models.svg" in manuscript)
+    check("legacy FIG-15 manuscript reference removed", "FIG-15_analog_signal_flow.svg" not in manuscript)
     check("FIG-02 workflow indexed", "FIG-02_overall_workflow.svg" in fig_index)
     check("FIG-02 workflow referenced by manuscript", "FIG-02_overall_workflow.svg" in manuscript)
     check("legacy FIG-02 removed from manuscript", "FIG-02_complete_system_flow.svg" not in manuscript)

@@ -233,9 +233,9 @@ MATLAB에서 확인한 공칭 설계값을 SystemVerilog XMODEL의 회로망과 
 
 디지털 분류기 앞단의 목적은 공개 ECG 전압을 증폭만 하는 것이 아니라, 기준선 이동과 전원선 간섭을 줄이고 1 kSPS signed 12-bit 스트림으로 일관되게 넘기는 것이다. 현재 고정 component에는 README가 언급하는 LTspice `.asc`와 원본 회로 캡처가 실제로 포함되어 있지 않다. 따라서 그림 7은 원본 schematic이 아니라 MATLAB 파라미터 문서와 SystemVerilog XMODEL 정본에서 확인한 신호 순서만 크게 정리한 설명용 signal flow다. 세부 설계값과 비이상성 검증은 이어지는 본문과 표에서 설명한다. 누락된 원본은 `source_of_truth/unresolved_artifacts.csv`에 기록하며, 본문은 이 그림을 제작된 회로도 또는 실제 회로 증거로 사용하지 않는다 [CLM-034].
 
-![그림 7. Analog AFE·ADC signal flow](../figures/final/FIG-15_analog_signal_flow.svg)
+![그림 7. Analog AFE·ADC signal flow](../figures/final/FIG-15_analog_signal_flow_nonideal_models.svg)
 
-*그림 7. ECG+와 ECG−가 각각 HPF를 통과한 뒤 3-op-amp IA에서 합류하고, 60 Hz notch·150 Hz LPF·ADC·signed stream으로 이어지는 analog signal flow. 보라색 점선은 입력 교란, R/C·op-amp와 ADC 비이상성이 신호 경로와 분리되어 주입되는 XMODEL 검증 경로다. 원본 LTspice schematic이 아니다. 실제 PCB·silicon·post-layout 결과를 뜻하지 않는다. [직접 근거: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`; `components/afe_xmodel/analog/ecg_afe_xmodel.sv`; `source_of_truth/unresolved_artifacts.csv`]*
+*그림 7. ECG+와 ECG−가 각각 HPF를 통과한 뒤 3-op-amp IA에서 합류하고, 60 Hz notch·150 Hz LPF·ADC·signed stream으로 이어지는 analog signal flow. 상단은 `Input Disturbance Injection`, `R/C Tolerance & Op-Amp Error Model`, `ADC Error Model`로 구분하며, 하단 범례는 실선을 신호 경로로, 점선을 주입 교란 또는 비이상 모델로 정의한다. 원본 LTspice schematic이 아니다. 실제 PCB·silicon·post-layout 결과를 뜻하지 않는다. [직접 근거: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`; `components/afe_xmodel/analog/ecg_afe_xmodel.sv`; `source_of_truth/unresolved_artifacts.csv`]*
 
 전체 경로는 `ECG 입력 → HPF → 3-op-amp IA → active Twin-T 60 Hz notch와 buffer → 150 Hz LPF와 buffer → 12-bit ADC → offset-binary → signed two’s-complement stream`이다 [CLM-028]. 그림 8은 같은 순서를 MATLAB 공칭 모델 관점에서 보여준다.
 
