@@ -298,55 +298,66 @@ def main() -> int:
     write_svg("FIG-11_confounding_claim_boundary.svg", s)
 
     # FIG-12: event path splits into rhythm and morphology evidence, then merges.
-    s = paper_canvas(1600, 780, "Signed ECG samples create events and QRS spikes, split into rhythm and morphology evidence paths, and merge into Snapshot and Final Membrane classification")
+    s = paper_canvas(2050, 850, "Signed ECG samples pass through delta calculation and separate Strong-Event and QRS LIF paths, generate rhythm and morphology features, merge at class scoring, and accumulate thirty Snapshot membranes into a thirty-minute Final Membrane")
     s += paper_box(30, 330, 140, 100, "Signed ECG", "#eff6ff", "#2563a8")
-    s += paper_box(200, 330, 140, 100, "변화량 계산", "#ecfdf3", "#2f855a")
-    s += paper_box(370, 330, 160, 100, "Strong Event", "#ecfdf3", "#2f855a")
-    s += paper_box(570, 330, 150, 100, "QRS LIF", "#fffbeb", "#b7791f")
+    s += paper_box(200, 330, 180, 100, "ΔECG Calculation", "#ecfdf3", "#2f855a")
+    s += paper_box(410, 330, 190, 100, ("Strong-Event", "Detector"), "#ecfdf3", "#2f855a")
+    s += paper_box(640, 330, 180, 100, ("QRS LIF", "Neuron"), "#fffbeb", "#b7791f")
     s += paper_path([(170, 380), (200, 380)])
-    s += paper_path([(340, 380), (370, 380)])
-    s += paper_path([(530, 380), (570, 380)])
+    s += paper_path([(380, 380), (410, 380)])
+    s += paper_path([(600, 380), (640, 380)])
 
-    s.append(txt(900, 80, "박동·리듬 경로", 17, "#475467", 700, "middle"))
-    s += paper_box(760, 120, 140, 90, "RR Counter", "#ecfeff", "#0e7490")
-    s += paper_box(930, 120, 190, 90, ("PNN·RDM", "Ectopic Evidence"), "#ecfeff", "#0e7490")
-    s += paper_path([(720, 380), (740, 380), (740, 165), (760, 165)])
-    s += paper_path([(900, 165), (930, 165)])
+    s.append(txt(1080, 65, "Rhythm Feature Path", 17, "#475467", 700, "middle"))
+    s += paper_box(880, 110, 150, 90, "RR Counter", "#ecfeff", "#0e7490")
+    s += paper_box(1060, 110, 250, 90, ("PNN / RDM /", "Ectopic Evidence"), "#ecfeff", "#0e7490")
+    s += paper_path([(820, 380), (850, 380), (850, 155), (880, 155)])
+    s += paper_path([(1030, 155), (1060, 155)])
 
-    s.append(txt(960, 480, "파형 형태 경로", 17, "#475467", 700, "middle"))
-    s += paper_path([(450, 430), (450, 500), (1130, 500)], arrow=False)
-    s += paper_path([(645, 430), (645, 500)], arrow=False)
-    s.append(paper_dot(450, 500, "#667085", 4))
-    s.append(paper_dot(645, 500, "#667085", 4))
-    morphology = [
-        (740, 90, "DSCR"),
-        (850, 90, "RAM"),
-        (960, 100, "QRS MAF"),
-        (1080, 100, "RBBB-like"),
-    ]
-    for x, w, title in morphology:
+    s.append(txt(1020, 485, "Morphology Feature Path", 17, "#475467", 700, "middle"))
+    s += paper_path([(730, 430), (730, 500), (1130, 500)], arrow=False)
+    s.append(paper_dot(730, 500, "#667085", 4))
+    s += paper_path([(505, 430), (505, 660), (1075, 660)], arrow=False)
+    s.append(paper_dot(505, 660, "#667085", 4))
+
+    qrs_morphology = [(850, 120, "QRS MAF"), (1000, 130, "RBBB-like")]
+    for x, w, title in qrs_morphology:
         center = x + w / 2
         s.append(paper_dot(center, 500, "#667085", 4))
-        s += paper_path([(center, 500), (center, 550)])
-        s += paper_box(x, 550, w, 70, title, "#fff7ed", "#c05621")
-        s += paper_path([(center, 620), (center, 660)], arrow=False)
-    s += paper_path([(785, 660), (1130, 660)], arrow=False)
-    s.append(paper_dot(1130, 660))
+        s += paper_path([(center, 500), (center, 545)])
+        s += paper_box(x, 545, w, 70, title, "#fff7ed", "#c05621")
+        s += paper_path([(center, 615), (center, 630)], arrow=False)
 
-    s += paper_box(1180, 310, 150, 140, ("60초", "Snapshot"), "#f5f3ff", "#6b46c1")
-    s += paper_path([(1120, 165), (1150, 165), (1150, 350), (1180, 350)])
-    s += paper_path([(1130, 660), (1150, 660), (1150, 410), (1180, 410)])
-    s += paper_box(1370, 300, 150, 160, ("Final", "Membrane"), "#fdf4ff", "#9c36b5")
-    s += paper_path([(1330, 380), (1370, 380)])
+    strong_morphology = [(850, 100, "DSCR"), (975, 100, "RAM")]
+    for x, w, title in strong_morphology:
+        center = x + w / 2
+        s.append(paper_dot(center, 660, "#667085", 4))
+        s += paper_path([(center, 660), (center, 685)])
+        s += paper_box(x, 685, w, 70, title, "#fff7ed", "#c05621")
+        s += paper_path([(center, 755), (center, 790)], arrow=False)
 
-    s += paper_path([(1520, 330), (1540, 330)], arrow=False)
-    s += paper_path([(1520, 370), (1540, 370)], arrow=False)
-    s += paper_path([(1520, 410), (1540, 410)], arrow=False)
-    s += paper_path([(1520, 450), (1540, 450)], arrow=False)
-    s.append(txt(1550, 336, "NSR", 16, "#182230", 700))
-    s.append(txt(1550, 376, "CHF", 16, "#182230", 700))
-    s.append(txt(1550, 416, "ARR", 16, "#182230", 700))
-    s.append(txt(1550, 456, "AFF", 16, "#182230", 700))
+    s += paper_path([(910, 630), (1250, 630)], arrow=False)
+    s += paper_path([(900, 790), (1250, 790), (1250, 630)], arrow=False)
+    s.append(paper_dot(1250, 630))
+
+    s += paper_box(1350, 300, 280, 140, ("Feature Accumulation", "& Class Scoring"), "#eef2ff", "#4f46e5")
+    s += paper_path([(1310, 155), (1325, 155), (1325, 340), (1350, 340)])
+    s += paper_path([(1250, 630), (1310, 630), (1310, 400), (1350, 400)])
+
+    s += paper_box(1680, 300, 210, 140, ("60 s Snapshot", "Membrane"), "#f5f3ff", "#6b46c1")
+    s += paper_path([(1630, 370), (1680, 370)])
+    s += paper_box(1690, 485, 190, 60, ("30-Snapshot", "Accumulation"), "#f5f3ff", "#6b46c1")
+    s += paper_path([(1785, 440), (1785, 485)])
+    s += paper_box(1680, 585, 210, 140, ("30 min Final", "Membrane"), "#fdf4ff", "#9c36b5")
+    s += paper_path([(1785, 545), (1785, 585)])
+
+    s += paper_path([(1890, 610), (1920, 610)], arrow=False)
+    s += paper_path([(1890, 645), (1920, 645)], arrow=False)
+    s += paper_path([(1890, 680), (1920, 680)], arrow=False)
+    s += paper_path([(1890, 715), (1920, 715)], arrow=False)
+    s.append(txt(1930, 616, "NSR", 16, "#182230", 700))
+    s.append(txt(1930, 651, "CHF", 16, "#182230", 700))
+    s.append(txt(1930, 686, "ARR", 16, "#182230", 700))
+    s.append(txt(1930, 721, "AFF", 16, "#182230", 700))
     s.append('</svg>')
     write_svg("FIG-12_digital_signal_flow.svg", s)
 
@@ -448,7 +459,7 @@ def main() -> int:
         ("FIG-09", "figures/final/FIG-09_digital_validation_hierarchy.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Digital validation hierarchy", "integer reference through board replay", "physical analog not included"),
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
-        ("FIG-12", "figures/final/FIG-12_digital_signal_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "signed ECG의 사건 경로가 박동·리듬과 파형 형태 경로로 분기된 뒤 Snapshot에서 합류하는 digital signal flow", "branched rhythm and morphology evidence paths with a shared Snapshot merge", "not literal post-synthesis netlist connectivity; block internals remain in the body"),
+        ("FIG-12", "figures/final/FIG-12_digital_signal_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "분리된 rhythm·morphology feature 경로가 class scoring에서 합류하고 30개 Snapshot이 Final Membrane으로 누적되는 digital signal flow", "separate Strong-Event and QRS branches, shared feature scoring, and explicit 30-Snapshot accumulation", "not literal post-synthesis netlist connectivity; block internals remain in the body"),
         ("FIG-13", "figures/final/FIG-13_beat_rhythm_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v", "components/digital_accelerator/rtl/core/rdm_variability_neuron.v", "components/digital_accelerator/rtl/core/ectopic_pair_neuron.v"], [DIGITAL], "박동·리듬 state-transition 경로", "reader-facing grouping of fixed RTL state transitions", "conceptual dataflow; literal timing remains in RTL"),
         ("FIG-14", "figures/final/FIG-14_morphology_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/dscr_spike_counter.v", "components/digital_accelerator/rtl/core/ram_peak_accumulator.v", "components/digital_accelerator/rtl/core/qrs_maf_neuron.v", "components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v"], [DIGITAL], "파형 형태 finite-state 경로", "reader-facing grouping of fixed RTL morphology mechanisms", "engineering proxies; not clinical morphology measurement"),
         ("FIG-15", "figures/final/FIG-15_analog_signal_flow_nonideal_models.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "ECG 차동 입력의 두 HPF 경로가 IA에서 합류하고 비이상성 주입 경로가 분리된 analog AFE·ADC signal flow", "differential-input reconstruction with separate XMODEL stress injection paths", "not the missing original LTspice schematic; component values and stress details remain in the body"),

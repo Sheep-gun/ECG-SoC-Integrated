@@ -9,7 +9,7 @@
 - [x] AFE·ADC XMODEL 검증 뒤에 signed stream을 소비하는 디지털 가속기 IP를 배치하여 아날로그 앞단과 디지털 뒷단의 인과관계를 유지한다.
 - [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, NO_BOARD 수치와 physical board pending을 구분한다.
 - [x] 초록은 배경→문제→제안 구조→검증→결과→한계 순서로 전개한다.
-- [x] 디지털 설명은 전압 숫자열→차분 사건→QRS 누적·발화→리듬·파형 증거→Snapshot→Final Membrane 순서로 읽힌다.
+- [x] 디지털 Figure는 Strong-Event와 QRS LIF의 feature 출력을 분리하고 rhythm·morphology 경로를 class scoring에서 합친 뒤 Snapshot 30개를 Final Membrane으로 누적한다.
 - [x] AFE 설명은 필요성→구성→설계값→검증→다음 블록 연결 순서를 각 블록에 적용한다.
 - [x] `token age`와 같은 내부 신호명은 직관적인 한국어 기능 설명 뒤에 필요한 경우만 제시한다.
 - [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, Exact C++ 측정·cycle-derived core·estimated power를 구분한다.

@@ -229,9 +229,11 @@ def main() -> int:
         check(f"figure referenced {filename}", len(matches) == 1, matches)
         check(f"figure exists {filename}", (ROOT / "figures" / "final" / filename).is_file())
     figure12 = (ROOT / "figures" / "final" / "FIG-12_digital_signal_flow.svg").read_text(encoding="utf-8")
-    for label in ["Signed ECG", "변화량 계산", "Strong Event", "QRS LIF", "박동·리듬 경로", "RR Counter", "PNN·RDM", "Ectopic Evidence", "파형 형태 경로", "DSCR", "RAM", "QRS MAF", "RBBB-like", "60초", "Snapshot", "Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
+    for label in ["Signed ECG", "ΔECG Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60 s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
-    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 20 and figure12.count("<circle") >= 6)
+    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 24 and figure12.count("<circle") >= 6)
+    check("FIG-12 Strong-Event and QRS morphology outputs separated", 'points="505,430 505,660' in figure12 and 'points="730,430 730,500' in figure12)
+    check("FIG-12 scoring and 30-Snapshot accumulation explicit", "Feature Accumulation" in figure12 and "30-Snapshot" in figure12 and "30 min Final" in figure12)
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
         "FIG-02_overall_workflow.svg": ["공개 ECG 데이터", "MATLAB AFE·ADC 사전검증", "AFE·ADC XMODEL 검증", "Digital SNN RTL IP", "AFE–RTL 통합 검증", "Accelerator Benchmark", "FPGA·IP 구현 검증", "설계·통합", "검증 기준 충족?", "모델·RTL 수정", "아니오", "예", "Locked Final Test", "최종 결과·보고서"],

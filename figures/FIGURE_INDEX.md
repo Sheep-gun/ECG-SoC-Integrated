@@ -130,8 +130,8 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: signed ECG의 사건 경로가 박동·리듬과 파형 형태 경로로 분기된 뒤 Snapshot에서 합류하는 digital signal flow
-- Evidence scope: branched rhythm and morphology evidence paths with a shared Snapshot merge
+- Caption: 분리된 rhythm·morphology feature 경로가 class scoring에서 합류하고 30개 Snapshot이 Final Membrane으로 누적되는 digital signal flow
+- Evidence scope: separate Strong-Event and QRS branches, shared feature scoring, and explicit 30-Snapshot accumulation
 - Limitations: not literal post-synthesis netlist connectivity; block internals remain in the body
 
 ## FIG-13
