@@ -249,7 +249,9 @@ def main() -> int:
         check(f"annotated Device View evidence {annotated_name}", (p05_root / annotated_name).is_file(), str(p05_root / annotated_name))
     annotated_svg = (p05_root / "device_view_annotated_publication.svg").read_text(encoding="utf-8")
     check("annotated Device View accelerator-only title", "SNN accelerator에 속한 배치 셀만 분리 표시" in annotated_svg)
-    check("annotated Device View pblock boundary", "pblock으로 고정했다는 의미는 아니다" in annotated_svg)
+    check("annotated Device View requested notes removed", "Post-route FPGA Device View. ASIC layout이 아니며" not in annotated_svg and "색상은 routed checkpoint의 실제 placed primitive 좌표이다" not in annotated_svg)
+    check("annotated Device View larger panel typography", '.ph{font:700 26px' in annotated_svg and '.lb{font:700 20px' in annotated_svg and '.sm{font:17px' in annotated_svg)
+    check("annotated Device View larger region numbering", annotated_svg.count('r="20"') == 5 and '.mk{font:700 22px' in annotated_svg)
     for native_name in ["microblaze_block_design_vivado_native.pdf", "worst_setup_path_vivado_native.pdf"]:
         check(f"Vivado native PDF {native_name}", (p05_root / native_name).is_file(), str(p05_root / native_name))
     legacy_captures = [p05_root / name for name in ["device_view_full.png", "device_view_accelerator_zoom.png", "worst_setup_path.png"]]
