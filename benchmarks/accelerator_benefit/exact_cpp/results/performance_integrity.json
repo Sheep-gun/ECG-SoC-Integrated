@@ -1,0 +1,114 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "check": "required_outputs",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "raw_720",
+      "status": "pass",
+      "detail": "720"
+    },
+    {
+      "check": "case_coverage",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "mode_coverage",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "protocol_flags",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "all_outputs_exact",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "repetition_coverage",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "summary_rows",
+      "status": "pass",
+      "detail": "74"
+    },
+    {
+      "check": "kernel_median",
+      "status": "pass",
+      "detail": "1777.6997999999999"
+    },
+    {
+      "check": "end_to_end_median",
+      "status": "pass",
+      "detail": "2007.54925"
+    },
+    {
+      "check": "comparison_single_row",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "comparison_formula",
+      "status": "pass",
+      "detail": "32.91268703969074"
+    },
+    {
+      "check": "fpga_scope",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "post_benchmark_equivalence",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "post_sample_hashes",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "classifier_source_commit_identity",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "fpga_cycle_csv_sha",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "fpga_cycle_summary_sha",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "report_scoping",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "environment_limitations",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "raw_sha",
+      "status": "pass",
+      "detail": ""
+    }
+  ],
+  "failures": [],
+  "raw_sha256": "7dc3b65fe0316d08f6a6e3b740427d91340effe6f5abb598885e5f98a782bee9",
+  "summary_sha256": "784844b860ac698af4c42a4d5d995e251ae9acde86be388aade1e06997fedbc5",
+  "comparison_sha256": "6152e1e78e18ed7d3025d44ed2c0e27f86a0a17232ed5015e11350a5b4afa315"
+}

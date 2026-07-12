@@ -48,3 +48,8 @@ add_test(NAME feature_blocks COMMAND test_feature_blocks)
 add_executable(test_adversarial_sequences tests/test_adversarial_sequences.cpp)
 target_link_libraries(test_adversarial_sequences PRIVATE exact_snn_model)
 add_test(NAME adversarial_sequences COMMAND test_adversarial_sequences)
+
+if(WIN32)
+    add_executable(exact_cpp_benchmark tools/benchmark_exact_cpp.cpp)
+    target_link_libraries(exact_cpp_benchmark PRIVATE exact_snn_model PowrProf)
+endif()
