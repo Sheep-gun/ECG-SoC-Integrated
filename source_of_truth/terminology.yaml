@@ -1,6 +1,6 @@
 schema_version: 1
 project_identity_en: "Holter-oriented long-window, multi-timescale, SNN-inspired ECG four-class classification accelerator IP"
-project_identity_kr: "Holter형 장시간 ECG 분석을 위한 60초 Snapshot·30분 Final Membrane 다중 시간축 SNN-inspired 분류 RTL accelerator IP"
+project_identity_kr: "Holter형 장시간 ECG의 순차 Snapshot과 간헐 질환 증거 누적에 기반한 SNN-inspired 기록 단위 분류 RTL accelerator IP"
 preferred:
   - Holter-oriented
   - long-window ECG

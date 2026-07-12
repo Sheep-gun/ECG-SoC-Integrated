@@ -2,7 +2,7 @@
 
 ## 프로젝트 정체성
 
-본 프로젝트는 Holter형 장시간 ECG 분석을 위해 60초 Snapshot과 30분 Final Membrane을 결합한 다중 시간축 SNN-inspired 분류 구조를 제안하고, 이를 signed 12-bit streaming RTL accelerator IP로 구현·검증한 연구이다.
+본 프로젝트는 Holter형 장시간 ECG를 제한된 길이의 Snapshot으로 순차 처리하고, 대부분 정상으로 보이는 기록 속에서 간헐적으로 나타나는 강한 질환 증거의 강도·빈도·반복성과 장시간 일관성을 고정 폭 상태에 누적하는 SNN-inspired 기록 단위 분류 구조를 제안한다. 현재 60초 Snapshot 30개와 30분 입력은 공개 데이터셋 길이에 맞춘 구현·검증 조건이며, 구조의 본질이나 24시간 검증 완료를 뜻하지 않는다. 이 구조를 signed 12-bit streaming RTL accelerator IP로 구현·검증하였다.
 
 ## End-to-end flow
 

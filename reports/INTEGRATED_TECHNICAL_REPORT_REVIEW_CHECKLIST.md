@@ -14,6 +14,19 @@
 - [x] `token age`와 같은 내부 신호명은 직관적인 한국어 기능 설명 뒤에 필요한 경우만 제시한다.
 - [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, 외부 근거 반입 전까지 pending으로 유지한다.
 
+## 장시간 ECG 관련 연구와 본 연구의 위치
+
+- [x] 개별 심박 SNN, 연속 ECG 사건 탐지, multiple instance 집계, 가변 길이 CNN/LSTM, 24시간 Holter temporal model을 최종 판정 단위별로 구분한다.
+- [x] Amirshahi–Hashemi 연구를 R-peak 주위 개별 심박의 진폭 spike encoding, STDP 특징 학습, reward/punishment R-STDP 분류로 설명하고 장시간 기록 집계 연구로 확대 해석하지 않는다.
+- [x] Bauer 연구의 비동기 사건·recurrent SNN·binary trigger와 Chen 연구의 LC-ADC·SCNN·개별 심박 분류 범위를 공식 출판본 또는 저자 원고로 확인한다.
+- [x] Shanmugam 연구의 약 48시간 ECG, 일부 고위험 instance 상위 20% 집계와 환자 단위 이진 예후 범위를 구분한다.
+- [x] Zihlmann 연구의 9–61초 가변 길이 네 클래스 기록 분류와 CNN 특징의 평균/LSTM 통합을 반영하여 “4개 클래스” 자체를 최초 차별성으로 주장하지 않는다.
+- [x] DeepHHF의 정식 제목·저자·2026년 npj Digital Medicine 출판·DOI를 재검증하고, 24시간 Holter의 30초 encoder 특징을 Transformer로 통합하는 이진 HF 예후 모델임을 명시한다.
+- [x] 비교표는 서로 다른 과업·데이터셋·판정 단위의 정확도를 직접 순위 비교하지 않는다.
+- [x] 본 연구의 핵심을 특정 60초·30분 수치가 아니라 간헐적 질환 증거의 강도·빈도·반복성과 장시간 일관성을 고정 폭 RTL 상태에 누적하는 streaming architecture로 설명한다.
+- [x] “세계 최초”와 문헌 전체에 동일 연구가 없다는 단정을 사용하지 않고, 검토한 대표 선행연구 범위의 제한된 비교로만 위치를 설명한다.
+- [x] 현재 검증 입력은 30분이고 24시간 정확도·처리시간·전력은 미검증이라는 경계를 유지한다.
+
 ## AFE·ADC 설계와 MATLAB/XMODEL 근거
 
 - [x] ECG→HPF→3-op-amp IA→active Twin-T 60 Hz notch+buffer→150 Hz LPF→12-bit ADC→offset-binary→signed stream의 전체 흐름을 설명한다.

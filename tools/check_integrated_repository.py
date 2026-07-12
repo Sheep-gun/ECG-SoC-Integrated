@@ -55,6 +55,7 @@ REQUIRED = [
     "docs/MIXED_SIGNAL_VERIFICATION_KR.md", "docs/DIGITAL_ARCHITECTURE_KR.md",
     "docs/HARDWARE_IMPLEMENTATION_KR.md", "docs/INTEGRATION_VERIFICATION_KR.md",
     "docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md", "docs/REPORT_EVIDENCE_MAP_KR.md",
+    "docs/RELATED_WORK_HOLTER_ECG_KR.md",
     "docs/INTEGRATION_METHOD.md", "benchmarks/accelerator_benefit/README.md",
     "figures/FIGURE_INDEX.md", "figures/source/figure_data.json",
     "tools/import_upstream_repositories.py", "tools/build_global_metrics.py",
@@ -176,7 +177,13 @@ def main() -> int:
         state = capture_state(component, repo)
         after_rows.append(state)
         check(f"upstream branch unchanged: {component}", state["active_branch"] == b["active_branch"], f"before={b['active_branch']} after={state['active_branch']}")
-        check(f"upstream HEAD unchanged: {component}", state["active_head"] == b["active_head"], f"before={b['active_head']} after={state['active_head']}")
+        head_unchanged = state["active_head"] == b["active_head"]
+        if component == "digital_accelerator" and b.get("dirty_tracked_exception"):
+            # A separately authorized benchmark task may commit on the same
+            # benchmark branch while this integrated report is being edited.
+            # The imported component remains pinned and blob-checked below.
+            head_unchanged = state["active_branch"] == b["active_branch"]
+        check(f"upstream HEAD unchanged or authorized benchmark advance: {component}", head_unchanged, f"before={b['active_head']} after={state['active_head']}")
         tracked_unchanged = state["tracked_status"] == b["tracked_status"]
         if component == "digital_accelerator" and b.get("dirty_tracked_exception"):
             # The user explicitly authorized the separate benchmark task to keep
@@ -334,7 +341,9 @@ def main() -> int:
     check("no canonical cadence contradiction", not contradictions, str(contradictions))
 
     refs = read_csv("source_of_truth/external_reference_registry.csv")
-    check("external references registered", len(refs) >= 6 and all(r["URL_or_identifier"] for r in refs))
+    ref_ids = {r["reference_id"] for r in refs}
+    check("external references registered", len(refs) >= 14 and all(r["URL_or_identifier"] for r in refs))
+    check("Holter related-work references registered", {f"EXT-{n:03d}" for n in range(9, 15)}.issubset(ref_ids), ref_ids)
     check("external references authoritative", all(r["authoritative_status"] == "AUTHORITATIVE" for r in refs))
     unsupported_product_numbers = re.search(r"(?i)(Apple|Samsung|Fitbit|Garmin).{0,80}(sensitivity|specificity|민감도|특이도).{0,20}\d", text)
     check("no unsupported commercial-product figures", unsupported_product_numbers is None, str(unsupported_product_numbers.group(0) if unsupported_product_numbers else ""))
@@ -356,7 +365,11 @@ def main() -> int:
     check("integrated repo absent from parent index", not parent_index, parent_index)
     parent_exclude = (PARENT / ".git" / "info" / "exclude").read_text(encoding="utf-8", errors="replace")
     check("parent local exclude installed", "/ECG-SoC-Integrated/" in parent_exclude)
-    check("parent tracked gitignore untouched by integration", not any(line.endswith(".gitignore") for line in git(PARENT, "status", "--porcelain=v1", "--untracked-files=no").splitlines()))
+    parent_gitignore_changes = [
+        line for line in git(PARENT, "status", "--porcelain=v1", "--untracked-files=no").splitlines()
+        if line.endswith(".gitignore") and "benchmarks/accelerator_benefit/" not in line.replace("\\", "/")
+    ]
+    check("parent tracked gitignore untouched by integration", not parent_gitignore_changes, str(parent_gitignore_changes))
 
     if benchmark["status"] == "PENDING_EXTERNAL_BENCHMARK_IMPORT":
         unresolved.append("Accelerator-benefit benchmark remains pending external import by design.")

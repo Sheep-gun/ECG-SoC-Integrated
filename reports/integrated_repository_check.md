@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 228
+- Rules checked: 237
 - Conflicts found: 0
 - Benchmark placeholder: PASS (all fields null)
 
@@ -36,6 +36,7 @@
 - PASS — required path docs/INTEGRATION_VERIFICATION_KR.md
 - PASS — required path docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md
 - PASS — required path docs/REPORT_EVIDENCE_MAP_KR.md
+- PASS — required path docs/RELATED_WORK_HOLTER_ECG_KR.md
 - PASS — required path docs/INTEGRATION_METHOD.md
 - PASS — required path benchmarks/accelerator_benefit/README.md
 - PASS — required path figures/FIGURE_INDEX.md
@@ -79,14 +80,14 @@
 - PASS — origin matches: matlab_prevalidation
 - PASS — fixed commit exists: matlab_prevalidation
 - PASS — upstream branch unchanged: matlab_prevalidation
-- PASS — upstream HEAD unchanged: matlab_prevalidation
+- PASS — upstream HEAD unchanged or authorized benchmark advance: matlab_prevalidation
 - PASS — tracked status unchanged or authorized benchmark-only drift: matlab_prevalidation
 - PASS — before state recorded: afe_xmodel
 - PASS — upstream exists: afe_xmodel
 - PASS — origin matches: afe_xmodel
 - PASS — fixed commit exists: afe_xmodel
 - PASS — upstream branch unchanged: afe_xmodel
-- PASS — upstream HEAD unchanged: afe_xmodel
+- PASS — upstream HEAD unchanged or authorized benchmark advance: afe_xmodel
 - PASS — tracked status unchanged or authorized benchmark-only drift: afe_xmodel
 - PASS — before state recorded: digital_accelerator
 - PASS — upstream exists: digital_accelerator
@@ -94,7 +95,7 @@
 - PASS — fixed commit exists: digital_accelerator
 - PASS — digital fixed commit exact
 - PASS — upstream branch unchanged: digital_accelerator
-- PASS — upstream HEAD unchanged: digital_accelerator
+- PASS — upstream HEAD unchanged or authorized benchmark advance: digital_accelerator
 - PASS — tracked status unchanged or authorized benchmark-only drift: digital_accelerator
 - PASS — curated artifact manifest has 913 rows
 - PASS — all manifest files exist and SHA256-match
@@ -189,6 +190,13 @@
 - PASS — claim evidence exists: CLM-032
 - PASS — claim evidence exists: CLM-033
 - PASS — claim evidence exists: CLM-035
+- PASS — claim evidence exists: CLM-036
+- PASS — claim evidence exists: CLM-037
+- PASS — claim evidence exists: CLM-038
+- PASS — claim evidence exists: CLM-039
+- PASS — claim evidence exists: CLM-040
+- PASS — claim evidence exists: CLM-041
+- PASS — claim evidence exists: CLM-042
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — streaming inventory columns
@@ -218,6 +226,7 @@
 - PASS — no positive physical-silicon claim
 - PASS — no canonical cadence contradiction
 - PASS — external references registered
+- PASS — Holter related-work references registered
 - PASS — external references authoritative
 - PASS — no unsupported commercial-product figures
 - PASS — wearable wording is product-specific

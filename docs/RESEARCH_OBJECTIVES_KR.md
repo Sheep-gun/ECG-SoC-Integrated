@@ -6,7 +6,7 @@
 
 ## 세부 목표
 
-1. 60초 Snapshot Readout과 30분 Final Membrane Readout을 결합한 다중 시간축 구조를 정의한다.
+1. 장시간 ECG를 제한된 길이의 Snapshot으로 순차 처리하고, 간헐적 질환 증거의 강도·빈도·반복성과 장시간 일관성을 기록 단위 상태에 누적하는 구조를 정의한다. 현재 60초 Snapshot 30개는 공개 데이터셋 길이에 맞춘 검증 설정이다.
 2. event/state update를 integer counter, comparator, signed accumulator와 fixed-size persistent state로 구현한다.
 3. 전체 30분 raw input을 저장하지 않고 streaming으로 최종 decision을 생성한다.
 4. MATLAB nominal intent에서 XMODEL, signed digital handoff, locked RTL까지 신호 규약을 추적한다.

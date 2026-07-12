@@ -15,6 +15,7 @@ CHECKLIST = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_REVIEW_CHECKLIST.md"
 EVIDENCE_MAP = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv"
 BASELINE_REVIEW = ROOT / "reports" / "BASELINE_PAPER_STRUCTURE_REVIEW_KR.md"
 UNRESOLVED_ARTIFACTS = ROOT / "source_of_truth" / "unresolved_artifacts.csv"
+RELATED_WORK_AUDIT = ROOT / "docs" / "RELATED_WORK_HOLTER_ECG_KR.md"
 
 MAIN_HEADINGS = [
     "# 1. 서론",
@@ -29,7 +30,7 @@ MAIN_HEADINGS = [
 ]
 SUBHEADINGS = [
     "1.1 연구 배경과 문제 정의", "1.2 연구 목표와 주요 기여",
-    "2.1 기존 접근의 한계와 설계 요구", "2.2 데이터셋과 평가 프로토콜",
+    "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", "2.2 데이터셋과 평가 프로토콜",
     "3.1 MATLAB 사전검증의 역할과 흐름", "3.2 공칭 주파수응답과 동적 범위 검증",
     "3.3 기준 벡터 생성과 XMODEL 인계",
     "4.1 AFE·ADC 신호 경로와 회로 설계", "4.2 XMODEL 비이상성 및 설계 수정 검증",
@@ -40,7 +41,7 @@ SUBHEADINGS = [
     "7.1 분류 성능", "7.2 Mixed-signal 및 디지털 통합 결과", "7.3 하드웨어 구현 결과",
     "8.1 설계적 차별성과 기술적 의의", "8.2 결과의 해석 범위와 향후 과제",
 ]
-REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS]
+REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS, RELATED_WORK_AUDIT]
 REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_complete_system_flow.svg",
     "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
@@ -114,8 +115,38 @@ def main() -> int:
     check("MATLAB plus AFE XMODEL depth comparable to digital", len(chapter3) + len(chapter4) >= int(len(chapter5) * 0.65), (len(chapter3), len(chapter4), len(chapter5)))
     check("research-flow chapter order", [text.index(h) for h in MAIN_HEADINGS] == sorted(text.index(h) for h in MAIN_HEADINGS))
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
-    for term in ["전체 파형을 저장", "짧은 구간의 파형", "학습된 심층 SNN", "설계 요구", "전체 신호 흐름"]:
-        check(f"related-work design gap {term}", term in chapter2)
+    related_work = section(text, "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", 2)
+    related_work_terms = [
+        "R-peak 전 0.25초와 후 0.45초", "Poisson spike train", "STDP 계층", "보상", "벌점", "개별 심박",
+        "비동기 이진 사건열", "recurrent SNN reservoir", "저역통과", "이진 검출 신호",
+        "레벨 교차 ADC(level-crossing ADC, LC-ADC)", "N·SVEB·VEB·F", "장시간 기록",
+        "약 48시간 ECG", "높은 20%의 평균", "대부분의 심박은 정상처럼 보이고", "환자 단위",
+        "9–61초", "시간축 평균", "양방향 LSTM", "네 클래스로 분류",
+        "Modeling day-long ECG signals to predict heart failure risk with explainable AI",
+        "10.1038/s41746-026-02835-8", "24시간 단일유도 Holter", "30초 구간", "Transformer 순차 통합부",
+        "증거의 강도·출현 빈도·반복성과 장시간 일관성", "고정 폭 RTL 상태", "24시간 이상의 정확도, 실시간 처리시간과 전력은 아직 검증하지 않았다",
+    ]
+    for term in related_work_terms:
+        check(f"related-work verified content {term}", term in related_work)
+    comparison_header = "| 연구 | 최종 판정 단위 | 국소 ECG 처리 | 장시간 집계 방식 | 구현 형태 | 본 연구와의 차이 |"
+    check("related-work comparison table", comparison_header in related_work)
+    for row_name in ["Amirshahi–Hashemi", "Bauer et al.", "Chen et al.", "Shanmugam et al.", "Zihlmann et al.", "DeepHHF", "본 연구"]:
+        check(f"related-work comparison row {row_name}", f"| {row_name}" in related_work)
+    check("no world-first claim", "세계 최초" not in text)
+    check("no absolute identical-study claim", "동일한 연구가 없다" not in text)
+    check("scoped novelty statement", "검토한 대표 선행연구 범위에서는" in related_work and "제한된 비교" in related_work)
+    reference_block = text.split("# 참고문헌", 1)[1].split("# 부록 A.", 1)[0]
+    reference_numbers = [int(n) for n in re.findall(r"(?m)^\[(\d+)\]", reference_block)]
+    check("references sequential 1 through 14", reference_numbers == list(range(1, 15)), reference_numbers)
+    for publication_path in [
+        "10.1109/TBCAS.2019.2948920", "10.1109/TBCAS.2019.2953001", "ieeexplore.ieee.org/document/9937756",
+        "proceedings.mlr.press/v106/shanmugam19a.html", "10.22489/CinC.2017.070-060", "10.1038/s41746-026-02835-8",
+    ]:
+        check(f"official related-work reference {publication_path}", publication_path in reference_block)
+    check("no machine-replacement classification error", "De Novo 클래스ification" not in text)
+    related_audit = RELATED_WORK_AUDIT.read_text(encoding="utf-8-sig") if RELATED_WORK_AUDIT.is_file() else ""
+    for audit_id in ["RW-001", "RW-002", "RW-003", "RW-004", "RW-005", "RW-006"]:
+        check(f"related-work audit {audit_id}", audit_id in related_audit)
     numbered_details = re.findall(r"(?m)^### 5\.[234]\.\d+ .+$", text)
     check("numbered circuit-detail subsections", len(numbered_details) == 14, numbered_details)
     baseline_text = BASELINE_REVIEW.read_text(encoding="utf-8-sig") if BASELINE_REVIEW.is_file() else ""
@@ -256,12 +287,13 @@ def main() -> int:
     check("global final metric", metrics["metrics"]["final_test_chunk_accuracy"]["value"] == 80.56)
     check("benchmark values remain null", all(v is None for k, v in metrics["benchmark"].items() if k != "status"))
     with (ROOT / "source_of_truth" / "claim_registry.csv").open(encoding="utf-8-sig", newline="") as handle:
-        known = {row["claim_id"] for row in csv.DictReader(handle)}
+        claim_rows = list(csv.DictReader(handle))
+    known = {row["claim_id"] for row in claim_rows}
     with EVIDENCE_MAP.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}
     check("evidence-map schema", bool(rows) and set(rows[0]) == required_columns)
-    check("evidence-map coverage", len(rows) >= 54, len(rows))
+    check("evidence-map coverage", len(rows) >= 61, len(rows))
     valid_sections = {"초록", "부록"} | {str(i) for i in range(1, 10)} | {s.split()[0] for s in SUBHEADINGS}
     for row in rows:
         check(f"map section {row['statement_id']}", row["section"] in valid_sections, row["section"])
@@ -272,7 +304,8 @@ def main() -> int:
     inline_paths = re.findall(r"`((?:components|datasets|docs|tables|figures|source_of_truth|benchmarks|reports)/[^`]+)`", text)
     for relative in inline_paths:
         check(f"inline path {relative}", (ROOT / relative).exists())
-    check("owners", all(term in text for term in ["서민우(MATLAB", "이수환(XMODEL", "양건(디지털"]))
+    registered_owners = {row["owner"] for row in claim_rows}
+    check("component owners registered", {"서민우", "이수환", "양건"}.issubset(registered_owners), registered_owners)
     check("no private email", re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", text, re.I) is None)
     check("no personal path", re.search(r"[A-Z]:[\\/]Users[\\/]", text, re.I) is None)
 
