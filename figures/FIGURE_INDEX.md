@@ -15,7 +15,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-02
 
-- File: `figures/final/FIG-02_overall_workflow.svg`
+- File: `figures/final/FIG-02_recordwise_validation_workflow.svg`
 - Owner: 서민우·이수환·양건
 - Source files: `source_of_truth/upstream_commits.yaml`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75

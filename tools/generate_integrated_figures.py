@@ -237,7 +237,7 @@ def main() -> int:
     s += paper_box(570, 1360, 360, 65, "최종 결과·보고서", "#dbeafe", "#2563a8")
     s += paper_path([(750, 1320), (750, 1360)])
     s.append('</svg>')
-    write_svg("FIG-02_overall_workflow.svg", s)
+    write_svg("FIG-02_recordwise_validation_workflow.svg", s)
 
     # FIG-03 ownership
     s = canvas("Contributor ownership and handoff", "구현 owner·verification owner·integration owner를 분리")
@@ -469,7 +469,7 @@ def main() -> int:
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
-        ("FIG-02", "figures/final/FIG-02_overall_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation만 MATLAB과 XMODEL·RTL 설계·검증에 사용하고, 잠금 Test는 Design Lock 뒤 최초 1회 최종시험에만 사용하는 전체 workflow", "data-separated portrait validation flow with parallel XMODEL/RTL paths and one pre-lock correction loop", "analog layers are model-based; locked test data remain isolated until the one-time final test after design lock"),
+        ("FIG-02", "figures/final/FIG-02_recordwise_validation_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation만 MATLAB과 XMODEL·RTL 설계·검증에 사용하고, 잠금 Test는 Design Lock 뒤 최초 1회 최종시험에만 사용하는 전체 workflow", "data-separated portrait validation flow with parallel XMODEL/RTL paths and one pre-lock correction loop", "analog layers are model-based; locked test data remain isolated until the one-time final test after design lock"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
         ("FIG-04", "figures/final/FIG-04_multitimescale_architecture.svg", "양건", ["components/digital_accelerator/FINAL_REPORT_KR.md"], [DIGITAL], "60초 Snapshot과 30분 Final Membrane 구조", "locked digital architecture", "SNN-inspired, not trained deep SNN"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),
