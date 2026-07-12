@@ -14,6 +14,7 @@ REPORT = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md"
 CHECKLIST = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_REVIEW_CHECKLIST.md"
 EVIDENCE_MAP = ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv"
 BASELINE_REVIEW = ROOT / "reports" / "BASELINE_PAPER_STRUCTURE_REVIEW_KR.md"
+UNRESOLVED_ARTIFACTS = ROOT / "source_of_truth" / "unresolved_artifacts.csv"
 
 MAIN_HEADINGS = [
     "# 1. 서론",
@@ -30,16 +31,21 @@ SUBHEADINGS = [
     "3.1 핵심 개념과 다중 시간축 처리", "3.2 박동 및 리듬 정보 추출",
     "3.3 파형 형태 및 진폭 정보 추출", "3.4 60초 Snapshot과 30분 Final Membrane",
     "3.5 Streaming state와 하드웨어 구현 방식",
-    "4.1 AFE·ADC 모델 검증", "4.2 RTL/IP/FPGA 구현", "4.3 End-to-end 기능 등가성 검증",
+    "4.1 AFE·ADC 설계", "4.2 MATLAB/XMODEL 검증", "4.3 RTL/IP/FPGA 구현과 End-to-end 검증",
     "5.1 분류 성능", "5.2 Mixed-signal 및 디지털 통합 결과", "5.3 하드웨어 구현 결과",
     "6.1 설계적 차별성과 기술적 의의", "6.2 결과의 해석 범위와 향후 과제",
 ]
-REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW]
+REQUIRED_FILES = [REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS]
 REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_complete_system_flow.svg",
     "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
     "FIG-10_classification_summary.svg", "FIG-12_detailed_digital_architecture.svg",
     "FIG-13_beat_rhythm_path.svg", "FIG-14_morphology_path.svg",
+    "FIG-15_afe_adc_reconstructed_diagram.svg",
+    "MAT-01_afe_chain_overview.png", "MAT-02_total_frequency_response.png",
+    "MAT-03_notch_dense_sweep.png", "MAT-04_dynamic_range_headroom.png",
+    "MAT-05_adc_code_distribution.png", "MAT-06_reference_vector_handoff.png",
+    "MAT-07_prevalidation_flow.png",
 ]
 MECHANISM_TERMS = [
     "변화량 = 현재 표본값 - 직전 표본값", "Strong Event 뉴런이 발화했다",
@@ -96,7 +102,10 @@ def main() -> int:
     check("grouped subsection count", len(numbered_subs) == len(SUBHEADINGS), len(numbered_subs))
     module_names = ["ecg_event_encoder", "qrs_lif", "pnn_rhythm", "rdm_", "dscr_", "ram_peak", "qrs_maf", "rbbb_"]
     check("no module-name headings", not any(name in h.lower() for h in numbered_subs for name in module_names))
-    check("chapter 3 is longest", len(section(text, "3. 제안 SNN-Inspired 디지털 아키텍처", 1)) == max(len(section(text, h[2:], 1)) for h in MAIN_HEADINGS), "chapter lengths")
+    chapter3 = section(text, "3. 제안 SNN-Inspired 디지털 아키텍처", 1)
+    chapter4 = section(text, "4. 구현 및 검증 방법", 1)
+    check("digital architecture remains substantive", len(chapter3) >= 12000, len(chapter3))
+    check("AFE ADC depth comparable to digital", len(chapter4) >= int(len(chapter3) * 0.70), (len(chapter3), len(chapter4)))
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
     for term in ["전체 파형을 저장", "짧은 구간의 파형", "학습된 심층 SNN", "설계 요구", "전체 신호 흐름"]:
         check(f"related-work design gap {term}", term in chapter2)
@@ -152,7 +161,7 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("eight reader-facing figures", len(report_images) == 8, len(report_images))
+    check("sixteen reader-facing figures", len(report_images) == 16, len(report_images))
     for filename in REQUIRED_FIGURES:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)
@@ -168,6 +177,7 @@ def main() -> int:
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
         "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "ECG 숫자 입력", "현재값-직전값", "강한 사건", "QRS 누적·발화", "박동 이후 표본 계수"],
         "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
+        "FIG-15_afe_adc_reconstructed_diagram.svg": ["AFE·ADC 회로 블록 재구성도", "HPF", "3-op-amp IA", "Active Twin-T", "LPF+buffer", "12-bit ADC", "원본 LTspice schematic이 아니라"],
     }
     for filename, labels in reader_figure_requirements.items():
         svg = (ROOT / "figures" / "final" / filename).read_text(encoding="utf-8")
@@ -177,7 +187,39 @@ def main() -> int:
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
     check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits"]:
+    afe = section(text, "4.1 AFE·ADC 설계", 2)
+    for term in [
+        "ECG 입력 → HPF → 3-op-amp IA → active Twin-T 60 Hz notch와 buffer → 150 Hz LPF와 buffer → 12-bit ADC → offset-binary → signed two’s-complement stream",
+        "Av_IA = 1 + 2Rfb/Rg", "100 kΩ", "1 kΩ", "0.482287706339 Hz", "10 MΩ", "33 nF",
+        "R=26.526 kΩ", "C=100 nF", "Rk1=5 kΩ", "Rk2=95 kΩ", "Q≈1/[4(1−k)]=5",
+        "1.06 µF", "150.146172728 Hz", "LSB=3.3/4095=0.000805860805861 V",
+        "offset_binary = floor", "signed_decimal = offset_binary − 2048", "$fstrobe",
+        "원본 schematic이 아니라", "unresolved_artifacts.csv",
+    ]:
+        check(f"AFE design detail {term}", term in afe)
+    for term in ["이산 relaxation", "vcvs", "loading", "실효이득이 36", "약 17 Hz", "110 dB", "off-by-one", "수동 Twin-T", "active Twin-T"]:
+        check(f"AFE correction history {term}", term.lower() in afe.lower())
+
+    analog_validation = section(text, "4.2 MATLAB/XMODEL 검증", 2)
+    for term in [
+        "MATLAB은 공칭", "XMODEL은", "평균 RMS 차이는 1.95 LSB", "60 Hz에서 RMS 0.92 mV",
+        "50 Hz에서 118 mV", "100.7 dB", "80.0 dB", "100 kHz", "2.04 code",
+        "train/val/test 1,200개 모두 0", "shift 중앙값 1.0 ms", "RR 오차 중앙값 0 ms",
+        "final_pred 15/16", "SHA256 36/36", "final_pred", "final_mem",
+    ]:
+        check(f"MATLAB XMODEL verification {term}", term in analog_validation)
+    for source_name in [
+        "fig_afe_chain_overview.png", "fig_total_frequency_response.png", "fig_notch_dense_sweep.png",
+        "fig_dynamic_range_headroom.png", "fig_adc_code_distribution.png",
+        "fig_reference_vector_handoff.png", "fig_matlab_prevalidation_flow.png",
+    ]:
+        check(f"fixed MATLAB figure cited {source_name}", source_name in text)
+    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:7|8|9|10|11|12|13|14|15)\..*\[직접 근거:.*\]\*$", text)
+    check("AFE figures have direct evidence captions", len(direct_evidence_captions) == 9, len(direct_evidence_captions))
+    check("original schematic claim forbidden", "원본 LTspice schematic이 아니다" in text and "UNRESOLVED_NOT_PRESENT" in UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig"))
+    check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
+
+    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "−83.5557 dB", "11.721 Hz", "5.119", "2.04 code", "0.00007%"]:
         check(f"required result {value}", value in text)
     for value in ["54.01 ms", "33.3 MSPS", "33,300", "0.099 W", "5.35 mJ"]:
         check(f"unverified benchmark absent {value}", value not in text)
@@ -196,7 +238,7 @@ def main() -> int:
         rows = list(csv.DictReader(handle))
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}
     check("evidence-map schema", bool(rows) and set(rows[0]) == required_columns)
-    check("evidence-map coverage", len(rows) >= 38, len(rows))
+    check("evidence-map coverage", len(rows) >= 53, len(rows))
     valid_sections = {"초록", "부록"} | {str(i) for i in range(1, 8)} | {s.split()[0] for s in SUBHEADINGS}
     for row in rows:
         check(f"map section {row['statement_id']}", row["section"] in valid_sections, row["section"])

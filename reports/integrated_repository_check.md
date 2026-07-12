@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 211
+- Rules checked: 227
 - Conflicts found: 0
 - Benchmark placeholder: PASS (all fields null)
 
@@ -18,6 +18,7 @@
 - PASS — required path source_of_truth/global_metrics.yaml
 - PASS — required path source_of_truth/claim_registry.csv
 - PASS — required path source_of_truth/artifact_manifest.csv
+- PASS — required path source_of_truth/unresolved_artifacts.csv
 - PASS — required path source_of_truth/ownership_matrix.csv
 - PASS — required path source_of_truth/terminology.yaml
 - PASS — required path source_of_truth/external_reference_registry.csv
@@ -53,6 +54,14 @@
 - PASS — required path docs/STREAMING_STATE_MEMORY_KR.md
 - PASS — required path tables/streaming_state_inventory.csv
 - PASS — required path figures/final/FIG-12_detailed_digital_architecture.svg
+- PASS — required path figures/final/FIG-15_afe_adc_reconstructed_diagram.svg
+- PASS — required path figures/final/MAT-01_afe_chain_overview.png
+- PASS — required path figures/final/MAT-02_total_frequency_response.png
+- PASS — required path figures/final/MAT-03_notch_dense_sweep.png
+- PASS — required path figures/final/MAT-04_dynamic_range_headroom.png
+- PASS — required path figures/final/MAT-05_adc_code_distribution.png
+- PASS — required path figures/final/MAT-06_reference_vector_handoff.png
+- PASS — required path figures/final/MAT-07_prevalidation_flow.png
 - PASS — required path integration_evidence/excluded_upstream_paths.csv
 - PASS — required path integration_evidence/excluded_large_dataset_paths.csv
 - PASS — required path reports/INTEGRATED_TECHNICAL_REPORT_KR.md
@@ -61,7 +70,8 @@
 - PASS — required path reports/HISTORY_REWRITE_RESULT.md
 - PASS — required path reports/PUBLISH_REWRITTEN_HISTORY.md
 - PASS — required path private_submission/.gitignore
-- PASS — 14 non-benchmark figures
+- PASS — 15 generated SVG figures
+- PASS — 7 inherited MATLAB PNG figures
 - PASS — verified tables present
 - PASS — public remote configured
 - PASS — before state recorded: matlab_prevalidation
@@ -172,6 +182,12 @@
 - PASS — claim evidence exists: CLM-025
 - PASS — claim evidence exists: CLM-026
 - PASS — claim evidence exists: CLM-027
+- PASS — claim evidence exists: CLM-028
+- PASS — claim evidence exists: CLM-029
+- PASS — claim evidence exists: CLM-030
+- PASS — claim evidence exists: CLM-031
+- PASS — claim evidence exists: CLM-032
+- PASS — claim evidence exists: CLM-033
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — streaming inventory columns

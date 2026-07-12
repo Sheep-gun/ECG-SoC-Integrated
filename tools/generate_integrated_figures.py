@@ -6,6 +6,7 @@ from __future__ import annotations
 import html
 import json
 from pathlib import Path
+import shutil
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -90,6 +91,27 @@ def main() -> int:
         },
         "matlab": {"clipping_percent": m["matlab_representative_clipping_ratio"]["value"], "minimum_headroom_v": m["matlab_minimum_representative_headroom"]["value"]},
         "xmodel": {"mean_rms_lsb": m["xmodel_emulator_mean_rms"]["value"]},
+        "afe": {
+            "hpf_r_ohm": 10_000_000,
+            "hpf_c_f": 33e-9,
+            "hpf_fc_hz": 0.482287706339,
+            "ia_rfb_ohm": 100_000,
+            "ia_rg_ohm": 1_000,
+            "ia_gain": 201,
+            "notch_r_ohm": 26_526,
+            "notch_c_f": 100e-9,
+            "notch_bootstrap_k": 0.95,
+            "notch_q": 5,
+            "lpf_r_ohm": 1_000,
+            "lpf_c_f": 1.06e-6,
+            "lpf_fc_hz": 150.146172728,
+            "adc_bits": 12,
+            "adc_fs_hz": 1_000,
+            "adc_vref_n": -1.65,
+            "adc_vref_p": 1.65,
+            "adc_lsb_v": 0.000805860805861,
+            "source": "MATLAB parameter reference and fixed XMODEL RTL",
+        },
         "streaming_memory": {
             "raw_window_samples": 1800000,
             "sample_width_bits": 12,
@@ -266,6 +288,41 @@ def main() -> int:
     footer(s, "전체 박동 파형을 저장하지 않고 유한 관찰 상태만 유지")
     write_svg("FIG-14_morphology_path.svg", s)
 
+    # FIG-15: report-facing reconstruction from the fixed MATLAB parameter
+    # reference and XMODEL RTL. This is intentionally not presented as the
+    # missing original LTspice schematic.
+    s = canvas("AFE·ADC 회로 블록 재구성도", "고정 MATLAB 파라미터와 SystemVerilog XMODEL 정본에서 재구성")
+    s += box(25, 125, 160, 135, "ECG 차동 입력", ["양·음 전극", "공개 ECG 전압"], fill="#e7f5ff")
+    s += box(215, 115, 165, 155, "HPF", ["양·음 경로", "10 MΩ · 33 nF", "fc=0.482 Hz"], fill="#e6fcf5")
+    s += box(410, 105, 190, 175, "3-op-amp IA", ["Rfb=100 kΩ", "Rg=1 kΩ", "Av=1+2Rfb/Rg=201", "차동단 10 kΩ"], fill="#e6fcf5")
+    s += box(630, 95, 210, 195, "Active Twin-T", ["R=26.526 kΩ · C=100 nF", "R/2 · 2C", "buffer + k=0.95", "Q≈5 · 60 Hz"], fill="#fff4e6")
+    s += box(870, 115, 145, 155, "LPF+buffer", ["1 kΩ · 1.06 µF", "fc=150.1 Hz", "ADC 구동"], fill="#fff9db")
+    s += box(1045, 105, 130, 175, "12-bit ADC", ["±1.65 V", "1 kSPS", "offset-binary"], fill="#e5dbff")
+    for x1, x2 in [(185,215),(380,410),(600,630),(840,870),(1015,1045)]:
+        s += arrow(x1, 192, x2, 192)
+    s += box(135, 365, 290, 130, "ADC 코드 변환", ["code=floor((V+1.65)/3.3×4095)", "signed=code−2048"], fill="#edf2ff")
+    s += box(455, 365, 290, 130, "Canonical stream", ["signed 12-bit two's-complement", "1 sample/line · 3-digit hex"], fill="#edf2ff")
+    s += box(775, 365, 290, 130, "Digital RTL 인계", ["SHA256 manifest", "Snapshot + Final Membrane"], fill="#d3f9d8")
+    s += arrow(425, 430, 455, 430) + arrow(745, 430, 775, 430)
+    s.append(txt(600, 565, "주의: 원본 LTspice schematic이 아니라 문서·파라미터·XMODEL RTL 기반 설명용 재구성도", 17, "#c92a2a", 700, "middle"))
+    footer(s, "Physical PCB, silicon 또는 post-layout 회로도를 뜻하지 않음")
+    write_svg("FIG-15_afe_adc_reconstructed_diagram.svg", s)
+
+    # Preserve the seven fixed MATLAB figures byte-for-byte in the integrated
+    # figure package. Their captions and limitations remain owned by MATLAB.
+    matlab_figure_root = ROOT / "components" / "matlab_prevalidation" / "matlab_afe_validation" / "figures"
+    inherited_matlab_figures = [
+        ("MAT-01", "fig_afe_chain_overview.png", "MAT-01_afe_chain_overview.png", "MATLAB nominal AFE+ADC chain overview"),
+        ("MAT-02", "fig_total_frequency_response.png", "MAT-02_total_frequency_response.png", "MATLAB nominal total frequency-response reference"),
+        ("MAT-03", "fig_notch_dense_sweep.png", "MAT-03_notch_dense_sweep.png", "Active Twin-T dense 60 Hz sweep"),
+        ("MAT-04", "fig_dynamic_range_headroom.png", "MAT-04_dynamic_range_headroom.png", "Representative ADC rail headroom"),
+        ("MAT-05", "fig_adc_code_distribution.png", "MAT-05_adc_code_distribution.png", "Representative offset-binary ADC-code distribution"),
+        ("MAT-06", "fig_reference_vector_handoff.png", "MAT-06_reference_vector_handoff.png", "MATLAB reference-vector handoff"),
+        ("MAT-07", "fig_matlab_prevalidation_flow.png", "MAT-07_prevalidation_flow.png", "MATLAB nominal pre-validation role"),
+    ]
+    for _, source_name, output_name, _ in inherited_matlab_figures:
+        shutil.copyfile(matlab_figure_root / source_name, OUT / output_name)
+
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
         ("FIG-02", "figures/final/FIG-02_complete_system_flow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml"], [MATLAB,XMODEL,DIGITAL], "MATLAB–XMODEL–digital–FPGA 전체 흐름", "component roles and handoffs", "analog layers are model-based"),
@@ -281,12 +338,15 @@ def main() -> int:
         ("FIG-12", "figures/final/FIG-12_detailed_digital_architecture.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "독자 개념 중심 디지털 아키텍처", "functional Korean grouping of verified RTL blocks and boundaries", "not literal netlist connectivity; no threshold or benchmark value"),
         ("FIG-13", "figures/final/FIG-13_beat_rhythm_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v", "components/digital_accelerator/rtl/core/rdm_variability_neuron.v", "components/digital_accelerator/rtl/core/ectopic_pair_neuron.v"], [DIGITAL], "박동·리듬 state-transition 경로", "reader-facing grouping of fixed RTL state transitions", "conceptual dataflow; literal timing remains in RTL"),
         ("FIG-14", "figures/final/FIG-14_morphology_path.svg", "양건(편집)", ["components/digital_accelerator/rtl/core/dscr_spike_counter.v", "components/digital_accelerator/rtl/core/ram_peak_accumulator.v", "components/digital_accelerator/rtl/core/qrs_maf_neuron.v", "components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v"], [DIGITAL], "파형 형태 finite-state 경로", "reader-facing grouping of fixed RTL morphology mechanisms", "engineering proxies; not clinical morphology measurement"),
+        ("FIG-15", "figures/final/FIG-15_afe_adc_reconstructed_diagram.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "AFE·ADC 설명용 회로 블록 재구성도", "reconstruction from fixed parameter documentation and XMODEL RTL", "not the missing original LTspice schematic; not physical or post-layout evidence"),
     ]
+    for fid, source_name, output_name, caption in inherited_matlab_figures:
+        figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence"))
     index = ["# Integrated figure index", "", "All figures are generated from verified non-benchmark evidence. Source data: `figures/source/figure_data.json`.", ""]
     for fid, path, owner, files, commits, caption, scope, limits in figures:
         index += [f"## {fid}", "", f"- File: `{path}`", f"- Owner: {owner}", f"- Source files: {', '.join(f'`{x}`' for x in files)}", f"- Source commits: {', '.join(commits)}", "- Source-data path: `figures/source/figure_data.json`", f"- Caption: {caption}", f"- Evidence scope: {scope}", f"- Limitations: {limits}", ""]
     (ROOT / "figures" / "FIGURE_INDEX.md").write_text("\n".join(index), encoding="utf-8")
-    print(f"generated {len(figures)} SVG figures")
+    print(f"generated/indexed {len(figures)} figures (15 SVG + 7 inherited MATLAB PNG)")
     return 0
 
 

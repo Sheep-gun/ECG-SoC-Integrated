@@ -1,61 +1,60 @@
-# Integrated technical report review checklist
+# 통합 기술보고서 검토 체크리스트
 
 검토 대상: `reports/INTEGRATED_TECHNICAL_REPORT_KR.md`
 
-## 처음 읽는 심사자의 이해 흐름
+## 독자가 처음 읽을 때의 이해 흐름
 
-- [x] 본문은 정확히 7개 장이며 module별 목차 대신 기능별 17개 묶음 절을 사용한다.
-- [x] 기준 논문 19쪽 전체를 본문 추출과 페이지 렌더링으로 검토하고 별도 적용 기록을 남긴다.
-- [x] 초록은 배경→제안→구조→검증→결과→한계 순서로 전개한다.
-- [x] 제2장은 기존 접근의 한계에서 설계 요구를 도출한 뒤 전체 시스템을 제시한다.
-- [x] 제3장의 회로 설명은 목적별 3단계 절 번호를 사용해 필요한 블록을 바로 찾을 수 있다.
-- [x] 제3장이 가장 긴 기술 핵심 장이다.
-- [x] sample, event, membrane, leak, threshold, refractory, beat, RR, Snapshot, Final Membrane을 세부 module 전에 정의한다.
-- [x] 하나의 비임상 신호 예시가 event→beat→RR/파형→Snapshot→Final 흐름을 연결한다.
-- [x] ECG 입력을 곡선이 아닌 부호 있는 숫자 나열로 제시하고 현재값-직전값→강한 사건→QRS 누적·발화 흐름을 먼저 설명한다.
-- [x] `token age` 같은 내부 신호명은 본문에서 “직전 박동 이후 들어온 표본값 개수”처럼 풀어 쓴다.
-- [x] FIG-12는 한국어 기능명을 1차 label, module명을 2차 label로 사용한다.
-- [x] FIG-13은 old state→next calculation→clock commit을, FIG-14는 finite morphology window를 보여준다.
-- [x] 본문에서 사용하는 FIG-01·02·04·08·10·12·13·14의 제목과 내부 설명은 짧은 한국어 기능 문구를 우선한다.
+- [x] 본문은 7개 장을 유지하고, 부품별 나열보다 설계 목적과 신호 흐름을 중심으로 구성한다.
+- [x] 초록은 배경→문제→제안 구조→검증→결과→한계 순서로 전개한다.
+- [x] 디지털 설명은 전압 숫자열→차분 사건→QRS 누적·발화→리듬·파형 증거→Snapshot→Final Membrane 순서로 읽힌다.
+- [x] AFE 설명은 필요성→구성→설계값→검증→다음 블록 연결 순서를 각 블록에 적용한다.
+- [x] `token age`와 같은 내부 신호명은 직관적인 한국어 기능 설명 뒤에 필요한 경우만 제시한다.
+- [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, 외부 근거 반입 전까지 pending으로 유지한다.
 
-## RTL mechanism 직접 감사
+## AFE·ADC 설계와 MATLAB/XMODEL 근거
+
+- [x] ECG→HPF→3-op-amp IA→active Twin-T 60 Hz notch+buffer→150 Hz LPF→12-bit ADC→offset-binary→signed stream의 전체 흐름을 설명한다.
+- [x] HPF 10 MΩ/33 nF와 0.4823 Hz, IA 100 kΩ/1 kΩ와 gain 201, LPF 1 kΩ/1.06 µF와 150.15 Hz를 직접 근거에 연결한다.
+- [x] 수동 Twin-T의 넓은 저지대역과 loading 문제, active Twin-T와 buffer를 추가한 이유를 설명한다.
+- [x] active Twin-T의 26.526 kΩ/100 nF, 200 nF/13.263 kΩ, k=0.95, Q≈5를 제시한다.
+- [x] ADC ±1.65 V, 12 bit, 1 kSPS, 0.80586 mV/LSB와 0 V code mapping을 설명한다.
+- [x] MATLAB은 공칭 필터·이득·동적 범위·기준 벡터, XMODEL은 비이상성·간섭·mismatch·GBW/VOS·ADC stress·장시간 stream을 담당한다고 구분한다.
+- [x] IA 수렴, notch loading, LPF cutoff, CMRR margin, ADC log off-by-one, passive→active notch 변경을 실제 수정 이력으로 기록한다.
+- [x] 주파수응답, clipping/headroom, 50/60 Hz PLI, R/C mismatch, GBW/VOS, ADC 비이상성과 장시간 stream 결과를 수치로 제시한다.
+- [x] MATLAB 기준 벡터→XMODEL signed stream→SHA256→RTL handoff를 설명한다.
+- [x] 고정 component에 원본 LTspice `.asc`/회로 캡처가 없음을 확인하고, FIG-15를 원본이 아닌 설명용 재구성도로 표시한다.
+- [x] 누락 원본 schematic을 `source_of_truth/unresolved_artifacts.csv`에 unresolved artifact로 기록한다.
+- [x] 기존 MATLAB 그림 7개를 byte-for-byte 상속하고 각각 원본 파일 및 설명 문서로 연결한다.
+
+## 디지털 RTL 메커니즘
 
 - [x] Event encoder의 signed 차분, one-cycle pulse와 adaptive bank 선택을 설명한다.
-- [x] QRS의 leak→event add→threshold→reset/refractory 순서와 locked leak=0을 구분한다.
-- [x] Strong Event를 뉴런 발화처럼 해석할 수 있음을 설명하되 실제 RTL은 별도 막전위가 아닌 차분·절댓값·문턱 비교기임을 밝힌다.
-- [x] PNN의 46-center sequential scan, tie 처리와 previous-winner prediction을 설명한다.
-- [x] RDM의 consecutive RR absolute difference와 level/code를 설명한다.
-- [x] Ectopic path의 adaptive reference와 early/late 교대 state를 설명한다.
-- [x] DSCR의 filtered slope, retained sign과 direction-change pulse를 설명한다.
-- [x] RAM의 predicted beat window, maximum amplitude code와 post hold를 설명한다.
-- [x] QRS MAF의 pre 120/post 100 sample, width/complexity/energy/pre-QRS 및 pipeline을 설명한다.
-- [x] RBBB-like path의 independent onset, observation/terminal window와 repeated segment evidence를 설명한다.
-- [x] Snapshot counter의 current `*_next` capture와 Final base/guard/rescue/veto/silent-AFF/WTA를 설명한다.
-- [x] DSCR·RAM·QRS MAF·RBBB-like 설명은 관찰 목적→실제 계산→상태/계수→출력→Snapshot/Final 전달 순서를 따른다.
+- [x] QRS의 이전 상태→누설→사건 가산→문턱 비교→reset/refractory 순서와 locked leak=0을 구분한다.
+- [x] PNN, RDM, ectopic, DSCR, RAM, QRS MAF와 RBBB-like 경로의 관찰 목적과 상태 갱신을 설명한다.
+- [x] Snapshot의 현재 `*_next` 저장과 Final base/guard/rescue/veto/silent-AFF/WTA를 설명한다.
+- [x] 디지털 기존 설명의 깊이와 고정 결과를 낮추거나 변경하지 않는다.
 
 ## 결과와 claim 경계
 
-- [x] Final chunk 29/36=80.56%, record-majority 16/19=84.21%가 source와 일치한다.
-- [x] Validation 100%는 model-selection only다.
-- [x] Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP와 WNS 8.184 ns를 device/tool-specific 결과로 쓴다.
-- [x] Input SHA, AFE→RTL, FPGA의 각 36/36 scope를 분리한다.
-- [x] 기능 등가성 36/36을 label accuracy 100%로 표현하지 않는다.
-- [x] Database–class confounding, physical/clinical/ASIC gap을 명시한다.
-- [x] SNN-inspired를 trained deep SNN, STDP, online learning, biological equivalence와 구분한다.
-- [x] Accelerator benchmark는 독립 evidence import 전까지 pending이며 금지 수치를 쓰지 않는다.
+- [x] Final chunk 29/36=80.56%, record-majority 16/19=84.21%와 validation 100%의 model-selection 용도를 구분한다.
+- [x] Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP와 WNS 8.184 ns를 device/tool-specific 결과로 둔다.
+- [x] 입력 SHA, AFE→RTL과 FPGA의 36/36 scope를 분리하고 기능 등가성을 분류 정확도 100%로 표현하지 않는다.
+- [x] database–class confounding과 physical PCB/silicon/post-layout/clinical gap을 명시한다.
+- [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
+- [x] accelerator benchmark 수치는 `PENDING_EXTERNAL_BENCHMARK_IMPORT` 상태를 유지한다.
 
 ## Artifact와 자동 검증
 
 - [x] MATLAB `907f7e1`, XMODEL `4756a508`, digital `c6b80de` provenance를 유지한다.
-- [x] 서민우–MATLAB, 이수환–XMODEL, 양건–digital/report ownership을 유지한다.
-- [x] Evidence-map CSV의 모든 path와 claim ID가 유효하다.
-- [x] `tools/generate_integrated_figures.py`가 14개 SVG와 figure index/data를 생성한다.
+- [x] evidence map의 모든 path와 claim ID가 유효하다.
+- [x] figure generator가 15개 SVG와 상속 MATLAB PNG 7개, index와 data를 생성한다.
+- [x] 본문은 16개 그림을 사용하고 AFE·ADC 관련 9개 그림 caption에 직접 evidence path를 둔다.
 - [x] `tools/check_integrated_technical_report.py` PASS
 - [x] `tools/check_integrated_repository.py` PASS
 - [x] `git diff --check` PASS
 
-## 공식 신청서에서 사람이 편집할 부분
+## 공식 신청서에서만 사람이 편집할 부분
 
-- HWP page/field 제한에 맞춘 축약과 표·그림 재배치
-- 독립 benchmark 완료 후 검증된 supporting table만 추가
-- 지도교수·소속·개인정보·서명은 private HWP에서만 작성
+- HWP page/field 제한에 맞춘 축약과 그림 배치
+- 검증된 외부 benchmark 산출물이 들어온 뒤의 supporting table
+- 지도교수·소속·개인정보·서명 등 private 제출 정보

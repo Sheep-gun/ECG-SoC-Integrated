@@ -155,3 +155,91 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Caption: 파형 형태 finite-state 경로
 - Evidence scope: reader-facing grouping of fixed RTL morphology mechanisms
 - Limitations: engineering proxies; not clinical morphology measurement
+
+## FIG-15
+
+- File: `figures/final/FIG-15_afe_adc_reconstructed_diagram.svg`
+- Owner: 양건(통합 편집)
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: AFE·ADC 설명용 회로 블록 재구성도
+- Evidence scope: reconstruction from fixed parameter documentation and XMODEL RTL
+- Limitations: not the missing original LTspice schematic; not physical or post-layout evidence
+
+## MAT-01
+
+- File: `figures/final/MAT-01_afe_chain_overview.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_afe_chain_overview.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB nominal AFE+ADC chain overview
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## MAT-02
+
+- File: `figures/final/MAT-02_total_frequency_response.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_total_frequency_response.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB nominal total frequency-response reference
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## MAT-03
+
+- File: `figures/final/MAT-03_notch_dense_sweep.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_notch_dense_sweep.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Active Twin-T dense 60 Hz sweep
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## MAT-04
+
+- File: `figures/final/MAT-04_dynamic_range_headroom.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_dynamic_range_headroom.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Representative ADC rail headroom
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## MAT-05
+
+- File: `figures/final/MAT-05_adc_code_distribution.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_adc_code_distribution.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Representative offset-binary ADC-code distribution
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## MAT-06
+
+- File: `figures/final/MAT-06_reference_vector_handoff.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_reference_vector_handoff.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB reference-vector handoff
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+
+## MAT-07
+
+- File: `figures/final/MAT-07_prevalidation_flow.png`
+- Owner: 서민우
+- Source files: `components/matlab_prevalidation/matlab_afe_validation/figures/fig_matlab_prevalidation_flow.png`, `components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB nominal pre-validation role
+- Evidence scope: fixed MATLAB nominal reference figure
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence

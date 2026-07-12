@@ -45,6 +45,7 @@ REQUIRED = [
     "README.md", "LICENSE_OR_PROVENANCE.md", "INTEGRATION_AUDIT.md", ".gitignore",
     "source_of_truth/upstream_commits.yaml", "source_of_truth/global_metrics.yaml",
     "source_of_truth/claim_registry.csv", "source_of_truth/artifact_manifest.csv",
+    "source_of_truth/unresolved_artifacts.csv",
     "source_of_truth/ownership_matrix.csv", "source_of_truth/terminology.yaml",
     "source_of_truth/external_reference_registry.csv",
     "docs/RESEARCH_BACKGROUND_KR.md", "docs/PROBLEM_DEFINITION_KR.md",
@@ -64,6 +65,14 @@ REQUIRED = [
     "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
     "tables/streaming_state_inventory.csv",
     "figures/final/FIG-12_detailed_digital_architecture.svg",
+    "figures/final/FIG-15_afe_adc_reconstructed_diagram.svg",
+    "figures/final/MAT-01_afe_chain_overview.png",
+    "figures/final/MAT-02_total_frequency_response.png",
+    "figures/final/MAT-03_notch_dense_sweep.png",
+    "figures/final/MAT-04_dynamic_range_headroom.png",
+    "figures/final/MAT-05_adc_code_distribution.png",
+    "figures/final/MAT-06_reference_vector_handoff.png",
+    "figures/final/MAT-07_prevalidation_flow.png",
     "integration_evidence/excluded_upstream_paths.csv",
     "integration_evidence/excluded_large_dataset_paths.csv",
     "reports/INTEGRATED_TECHNICAL_REPORT_KR.md",
@@ -141,7 +150,8 @@ def main() -> int:
     check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
-    check("14 non-benchmark figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 14)
+    check("15 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 15)
+    check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
     check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
     check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
 

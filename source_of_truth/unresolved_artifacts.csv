@@ -1,0 +1,2 @@
+artifact_id,description,expected_or_mentioned_path,status,evidence,report_handling
+UNRES-001,"Original LTspice AFE schematic or an original circuit capture","components/afe_xmodel/ECG_AFE_LTspice/ecg_afe.asc",UNRESOLVED_NOT_PRESENT,"components/afe_xmodel/README.md mentions ECG_AFE_LTspice/ecg_afe.asc but recursive fixed-snapshot audit found no .asc or original circuit-capture file","Use figures/final/FIG-15_afe_adc_reconstructed_diagram.svg only as a documentation-and-XMODEL-based reconstruction and state that it is not the original schematic"

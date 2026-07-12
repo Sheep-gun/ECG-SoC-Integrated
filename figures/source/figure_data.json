@@ -26,6 +26,27 @@
   "xmodel": {
     "mean_rms_lsb": 1.95
   },
+  "afe": {
+    "hpf_r_ohm": 10000000,
+    "hpf_c_f": 3.3e-08,
+    "hpf_fc_hz": 0.482287706339,
+    "ia_rfb_ohm": 100000,
+    "ia_rg_ohm": 1000,
+    "ia_gain": 201,
+    "notch_r_ohm": 26526,
+    "notch_c_f": 1e-07,
+    "notch_bootstrap_k": 0.95,
+    "notch_q": 5,
+    "lpf_r_ohm": 1000,
+    "lpf_c_f": 1.06e-06,
+    "lpf_fc_hz": 150.146172728,
+    "adc_bits": 12,
+    "adc_fs_hz": 1000,
+    "adc_vref_n": -1.65,
+    "adc_vref_p": 1.65,
+    "adc_lsb_v": 0.000805860805861,
+    "source": "MATLAB parameter reference and fixed XMODEL RTL"
+  },
   "streaming_memory": {
     "raw_window_samples": 1800000,
     "sample_width_bits": 12,
