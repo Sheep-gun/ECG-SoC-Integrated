@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 294
+- Rules checked: 298
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
@@ -40,6 +40,7 @@
 - PASS — required path docs/RELATED_WORK_HOLTER_ECG_KR.md
 - PASS — required path docs/INTEGRATION_METHOD.md
 - PASS — required path docs/BENCHMARK_IMPORT_AUDIT_KR.md
+- PASS — required path docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md
 - PASS — required path benchmarks/accelerator_benefit/README.md
 - PASS — required path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
 - PASS — required path benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
@@ -246,8 +247,11 @@
 - PASS — claim evidence exists: CLM-045
 - PASS — claim evidence exists: CLM-046
 - PASS — claim evidence exists: CLM-047
+- PASS — claim evidence exists: CLM-048
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
+- PASS — CLM-048 timing history registered
+- PASS — CLM-048 evidence path
 - PASS — streaming inventory columns
 - PASS — streaming inventory substantive
 - PASS — unresolved widths explicit

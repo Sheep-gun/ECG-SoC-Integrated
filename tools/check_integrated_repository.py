@@ -58,6 +58,7 @@ REQUIRED = [
     "docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md", "docs/REPORT_EVIDENCE_MAP_KR.md",
     "docs/RELATED_WORK_HOLTER_ECG_KR.md",
     "docs/INTEGRATION_METHOD.md", "docs/BENCHMARK_IMPORT_AUDIT_KR.md",
+    "docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md",
     "benchmarks/accelerator_benefit/README.md",
     "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md",
     "benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md",
@@ -337,6 +338,8 @@ def main() -> int:
     claim_map = {row["claim_id"]: row for row in claims}
     check("CLM-023 registered safe", claim_map.get("CLM-023", {}).get("status") == "SAFE")
     check("CLM-023 direct RTL evidence", "direct RTL" in claim_map.get("CLM-023", {}).get("evidence_type", ""))
+    check("CLM-048 timing history registered", claim_map.get("CLM-048", {}).get("status") == "CAREFUL")
+    check("CLM-048 evidence path", claim_map.get("CLM-048", {}).get("evidence_path") == "docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md")
     state_rows = read_csv("tables/streaming_state_inventory.csv")
     required_state_columns = {"state_id", "RTL_module", "RTL_signal_or_group", "state_category", "count", "width_bits", "estimated_total_bits", "reset_scope", "update_condition", "persistent_across_samples", "persistent_across_snapshots", "evidence_path", "notes"}
     check("streaming inventory columns", bool(state_rows) and set(state_rows[0]) == required_state_columns)

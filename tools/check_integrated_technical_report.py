@@ -17,6 +17,7 @@ BASELINE_REVIEW = ROOT / "reports" / "BASELINE_PAPER_STRUCTURE_REVIEW_KR.md"
 UNRESOLVED_ARTIFACTS = ROOT / "source_of_truth" / "unresolved_artifacts.csv"
 RELATED_WORK_AUDIT = ROOT / "docs" / "RELATED_WORK_HOLTER_ECG_KR.md"
 BENCHMARK_AUDIT = ROOT / "docs" / "BENCHMARK_IMPORT_AUDIT_KR.md"
+TIMING_HISTORY = ROOT / "docs" / "RTL_TIMING_OPTIMIZATION_HISTORY_KR.md"
 
 MAIN_HEADINGS = [
     "# 1. 서론",
@@ -44,7 +45,7 @@ SUBHEADINGS = [
 ]
 REQUIRED_FILES = [
     REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS,
-    RELATED_WORK_AUDIT, BENCHMARK_AUDIT,
+    RELATED_WORK_AUDIT, BENCHMARK_AUDIT, TIMING_HISTORY,
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "cpu_fpga_comparison.csv",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "rtl_cycle_summary.json",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
@@ -174,6 +175,34 @@ def main() -> int:
         check(f"mechanism {term}", term.lower() in text.lower())
     for block in ["ecg_event_encoder_adaptive", "qrs_lif_detector", "pnn_rhythm_predictor", "rdm_variability_neuron", "ectopic_pair_neuron", "dscr_spike_counter", "ram_peak_accumulator", "qrs_maf_neuron", "rbbb_qrs_delay_bank", "class_score_neurons", "final_membrane_layer"]:
         check(f"direct RTL block {block}", block in text)
+    timing_optimization = section(text, "RTL timing bottleneck 분석과 pipeline 최적화", 3)
+    for term in [
+        "rdm_level_spike → pred_class", "약 90 logic levels", "52개 CARRY4", "약 17.5k LUT",
+        "clock 제약 완화가 아니라", "C24/global readout", "`*_next` 계수값", "exact lookup table",
+        "update–adjust–commit", "timestamp FIFO", "predictor center", "pairwise stage",
+        "critical path 관측 → pipeline 분할 → timing 재검증 → 기능 등가성 확인",
+        "Pure RTL WNS 8.184 ns", "MicroBlaze 전체 system setup WNS 0.097 ns",
+        "각각 36/36 일치", "과거 OOC timing·자원 수치는 개발 이력",
+    ]:
+        check(f"timing optimization content {term}", term in timing_optimization)
+    dense_response = section(text, "Dense 신경망의 하드웨어 부담과 제안 구조의 대응", 3)
+    for term in [
+        "`generic dense neural network`를 FPGA에 이식한 구조가 아니라",
+        "domain-specific streaming accelerator", "`multiplier`와 대규모 `MAC` 연산",
+        "현재 고정 Pure RTL 구현에서 DSP 0", "현재 고정 Pure RTL 구현에서 BRAM 0",
+        "고정 크기 `streaming state`만 표본값 단위로 갱신", "30개 Snapshot의 Final Membrane",
+        "정확도·속도·전력·면적 우월성을 주장하지 않는다",
+        "2.7 MB는 측정된 memory saving이 아니라", "`Sparse event rate`와 그에 따른 전력 절감률도 측정하지 않았다",
+    ]:
+        check(f"dense response content {term}", term in dense_response)
+    timing_history = TIMING_HISTORY.read_text(encoding="utf-8-sig") if TIMING_HISTORY.is_file() else ""
+    for term in [
+        "c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa", "5e2e5d0a46be47d8086b8642e055066079bfa4e6",
+        "c6b80de19cdcad5b7e43fe7835588b629d847f75", "ancestor임을 확인",
+        "최종 제출용 저장소 정리 과정에서 삭제", "최적화 전 historical OOC hotspot 수치",
+        "critical path 관측 → pipeline 분할 → timing 재검증 → 기능 등가성 확인",
+    ]:
+        check(f"timing history audit {term}", term in timing_history)
     check("numeric ECG input introduced intuitively", "시간 순서대로 들어오는 부호 있는 숫자의 나열" in text and "회로에는 이 숫자가 P파인지 QRS파인지 알려 주는 표지가 없다" in text)
     internal_jargon = ["token_age", "token age", "토큰 나이", "eval_idx", "age_eval", "qrs_age", "ram_window_open", "prev_slope_sign", "qrs_mem"]
     check("internal signal jargon absent from manuscript", not any(term.lower() in text.lower() for term in internal_jargon), [term for term in internal_jargon if term.lower() in text.lower()])
@@ -184,7 +213,8 @@ def main() -> int:
     # use the Git term, while state updates in the engineering prose are Korean.
     unnecessary_english = ["sample", "event", "state", "window", "baseline", "slope", "sign flip", "amplitude", "morphology", "activity", "readout", "winner", "evidence", "class", "code", "counter", "module", "detector", "output", "input", "pipeline", "reset"]
     english_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", cleaned)) for term in unnecessary_english}
-    check("Korean-first prose vocabulary", sum(english_counts.values()) <= 25 and max(english_counts.values()) <= 6, english_counts)
+    # The requested reader-facing timing subsection retains one English "pipeline" in its title.
+    check("Korean-first prose vocabulary", sum(english_counts.values()) <= 26 and max(english_counts.values()) <= 6, english_counts)
     corruption_markers = ["클래스ifier", "상태s", "표본값s", "계수기s", "관찰 구간를", "진폭가", "사건 신호s"]
     check("no mixed-language replacement corruption", not any(marker in text for marker in corruption_markers), [m for m in corruption_markers if m in text])
     check("two consolidated architecture boundaries", text.count("**통합 해석 경계.**") == 2, text.count("**통합 해석 경계.**"))
@@ -335,6 +365,10 @@ def main() -> int:
     with (ROOT / "source_of_truth" / "claim_registry.csv").open(encoding="utf-8-sig", newline="") as handle:
         claim_rows = list(csv.DictReader(handle))
     known = {row["claim_id"] for row in claim_rows}
+    claim_map = {row["claim_id"]: row for row in claim_rows}
+    check("CLM-048 timing history registered", claim_map.get("CLM-048", {}).get("status") == "CAREFUL")
+    check("CLM-048 commit chain", all(commit in claim_map.get("CLM-048", {}).get("upstream_commit", "") for commit in ["c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa", "5e2e5d0a46be47d8086b8642e055066079bfa4e6", "c6b80de19cdcad5b7e43fe7835588b629d847f75"]))
+    check("CLM-048 historical limitation", "17.5k LUT" in claim_map.get("CLM-048", {}).get("limitations", ""))
     with EVIDENCE_MAP.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}

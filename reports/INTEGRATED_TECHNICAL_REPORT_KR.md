@@ -720,6 +720,28 @@ Pure RTL 구현에서 양의 WNS와 0 BRAM/0 DSP를 확인했고, 묶음화한 M
 
 SNN-inspired 구조의 의미도 여기서 분명해진다. 모든 파형값을 밀집 벡터로 보존하는 대신 의미 있는 변화가 일어날 때 사건을 만들고, 막전위형 누산값과 문턱값으로 시간 증거를 판정에 반영한다. QRS 검출기의 일반 구조는 누설을 지원하지만 현재 고정 설정의 누설값은 0이다. Final Membrane은 양·음의 클래스 상태와 승자독식을 사용한다. 이는 생물학적 뉴런의 충실한 모사가 아니라 사건 신호와 지속 상태를 이용한 하드웨어 추상화다.
 
+### RTL timing bottleneck 분석과 pipeline 최적화
+
+개발 중 timing report에서 초기 주요 병목은 `class_score_neurons` 내부의 `rdm_level_spike → pred_class` 조합 경로로 관측됐다. 이 경로는 약 90 logic levels와 52개 CARRY4를 거치며 RDM 사건의 누산, 클래스 점수 비교와 승자독식을 한 클록 안에서 연결했다. 당시 `class_score_neurons`는 약 17.5k LUT의 주요 자원·timing hotspot이었다. 이 값은 최적화 전 historical OOC 분석값이므로 최종 Pure RTL 9,719 LUT와 직접 비교하거나 감소율로 해석하지 않는다 [CLM-048].
+
+해결 방법은 clock 제약 완화가 아니라 계산과 상태 확정 시점을 구조적으로 나누는 것이었다. `C24/global readout`과 `class WTA`를 분리하고, `segment_done`에서는 `*_next` 계수값을 저장해 마지막 사건을 보존했다. C24 사건·게이트·점수 증분을 등록하고 RDM·RAM 산술을 동일 정수 결과의 exact lookup table로 바꿨다. Snapshot 점수는 `update–adjust–commit` 단계로 나눴으며 RBBB gate 평가를 지연된 commit 시점에 맞췄다. QRS MAF의 긴 조합 탐색은 `timestamp FIFO` 기반 다중-cycle 처리로, PNN predictor center는 등록값과 `case` lookup으로 바꿨다. Final Membrane의 margin·WTA는 `pairwise stage`로 분리했고 ARR scale/commit과 post-segment flush timing도 함께 정렬했다.
+
+검증은 **`critical path 관측 → pipeline 분할 → timing 재검증 → 기능 등가성 확인`** 순서로 수행했다. Historical OOC 보고서에서 기존 RDM-to-prediction path가 제거된 것을 확인한 뒤, 최종 고정 RTL에서는 Pure RTL WNS 8.184 ns와 MicroBlaze 전체 system setup WNS 0.097 ns를 각각 확인했다. Python 정수 기준과 full-top RTL/XSim은 잠금 최종시험 36개에서 `final_pred`·`final_mem` mismatch 0이었고, FPGA replay도 두 출력이 각각 36/36 일치했다. 즉 파이프라인 변경으로 기존 critical path를 제거하면서 기능을 유지한 채 timing closure를 달성했다. 과거 OOC timing·자원 수치는 개발 이력이며 표 11의 최종 구현 결과와 혼합하지 않는다 [CLM-008~CLM-010, CLM-048; `docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md`; `components/digital_accelerator/reports/final/final_metrics.json`].
+
+### Dense 신경망의 하드웨어 부담과 제안 구조의 대응
+
+본 연구는 `generic dense neural network`를 FPGA에 이식한 구조가 아니라, ECG 영역 지식을 사건·박동·리듬·파형 형태 증거로 변환하고 이를 고정 폭 정수 상태에 누적하는 `domain-specific streaming accelerator`다.
+
+| 일반적인 dense CNN/RNN/MLP FPGA 구현 부담 | 본 설계의 대응 |
+|---|---|
+| `multiplier`와 대규모 `MAC` 연산 | `comparator`, `counter`, `shift/add`, `signed accumulator` 중심의 정수 연산 |
+| DSP 의존 가능성 | 현재 고정 Pure RTL 구현에서 DSP 0 |
+| `weight·activation buffer`와 BRAM 요구 가능성 | 추론 시 가중치 메모리가 없으며 현재 고정 Pure RTL 구현에서 BRAM 0 |
+| 전체 `window` 또는 대규모 `feature tensor` 보존 | 고정 크기 `streaming state`만 표본값 단위로 갱신 |
+| 짧은 구간 결과를 장시간 판정으로 연결하기 어려움 | 60초 Snapshot의 국소 증거를 30개 Snapshot의 Final Membrane에 누적 |
+
+표의 대응 관계는 설계 동기와 현재 구현 특성을 설명하며, dense CNN/RNN/MLP 기준선을 실제로 구현한 비교 결과가 아니다. 따라서 정확도·속도·전력·면적 우월성을 주장하지 않는다. 0 BRAM·0 DSP는 현재 고정 FPGA 구현에만 해당하고, 2.7 MB는 측정된 memory saving이 아니라 저장하지 않도록 설계한 30분 `raw-input window`의 크기다. `Sparse event rate`와 그에 따른 전력 절감률도 측정하지 않았다 [CLM-008, CLM-023].
+
 하드웨어 기술성은 고정 폭 연산뿐 아니라 표본 수락과 상태 확정의 클록 순서에 있다. 사건 인코더의 직전 표본 갱신, QRS의 이전→다음 막전위, PNN 순차 탐색, QRS MAF의 다중 클록 평가, 60초 계수기의 `*_next` 저장과 Final `BASE→STRUCT→WTA`가 모두 정확한 순서를 요구한다. XSim, Vivado, IP-XACT와 보드 막전위 36/36은 이 순서가 package된 system에서도 보존되었음을 보여준다.
 
 재현성은 재실행 여부만이 아니라 어떤 원천과 claim을 사용했는지까지 포함한다. 고정 component commit, 데이터셋 DOI/hash, 산출물 manifest, 담당자 표와 SAFE/CAREFUL/FORBIDDEN registry가 보고서 문장의 범위를 고정한다. 긴 경로와 hash는 부록 B/C로 이동하여 본문은 공학적 논리에 집중시켰다.
