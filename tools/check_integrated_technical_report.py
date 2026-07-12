@@ -52,9 +52,9 @@ REQUIRED_FILES = [
 REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_complete_system_flow.svg",
     "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
-    "FIG-10_classification_summary.svg", "FIG-12_detailed_digital_architecture.svg",
+    "FIG-10_classification_summary.svg", "FIG-12_digital_signal_flow.svg",
     "FIG-13_beat_rhythm_path.svg", "FIG-14_morphology_path.svg",
-    "FIG-15_afe_adc_reconstructed_diagram.svg",
+    "FIG-15_analog_signal_flow.svg",
     "MAT-01_afe_chain_overview.png", "MAT-02_total_frequency_response.png",
     "MAT-03_notch_dense_sweep.png", "MAT-04_dynamic_range_headroom.png",
     "MAT-05_adc_code_distribution.png", "MAT-06_reference_vector_handoff.png",
@@ -228,8 +228,8 @@ def main() -> int:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)
         check(f"figure exists {filename}", (ROOT / "figures" / "final" / filename).is_file())
-    figure12 = (ROOT / "figures" / "final" / "FIG-12_detailed_digital_architecture.svg").read_text(encoding="utf-8")
-    for label in ["입력 ECG 표본값", "파형 변화 사건", "박동 검출", "박동 간격 측정", "리듬 분석", "60초 증거 누적", "30분 클래스 상태", "최종 클래스 선택"]:
+    figure12 = (ROOT / "figures" / "final" / "FIG-12_digital_signal_flow.svg").read_text(encoding="utf-8")
+    for label in ["ECG 표본 입력", "변화량 계산", "강한 변화 사건", "QRS LIF", "박동·리듬 경로", "파형 형태 병렬 경로", "60초 Snapshot", "Final Membrane"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
@@ -239,7 +239,7 @@ def main() -> int:
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
         "FIG-13_beat_rhythm_path.svg": ["박동·리듬 경로", "ECG 숫자 입력", "현재값-직전값", "강한 사건", "QRS 누적·발화", "박동 이후 표본 계수"],
         "FIG-14_morphology_path.svg": ["파형 형태 경로", "이전 유효 부호 유지", "예측 박동 관찰 구간", "말단 관찰 구간"],
-        "FIG-15_afe_adc_reconstructed_diagram.svg": ["AFE·ADC 회로 블록 재구성도", "HPF", "3-op-amp IA", "Active Twin-T", "LPF+buffer", "12-bit ADC", "원본 LTspice schematic이 아니라"],
+        "FIG-15_analog_signal_flow.svg": ["Analog AFE·ADC signal flow", "ECG 입력", "HPF", "3-op-amp IA", "Active Twin-T", "LPF+buffer", "12-bit ADC", "코드 중심 이동", "Digital RTL 인계", "원본 LTspice schematic"],
     }
     for filename, labels in reader_figure_requirements.items():
         svg = (ROOT / "figures" / "final" / filename).read_text(encoding="utf-8")

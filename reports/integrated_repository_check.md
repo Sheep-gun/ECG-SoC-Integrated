@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 287
+- Rules checked: 289
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
@@ -64,8 +64,8 @@
 - PASS — required path datasets/SHA256SUMS_EXPECTED.txt
 - PASS — required path docs/STREAMING_STATE_MEMORY_KR.md
 - PASS — required path tables/streaming_state_inventory.csv
-- PASS — required path figures/final/FIG-12_detailed_digital_architecture.svg
-- PASS — required path figures/final/FIG-15_afe_adc_reconstructed_diagram.svg
+- PASS — required path figures/final/FIG-12_digital_signal_flow.svg
+- PASS — required path figures/final/FIG-15_analog_signal_flow.svg
 - PASS — required path figures/final/MAT-01_afe_chain_overview.png
 - PASS — required path figures/final/MAT-02_total_frequency_response.png
 - PASS — required path figures/final/MAT-03_notch_dense_sweep.png
@@ -284,6 +284,8 @@
 - PASS — dataset hashes populated
 - PASS — FIG-12 indexed
 - PASS — FIG-12 referenced by manuscript
+- PASS — FIG-15 indexed
+- PASS — FIG-15 referenced by manuscript
 - PASS — manuscript raw-data policy
 - PASS — benchmark value promoted with scope: 1,777.699800 ms
 - PASS — benchmark value promoted with scope: 54.012600 ms

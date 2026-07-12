@@ -44,9 +44,9 @@
 
 ## 그림과 원본 회로도 경계
 
-고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 추가한 `FIG-15_afe_adc_reconstructed_diagram.svg`는 MATLAB 파라미터 문서와 XMODEL RTL로 재구성한 설명용 블록도다.
+고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 기존 AFE 재구성 블록도는 `FIG-15_analog_signal_flow.svg`로 교체해 ECG 입력부터 signed RTL stream까지의 순서와 XMODEL 비이상성 주입 위치를 한 방향으로 읽도록 했다. 기존 디지털 아키텍처 그림은 `FIG-12_digital_signal_flow.svg`로 교체해 변화량·강한 사건·QRS 발화에서 병렬 리듬/파형 경로, Snapshot과 Final Membrane까지 연결했다.
 
-고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 FIG-15와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
+고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 analog signal flow와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
 
 ## 가속기 Benchmark 반입 내용
 
@@ -83,7 +83,7 @@
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 655 rules, 0 conflicts, chars 63,654, figures 19, evidence rows 67
-- `tools/check_integrated_repository.py`: PASS — 287 rules, 0 conflicts
+- `tools/check_integrated_technical_report.py`: PASS — 658 rules, 0 conflicts, chars 63,936, figures 19, evidence rows 67
+- `tools/check_integrated_repository.py`: PASS — 289 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

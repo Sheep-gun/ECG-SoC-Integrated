@@ -125,14 +125,14 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-12
 
-- File: `figures/final/FIG-12_detailed_digital_architecture.svg`
+- File: `figures/final/FIG-12_digital_signal_flow.svg`
 - Owner: 양건(편집)
-- Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
+- Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: 독자 개념 중심 디지털 아키텍처
-- Evidence scope: functional Korean grouping of verified RTL blocks and boundaries
-- Limitations: not literal netlist connectivity; no threshold or benchmark value
+- Caption: signed ECG에서 4-class 출력까지의 digital signal flow
+- Evidence scope: conceptual grouping of verified RTL state transitions and parallel evidence paths
+- Limitations: not literal post-synthesis netlist connectivity; not clinical feature measurement
 
 ## FIG-13
 
@@ -158,12 +158,12 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 ## FIG-15
 
-- File: `figures/final/FIG-15_afe_adc_reconstructed_diagram.svg`
+- File: `figures/final/FIG-15_analog_signal_flow.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
-- Caption: AFE·ADC 설명용 회로 블록 재구성도
+- Caption: ECG 차동 입력에서 signed RTL stream까지의 analog AFE·ADC signal flow
 - Evidence scope: reconstruction from fixed parameter documentation and XMODEL RTL
 - Limitations: not the missing original LTspice schematic; not physical or post-layout evidence
 

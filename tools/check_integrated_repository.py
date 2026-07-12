@@ -75,8 +75,8 @@ REQUIRED = [
     "datasets/dataset_manifest.yaml", "datasets/DATASET_LICENSES.md",
     "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
     "tables/streaming_state_inventory.csv",
-    "figures/final/FIG-12_detailed_digital_architecture.svg",
-    "figures/final/FIG-15_afe_adc_reconstructed_diagram.svg",
+    "figures/final/FIG-12_digital_signal_flow.svg",
+    "figures/final/FIG-15_analog_signal_flow.svg",
     "figures/final/MAT-01_afe_chain_overview.png",
     "figures/final/MAT-02_total_frequency_response.png",
     "figures/final/MAT-03_notch_dense_sweep.png",
@@ -383,8 +383,10 @@ def main() -> int:
     check("dataset hashes populated", sum(1 for line in (ROOT / "datasets" / "SHA256SUMS_EXPECTED.txt").read_text(encoding="utf-8").splitlines() if line and not line.startswith("#")) >= 1000)
     fig_index = (ROOT / "figures" / "FIGURE_INDEX.md").read_text(encoding="utf-8")
     manuscript = (ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md").read_text(encoding="utf-8")
-    check("FIG-12 indexed", "FIG-12_detailed_digital_architecture.svg" in fig_index)
-    check("FIG-12 referenced by manuscript", "FIG-12_detailed_digital_architecture.svg" in manuscript)
+    check("FIG-12 indexed", "FIG-12_digital_signal_flow.svg" in fig_index)
+    check("FIG-12 referenced by manuscript", "FIG-12_digital_signal_flow.svg" in manuscript)
+    check("FIG-15 indexed", "FIG-15_analog_signal_flow.svg" in fig_index)
+    check("FIG-15 referenced by manuscript", "FIG-15_analog_signal_flow.svg" in manuscript)
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
     for required in ["1,777.699800 ms", "54.012600 ms", "32.912687", "0.099 W", "PENDING_BOARD"]:
         check(f"benchmark value promoted with scope: {required}", required in text)
