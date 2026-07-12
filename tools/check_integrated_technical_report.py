@@ -211,9 +211,14 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("seventeen reader-facing figures", len(report_images) == 17, len(report_images))
-    p05 = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation" / "vivado_implementation_composite.svg"
-    check("Vivado implementation publication figure", p05.is_file(), str(p05))
+    check("nineteen reader-facing figures", len(report_images) == 19, len(report_images))
+    p05_root = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation"
+    for vector_name in ["device_placement_map.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
+        check(f"Vivado implementation vector {vector_name}", (p05_root / vector_name).is_file(), str(p05_root / vector_name))
+    for native_name in ["microblaze_block_design_vivado_native.pdf", "worst_setup_path_vivado_native.pdf"]:
+        check(f"Vivado native PDF {native_name}", (p05_root / native_name).is_file(), str(p05_root / native_name))
+    legacy_captures = [p05_root / name for name in ["device_view_full.png", "device_view_accelerator_zoom.png", "worst_setup_path.png"]]
+    check("no FIG-P05 GUI screenshots", not any(path.exists() for path in legacy_captures), [str(path) for path in legacy_captures if path.exists()])
     for filename in REQUIRED_FIGURES:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)

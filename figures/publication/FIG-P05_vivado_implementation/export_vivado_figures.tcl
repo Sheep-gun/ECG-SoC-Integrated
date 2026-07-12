@@ -2,9 +2,8 @@
 #
 # Build/report phase:
 #   vivado -mode batch -source export_vivado_figures.tcl -tclargs build
-# GUI preparation phases (normally driven by capture_vivado_device_views.ps1):
-#   vivado -mode gui -source export_vivado_figures.tcl -tclargs gui_full
-#   vivado -mode gui -source export_vivado_figures.tcl -tclargs gui_zoom
+# Native vector export phase (Vivado GUI mode is required by these commands):
+#   vivado -mode gui -source export_vivado_figures.tcl -tclargs vector_exports
 
 set script_dir [file dirname [file normalize [info script]]]
 set repo_root [file normalize [file join $script_dir .. .. ..]]
@@ -29,9 +28,9 @@ proc export_block_design {script_dir} {
     }
     open_bd_design [lindex $bd 0]
     write_bd_layout -force -format svg -orientation landscape -scope all \
-        [file join $script_dir microblaze_block_design.svg]
+        [file join $script_dir microblaze_block_design_vivado_native.svg]
     write_bd_layout -force -format pdf -orientation landscape -scope all \
-        [file join $script_dir microblaze_block_design.pdf]
+        [file join $script_dir microblaze_block_design_vivado_native.pdf]
 }
 
 proc write_accelerator_bounds {script_dir} {
@@ -55,6 +54,44 @@ proc write_accelerator_bounds {script_dir} {
     set ys [lsort -integer $ys]
     write_text_file [file join $script_dir accelerator_bounds.csv] \
         "xmin,xmax,ymin,ymax,placed_cells\n[lindex $xs 0],[lindex $xs end],[lindex $ys 0],[lindex $ys end],[llength $xs]\n"
+}
+
+proc csv_quote {value} {
+    return "\"[string map {\" \"\"} $value]\""
+}
+
+proc write_placed_tile_occupancy {script_dir} {
+    array set count {}
+    array set tile_name {}
+    foreach cell [get_cells -quiet -hierarchical -filter {IS_PRIMITIVE == 1 && LOC != ""}] {
+        set site [lindex [get_sites -quiet -of_objects $cell] 0]
+        if {$site eq ""} {
+            continue
+        }
+        set tile [lindex [get_tiles -quiet -of_objects $site] 0]
+        if {$tile eq ""} {
+            continue
+        }
+        set scope system_other
+        if {[string match "*/snn_ecg_axi_accelerator_0/inst/u_core/*" $cell]} {
+            set scope accelerator_core
+        }
+        set gx [get_property GRID_POINT_X $tile]
+        set gy [get_property GRID_POINT_Y $tile]
+        set key "$scope,$gx,$gy"
+        if {![info exists count($key)]} {
+            set count($key) 0
+            set tile_name($key) $tile
+        }
+        incr count($key)
+    }
+    set fh [open [file join $script_dir placed_tile_occupancy.csv] w]
+    puts $fh "scope,grid_x,grid_y,placed_primitives,representative_tile"
+    foreach key [lsort [array names count]] {
+        lassign [split $key ,] scope gx gy
+        puts $fh "[csv_quote $scope],$gx,$gy,$count($key),[csv_quote $tile_name($key)]"
+    }
+    close $fh
 }
 
 proc export_postroute_reports {routed_dcp script_dir} {
@@ -81,11 +118,31 @@ proc export_postroute_reports {routed_dcp script_dir} {
         append meta "$label,[get_property $prop $path]\n"
     }
     write_text_file [file join $script_dir worst_setup_path_metadata.csv] $meta
-    show_schematic $path
-    write_schematic -force -format svg -orientation landscape -scope all \
-        [file join $script_dir worst_setup_path.svg]
-    write_schematic -force -format pdf -orientation landscape -scope all \
-        [file join $script_dir worst_setup_path.pdf]
+}
+
+proc export_native_vectors {routed_dcp project_dir script_dir} {
+    if {![file exists $routed_dcp]} {
+        error "Routed checkpoint missing; run build phase first: $routed_dcp"
+    }
+    open_project [file join $project_dir SNN_ECG_P05.xpr]
+    export_block_design $script_dir
+    close_project
+
+    open_checkpoint $routed_dcp
+    write_placed_tile_occupancy $script_dir
+    set worst [lindex [get_timing_paths -setup -max_paths 1 -nworst 1] 0]
+    if {$worst eq ""} {
+        error "Vivado returned no post-route setup path"
+    }
+    set schematic_name "P05 Worst Setup Path"
+    show_schematic -name $schematic_name $worst
+    after 8000
+    write_schematic -force -name $schematic_name -format svg -orientation landscape -scope all \
+        [file join $script_dir worst_setup_path_vivado_native.svg]
+    write_schematic -force -name $schematic_name -format pdf -orientation landscape -scope all \
+        [file join $script_dir worst_setup_path_vivado_native.pdf]
+    write_text_file [file join $script_dir native_vector_export.txt] \
+        "Vivado [version -short]\nBlock Design: write_bd_layout PDF/SVG\nWorst setup path: write_schematic PDF/SVG\nDevice View: no native PDF/SVG export in Vivado 2020.2; placed_tile_occupancy.csv is derived from routed GRID_POINT_X/Y properties.\n"
 }
 
 proc build_and_export {repo_root digital_root source_dir work_root project_dir routed_dcp script_dir} {
@@ -140,40 +197,6 @@ proc build_and_export {repo_root digital_root source_dir work_root project_dir r
     puts "P05_BUILD_COMPLETE=$routed_dcp"
 }
 
-proc prepare_gui_view {phase routed_dcp script_dir work_root} {
-    if {![file exists $routed_dcp]} {
-        error "Routed checkpoint missing; run build phase first: $routed_dcp"
-    }
-    if {$phase eq "gui_full"} {
-        open_project [file join $work_root project SNN_ECG_P05.xpr]
-        export_block_design $script_dir
-        close_project
-    }
-    open_checkpoint $routed_dcp
-    unhighlight_objects -quiet [get_highlighted_objects]
-    unselect_objects -quiet [get_selected_objects]
-    if {$phase eq "gui_timing"} {
-        set worst [lindex [get_timing_paths -setup -max_paths 1 -nworst 1] 0]
-        show_schematic $worst
-    } elseif {$phase eq "gui_zoom"} {
-        set accel [get_cells -quiet -hierarchical -filter \
-            {NAME =~ */snn_ecg_axi_accelerator_0/inst/u_core/* && IS_PRIMITIVE == 1}]
-        highlight_objects -color magenta $accel
-        select_objects $accel
-    } else {
-        set accel [get_cells -quiet -hierarchical -filter \
-            {NAME =~ */snn_ecg_axi_accelerator_0/inst/u_core/* && IS_PRIMITIVE == 1}]
-        highlight_objects -color magenta $accel
-    }
-    after 6000
-    write_text_file [file join $work_root ${phase}_READY] \
-        "Actual Vivado Device View prepared from $routed_dcp\n"
-    after 180000 {set ::p05_gui_done 1}
-    vwait ::p05_gui_done
-    stop_gui
-    exit 0
-}
-
 if {$phase eq "build"} {
     build_and_export $repo_root $digital_root $source_dir $work_root \
         $project_dir $routed_dcp $script_dir
@@ -187,8 +210,10 @@ if {$phase eq "build"} {
     write_text_file [file join $work_root BUILD_COMPLETE] \
         "Vivado [version -short]\nPart xc7a100tcsg324-1\nRouted checkpoint $routed_dcp\n"
     exit 0
-} elseif {$phase eq "gui_full" || $phase eq "gui_zoom" || $phase eq "gui_timing"} {
-    prepare_gui_view $phase $routed_dcp $script_dir $work_root
+} elseif {$phase eq "vector_exports"} {
+    export_native_vectors $routed_dcp $project_dir $script_dir
+    stop_gui
+    exit 0
 } else {
-    error "Unknown phase '$phase'; use build, extract, gui_full, gui_zoom, or gui_timing"
+    error "Unknown phase '$phase'; use build, extract, or vector_exports"
 }

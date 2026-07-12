@@ -248,9 +248,9 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 - File: `figures/publication/FIG-P05_vivado_implementation/vivado_implementation_composite.svg`
 - Owner: 양건(통합 편집)
-- Source files: `figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl`, `figures/publication/FIG-P05_vivado_implementation/evidence_paths.md`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt`
+- Source files: `figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl`, `figures/publication/FIG-P05_vivado_implementation/build_vector_publication.py`, `figures/publication/FIG-P05_vivado_implementation/evidence_paths.md`, `figures/publication/FIG-P05_vivado_implementation/placed_tile_occupancy.csv`, `figures/publication/FIG-P05_vivado_implementation/microblaze_block_design_vivado_native.pdf`, `figures/publication/FIG-P05_vivado_implementation/worst_setup_path_vivado_native.pdf`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt`, `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Vivado post-route Device View, MicroBlaze Block Design, worst setup path와 hierarchy별 자원/timing 요약
-- Evidence scope: Vivado 2020.2, xc7a100tcsg324-1, FPGA placement/routing
-- Limitations: not ASIC layout; pure RTL and MicroBlaze system timing are different scopes
+- Caption: Routed tile vector map, Vivado native MicroBlaze Block Design와 worst setup path
+- Evidence scope: Vivado 2020.2, xc7a100tcsg324-1, screenshot-free FPGA placement/timing evidence
+- Limitations: Device View itself is not exported; tile map uses routed GRID_POINT_X/Y; not ASIC layout

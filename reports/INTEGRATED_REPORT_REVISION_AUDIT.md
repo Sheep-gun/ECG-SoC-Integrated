@@ -73,15 +73,16 @@
 ## Vivado 물리 구현 그림 보강
 
 - Vivado 2020.2와 `xc7a100tcsg324-1`에서 기존 BD/IP/constraints/run strategy로 MicroBlaze 통합 구현을 재생성했다.
-- 실제 routed checkpoint의 Device View 전체 화면과 accelerator hierarchy 확대, 실제 IP Integrator Block Design, 실제 worst setup Schematic View를 `FIG-P05_vivado_implementation`에 추가했다.
+- 잘린 Device View 스크린샷과 GUI 캡처 도구를 제거했다. Device View는 native PDF/SVG export가 없어 routed tile 좌표 기반 벡터 map으로 대체했다.
+- IP Integrator Block Design은 `write_bd_layout`, worst setup Schematic은 `write_schematic`의 Vivado native PDF/SVG로 다시 export했다.
 - 최악 setup path의 startpoint, endpoint, path delay 9.810 ns, requirement 10.000 ns, slack 0.097 ns를 원본 report와 함께 기록했다.
 - pure RTL 9,719 LUT/5,038 FF/0 BRAM/0 DSP/WNS 8.184 ns와 MicroBlaze system 12,494 LUT/8,494 FF/16 BRAM/3 DSP/WNS 0.097 ns를 서로 다른 구현 범위로 유지했다.
-- Device View는 FPGA placement/routing이며 ASIC layout이 아님을 caption·본문·evidence map에 명시했다.
+- publication PDF는 placement vector map, native Block Design, native timing schematic의 3페이지 package이며 raster screenshot을 포함하지 않는다.
 
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 642 rules, 0 conflicts, chars 62,619, figures 17, evidence rows 67
+- `tools/check_integrated_technical_report.py`: PASS — 647 rules, 0 conflicts, chars 63,424, figures 19, evidence rows 67
 - `tools/check_integrated_repository.py`: PASS — 287 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

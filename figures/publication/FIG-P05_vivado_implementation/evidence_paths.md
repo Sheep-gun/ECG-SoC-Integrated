@@ -12,26 +12,37 @@
 - Fixed XSA: `components/digital_accelerator/results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.xsa`
   - SHA256 `8ff2a1ed537c27bd6d8117313c274aa79de8f11b4e6df54fa1b9fa10ca5942a3`
 - Fixed system timing: `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt`
-  - SHA256 `7607366a0611ac73864ca6b84308f3e36f335d55591526d340ccb61a6deaeb12`
 - Fixed hierarchical utilization: `components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt`
-  - SHA256 `659ff69b2937020ee6649001156dc9c8f70a1e46e88d5e58adbacf9e69104107`
 - Fixed pure RTL metrics: `components/digital_accelerator/reports/final/final_metrics.json`
-  - SHA256 `c5b2ea036d8814791b952c8e4f2ceeaef759f5f56e1af44fdfcc8bce651a3352`
 
-## 재생성과 publication export
+## Vivado native vector exports
 
-- `export_vivado_figures.tcl`: 동일 part, IP, BD, constraints와 기존 run strategy로 새 작업 project를 만들고 bitstream까지 구현한 뒤 routed checkpoint, timing, hierarchy와 worst path를 추출한다.
-- 재생성 작업 디렉터리: `C:/Users/YangGeon/_ecg_p05_vivado_work/` (Git 비추적 임시 경로)
-- `capture_vivado_device_views.ps1`: routed checkpoint를 Vivado GUI에서 열고 실제 Device/Schematic View 창을 PNG로 캡처한다.
-- `build_publication_composite.py`: Vivado export의 방향·여백을 정리하고 실제 Device View를 crop하며 CSV와 SVG/PDF composite를 생성한다. 배치나 timing path를 새로 그리지 않는다.
-- 재생성 원본: `timing_summary.rpt`, `hierarchical_utilization.rpt`, `worst_setup_path.rpt`, `worst_setup_path_metadata.csv`
-- publication 원본: `device_view_full.png`, `device_view_accelerator_zoom.png`, `microblaze_block_design.png`, `worst_setup_path.png`
-- publication 결과: `vivado_implementation_composite.svg`, `vivado_implementation_composite.pdf`
+- `microblaze_block_design_vivado_native.pdf/.svg`
+  - Vivado 2020.2 `write_bd_layout -format pdf/svg -scope all` 직접 출력
+- `worst_setup_path_vivado_native.pdf/.svg`
+  - Vivado 2020.2 `write_schematic -format pdf/svg -scope all` 직접 출력
+- `native_vector_export.txt`
+  - 실행한 export 형식과 Device View export 제한 기록
+
+## Device 배치 데이터
+
+- `placed_tile_occupancy.csv`
+  - routed checkpoint의 tile `GRID_POINT_X/Y`별 primitive cell 수를 기록
+  - `accelerator_core`와 `system_other` 범위를 분리
+- `device_placement_map.svg/.pdf`
+  - `placed_cells.csv`만으로 생성한 벡터 배치 분포
+  - Vivado Device View 스크린샷 또는 GUI 화면 재현이 아님
+
+## Publication 산출물
+
+- `microblaze_block_design.pdf/.svg`: native vector에서 회전·여백만 정규화
+- `worst_setup_path.pdf/.svg`: native vector에서 회전·여백만 정규화
+- `vivado_implementation_composite.pdf`: placement map + 두 native vector의 3페이지 package
+- `vivado_implementation_composite.svg`: screenshot-free routed placement overview
+- `build_vector_publication.py`: rasterization 없이 위 산출물을 재생성
 
 ## 범위 경계
 
-- `pure RTL WNS 8.184 ns`는 고정 standalone pure RTL 구현 범위다.
-- `MicroBlaze system WNS 0.097 ns`와 worst setup path는 processor·interconnect·memory·UART·sample feeder·accelerator를 포함한 통합 system 범위다.
-- Device View는 FPGA placement/routing이며 ASIC layout이 아니다.
+- `pure RTL WNS 8.184 ns`는 standalone pure RTL 구현 범위다.
+- `MicroBlaze system WNS 0.097 ns`와 worst setup path는 processor·interconnect·memory·UART·표본 공급기·accelerator를 포함한 통합 system 범위다.
 - 물리 AFE PCB, ADC silicon, fabricated ASIC, ASIC post-layout 또는 clinical validation 근거로 사용하지 않는다.
-

@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1963 860" preserveAspectRatio="xMidYMid meet"><g transform="translate(1963 0) rotate(90)">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg viewBox="0 0 860 1963"
+     preserveAspectRatio="xMidYMid meet"
+     version="1.1"
+     baseProfile="full"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:ev="http://www.w3.org/2001/xml-events"
+     xml:space="preserve">
 <title>snn_ecg_mb_full_replay_imp</title>
 <desc>Nlview schematic (SVG)</desc>
 <clipPath id="clippingbbox">
@@ -568,4 +576,4 @@
 <path d="M1238 70h90v310h60" />
 </g>
 </g>
-</g></svg>
+</svg>

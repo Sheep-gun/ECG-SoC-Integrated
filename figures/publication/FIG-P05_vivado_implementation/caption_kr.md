@@ -1,12 +1,20 @@
 # FIG-P05 Vivado FPGA 구현 결과
 
-**(a) Post-route Device View.** Vivado 2020.2에서 `xc7a100tcsg324-1`의 routed checkpoint를 연 전체 FPGA fabric 화면이다. magenta 영역은 MicroBlaze 통합 system 안의 pure classifier core hierarchy를 강조한 것이다. 이 화면은 FPGA placement/routing 결과이며 ASIC layout, transistor-level layout 또는 post-layout ASIC 검증이 아니다.
+## (a) Routed tile placement map
 
-**(b) MicroBlaze IP Integrator Block Design.** MicroBlaze, AXI interconnect, AXI-Lite/AXI-Stream sample feeder, SNN ECG accelerator, UART, interrupt controller와 IRQ 연결을 보인다. Vivado의 `write_bd_layout`로 실제 block design에서 export하였다.
+Vivado 2020.2의 Device View는 PDF/SVG 직접 export를 지원하지 않는다. 따라서 GUI 스크린샷을 사용하지 않고, 실제 routed checkpoint에서 각 primitive cell의 tile `GRID_POINT_X/Y`를 Tcl로 추출해 전체 MicroBlaze system과 pure classifier core의 배치 분포를 벡터로 표시했다. 이 그림은 routed placement 데이터의 시각화이며 Vivado Device View 화면을 재현한 그림이라고 주장하지 않는다. FPGA 배치 결과이지 ASIC layout 또는 ASIC post-layout 결과가 아니다.
 
-**(c) Worst Setup Timing Path.** post-route MicroBlaze 통합 system의 최악 setup path를 Vivado Schematic View에 표시하였다. startpoint는 `qrs_energy_abn_count_reg[3]/C`, endpoint는 `u_final/dec_morphology_reg[29]/D`이며, requirement 10.000 ns, data path delay 9.810 ns, slack 0.097 ns이다. 이는 통합 system의 timing path이며, pure RTL standalone 구현의 WNS 8.184 ns와는 다른 구현 범위다.
+## (b) MicroBlaze IP Integrator Block Design
 
-**(d) Resource/Timing Summary.** 고정 standalone pure RTL 결과는 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns이다. 재생성한 MicroBlaze 통합 post-route system은 12,494 LUT, 8,494 FF, 16 BRAM36, 3 DSP, WNS 0.097 ns이며, 그 안의 SNN AXI wrapper는 10,485 LUT와 6,652 FF를 사용한다. 두 WNS는 timing closure 근거이지 ECG 한 기록의 처리 지연시간이 아니다.
+MicroBlaze, AXI interconnect, AXI-Lite/AXI-Stream 표본 공급기, SNN ECG accelerator, UART, interrupt controller와 IRQ 연결을 보인다. `microblaze_block_design_vivado_native.pdf/.svg`는 Vivado `write_bd_layout`의 직접 출력이며, publication 파일은 raster 변환 없이 회전 메타데이터와 흰 여백만 정리한 벡터다.
 
-확대 파일 `device_view_accelerator_zoom.png`는 실제 Vivado Device View에서 accelerator가 선택된 영역을 crop·확대한 것이며 배치 정보를 다시 그리거나 합성하지 않았다.
+## (c) Worst Setup Timing Path
+
+MicroBlaze 통합 post-route system의 최악 setup path를 Vivado Schematic으로 표시했다. `worst_setup_path_vivado_native.pdf/.svg`는 Vivado `write_schematic`의 직접 출력이다. startpoint는 `qrs_energy_abn_count_reg[3]/C`, endpoint는 `u_final/dec_morphology_reg[29]/D`이며 requirement 10.000 ns, data path delay 9.810 ns, slack 0.097 ns이다.
+
+## 자원과 timing 범위
+
+고정 standalone pure RTL 결과는 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns이다. MicroBlaze 통합 post-route system은 12,494 LUT, 8,494 FF, 16 BRAM36, 3 DSP, WNS 0.097 ns이다. 두 WNS는 서로 다른 구현 범위의 timing closure 근거이며 ECG 한 기록의 처리 지연시간이 아니다.
+
+`vivado_implementation_composite.pdf`는 세 페이지로 구성된다. 1쪽은 routed tile vector map, 2쪽은 Vivado native Block Design, 3쪽은 Vivado native worst setup schematic이다. 세 페이지 모두 스크린샷이나 PNG를 포함하지 않는다.
 

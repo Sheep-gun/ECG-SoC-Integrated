@@ -1,0 +1,4 @@
+Vivado 2020.2
+Block Design: write_bd_layout PDF/SVG
+Worst setup path: write_schematic PDF/SVG
+Device View: no native PDF/SVG export in Vivado 2020.2; placed_tile_occupancy.csv is derived from routed GRID_POINT_X/Y properties.

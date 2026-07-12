@@ -598,9 +598,7 @@ RTL에 적합한 특성은 다음과 같다.
 
 *표 11. FPGA 자원과 timing closure. [근거: CLM-008, CLM-009, CLM-010; 고정 Vivado 결과]*
 
-![그림 16. Vivado FPGA 구현 결과](../figures/publication/FIG-P05_vivado_implementation/vivado_implementation_composite.svg)
-
-*그림 16. Vivado FPGA 구현. 배치·배선이며 ASIC layout이 아니다.*
+스크린샷을 사용하지 않은 routed placement와 Vivado native Block Design·timing schematic은 부록 D에 제시한다.
 
 Pure RTL의 0 BRAM/0 DSP는 고정 폭 streaming datapath와 일관된다. 그러나 BRAM 0 하나만으로 전체 관찰 구간을 저장하지 않는다는 사실을 증명하지는 못한다. 그 근거는 RTL에서 확인한 직전 표본, 계수기, 유한 박동 구간과 장시간 누적 상태다. MicroBlaze의 BRAM/DSP에는 software와 재생 기반 구조가 포함되므로 pure core와 단순 감소율을 계산할 수 없다. WNS는 구현 제약의 timing slack이며 한 30분 판정의 처리 지연시간이 아니다.
 
@@ -843,3 +841,17 @@ python tools/check_integrated_repository.py
 ```
 
 Application form의 page 제한, 소속·지도교수·서명 등 개인정보 입력은 이 public repository 밖의 private HWP 편집 단계에서 수행한다.
+
+# 부록 D. Vivado 벡터 구현 근거
+
+![그림 16. Routed FPGA tile placement map](../figures/publication/FIG-P05_vivado_implementation/device_placement_map.svg)
+
+*그림 16. routed checkpoint의 실제 tile 좌표로 그린 전체 system과 pure classifier core 배치 분포. Vivado Device View는 PDF/SVG export를 지원하지 않아 GUI 스크린샷을 사용하지 않았다. FPGA placement 데이터이며 ASIC layout이 아니다.*
+
+![그림 17. MicroBlaze IP Integrator Block Design](../figures/publication/FIG-P05_vivado_implementation/microblaze_block_design.svg)
+
+*그림 17. MicroBlaze, AXI interconnect, 표본 공급기, SNN accelerator, UART와 IRQ 연결. Vivado `write_bd_layout`의 native SVG를 raster 변환 없이 회전·여백만 정규화한 벡터다.*
+
+![그림 18. Worst setup timing path](../figures/publication/FIG-P05_vivado_implementation/worst_setup_path.svg)
+
+*그림 18. Vivado `write_schematic`으로 직접 export한 post-route 최악 setup path. data path delay 9.810 ns, requirement 10.000 ns, slack 0.097 ns이며 MicroBlaze 통합 system 범위다.*

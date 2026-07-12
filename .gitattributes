@@ -6,6 +6,7 @@
 *.yml text eol=lf
 *.json text eol=lf
 *.svg text eol=lf
+*.pdf binary
 
 # Imported component snapshots override generic rules and preserve exact bytes.
 /components/** -text !eol
