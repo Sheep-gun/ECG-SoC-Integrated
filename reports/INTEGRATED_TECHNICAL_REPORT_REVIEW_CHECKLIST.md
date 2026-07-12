@@ -70,6 +70,8 @@
 
 ## Artifact와 자동 검증
 
+- [x] 전체 workflow 그림은 공개 ECG·provenance 고정부터 MATLAB, XMODEL, RTL, FPGA, locked final-test와 결과 통합까지 연결한다.
+- [x] 단계별 수정 반복과 final-test 이후 재튜닝 금지를 LOCK 경계와 단방향 화살표로 구분한다.
 - [x] MATLAB `907f7e1`, XMODEL `4756a508`, digital `c6b80de` provenance를 유지한다.
 - [x] evidence map의 모든 path와 claim ID가 유효하다.
 - [x] figure generator가 15개 SVG와 상속 MATLAB PNG 7개, index와 data를 생성한다.

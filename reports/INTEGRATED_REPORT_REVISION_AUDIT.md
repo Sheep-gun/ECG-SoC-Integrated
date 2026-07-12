@@ -80,6 +80,13 @@
 - pure RTL 9,719 LUT/5,038 FF/0 BRAM/0 DSP/WNS 8.184 ns와 MicroBlaze system 12,494 LUT/8,494 FF/16 BRAM/3 DSP/WNS 0.097 ns를 서로 다른 구현 범위로 유지했다.
 - 승인된 reader-facing Figure는 실제 Device View, `SNN accelerator에 속한 배치 셀만 분리 표시`, hierarchy 범례와 자원·timing 요약을 한 페이지에 결합한다. 기존 3페이지 vector package는 보조 evidence로 유지한다.
 
+## 전체 연구·검증 workflow 보강
+
+- 기존의 단순한 MATLAB→XMODEL→RTL→FPGA 직선 블록도를 입력 고정, 단계별 판단, 수정 후 재검증, 잠금 최종시험과 결과 통합까지 포함하는 전체 workflow로 교체하였다.
+- 공개 ECG와 세 component commit·manifest·SHA256을 함께 시작점으로 두어 데이터와 구현 provenance가 동시에 고정됨을 나타냈다.
+- MATLAB 공칭 검증, XMODEL stress·인계 검증, reference↔XSim 일치, FPGA 통합 등가성의 수정 반복은 허용하되 LOCK 아래 final-test 결과가 설계 단계로 되먹임되지 않도록 화살표를 분리하였다.
+- physical AFE, 24시간 성능과 clinical validation은 최종 결과 상자에서도 미검증 범위로 유지하였다.
+
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index

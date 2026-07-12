@@ -110,6 +110,43 @@ def signal_footer(lines: list[str], note: str) -> None:
     lines.append('</svg>')
 
 
+def workflow_canvas(title: str, subtitle: str) -> list[str]:
+    return [
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1150" viewBox="0 0 1600 1150">',
+        '<defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#34495e"/></marker></defs>',
+        '<rect width="1600" height="1150" fill="#ffffff"/>',
+        '<rect x="0" y="0" width="1600" height="100" fill="#102a43"/>',
+        f'<text x="54" y="56" font-family="Arial, Noto Sans KR, sans-serif" font-size="34" font-weight="700" fill="white">{esc(title)}</text>',
+        f'<text x="54" y="83" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#d9e2ec">{esc(subtitle)}</text>',
+    ]
+
+
+def workflow_decision(x, y, w, h, lines) -> list[str]:
+    points = f"{x + w/2},{y} {x + w},{y + h/2} {x + w/2},{y + h} {x},{y + h/2}"
+    out = [f'<polygon points="{points}" fill="#e6fcf5" stroke="#2f9e44" stroke-width="2.5"/>']
+    first_y = y + h / 2 - (len(lines) - 1) * 11 + 6
+    for i, line in enumerate(lines):
+        out.append(txt(x + w / 2, first_y + i * 22, line, 15, "#1b4332", 700, "middle"))
+    return out
+
+
+def workflow_box(x, y, w, h, title, lines=(), accent="#2f80ed", fill="#ffffff") -> list[str]:
+    out = [
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="7" fill="{fill}" stroke="#829ab1" stroke-width="2"/>',
+        f'<rect x="{x}" y="{y}" width="{w}" height="8" rx="4" fill="{accent}"/>',
+        txt(x + w / 2, y + 34, title, 18, "#102a43", 700, "middle"),
+    ]
+    for i, line in enumerate(lines):
+        out.append(txt(x + w / 2, y + 62 + i * 21, line, 14, "#334e68", 400, "middle"))
+    return out
+
+
+def workflow_footer(lines: list[str], note: str) -> None:
+    lines.append('<line x1="40" y1="1090" x2="1560" y2="1090" stroke="#d9e2ec" stroke-width="2"/>')
+    lines.append(txt(800, 1125, note, 14, "#486581", 400, "middle"))
+    lines.append('</svg>')
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     SRC.mkdir(parents=True, exist_ok=True)
@@ -191,16 +228,46 @@ def main() -> int:
     footer(s, "설계 동기를 설명하는 그림이며 임상 진단을 뜻하지 않음")
     write_svg("FIG-01_long_window_motivation.svg", s)
 
-    # FIG-02: system flow
-    s = canvas("전체 시스템 흐름", "모델 기반 AFE·ADC에서 디지털 IP와 FPGA까지")
-    xs = [45, 285, 525, 765, 1005]
-    titles = ["공개 ECG", "MATLAB", "XMODEL", "디지털 RTL", "FPGA 재생"]
-    desc = [["4개 원천 DB"],["공칭 AFE/ADC","기준 벡터"],["교란·비이상성","부호 스트림"],["Snapshot + Final","IP-XACT"],["36개 사례","기능 등가성"]]
-    for i,x in enumerate(xs):
-        s += box(x, 210, 160, 190, titles[i], desc[i], fill="#e6fffa" if i in (1,2) else "#e8f1fb")
-        if i < 4: s += arrow(x+160, 305, xs[i+1], 305)
-    footer(s, "아날로그 계층은 모델 기반이며 FPGA는 디지털 통합 증거")
-    write_svg("FIG-02_complete_system_flow.svg", s)
+    # FIG-02: overall research and validation workflow. Iteration arrows stop
+    # before the locked final test so the figure cannot imply test-set tuning.
+    s = workflow_canvas("전체 연구·검증 workflow", "입력과 provenance 고정 → AFE·ADC 모델 검증 → streaming RTL → FPGA 통합 → 잠금 최종시험")
+    s += workflow_box(170, 125, 400, 90, "공개 ECG 데이터", ["NSR·CHF·ARR·AFF 원천 record"], accent="#2f80ed", fill="#f7fbff")
+    s += workflow_box(1030, 125, 400, 90, "고정 provenance", ["세 component commit · manifest · SHA256"], accent="#5f3dc4", fill="#faf8ff")
+    s += workflow_box(510, 250, 580, 95, "평가 입력과 기준을 먼저 고정", ["record-wise split · 공통 30분 window", "final test는 모델 선택에 사용하지 않음"], accent="#486581", fill="#f5f7fa")
+    s += signal_path([(370, 215), (370, 235), (675, 235), (675, 250)])
+    s += signal_path([(1230, 215), (1230, 235), (925, 235), (925, 250)])
+
+    rows = [
+        (385, "MATLAB 공칭 pre-validation", ["필터·이득·headroom·clipping", "signed 기준 벡터 생성"], ["공칭 기준", "충족?"], "AFE·ADC 파라미터 수정", ["공칭 모델 단계"], "#0ca678", "#f0fff8"),
+        (525, "SystemVerilog AFE+ADC XMODEL", ["PLI·R/C mismatch·GBW/VOS", "ADC 비이상성·장시간 stream"], ["stress와 인계", "기준 충족?"], "모델 구현 수정", ["물리 회로 검증 아님"], "#f08c00", "#fff9f0"),
+        (665, "정수 reference와 streaming RTL", ["사건·QRS·리듬·형태 → Snapshot", "30개 Snapshot → Final Membrane"], ["reference↔XSim", "일치?"], "RTL 구현 수정", ["locked 구조는 재튜닝하지 않음"], "#7950f2", "#faf7ff"),
+        (805, "Vivado implementation · IP · FPGA replay", ["pure RTL → IP-XACT → MicroBlaze", "final_pred·final_mem 비교"], ["통합 등가성", "통과?"], "통합 구현 수정", ["입출력·cadence·연결 교정"], "#1971c2", "#f3f9ff"),
+    ]
+    for index, (y, title, details, decision, fix_title, fix_lines, accent, fill) in enumerate(rows):
+        s.append(f'<circle cx="130" cy="{y + 47.5}" r="22" fill="{accent}"/>')
+        s.append(txt(130, y + 54, str(index + 1), 17, "#ffffff", 700, "middle"))
+        s += workflow_box(170, y, 500, 95, title, details, accent=accent, fill=fill)
+        s += workflow_decision(780, y - 5, 260, 105, decision)
+        s += workflow_box(1140, y + 5, 300, 85, fix_title, fix_lines, accent="#e03131", fill="#fff5f5")
+        s += signal_arrow(670, y + 47.5, 780, y + 47.5)
+        s += signal_arrow(1040, y + 47.5, 1140, y + 47.5, "아니오")
+        s += signal_path([(1290, y + 5), (1290, y - 22), (910, y - 22), (910, y - 5)], dashed=True, color="#c92a2a")
+        s.append(txt(1100, y - 29, "수정 후 재검증", 13, "#c92a2a", 600, "middle"))
+        if index == 0:
+            s += signal_path([(800, 345), (800, 365), (420, 365), (420, 385)], "시작")
+        else:
+            previous_y = rows[index - 1][0]
+            s += signal_path([(910, previous_y + 100), (910, y - 18), (420, y - 18), (420, y)], "예")
+
+    s.append(txt(600, 922, "LOCK — 이 아래 결과는 위 설계 단계로 되먹임하지 않음", 15, "#c92a2a", 700, "middle"))
+    s.append('<line x1="140" y1="932" x2="1060" y2="932" stroke="#c92a2a" stroke-width="2.5" stroke-dasharray="10 8"/>')
+    s += signal_path([(910, 905), (910, 942), (500, 942), (500, 960)])
+    s.append(txt(930, 918, "예", 13, "#486581", 600, "start"))
+    s += workflow_box(220, 960, 560, 95, "Locked final-test 1회", ["30분 chunk 29/36 · record-majority 16/19", "결과를 모델 선택에 되먹임하지 않음"], accent="#f59f00", fill="#fff9db")
+    s += workflow_box(900, 960, 500, 95, "결과·근거·한계 통합", ["성능·자원·benchmark·claim registry", "24시간·physical AFE·clinical validation은 미검증"], accent="#2f80ed", fill="#f3f9ff")
+    s += signal_arrow(780, 1007.5, 900, 1007.5)
+    workflow_footer(s, "반복 화살표는 공칭·모델·구현 검증에만 적용되며 locked final-test를 이용한 재튜닝 경로는 없다.")
+    write_svg("FIG-02_overall_workflow.svg", s)
 
     # FIG-03 ownership
     s = canvas("Contributor ownership and handoff", "구현 owner·verification owner·integration owner를 분리")
@@ -408,7 +475,7 @@ def main() -> int:
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
-        ("FIG-02", "figures/final/FIG-02_complete_system_flow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml"], [MATLAB,XMODEL,DIGITAL], "MATLAB–XMODEL–digital–FPGA 전체 흐름", "component roles and handoffs", "analog layers are model-based"),
+        ("FIG-02", "figures/final/FIG-02_overall_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "입력 고정부터 MATLAB–XMODEL–RTL–FPGA–locked final-test까지의 전체 workflow", "component handoffs, engineering correction loops, and one-way locked evaluation", "analog layers are model-based; iteration does not include final-test tuning"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
         ("FIG-04", "figures/final/FIG-04_multitimescale_architecture.svg", "양건", ["components/digital_accelerator/FINAL_REPORT_KR.md"], [DIGITAL], "60초 Snapshot과 30분 Final Membrane 구조", "locked digital architecture", "SNN-inspired, not trained deep SNN"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),

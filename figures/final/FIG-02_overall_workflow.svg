@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1150" viewBox="0 0 1600 1150">
+<defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#34495e"/></marker></defs>
+<rect width="1600" height="1150" fill="#ffffff"/>
+<rect x="0" y="0" width="1600" height="100" fill="#102a43"/>
+<text x="54" y="56" font-family="Arial, Noto Sans KR, sans-serif" font-size="34" font-weight="700" fill="white">전체 연구·검증 workflow</text>
+<text x="54" y="83" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#d9e2ec">입력과 provenance 고정 → AFE·ADC 모델 검증 → streaming RTL → FPGA 통합 → 잠금 최종시험</text>
+<rect x="170" y="125" width="400" height="90" rx="7" fill="#f7fbff" stroke="#829ab1" stroke-width="2"/>
+<rect x="170" y="125" width="400" height="8" rx="4" fill="#2f80ed"/>
+<text x="370.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">공개 ECG 데이터</text>
+<text x="370.0" y="187" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">NSR·CHF·ARR·AFF 원천 record</text>
+<rect x="1030" y="125" width="400" height="90" rx="7" fill="#faf8ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="1030" y="125" width="400" height="8" rx="4" fill="#5f3dc4"/>
+<text x="1230.0" y="159" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">고정 provenance</text>
+<text x="1230.0" y="187" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">세 component commit · manifest · SHA256</text>
+<rect x="510" y="250" width="580" height="95" rx="7" fill="#f5f7fa" stroke="#829ab1" stroke-width="2"/>
+<rect x="510" y="250" width="580" height="8" rx="4" fill="#486581"/>
+<text x="800.0" y="284" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">평가 입력과 기준을 먼저 고정</text>
+<text x="800.0" y="312" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">record-wise split · 공통 30분 window</text>
+<text x="800.0" y="333" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">final test는 모델 선택에 사용하지 않음</text>
+<polyline points="370,215 370,235 675,235 675,250" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<polyline points="1230,215 1230,235 925,235 925,250" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<circle cx="130" cy="432.5" r="22" fill="#0ca678"/>
+<text x="130" y="439" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#ffffff">1</text>
+<rect x="170" y="385" width="500" height="95" rx="7" fill="#f0fff8" stroke="#829ab1" stroke-width="2"/>
+<rect x="170" y="385" width="500" height="8" rx="4" fill="#0ca678"/>
+<text x="420.0" y="419" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">MATLAB 공칭 pre-validation</text>
+<text x="420.0" y="447" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">필터·이득·headroom·clipping</text>
+<text x="420.0" y="468" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">signed 기준 벡터 생성</text>
+<polygon points="910.0,380 1040,432.5 910.0,485 780,432.5" fill="#e6fcf5" stroke="#2f9e44" stroke-width="2.5"/>
+<text x="910.0" y="427.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">공칭 기준</text>
+<text x="910.0" y="449.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">충족?</text>
+<rect x="1140" y="390" width="300" height="85" rx="7" fill="#fff5f5" stroke="#829ab1" stroke-width="2"/>
+<rect x="1140" y="390" width="300" height="8" rx="4" fill="#e03131"/>
+<text x="1290.0" y="424" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">AFE·ADC 파라미터 수정</text>
+<text x="1290.0" y="452" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">공칭 모델 단계</text>
+<line x1="670" y1="432.5" x2="780" y2="432.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<line x1="1040" y1="432.5" x2="1140" y2="432.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="1090.0" y="422.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">아니오</text>
+<polyline points="1290,390 1290,363 910,363 910,380" fill="none" stroke="#c92a2a" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
+<text x="1100" y="356" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#c92a2a">수정 후 재검증</text>
+<polyline points="800,345 800,365 420,365 420,385" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="420" y="355" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">시작</text>
+<circle cx="130" cy="572.5" r="22" fill="#f08c00"/>
+<text x="130" y="579" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#ffffff">2</text>
+<rect x="170" y="525" width="500" height="95" rx="7" fill="#fff9f0" stroke="#829ab1" stroke-width="2"/>
+<rect x="170" y="525" width="500" height="8" rx="4" fill="#f08c00"/>
+<text x="420.0" y="559" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">SystemVerilog AFE+ADC XMODEL</text>
+<text x="420.0" y="587" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">PLI·R/C mismatch·GBW/VOS</text>
+<text x="420.0" y="608" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">ADC 비이상성·장시간 stream</text>
+<polygon points="910.0,520 1040,572.5 910.0,625 780,572.5" fill="#e6fcf5" stroke="#2f9e44" stroke-width="2.5"/>
+<text x="910.0" y="567.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">stress와 인계</text>
+<text x="910.0" y="589.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">기준 충족?</text>
+<rect x="1140" y="530" width="300" height="85" rx="7" fill="#fff5f5" stroke="#829ab1" stroke-width="2"/>
+<rect x="1140" y="530" width="300" height="8" rx="4" fill="#e03131"/>
+<text x="1290.0" y="564" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">모델 구현 수정</text>
+<text x="1290.0" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">물리 회로 검증 아님</text>
+<line x1="670" y1="572.5" x2="780" y2="572.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<line x1="1040" y1="572.5" x2="1140" y2="572.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="1090.0" y="562.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">아니오</text>
+<polyline points="1290,530 1290,503 910,503 910,520" fill="none" stroke="#c92a2a" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
+<text x="1100" y="496" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#c92a2a">수정 후 재검증</text>
+<polyline points="910,485 910,507 420,507 420,525" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="420" y="497" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">예</text>
+<circle cx="130" cy="712.5" r="22" fill="#7950f2"/>
+<text x="130" y="719" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#ffffff">3</text>
+<rect x="170" y="665" width="500" height="95" rx="7" fill="#faf7ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="170" y="665" width="500" height="8" rx="4" fill="#7950f2"/>
+<text x="420.0" y="699" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">정수 reference와 streaming RTL</text>
+<text x="420.0" y="727" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">사건·QRS·리듬·형태 → Snapshot</text>
+<text x="420.0" y="748" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">30개 Snapshot → Final Membrane</text>
+<polygon points="910.0,660 1040,712.5 910.0,765 780,712.5" fill="#e6fcf5" stroke="#2f9e44" stroke-width="2.5"/>
+<text x="910.0" y="707.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">reference↔XSim</text>
+<text x="910.0" y="729.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">일치?</text>
+<rect x="1140" y="670" width="300" height="85" rx="7" fill="#fff5f5" stroke="#829ab1" stroke-width="2"/>
+<rect x="1140" y="670" width="300" height="8" rx="4" fill="#e03131"/>
+<text x="1290.0" y="704" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">RTL 구현 수정</text>
+<text x="1290.0" y="732" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">locked 구조는 재튜닝하지 않음</text>
+<line x1="670" y1="712.5" x2="780" y2="712.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<line x1="1040" y1="712.5" x2="1140" y2="712.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="1090.0" y="702.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">아니오</text>
+<polyline points="1290,670 1290,643 910,643 910,660" fill="none" stroke="#c92a2a" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
+<text x="1100" y="636" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#c92a2a">수정 후 재검증</text>
+<polyline points="910,625 910,647 420,647 420,665" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="420" y="637" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">예</text>
+<circle cx="130" cy="852.5" r="22" fill="#1971c2"/>
+<text x="130" y="859" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#ffffff">4</text>
+<rect x="170" y="805" width="500" height="95" rx="7" fill="#f3f9ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="170" y="805" width="500" height="8" rx="4" fill="#1971c2"/>
+<text x="420.0" y="839" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Vivado implementation · IP · FPGA replay</text>
+<text x="420.0" y="867" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">pure RTL → IP-XACT → MicroBlaze</text>
+<text x="420.0" y="888" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">final_pred·final_mem 비교</text>
+<polygon points="910.0,800 1040,852.5 910.0,905 780,852.5" fill="#e6fcf5" stroke="#2f9e44" stroke-width="2.5"/>
+<text x="910.0" y="847.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">통합 등가성</text>
+<text x="910.0" y="869.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#1b4332">통과?</text>
+<rect x="1140" y="810" width="300" height="85" rx="7" fill="#fff5f5" stroke="#829ab1" stroke-width="2"/>
+<rect x="1140" y="810" width="300" height="8" rx="4" fill="#e03131"/>
+<text x="1290.0" y="844" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">통합 구현 수정</text>
+<text x="1290.0" y="872" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">입출력·cadence·연결 교정</text>
+<line x1="670" y1="852.5" x2="780" y2="852.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<line x1="1040" y1="852.5" x2="1140" y2="852.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="1090.0" y="842.5" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">아니오</text>
+<polyline points="1290,810 1290,783 910,783 910,800" fill="none" stroke="#c92a2a" stroke-width="3" marker-end="url(#flow-arrow)" stroke-dasharray="8 7"/>
+<text x="1100" y="776" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#c92a2a">수정 후 재검증</text>
+<polyline points="910,765 910,787 420,787 420,805" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="420" y="777" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">예</text>
+<text x="600" y="922" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="700" fill="#c92a2a">LOCK — 이 아래 결과는 위 설계 단계로 되먹임하지 않음</text>
+<line x1="140" y1="932" x2="1060" y2="932" stroke="#c92a2a" stroke-width="2.5" stroke-dasharray="10 8"/>
+<polyline points="910,905 910,942 500,942 500,960" fill="none" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<text x="930" y="918" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" font-weight="600" fill="#486581">예</text>
+<rect x="220" y="960" width="560" height="95" rx="7" fill="#fff9db" stroke="#829ab1" stroke-width="2"/>
+<rect x="220" y="960" width="560" height="8" rx="4" fill="#f59f00"/>
+<text x="500.0" y="994" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">Locked final-test 1회</text>
+<text x="500.0" y="1022" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">30분 chunk 29/36 · record-majority 16/19</text>
+<text x="500.0" y="1043" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">결과를 모델 선택에 되먹임하지 않음</text>
+<rect x="900" y="960" width="500" height="95" rx="7" fill="#f3f9ff" stroke="#829ab1" stroke-width="2"/>
+<rect x="900" y="960" width="500" height="8" rx="4" fill="#2f80ed"/>
+<text x="1150.0" y="994" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#102a43">결과·근거·한계 통합</text>
+<text x="1150.0" y="1022" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">성능·자원·benchmark·claim registry</text>
+<text x="1150.0" y="1043" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#334e68">24시간·physical AFE·clinical validation은 미검증</text>
+<line x1="780" y1="1007.5" x2="900" y2="1007.5" stroke="#34495e" stroke-width="3" marker-end="url(#flow-arrow)"/>
+<line x1="40" y1="1090" x2="1560" y2="1090" stroke="#d9e2ec" stroke-width="2"/>
+<text x="800" y="1125" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="400" fill="#486581">반복 화살표는 공칭·모델·구현 검증에만 적용되며 locked final-test를 이용한 재튜닝 경로는 없다.</text>
+</svg>

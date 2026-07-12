@@ -50,7 +50,7 @@ REQUIRED_FILES = [
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
 ]
 REQUIRED_FIGURES = [
-    "FIG-01_long_window_motivation.svg", "FIG-02_complete_system_flow.svg",
+    "FIG-01_long_window_motivation.svg", "FIG-02_overall_workflow.svg",
     "FIG-04_multitimescale_architecture.svg", "FIG-08_signed_stream_handoff.svg",
     "FIG-10_classification_summary.svg", "FIG-12_digital_signal_flow.svg",
     "FIG-13_beat_rhythm_path.svg", "FIG-14_morphology_path.svg",
@@ -233,7 +233,7 @@ def main() -> int:
         check(f"FIG-12 Korean label {label}", label in figure12)
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
-        "FIG-02_complete_system_flow.svg": ["전체 시스템 흐름", "공개 ECG", "디지털 RTL", "FPGA 재생"],
+        "FIG-02_overall_workflow.svg": ["전체 연구·검증 workflow", "공개 ECG 데이터", "MATLAB 공칭 pre-validation", "SystemVerilog AFE+ADC XMODEL", "정수 reference와 streaming RTL", "Vivado implementation · IP · FPGA replay", "Locked final-test 1회", "결과·근거·한계 통합", "수정 후 재검증", "LOCK"],
         "FIG-04_multitimescale_architecture.svg": ["다중 시간축 구조", "사건과 지속 상태", "60초 Snapshot", "30분 Final Membrane"],
         "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],

@@ -77,6 +77,7 @@ REQUIRED = [
     "tables/streaming_state_inventory.csv",
     "figures/final/FIG-12_digital_signal_flow.svg",
     "figures/final/FIG-15_analog_signal_flow.svg",
+    "figures/final/FIG-02_overall_workflow.svg",
     "figures/final/MAT-01_afe_chain_overview.png",
     "figures/final/MAT-02_total_frequency_response.png",
     "figures/final/MAT-03_notch_dense_sweep.png",
@@ -387,6 +388,9 @@ def main() -> int:
     check("FIG-12 referenced by manuscript", "FIG-12_digital_signal_flow.svg" in manuscript)
     check("FIG-15 indexed", "FIG-15_analog_signal_flow.svg" in fig_index)
     check("FIG-15 referenced by manuscript", "FIG-15_analog_signal_flow.svg" in manuscript)
+    check("FIG-02 workflow indexed", "FIG-02_overall_workflow.svg" in fig_index)
+    check("FIG-02 workflow referenced by manuscript", "FIG-02_overall_workflow.svg" in manuscript)
+    check("legacy FIG-02 removed from manuscript", "FIG-02_complete_system_flow.svg" not in manuscript)
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
     for required in ["1,777.699800 ms", "54.012600 ms", "32.912687", "0.099 W", "PENDING_BOARD"]:
         check(f"benchmark value promoted with scope: {required}", required in text)
