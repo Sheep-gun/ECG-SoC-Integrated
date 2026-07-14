@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 451
+- Rules checked: 457
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
@@ -86,7 +86,7 @@
 - PASS — required path reports/HISTORY_REWRITE_RESULT.md
 - PASS — required path reports/PUBLISH_REWRITTEN_HISTORY.md
 - PASS — required path private_submission/.gitignore
-- PASS — 12 generated SVG figures
+- PASS — 13 generated SVG figures
 - PASS — 7 inherited MATLAB PNG figures
 - PASS — verified tables present
 - PASS — public remote configured
@@ -446,6 +446,12 @@
 - PASS — approved SVG master installed byte-for-byte: FIG-15_afe_adc_signal_flow.svg
 - PASS — FIG-02 workflow indexed
 - PASS — FIG-02 workflow referenced by manuscript
+- PASS — FIG-RTL hierarchy indexed
+- PASS — FIG-RTL hierarchy referenced by manuscript
+- PASS — FIG-RTL approved SVG master present
+- PASS — FIG-RTL approved SVG installed byte-for-byte
+- PASS — FIG-RTL Vivado source present: FIG-RTL-A_top_hierarchy.svg
+- PASS — FIG-RTL Vivado source present: FIG-RTL-B_snapshot_core_hierarchy.svg
 - PASS — superseded flow figures removed from manuscript and index
 - PASS — superseded flow figure files deleted
 - PASS — manuscript raw-data policy

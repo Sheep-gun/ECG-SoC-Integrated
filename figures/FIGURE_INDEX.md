@@ -211,6 +211,18 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Evidence scope: fixed MATLAB nominal reference figure
 - Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
 
+## FIG-RTL
+
+- File: `figures/final/FIG-RTL_top_with_snapshot_expansion.svg`
+- Preview: `figures/final/FIG-RTL_top_with_snapshot_expansion.png` (3600 × 2300 px)
+- Owner: 양건(통합 편집)
+- Source files: `figures/source/approved_svg/FIG-RTL_top_with_snapshot_expansion.svg`, `artifacts/rtl_elaborated_schematic/FIG-RTL-A_top_hierarchy.svg`, `artifacts/rtl_elaborated_schematic/FIG-RTL-B_snapshot_core_hierarchy.svg`, `artifacts/rtl_elaborated_schematic/hierarchy_report.txt`, `artifacts/rtl_elaborated_schematic/selected_cells_top.txt`, `artifacts/rtl_elaborated_schematic/selected_nets_top.txt`, `artifacts/rtl_elaborated_schematic/selected_cells_snapshot.txt`, `artifacts/rtl_elaborated_schematic/selected_nets_snapshot.txt`, `tools/vivado/generate_publication_rtl_hierarchy_svg.py`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Vivado RTL Elaborated Schematic에서 확인한 Pure RTL 최상위 계층과 `u_snapshot` 내부 실제 module hierarchy를 한 장에 배치한 설계회로 구성도
+- Evidence scope: `snn_ecg_30min_final_top`의 `u_snapshot`·`u_final`과 Snapshot core의 실제 named RTL instances 및 선택된 handoff signals
+- Limitations: Vivado elaboration 근거를 읽기 좋게 재배치한 Figure이며 synthesized gate-level netlist 또는 post-route connectivity가 아니다. Clock/reset, debug/profile, 반복 폭 표기와 비핵심 내부 신호는 생략했다.
+
 ## FIG-P05
 
 - File: `figures/publication/FIG-P05_vivado_implementation/device_view_annotated_publication.svg`

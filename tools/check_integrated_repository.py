@@ -187,6 +187,12 @@ def tracked_text_home_path_audit() -> tuple[list[str], list[str]]:
         if not rel:
             continue
         path = ROOT / rel
+        # A tracked file may be intentionally deleted in the current worktree
+        # before that deletion is committed. Required artifacts are checked by
+        # their dedicated rules below; the home-path audit only inspects files
+        # that still exist and must not crash on a pending deletion.
+        if not path.is_file():
+            continue
         extended = "\\\\?\\" + str(path.resolve()) if os.name == "nt" else str(path)
         with open(extended, "rb") as handle:
             raw = handle.read()
@@ -226,7 +232,7 @@ def main() -> int:
     check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
-    check("12 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 12)
+    check("13 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 13)
     check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
     check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
     check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
@@ -475,6 +481,20 @@ def main() -> int:
         check(f"approved SVG master installed byte-for-byte: {approved_name}", approved.read_bytes() == final.read_bytes())
     check("FIG-02 workflow indexed", "FIG-02_research_workflow.svg" in fig_index)
     check("FIG-02 workflow referenced by manuscript", "FIG-02_research_workflow.svg" in manuscript)
+    check("FIG-RTL hierarchy indexed", "FIG-RTL_top_with_snapshot_expansion.svg" in fig_index)
+    check("FIG-RTL hierarchy referenced by manuscript", "FIG-RTL_top_with_snapshot_expansion.svg" in manuscript)
+    rtl_approved = ROOT / "figures" / "source" / "approved_svg" / "FIG-RTL_top_with_snapshot_expansion.svg"
+    rtl_final = ROOT / "figures" / "final" / "FIG-RTL_top_with_snapshot_expansion.svg"
+    check("FIG-RTL approved SVG master present", rtl_approved.is_file())
+    check(
+        "FIG-RTL approved SVG installed byte-for-byte",
+        rtl_approved.is_file() and rtl_final.is_file() and rtl_approved.read_bytes() == rtl_final.read_bytes(),
+    )
+    for rtl_schematic_source in ["FIG-RTL-A_top_hierarchy.svg", "FIG-RTL-B_snapshot_core_hierarchy.svg"]:
+        check(
+            f"FIG-RTL Vivado source present: {rtl_schematic_source}",
+            (ROOT / "artifacts" / "rtl_elaborated_schematic" / rtl_schematic_source).is_file(),
+        )
     superseded_flows = [
         "FIG-02_recordwise_validation_workflow.svg", "FIG-04_multitimescale_architecture.svg",
         "FIG-12_digital_signal_flow.svg", "FIG-13_beat_rhythm_path.svg",

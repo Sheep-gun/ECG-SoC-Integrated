@@ -1,0 +1,26 @@
+Vivado RTL Elaborated Design hierarchy
+TOP=snn_ecg_30min_final_top
+PART=xc7a100tcsg324-1
+FIXED_DIGITAL_COMMIT=c6b80de19cdcad5b7e43fe7835588b629d847f75
+NON_PRIMITIVE_HIERARCHICAL_CELL_COUNT=19
+
+TOP_MODULE=snn_ecg_30min_final_top (design root; timer/control FSM are internal RTL logic, not child modules)
+CELL=u_final | REF_NAME=final_membrane_layer | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot | REF_NAME=snn_ecg_3feat_top | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_class | REF_NAME=class_score_neurons | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_dscr | REF_NAME=dscr_spike_counter | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_ectopic | REF_NAME=ectopic_pair_neuron | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_etmc | REF_NAME=etmc_feature | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_event_encoder | REF_NAME=ecg_event_encoder_adaptive | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_input_normalizer | REF_NAME=snn_ecg_input_normalizer | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_ipb | REF_NAME=ipb_feature | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_nsr_gate | REF_NAME=nsr_normality_gate | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_pnn | REF_NAME=pnn_rhythm_predictor | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_qrs_detector | REF_NAME=qrs_lif_detector | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_qrs_maf | REF_NAME=qrs_maf_neuron | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_ram | REF_NAME=ram_peak_accumulator | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rbbb_late_gate | REF_NAME=rbbb_lateslope_gate | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rbbb_qrs_delay | REF_NAME=rbbb_qrs_delay_bank | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rcd | REF_NAME=rcd_feature | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rcd2 | REF_NAME=rcd2_feature | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rdm | REF_NAME=rdm_variability_neuron | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>

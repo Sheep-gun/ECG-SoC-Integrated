@@ -1,0 +1,33 @@
+Vivado RTL elaboration minimum source manifest
+TOP=snn_ecg_30min_final_top
+PART=xc7a100tcsg324-1
+FIXED_DIGITAL_COMMIT=c6b80de19cdcad5b7e43fe7835588b629d847f75
+
+repository-relative source path | defined module | parent module / instance | include dependency
+components/digital_accelerator/rtl/snn_ecg_30min_final_top.v | snn_ecg_30min_final_top | design top | no
+components/digital_accelerator/rtl/final_membrane_layer.v | final_membrane_layer | snn_ecg_30min_final_top / u_final | yes: strict_recordwise_locked_params.vh
+components/digital_accelerator/rtl/strict_recordwise_locked_params.vh | localparam include header | final_membrane_layer / textual include | include guard STRICT_RECORDWISE_LOCKED_PARAMS_VH
+components/digital_accelerator/rtl/core/snn_ecg_3feat_top.v | snn_ecg_3feat_top | snn_ecg_30min_final_top / u_snapshot | no
+components/digital_accelerator/rtl/core/snn_ecg_input_normalizer.v | snn_ecg_input_normalizer | snn_ecg_3feat_top / u_input_normalizer | no
+components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v | ecg_event_encoder_adaptive | snn_ecg_3feat_top / u_event_encoder | no
+components/digital_accelerator/rtl/core/qrs_lif_detector.v | qrs_lif_detector | snn_ecg_3feat_top / u_qrs_detector | no
+components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v | pnn_rhythm_predictor | snn_ecg_3feat_top / u_pnn | no
+components/digital_accelerator/rtl/core/dscr_spike_counter.v | dscr_spike_counter | snn_ecg_3feat_top / u_dscr | no
+components/digital_accelerator/rtl/core/ram_peak_accumulator.v | ram_peak_accumulator | snn_ecg_3feat_top / u_ram | no
+components/digital_accelerator/rtl/core/rdm_variability_neuron.v | rdm_variability_neuron | snn_ecg_3feat_top / u_rdm | no
+components/digital_accelerator/rtl/core/ectopic_pair_neuron.v | ectopic_pair_neuron | snn_ecg_3feat_top / u_ectopic | no
+components/digital_accelerator/rtl/core/qrs_maf_neuron.v | qrs_maf_neuron | snn_ecg_3feat_top / u_qrs_maf | no
+components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v | rbbb_qrs_delay_bank | snn_ecg_3feat_top / u_rbbb_qrs_delay | no
+components/digital_accelerator/rtl/core/class_score_neurons.v | class_score_neurons | snn_ecg_3feat_top / u_class | no
+components/digital_accelerator/rtl/core/abandoned_feature_stubs.v | rcd_feature | snn_ecg_3feat_top / u_rcd | no
+components/digital_accelerator/rtl/core/abandoned_feature_stubs.v | rcd2_feature | snn_ecg_3feat_top / u_rcd2 | no
+components/digital_accelerator/rtl/core/abandoned_feature_stubs.v | ipb_feature | snn_ecg_3feat_top / u_ipb | no
+components/digital_accelerator/rtl/core/abandoned_feature_stubs.v | nsr_normality_gate | snn_ecg_3feat_top / u_nsr_gate | no
+components/digital_accelerator/rtl/core/abandoned_feature_stubs.v | rbbb_lateslope_gate | snn_ecg_3feat_top / u_rbbb_late_gate | no
+components/digital_accelerator/rtl/core/abandoned_feature_stubs.v | etmc_feature | snn_ecg_3feat_top / u_etmc | no
+
+Excluded as outside the recursive Pure RTL dependency closure:
+- components/digital_accelerator/rtl/axi/*
+- components/digital_accelerator/rtl/common/reset_sync.v
+- components/digital_accelerator/rtl/core/ecg_event_encoder.v
+- components/digital_accelerator/rtl/generated/strict_recordwise_locked_params_pkg.sv

@@ -1,0 +1,17 @@
+Figure B selected/inspected handoff nets from the elaborated design
+SCHEMATIC_SELECTION=strong_event; beat_spike; pnn_match_spike; pnn_mismatch_spike; dscr_valid_slope_spike; dscr_sign_flip_spike; ram_amp_spike; rdm_level_spike[14:0]; ectopic_pair_spike; qrs_maf_valid_spike; rbbb_like_beat_spike
+SIGNAL=*adc_frontend* | MATCHES=12 | FIRST=u_snapshot/adc_frontend_d[0] | LAST=u_snapshot/adc_frontend_d[11]
+SIGNAL=*strong_event* | MATCHES=8 | FIRST=u_snapshot/strong_event | LAST=u_snapshot/u_qrs_maf/strong_event
+SIGNAL=*beat_spike* | MATCHES=25 | FIRST=beat_spike | LAST=u_snapshot/u_rbbb_qrs_delay/rbbb_like_beat_spike_i_n_0
+SIGNAL=*pnn_match_spike* | MATCHES=12 | FIRST=pnn_match_spike | LAST=u_snapshot/u_rbbb_qrs_delay/pnn_match_spike
+SIGNAL=*pnn_mismatch_spike* | MATCHES=13 | FIRST=pnn_mismatch_spike | LAST=u_snapshot/u_rbbb_qrs_delay/pnn_mismatch_spike
+SIGNAL=*dscr_sign_flip_spike* | MATCHES=4 | FIRST=dscr_sign_flip_spike | LAST=u_snapshot/u_qrs_maf/dscr_sign_flip_spike
+SIGNAL=*ram_amp_spike* | MATCHES=7 | FIRST=ram_amp_spike | LAST=u_snapshot/u_ram/ram_amp_spike_i_n_0
+SIGNAL=*rdm_level_spike* | MATCHES=100 | FIRST=rdm_level_spike[4] | LAST=u_snapshot/u_rdm/rdm_level_spike_i_n_14
+SIGNAL=*ectopic_pair_spike* | MATCHES=12 | FIRST=ectopic_pair_spike | LAST=u_snapshot/u_ectopic/ectopic_pair_spike_i_n_0
+SIGNAL=*qrs_maf_spike* | MATCHES=3 | FIRST=qrs_maf_spike | LAST=u_snapshot/qrs_maf_spike0
+SIGNAL=*rbbb_qrs_like_beat_spike* | MATCHES=3 | FIRST=rbbb_qrs_like_beat_spike | LAST=u_snapshot/u_class/rbbb_qrs_like_beat_spike
+SIGNAL=c24_mem_nsr* | MATCHES=257 | FIRST=c24_mem_nsr[0] | LAST=u_snapshot/u_class/c24_mem_nsr_i_n_0
+SIGNAL=c24_mem_chf* | MATCHES=257 | FIRST=c24_mem_chf[0] | LAST=u_snapshot/u_class/c24_mem_chf_i_n_0
+SIGNAL=c24_mem_arr* | MATCHES=257 | FIRST=c24_mem_arr[0] | LAST=u_snapshot/u_class/c24_mem_arr_i_n_0
+SIGNAL=c24_mem_aff* | MATCHES=257 | FIRST=c24_mem_aff[0] | LAST=u_snapshot/u_class/c24_mem_aff_i_n_0

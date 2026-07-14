@@ -1,0 +1,12 @@
+Figure B selected principal elaborated cells
+Selection is intentionally limited to 10 actual RTL instances; omitted support instances remain listed in hierarchy_report.txt.
+CELL=u_snapshot/u_class | REF_NAME=class_score_neurons | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_dscr | REF_NAME=dscr_spike_counter | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_ectopic | REF_NAME=ectopic_pair_neuron | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_event_encoder | REF_NAME=ecg_event_encoder_adaptive | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_pnn | REF_NAME=pnn_rhythm_predictor | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_qrs_detector | REF_NAME=qrs_lif_detector | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_qrs_maf | REF_NAME=qrs_maf_neuron | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_ram | REF_NAME=ram_peak_accumulator | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rbbb_qrs_delay | REF_NAME=rbbb_qrs_delay_bank | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
+CELL=u_snapshot/u_rdm | REF_NAME=rdm_variability_neuron | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>

@@ -1,0 +1,11 @@
+Vivado command/property capability probe
+Vivado version: 2020.2
+synth_design -rtl: 1
+synth_design -flatten_hierarchy none: 1
+synth_1 run property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY: 1
+show_schematic command: 1
+write_schematic command: 1
+write_schematic PDF: 1
+write_schematic SVG: 1
+write_schematic PNG: 0
+unsupported commands confirmed by help probe: export_schematic, save_schematic_pdf

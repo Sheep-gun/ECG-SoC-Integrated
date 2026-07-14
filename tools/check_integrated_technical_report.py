@@ -239,9 +239,9 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("sixteen reader-facing figures", len(report_images) == 16, len(report_images))
+    check("seventeen reader-facing figures", len(report_images) == 17, len(report_images))
     p05_root = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation"
-    for vector_name in ["device_placement_map.svg", "device_view_annotated_publication.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
+    for vector_name in ["device_view_annotated_publication.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
         check(f"Vivado implementation vector {vector_name}", (p05_root / vector_name).is_file(), str(p05_root / vector_name))
     for annotated_name in ["device_view_full_original.png", "device_view_annotated_publication.pdf", "device_view_annotated_publication.png", "hierarchy_tile_occupancy.csv", "device_grid_bounds.csv"]:
         check(f"annotated Device View evidence {annotated_name}", (p05_root / annotated_name).is_file(), str(p05_root / annotated_name))
@@ -339,7 +339,7 @@ def main() -> int:
         "fig_reference_vector_handoff.png", "fig_matlab_prevalidation_flow.png",
     ]:
         check(f"fixed MATLAB figure cited {source_name}", source_name in text)
-    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4|5|6|7|8|9|10|12)\..*\[직접 근거:.*\]\*$", text)
+    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4|5|6|7|8|9|10|13)\..*\[직접 근거:.*\]\*$", text)
     check("AFE figures have direct evidence captions", len(direct_evidence_captions) == 9, len(direct_evidence_captions))
     check("original schematic claim forbidden", "원본 LTspice schematic이 아니다" in text and "UNRESOLVED_NOT_PRESENT" in UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig"))
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")

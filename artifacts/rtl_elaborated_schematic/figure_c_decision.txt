@@ -1,0 +1,3 @@
+GENERATED=NO
+NON_PRIMITIVE_CHILDREN_UNDER_U_FINAL=0
+REASON=final_membrane_layer has no child source-module instances; expanding it would expose RTL operators/registers rather than a readable module hierarchy.

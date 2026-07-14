@@ -1,0 +1,5 @@
+Property support on elaborated cell u_snapshot
+REF_NAME | supported=1 | value=snn_ecg_3feat_top
+ORIG_REF_NAME | supported=1 | value=
+IS_PRIMITIVE | supported=1 | value=0
+IS_LEAF | supported=0 | value=<unsupported>
