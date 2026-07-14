@@ -93,6 +93,8 @@ REQUIRED = [
     "figures/final/FIG-12_digital_processing_flow.svg",
     "figures/final/FIG-15_afe_adc_signal_flow.svg",
     "figures/final/FIG-02_research_workflow.svg",
+    "figures/source/approved_svg/FIG-12_digital_processing_flow.svg",
+    "figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg",
     "figures/final/MAT-01_afe_chain_overview.png",
     "figures/final/MAT-02_total_frequency_response.png",
     "figures/final/MAT-03_notch_dense_sweep.png",
@@ -467,6 +469,10 @@ def main() -> int:
     check("FIG-12 referenced by manuscript", "FIG-12_digital_processing_flow.svg" in manuscript)
     check("FIG-15 indexed", "FIG-15_afe_adc_signal_flow.svg" in fig_index)
     check("FIG-15 referenced by manuscript", "FIG-15_afe_adc_signal_flow.svg" in manuscript)
+    for approved_name in ["FIG-12_digital_processing_flow.svg", "FIG-15_afe_adc_signal_flow.svg"]:
+        approved = ROOT / "figures" / "source" / "approved_svg" / approved_name
+        final = ROOT / "figures" / "final" / approved_name
+        check(f"approved SVG master installed byte-for-byte: {approved_name}", approved.read_bytes() == final.read_bytes())
     check("FIG-02 workflow indexed", "FIG-02_research_workflow.svg" in fig_index)
     check("FIG-02 workflow referenced by manuscript", "FIG-02_research_workflow.svg" in manuscript)
     superseded_flows = [

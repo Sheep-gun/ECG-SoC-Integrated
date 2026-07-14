@@ -77,6 +77,11 @@
     "evidence_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75"
   },
   "figure_layout": {
+    "approved_svg_master": {
+      "FIG-12": "figures/source/approved_svg/FIG-12_digital_processing_flow.svg",
+      "FIG-15": "figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg",
+      "regeneration": "copy byte-for-byte to figures/final"
+    },
     "workflow": {
       "main_center_x": 550,
       "main_block_width": 600,

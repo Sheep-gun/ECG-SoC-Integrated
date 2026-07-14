@@ -116,7 +116,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 - File: `figures/final/FIG-12_digital_processing_flow.svg`
 - Owner: 양건(편집)
-- Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
+- Source files: `figures/source/approved_svg/FIG-12_digital_processing_flow.svg`, `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 네 morphology 증거가 서로 독립적인 병렬 경로로 class scoring에 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow
@@ -127,7 +127,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 - File: `figures/final/FIG-15_afe_adc_signal_flow.svg`
 - Owner: 양건(통합 편집)
-- Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
+- Source files: `figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg`, `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: 차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow

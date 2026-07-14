@@ -258,17 +258,24 @@ def main() -> int:
         matches = [p for p in report_images if Path(p).name == filename]
         check(f"figure referenced {filename}", len(matches) == 1, matches)
         check(f"figure exists {filename}", (ROOT / "figures" / "final" / filename).is_file())
-    figure12 = (ROOT / "figures" / "final" / "FIG-12_digital_processing_flow.svg").read_text(encoding="utf-8")
-    for label in ["Signed ECG", "ΔECG", "Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60 s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
+    approved_svg_root = ROOT / "figures" / "source" / "approved_svg"
+    figure12_path = ROOT / "figures" / "final" / "FIG-12_digital_processing_flow.svg"
+    figure15_path = ROOT / "figures" / "final" / "FIG-15_afe_adc_signal_flow.svg"
+    figure12_master = approved_svg_root / figure12_path.name
+    figure15_master = approved_svg_root / figure15_path.name
+    check("FIG-12 approved SVG master exists", figure12_master.is_file(), str(figure12_master))
+    check("FIG-15 approved SVG master exists", figure15_master.is_file(), str(figure15_master))
+    check("FIG-12 final matches approved SVG master", figure12_master.is_file() and figure12_path.read_bytes() == figure12_master.read_bytes())
+    check("FIG-15 final matches approved SVG master", figure15_master.is_file() and figure15_path.read_bytes() == figure15_master.read_bytes())
+    figure12 = figure12_path.read_text(encoding="utf-8")
+    for label in ["Signed ECG", "ΔECG", "Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
-    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 20 and figure12.count("<circle") >= 3)
-    check("FIG-12 rhythm path preserved", 'points="660,270 660,117 780,117' in figure12 and 'points="930,117 970,117' in figure12)
-    check("FIG-12 Strong-Event and QRS feed morphology bus", 'points="465,360 465,440 610,440' in figure12 and 'points="660,360 660,440' in figure12)
-    parallel_morphology_rects = re.findall(r'<rect x="(?:630|770|910|1050)" y="480" width="120" height="80"', figure12)
-    check("FIG-12 four morphology blocks aligned in parallel", len(parallel_morphology_rects) == 4, len(parallel_morphology_rects))
-    check("FIG-12 no serial morphology arrows", 'points="720,545 720,580' not in figure12 and 'points="925,545 925,580' not in figure12)
+    check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 20 and all(label in figure12 for label in ["Rhythm Feature Path", "Morphology Feature Path", "Feature Accumulation"]))
+    check("FIG-12 rhythm path preserved", figure12.index("RR Counter") < figure12.index("PNN / RDM /") < figure12.index("Feature Accumulation"))
+    morphology_positions = [figure12.index(label) for label in [">DSCR<", ">RAM<", ">QRS MAF<", ">RBBB-like<"]]
+    check("FIG-12 four morphology blocks remain independent peers", morphology_positions == sorted(morphology_positions) and len(set(morphology_positions)) == 4)
     check("FIG-12 scoring and 30-Snapshot accumulation explicit", "Feature Accumulation" in figure12 and "30-Snapshot" in figure12 and "30 min Final" in figure12)
-    check("FIG-12 white vector canvas", 'fill="#ffffff"' in figure12 and figure12.lstrip().startswith("<svg"))
+    check("FIG-12 white vector canvas", 'fill="#ffffff"' in figure12 and "<svg" in figure12[:400])
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
         "FIG-02_research_workflow.svg": ["Public ECG Data", "Record-wise Train / Validation /", "Locked Test Split", "Front End Verification", "(MATLAB, XMODEL)", "Digital Model / RTL Development", "Digital Validation", "Criteria Met?", "No", "Yes", "Design Lock", "Locked Test Data", "(Held-out)", "Locked Final Test", "(Used Once Only)", "Implementation Verification", "(RTL / IP / FPGA)", "Analog-Digital Integration Verification", "(XMODEL – RTL End-to-End)", "Final Results &amp; Report"],
@@ -281,7 +288,7 @@ def main() -> int:
         for label in labels:
             check(f"reader-facing figure label {filename}: {label}", label in svg)
     figure02 = (ROOT / "figures" / "final" / "FIG-02_research_workflow.svg").read_text(encoding="utf-8")
-    figure15 = (ROOT / "figures" / "final" / "FIG-15_afe_adc_signal_flow.svg").read_text(encoding="utf-8")
+    figure15 = figure15_path.read_text(encoding="utf-8")
     check("FIG-02 data-separated validation flow with pre-lock correction loop", "<polygon" in figure02 and figure02.count("<polyline") >= 12)
     check("FIG-02 locked test follows Design Lock in the main path", figure02.index("Design Lock") < figure02.index("Locked Final Test") and "(Used Once Only)" in figure02)
     check("FIG-02 correction loop returns only to digital development", 'points="310,730 120,730 120,530 250,530' in figure02 and "Digital Model / RTL Development" in figure02)
@@ -290,11 +297,10 @@ def main() -> int:
     check("FIG-02 held-out data feeds only Locked Final Test", figure02.count('points="1045,430 1045,1080 850,1080') == 1)
     check("FIG-02 post-lock central flow has no branch", all(path in figure02 for path in ['points="550,980 550,1030', 'points="550,1130 550,1180', 'points="550,1280 550,1330', 'points="550,1430 550,1480']))
     check("FIG-02 white vector canvas", 'fill="#ffffff"' in figure02 and figure02.lstrip().startswith("<svg"))
-    check("FIG-15 differential merge and stress injection", "<polygon" in figure15 and figure15.count('stroke-dasharray="8 7"') == 8)
-    check("FIG-15 R/C mismatch targets only IA and Twin-T", 'points="628,123 628,170 540,170 540,238' in figure15 and 'points="628,170 780,170 780,326' in figure15)
-    check("FIG-15 op-amp model targets IA notch and LPF", all(path in figure15 for path in ['points="980,45 980,20 420,20 420,245 443,245', 'points="980,123 980,205 810,205 810,326', 'points="980,205 1030,205 1030,326']))
-    check("FIG-15 ADC non-ideality has one code-boundary target", figure15.count('points="1410,123 1410,245 1360,245 1360,386') == 1 and 'cx="1360" cy="393"' in figure15)
-    check("FIG-15 white vector canvas", 'fill="#ffffff"' in figure15 and figure15.lstrip().startswith("<svg"))
+    check("FIG-15 differential merge and stress injection", "<polygon" in figure15 and figure15.count("stroke-dasharray") >= 8)
+    check("FIG-15 approved stress labels retained", all(label in figure15 for label in ["Input Disturbance Injection", "R/C Mismatch Model", "Op-Amp GBW / VOS Model", "ADC Non-Ideality Injection"]))
+    check("FIG-15 ADC output code boundary retained", 'points="1360,393 1385,393"' in figure15 and "marker-mid:url(#Dot)" in figure15)
+    check("FIG-15 white vector canvas", 'fill="#ffffff"' in figure15 and "<svg" in figure15[:500])
     check("reader-facing caption states parallel morphology grouping", "네 파형 형태 블록은 독자를 위한 개념적 묶음" in text and "실제 post-synthesis netlist 연결을 뜻하지 않는다" in text)
     check("reader-facing caption states analog stress scope", "유한 GBW는 능동 연산증폭기 단계 전체에서 평가했고 VOS 스트레스는 IA 입력쌍에 적용했다" in text)
     check("reader-facing caption forbids post-lock retuning", "모델·문턱값·구조 재조정을 허용하지 않는다" in text)

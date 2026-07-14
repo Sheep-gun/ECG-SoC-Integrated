@@ -12,6 +12,7 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "figures" / "final"
 SRC = ROOT / "figures" / "source"
+APPROVED_SVG = SRC / "approved_svg"
 DIGITAL = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
 XMODEL = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB = "907f7e1f081a9d6a5703a32095d962143315a192"
@@ -61,6 +62,14 @@ def bar(lines, x, y, width, value, label, color="#2f80ed"):
 
 def write_svg(name: str, lines: list[str]) -> None:
     (OUT / name).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def install_approved_svg(name: str) -> None:
+    """Install a user-approved editable SVG master without rasterization."""
+    master = APPROVED_SVG / name
+    if not master.is_file():
+        raise FileNotFoundError(f"approved SVG master is missing: {master}")
+    shutil.copyfile(master, OUT / name)
 
 
 def paper_canvas(width: int, height: int, description: str) -> list[str]:
@@ -158,6 +167,11 @@ def main() -> int:
             "evidence_commit": DIGITAL,
         },
         "figure_layout": {
+            "approved_svg_master": {
+                "FIG-12": "figures/source/approved_svg/FIG-12_digital_processing_flow.svg",
+                "FIG-15": "figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg",
+                "regeneration": "copy byte-for-byte to figures/final",
+            },
             "workflow": {
                 "main_center_x": 550,
                 "main_block_width": 600,
@@ -359,7 +373,10 @@ def main() -> int:
         s += paper_path([(1620, y), (1645, y)], arrow=False)
         s.append(txt(1652, y + 6, label, 16, "#182230", 700))
     s.append('</svg>')
-    write_svg("FIG-12_digital_processing_flow.svg", s)
+    # The editable Inkscape SVG is the approved source master. Keep the
+    # programmatic construction above as a semantic layout reference, but
+    # install the approved vector byte-for-byte so manual alignment survives.
+    install_approved_svg("FIG-12_digital_processing_flow.svg")
 
     # FIG-15: user-approved AFE/ADC flow, redrawn as a lossless vector. Solid
     # arrows carry the signal; dashed arrows inject disturbances/non-idealities.
@@ -420,7 +437,7 @@ def main() -> int:
 
     s.append(txt(850, 625, "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model", 17, "#344054", 600, "middle"))
     s.append('</svg>')
-    write_svg("FIG-15_afe_adc_signal_flow.svg", s)
+    install_approved_svg("FIG-15_afe_adc_signal_flow.svg")
 
     # Preserve the seven fixed MATLAB figures byte-for-byte in the integrated
     # figure package. Their captions and limitations remain owned by MATLAB.
@@ -448,8 +465,8 @@ def main() -> int:
         ("FIG-09", "figures/final/FIG-09_digital_validation_hierarchy.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Digital validation hierarchy", "integer reference through board replay", "physical analog not included"),
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
-        ("FIG-12", "figures/final/FIG-12_digital_processing_flow.svg", "양건(편집)", ["components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 네 morphology 증거가 서로 독립적인 병렬 경로로 class scoring에 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow", "reader-facing digital architecture with four parallel morphology evidence paths and 30-Snapshot accumulation", "conceptual grouping, not literal post-synthesis netlist connectivity; block internals remain in the body"),
-        ("FIG-15", "figures/final/FIG-15_afe_adc_signal_flow.svg", "양건(통합 편집)", ["components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow", "finite GBW across active op-amp stages, VOS stress at the IA input pair, and one ADC code-boundary injection", "not the missing original LTspice schematic; component values and stress details remain in the body"),
+        ("FIG-12", "figures/final/FIG-12_digital_processing_flow.svg", "양건(편집)", ["figures/source/approved_svg/FIG-12_digital_processing_flow.svg", "components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 네 morphology 증거가 서로 독립적인 병렬 경로로 class scoring에 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow", "reader-facing digital architecture with four parallel morphology evidence paths and 30-Snapshot accumulation", "conceptual grouping, not literal post-synthesis netlist connectivity; block internals remain in the body"),
+        ("FIG-15", "figures/final/FIG-15_afe_adc_signal_flow.svg", "양건(통합 편집)", ["figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg", "components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow", "finite GBW across active op-amp stages, VOS stress at the IA input pair, and one ADC code-boundary injection", "not the missing original LTspice schematic; component values and stress details remain in the body"),
     ]
     for fid, source_name, output_name, caption in inherited_matlab_figures:
         figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence"))

@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 447
+- Rules checked: 451
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
@@ -69,6 +69,8 @@
 - PASS — required path figures/final/FIG-12_digital_processing_flow.svg
 - PASS — required path figures/final/FIG-15_afe_adc_signal_flow.svg
 - PASS — required path figures/final/FIG-02_research_workflow.svg
+- PASS — required path figures/source/approved_svg/FIG-12_digital_processing_flow.svg
+- PASS — required path figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg
 - PASS — required path figures/final/MAT-01_afe_chain_overview.png
 - PASS — required path figures/final/MAT-02_total_frequency_response.png
 - PASS — required path figures/final/MAT-03_notch_dense_sweep.png
@@ -440,6 +442,8 @@
 - PASS — FIG-12 referenced by manuscript
 - PASS — FIG-15 indexed
 - PASS — FIG-15 referenced by manuscript
+- PASS — approved SVG master installed byte-for-byte: FIG-12_digital_processing_flow.svg
+- PASS — approved SVG master installed byte-for-byte: FIG-15_afe_adc_signal_flow.svg
 - PASS — FIG-02 workflow indexed
 - PASS — FIG-02 workflow referenced by manuscript
 - PASS — superseded flow figures removed from manuscript and index
