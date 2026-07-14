@@ -3,10 +3,10 @@ SNN ECG Model S 통합 프로젝트 안내
 팀원에게 전달할 때는 이 폴더 전체를 압축하면 됩니다.
 
 압축 대상:
-C:\Users\YangGeon\SNN_ECG_RESTORE_MODEL_S
+<LOCAL_DIGITAL_REPOSITORY>
 
 Vivado에서 열어야 할 단일 통합 프로젝트:
-C:\Users\YangGeon\SNN_ECG_RESTORE_MODEL_S\vivado_project\SNN_ECG_ModelS_Unified\SNN_ECG_ModelS_Unified.xpr
+<LOCAL_DIGITAL_REPOSITORY>\vivado_project\SNN_ECG_ModelS_Unified\SNN_ECG_ModelS_Unified.xpr
 
 합성/비트스트림용 top module:
 nexys_a7_model_s_smoke_top

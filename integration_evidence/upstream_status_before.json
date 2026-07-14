@@ -4,7 +4,7 @@
   "repositories": [
     {
       "component": "matlab_prevalidation",
-      "repository_root": "C:\\Users\\YangGeon\\Desktop\\Analog\\ECG-SoC-MATLAB-AFE-ADC-Prevalidation",
+      "repository_root": "<LOCAL_MATLAB_REPOSITORY>",
       "origin": "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation.git",
       "active_branch": "main",
       "active_head": "907f7e1f081a9d6a5703a32095d962143315a192",
@@ -16,7 +16,7 @@
     },
     {
       "component": "afe_xmodel",
-      "repository_root": "C:\\Users\\YangGeon\\Desktop\\Analog\\ECG-SoC",
+      "repository_root": "<LOCAL_AFE_XMODEL_REPOSITORY>",
       "origin": "https://github.com/Hwan-22/ECG-SoC.git",
       "active_branch": "main",
       "active_head": "4756a5086023547328ef44fd5fd87da3c250dc39",
@@ -28,7 +28,7 @@
     },
     {
       "component": "digital_accelerator",
-      "repository_root": "C:\\Users\\YangGeon\\SNN ECG Classifier",
+      "repository_root": "<LOCAL_DIGITAL_REPOSITORY>",
       "origin": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier.git",
       "active_branch": "codex/accelerator-benefit-benchmark",
       "active_head": "5b6f01192dd84cc02022a85449a917532c1b3dca",

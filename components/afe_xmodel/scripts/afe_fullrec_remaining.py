@@ -10,7 +10,7 @@ import numpy as np
 sys.path.insert(0, _ROOT + "/scripts")
 from afe_full import read_record_1ksps, afe_adc_unsigned
 
-ROOT = "/mnt/c/Users/USER/Downloads/handoff_remaining/handoff_to_suhwan_remaining_records"
+ROOT = "<LOCAL_DATA_ROOT>/handoff_to_suhwan_remaining_records"
 MAN_IN = ROOT + "/remaining_records_manifest.csv"
 RECDIR = ROOT + "/remaining_original_records"
 ECG = _ROOT + ""

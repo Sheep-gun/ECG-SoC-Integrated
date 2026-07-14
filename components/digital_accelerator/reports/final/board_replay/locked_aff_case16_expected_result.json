@@ -1,5 +1,5 @@
 {
-  "source": "C:\\Users\\YangGeon\\SNN ECG Classifier\\reports\\final\\fulltop_xsim_locked_class_cases_predictions.csv",
+  "source": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\fulltop_xsim_locked_class_cases_predictions.csv",
   "case_id": "16",
   "expected_class": 3,
   "final_pred": 3,

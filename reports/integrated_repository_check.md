@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 298
+- Rules checked: 447
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
@@ -19,6 +19,7 @@
 - PASS — required path source_of_truth/claim_registry.csv
 - PASS — required path source_of_truth/artifact_manifest.csv
 - PASS — required path source_of_truth/benchmark_import_manifest.csv
+- PASS — required path source_of_truth/path_redaction_manifest.csv
 - PASS — required path source_of_truth/unresolved_artifacts.csv
 - PASS — required path source_of_truth/ownership_matrix.csv
 - PASS — required path source_of_truth/terminology.yaml
@@ -87,7 +88,10 @@
 - PASS — 7 inherited MATLAB PNG figures
 - PASS — verified tables present
 - PASS — public remote configured
+- PASS — tracked UTF-8 text contains no personal home path
+- PASS — tracked non-binary text is UTF-8 decodable
 - PASS — before state recorded: matlab_prevalidation
+- PASS — local upstream path configured: matlab_prevalidation
 - PASS — upstream exists: matlab_prevalidation
 - PASS — origin matches: matlab_prevalidation
 - PASS — fixed commit exists: matlab_prevalidation
@@ -95,6 +99,7 @@
 - PASS — upstream HEAD unchanged or authorized benchmark advance: matlab_prevalidation
 - PASS — tracked status unchanged or authorized benchmark-only drift: matlab_prevalidation
 - PASS — before state recorded: afe_xmodel
+- PASS — local upstream path configured: afe_xmodel
 - PASS — upstream exists: afe_xmodel
 - PASS — origin matches: afe_xmodel
 - PASS — fixed commit exists: afe_xmodel
@@ -102,6 +107,7 @@
 - PASS — upstream HEAD unchanged or authorized benchmark advance: afe_xmodel
 - PASS — tracked status unchanged or authorized benchmark-only drift: afe_xmodel
 - PASS — before state recorded: digital_accelerator
+- PASS — local upstream path configured: digital_accelerator
 - PASS — upstream exists: digital_accelerator
 - PASS — origin matches: digital_accelerator
 - PASS — fixed commit exists: digital_accelerator
@@ -110,6 +116,149 @@
 - PASS — upstream HEAD unchanged or authorized benchmark advance: digital_accelerator
 - PASS — tracked status unchanged or authorized benchmark-only drift: digital_accelerator
 - PASS — curated artifact manifest has 913 rows
+- PASS — path-redaction manifest is nonempty
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/ip_repo/snn_ecg_axi_accelerator/component.xml
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/ip_repo/snn_ecg_axi_accelerator/component.xml
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_aff_case16_expected_result.json
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_aff_case16_expected_result.json
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_aff_case16_summary.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_aff_case16_summary.md
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_arr_case45_expected_result.json
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_arr_case45_expected_result.json
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_arr_case45_summary.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_arr_case45_summary.md
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_chf_case91_expected_result.json
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_chf_case91_expected_result.json
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_chf_case91_summary.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_chf_case91_summary.md
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_nsr_case117_expected_result.json
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_nsr_case117_expected_result.json
+- PASS — path-redaction file exists: components/afe_xmodel/digital_block/reports/final/board_replay/locked_nsr_case117_summary.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/digital_block/reports/final/board_replay/locked_nsr_case117_summary.md
+- PASS — path-redaction file exists: components/afe_xmodel/docs/digital_design/Actual Project/model_s_feature_graphs/README.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/docs/digital_design/Actual Project/model_s_feature_graphs/README.md
+- PASS — path-redaction file exists: components/afe_xmodel/docs/digital_design/Actual Project/model_s_feature_graphs/model_s_feature_plot_manifest.csv
+- PASS — path-redaction sanitized hash: components/afe_xmodel/docs/digital_design/Actual Project/model_s_feature_graphs/model_s_feature_plot_manifest.csv
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/README_OPEN_THIS_PROJECT.txt
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/README_OPEN_THIS_PROJECT.txt
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_board_demo_core_timing.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_board_demo_core_timing.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_dataset.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_dataset.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_dataset.v.bak_before_eerg
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_dataset.v.bak_before_eerg
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_test.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_test.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_train.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_train.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_train_rbbb_subset.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_train_rbbb_subset.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_val.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sim_1/new/tb_snn_ecg_3feat_record_strict_val.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/SNN_ECG.srcs/sources_1/board/nexys_a7_model_s_smoke_top.v
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/SNN_ECG.srcs/sources_1/board/nexys_a7_model_s_smoke_top.v
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/board_smoke/nexys_a7_model_s_smoke_summary.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/board_smoke/nexys_a7_model_s_smoke_summary.md
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/board_smoke/nexys_a7_model_s_smoke_timing_summary.rpt
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/board_smoke/nexys_a7_model_s_smoke_timing_summary.rpt
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/board_smoke/nexys_a7_model_s_smoke_utilization.rpt
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/board_smoke/nexys_a7_model_s_smoke_utilization.rpt
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_final_report.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_final_report.md
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_test_case_summary.csv
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_test_case_summary.csv
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_train_case_summary.csv
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_train_case_summary.csv
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_val_case_summary.csv
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/model_s_rtl/model_s_rtl_val_case_summary.csv
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/synth/model_s_rtl_synth_report.md
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/synth/model_s_rtl_synth_report.md
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/synth/restore_model_s_timing_summary.rpt
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/synth/restore_model_s_timing_summary.rpt
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/synth/restore_model_s_utilization.rpt
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/synth/restore_model_s_utilization.rpt
+- PASS — path-redaction file exists: components/afe_xmodel/fpga/reports/synth/restore_model_s_utilization_hier.rpt
+- PASS — path-redaction sanitized hash: components/afe_xmodel/fpga/reports/synth/restore_model_s_utilization_hier.rpt
+- PASS — path-redaction file exists: components/afe_xmodel/scripts/afe_full.py
+- PASS — path-redaction sanitized hash: components/afe_xmodel/scripts/afe_full.py
+- PASS — path-redaction file exists: components/afe_xmodel/scripts/afe_fullrec_gen.py
+- PASS — path-redaction sanitized hash: components/afe_xmodel/scripts/afe_fullrec_gen.py
+- PASS — path-redaction file exists: components/afe_xmodel/scripts/afe_fullrec_remaining.py
+- PASS — path-redaction sanitized hash: components/afe_xmodel/scripts/afe_fullrec_remaining.py
+- PASS — path-redaction file exists: components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/component.xml
+- PASS — path-redaction sanitized hash: components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/component.xml
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_aff_case16_expected_result.json
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_aff_case16_expected_result.json
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_aff_case16_summary.md
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_aff_case16_summary.md
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_arr_case45_expected_result.json
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_arr_case45_expected_result.json
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_arr_case45_summary.md
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_arr_case45_summary.md
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_chf_case91_expected_result.json
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_chf_case91_expected_result.json
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_chf_case91_summary.md
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_chf_case91_summary.md
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_nsr_case117_expected_result.json
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_nsr_case117_expected_result.json
+- PASS — path-redaction file exists: components/digital_accelerator/reports/final/board_replay/locked_nsr_case117_summary.md
+- PASS — path-redaction sanitized hash: components/digital_accelerator/reports/final/board_replay/locked_nsr_case117_summary.md
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/build_microblaze_full_replay_app.tcl
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/build_microblaze_full_replay_app.tcl
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/build_microblaze_full_replay_system.tcl
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/build_microblaze_full_replay_system.tcl
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/microblaze_full_replay_summary.json
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/microblaze_full_replay_summary.json
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/program_microblaze_full_replay_board.tcl
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/program_microblaze_full_replay_board.tcl
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_cdc.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_cdc.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_clock_interaction.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_clock_interaction.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_drc.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_drc.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_io.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_io.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_methodology.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_methodology.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt
+- PASS — path-redaction sanitized hash: components/digital_accelerator/results/board_replay/microblaze_full_replay/reports/system_utilization_hier.rpt
+- PASS — path-redaction file exists: components/digital_accelerator/vivado_project/SNN_ECG_MB_FULL_REPLAY/SNN_ECG_MB_FULL_REPLAY.xpr
+- PASS — path-redaction sanitized hash: components/digital_accelerator/vivado_project/SNN_ECG_MB_FULL_REPLAY/SNN_ECG_MB_FULL_REPLAY.xpr
+- PASS — path-redaction file exists: figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl
+- PASS — path-redaction sanitized hash: figures/publication/FIG-P05_vivado_implementation/export_vivado_figures.tcl
+- PASS — path-redaction file exists: figures/publication/FIG-P05_vivado_implementation/extract_hierarchy_placement.tcl
+- PASS — path-redaction sanitized hash: figures/publication/FIG-P05_vivado_implementation/extract_hierarchy_placement.tcl
+- PASS — path-redaction file exists: figures/publication/FIG-P05_vivado_implementation/hierarchical_utilization.rpt
+- PASS — path-redaction sanitized hash: figures/publication/FIG-P05_vivado_implementation/hierarchical_utilization.rpt
+- PASS — path-redaction file exists: figures/publication/FIG-P05_vivado_implementation/timing_summary.rpt
+- PASS — path-redaction sanitized hash: figures/publication/FIG-P05_vivado_implementation/timing_summary.rpt
+- PASS — path-redaction file exists: figures/publication/FIG-P05_vivado_implementation/worst_setup_path.rpt
+- PASS — path-redaction sanitized hash: figures/publication/FIG-P05_vivado_implementation/worst_setup_path.rpt
+- PASS — path-redaction file exists: integration_evidence/upstream_status_after.json
+- PASS — path-redaction sanitized hash: integration_evidence/upstream_status_after.json
+- PASS — path-redaction file exists: integration_evidence/upstream_status_before.json
+- PASS — path-redaction sanitized hash: integration_evidence/upstream_status_before.json
+- PASS — path-redaction file exists: reports/HISTORY_REWRITE_PLAN.md
+- PASS — path-redaction sanitized hash: reports/HISTORY_REWRITE_PLAN.md
+- PASS — path-redaction file exists: reports/HISTORY_REWRITE_RESULT.md
+- PASS — path-redaction sanitized hash: reports/HISTORY_REWRITE_RESULT.md
+- PASS — path-redaction file exists: reports/PUBLICATION_READINESS_PREFLIGHT.md
+- PASS — path-redaction sanitized hash: reports/PUBLICATION_READINESS_PREFLIGHT.md
+- PASS — path-redaction file exists: reports/PUBLISH_REWRITTEN_HISTORY.md
+- PASS — path-redaction sanitized hash: reports/PUBLISH_REWRITTEN_HISTORY.md
+- PASS — path-redaction file exists: source_of_truth/upstream_commits.yaml
+- PASS — path-redaction sanitized hash: source_of_truth/upstream_commits.yaml
+- PASS — path-redaction file exists: tools/check_integrated_repository.py
+- PASS — path-redaction sanitized hash: tools/check_integrated_repository.py
+- PASS — path-redaction file exists: tools/import_upstream_repositories.py
+- PASS — path-redaction sanitized hash: tools/import_upstream_repositories.py
+- PASS — path-redaction file exists: tools/publication_readiness_audit.py
+- PASS — path-redaction sanitized hash: tools/publication_readiness_audit.py
 - PASS — benchmark evidence commit exists
 - PASS — benchmark import manifest has 9 rows
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/README.md

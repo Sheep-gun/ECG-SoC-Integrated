@@ -4,7 +4,7 @@
 
 - This report is generated from XSim CSV output produced by the restored synthesizable RTL.
 - EERG is inside RTL in this version. It is not applied by Python post-processing.
-- Source root: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S`
+- Source root: `<LOCAL_DIGITAL_REPOSITORY>`
 
 ## Split Metrics
 

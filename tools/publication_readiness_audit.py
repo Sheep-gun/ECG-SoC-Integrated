@@ -8,14 +8,14 @@ import csv
 import hashlib
 import os
 from pathlib import Path
+import shutil
 import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GIT = os.environ.get(
-    "GIT_EXECUTABLE",
-    r"C:\Users\YangGeon\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd\git.exe",
-)
+GIT = os.environ.get("GIT_EXECUTABLE") or shutil.which("git")
+if not GIT:
+    raise RuntimeError("Git executable not found. Set GIT_EXECUTABLE or add git to PATH.")
 BASELINE = "32d2fbd582040f7de7ed54e4ecf5a8a4efd19268"
 AFE_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 DATASET_ROOTS = {

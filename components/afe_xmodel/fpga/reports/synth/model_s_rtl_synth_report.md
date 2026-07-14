@@ -5,7 +5,7 @@
 - Tool: Vivado 2020.2
 - Part: xc7a100tcsg324-1
 - Top: snn_ecg_model_a_plus_core
-- Script: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/scripts/create_and_synth_model_s_restore.tcl`
+- Script: `<LOCAL_DIGITAL_REPOSITORY>/scripts/create_and_synth_model_s_restore.tcl`
 - Result: synth_design completed successfully.
 
 ## Utilization

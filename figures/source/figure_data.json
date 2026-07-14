@@ -76,5 +76,41 @@
     ],
     "evidence_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75"
   },
+  "figure_layout": {
+    "workflow": {
+      "main_center_x": 550,
+      "main_block_width": 600,
+      "locked_test_source": "Record-wise Train / Validation / Locked Test Split",
+      "locked_test_target": "Locked Final Test",
+      "post_lock_retuning": false
+    },
+    "digital": {
+      "parallel_morphology_blocks": [
+        "DSCR",
+        "RAM",
+        "QRS MAF",
+        "RBBB-like"
+      ],
+      "rhythm_morphology_merge": "Feature Accumulation & Class Scoring",
+      "conceptual_grouping": true
+    },
+    "analog": {
+      "input_disturbance_targets": [
+        "ECG+",
+        "ECG−"
+      ],
+      "rc_mismatch_targets": [
+        "3-op-amp IA",
+        "Active Twin-T 60 Hz Notch"
+      ],
+      "op_amp_gbw_targets": [
+        "3-op-amp IA",
+        "Active Twin-T 60 Hz Notch",
+        "150 Hz LPF + Buffer"
+      ],
+      "vos_stress_target": "IA input pair",
+      "adc_non_ideality_target": "ADC output code boundary"
+    }
+  },
   "benchmark_status": "IMPORTED_VERIFIED_NO_BOARD"
 }

@@ -3,7 +3,7 @@
 #   vivado -mode batch -source extract_hierarchy_placement.tcl
 
 set out_dir [pwd]
-set routed_dcp "C:/Users/YangGeon/_ecg_p05_vivado_work/system_routed.dcp"
+set routed_dcp "<LOCAL_VIVADO_WORK_DIR>/system_routed.dcp"
 
 proc csv_quote {value} {
     return "\"[string map {\" \"\"} $value]\""

@@ -11,6 +11,7 @@ __pycache__/
 
 # Generated integration scratch files
 .integration-tmp/
+.local/
 
 # Fixed-version PhysioNet downloads are kept outside Git.
 _ecg_soc_physionet/

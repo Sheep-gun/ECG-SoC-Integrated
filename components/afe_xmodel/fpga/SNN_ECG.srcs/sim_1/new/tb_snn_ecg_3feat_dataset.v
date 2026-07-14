@@ -2,11 +2,11 @@
 
 module tb_snn_ecg_3feat_dataset;
     parameter MAX_SAMPLES = 60000;
-    parameter MANIFEST_FILE = "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/person_data_record_split_strict_varlen/test/dataset_manifest_test_varlen.txt";
+    parameter MANIFEST_FILE = "<LOCAL_DIGITAL_REPOSITORY>/person_data_record_split_strict_varlen/test/dataset_manifest_test_varlen.txt";
     parameter WRITE_CASE_CSV = 1;
-    parameter RESULT_CSV = "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/results/generic/rtl_dataset_case_results.csv";
+    parameter RESULT_CSV = "<LOCAL_DIGITAL_REPOSITORY>/results/generic/rtl_dataset_case_results.csv";
     parameter WRITE_SUBWINDOW_CSV = 0;
-    parameter SUBWINDOW_CSV = "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/results/generic/rtl_dataset_subwindow_features.csv";
+    parameter SUBWINDOW_CSV = "<LOCAL_DIGITAL_REPOSITORY>/results/generic/rtl_dataset_subwindow_features.csv";
     parameter MANIFEST_HAS_SAMPLE_COUNT = 0;
 
     reg clk;

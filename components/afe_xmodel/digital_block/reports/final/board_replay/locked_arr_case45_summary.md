@@ -1,9 +1,9 @@
 # locked_arr_case45 board full-record replay summary
 
-- mem: `C:\Users\YangGeon\SNN ECG Classifier\fullrec_afe_30min_annotation_valid_balanced\test\ARR\118\118_30min_w000.mem`
-- expected source: `C:\Users\YangGeon\SNN ECG Classifier\reports\final\fulltop_xsim_locked_class_cases_predictions.csv`
-- transcript: `C:\Users\YangGeon\SNN ECG Classifier\reports\final\board_replay\locked_arr_case45_uart_full_replay.txt`
-- comparison: `C:\Users\YangGeon\SNN ECG Classifier\reports\final\board_replay\locked_arr_case45_expected_vs_board.csv`
+- mem: `<LOCAL_DIGITAL_REPOSITORY>\fullrec_afe_30min_annotation_valid_balanced\test\ARR\118\118_30min_w000.mem`
+- expected source: `<LOCAL_DIGITAL_REPOSITORY>\reports\final\fulltop_xsim_locked_class_cases_predictions.csv`
+- transcript: `<LOCAL_DIGITAL_REPOSITORY>\reports\final\board_replay\locked_arr_case45_uart_full_replay.txt`
+- comparison: `<LOCAL_DIGITAL_REPOSITORY>\reports\final\board_replay\locked_arr_case45_expected_vs_board.csv`
 - board internal pass marker: `True`
 - expected-vs-board match: `True`
 

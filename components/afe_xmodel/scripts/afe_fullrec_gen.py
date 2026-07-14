@@ -10,7 +10,7 @@ import numpy as np
 sys.path.insert(0, _ROOT + "/scripts")
 from afe_full import read_record_1ksps, afe_adc_unsigned
 
-HANDOFF = "/mnt/c/Users/USER/Downloads/handoff_to_suhwan/handoff_to_suhwan"
+HANDOFF = "<LOCAL_DATA_ROOT>/handoff_to_suhwan"
 SEL_MAN = HANDOFF + "/selected_records_manifest.csv"
 STRICT_MAN_GLOB = _ROOT + "/datasets/strict60_large/afe_manifest_*_strict60_large.csv"
 ECG = _ROOT + ""

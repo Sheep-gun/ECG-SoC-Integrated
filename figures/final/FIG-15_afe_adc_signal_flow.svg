@@ -38,18 +38,19 @@
 <polyline points="635,393 685,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
 <polyline points="875,393 925,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
 <polyline points="1135,393 1185,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
-<polyline points="1335,393 1385,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1335,393 1360,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1360" cy="393" r="5" fill="#364152"/>
+<polyline points="1360,393 1385,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
 <polyline points="1560,393 1615,393" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
 <text x="1622" y="400" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#182230">Digital</text>
 <text x="1622" y="423" text-anchor="start" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="700" fill="#182230">RTL</text>
 <polyline points="215,123 215,185 125,185 125,316" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="215,185 160,185 160,463 193,463" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="628,123 628,190 540,190 540,275" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="628,190 780,190 780,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="980,123 980,205 555,205 555,285" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="980,205 800,205 800,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="215,185 95,185 95,463 118,463" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="628,123 628,170 540,170 540,238" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="628,170 780,170 780,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="980,45 980,20 420,20 420,245 443,245" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="980,123 980,205 810,205 810,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
 <polyline points="980,205 1030,205 1030,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="1410,123 1410,245 1260,245 1260,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
-<polyline points="1410,245 1472,245 1472,326" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
+<polyline points="1410,123 1410,245 1360,245 1360,386" fill="none" stroke="#6b46c1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#paper-arrow)"/>
 <text x="850" y="625" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="17" font-weight="600" fill="#344054">Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model</text>
 </svg>

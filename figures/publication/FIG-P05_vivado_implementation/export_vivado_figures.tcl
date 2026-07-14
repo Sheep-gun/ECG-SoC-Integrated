@@ -9,7 +9,7 @@ set script_dir [file dirname [file normalize [info script]]]
 set repo_root [file normalize [file join $script_dir .. .. ..]]
 set digital_root [file join $repo_root components digital_accelerator]
 set source_dir [file join $digital_root results board_replay microblaze_full_replay]
-set work_root "C:/Users/YangGeon/_ecg_p05_vivado_work"
+set work_root "<LOCAL_VIVADO_WORK_DIR>"
 set project_dir [file join $work_root project]
 set routed_dcp [file join $work_root system_routed.dcp]
 set phase [expr {[llength $argv] > 0 ? [lindex $argv 0] : "build"}]

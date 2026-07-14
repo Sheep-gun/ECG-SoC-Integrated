@@ -113,22 +113,22 @@ module tb_board_demo_core_timing;
         adc_data = 12'sd0;
 
         run_case("CHF", 2'd1,
-                 "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_chf.mem",
+                 "<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem",
                  1'b0, 1);
         run_case("CHF", 2'd1,
-                 "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_chf.mem",
+                 "<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem",
                  1'b1, 1);
         run_case("CHF", 2'd1,
-                 "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_chf.mem",
+                 "<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem",
                  1'b1, 50);
         run_case("ARR", 2'd2,
-                 "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_arr.mem",
+                 "<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem",
                  1'b0, 1);
         run_case("ARR", 2'd2,
-                 "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_arr.mem",
+                 "<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem",
                  1'b1, 1);
         run_case("ARR", 2'd2,
-                 "C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_arr.mem",
+                 "<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem",
                  1'b1, 50);
 
         $finish;

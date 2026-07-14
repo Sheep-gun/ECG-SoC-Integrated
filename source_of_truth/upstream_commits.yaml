@@ -7,7 +7,7 @@ repositories:
   matlab_prevalidation:
     name: ECG-SoC-MATLAB-AFE-ADC-Prevalidation
     normalized_origin_url: https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation
-    absolute_local_path: "C:/Users/YangGeon/Desktop/Analog/ECG-SoC-MATLAB-AFE-ADC-Prevalidation"
+    absolute_local_path: "<LOCAL_MATLAB_REPOSITORY>"
     active_branch_at_integration: main
     active_head_at_integration: 907f7e1f081a9d6a5703a32095d962143315a192
     fixed_imported_commit: 907f7e1f081a9d6a5703a32095d962143315a192
@@ -20,7 +20,7 @@ repositories:
   afe_xmodel:
     name: ECG-SoC
     normalized_origin_url: https://github.com/Hwan-22/ECG-SoC
-    absolute_local_path: "C:/Users/YangGeon/Desktop/Analog/ECG-SoC"
+    absolute_local_path: "<LOCAL_AFE_XMODEL_REPOSITORY>"
     active_branch_at_integration: main
     active_head_at_integration: 4756a5086023547328ef44fd5fd87da3c250dc39
     fixed_imported_commit: 4756a5086023547328ef44fd5fd87da3c250dc39
@@ -33,7 +33,7 @@ repositories:
   digital_accelerator:
     name: SNN-ECG-4-Class-Classifier
     normalized_origin_url: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
-    absolute_local_path: "C:/Users/YangGeon/SNN ECG Classifier"
+    absolute_local_path: "<LOCAL_DIGITAL_REPOSITORY>"
     active_branch_at_integration: codex/accelerator-benefit-benchmark
     active_head_at_integration: 5b6f01192dd84cc02022a85449a917532c1b3dca
     fixed_imported_commit: c6b80de19cdcad5b7e43fe7835588b629d847f75

@@ -3,7 +3,7 @@ Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 | Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
 | Date         : Tue Jun  2 05:20:04 2026
 | Host         : DESKTOP-F81OJT8 running 64-bit major release  (build 9200)
-| Command      : report_utilization -hierarchical -file C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/reports/synth/restore_model_s_utilization_hier.rpt
+| Command      : report_utilization -hierarchical -file <LOCAL_DIGITAL_REPOSITORY>/reports/synth/restore_model_s_utilization_hier.rpt
 | Design       : snn_ecg_model_a_plus_core
 | Device       : 7a100tcsg324-1
 | Design State : Synthesized

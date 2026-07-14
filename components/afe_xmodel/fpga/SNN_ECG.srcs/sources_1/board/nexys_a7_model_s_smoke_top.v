@@ -149,10 +149,10 @@ module nexys_a7_model_s_smoke_top (
     (* rom_style = "block" *) reg [11:0] demo_aff_rom [0:SEGMENT_TICKS-1];
 
     initial begin
-        $readmemh("C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_nsr.mem", demo_nsr_rom);
-        $readmemh("C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_chf.mem", demo_chf_rom);
-        $readmemh("C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_arr.mem", demo_arr_rom);
-        $readmemh("C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_aff.mem", demo_aff_rom);
+        $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_nsr.mem", demo_nsr_rom);
+        $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem", demo_chf_rom);
+        $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem", demo_arr_rom);
+        $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_aff.mem", demo_aff_rom);
     end
 
     assign core_rst = rst_core_sync || (state == ST_RESET);

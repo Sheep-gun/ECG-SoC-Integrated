@@ -19,9 +19,22 @@ ROOT = Path(__file__).resolve().parents[1]
 PARENT = ROOT.parent
 GIT = os.environ.get(
     "GIT_EXECUTABLE",
-    shutil.which("git")
-    or r"C:\Users\YangGeon\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd\git.exe",
+    shutil.which("git"),
 )
+if not GIT:
+    raise RuntimeError("Git executable not found. Set GIT_EXECUTABLE or add git to PATH.")
+
+LOCAL_CONFIG_PATH = ROOT / ".local" / "upstream_paths.json"
+LOCAL_PATH_ENV = {
+    "matlab_prevalidation": "ECG_SOC_MATLAB_REPOSITORY",
+    "afe_xmodel": "ECG_SOC_AFE_XMODEL_REPOSITORY",
+    "digital_accelerator": "ECG_SOC_DIGITAL_REPOSITORY",
+}
+PUBLIC_LOCAL_PATH = {
+    "matlab_prevalidation": "<LOCAL_MATLAB_REPOSITORY>",
+    "afe_xmodel": "<LOCAL_AFE_XMODEL_REPOSITORY>",
+    "digital_accelerator": "<LOCAL_DIGITAL_REPOSITORY>",
+}
 
 SPECS = {
     "matlab_prevalidation": {
@@ -46,6 +59,7 @@ REQUIRED = [
     "source_of_truth/upstream_commits.yaml", "source_of_truth/global_metrics.yaml",
     "source_of_truth/claim_registry.csv", "source_of_truth/artifact_manifest.csv",
     "source_of_truth/benchmark_import_manifest.csv",
+    "source_of_truth/path_redaction_manifest.csv",
     "source_of_truth/unresolved_artifacts.csv",
     "source_of_truth/ownership_matrix.csv", "source_of_truth/terminology.yaml",
     "source_of_truth/external_reference_registry.csv",
@@ -128,7 +142,7 @@ def capture_state(component: str, repo: Path) -> dict:
     tracked = git(repo, "status", "--porcelain=v1", "--untracked-files=no")
     return {
         "component": component,
-        "repository_root": str(repo),
+        "repository_root": PUBLIC_LOCAL_PATH[component],
         "origin": git(repo, "remote", "get-url", "origin"),
         "active_branch": git(repo, "branch", "--show-current"),
         "active_head": git(repo, "rev-parse", "HEAD"),
@@ -137,6 +151,53 @@ def capture_state(component: str, repo: Path) -> dict:
         "tracked_status": tracked.splitlines() if tracked else [],
         "untracked_paths": [line[3:] for line in porcelain.splitlines() if line.startswith("?? ")],
     }
+
+
+def resolve_local_repositories() -> dict[str, Path]:
+    local_config = {}
+    if LOCAL_CONFIG_PATH.is_file():
+        local_config = json.loads(LOCAL_CONFIG_PATH.read_text(encoding="utf-8-sig"))
+    resolved = {}
+    for component, env_name in LOCAL_PATH_ENV.items():
+        value = os.environ.get(env_name) or local_config.get(component)
+        if not value and component == "digital_accelerator":
+            value = str(PARENT)
+        if value:
+            resolved[component] = Path(value).expanduser()
+    return resolved
+
+
+def tracked_text_home_path_audit() -> tuple[list[str], list[str]]:
+    """Return personal-home path hits and undecodable non-binary tracked files."""
+    binary_suffixes = {
+        ".bit", ".bin", ".bmp", ".dcp", ".dll", ".elf", ".exe", ".gif",
+        ".gz", ".ico", ".jpeg", ".jpg", ".pdf", ".png", ".so", ".ttf",
+        ".woff", ".woff2", ".xsa", ".zip", ".7z",
+    }
+    windows_home = re.compile(r"(?i)[A-Z]:" + r"[\\/]+" + "Users" + r"[\\/]+[^\\/\s\"'<>]+[\\/]+")
+    wsl_windows_home = re.compile(r"(?i)/mnt/[a-z]/Users/[^/\s\"'<>]+/")
+    linux_home = re.compile(r"(?<![A-Za-z0-9_])/" + "home" + r"/[A-Za-z0-9._-]+/")
+    mac_home = re.compile(r"(?<![A-Za-z0-9_])/" + "Users" + r"/[A-Za-z0-9._-]+/")
+    root_home = re.compile(r"(?<![A-Za-z0-9_])/" + "root" + r"/")
+    violations: list[str] = []
+    undecodable: list[str] = []
+    for rel in git(ROOT, "ls-files", "-z").split("\0"):
+        if not rel:
+            continue
+        path = ROOT / rel
+        extended = "\\\\?\\" + str(path.resolve()) if os.name == "nt" else str(path)
+        with open(extended, "rb") as handle:
+            raw = handle.read()
+        if path.suffix.lower() in binary_suffixes or b"\x00" in raw:
+            continue
+        try:
+            content = raw.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            undecodable.append(rel)
+            continue
+        if any(pattern.search(content) for pattern in [windows_home, wsl_windows_home, linux_home, mac_home, root_home]):
+            violations.append(rel)
+    return violations, undecodable
 
 
 def authored_text() -> str:
@@ -167,16 +228,23 @@ def main() -> int:
     check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
     check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
     check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
+    personal_path_hits, undecodable_tracked_text = tracked_text_home_path_audit()
+    check("tracked UTF-8 text contains no personal home path", not personal_path_hits, str(personal_path_hits))
+    check("tracked non-binary text is UTF-8 decodable", not undecodable_tracked_text, str(undecodable_tracked_text))
 
     before = json.loads((ROOT / "integration_evidence" / "upstream_status_before.json").read_text(encoding="utf-8-sig"))
     before_map = {x["component"]: x for x in before["repositories"]}
+    repo_by_component = resolve_local_repositories()
     after_rows = []
     for component, spec in SPECS.items():
         b = before_map.get(component)
         check(f"before state recorded: {component}", b is not None)
         if not b:
             continue
-        repo = Path(b["repository_root"])
+        repo = repo_by_component.get(component)
+        check(f"local upstream path configured: {component}", repo is not None, LOCAL_PATH_ENV[component])
+        if repo is None:
+            continue
         check(f"upstream exists: {component}", (repo / ".git").exists())
         if not (repo / ".git").exists():
             continue
@@ -212,13 +280,21 @@ def main() -> int:
     after_payload = {"captured_at_utc": datetime.now(timezone.utc).isoformat(), "repositories": after_rows}
     # Timestamp is intentionally removed from the committed evidence to make reruns stable.
     after_payload["captured_at_utc"] = "FINAL_INTEGRITY_CHECK"
-    (ROOT / "integration_evidence" / "upstream_status_after.json").write_text(json.dumps(after_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    with (ROOT / "integration_evidence" / "upstream_status_after.json").open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(after_payload, ensure_ascii=False, indent=2) + "\n")
 
     manifest = read_csv("source_of_truth/artifact_manifest.csv")
     check("curated artifact manifest has 913 rows", len(manifest) == 913, str(len(manifest)))
+    path_redactions = read_csv("source_of_truth/path_redaction_manifest.csv")
+    redaction_paths = {row["tracked_path"] for row in path_redactions}
+    check("path-redaction manifest is nonempty", bool(path_redactions), str(len(path_redactions)))
+    for row in path_redactions:
+        redacted_path = ROOT / row["tracked_path"]
+        check(f"path-redaction file exists: {row['tracked_path']}", redacted_path.is_file())
+        if redacted_path.is_file():
+            check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_path(redacted_path) == row["sanitized_sha256"])
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
-    repo_by_component = {component: Path(before_map[component]["repository_root"]) for component in SPECS}
     benchmark_commit = "09e4d840827ad20856f5e23be4743ddd01565e30"
     benchmark_commit_check = subprocess.run([GIT, "-C", str(repo_by_component["digital_accelerator"]), "cat-file", "-e", f"{benchmark_commit}^{{commit}}"])
     check("benchmark evidence commit exists", benchmark_commit_check.returncode == 0, benchmark_commit)
@@ -254,7 +330,7 @@ def main() -> int:
             failures.append(f"manifest commit mismatch: {rel}")
         upstream_blob = upstream_blob_maps[row["component"]].get(row["upstream_path"], "")
         index_blob = local_index_blobs.get(rel, "")
-        if upstream_blob != index_blob:
+        if upstream_blob != index_blob and rel not in redaction_paths:
             failures.append(f"retained integrated Git blob differs from upstream Git object: {rel}")
     checked.append("all manifest files exist and SHA256-match")
     actual_paths = set()
@@ -437,7 +513,8 @@ def main() -> int:
     report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_NO_BOARD`.", "- Exact C++ measurement, cycle-derived FPGA-core timing and estimated power are distinguished.", "- Physical board timing, power and energy remain `PENDING_BOARD`.", ""]
     reports = ROOT / "reports"
     reports.mkdir(exist_ok=True)
-    (reports / "integrated_repository_check.md").write_text("\n".join(report), encoding="utf-8")
+    with (reports / "integrated_repository_check.md").open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write("\n".join(report))
     print(f"{'PASS' if not failures else 'FAIL'}: {len(checked)} rules, {len(failures)} conflicts")
     if failures:
         for failure in failures:

@@ -52,7 +52,7 @@ if __name__ == "__main__":
     sys.path.insert(0, _ROOT + "/scripts")
     from afe_emu import afe_adc_unsigned as afe_slow, read_mem_signed
 
-    REC = "/mnt/c/Users/USER/Downloads/handoff_to_suhwan/handoff_to_suhwan/selected_records/NSR/16265/16265"
+    REC = "<LOCAL_DATA_ROOT>/handoff_to_suhwan/selected_records/NSR/16265/16265"
     XM = _ROOT + "/datasets/afe_output_xmodelmatch/train/unsigned/0000_NSR_16265_60s_1640000ms.mem"
     START_S = 1640.0
 

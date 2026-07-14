@@ -8,16 +8,16 @@ This is a board-level interactive demo, not a full dataset accuracy test. The wr
 
 ## Files
 
-- Board top: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/nexys_a7_model_s_smoke_top.v`
-- Constraint file: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/constraints/nexys_a7_model_s_smoke.xdc`
-- Build/program script: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/scripts/build_program_nexys_a7_smoke.tcl`
-- Bitstream: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/bitstreams/nexys_a7_model_s_smoke_top.bit`
-- Timing report: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/reports/board_smoke/nexys_a7_model_s_smoke_timing_summary.rpt`
-- Utilization report: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/reports/board_smoke/nexys_a7_model_s_smoke_utilization.rpt`
-- Demo NSR ROM: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_nsr.mem`
-- Demo CHF ROM: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_chf.mem`
-- Demo ARR ROM: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_arr.mem`
-- Demo AFF ROM: `C:/Users/YangGeon/SNN_ECG_RESTORE_MODEL_S/SNN_ECG.srcs/sources_1/board/demo_aff.mem`
+- Board top: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/nexys_a7_model_s_smoke_top.v`
+- Constraint file: `<LOCAL_DIGITAL_REPOSITORY>/constraints/nexys_a7_model_s_smoke.xdc`
+- Build/program script: `<LOCAL_DIGITAL_REPOSITORY>/scripts/build_program_nexys_a7_smoke.tcl`
+- Bitstream: `<LOCAL_DIGITAL_REPOSITORY>/bitstreams/nexys_a7_model_s_smoke_top.bit`
+- Timing report: `<LOCAL_DIGITAL_REPOSITORY>/reports/board_smoke/nexys_a7_model_s_smoke_timing_summary.rpt`
+- Utilization report: `<LOCAL_DIGITAL_REPOSITORY>/reports/board_smoke/nexys_a7_model_s_smoke_utilization.rpt`
+- Demo NSR ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_nsr.mem`
+- Demo CHF ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem`
+- Demo ARR ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem`
+- Demo AFF ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_aff.mem`
 
 ## Button Mapping
 

@@ -5,7 +5,7 @@
 - Pre-rewrite public baseline: `32d2fbd582040f7de7ed54e4ecf5a8a4efd19268`
 - Branch: `main`
 - Remote before maintenance: `origin` → `https://github.com/Sheep-gun/ECG-SoC-Integrated.git`
-- Backup bundle: `C:\Users\YangGeon\SNN ECG Classifier\ECG-SoC-Integrated-before-slimming.bundle`
+- Backup bundle: `<LOCAL_BACKUP_BUNDLE>`
 - Bundle SHA256: `6601AA18474939D0C659AFAE6219E7E7371287DCEA7ACF12171D169FBB929D1C`
 - Bundle verification: complete history, `git bundle verify` PASS
 - Force push in this task: forbidden

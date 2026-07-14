@@ -23,12 +23,12 @@ from datetime import datetime, timezone
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ANALOG_SEARCH_ROOT = Path(r"C:\Users\YangGeon\Desktop\Analog")
-GIT = os.environ.get(
-    "GIT_EXECUTABLE",
-    shutil.which("git")
-    or r"C:\Users\YangGeon\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd\git.exe",
-)
+LOCAL_CONFIG_PATH = ROOT / ".local" / "upstream_paths.json"
+LOCAL_CONFIG = json.loads(LOCAL_CONFIG_PATH.read_text(encoding="utf-8-sig")) if LOCAL_CONFIG_PATH.is_file() else {}
+ANALOG_SEARCH_ROOT = Path(os.environ.get("ECG_SOC_ANALOG_SEARCH_ROOT") or LOCAL_CONFIG.get("analog_search_root", "."))
+GIT = os.environ.get("GIT_EXECUTABLE") or shutil.which("git")
+if not GIT:
+    raise RuntimeError("Git executable not found. Set GIT_EXECUTABLE or add git to PATH.")
 
 COMPONENTS = {
     "matlab_prevalidation": {
@@ -47,7 +47,7 @@ COMPONENTS = {
         "origin": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier",
         "commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
         "owner": "양건",
-        "path": ROOT.parent,
+        "path": Path(os.environ.get("ECG_SOC_DIGITAL_REPOSITORY") or LOCAL_CONFIG.get("digital_accelerator", ROOT.parent)),
         "search": False,
     },
 }

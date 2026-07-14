@@ -8,5 +8,7 @@
 *.svg text eol=lf
 *.pdf binary
 
-# Imported component snapshots override generic rules and preserve exact bytes.
-/components/** -text !eol
+# Imported component snapshots override generic rules and preserve their native
+# line endings. CRLF is therefore a valid end-of-line sequence in redacted
+# public copies and must not be reported as trailing whitespace.
+/components/** -text !eol whitespace=cr-at-eol

@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="54" Path="C:/Users/YangGeon/SNN ECG Classifier/vivado_project/SNN_ECG_MB_FULL_REPLAY/SNN_ECG_MB_FULL_REPLAY.xpr">
+<Project Version="7" Minor="54" Path="<LOCAL_DIGITAL_REPOSITORY>/vivado_project/SNN_ECG_MB_FULL_REPLAY/SNN_ECG_MB_FULL_REPLAY.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="97f0ad625ee04251808d9ecd3a5f0222"/>

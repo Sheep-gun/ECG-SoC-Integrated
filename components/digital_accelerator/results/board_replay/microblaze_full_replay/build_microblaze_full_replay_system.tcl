@@ -1,6 +1,6 @@
-set repo_dir "C:/Users/YangGeon/SNN ECG Classifier"
-set work_dir "C:/Users/YangGeon/_snn_ecg_microblaze_full_replay_work"
-set out_dir "C:/Users/YangGeon/SNN ECG Classifier/results/board_replay/microblaze_full_replay"
+set repo_dir "<LOCAL_DIGITAL_REPOSITORY>"
+set work_dir "<LOCAL_HOME>/_snn_ecg_microblaze_full_replay_work"
+set out_dir "<LOCAL_DIGITAL_REPOSITORY>/results/board_replay/microblaze_full_replay"
 set proj_dir "$work_dir/project"
 set bd_name "snn_ecg_mb_full_replay"
 file mkdir $out_dir

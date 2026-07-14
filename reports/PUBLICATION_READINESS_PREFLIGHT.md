@@ -17,7 +17,7 @@ Captured before repository-content changes and history rewriting.
 ? reports/largest_git_blobs_before.csv
 ? reports/raw_dataset_inventory.csv
 ? tools/publication_readiness_audit.py`
-- Backup bundle: `C:\Users\YangGeon\SNN ECG Classifier\ECG-SoC-Integrated-before-slimming.bundle`
+- Backup bundle: `<LOCAL_BACKUP_BUNDLE>`
 - Bundle SHA256: `6601aa18474939d0c659afae6219e7e7371287dcea7acf12171d169fbb929d1c`
 - Bundle verification: complete-history bundle verified with `git bundle verify`
 

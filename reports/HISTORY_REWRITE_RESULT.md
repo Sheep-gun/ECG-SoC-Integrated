@@ -48,7 +48,7 @@ Locked `.mem` inputs, strict split/lock metadata, classification/evaluation CSV/
 
 ## Backup
 
-- Bundle: `C:\Users\YangGeon\SNN ECG Classifier\ECG-SoC-Integrated-before-slimming.bundle`
+- Bundle: `<LOCAL_BACKUP_BUNDLE>`
 - SHA256: `6601AA18474939D0C659AFAE6219E7E7371287DCEA7ACF12171D169FBB929D1C`
 - `git bundle verify`: complete-history PASS
 

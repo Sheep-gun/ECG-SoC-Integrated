@@ -20,9 +20,9 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `source_of_truth/upstream_commits.yaml`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Record-wise 분할 뒤 Train·Validation으로 Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 검증으로 이어지는 전체 workflow
+- Caption: Record-wise 분할 뒤 Train·Validation으로 Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow
 - Evidence scope: data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test
-- Limitations: analog layers are model-based; locked test data remain isolated until the one-time final test after design lock
+- Limitations: the post-lock implementation and integration stages verify equivalence and do not permit model, threshold, or structural retuning
 
 ## FIG-03
 
@@ -119,9 +119,9 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v`, `components/digital_accelerator/rtl/core/qrs_lif_detector.v`, `components/digital_accelerator/rtl/final_membrane_layer.v`, `tables/streaming_state_inventory.csv`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 두 증거가 class scoring에서 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow
-- Evidence scope: reader-facing digital architecture with explicit rhythm/morphology branches and 30-Snapshot accumulation
-- Limitations: not literal post-synthesis netlist connectivity; block internals remain in the body
+- Caption: Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 네 morphology 증거가 서로 독립적인 병렬 경로로 class scoring에 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow
+- Evidence scope: reader-facing digital architecture with four parallel morphology evidence paths and 30-Snapshot accumulation
+- Limitations: conceptual grouping, not literal post-synthesis netlist connectivity; block internals remain in the body
 
 ## FIG-15
 
@@ -130,8 +130,8 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source files: `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
 - Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
-- Caption: 차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 점선 경로로 주입되는 AFE·ADC signal flow
-- Evidence scope: differential AFE/ADC reconstruction with four separate XMODEL stress-source groups
+- Caption: 차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow
+- Evidence scope: finite GBW across active op-amp stages, VOS stress at the IA input pair, and one ADC code-boundary injection
 - Limitations: not the missing original LTspice schematic; component values and stress details remain in the body
 
 ## MAT-01

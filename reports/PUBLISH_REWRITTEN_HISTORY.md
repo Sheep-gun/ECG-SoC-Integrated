@@ -31,4 +31,4 @@ The last command must produce no output. A fresh clone should then run both Pyth
 
 ## Existing-clone warning
 
-Every rewritten commit has a new SHA. Existing clones must not merge the old and rewritten histories. Safest recovery is a fresh clone. If preserving a clone is essential, first back up local work, fetch, and explicitly reset/rebase onto the rewritten `origin/main` only after understanding the consequences. The pre-rewrite full bundle remains at `C:\Users\YangGeon\SNN ECG Classifier\ECG-SoC-Integrated-before-slimming.bundle` with SHA256 `6601AA18474939D0C659AFAE6219E7E7371287DCEA7ACF12171D169FBB929D1C`.
+Every rewritten commit has a new SHA. Existing clones must not merge the old and rewritten histories. Safest recovery is a fresh clone. If preserving a clone is essential, first back up local work, fetch, and explicitly reset/rebase onto the rewritten `origin/main` only after understanding the consequences. The pre-rewrite full bundle remains at `<LOCAL_BACKUP_BUNDLE>` with SHA256 `6601AA18474939D0C659AFAE6219E7E7371287DCEA7ACF12171D169FBB929D1C`.
