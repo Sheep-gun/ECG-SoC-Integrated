@@ -1,0 +1,9 @@
+﻿artifact,exists,row_count,status,notes
+tables/xmodel_aligned_nominal_ac_metrics.csv,True,20,MEASURED,Generated from aligned raw/log evidence
+tables/xmodel_aligned_nominal_transient_metrics.csv,True,126,MEASURED,Generated from aligned raw/log evidence
+tables/xmodel_aligned_track_hold_metrics.csv,True,17,MEASURED,Generated from aligned raw/log evidence
+tables/xmodel_aligned_adc_mapping_metrics.csv,True,15,MEASURED,Generated from aligned raw/log evidence
+tables/xmodel_aligned_timestep_convergence.csv,True,5,MEASURED,Generated from aligned raw/log evidence
+tables/xmodel_aligned_stress_results.csv,True,210,MEASURED,Generated from aligned raw/log evidence
+tables/xmodel_aligned_ltspice_xmodel_correlation.csv,True,39,PENDING_XMODEL_EXECUTION,Pending rows contain no fabricated measured value
+tables/xmodel_ltspice_handoff_metrics.csv,True,11,MEASURED_TEAM_HANDOFF,Follow-up 10-second XMODEL-LTspice result; original pending table retained as pre-run snapshot

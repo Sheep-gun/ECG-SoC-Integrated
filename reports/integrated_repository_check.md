@@ -2,13 +2,13 @@
 
 ## Result: PASS
 
-- Rules checked: 457
+- Rules checked: 499
 - Conflicts found: 0
 - Benchmark import: PASS (verified NO_BOARD scope)
 
 ## Rules checked
 
-- PASS — independent .git exists
+- PASS — independent Git worktree exists
 - PASS — integrated branch is approved
 - PASS — required path README.md
 - PASS — required path LICENSE_OR_PROVENANCE.md
@@ -53,6 +53,7 @@
 - PASS — required path benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
 - PASS — required path figures/FIGURE_INDEX.md
 - PASS — required path figures/source/figure_data.json
+- PASS — required path figures/source/team_handoff_analog/README.md
 - PASS — required path tools/import_upstream_repositories.py
 - PASS — required path tools/build_global_metrics.py
 - PASS — required path tools/check_integrated_repository.py
@@ -78,6 +79,24 @@
 - PASS — required path figures/final/MAT-05_adc_code_distribution.png
 - PASS — required path figures/final/MAT-06_reference_vector_handoff.png
 - PASS — required path figures/final/MAT-07_prevalidation_flow.png
+- PASS — required path figures/final/SPICE-01_analog_afe_architecture.svg
+- PASS — required path figures/final/SPICE-02_ltspice_xmodel_aligned_schematic.jpg
+- PASS — required path figures/final/SPICE-03_matlab_ltspice_afe_response.png
+- PASS — required path figures/final/SPICE-04_matlab_ltspice_notch_response.png
+- PASS — required path figures/final/SPICE-05_xmodel_ltspice_adc_waveform_full.png
+- PASS — required path figures/final/SPICE-06_xmodel_ltspice_adc_waveform_zoom.png
+- PASS — required path figures/final/SPICE-07_xmodel_ltspice_adc_error.png
+- PASS — required path figures/final/SPICE-08_xmodel_ltspice_adc_error_histogram.png
+- PASS — required path figures/final/SPICE-09_xmodel_ltspice_adc_agreement.png
+- PASS — required path figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png
+- PASS — required path validation/afe_ltspice_xmodel_aligned/README.md
+- PASS — required path validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc
+- PASS — required path validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net
+- PASS — required path validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/XOpAmp_XMODEL.lib
+- PASS — required path validation/afe_ltspice_xmodel_aligned/tables/xmodel_aligned_execution_manifest.csv
+- PASS — required path validation/afe_ltspice_xmodel_aligned/tables/xmodel_aligned_nominal_ac_metrics.csv
+- PASS — required path validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv
+- PASS — required path validation/afe_ltspice_xmodel_aligned/results/xmodel_aligned/nominal/ltspice_xmodel_aligned_adc_samples.csv
 - PASS — required path integration_evidence/excluded_upstream_paths.csv
 - PASS — required path integration_evidence/excluded_large_dataset_paths.csv
 - PASS — required path reports/INTEGRATED_TECHNICAL_REPORT_KR.md
@@ -88,6 +107,17 @@
 - PASS — required path private_submission/.gitignore
 - PASS — 13 generated SVG figures
 - PASS — 7 inherited MATLAB PNG figures
+- PASS — 10 immutable SPICE handoff figures
+- PASS — SPICE figure SHA256 SPICE-01_analog_afe_architecture.svg
+- PASS — SPICE figure SHA256 SPICE-02_ltspice_xmodel_aligned_schematic.jpg
+- PASS — SPICE figure SHA256 SPICE-03_matlab_ltspice_afe_response.png
+- PASS — SPICE figure SHA256 SPICE-04_matlab_ltspice_notch_response.png
+- PASS — SPICE figure SHA256 SPICE-05_xmodel_ltspice_adc_waveform_full.png
+- PASS — SPICE figure SHA256 SPICE-06_xmodel_ltspice_adc_waveform_zoom.png
+- PASS — SPICE figure SHA256 SPICE-07_xmodel_ltspice_adc_error.png
+- PASS — SPICE figure SHA256 SPICE-08_xmodel_ltspice_adc_error_histogram.png
+- PASS — SPICE figure SHA256 SPICE-09_xmodel_ltspice_adc_agreement.png
+- PASS — SPICE figure SHA256 SPICE-10_xmodel_ltspice_adc_metrics.png
 - PASS — verified tables present
 - PASS — public remote configured
 - PASS — tracked UTF-8 text contains no personal home path
@@ -332,6 +362,13 @@
 - PASS — metric evidence exists: afe_to_rtl_final_mem_equivalence
 - PASS — metric evidence exists: matlab_representative_clipping_ratio
 - PASS — metric evidence exists: matlab_minimum_representative_headroom
+- PASS — metric evidence exists: ltspice_execution_count
+- PASS — metric evidence exists: ltspice_xmodel_adc_sample_count
+- PASS — metric evidence exists: ltspice_xmodel_adc_mae
+- PASS — metric evidence exists: ltspice_xmodel_adc_rms
+- PASS — metric evidence exists: ltspice_xmodel_adc_correlation
+- PASS — metric evidence exists: ltspice_xmodel_within_5_lsb
+- PASS — metric evidence exists: ltspice_xmodel_within_10_lsb
 - PASS — metric evidence exists: signed_stream_width
 - PASS — metric evidence exists: signed_stream_sample_rate
 - PASS — metric evidence exists: snapshot_duration
@@ -385,6 +422,7 @@
 - PASS — claim evidence exists: CLM-031
 - PASS — claim evidence exists: CLM-032
 - PASS — claim evidence exists: CLM-033
+- PASS — claim evidence exists: CLM-034
 - PASS — claim evidence exists: CLM-035
 - PASS — claim evidence exists: CLM-036
 - PASS — claim evidence exists: CLM-037
@@ -399,6 +437,10 @@
 - PASS — claim evidence exists: CLM-046
 - PASS — claim evidence exists: CLM-047
 - PASS — claim evidence exists: CLM-048
+- PASS — claim evidence exists: CLM-049
+- PASS — claim evidence exists: CLM-050
+- PASS — claim evidence exists: CLM-051
+- PASS — claim evidence exists: CLM-052
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — CLM-048 timing history registered
@@ -441,7 +483,7 @@
 - PASS — FIG-12 indexed
 - PASS — FIG-12 referenced by manuscript
 - PASS — FIG-15 indexed
-- PASS — FIG-15 referenced by manuscript
+- PASS — analog architecture referenced by manuscript
 - PASS — approved SVG master installed byte-for-byte: FIG-12_digital_processing_flow.svg
 - PASS — approved SVG master installed byte-for-byte: FIG-15_afe_adc_signal_flow.svg
 - PASS — FIG-02 workflow indexed

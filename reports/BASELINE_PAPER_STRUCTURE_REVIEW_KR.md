@@ -43,9 +43,9 @@
 |---|---|
 | 서론의 측정 필요성 | 장시간 ECG에서 세 시간척도가 필요한 이유 |
 | 관련 연구의 방식 비교 | 전체 저장·짧은 구간 회로·학습형 SNN의 한계와 설계 요구 |
-| 시스템 블록도와 목표 표 | MATLAB→XMODEL→signed stream→RTL/IP→FPGA 흐름과 인터페이스 |
+| 시스템 블록도와 목표 표 | MATLAB→LTspice→XMODEL→signed stream→RTL/IP→FPGA 흐름과 인터페이스 |
 | 회로 설명 | 표본값→사건→박동→리듬·파형→Snapshot→Final Membrane |
-| post-layout/algorithm verification | 공칭 AFE, XMODEL, RTL/XSim, Vivado와 FPGA 기능 등가성 |
+| post-layout/algorithm verification | MATLAB 공칭 AFE, LTspice schematic, XMODEL, RTL/XSim, Vivado와 FPGA 기능 등가성 |
 | 결과 표 | 분류, 혼합신호 인계와 하드웨어 구현 결과의 분리 |
 | discussion | 차별성, 데이터 한계, 물리·임상·physical board benchmark 공백 |
 

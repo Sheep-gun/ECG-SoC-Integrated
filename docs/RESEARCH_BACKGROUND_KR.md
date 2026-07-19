@@ -33,6 +33,6 @@ Ambulatory ECG에서는 증상의 발생 빈도와 관찰 목적에 따라 24/48
 
 ## 5. 연구 범위
 
-본 결과는 MATLAB nominal pre-validation, SystemVerilog XMODEL model-based verification, signed-stream handoff, locked digital inference, RTL/XSim, Vivado, IP-XACT, Vitis/MicroBlaze와 FPGA replay를 연결한 semiconductor-IP engineering prototype이다. Physical AFE PCB, ADC silicon, transistor/post-layout, live electrode acquisition과 clinical validation은 범위 밖이다.
+본 결과는 MATLAB nominal pre-validation, LTspice schematic verification, SystemVerilog XMODEL behavioral/non-ideal verification, signed-stream handoff, locked digital inference, RTL/XSim, Vivado, IP-XACT, Vitis/MicroBlaze와 FPGA replay를 연결한 semiconductor-IP engineering prototype이다. Physical AFE PCB, ADC silicon, transistor/post-layout, live electrode acquisition과 clinical validation은 범위 밖이다.
 
 외부 출처의 서지와 URL은 `source_of_truth/external_reference_registry.csv`에 고정돼 있다. 본 문서는 상용 제품의 sensitivity/specificity 수치를 사용하지 않는다.

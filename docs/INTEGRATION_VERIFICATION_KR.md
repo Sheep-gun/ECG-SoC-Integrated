@@ -5,7 +5,9 @@
 | Boundary | Input evidence | Output evidence | Acceptance |
 |---|---|---|---|
 | MATLAB nominal | class별 input/reference package | frequency/headroom/coding CSV | nominal intent와 signed vector가 manifest로 고정 |
-| MATLAB/XMODEL | nominal parameter와 vector | XMODEL waveform/stress reports | model scope와 caveat가 명시됨 |
+| MATLAB/LTspice | nominal parameter와 vector | `.asc`/`.net`, AC/transient/S&H/ADC/stress 결과 | 목표 응답과 실제 schematic의 정합 |
+| LTspice/XMODEL | 동일 10초 ECG와 ADC contract | 10,000-code error/coverage table | MAE 0.6445 LSB, corr. 0.999518, ±5 LSB 98.74%, ±10 LSB 99.89% |
+| XMODEL 장시간 | fixed 회로 계약과 public ECG | 36×60초 waveform/stress reports | 평균 RMS 1.95 LSB, lag 0; 10초 LTspice 비교와 별도 범위 |
 | XMODEL/digital | full-record AFE stream | 30분 chunk와 SHA256 CSV | board-replay input과 36/36 byte identity |
 | AFE/locked RTL | same 36 chunks | final_pred/final_mem compare CSV | gap=2에서 36/36 bit-exact |
 | Python/RTL | locked model and parameters | XSim final outputs | final-test mismatch 0/36 |
@@ -39,7 +41,7 @@ Imported component bytes는 `artifact_manifest.csv`의 SHA256으로 검증한다
 
 ## Remaining gaps
 
-- Physical AFE/ADC와 silicon validation 없음
+- LTspice schematic은 검증했으나 physical AFE/ADC와 silicon validation 없음
 - same-acquisition multi-class clinical cohort 없음
 - database-class confounding 미해소
 - digital `main` commit `09e4d840...`의 independent NO_BOARD accelerator-benefit benchmark 반입 완료; physical board timing·power는 대기

@@ -1,0 +1,12 @@
+scope,metric,value,unit,evidence,status,notes
+full_10s,sample_count,10000,samples,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,patient100 10 s at 1 kSPS
+full_10s,mean_error,0.0221,LSB,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,LTspice S/H minus XMODEL
+full_10s,mae,0.6445,LSB,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,
+full_10s,rms_error,1.3020,LSB,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,
+full_10s,max_abs_error,13,LSB,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,QRS-edge concentrated
+full_10s,zero_lag_correlation,0.999518,ratio,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,
+full_10s,best_lag,0,samples,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,
+full_10s,clipping_count,0,samples,figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png,MEASURED_TEAM_HANDOFF,
+full_10s,exact_coverage,56.49,percent,figures/final/SPICE-09_xmodel_ltspice_adc_agreement.png,MEASURED_TEAM_HANDOFF,5649 of 10000
+full_10s,within_5_lsb_coverage,98.74,percent,figures/final/SPICE-09_xmodel_ltspice_adc_agreement.png,MEASURED_TEAM_HANDOFF,9874 of 10000
+full_10s,within_10_lsb_coverage,99.89,percent,figures/final/SPICE-09_xmodel_ltspice_adc_agreement.png,MEASURED_TEAM_HANDOFF,9989 of 10000

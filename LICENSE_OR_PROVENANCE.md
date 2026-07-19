@@ -23,6 +23,16 @@ tables, executables, and board package remain authoritative in that upstream
 commit. This benchmark evidence does not change the locked classifier/RTL
 authority at `c6b80de19cdcad5b7e43fe7835588b629d847f75`.
 
+The XMODEL-aligned LTspice validation package under
+`validation/afe_ltspice_xmodel_aligned/` and the ten `SPICE-*` figures are a
+team handoff identified as `INTEGRATED_LTSPICE_2026-07-19`. Their original
+filenames and SHA256 values are recorded in
+`figures/source/team_handoff_analog/README.md`. Multi-gigabyte raw LTspice
+waveforms are intentionally omitted; graphical schematic, generated netlist,
+dedicated op-amp model, compact ADC vectors, tables, logs, plots and rerun
+scripts are retained. Local user-home prefixes in imported text logs were
+redacted without changing scientific values.
+
 The original copyright and license notices inside each component snapshot
 remain controlling for that component. If an upstream file has no explicit
 license, its presence here documents provenance only and grants no additional

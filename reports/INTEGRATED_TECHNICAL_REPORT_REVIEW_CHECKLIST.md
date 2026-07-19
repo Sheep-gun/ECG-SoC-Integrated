@@ -30,19 +30,19 @@
 - [x] “세계 최초”와 문헌 전체에 동일 연구가 없다는 단정을 사용하지 않고, 검토한 대표 선행연구 범위의 제한된 비교로만 위치를 설명한다.
 - [x] 현재 검증 입력은 30분이고 24시간 정확도·처리시간·전력은 미검증이라는 경계를 유지한다.
 
-## AFE·ADC 설계와 MATLAB/XMODEL 근거
+## AFE·ADC 설계와 MATLAB/LTspice/XMODEL 근거
 
 - [x] ECG→HPF→3-op-amp IA→active Twin-T 60 Hz notch+buffer→150 Hz LPF→12-bit ADC→offset-binary→signed stream의 전체 흐름을 설명한다.
 - [x] HPF 10 MΩ/33 nF와 0.4823 Hz, IA 100 kΩ/1 kΩ와 gain 201, LPF 1 kΩ/1.06 µF와 150.15 Hz를 직접 근거에 연결한다.
 - [x] 수동 Twin-T의 넓은 저지대역과 loading 문제, active Twin-T와 buffer를 추가한 이유를 설명한다.
 - [x] active Twin-T의 26.526 kΩ/100 nF, 200 nF/13.263 kΩ, k=0.95, Q≈5를 제시한다.
 - [x] ADC ±1.65 V, 12 bit, 1 kSPS, 0.80586 mV/LSB와 0 V code mapping을 설명한다.
-- [x] MATLAB은 공칭 필터·이득·동적 범위·기준 벡터, XMODEL은 비이상성·간섭·mismatch·GBW/VOS·ADC stress·장시간 stream을 담당한다고 구분한다.
+- [x] MATLAB은 공칭 필터·이득·동적 범위·기준 벡터, LTspice는 실제 schematic·전원·S/H·ADC mapping과 회로 stress, XMODEL은 비이상성·간섭·장시간 stream과 RTL 인계를 담당한다고 구분한다.
 - [x] IA 수렴, notch loading, LPF cutoff, CMRR margin, ADC log off-by-one, passive→active notch 변경을 실제 수정 이력으로 기록한다.
 - [x] 주파수응답, clipping/headroom, 50/60 Hz PLI, R/C mismatch, GBW/VOS, ADC 비이상성과 장시간 stream 결과를 수치로 제시한다.
-- [x] MATLAB 기준 벡터→XMODEL signed stream→SHA256→RTL handoff를 설명한다.
-- [x] 고정 component에 원본 LTspice `.asc`/회로 캡처가 없음을 확인하고, FIG-15를 원본이 아닌 설명용 재구성도로 표시한다.
-- [x] 누락 원본 schematic을 `source_of_truth/unresolved_artifacts.csv`에 unresolved artifact로 기록한다.
+- [x] MATLAB 기준→LTspice schematic 검증→XMODEL signed stream→SHA256→RTL handoff를 설명한다.
+- [x] XMODEL-aligned LTspice `.asc`·`.net`·전용 op-amp 모델과 실제 회로 캡처를 보존하고, FIG-15 설명용 흐름도와 SPICE-02 실제 schematic을 구분한다.
+- [x] 기존 누락 schematic 항목 `UNRES-001`을 `RESOLVED_IMPORTED`로 갱신하고 physical PCB·transistor/post-layout·silicon 경계는 유지한다.
 - [x] 기존 MATLAB 그림 7개를 byte-for-byte 상속하고 각각 원본 파일 및 설명 문서로 연결한다.
 
 ## 디지털 RTL 메커니즘
@@ -76,8 +76,8 @@
 - [x] 세 검증 결과를 단일 판단 gate로 모으고, 불충족 loop가 MATLAB이 아니라 XMODEL·RTL 단계로 돌아가도록 표시한다.
 - [x] MATLAB `907f7e1`, XMODEL `4756a508`, digital `c6b80de` provenance를 유지한다.
 - [x] evidence map의 모든 path와 claim ID가 유효하다.
-- [x] figure generator가 15개 SVG와 상속 MATLAB PNG 7개, index와 data를 생성한다.
-- [x] 본문은 16개 그림을 사용하고 AFE·ADC 관련 9개 그림 caption에 직접 evidence path를 둔다.
+- [x] figure generator가 통합 SVG, 상속 MATLAB PNG 7개와 immutable team handoff figure 10개를 index에 등록한다.
+- [x] 본문은 MATLAB–LTspice–XMODEL 검증 figure와 디지털 구현 figure를 분리하고 caption에 직접 evidence path를 둔다.
 - [x] `tools/check_integrated_technical_report.py` PASS
 - [x] `tools/check_integrated_repository.py` PASS
 - [x] `git diff --check` PASS

@@ -77,6 +77,6 @@
 - Snapshot별 리듬·파형 형태·질환 증거의 명시적 고정 폭 상태화
 - 간헐적 강한 Snapshot의 출현 빈도·반복성과 장시간 일관성 누적
 - RTL/IP/FPGA 구현
-- MATLAB–XMODEL–signed stream–RTL 추적성
+- MATLAB–LTspice–XMODEL–signed stream–RTL 추적성
 
 이는 세계 최초 또는 문헌 전체에 동일 연구가 없다는 주장이 아니다. 현재 실제 검증 입력은 30분이며 24시간 정확도·처리시간·전력은 미검증이다.

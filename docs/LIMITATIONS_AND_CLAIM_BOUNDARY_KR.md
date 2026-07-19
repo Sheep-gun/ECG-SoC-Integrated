@@ -8,13 +8,13 @@
 - pure RTL resource/timing closure와 packaged IP/FPGA replay
 - board final_pred/final_mem 36/36 functional equivalence
 - AFE input SHA256 36/36와 canonical cadence AFE-to-RTL 36/36 reproduction
-- MATLAB/XMODEL 기반 model-based AFE/ADC verification
+- MATLAB/LTspice/XMODEL 기반 공칭·schematic·behavioral AFE/ADC verification
 
 ## 주의해서 표현할 주장
 
 `Holter-oriented`는 장시간 ECG 구조의 설계 동기를 뜻하며 임상 Holter 인증이 아니다. `SNN-inspired`는 event/state와 membrane-like accumulation을 뜻하며 trained deep SNN이나 생물학적 등가가 아니다. `low-resource`는 0 BRAM/0 DSP와 구현 자원으로 범위를 한정한다. NO_BOARD benchmark의 처리시간 비율과 추정 전력은 보고할 수 있지만 physical board의 speedup·power·energy superiority는 주장하지 않는다.
 
-Analog robustness는 XMODEL stress와 representative regression이 지원하는 model-based 범위로만 쓴다. R/C mismatch의 30분 final_pred stability는 직접 전체 sweep이 아니라 equivalence-based argument임을 유지한다. 60 Hz target 결과를 50 Hz 환경 성능으로 일반화하지 않는다.
+Analog robustness는 LTspice schematic stress와 XMODEL representative regression이 지원하는 model-based 범위로만 쓴다. LTspice–XMODEL 10초 비교의 ±5/±10 LSB coverage를 sample-wise bit-exact로 표현하지 않는다. R/C mismatch의 30분 final_pred stability는 직접 전체 sweep이 아니라 equivalence-based argument임을 유지한다. 60 Hz target 결과를 50 Hz 환경 성능으로 일반화하지 않는다.
 
 ## 금지되는 주장
 
@@ -35,7 +35,7 @@ Strict record-wise split은 같은 source record의 직접 leakage를 막지만 
 
 ## Analog/physical 한계
 
-MATLAB은 nominal pre-validation이고 SystemVerilog XMODEL은 model-based non-ideal verification이다. 둘 다 실제 electrode-to-PCB measurement, transistor-level sign-off, ADC silicon 또는 fabricated chip의 증거가 아니다. 보고서 제목과 diagram에서도 `model-based AFE/XMODEL verification`과 `digital accelerator IP prototype`을 분리한다.
+MATLAB은 nominal pre-validation, LTspice는 실제 schematic 기반 회로 검증, SystemVerilog XMODEL은 model-based non-ideal/RTL handoff verification이다. LTspice에 실제 `.asc`와 netlist가 존재하더라도 세 단계 모두 실제 electrode-to-PCB measurement, transistor-level sign-off, ADC silicon 또는 fabricated chip의 증거가 아니다. 보고서에서도 `schematic/behavioral model-based AFE verification`과 `digital accelerator IP prototype`을 분리한다.
 
 ## Benchmark 경계
 

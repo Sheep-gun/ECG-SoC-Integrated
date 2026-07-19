@@ -1,0 +1,27 @@
+﻿case_id,owner,execution_status,source_schematic,source_commit,notes
+nominal,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_nominal.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+dc_p10m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_dc_p10m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+dc_p50m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_dc_p50m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+dc_p100m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_dc_p100m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+dc_p200m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_dc_p200m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+dc_m200m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_dc_m200m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+bw_0p1hz_1m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_bw_0p1hz_1m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+bw_0p2hz_2m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_bw_0p2hz_2m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+pli60,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_pli60.cir,4756a5086023547328ef44fd5fd87da3c250dc39,50us ZOH input update; 1ms aperture
+pli50,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_pli50.cir,4756a5086023547328ef44fd5fd87da3c250dc39,OUT_OF_TARGET_DIAGNOSTIC; 50Hz uses the same CM/differential amplitude as fixed 60Hz PLI
+nominal_10s_graphical,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,4756a5086023547328ef44fd5fd87da3c250dc39,10s patient; final vector source
+mm_0,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_mm_0_pli60.cir,4756a5086023547328ef44fd5fd87da3c250dc39,IA/Twin-T fixed-XMODEL worst-direction mismatch
+mm_0p1pct,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_mm_0p1pct_pli60.cir,4756a5086023547328ef44fd5fd87da3c250dc39,IA/Twin-T fixed-XMODEL worst-direction mismatch
+mm_0p5pct,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_mm_0p5pct_pli60.cir,4756a5086023547328ef44fd5fd87da3c250dc39,IA/Twin-T fixed-XMODEL worst-direction mismatch
+mm_1pct,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_mm_1pct_pli60.cir,4756a5086023547328ef44fd5fd87da3c250dc39,IA/Twin-T fixed-XMODEL worst-direction mismatch
+gbw_100k,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_gbw_100k.cir,4756a5086023547328ef44fd5fd87da3c250dc39,ecg_afe_xmodel_op.sv GBW parameter
+gbw_500k,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_gbw_500k.cir,4756a5086023547328ef44fd5fd87da3c250dc39,ecg_afe_xmodel_op.sv GBW parameter
+gbw_1m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_gbw_1m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,ecg_afe_xmodel_op.sv GBW parameter
+gbw_5m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_gbw_5m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,ecg_afe_xmodel_op.sv GBW parameter
+vos_0p5m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_vos_0p5m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,U1=+VOS; U2=-VOS
+vos_1m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_vos_1m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,U1=+VOS; U2=-VOS
+vos_2m,LTSPICE_OWNED,EXECUTED,schematics/xmodel_aligned/xma_vos_2m.cir,4756a5086023547328ef44fd5fd87da3c250dc39,U1=+VOS; U2=-VOS
+adc_white_noise,XMODEL_OWNED,XMODEL_OWNED,,4756a5086023547328ef44fd5fd87da3c250dc39,Not duplicated in LTspice final gate
+sample_jitter,XMODEL_OWNED,XMODEL_OWNED,,4756a5086023547328ef44fd5fd87da3c250dc39,Not duplicated in LTspice final gate
+30min_locked_regression,XMODEL_RTL_OWNED,XMODEL_OWNED,,4756a5086023547328ef44fd5fd87da3c250dc39,Use locked XMODEL/RTL flow
+final_pred_final_mem,LOCKED_RTL_FPGA_OWNED,XMODEL_OWNED,,4756a5086023547328ef44fd5fd87da3c250dc39,Outside LTspice analog scope

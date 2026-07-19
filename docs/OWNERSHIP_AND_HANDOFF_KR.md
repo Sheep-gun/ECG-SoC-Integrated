@@ -5,14 +5,14 @@
 | Contributor | Primary ownership | Handoff output |
 |---|---|---|
 | 서민우 | MATLAB nominal AFE+ADC pre-validation, parameter/frequency/gain reference, ADC headroom/clipping, signed reference vectors와 manifest | nominal analog intent, coding convention, class별 reference package |
-| 이수환 | SystemVerilog AFE+ADC XMODEL, non-ideal/stress, full-record stream generation, AFE-to-digital integration | signed 12-bit AFE output, SHA256 identity, canonical cadence integration evidence |
+| 이수환 | LTspice/XMODEL AFE+ADC 구현·검증, non-ideal/stress, full-record stream generation, AFE-to-digital integration | LTspice schematic·검증표, signed 12-bit AFE output, SHA256 identity, canonical cadence integration evidence |
 | 양건 | project leadership, long-window architecture, strict evaluation, locked integer model, RTL/XSim/Vivado/IP-XACT/Vitis/board, final integration | locked digital golden, synthesizable/packageable IP, implementation and board evidence |
 
 Canonical machine-readable record는 `source_of_truth/ownership_matrix.csv`이다.
 
-## Handoff 1: MATLAB → XMODEL
+## Handoff 1: MATLAB → LTspice → XMODEL
 
-서민우 component는 nominal parameter와 ADC coding, class별 signed/offset-binary reference vector를 제공한다. 이수환 component는 이를 XMODEL signal-chain 검증과 stress 범위의 reference로 사용한다. MATLAB 결과를 physical measurement로 승격하지 않으며, XMODEL의 non-ideal claim은 이수환 evidence에서 별도로 검증한다.
+서민우 component는 nominal parameter와 ADC coding, class별 signed/offset-binary reference vector를 제공한다. 이수환 검증은 이를 ±1.65 V LTspice schematic으로 구현해 회로 응답·S/H·ADC mapping과 stress를 확인한 뒤 같은 회로 계약을 XMODEL signal chain과 RTL 인계 기준으로 사용한다. MATLAB이나 LTspice 결과를 physical measurement로 승격하지 않으며, XMODEL의 non-ideal claim은 별도 evidence에서 검증한다.
 
 ## Handoff 2: XMODEL → Digital
 
@@ -27,7 +27,7 @@ Canonical machine-readable record는 `source_of_truth/ownership_matrix.csv`이�
 Mixed-signal-to-digital chain은 공동 integration 결과지만 구현 owner를 합치지 않는다.
 
 - MATLAB nominal implementation owner: 서민우
-- XMODEL and AFE-to-digital verification owner: 이수환
+- LTspice/XMODEL and AFE-to-digital verification owner: 이수환
 - digital architecture/implementation owner: 양건
 - integrated repository and final claim coordination: 양건
 

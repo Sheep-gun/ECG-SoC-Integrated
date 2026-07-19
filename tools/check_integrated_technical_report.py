@@ -23,7 +23,7 @@ MAIN_HEADINGS = [
     "# 1. 서론",
     "# 2. 관련 기술과 시스템 설계",
     "# 3. MATLAB 공칭 AFE·ADC 사전검증",
-    "# 4. AFE·ADC 회로 설계와 XMODEL 검증",
+    "# 4. LTspice AFE·ADC 구현과 XMODEL 검증",
     "# 5. 디지털 가속기 IP 설계 및 구현",
     "# 6. 가속기 Benchmark와 아날로그·디지털 통합 검증",
     "# 7. 실험 결과",
@@ -34,8 +34,8 @@ SUBHEADINGS = [
     "1.1 연구 배경과 문제 정의", "1.2 연구 목표와 주요 기여",
     "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", "2.2 데이터셋과 평가 프로토콜",
     "3.1 MATLAB 사전검증의 역할과 흐름", "3.2 공칭 주파수응답과 동적 범위 검증",
-    "3.3 기준 벡터 생성과 XMODEL 인계",
-    "4.1 AFE·ADC 신호 경로와 회로 설계", "4.2 XMODEL 비이상성 및 설계 수정 검증",
+    "3.3 기준 벡터 생성과 LTspice 인계",
+    "4.1 LTspice AFE·ADC 회로 구현 및 검증", "4.2 LTspice→XMODEL 정합과 비이상성 검증",
     "5.1 핵심 개념과 다중 시간축 처리", "5.2 박동 및 리듬 정보 추출",
     "5.3 파형 형태 및 진폭 정보 추출", "5.4 60초 Snapshot과 30분 Final Membrane",
     "5.5 Streaming state와 하드웨어 구현 방식", "5.6 RTL/IP/FPGA 구현",
@@ -49,15 +49,25 @@ REQUIRED_FILES = [
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "cpu_fpga_comparison.csv",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "rtl_cycle_summary.json",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
+    ROOT / "docs" / "MIXED_SIGNAL_VERIFICATION_KR.md",
+    ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "README.md",
+    ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc",
+    ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "tables" / "xmodel_aligned_execution_manifest.csv",
+    ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "tables" / "xmodel_ltspice_handoff_metrics.csv",
 ]
 REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_research_workflow.svg",
     "FIG-08_signed_stream_handoff.svg", "FIG-10_classification_summary.svg",
-    "FIG-12_digital_processing_flow.svg", "FIG-15_afe_adc_signal_flow.svg",
+    "FIG-12_digital_processing_flow.svg",
     "MAT-01_afe_chain_overview.png", "MAT-02_total_frequency_response.png",
     "MAT-03_notch_dense_sweep.png", "MAT-04_dynamic_range_headroom.png",
     "MAT-05_adc_code_distribution.png", "MAT-06_reference_vector_handoff.png",
     "MAT-07_prevalidation_flow.png",
+    "SPICE-01_analog_afe_architecture.svg", "SPICE-02_ltspice_xmodel_aligned_schematic.jpg",
+    "SPICE-03_matlab_ltspice_afe_response.png", "SPICE-04_matlab_ltspice_notch_response.png",
+    "SPICE-05_xmodel_ltspice_adc_waveform_full.png", "SPICE-06_xmodel_ltspice_adc_waveform_zoom.png",
+    "SPICE-07_xmodel_ltspice_adc_error.png", "SPICE-08_xmodel_ltspice_adc_error_histogram.png",
+    "SPICE-09_xmodel_ltspice_adc_agreement.png", "SPICE-10_xmodel_ltspice_adc_metrics.png",
 ]
 MECHANISM_TERMS = [
     "변화량 = 현재 표본값 - 직전 표본값", "Strong Event 뉴런이 발화했다",
@@ -115,10 +125,10 @@ def main() -> int:
     module_names = ["ecg_event_encoder", "qrs_lif", "pnn_rhythm", "rdm_", "dscr_", "ram_peak", "qrs_maf", "rbbb_"]
     check("no module-name headings", not any(name in h.lower() for h in numbered_subs for name in module_names))
     chapter3 = section(text, "3. MATLAB 공칭 AFE·ADC 사전검증", 1)
-    chapter4 = section(text, "4. AFE·ADC 회로 설계와 XMODEL 검증", 1)
+    chapter4 = section(text, "4. LTspice AFE·ADC 구현과 XMODEL 검증", 1)
     chapter5 = section(text, "5. 디지털 가속기 IP 설계 및 구현", 1)
     check("digital architecture remains substantive", len(chapter5) >= 12000, len(chapter5))
-    check("MATLAB plus AFE XMODEL depth comparable to digital", len(chapter3) + len(chapter4) >= int(len(chapter5) * 0.65), (len(chapter3), len(chapter4), len(chapter5)))
+    check("MATLAB LTspice and XMODEL depth comparable to digital", len(chapter3) + len(chapter4) >= int(len(chapter5) * 0.65), (len(chapter3), len(chapter4), len(chapter5)))
     check("research-flow chapter order", [text.index(h) for h in MAIN_HEADINGS] == sorted(text.index(h) for h in MAIN_HEADINGS))
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
     related_work = section(text, "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", 2)
@@ -239,7 +249,7 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("seventeen reader-facing figures", len(report_images) == 17, len(report_images))
+    check("twenty-six reader-facing figures", len(report_images) == 26, len(report_images))
     p05_root = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation"
     for vector_name in ["device_view_annotated_publication.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
         check(f"Vivado implementation vector {vector_name}", (p05_root / vector_name).is_file(), str(p05_root / vector_name))
@@ -278,7 +288,7 @@ def main() -> int:
     check("FIG-12 white vector canvas", 'fill="#ffffff"' in figure12 and "<svg" in figure12[:400])
     reader_figure_requirements = {
         "FIG-01_long_window_motivation.svg": ["장시간 ECG 분류 문제", "표본값과 박동", "60초 Snapshot", "30분 최종 상태"],
-        "FIG-02_research_workflow.svg": ["Public ECG Data", "Record-wise Train / Validation /", "Locked Test Split", "Front End Verification", "(MATLAB, XMODEL)", "Digital Model / RTL Development", "Digital Validation", "Criteria Met?", "No", "Yes", "Design Lock", "Locked Test Data", "(Held-out)", "Locked Final Test", "(Used Once Only)", "Implementation Verification", "(RTL / IP / FPGA)", "Analog-Digital Integration Verification", "(XMODEL – RTL End-to-End)", "Final Results &amp; Report"],
+        "FIG-02_research_workflow.svg": ["Public ECG Data", "Record-wise Train / Validation /", "Locked Test Split", "Front End Verification", "(MATLAB, LTspice, XMODEL)", "Digital Model / RTL Development", "Digital Validation", "Criteria Met?", "No", "Yes", "Design Lock", "Locked Test Data", "(Held-out)", "Locked Final Test", "(Used Once Only)", "Implementation Verification", "(RTL / IP / FPGA)", "Analog-Digital Integration Verification", "(XMODEL – RTL End-to-End)", "Final Results &amp; Report"],
         "FIG-08_signed_stream_handoff.svg": ["기능 등가성", "SHA256 동일성", "고정 RTL"],
         "FIG-10_classification_summary.svg": ["분류 결과", "최종 시험 30분 구간", "주 결과"],
         "FIG-15_afe_adc_signal_flow.svg": ["ECG+", "ECG−", "HPF (+)", "HPF (−)", "3-op-amp", "IA", "Active Twin-T", "60 Hz Notch", "150 Hz LPF", "+ Buffer", "12-bit ADC", "Signed 12-bit", "Stream", "Digital", "RTL", "Input Disturbance Injection", "R/C Mismatch Model", "Op-Amp GBW / VOS Model", "ADC Non-Ideality Injection", "Solid arrows: signal path / Dashed arrows: injected disturbance or non-ideal model"],
@@ -308,14 +318,14 @@ def main() -> int:
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
     check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])
 
-    afe = section(text, "4.1 AFE·ADC 신호 경로와 회로 설계", 2)
+    afe = section(text, "4.1 LTspice AFE·ADC 회로 구현 및 검증", 2)
     for term in [
         "ECG 입력 → HPF → 3-op-amp IA → active Twin-T 60 Hz notch와 buffer → 150 Hz LPF와 buffer → 12-bit ADC → offset-binary → signed two’s-complement stream",
         "Av_IA = 1 + 2Rfb/Rg", "100 kΩ", "1 kΩ", "0.482287706339 Hz", "10 MΩ", "33 nF",
         "R=26.526 kΩ", "C=100 nF", "Rk1=5 kΩ", "Rk2=95 kΩ", "Q≈1/[4(1−k)]=5",
         "1.06 µF", "150.146172728 Hz", "LSB=3.3/4095=0.000805860805861 V",
         "offset_binary = floor", "signed_decimal = offset_binary − 2048", "$fstrobe",
-        "원본 schematic이 아니라", "unresolved_artifacts.csv",
+        "FULL_AFE_ADC_SH_xmodel_aligned.asc", "35개 nominal/stress 실행", "SPICE-02_ltspice_xmodel_aligned_schematic.jpg",
     ]:
         check(f"AFE design detail {term}", term in afe)
     for term in ["이산 relaxation", "vcvs", "loading", "실효이득이 36", "약 17 Hz", "110 dB", "off-by-one", "수동 Twin-T", "active Twin-T"]:
@@ -323,14 +333,15 @@ def main() -> int:
 
     analog_validation = "\n".join([
         section(text, "3. MATLAB 공칭 AFE·ADC 사전검증", 1),
-        section(text, "4.2 XMODEL 비이상성 및 설계 수정 검증", 2),
+        section(text, "4.2 LTspice→XMODEL 정합과 비이상성 검증", 2),
         section(text, "6.2 AFE·디지털 통합 XMODEL 검증", 2),
     ])
     for term in [
-        "MATLAB은 공칭", "XMODEL은", "평균 RMS 차이는 1.95 LSB", "60 Hz에서 RMS 0.92 mV",
+        "MATLAB은 공칭", "LTspice", "XMODEL", "평균 RMS 차이는 1.95 LSB", "60 Hz에서 RMS 0.92 mV",
         "50 Hz에서 118 mV", "100.7 dB", "80.0 dB", "100 kHz", "2.04 code",
         "train/val/test 1,200개 모두 0", "shift 중앙값 1.0 ms", "RR 오차 중앙값 0 ms",
-        "final_pred 15/16", "SHA256 36/36", "final_pred", "final_mem",
+        "final_pred 15/16", "SHA256 36/36", "final_pred", "final_mem", "MAE 0.6445 LSB",
+        "zero-lag correlation 0.999518", "±5 LSB", "98.74%", "±10 LSB", "99.89%",
     ]:
         check(f"MATLAB XMODEL verification {term}", term in analog_validation)
     for source_name in [
@@ -339,12 +350,14 @@ def main() -> int:
         "fig_reference_vector_handoff.png", "fig_matlab_prevalidation_flow.png",
     ]:
         check(f"fixed MATLAB figure cited {source_name}", source_name in text)
-    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4|5|6|7|8|9|10|13)\..*\[직접 근거:.*\]\*$", text)
-    check("AFE figures have direct evidence captions", len(direct_evidence_captions) == 9, len(direct_evidence_captions))
-    check("original schematic claim forbidden", "원본 LTspice schematic이 아니다" in text and "UNRESOLVED_NOT_PRESENT" in UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig"))
+    direct_evidence_captions = re.findall(r"(?m)^\*그림 (?:3|4[a-d]?|5|6[a-b]?|7|8|9|10[a-d]?|13|15[a-b]?)\..*\[직접 근거:.*\]\*$", text)
+    check("AFE figures have direct evidence captions", len(direct_evidence_captions) == 18, len(direct_evidence_captions))
+    unresolved_text = UNRESOLVED_ARTIFACTS.read_text(encoding="utf-8-sig")
+    check("LTspice schematic resolution recorded", "RESOLVED_IMPORTED" in unresolved_text and "FULL_AFE_ADC_SH_xmodel_aligned.asc" in unresolved_text)
+    check("LTspice schematic present", (ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc").is_file())
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "−83.5557 dB", "11.721 Hz", "5.119", "2.04 code", "0.00007%", "1,777.699800 ms", "2,007.549250 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "0.099 W", "0.005347247400 J/decision"]:
+    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "−83.5557 dB", "11.721 Hz", "5.119", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "2,007.549250 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "0.099 W", "0.005347247400 J/decision"]:
         check(f"required result {value}", value in text)
     benchmark_section = section(text, "6.1 가속기 Benchmark 결과와 해석 범위", 2)
     for term in [

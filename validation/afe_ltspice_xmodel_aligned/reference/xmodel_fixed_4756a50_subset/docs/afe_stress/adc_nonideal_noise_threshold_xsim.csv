@@ -1,0 +1,4 @@
+manifest_id,base_case_id,class_label,record_id,noise_rms_lsb,clean_pred,pert_pred,flipped,final_mem_NSR,final_mem_CHF,final_mem_ARR,final_mem_AFF
+2000,110,NSR,16483,0.5,NSR,NSR,false,30,0,0,0
+2001,110,NSR,16483,1.0,NSR,NSR,false,30,0,0,0
+1006,110,NSR,16483,2.0,NSR,CHF,true,0,25,5,0

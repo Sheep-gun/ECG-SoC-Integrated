@@ -21,7 +21,7 @@
 
 ## 4. mixed-signal-to-digital verification chain
 
-MATLAB은 nominal AFE/ADC intent, headroom, coding과 reference vector를 담당한다. XMODEL은 non-ideal/stress와 long-stream generation을 담당한다. AFE-generated 36개 final-test chunk는 digital board-replay input과 SHA256 36/36 동일했고, canonical `sample_gap_cycles=2`에서 locked full-top RTL의 final_pred와 final_mem이 각각 36/36 bit-exact였다.
+MATLAB은 nominal AFE/ADC intent, headroom, coding과 reference vector를 담당한다. LTspice는 이를 실제 schematic, 전원, S/H와 ADC mapping으로 구현해 35개 nominal/stress run으로 검증한다. XMODEL은 LTspice로 확인한 회로 계약의 SystemVerilog 실행, non-ideal/stress와 long-stream generation을 담당한다. 동일한 10초 10,000표본 LTspice–XMODEL ADC 비교는 MAE 0.6445 LSB, correlation 0.999518, ±5 LSB 98.74%, ±10 LSB 99.89%였다. AFE-generated 36개 final-test chunk는 digital board-replay input과 SHA256 36/36 동일했고, canonical `sample_gap_cycles=2`에서 locked full-top RTL의 final_pred와 final_mem이 각각 36/36 bit-exact였다.
 
 이 결과는 model-based analog intent에서 digital classifier까지의 handoff가 같은 byte stream과 같은 output state로 이어졌다는 integration evidence다. Physical AFE나 silicon validation을 뜻하지 않는다.
 
@@ -40,7 +40,7 @@ Classification accuracy는 별도로 29/36=80.56%이며 hardware equivalence와 
 1. 장시간 네 class ECG 문제 정의
 2. Snapshot/Final Membrane 다중 시간축 구조
 3. 정수형 event/state streaming realization
-4. MATLAB–XMODEL–digital handoff와 bit identity
+4. MATLAB–LTspice–XMODEL–digital handoff와 정량 정합·bit identity
 5. RTL/IP/FPGA 구현 완결성
 6. resource, timing과 완료된 NO_BOARD accelerator benefit benchmark; physical board timing·power는 향후 검증
 

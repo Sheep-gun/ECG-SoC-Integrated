@@ -1,0 +1,17 @@
+LTspice 26.0.1 for Windows
+Circuit: <USER_HOME>\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\xma_dc_p200m.cir
+Start Time: Wed Jul 15 19:39:08 2026
+Options:plotwinsize=0 plotwinsize=0
+solver = Normal
+Maximum thread count: 32
+tnom = 27
+temp = 27
+method = trap
+AsciiRawFile = true
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 47.690 seconds.
+
+Files loaded:
+<USER_HOME>\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\xma_dc_p200m.cir
+<USER_HOME>\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\XOpAmp_XMODEL.lib
+

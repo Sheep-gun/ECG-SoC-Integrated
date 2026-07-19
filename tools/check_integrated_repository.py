@@ -83,6 +83,7 @@ REQUIRED = [
     "benchmarks/accelerator_benefit/results/power_energy_summary.csv",
     "benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json",
     "figures/FIGURE_INDEX.md", "figures/source/figure_data.json",
+    "figures/source/team_handoff_analog/README.md",
     "tools/import_upstream_repositories.py", "tools/build_global_metrics.py",
     "tools/check_integrated_repository.py", "tools/generate_integrated_figures.py",
     "tools/check_integrated_technical_report.py", "tools/fetch_physionet_datasets.py",
@@ -102,6 +103,24 @@ REQUIRED = [
     "figures/final/MAT-05_adc_code_distribution.png",
     "figures/final/MAT-06_reference_vector_handoff.png",
     "figures/final/MAT-07_prevalidation_flow.png",
+    "figures/final/SPICE-01_analog_afe_architecture.svg",
+    "figures/final/SPICE-02_ltspice_xmodel_aligned_schematic.jpg",
+    "figures/final/SPICE-03_matlab_ltspice_afe_response.png",
+    "figures/final/SPICE-04_matlab_ltspice_notch_response.png",
+    "figures/final/SPICE-05_xmodel_ltspice_adc_waveform_full.png",
+    "figures/final/SPICE-06_xmodel_ltspice_adc_waveform_zoom.png",
+    "figures/final/SPICE-07_xmodel_ltspice_adc_error.png",
+    "figures/final/SPICE-08_xmodel_ltspice_adc_error_histogram.png",
+    "figures/final/SPICE-09_xmodel_ltspice_adc_agreement.png",
+    "figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png",
+    "validation/afe_ltspice_xmodel_aligned/README.md",
+    "validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc",
+    "validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net",
+    "validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/XOpAmp_XMODEL.lib",
+    "validation/afe_ltspice_xmodel_aligned/tables/xmodel_aligned_execution_manifest.csv",
+    "validation/afe_ltspice_xmodel_aligned/tables/xmodel_aligned_nominal_ac_metrics.csv",
+    "validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv",
+    "validation/afe_ltspice_xmodel_aligned/results/xmodel_aligned/nominal/ltspice_xmodel_aligned_adc_samples.csv",
     "integration_evidence/excluded_upstream_paths.csv",
     "integration_evidence/excluded_large_dataset_paths.csv",
     "reports/INTEGRATED_TECHNICAL_REPORT_KR.md",
@@ -137,6 +156,18 @@ def hash_path(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def hash_index_path(rel: str) -> str:
+    """Hash the exact staged blob, avoiding checkout line-ending conversion."""
+    result = subprocess.run(
+        [GIT, "-C", str(ROOT), "show", f":{rel}"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if result.returncode:
+        raise RuntimeError(f"staged path unavailable: {rel}: {result.stderr.decode(errors='replace').strip()}")
+    return hashlib.sha256(result.stdout).hexdigest()
 
 
 def capture_state(component: str, repo: Path) -> dict:
@@ -227,13 +258,29 @@ def main() -> int:
         if not condition:
             failures.append(f"{name}: {detail or 'condition failed'}")
 
-    check("independent .git exists", (ROOT / ".git").is_dir())
+    check("independent Git worktree exists", (ROOT / ".git").exists())
     active_branch = git(ROOT, "branch", "--show-current")
-    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final"}, active_branch)
+    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final", "codex/analog-validation-flow"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
     check("13 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 13)
     check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
+    check("10 immutable SPICE handoff figures", len(list((ROOT / "figures" / "final").glob("SPICE-*"))) == 10)
+    spice_hashes = {
+        "SPICE-01_analog_afe_architecture.svg": "abdeaeecfbcb52e79a467e376fc586d1966f112786167314ddb0a1ae862ca2c6",
+        "SPICE-02_ltspice_xmodel_aligned_schematic.jpg": "9440e2287f789a1427245c83a87556091e62ced00a32418ce1d162b493bc9490",
+        "SPICE-03_matlab_ltspice_afe_response.png": "41f2dede9e31b09ca35eabd375615cf8445409bd26f4497a7f4a1de1bbf60181",
+        "SPICE-04_matlab_ltspice_notch_response.png": "54129359411767150e513d235fdddb46a7a66d5bf9871c246d0ee9e5dcdf067c",
+        "SPICE-05_xmodel_ltspice_adc_waveform_full.png": "405c99c24da8637bf63516db9b433d1f41d8af109cdb23a1be2600eac168bb27",
+        "SPICE-06_xmodel_ltspice_adc_waveform_zoom.png": "bd1794967515cebc76cfd186a5e20443f4337a889fa4ef0c6d1af2bcaab72ee6",
+        "SPICE-07_xmodel_ltspice_adc_error.png": "b431c7511b8e62ce71206103304563975e7833b99832855f04eae05fa29bb34f",
+        "SPICE-08_xmodel_ltspice_adc_error_histogram.png": "f076853dce4cb35a71c073a56071d3e327ef81b55a8cb53e43c553082a7a3b49",
+        "SPICE-09_xmodel_ltspice_adc_agreement.png": "75faf5f2fef3a5b4b75b3ab2cfdceea675f69a7598717cc67255a1ae80a30ff4",
+        "SPICE-10_xmodel_ltspice_adc_metrics.png": "8b6d60ca26ba71dae6fc6235acbf5588b2591b08716af3cb6eb726b8d41a2d0f",
+    }
+    for filename, expected_hash in spice_hashes.items():
+        path = ROOT / "figures" / "final" / filename
+        check(f"SPICE figure SHA256 {filename}", path.is_file() and hash_path(path) == expected_hash)
     check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
     check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
     personal_path_hits, undecodable_tracked_text = tracked_text_home_path_audit()
@@ -300,7 +347,7 @@ def main() -> int:
         redacted_path = ROOT / row["tracked_path"]
         check(f"path-redaction file exists: {row['tracked_path']}", redacted_path.is_file())
         if redacted_path.is_file():
-            check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_path(redacted_path) == row["sanitized_sha256"])
+            check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_index_path(row["tracked_path"]) == row["sanitized_sha256"])
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
     benchmark_commit = "09e4d840827ad20856f5e23be4743ddd01565e30"
@@ -474,7 +521,7 @@ def main() -> int:
     check("FIG-12 indexed", "FIG-12_digital_processing_flow.svg" in fig_index)
     check("FIG-12 referenced by manuscript", "FIG-12_digital_processing_flow.svg" in manuscript)
     check("FIG-15 indexed", "FIG-15_afe_adc_signal_flow.svg" in fig_index)
-    check("FIG-15 referenced by manuscript", "FIG-15_afe_adc_signal_flow.svg" in manuscript)
+    check("analog architecture referenced by manuscript", "FIG-15_afe_adc_signal_flow.svg" in manuscript or "SPICE-01_analog_afe_architecture.svg" in manuscript)
     for approved_name in ["FIG-12_digital_processing_flow.svg", "FIG-15_afe_adc_signal_flow.svg"]:
         approved = ROOT / "figures" / "source" / "approved_svg" / approved_name
         final = ROOT / "figures" / "final" / approved_name
@@ -508,12 +555,18 @@ def main() -> int:
     check("benchmark live boundary", "live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다" in text)
     check("benchmark board-speedup boundary", "측정 보드 speedup" in text or "측정 board speedup" in text)
 
-    parent_index = git(PARENT, "ls-files", "--stage", "--", "ECG-SoC-Integrated")
+    # The integrated repository may be checked from a standalone Git worktree,
+    # so use the explicitly resolved digital repository instead of ROOT.parent.
+    parent_repo = repo_by_component["digital_accelerator"]
+    parent_index = git(parent_repo, "ls-files", "--stage", "--", "ECG-SoC-Integrated")
     check("integrated repo absent from parent index", not parent_index, parent_index)
-    parent_exclude = (PARENT / ".git" / "info" / "exclude").read_text(encoding="utf-8", errors="replace")
+    parent_git_dir = Path(git(parent_repo, "rev-parse", "--git-dir"))
+    if not parent_git_dir.is_absolute():
+        parent_git_dir = parent_repo / parent_git_dir
+    parent_exclude = (parent_git_dir / "info" / "exclude").read_text(encoding="utf-8", errors="replace")
     check("parent local exclude installed", "/ECG-SoC-Integrated/" in parent_exclude)
     parent_gitignore_changes = [
-        line for line in git(PARENT, "status", "--porcelain=v1", "--untracked-files=no").splitlines()
+        line for line in git(parent_repo, "status", "--porcelain=v1", "--untracked-files=no").splitlines()
         if line.endswith(".gitignore") and "benchmarks/accelerator_benefit/" not in line.replace("\\", "/")
     ]
     check("parent tracked gitignore untouched by integration", not parent_gitignore_changes, str(parent_gitignore_changes))

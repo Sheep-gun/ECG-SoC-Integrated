@@ -1,0 +1,8 @@
+executable=<USER_HOME>\AppData\Local\Programs\ADI\LTspice\LTspice.exe
+arguments=-b -ascii "<USER_HOME>\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\xma_dc_p200m.cir"
+working_directory=<USER_HOME>\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned
+started_utc=2026-07-15T10:39:08.6595722Z
+return_code=0
+completed_in_log=True
+fatal_pattern_in_log=False
+finished_utc=2026-07-15T10:39:57.1240491Z

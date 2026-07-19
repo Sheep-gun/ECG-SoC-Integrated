@@ -1,6 +1,6 @@
 # Integrated figure index
 
-All figures are generated from verified non-benchmark evidence. Source data: `figures/source/figure_data.json`.
+Generated integrated figures and immutable team-provided analog validation figures are indexed below. Generated source data: `figures/source/figure_data.json`; analog handoff hashes: `figures/source/team_handoff_analog/README.md`.
 
 ## FIG-01
 
@@ -17,10 +17,10 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 - File: `figures/final/FIG-02_research_workflow.svg`
 - Owner: 서민우·이수환·양건
-- Source files: `source_of_truth/upstream_commits.yaml`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
-- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
+- Source files: `source_of_truth/upstream_commits.yaml`, `validation/afe_ltspice_xmodel_aligned/README.md`, `components/digital_accelerator/configs/final_submission_locked_model.json`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`, `components/digital_accelerator/reports/final/final_metrics.json`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, INTEGRATED_LTSPICE_2026-07-19, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Record-wise 분할 뒤 Train·Validation으로 Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow
+- Caption: Record-wise 분할 뒤 Train·Validation으로 MATLAB→LTspice→XMODEL Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow
 - Evidence scope: data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test
 - Limitations: the post-lock implementation and integration stages verify equivalence and do not permit model, threshold, or structural retuning
 
@@ -29,7 +29,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - File: `figures/final/FIG-03_ownership_handoff.svg`
 - Owner: 양건(편집)
 - Source files: `source_of_truth/ownership_matrix.csv`
-- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, INTEGRATED_LTSPICE_2026-07-19, 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Contributor ownership과 handoff
 - Evidence scope: ownership
@@ -127,12 +127,23 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 
 - File: `figures/final/FIG-15_afe_adc_signal_flow.svg`
 - Owner: 양건(통합 편집)
-- Source files: `figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg`, `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`, `source_of_truth/unresolved_artifacts.csv`
-- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
+- Source files: `figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg`, `validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc`, `components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md`, `components/afe_xmodel/analog/ecg_afe_xmodel.sv`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, INTEGRATED_LTSPICE_2026-07-19, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: 차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow
 - Evidence scope: finite GBW across active op-amp stages, VOS stress at the IA input pair, and one ADC code-boundary injection
-- Limitations: not the missing original LTspice schematic; component values and stress details remain in the body
+- Limitations: reader-facing architecture; use SPICE-02 for the actual LTspice graphical schematic; neither is physical PCB or silicon evidence
+
+## FIG-RTL
+
+- File: `figures/final/FIG-RTL_top_with_snapshot_expansion.svg`
+- Owner: 양건(통합 편집)
+- Source files: `figures/source/approved_svg/FIG-RTL_top_with_snapshot_expansion.svg`, `artifacts/rtl_elaborated_schematic/FIG-RTL-A_top_hierarchy.svg`, `artifacts/rtl_elaborated_schematic/FIG-RTL-B_snapshot_core_hierarchy.svg`, `artifacts/rtl_elaborated_schematic/hierarchy_report.txt`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Pure RTL top hierarchy와 Snapshot core 확장
+- Evidence scope: Vivado RTL Elaborated Schematic 기반 hierarchy reconstruction
+- Limitations: module instances and connectivity retained; not a synthesized gate-level or post-route netlist
 
 ## MAT-01
 
@@ -143,7 +154,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: MATLAB nominal AFE+ADC chain overview
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
 ## MAT-02
 
@@ -154,7 +165,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: MATLAB nominal total frequency-response reference
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
 ## MAT-03
 
@@ -165,7 +176,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Active Twin-T dense 60 Hz sweep
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
 ## MAT-04
 
@@ -176,7 +187,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Representative ADC rail headroom
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
 ## MAT-05
 
@@ -187,7 +198,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Representative offset-binary ADC-code distribution
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
 ## MAT-06
 
@@ -198,7 +209,7 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: MATLAB reference-vector handoff
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
 ## MAT-07
 
@@ -209,19 +220,117 @@ All figures are generated from verified non-benchmark evidence. Source data: `fi
 - Source-data path: `figures/source/figure_data.json`
 - Caption: MATLAB nominal pre-validation role
 - Evidence scope: fixed MATLAB nominal reference figure
-- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence
+- Limitations: not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence
 
-## FIG-RTL
+## SPICE-01
 
-- File: `figures/final/FIG-RTL_top_with_snapshot_expansion.svg`
-- Preview: `figures/final/FIG-RTL_top_with_snapshot_expansion.png` (3600 × 2300 px)
-- Owner: 양건(통합 편집)
-- Source files: `figures/source/approved_svg/FIG-RTL_top_with_snapshot_expansion.svg`, `artifacts/rtl_elaborated_schematic/FIG-RTL-A_top_hierarchy.svg`, `artifacts/rtl_elaborated_schematic/FIG-RTL-B_snapshot_core_hierarchy.svg`, `artifacts/rtl_elaborated_schematic/hierarchy_report.txt`, `artifacts/rtl_elaborated_schematic/selected_cells_top.txt`, `artifacts/rtl_elaborated_schematic/selected_nets_top.txt`, `artifacts/rtl_elaborated_schematic/selected_cells_snapshot.txt`, `artifacts/rtl_elaborated_schematic/selected_nets_snapshot.txt`, `tools/vivado/generate_publication_rtl_hierarchy_svg.py`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75
+- File: `figures/final/SPICE-01_analog_afe_architecture.svg`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
 - Source-data path: `figures/source/figure_data.json`
-- Caption: Vivado RTL Elaborated Schematic에서 확인한 Pure RTL 최상위 계층과 `u_snapshot` 내부 실제 module hierarchy를 한 장에 배치한 설계회로 구성도
-- Evidence scope: `snn_ecg_30min_final_top`의 `u_snapshot`·`u_final`과 Snapshot core의 실제 named RTL instances 및 선택된 handoff signals
-- Limitations: Vivado elaboration 근거를 읽기 좋게 재배치한 Figure이며 synthesized gate-level netlist 또는 post-route connectivity가 아니다. Clock/reset, debug/profile, 반복 폭 표기와 비핵심 내부 신호는 생략했다.
+- Caption: AFE+ADC architecture and non-ideality injection points
+- Evidence scope: schematic/behavioral architecture
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-02
+
+- File: `figures/final/SPICE-02_ltspice_xmodel_aligned_schematic.jpg`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: XMODEL-aligned LTspice AFE+ADC/S&H graphical schematic
+- Evidence scope: actual LTspice schematic capture
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-03
+
+- File: `figures/final/SPICE-03_matlab_ltspice_afe_response.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB and LTspice full AFE frequency-response comparison
+- Evidence scope: MATLAB-to-schematic design-intent comparison
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-04
+
+- File: `figures/final/SPICE-04_matlab_ltspice_notch_response.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB and LTspice active Twin-T notch comparison
+- Evidence scope: 60 Hz dense response comparison
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-05
+
+- File: `figures/final/SPICE-05_xmodel_ltspice_adc_waveform_full.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Full ten-second XMODEL-LTspice ADC waveform overlay
+- Evidence scope: patient100 nominal 10-second comparison
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-06
+
+- File: `figures/final/SPICE-06_xmodel_ltspice_adc_waveform_zoom.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Two-to-three-second XMODEL-LTspice ADC waveform zoom
+- Evidence scope: QRS-region nominal comparison
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-07
+
+- File: `figures/final/SPICE-07_xmodel_ltspice_adc_error.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Per-sample LTspice S/H minus XMODEL ADC error
+- Evidence scope: ten-second code error
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-08
+
+- File: `figures/final/SPICE-08_xmodel_ltspice_adc_error_histogram.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: XMODEL-LTspice ADC error histogram
+- Evidence scope: ten-second code-error distribution
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-09
+
+- File: `figures/final/SPICE-09_xmodel_ltspice_adc_agreement.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Cumulative ADC-code agreement by error range
+- Evidence scope: exact through plus-or-minus 10 LSB coverage
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
+
+## SPICE-10
+
+- File: `figures/final/SPICE-10_xmodel_ltspice_adc_metrics.png`
+- Owner: 이수환(팀 handoff)
+- Source files: `figures/source/team_handoff_analog/README.md`, `validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv`
+- Source commits: INTEGRATED_LTSPICE_2026-07-19
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Quantitative XMODEL-LTspice ADC comparison
+- Evidence scope: full and settled nominal metrics
+- Limitations: team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement
 
 ## FIG-P05
 

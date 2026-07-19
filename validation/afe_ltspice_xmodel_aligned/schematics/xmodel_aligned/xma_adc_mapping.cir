@@ -1,0 +1,9 @@
+* XMODEL-aligned behavioral ADC mapping; not a transistor-level SAR ADC
+VADCIN ADC_IN 0 PWL(0 -2 1m -2 1.001m -1.65 2m -1.65 2.001m 0 3m 0 3.001m 0.000402931 4m 0.000402931 4.001m 1.65 5m 1.65 5.001m 2 6m 2)
+BCLIP ADC_CLIP 0 V=limit(V(ADC_IN),-1.65,1.65)
+BCODE ADC_CODE 0 V=limit(floor((V(ADC_CLIP)+1.65)/3.3*4095),0,4095)
+BSIGNED ADC_SIGNED 0 V=V(ADC_CODE)-2048
+.tran 0 6m 0 1u
+.options plotwinsize=0
+.save V(ADC_IN) V(ADC_CLIP) V(ADC_CODE) V(ADC_SIGNED)
+.end

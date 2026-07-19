@@ -7,7 +7,7 @@
 | 1. 서론 | 무엇을 왜 설계했는가 | `docs/PROBLEM_DEFINITION_KR.md`, `docs/CONTRIBUTIONS_AND_NOVELTY_KR.md` | 임상 진단이나 상용 우월성 주장이 아님 |
 | 2. 전체 시스템과 평가 방법 | 데이터와 세 component가 어떻게 연결되는가 | `source_of_truth/upstream_commits.yaml`, `source_of_truth/ownership_matrix.csv`, dataset·split artifact | record-wise split이 database–class confounding을 제거하지 않음 |
 | 3. 디지털 아키텍처 | 표본이 어떤 RTL state transition을 거쳐 class가 되는가 | digital `rtl/`, FIG-12~14, `tables/streaming_state_inventory.csv` | trained deep SNN·STDP·online learning이 아닌 SNN-inspired event/state architecture |
-| 4. 구현 | MATLAB/XMODEL intent와 RTL/IP/FPGA가 어떻게 검증되는가 | MATLAB/XMODEL 결과, Vivado/IP-XACT/MicroBlaze artifact | model-based analog 검증은 physical AFE/ADC 검증이 아님 |
+| 4. 구현 | MATLAB 설계가 LTspice schematic과 XMODEL을 거쳐 RTL/IP/FPGA로 어떻게 이어지는가 | MATLAB/LTspice/XMODEL 결과, Vivado/IP-XACT/MicroBlaze artifact | schematic/behavioral model 검증은 physical AFE/ADC 검증이 아님 |
 | 5. 결과 | 정확도·등가성·자원이 각각 무엇을 뜻하는가 | `final_metrics.json`, SHA/equivalence/board result | 36/36 기능 등가성을 100% label accuracy로 해석하지 않음 |
 | 6. 논의와 한계 | 기여가 무엇이며 어디까지 유효한가 | claim registry, benchmark import audit, confounding/limitation 문서 | NO_BOARD 결과와 physical board pending을 분리 |
 | 7. 결론 | 무엇을 완성했고 무엇이 남았는가 | 앞 장의 registered evidence | physical·clinical·ASIC claim 금지 |

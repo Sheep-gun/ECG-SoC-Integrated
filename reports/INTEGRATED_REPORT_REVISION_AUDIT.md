@@ -3,8 +3,8 @@
 ## 상태와 기준
 
 - 개정 상태: `COMPLETE`
-- 작업 branch: `main`
-- 작업 시작 기준: `f756bcf84dd6f15476bf347b2791a3ba9a64e6f5` (`origin/main`과 일치 확인)
+- 작업 branch: `codex/analog-validation-flow` (검증 후 `main`에 fast-forward push)
+- 작업 시작 기준: `0413aaaf9f94fe498af5d69355de7422a2b7d108` (`origin/main`과 일치 확인)
 - 고정 upstream: MATLAB `907f7e1f081a9d6a5703a32095d962143315a192`, XMODEL `4756a5086023547328ef44fd5fd87da3c250dc39`, digital `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
 ## 이번 개정 범위
@@ -14,14 +14,15 @@
 | 항목 | 개정 결과 |
 |---|---:|
 | 본문 장 | 9 |
-| 본문 문자 수 | 62,448 |
-| 생성 SVG | 15 |
+| 본문 문자 수 | 74,676 |
+| 통합 생성·보존 FIG SVG | 13 |
 | 상속 MATLAB PNG | 7 |
-| 본문 참조 그림 | 16 |
-| Evidence map 행 | 66 |
-| Claim registry 행 | 47 |
+| immutable LTspice handoff 그림 | 10 |
+| 본문 참조 그림 | 26 |
+| Evidence map 행 | 76 |
+| Claim registry 행 | 52 |
 | 참고문헌 | 14 |
-| Unresolved artifact | 1 |
+| Artifact registry | 1 (`RESOLVED_IMPORTED`) |
 
 ## AFE·ADC 보강 내용
 
@@ -46,7 +47,16 @@
 
 고정 MATLAB component의 일곱 그림은 내용이나 픽셀을 다시 만들지 않고 `figures/final/MAT-01`~`MAT-07`로 그대로 상속하였다. 사용자가 수정한 세 흐름의 구조를 해상도에 독립적인 SVG로 다시 구성해 `FIG-02_research_workflow.svg`, `FIG-15_afe_adc_signal_flow.svg`, `FIG-12_digital_processing_flow.svg`에 반영하였다. Analog Flow는 ECG+·ECG−의 두 HPF 경로가 IA에서 합류하고 `Input Disturbance Injection`, `R/C Mismatch Model`, `Op-Amp GBW / VOS Model`, `ADC Non-Ideality Injection`이 점선 경로로 분리된다. Digital Flow는 rhythm·morphology 경로를 `Feature Accumulation & Class Scoring`에서 합친 뒤 30개 Snapshot을 30분 Final Membrane으로 누적한다. 같은 내용을 반복하던 `FIG-04`, `FIG-13`, `FIG-14`는 보고서와 Figure index에서 제거하였다.
 
-고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않았다. 따라서 analog signal flow와 본문 caption에서 원본 schematic이 아님을 명시했고, 누락 항목을 `source_of_truth/unresolved_artifacts.csv`의 `UNRES-001`로 기록하였다. Physical PCB, fabricated silicon, post-layout 또는 실제 전극 검증 claim은 추가하지 않았다.
+초기 고정 component에는 README에서 언급한 LTspice `.asc` 또는 원본 회로 캡처가 존재하지 않아 `UNRES-001`로 기록했었다. 2026-07-19 팀 handoff에서 XMODEL-aligned graphical `.asc`, generated `.net`, 전용 op-amp 모델, 35-run 실행 근거와 실제 회로 캡처가 제공되어 `validation/afe_ltspice_xmodel_aligned/`에 반입하고 `UNRES-001`을 `RESOLVED_IMPORTED`로 갱신하였다. 설명용 FIG-15와 실제 schematic 캡처 SPICE-02는 명확히 구분한다. Physical PCB, fabricated silicon, transistor/post-layout 또는 실제 전극 검증 claim은 여전히 추가하지 않았다.
+
+## LTspice handoff 반입 보강 (2026-07-19)
+
+- 흐름을 `MATLAB 공칭 사전설계 → LTspice 실제 schematic 구현·검증 → SystemVerilog XMODEL 행동모델·RTL 인계`로 명시하였다.
+- XMODEL 계약에 정렬한 ±1.65 V AFE+ADC/S&H schematic, netlist와 전용 op-amp abstraction을 보존하였다.
+- nominal/stress 35개 LTspice run이 모두 `EXECUTED`이고 fatal/warning signature가 없음을 execution manifest로 확인하였다.
+- 동일 10초 ECG의 10,000개 ADC code에서 LTspice–XMODEL MAE 0.6445 LSB, RMS 1.3020 LSB, zero-lag correlation 0.999518, ±5 LSB 98.74%, ±10 LSB 99.89%, clipping 0을 반영하였다.
+- 팀 제공 figure 10종은 원본 SHA256을 provenance manifest와 checker에 고정하였다.
+- 수 GB raw waveform은 제외하고 회로, compact vector, 결과표, 로그와 재실행 스크립트를 반입하였다.
 
 ## 가속기 Benchmark 반입 내용
 
@@ -89,8 +99,8 @@
 
 ## 최종 자동 검증
 
-- `tools/generate_integrated_figures.py`: PASS — 22개 생성, FIG-P05를 포함해 23개 index
-- `tools/check_integrated_technical_report.py`: PASS — 704 rules, 0 conflicts, chars 64,969, figures 19, evidence rows 68
-- `tools/check_integrated_repository.py`: PASS — 294 rules, 0 conflicts
+- `tools/generate_integrated_figures.py`: PASS — 19개 생성(12 SVG+7 MATLAB PNG), LTspice handoff 10개 보존, FIG-P05 포함 31개 index
+- `tools/check_integrated_technical_report.py`: PASS — 813 rules, 0 conflicts, chars 74,676, figures 26, evidence rows 76
+- `tools/check_integrated_repository.py`: PASS — 499 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

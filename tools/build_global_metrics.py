@@ -14,6 +14,7 @@ DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
 BENCHMARK_COMMIT = "09e4d840827ad20856f5e23be4743ddd01565e30"
 XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
+LTSPICE_HANDOFF = "INTEGRATED_LTSPICE_2026-07-19"
 
 
 def read_json(rel: str):
@@ -71,6 +72,28 @@ def main() -> int:
     assert all(float(row["clipping_ratio_percent"]) == 0.0 for row in mr)
     minimum_headroom = min(float(row["minimum_headroom_to_rail_V"]) for row in mr)
 
+    ltspice_handoff_path = "validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv"
+    lh = {row["metric"]: row for row in read_csv(ltspice_handoff_path)}
+    expected_handoff = {
+        "sample_count": 10000.0,
+        "mae": 0.6445,
+        "rms_error": 1.3020,
+        "max_abs_error": 13.0,
+        "zero_lag_correlation": 0.999518,
+        "best_lag": 0.0,
+        "clipping_count": 0.0,
+        "within_5_lsb_coverage": 98.74,
+        "within_10_lsb_coverage": 99.89,
+    }
+    for name, expected in expected_handoff.items():
+        assert float(lh[name]["value"]) == expected
+
+    ltspice_execution_path = "validation/afe_ltspice_xmodel_aligned/tables/xmodel_aligned_execution_manifest.csv"
+    le = read_csv(ltspice_execution_path)
+    assert len(le) == 35
+    assert all(row["status"] == "EXECUTED" for row in le)
+    assert all(row["fatal_pattern"] == "False" and row["warning_pattern"] == "False" for row in le)
+
     benchmark_comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
     assert len(benchmark_comparison) == 1
     bc = benchmark_comparison[0]
@@ -85,6 +108,7 @@ def main() -> int:
     dr = "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier"
     xr_name = "https://github.com/Hwan-22/ECG-SoC"
     mr_name = "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation"
+    integrated_repo = "https://github.com/Sheep-gun/ECG-SoC-Integrated"
     metrics = {
         "schema_version": 1,
         "project_identity": "Holter-oriented long-window, multi-timescale, SNN-inspired ECG four-class classification accelerator IP",
@@ -118,7 +142,14 @@ def main() -> int:
             "afe_to_rtl_final_mem_equivalence": metric("36/36", "chunks", "AFE-generated chunks at canonical cadence vs digital golden", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "functional reproduction, not clinical validation"),
             "matlab_representative_clipping_ratio": metric(0.0, "percent", "NSR/CHF/ARR/AFF representative 60-second nominal MATLAB records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal model-based pre-validation; not physical measurement"),
             "matlab_minimum_representative_headroom": metric(round(minimum_headroom, 12), "V", "minimum across NSR/CHF/ARR/AFF representative nominal records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal MATLAB chain and selected representative records only"),
-            "signed_stream_width": metric(12, "bits", "MATLAB/XMODEL-to-digital interface", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "two's-complement signed digital handoff"),
+            "ltspice_execution_count": metric(35, "runs", "XMODEL-aligned LTspice nominal and stress regression", "execution manifest", ltspice_execution_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "LTspice behavioral op-amp implementation; not transistor-level, PCB, or silicon measurement"),
+            "ltspice_xmodel_adc_sample_count": metric(10000, "samples", "same 10-second patient100 input at 1 kSPS", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "team-provided cross-tool comparison; regenerated raw waveforms are intentionally excluded because of size"),
+            "ltspice_xmodel_adc_mae": metric(0.6445, "LSB", "LTspice S/H minus XMODEL over the same 10-second, 10,000-sample input", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "model-to-model agreement; not physical ADC error"),
+            "ltspice_xmodel_adc_rms": metric(1.3020, "LSB", "LTspice S/H minus XMODEL over the same 10-second, 10,000-sample input", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "maximum local deviation is 13 LSB and is concentrated near fast ECG edges"),
+            "ltspice_xmodel_adc_correlation": metric(0.999518, "ratio", "zero-lag LTspice/XMODEL ADC-code correlation over 10,000 samples", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "correlation alone does not establish sample-wise identity"),
+            "ltspice_xmodel_within_5_lsb": metric(98.74, "percent", "absolute LTspice/XMODEL code error within 5 LSB over 10,000 samples", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "engineering tolerance coverage, not exact bit identity"),
+            "ltspice_xmodel_within_10_lsb": metric(99.89, "percent", "absolute LTspice/XMODEL code error within 10 LSB over 10,000 samples", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "11 samples exceed 10 LSB; maximum absolute error is 13 LSB"),
+            "signed_stream_width": metric(12, "bits", "MATLAB/LTspice/XMODEL-to-digital interface", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "two's-complement signed digital handoff"),
             "signed_stream_sample_rate": metric(1000, "samples/s", "canonical ECG stream contract", "component contract", "components/digital_accelerator/reports/final/digital_input_contract.md", dr, DIGITAL_COMMIT, "양건", "input stream convention, not accelerator throughput"),
             "snapshot_duration": metric(60, "s", "Snapshot Readout interval", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "architecture time scale at 1 kSPS"),
             "final_membrane_snapshots": metric(30, "snapshots", "Final Membrane accumulation", "locked architecture report", "components/digital_accelerator/FINAL_REPORT_KR.md", dr, DIGITAL_COMMIT, "양건", "30-minute common public-data window constrained by MIT-BIH Arrhythmia half-hour excerpts; not equivalent to 24-hour Holter validation"),

@@ -7,6 +7,10 @@
 *.json text eol=lf
 *.svg text eol=lf
 *.pdf binary
+*.png binary
+*.jpg binary
+/figures/final/SPICE-01_analog_afe_architecture.svg binary
+/validation/afe_ltspice_xmodel_aligned/results/xmodel_aligned/logs/*.log whitespace=-blank-at-eof
 
 # Imported component snapshots override generic rules and preserve their native
 # line endings. CRLF is therefore a valid end-of-line sequence in redacted

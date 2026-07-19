@@ -1,0 +1,18 @@
+﻿test_id,variant,source_schematic,simulation_type,metric,target,measured,unit,deviation,status,evidence_path,notes
+TH_APERTURE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,first_direct_aperture,0.001,0.001,s,0,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,XMODEL first falling edge
+TH_APERTURE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,switch_off_threshold_crossing,,0.00099952,s,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,PULSE falling 999-1000us; SW_ADC turn-off at 2.4V
+TH_APERTURE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,valid_hold_phase_after_aperture,,1e-07,s,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_ACQUISITION,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,maximum_absolute_error,,0.00444512433503,V,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_ACQUISITION,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,rms_error,,5.01724038607e-05,V,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_ACQUISITION,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,maximum_absolute_error,,5.51599519755,LSB,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_DROOP,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,maximum_absolute_droop,,2.22390313008e-05,V,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_DROOP,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,rms_droop,,3.0524130478e-06,V,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_DROOP,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,maximum_absolute_droop,,0.0275966161142,LSB,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_CODE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,valid_sample_count,10000,10000,samples,0,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_CODE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,hold_interval_code_change_count,,14,changes,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_CODE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,hold_periods_with_code_change,,14,periods,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+TH_CODE,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,maximum_code_changes_in_one_hold,,1,changes/period,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+ADC_DIRECT,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,clip_count,,0,samples,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+ADC_DIRECT,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,clip_ratio,,0,ratio,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+ADC_TRACK_HOLD,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,clip_count,,0,samples,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,
+ADC_TRACK_HOLD,XMODEL_ALIGNED,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc,TRAN,clip_ratio,,0,ratio,,MEASURED,results/xmodel_aligned/raw/FULL_AFE_ADC_SH_xmodel_aligned.raw,

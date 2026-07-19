@@ -16,6 +16,7 @@ APPROVED_SVG = SRC / "approved_svg"
 DIGITAL = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
 XMODEL = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB = "907f7e1f081a9d6a5703a32095d962143315a192"
+LTSPICE = "INTEGRATED_LTSPICE_2026-07-19"
 
 
 def esc(value) -> str:
@@ -219,7 +220,7 @@ def main() -> int:
     s += paper_box(main_x, main_y[0], main_w, main_h, "Public ECG Data", "#eff6ff", "#2563a8")
     s += paper_box(main_x, main_y[1], main_w, main_h, ["Record-wise Train / Validation /", "Locked Test Split"], "#eff6ff", "#2563a8")
     s += paper_path([(center_x, 130), (center_x, 180)])
-    s += paper_box(main_x, main_y[2], main_w, main_h, ["Front End Verification", "(MATLAB, XMODEL)"], "#eff6ff", "#2563a8")
+    s += paper_box(main_x, main_y[2], main_w, main_h, ["Front End Verification", "(MATLAB, LTspice, XMODEL)"], "#eff6ff", "#2563a8")
     s += paper_path([(center_x, 280), (center_x, 330)])
     s += paper_box(main_x, main_y[3], main_w, main_h, "Digital Model / RTL Development", "#ecfdf3", "#2f855a")
     s += paper_path([(center_x, 430), (center_x, 480)])
@@ -456,8 +457,8 @@ def main() -> int:
 
     figures = [
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
-        ("FIG-02", "figures/final/FIG-02_research_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation으로 Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow", "data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test", "the post-lock implementation and integration stages verify equivalence and do not permit model, threshold, or structural retuning"),
-        ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
+        ("FIG-02", "figures/final/FIG-02_research_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "validation/afe_ltspice_xmodel_aligned/README.md", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,LTSPICE,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation으로 MATLAB→LTspice→XMODEL Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow", "data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test", "the post-lock implementation and integration stages verify equivalence and do not permit model, threshold, or structural retuning"),
+        ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,LTSPICE,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),
         ("FIG-06", "figures/final/FIG-06_matlab_nominal_summary.svg", "서민우", ["components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv"], [MATLAB], "MATLAB representative nominal clipping/headroom", "four selected nominal 60-second records", "not physical measurement"),
         ("FIG-07", "figures/final/FIG-07_xmodel_scope.svg", "이수환", ["components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md"], [XMODEL], "XMODEL waveform/stress/integration scope", "model-based verification", "not transistor/post-layout/PCB/silicon"),
@@ -466,10 +467,25 @@ def main() -> int:
         ("FIG-10", "figures/final/FIG-10_classification_summary.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Locked classification results", "final-test and model-selection metrics", "public-dataset engineering result"),
         ("FIG-11", "figures/final/FIG-11_confounding_claim_boundary.svg", "양건(편집)", ["docs/DATASET_DOMAIN_CONFOUNDING_KR.md"], ["INTEGRATED"], "Database-class confounding and claim boundary", "generalization interpretation", "does not invalidate RTL/IP evidence"),
         ("FIG-12", "figures/final/FIG-12_digital_processing_flow.svg", "양건(편집)", ["figures/source/approved_svg/FIG-12_digital_processing_flow.svg", "components/digital_accelerator/rtl/snn_ecg_30min_final_top.v", "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v", "components/digital_accelerator/rtl/core/qrs_lif_detector.v", "components/digital_accelerator/rtl/final_membrane_layer.v", "tables/streaming_state_inventory.csv"], [DIGITAL], "Signed ECG가 사건·QRS 검출을 거쳐 rhythm·morphology 경로로 분기되고, 네 morphology 증거가 서로 독립적인 병렬 경로로 class scoring에 합류한 뒤 60초 Snapshot 30개가 Final Membrane으로 누적되는 digital processing flow", "reader-facing digital architecture with four parallel morphology evidence paths and 30-Snapshot accumulation", "conceptual grouping, not literal post-synthesis netlist connectivity; block internals remain in the body"),
-        ("FIG-15", "figures/final/FIG-15_afe_adc_signal_flow.svg", "양건(통합 편집)", ["figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg", "components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv", "source_of_truth/unresolved_artifacts.csv"], [MATLAB, XMODEL, "INTEGRATED"], "차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow", "finite GBW across active op-amp stages, VOS stress at the IA input pair, and one ADC code-boundary injection", "not the missing original LTspice schematic; component values and stress details remain in the body"),
+        ("FIG-15", "figures/final/FIG-15_afe_adc_signal_flow.svg", "양건(통합 편집)", ["figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg", "validation/afe_ltspice_xmodel_aligned/schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.asc", "components/matlab_prevalidation/matlab_afe_validation/docs/afe_adc_parameter_reference.md", "components/afe_xmodel/analog/ecg_afe_xmodel.sv"], [MATLAB, LTSPICE, XMODEL, "INTEGRATED"], "차동 ECG가 HPF·IA·Active Twin-T notch·LPF와 buffer·12-bit ADC를 통과해 signed stream으로 인계되고, XMODEL 비이상성은 실제 고정 검증 범위에 맞춘 점선 경로로 주입되는 AFE·ADC signal flow", "finite GBW across active op-amp stages, VOS stress at the IA input pair, and one ADC code-boundary injection", "reader-facing architecture; use SPICE-02 for the actual LTspice graphical schematic; neither is physical PCB or silicon evidence"),
+        ("FIG-RTL", "figures/final/FIG-RTL_top_with_snapshot_expansion.svg", "양건(통합 편집)", ["figures/source/approved_svg/FIG-RTL_top_with_snapshot_expansion.svg", "artifacts/rtl_elaborated_schematic/FIG-RTL-A_top_hierarchy.svg", "artifacts/rtl_elaborated_schematic/FIG-RTL-B_snapshot_core_hierarchy.svg", "artifacts/rtl_elaborated_schematic/hierarchy_report.txt"], [DIGITAL, "INTEGRATED"], "Pure RTL top hierarchy와 Snapshot core 확장", "Vivado RTL Elaborated Schematic 기반 hierarchy reconstruction", "module instances and connectivity retained; not a synthesized gate-level or post-route netlist"),
     ]
     for fid, source_name, output_name, caption in inherited_matlab_figures:
-        figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-XMODEL bit-exact evidence"))
+        figures.append((fid, f"figures/final/{output_name}", "서민우", [f"components/matlab_prevalidation/matlab_afe_validation/figures/{source_name}", "components/matlab_prevalidation/matlab_afe_validation/figures/FIGURE_CAPTIONS.md"], [MATLAB], caption, "fixed MATLAB nominal reference figure", "not transistor-level, PCB, silicon, post-layout, or MATLAB-LTspice-XMODEL bit-exact evidence"))
+    spice_figures = [
+        ("SPICE-01", "SPICE-01_analog_afe_architecture.svg", "AFE+ADC architecture and non-ideality injection points", "schematic/behavioral architecture"),
+        ("SPICE-02", "SPICE-02_ltspice_xmodel_aligned_schematic.jpg", "XMODEL-aligned LTspice AFE+ADC/S&H graphical schematic", "actual LTspice schematic capture"),
+        ("SPICE-03", "SPICE-03_matlab_ltspice_afe_response.png", "MATLAB and LTspice full AFE frequency-response comparison", "MATLAB-to-schematic design-intent comparison"),
+        ("SPICE-04", "SPICE-04_matlab_ltspice_notch_response.png", "MATLAB and LTspice active Twin-T notch comparison", "60 Hz dense response comparison"),
+        ("SPICE-05", "SPICE-05_xmodel_ltspice_adc_waveform_full.png", "Full ten-second XMODEL-LTspice ADC waveform overlay", "patient100 nominal 10-second comparison"),
+        ("SPICE-06", "SPICE-06_xmodel_ltspice_adc_waveform_zoom.png", "Two-to-three-second XMODEL-LTspice ADC waveform zoom", "QRS-region nominal comparison"),
+        ("SPICE-07", "SPICE-07_xmodel_ltspice_adc_error.png", "Per-sample LTspice S/H minus XMODEL ADC error", "ten-second code error"),
+        ("SPICE-08", "SPICE-08_xmodel_ltspice_adc_error_histogram.png", "XMODEL-LTspice ADC error histogram", "ten-second code-error distribution"),
+        ("SPICE-09", "SPICE-09_xmodel_ltspice_adc_agreement.png", "Cumulative ADC-code agreement by error range", "exact through plus-or-minus 10 LSB coverage"),
+        ("SPICE-10", "SPICE-10_xmodel_ltspice_adc_metrics.png", "Quantitative XMODEL-LTspice ADC comparison", "full and settled nominal metrics"),
+    ]
+    for fid, filename, caption, scope in spice_figures:
+        figures.append((fid, f"figures/final/{filename}", "이수환(팀 handoff)", ["figures/source/team_handoff_analog/README.md", "validation/afe_ltspice_xmodel_aligned/tables/xmodel_ltspice_handoff_metrics.csv"], [LTSPICE], caption, scope, "team-provided immutable figure; schematic/behavioral model evidence, not physical PCB or silicon measurement"))
     figures.append((
         "FIG-P05",
         "figures/publication/FIG-P05_vivado_implementation/device_view_annotated_publication.svg",
@@ -493,11 +509,11 @@ def main() -> int:
         "Vivado 2020.2, xc7a100tcsg324-1, actual Device View plus routed hierarchy/timing evidence",
         "Hierarchy colors use placed primitive coordinates and are not pblock boundaries; not ASIC layout",
     ))
-    index = ["# Integrated figure index", "", "All figures are generated from verified non-benchmark evidence. Source data: `figures/source/figure_data.json`.", ""]
+    index = ["# Integrated figure index", "", "Generated integrated figures and immutable team-provided analog validation figures are indexed below. Generated source data: `figures/source/figure_data.json`; analog handoff hashes: `figures/source/team_handoff_analog/README.md`.", ""]
     for fid, path, owner, files, commits, caption, scope, limits in figures:
         index += [f"## {fid}", "", f"- File: `{path}`", f"- Owner: {owner}", f"- Source files: {', '.join(f'`{x}`' for x in files)}", f"- Source commits: {', '.join(commits)}", "- Source-data path: `figures/source/figure_data.json`", f"- Caption: {caption}", f"- Evidence scope: {scope}", f"- Limitations: {limits}", ""]
     (ROOT / "figures" / "FIGURE_INDEX.md").write_text("\n".join(index), encoding="utf-8")
-    print(f"generated 19 figures (12 SVG + 7 inherited MATLAB PNG); indexed {len(figures)} including FIG-P05")
+    print(f"generated 19 figures (12 SVG + 7 inherited MATLAB PNG); retained 10 SPICE handoff figures; indexed {len(figures)} including FIG-P05")
     return 0
 
 

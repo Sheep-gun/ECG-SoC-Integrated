@@ -115,16 +115,6 @@
       ],
       "vos_stress_target": "IA input pair",
       "adc_non_ideality_target": "ADC output code boundary"
-    },
-    "rtl_elaborated_hierarchy": {
-      "final_svg": "figures/final/FIG-RTL_top_with_snapshot_expansion.svg",
-      "preview_png": "figures/final/FIG-RTL_top_with_snapshot_expansion.png",
-      "approved_svg_master": "figures/source/approved_svg/FIG-RTL_top_with_snapshot_expansion.svg",
-      "source_top": "artifacts/rtl_elaborated_schematic/FIG-RTL-A_top_hierarchy.svg",
-      "source_snapshot": "artifacts/rtl_elaborated_schematic/FIG-RTL-B_snapshot_core_hierarchy.svg",
-      "fixed_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
-      "canvas_viewbox": "0 0 1800 1150",
-      "layout_note": "Reader-facing reconstruction from Vivado RTL Elaborated Schematic views; actual instances and handoff connectivity are preserved while nonessential signal labels are omitted."
     }
   },
   "benchmark_status": "IMPORTED_VERIFIED_NO_BOARD"

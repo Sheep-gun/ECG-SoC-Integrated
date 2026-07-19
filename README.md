@@ -18,7 +18,7 @@
 
 ## 2. 아키텍처 개요
 
-`public ECG → MATLAB nominal AFE+ADC pre-validation → SystemVerilog XMODEL verification → signed 12-bit stream → integer event/state → 60초 Snapshot → 30개 Snapshot의 Final Membrane → RTL/XSim → Vivado/IP-XACT → Vitis/MicroBlaze → FPGA replay`
+`public ECG → MATLAB nominal AFE+ADC pre-validation → LTspice schematic implementation/verification → SystemVerilog XMODEL verification → signed 12-bit stream → integer event/state → 60초 Snapshot → 30개 Snapshot의 Final Membrane → RTL/XSim → Vivado/IP-XACT → Vitis/MicroBlaze → FPGA replay`
 
 ![전체 연구·검증 workflow](figures/final/FIG-02_research_workflow.svg)
 
@@ -37,6 +37,8 @@ Direct RTL audit에 따르면 pure accelerator는 1,800,000-sample raw input win
 | Pure RTL | LUT 9,719, FF 5,038, BRAM 0, DSP 0, WNS 8.184 ns | device/tool/configuration-specific; WNS는 latency가 아님 |
 | MicroBlaze full-replay system | LUT 12,494, register 8,494, BRAM 16, DSP 3, setup WNS 0.097 ns | accelerator가 아닌 whole-system 범위 |
 | MATLAB nominal | 대표 네 class clipping 0%, 최소 headroom 약 1.0196 V | selected model-based records |
+| LTspice schematic | 35 run executed; HPF 0.481174 Hz, IA 200.594 V/V, 60 Hz −83.557 dB, LPF 150.211 Hz, clipping 0 | schematic/model 기반 회로 검증 |
+| LTspice↔XMODEL | 10,000 samples; MAE 0.6445 LSB, corr. 0.999518, ±5 LSB 98.74%, ±10 LSB 99.89% | 대표 10초 nominal 회로 계약 정합 |
 | Emulator↔XMODEL | 36 segments 평균 RMS 1.95 LSB, lag 0 | model-to-model waveform agreement |
 | AFE input identity | SHA256 36/36 | byte identity |
 | Canonical AFE→RTL | final_pred/final_mem 36/36, `sample_gap_cycles=2` | 기능 등가성, 정확도 아님 |
@@ -50,11 +52,12 @@ Validation 100%는 final generalization claim이 아니다.
 
 ```text
 components/             three curated fixed-commit component snapshots
+validation/             LTspice schematic, compact evidence, XMODEL handoff and rerun scripts
 datasets/               fixed versions, hashes, licenses and fetch policy; no raw waveforms
 source_of_truth/        commits, metrics, claims, owners, terms and references
 docs/                   research positioning and technical integration narratives
 integration_evidence/   upstream status and intentional exclusions
-figures/                12 evidence-scoped report figures
+figures/                integrated figures and immutable team-provided analog validation figures
 tables/                 result, integration and streaming-state tables
 benchmarks/             verified NO_BOARD benchmark summary and claim boundaries
 reports/                definitive manuscript, evidence map and audits
@@ -67,7 +70,7 @@ PhysioNet raw waveform은 public Git에 번들하지 않는다. 고정 version 1
 ## 5. 한계와 claim 경계
 
 - NSR·CHF·ARR·AFF가 서로 다른 source DB와 결합되어 database–class confounding이 남는다. Strict source-record-wise split은 직접 record leakage를 막지만 이 confounding을 해소하지 않는다.
-- MATLAB/XMODEL은 모델 기반 AFE/ADC 검증이며 physical AFE PCB, ADC silicon, transistor/post-layout, live-electrode 또는 fabricated SoC의 증거가 아니다.
+- MATLAB/LTspice/XMODEL은 공칭·schematic·behavioral model 기반 AFE/ADC 검증이며 physical AFE PCB, ADC silicon, transistor/post-layout, live-electrode 또는 fabricated SoC의 증거가 아니다.
 - Board 36/36은 XSim 기준 출력에 대한 기능 등가성이고 classification accuracy는 29/36이다.
 - 본 결과는 임상적으로 검증된 진단, 네 질환의 확진, 또는 상용 wearable 대비 우월성을 뜻하지 않는다.
 - Pure RTL의 0 BRAM/0 DSP와 timing closure만으로 저전력·고속·에너지 우월성을 주장하지 않는다.
@@ -83,6 +86,8 @@ PhysioNet raw waveform은 public Git에 번들하지 않는다. 고정 version 1
 - MATLAB nominal: `907f7e1f081a9d6a5703a32095d962143315a192`
 - XMODEL/integration: `4756a5086023547328ef44fd5fd87da3c250dc39`
 - Digital RTL/IP/FPGA: `c6b80de19cdcad5b7e43fe7835588b629d847f75`
+
+LTspice 검증 패키지는 [`validation/afe_ltspice_xmodel_aligned/README.md`](validation/afe_ltspice_xmodel_aligned/README.md), 상세 아날로그 검증 서술은 [`docs/MIXED_SIGNAL_VERIFICATION_KR.md`](docs/MIXED_SIGNAL_VERIFICATION_KR.md)에서 시작한다. 수 GB raw simulator waveform은 제외하고 schematic, netlist, compact ADC vector, 표, 로그와 재실행 스크립트만 보존한다.
 
 ```powershell
 python tools/build_global_metrics.py
