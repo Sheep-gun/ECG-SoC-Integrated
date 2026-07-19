@@ -1,8 +1,0 @@
-﻿executable=C:\Users\YangGeon\AppData\Local\Programs\ADI\LTspice\LTspice.exe
-arguments=-b -ascii "C:\Users\YangGeon\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\FULL_AFE_ADC_SH_xmodel_aligned.asc"
-working_directory=C:\Users\YangGeon\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned
-started_utc=2026-07-15T10:32:56.6415027Z
-return_code=0
-completed_in_log=True
-fatal_pattern_in_log=False
-finished_utc=2026-07-15T10:34:54.9846339Z

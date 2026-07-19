@@ -6,7 +6,6 @@
 |---|---|
 | SNN-inspired ECG Classification Accelerator IP Core | locked protocol, RTL, AXI wrapper, IP-XACT package |
 | signed 12-bit AFE+ADC XMODEL stream input compatibility | digital input contract, 1 kSPS stream, 60 s snapshot, 30 min final decision |
-| MATLAB-LTspice-XMODEL model-based analog validation | nominal response, XMODEL-aligned schematic, 10초 10,000-code cross-model comparison |
 | Fully blind strict record-wise locked final holdout | final_test not used for selection/search/context, evaluation count 1 |
 | RTL/XSim locked-model equivalence | final_pred/final_mem mismatch 0 over 36 final_test cases |
 | Vivado/IP-XACT packaged accelerator IP | timing/resource/power reports, `component.xml` artifacts |
@@ -23,7 +22,8 @@
 | Virtuoso/post-layout analog verification | Not performed |
 | Clinical diagnosis validation | Engineering prototype only |
 | Validation 100.00% as final generalization | Validation is model-selection performance |
-| Physical analog validation completed by this repo | Evidence is MATLAB/LTspice/XMODEL model-based verification, not bench/silicon measurement |
+| AFE+ADC XMODEL stress verification owned by this repo | Maintained in the upstream XMODEL teammate repo |
+| MATLAB nominal filter validation owned by this repo | Maintained in the upstream MATLAB teammate repo |
 
 ## Final Result Interpretation
 
@@ -42,6 +42,6 @@ Validation 32/32 = 100.00%는 Final Membrane 후보를 선택하는 단계의 �
 
 ## Final Claim-Boundary Statement
 
-This repo is the integrated evidence repository for a model-based MATLAB/LTspice/XMODEL AFE+ADC flow and a signed 12-bit ECG-stream SNN accelerator IP. Analog source development remains upstream, while this repository mirrors the report evidence and provides locked protocol, RTL/XSim, Vivado/IP-XACT, and Vitis/MicroBlaze board replay evidence.
+This repo is the digital hardware validation repository for a signed 12-bit ECG-stream SNN accelerator IP. AFE+ADC XMODEL and analog/mixed-signal verification are maintained upstream, while this repo provides locked protocol, RTL/XSim, Vivado/IP-XACT, and Vitis/MicroBlaze board replay evidence.
 
-즉 아날로그 원본 개발은 teammate repositories가 소유하지만, 이 repo는 MATLAB 사전설계 -> LTspice schematic 검증 -> SystemVerilog XMODEL 구현의 보고서용 사본과 상관 결과를 보존한다. 디지털 구현은 signed 12-bit stream 이후의 accelerator IP를 소유하며 full-top XSim expected output과 Vitis/MicroBlaze board replay result를 비교한다.
+즉 본 repo는 signed 12-bit stream 이후의 accelerator IP를 소유한다. MATLAB AFE+ADC nominal pre-validation과 SystemVerilog AFE+ADC XMODEL stress/integration evidence는 teammate repositories에서 관리되며, 본 repo는 그 upstream stream contract를 받아 digital full-top XSim expected output과 Vitis/MicroBlaze board replay result를 비교한다.

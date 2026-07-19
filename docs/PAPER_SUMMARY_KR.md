@@ -2,9 +2,7 @@
 
 ## 핵심 요약
 
-본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. 아날로그 flow는 MATLAB 사전설계, XMODEL-aligned LTspice 실제 schematic 검증, SystemVerilog XMODEL 구현 순서로 진행하며, 이후 signed 12-bit stream을 60초 Snapshot Readout과 30분 Final Membrane Readout에 전달한다. 이 digital repo는 전체 보고서 evidence를 연결하고 RTL/XSim/Vivado/IP-XACT/Vitis/board replay 검증을 담당한다.
-
-동일 10초 ECG 10,000-sample의 LTspice-XMODEL ADC 비교는 MAE 0.6445 LSB, correlation 0.999518, lag 0, clipping 0이었으며 98.74%가 ±5 LSB, 99.89%가 ±10 LSB 이내였다. 이는 bit-exact 주장이 아니라 schematic과 mixed-signal 행동모델 사이의 high-correlation validation이다.
+본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. Upstream MATLAB/XMODEL teammate repositories가 공개 digitized ECG record의 analog-equivalent `vin` 해석, AFE+ADC nominal/XMODEL 검증, signed 12-bit stream 생성을 담당한다. 이 digital repo는 그 stream contract부터 시작하여 60초 Snapshot Readout, 30분 Final Membrane Readout, RTL/XSim/Vivado/IP-XACT/Vitis/board replay 검증을 담당한다.
 
 ![Final system architecture](../reports/final/figures/final_system_architecture.png)
 
@@ -31,12 +29,12 @@ Validation 100.00%는 model-selection 성능으로만 해석한다. 최종 held-
 
 ## 제출 포지션
 
-본 결과는 실제 전극 기반 의료기기 검증이 아니라, MATLAB 설계 reference, LTspice schematic, AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 signed 12-bit stream contract로 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. 원본 analog 개발은 teammate repositories에서 유지하며, 보고서용 evidence mirror는 이 repo에 보존한다. 디지털 accelerator는 Python golden, XSim, Vivado implementation, IP-XACT packaging과 Vitis/MicroBlaze board replay로 검증한다.
+본 결과는 실제 전극 기반 의료기기 검증이 아니라, upstream AFE+ADC XMODEL과 SNN-inspired RTL Accelerator IP Core를 signed 12-bit stream contract로 연결한 biomedical mixed-signal-to-digital FPGA prototype이다. MATLAB nominal pre-validation과 XMODEL stress/integration evidence는 teammate repositories에서 유지하며, 이 repo는 Python golden, XSim, Vivado implementation, IP-XACT packaging, Vitis/MicroBlaze board replay로 digital accelerator를 검증한다.
 
 ## 한계
 
 - Source ECG는 이미 digitized public record이다.
-- AFE+ADC는 MATLAB/LTspice/XMODEL model-based verification 결과이며 상세 evidence는 `reports/final/analog_validation_result.md`에 보존한다.
+- AFE+ADC는 upstream teammate repositories가 관리하는 XMODEL/nominal model 기반이다.
 - Physical AFE PCB, ADC silicon, transistor-level layout 검증은 수행하지 않았다.
 - Clinical diagnosis validation은 수행하지 않았다.
 - Board replay는 strict final_test 36개 30분 case 전체에 대해 수행했지만, physical analog validation은 아니며 final_pred/final_mem exact match는 모두 36/36으로 보고한다.

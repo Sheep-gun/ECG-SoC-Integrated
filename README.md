@@ -2,9 +2,7 @@
 
 이 repository는 **signed 12-bit ECG stream**을 입력으로 받아 NSR / CHF / ARR / AFF를 분류하는 **SNN-based Long-window ECG 4-Class Classification Accelerator IP Core**의 디지털 구현과 검증(digital RTL/IP/FPGA validation)을 담당한다. 본 repo가 소유하는 범위는 locked strict record-wise protocol, Snapshot Readout과 Final Membrane Readout RTL, XSim golden comparison, Vivado implementation, AXI/IP-XACT packaging, Vitis/MicroBlaze board replay, 그리고 디지털 hardware evidence이다.
 
-상위 아날로그 검증은 **MATLAB 사전설계 -> LTspice 실제 schematic 구현·검증 -> SystemVerilog XMODEL 행동모델·통합 검증** 순서로 진행한다. 원본 MATLAB/XMODEL 개발은 teammate repository에서 관리하지만, 이 repo에는 최종 보고서 작성에 필요한 회로, 정량 결과, 비교 그림과 코드 사본을 함께 보존한다. 디지털 accelerator의 구현 경계는 이 upstream flow가 정의한 **signed 12-bit, 1 kSPS ECG stream input contract**부터 시작한다.
-
-대회 보고서용 XMODEL-aligned LTspice 회로·결과·handoff 사본은 [`validation/afe_ltspice_xmodel_aligned/`](validation/afe_ltspice_xmodel_aligned/)에 보존한다. MATLAB/LTspice/XMODEL 단계별 역할, 10초 ECG 10,000-sample 비교와 보고서용 그림은 [`reports/final/analog_validation_result.md`](reports/final/analog_validation_result.md)에 정리했다. XMODEL-LTspice ADC 비교에서 98.74%가 ±5 LSB, 99.89%가 ±10 LSB 이내였고 zero-lag correlation은 0.999518이었다.
+상위 시스템 흐름은 유지하되, MATLAB AFE+ADC nominal pre-validation과 AFE+ADC XMODEL stress/integration verification은 teammate repository에서 관리한다. 이 repo는 그 upstream 검증 결과로 정의되는 **signed 12-bit, 1 kSPS ECG stream input contract**부터 시작하여 digital accelerator path를 검증한다.
 
 Digital verification axis는 `RTL/XSim/Vivado/IP-XACT/Vitis/MicroBlaze board replay`로 고정한다.
 
@@ -14,23 +12,21 @@ Digital verification axis는 `RTL/XSim/Vivado/IP-XACT/Vitis/MicroBlaze board rep
 
 ```mermaid
 flowchart LR
-    A["MATLAB AFE+ADC pre-design"] --> B["LTspice schematic implementation and verification"]
-    B --> C["SystemVerilog AFE+ADC XMODEL verification"]
-    C --> D["signed 12-bit ECG stream contract"]
-    D --> E["60 s SNN Snapshot Readout"]
-    E --> F["30 min Final Membrane Readout"]
-    F --> G["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
-    F --> H["NSR / CHF / ARR / AFF"]
+    A["MATLAB nominal AFE+ADC pre-validation"] --> B["SystemVerilog AFE+ADC XMODEL verification"]
+    B --> C["signed 12-bit ECG stream contract"]
+    C --> D["60 s SNN Snapshot Readout"]
+    D --> E["30 min Final Membrane Readout"]
+    E --> F["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
+    E --> G["NSR / CHF / ARR / AFF"]
 ```
 
-Upstream analog chain은 `HPF 0.482 Hz -> IA x201 -> 60 Hz active Twin-T notch -> LPF 150 Hz -> 12-bit ADC`로 연결된다. MATLAB은 설계 의도와 nominal reference를 정하고, LTspice는 같은 사양을 실제 R/C/op-amp schematic으로 구현해 검증하며, XMODEL은 검증된 회로 계약을 SystemVerilog mixed-signal 행동모델로 옮겨 RTL 통합에 사용한다.
+Upstream analog chain은 merged paper에서 `HPF 0.482 Hz -> IA x201 -> 60 Hz notch -> LPF 150 Hz -> 12-bit ADC`로 연결된다. 이 repo의 main body에서는 해당 chain의 상세 MATLAB/XMODEL robustness를 재검증하지 않고, digital IP가 소비하는 stream contract와 downstream RTL/IP/FPGA evidence에 집중한다.
 
 ## 2. Cross-Repo Ownership
 
 | Repository / teammate | Responsibility | Artifact type | How it connects to this digital repo |
 |---|---|---|---|
 | MATLAB AFE+ADC nominal pre-validation | Nominal filter/gain/ADC behavior pre-check | MATLAB scripts, plots, nominal response reports | XMODEL verification repo가 사용할 analog-chain intent와 nominal reference를 제공 |
-| LTspice XMODEL-aligned schematic verification | ±1.65 V 실제 R/C/op-amp 회로, AC/transient/S&H/ADC/stress 검증 | `.asc`, `.net`, model library, execution manifest, metric tables | MATLAB 설계 의도를 회로 수준에서 확인하고 XMODEL 구현 기준을 고정 |
 | XMODEL AFE+ADC verification and AFE-to-locked RTL integration | AFE+ADC SystemVerilog XMODEL stress verification, signed 12-bit stream generation, AFE-to-locked RTL integration reproduction | XMODEL testbench, stress reports, generated `.mem`, integration transcripts | 이 repo의 canonical input contract와 `sample_gap_cycles=2` full-top XSim cadence에 맞춰 digital golden과 비교 |
 | Digital SNN accelerator RTL/IP/FPGA validation | Locked SNN protocol, RTL, XSim, Vivado, IP-XACT, Vitis/MicroBlaze board replay | RTL, testbenches, Vivado reports, IP-XACT `component.xml`, bitstream/XSA/ELF, board transcripts | signed 12-bit stream 이후의 accelerator behavior와 hardware implementation evidence를 소유 |
 
@@ -96,8 +92,6 @@ Pure RTL resource는 accelerator datapath만의 구현 결과이다. MicroBlaze 
 | `docs/STRICT_RECORDWISE_PROTOCOL_KR.md` | strict record-wise locked model protocol |
 | `docs/HARDWARE_VALIDATION_KR.md` | RTL/XSim/Vivado/IP/Vitis/board evidence |
 | `docs/LIMITATIONS_KR.md` | claim boundary |
-| `reports/final/analog_validation_result.md` | MATLAB -> LTspice -> XMODEL 아날로그 검증 결과와 figure |
-| `validation/afe_ltspice_xmodel_aligned/` | LTspice 회로·표·스크립트와 XMODEL SystemVerilog reference 사본 |
 | `reports/final/digital_ip_scope_and_handoff.md` | cross-repo ownership and handoff scope |
 | `reports/final/digital_input_contract.md` | signed 12-bit stream contract and canonical cadence |
 | `configs/final_submission_locked_model.json` | final model, metric, claim source of truth |
@@ -108,8 +102,8 @@ Pure RTL resource는 accelerator datapath만의 구현 결과이다. MicroBlaze 
 ## 7. Claim Boundary
 
 - This repo is the **digital hardware validation repository** for a signed 12-bit ECG-stream SNN accelerator IP.
-- MATLAB/LTspice/XMODEL 원본 개발은 teammate repositories가 관리하며, 보고서용 evidence mirror는 이 repo에 보존한다.
-- 본 repo의 아날로그 결과는 model-based verification이며, MATLAB 사전설계, LTspice schematic verification, XMODEL behavioral equivalence를 구분해 해석한다.
+- MATLAB nominal filter validation is maintained in the MATLAB teammate repo.
+- AFE+ADC XMODEL stress verification and AFE-to-locked RTL integration evidence are maintained in the XMODEL teammate repo.
 - This repo does not claim raw analog ECG acquisition, physical AFE PCB validation, ADC silicon validation, CMOS layout/post-layout validation, or clinical diagnosis validation.
 - Board replay is digital RTL/IP replay equivalence evidence, not physical analog acquisition-chain validation.
 

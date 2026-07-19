@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This report defines the scope of `Sheep-gun/SNN-ECG-4-Class-Classifier` as the **digital SNN ECG 4-Class Classification Accelerator IP Core** repository and the report-evidence mirror for the upstream analog flow. It keeps the merged-paper end-to-end skeleton while separating ownership across MATLAB pre-design, LTspice schematic verification, SystemVerilog XMODEL, and digital RTL/IP/FPGA repositories.
+This report defines the scope of `Sheep-gun/SNN-ECG-4-Class-Classifier` as the **digital SNN ECG 4-Class Classification Accelerator IP Core** repository. It keeps the merged-paper end-to-end skeleton, but separates ownership across the MATLAB AFE, SystemVerilog XMODEL, and digital RTL/IP/FPGA repositories.
 
 ## 2. What This Repo Owns
 
@@ -19,7 +19,6 @@ This report defines the scope of `Sheep-gun/SNN-ECG-4-Class-Classifier` as the *
 | Repository / teammate | Responsibility | Artifact type | How it connects to this digital repo |
 |---|---|---|---|
 | MATLAB AFE+ADC nominal pre-validation | Nominal filter/gain/ADC behavior pre-check | MATLAB scripts, plots, nominal response reports | Provides analog-chain intent and nominal reference for the XMODEL repo |
-| LTspice XMODEL-aligned schematic verification | ±1.65 V R/C/op-amp implementation, AC/transient/S&H/ADC/stress verification | `.asc`, `.net`, model library, metric tables, execution manifest | Converts MATLAB intent into a circuit-level contract for XMODEL |
 | XMODEL AFE+ADC verification and AFE-to-locked RTL integration | AFE+ADC SystemVerilog XMODEL stress verification, signed 12-bit stream generation, AFE-to-locked RTL integration reproduction | XMODEL testbench, stress reports, generated `.mem`, integration transcripts | Uses this repo's signed stream contract and canonical `sample_gap_cycles=2` full-top cadence |
 | Digital SNN accelerator RTL/IP/FPGA validation | Locked SNN protocol, RTL, XSim, Vivado, IP-XACT, Vitis/MicroBlaze board replay | RTL, testbenches, Vivado reports, IP-XACT `component.xml`, bitstream/XSA/ELF, board transcripts | Owns accelerator behavior and hardware evidence from signed 12-bit stream onward |
 
@@ -27,21 +26,20 @@ This report defines the scope of `Sheep-gun/SNN-ECG-4-Class-Classifier` as the *
 
 ```mermaid
 flowchart LR
-    A["MATLAB AFE+ADC pre-design"] --> B["LTspice schematic verification"]
-    B --> C["SystemVerilog AFE+ADC XMODEL verification"]
-    C --> D["signed 12-bit ECG stream"]
-    D --> E["SNN Snapshot Readout"]
-    E --> F["Final Membrane Readout"]
-    F --> G["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
+    A["MATLAB nominal AFE+ADC pre-validation"] --> B["SystemVerilog AFE+ADC XMODEL verification"]
+    B --> C["signed 12-bit ECG stream"]
+    C --> D["SNN Snapshot Readout"]
+    D --> E["Final Membrane Readout"]
+    E --> F["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
 ```
 
 The upstream analog chain is summarized as:
 
 ```text
-HPF 0.482 Hz -> IA x201 -> 60 Hz active Twin-T notch -> LPF 150 Hz -> 12-bit ADC
+HPF 0.482 Hz -> IA x201 -> 60 Hz notch -> LPF 150 Hz -> 12-bit ADC
 ```
 
-The final report now preserves the concise analog validation chain and links its detailed evidence in `reports/final/analog_validation_result.md`. The original analog development remains upstream; the local mirror exists to make the competition report reproducible.
+This digital repo does not restate detailed MATLAB robustness, XMODEL stress, PLI, mismatch, or op-amp verification in its main body. It references those as upstream evidence.
 
 ## 5. Claim Boundary
 
