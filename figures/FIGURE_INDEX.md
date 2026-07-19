@@ -35,6 +35,17 @@ Generated integrated figures and immutable team-provided analog validation figur
 - Evidence scope: ownership
 - Limitations: collaboration does not transfer implementation ownership
 
+## FIG-04
+
+- File: `figures/final/FIG-04_analog_validation_flow.svg`
+- Owner: 양건(통합 편집)
+- Source files: `figures/final/SPICE-03_matlab_ltspice_afe_response.png`, `figures/final/SPICE-04_matlab_ltspice_notch_response.png`, `figures/final/SPICE-05_xmodel_ltspice_adc_waveform_full.png`, `figures/final/SPICE-08_xmodel_ltspice_adc_error_histogram.png`
+- Source commits: 907f7e1f081a9d6a5703a32095d962143315a192, INTEGRATED_LTSPICE_2026-07-19, 4756a5086023547328ef44fd5fd87da3c250dc39, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: MATLAB–LTspice 주파수 응답 비교와 LTspice–XMODEL ADC 출력 비교의 아날로그 검증 흐름
+- Evidence scope: two-stage analog model comparison
+- Limitations: model- and schematic-level simulation evidence; not physical PCB or silicon measurement
+
 ## FIG-05
 
 - File: `figures/final/FIG-05_strict_recordwise_protocol.svg`

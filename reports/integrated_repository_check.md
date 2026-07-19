@@ -105,7 +105,7 @@
 - PASS — required path reports/HISTORY_REWRITE_RESULT.md
 - PASS — required path reports/PUBLISH_REWRITTEN_HISTORY.md
 - PASS — required path private_submission/.gitignore
-- PASS — 13 generated SVG figures
+- PASS — 14 generated SVG figures
 - PASS — 7 inherited MATLAB PNG figures
 - PASS — 10 immutable SPICE handoff figures
 - PASS — SPICE figure SHA256 SPICE-01_analog_afe_architecture.svg

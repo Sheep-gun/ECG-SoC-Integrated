@@ -260,6 +260,27 @@ def main() -> int:
     footer(s, "Collaborative chain does not transfer one contributor's implementation ownership to another")
     write_svg("FIG-03_ownership_handoff.svg", s)
 
+    # FIG-04 analog verification flow
+    s = paper_canvas(
+        1500,
+        440,
+        "MATLAB to LTspice frequency-response verification followed by LTspice to XMODEL ADC-output verification",
+    )
+    s.append('<title>아날로그 검증 흐름</title>')
+    s.append('<desc>MATLAB과 LTspice의 주파수 응답을 비교한 뒤 LTspice와 XMODEL의 ADC 출력을 비교하는 검증 순서</desc>')
+    s.append(txt(750, 58, "아날로그 검증 흐름", 27, "#182230", 700, "middle"))
+    s += paper_box(65, 165, 270, 130, ["MATLAB", "사전 설계 모델"], "#eff6ff", "#2563a8")
+    s += paper_box(615, 165, 270, 130, ["LTspice", "회로 시뮬레이션"], "#fff7e6", "#b7791f")
+    s += paper_box(1165, 165, 270, 130, ["XMODEL", "Verilog 행동모델"], "#ecfdf3", "#2f855a")
+    s += paper_path([(335, 230), (615, 230)])
+    s += paper_path([(885, 230), (1165, 230)])
+    s.append(txt(475, 112, "주파수 응답 비교", 18, "#182230", 700, "middle"))
+    s.append(txt(475, 138, "Overall AFE · 60 Hz Notch", 15, "#475467", 400, "middle"))
+    s.append(txt(1025, 112, "ADC 출력 비교", 18, "#182230", 700, "middle"))
+    s.append(txt(1025, 138, "Waveform · Error Histogram", 15, "#475467", 400, "middle"))
+    s.append('</svg>')
+    write_svg("FIG-04_analog_validation_flow.svg", s)
+
     # FIG-05 split
     s = canvas("Strict source-record-wise evaluation", "record leakage 방지와 database confounding은 서로 다른 문제")
     s += box(70, 160, 280, 260, "Source records", ["record_id is split unit", "all chunks stay together"])
@@ -459,6 +480,7 @@ def main() -> int:
         ("FIG-01", "figures/final/FIG-01_long_window_motivation.svg", "양건", ["docs/PROBLEM_DEFINITION_KR.md"], ["INTEGRATED"], "장시간 ECG에서 국소 evidence와 장기 persistence를 결합하는 문제 동기", "architectural motivation", "Holter-oriented; not clinical certification"),
         ("FIG-02", "figures/final/FIG-02_research_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "validation/afe_ltspice_xmodel_aligned/README.md", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,LTSPICE,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation으로 MATLAB→LTspice→XMODEL Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow", "data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test", "the post-lock implementation and integration stages verify equivalence and do not permit model, threshold, or structural retuning"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,LTSPICE,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
+        ("FIG-04", "figures/final/FIG-04_analog_validation_flow.svg", "양건(통합 편집)", ["figures/final/SPICE-03_matlab_ltspice_afe_response.png", "figures/final/SPICE-04_matlab_ltspice_notch_response.png", "figures/final/SPICE-05_xmodel_ltspice_adc_waveform_full.png", "figures/final/SPICE-08_xmodel_ltspice_adc_error_histogram.png"], [MATLAB,LTSPICE,XMODEL,"INTEGRATED"], "MATLAB–LTspice 주파수 응답 비교와 LTspice–XMODEL ADC 출력 비교의 아날로그 검증 흐름", "two-stage analog model comparison", "model- and schematic-level simulation evidence; not physical PCB or silicon measurement"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),
         ("FIG-06", "figures/final/FIG-06_matlab_nominal_summary.svg", "서민우", ["components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv"], [MATLAB], "MATLAB representative nominal clipping/headroom", "four selected nominal 60-second records", "not physical measurement"),
         ("FIG-07", "figures/final/FIG-07_xmodel_scope.svg", "이수환", ["components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md"], [XMODEL], "XMODEL waveform/stress/integration scope", "model-based verification", "not transistor/post-layout/PCB/silicon"),

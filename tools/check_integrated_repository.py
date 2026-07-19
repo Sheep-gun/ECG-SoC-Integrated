@@ -263,7 +263,7 @@ def main() -> int:
     check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final", "codex/analog-validation-flow"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
-    check("13 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 13)
+    check("14 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 14)
     check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
     check("10 immutable SPICE handoff figures", len(list((ROOT / "figures" / "final").glob("SPICE-*"))) == 10)
     spice_hashes = {

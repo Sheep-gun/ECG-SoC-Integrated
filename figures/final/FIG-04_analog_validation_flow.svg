@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="440" viewBox="0 0 1500 440" role="img" aria-label="MATLAB to LTspice frequency-response verification followed by LTspice to XMODEL ADC-output verification">
+<defs><marker id="paper-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#364152"/></marker></defs>
+<rect width="1500" height="440" fill="#ffffff"/>
+<title>아날로그 검증 흐름</title>
+<desc>MATLAB과 LTspice의 주파수 응답을 비교한 뒤 LTspice와 XMODEL의 ADC 출력을 비교하는 검증 순서</desc>
+<text x="750" y="58" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="27" font-weight="700" fill="#182230">아날로그 검증 흐름</text>
+<rect x="65" y="165" width="270" height="130" rx="4" fill="#eff6ff" stroke="#2563a8" stroke-width="2"/>
+<text x="200.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">MATLAB</text>
+<text x="200.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">사전 설계 모델</text>
+<rect x="615" y="165" width="270" height="130" rx="4" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+<text x="750.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">LTspice</text>
+<text x="750.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">회로 시뮬레이션</text>
+<rect x="1165" y="165" width="270" height="130" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1300.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">XMODEL</text>
+<text x="1300.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Verilog 행동모델</text>
+<polyline points="335,230 615,230" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="885,230 1165,230" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<text x="475" y="112" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">주파수 응답 비교</text>
+<text x="475" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#475467">Overall AFE · 60 Hz Notch</text>
+<text x="1025" y="112" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">ADC 출력 비교</text>
+<text x="1025" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" font-weight="400" fill="#475467">Waveform · Error Histogram</text>
+</svg>
