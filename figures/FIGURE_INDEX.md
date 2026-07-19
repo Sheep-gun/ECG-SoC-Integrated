@@ -46,6 +46,28 @@ Generated integrated figures and immutable team-provided analog validation figur
 - Evidence scope: two-stage analog model comparison
 - Limitations: model- and schematic-level simulation evidence; not physical PCB or silicon measurement
 
+## VAL-02
+
+- File: `figures/final/VAL-02_digital_validation_flow.svg`
+- Owner: 양건(통합 편집)
+- Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv`, `components/digital_accelerator/sim/tb_snn_ecg_axi_smoke.v`, `components/digital_accelerator/sim/tb_axi_lite_axis_sample_feeder.v`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 09e4d840827ad20856f5e23be4743ddd01565e30, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Python과 Exact C++ 기준을 RTL/XSim에 비교한 뒤 Full-top 제어와 AXI/IP 인터페이스로 확장하는 디지털 검증 흐름
+- Evidence scope: digital functional and interface verification sequence
+- Limitations: AXI/IP smoke-test source exists; a report-facing rerun transcript and waveform remain to be captured
+
+## VAL-03
+
+- File: `figures/final/VAL-03_analog_digital_integration_flow.svg`
+- Owner: 양건(통합 편집)
+- Source files: `components/afe_xmodel/docs/integration_latest/afe36_sha256_bitidentity.csv`, `components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`
+- Source commits: 4756a5086023547328ef44fd5fd87da3c250dc39, c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: XMODEL AFE·ADC의 signed 12-bit 출력이 Digital RTL/XSim 최종 상태까지 이어지는 아날로그–디지털 통합 검증 흐름
+- Evidence scope: 36-case XMODEL-to-RTL handoff and end-to-end equivalence
+- Limitations: model-based AFE and RTL simulation evidence; not physical analog acquisition or clinical validation
+
 ## FIG-05
 
 - File: `figures/final/FIG-05_strict_recordwise_protocol.svg`

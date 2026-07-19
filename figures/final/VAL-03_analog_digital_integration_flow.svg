@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="440" viewBox="0 0 1500 440" role="img" aria-label="Analog-digital integration verification from XMODEL AFE ADC output through signed stream handoff to Digital RTL XSim">
+<defs><marker id="paper-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#364152"/></marker></defs>
+<rect width="1500" height="440" fill="#ffffff"/>
+<title>아날로그–디지털 통합 검증 흐름</title>
+<desc>XMODEL AFE ADC 출력의 signed 12-bit 인계와 Digital RTL XSim의 End-to-End 결과를 검증하는 순서</desc>
+<text x="750" y="58" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="27" font-weight="700" fill="#182230">아날로그–디지털 통합 검증 흐름</text>
+<rect x="70" y="165" width="260" height="130" rx="4" fill="#eff6ff" stroke="#2563a8" stroke-width="2"/>
+<text x="200.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">XMODEL AFE·ADC</text>
+<text x="200.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">ECG→ADC code</text>
+<rect x="440" y="165" width="260" height="130" rx="4" fill="#f4f3ff" stroke="#6941c6" stroke-width="2"/>
+<text x="570.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Signed 12-bit Stream</text>
+<text x="570.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">30 min × 36 cases</text>
+<rect x="810" y="165" width="260" height="130" rx="4" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+<text x="940.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Digital RTL / XSim</text>
+<text x="940.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">30 Snapshots</text>
+<rect x="1180" y="165" width="250" height="130" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1305.0" y="224.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">End-to-End 비교</text>
+<text x="1305.0" y="250.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">통합 검증 통과</text>
+<polyline points="330,230 440,230" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="700,230 810,230" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1070,230 1180,230" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<text x="385" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">1 kSPS 인계</text>
+<text x="755" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">SHA256 36/36</text>
+<text x="1125" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">Pred · Mem 36/36</text>
+</svg>

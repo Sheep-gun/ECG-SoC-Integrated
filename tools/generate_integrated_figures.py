@@ -281,6 +281,53 @@ def main() -> int:
     s.append('</svg>')
     write_svg("FIG-04_analog_validation_flow.svg", s)
 
+    # VAL-02 digital verification flow
+    s = paper_canvas(
+        1500,
+        520,
+        "Digital verification flow from two software references through RTL XSim, full-top control, and AXI IP validation",
+    )
+    s.append('<title>디지털 회로 검증 흐름</title>')
+    s.append('<desc>Python 최종 출력 기준과 Exact C++ 내부 상태 기준을 RTL XSim에 교차 비교하고 Full-top 제어와 AXI IP 인터페이스를 검증하는 순서</desc>')
+    s.append(txt(750, 58, "디지털 회로 검증 흐름", 27, "#182230", 700, "middle"))
+    s += paper_box(65, 125, 300, 120, ["Python 정수 기준", "최종 출력 기준"], "#eff6ff", "#2563a8")
+    s += paper_box(65, 315, 300, 120, ["Exact C++", "고정폭·내부 상태 기준"], "#f4f3ff", "#6941c6")
+    s += paper_box(500, 220, 300, 120, ["RTL / XSim", "Core"], "#fff7e6", "#b7791f")
+    s += paper_box(890, 220, 260, 120, ["Full-top RTL", "표본→Snapshot→판정"], "#fef3f2", "#b42318")
+    s += paper_box(1210, 220, 240, 120, ["AXI / IP", "Lite · Stream"], "#ecfdf3", "#2f855a")
+    s += paper_path([(365, 185), (430, 185), (430, 250), (500, 250)])
+    s += paper_path([(365, 375), (430, 375), (430, 310), (500, 310)])
+    s += paper_path([(800, 280), (890, 280)])
+    s += paper_path([(1150, 280), (1210, 280)])
+    s.append(txt(430, 155, "최종 출력 비교", 16, "#475467", 700, "middle"))
+    s.append(txt(430, 415, "내부 상태 비교", 16, "#475467", 700, "middle"))
+    s.append(txt(845, 205, "제어 흐름 검증", 16, "#475467", 700, "middle"))
+    s.append(txt(1180, 205, "인터페이스 검증", 16, "#475467", 700, "middle"))
+    s.append('</svg>')
+    write_svg("VAL-02_digital_validation_flow.svg", s)
+
+    # VAL-03 analog-digital integration verification flow
+    s = paper_canvas(
+        1500,
+        440,
+        "Analog-digital integration verification from XMODEL AFE ADC output through signed stream handoff to Digital RTL XSim",
+    )
+    s.append('<title>아날로그–디지털 통합 검증 흐름</title>')
+    s.append('<desc>XMODEL AFE ADC 출력의 signed 12-bit 인계와 Digital RTL XSim의 End-to-End 결과를 검증하는 순서</desc>')
+    s.append(txt(750, 58, "아날로그–디지털 통합 검증 흐름", 27, "#182230", 700, "middle"))
+    s += paper_box(70, 165, 260, 130, ["XMODEL AFE·ADC", "ECG→ADC code"], "#eff6ff", "#2563a8")
+    s += paper_box(440, 165, 260, 130, ["Signed 12-bit Stream", "30 min × 36 cases"], "#f4f3ff", "#6941c6")
+    s += paper_box(810, 165, 260, 130, ["Digital RTL / XSim", "30 Snapshots"], "#fff7e6", "#b7791f")
+    s += paper_box(1180, 165, 250, 130, ["End-to-End 비교", "통합 검증 통과"], "#ecfdf3", "#2f855a")
+    s += paper_path([(330, 230), (440, 230)])
+    s += paper_path([(700, 230), (810, 230)])
+    s += paper_path([(1070, 230), (1180, 230)])
+    s.append(txt(385, 138, "1 kSPS 인계", 16, "#475467", 700, "middle"))
+    s.append(txt(755, 138, "SHA256 36/36", 16, "#475467", 700, "middle"))
+    s.append(txt(1125, 138, "Pred · Mem 36/36", 16, "#475467", 700, "middle"))
+    s.append('</svg>')
+    write_svg("VAL-03_analog_digital_integration_flow.svg", s)
+
     # FIG-05 split
     s = canvas("Strict source-record-wise evaluation", "record leakage 방지와 database confounding은 서로 다른 문제")
     s += box(70, 160, 280, 260, "Source records", ["record_id is split unit", "all chunks stay together"])
@@ -481,6 +528,8 @@ def main() -> int:
         ("FIG-02", "figures/final/FIG-02_research_workflow.svg", "서민우·이수환·양건", ["source_of_truth/upstream_commits.yaml", "validation/afe_ltspice_xmodel_aligned/README.md", "components/digital_accelerator/configs/final_submission_locked_model.json", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv", "components/digital_accelerator/reports/final/final_metrics.json"], [MATLAB,LTSPICE,XMODEL,DIGITAL], "Record-wise 분할 뒤 Train·Validation으로 MATLAB→LTspice→XMODEL Front End와 Digital RTL을 설계·검증하고, 설계 잠금 뒤 Held-out Test를 최초 1회 사용한 다음 구현·통합 등가성 검증으로 이어지는 전체 workflow", "data-separated portrait workflow with one pre-lock digital correction loop and a one-time locked final test", "the post-lock implementation and integration stages verify equivalence and do not permit model, threshold, or structural retuning"),
         ("FIG-03", "figures/final/FIG-03_ownership_handoff.svg", "양건(편집)", ["source_of_truth/ownership_matrix.csv"], [MATLAB,LTSPICE,XMODEL,DIGITAL], "Contributor ownership과 handoff", "ownership", "collaboration does not transfer implementation ownership"),
         ("FIG-04", "figures/final/FIG-04_analog_validation_flow.svg", "양건(통합 편집)", ["figures/final/SPICE-03_matlab_ltspice_afe_response.png", "figures/final/SPICE-04_matlab_ltspice_notch_response.png", "figures/final/SPICE-05_xmodel_ltspice_adc_waveform_full.png", "figures/final/SPICE-08_xmodel_ltspice_adc_error_histogram.png"], [MATLAB,LTSPICE,XMODEL,"INTEGRATED"], "MATLAB–LTspice 주파수 응답 비교와 LTspice–XMODEL ADC 출력 비교의 아날로그 검증 흐름", "two-stage analog model comparison", "model- and schematic-level simulation evidence; not physical PCB or silicon measurement"),
+        ("VAL-02", "figures/final/VAL-02_digital_validation_flow.svg", "양건(통합 편집)", ["components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv", "benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json", "components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv", "components/digital_accelerator/sim/tb_snn_ecg_axi_smoke.v", "components/digital_accelerator/sim/tb_axi_lite_axis_sample_feeder.v"], [DIGITAL,"09e4d840827ad20856f5e23be4743ddd01565e30","INTEGRATED"], "Python과 Exact C++ 기준을 RTL/XSim에 비교한 뒤 Full-top 제어와 AXI/IP 인터페이스로 확장하는 디지털 검증 흐름", "digital functional and interface verification sequence", "AXI/IP smoke-test source exists; a report-facing rerun transcript and waveform remain to be captured"),
+        ("VAL-03", "figures/final/VAL-03_analog_digital_integration_flow.svg", "양건(통합 편집)", ["components/afe_xmodel/docs/integration_latest/afe36_sha256_bitidentity.csv", "components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv"], [XMODEL,DIGITAL,"INTEGRATED"], "XMODEL AFE·ADC의 signed 12-bit 출력이 Digital RTL/XSim 최종 상태까지 이어지는 아날로그–디지털 통합 검증 흐름", "36-case XMODEL-to-RTL handoff and end-to-end equivalence", "model-based AFE and RTL simulation evidence; not physical analog acquisition or clinical validation"),
         ("FIG-05", "figures/final/FIG-05_strict_recordwise_protocol.svg", "양건", ["components/digital_accelerator/reports/final/final_metrics.json"], [DIGITAL], "Strict source-record-wise evaluation protocol", "evaluation protocol", "does not solve database-class confounding"),
         ("FIG-06", "figures/final/FIG-06_matlab_nominal_summary.svg", "서민우", ["components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv"], [MATLAB], "MATLAB representative nominal clipping/headroom", "four selected nominal 60-second records", "not physical measurement"),
         ("FIG-07", "figures/final/FIG-07_xmodel_scope.svg", "이수환", ["components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md"], [XMODEL], "XMODEL waveform/stress/integration scope", "model-based verification", "not transistor/post-layout/PCB/silicon"),
@@ -535,7 +584,8 @@ def main() -> int:
     for fid, path, owner, files, commits, caption, scope, limits in figures:
         index += [f"## {fid}", "", f"- File: `{path}`", f"- Owner: {owner}", f"- Source files: {', '.join(f'`{x}`' for x in files)}", f"- Source commits: {', '.join(commits)}", "- Source-data path: `figures/source/figure_data.json`", f"- Caption: {caption}", f"- Evidence scope: {scope}", f"- Limitations: {limits}", ""]
     (ROOT / "figures" / "FIGURE_INDEX.md").write_text("\n".join(index), encoding="utf-8")
-    print(f"generated 19 figures (12 SVG + 7 inherited MATLAB PNG); retained 10 SPICE handoff figures; indexed {len(figures)} including FIG-P05")
+    generated_svg_count = len(list(OUT.glob("FIG-*.svg"))) + len(list(OUT.glob("VAL-*.svg")))
+    print(f"generated {generated_svg_count + len(inherited_matlab_figures)} figures ({generated_svg_count} SVG + 7 inherited MATLAB PNG); retained 10 SPICE handoff figures; indexed {len(figures)} including FIG-P05")
     return 0
 
 
