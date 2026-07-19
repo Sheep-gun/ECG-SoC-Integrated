@@ -99,16 +99,25 @@
 
 ## 독자 중심 서술 간결화 (2026-07-19)
 
-- 초록을 문제, 구현 구조, 대표 검증 결과와 한계만 남긴 한 문단으로 축약하였다.
+- 초록을 완성된 통합 시스템의 구성, 동작과 대표 성능만 남긴 한 문단으로 축약하였다.
 - 제2장은 세부 기술 나열을 줄이고 `선행연구가 답하는 질문 → 전체 시스템 흐름 → 데이터와 평가 원칙` 순서로 재구성하였다.
 - MATLAB·LTspice·XMODEL·RTL·FPGA가 각각 무엇을 확인하고 다음 단계에 무엇을 넘기는지 질문형 표로 정리하였다.
 - 본문 성능 서술은 `확인하려는 질문 → 수치 → 독자에게 의미하는 바` 순서로 바꾸었다. 예를 들어 −83.557 dB는 60 Hz 진폭 약 1/15,000, 0.6445 LSB는 평균적으로 ADC 한 단계 미만, 29/36은 7개 오류, 36/36은 정확도가 아닌 구현 등가성으로 해석하였다.
 - 재현에 필요한 정밀 수치는 결과표와 부록에 유지하고, 결론에서는 세부 소자값과 내부 블록 설명의 반복을 제거하였다.
 
+## 완성 시스템 중심 논문 시점 정리 (2026-07-19)
+
+- 초록에서 개발 순서, 남은 과제와 미래 검증 계획을 제거하고 AFE–ADC–RTL–FPGA 통합 시스템의 구조와 결과만 제시하였다.
+- 본문에서 `원래 설계 목표`, `초기 버전`, `정본`, `무엇을 수정했는가`, `pre-alignment` 등 개발일지형 표현을 제거하였다.
+- AFE는 최종 HPF·IA·active Twin-T·LPF·S/H·ADC 구성과 검증 결과만 설명하도록 정리하였다.
+- RTL timing 절은 과거 병목 수치 대신 구현된 pipeline 단계, 최종 WNS와 36/36 기능 등가성만 제시한다.
+- 제8장을 `시스템 특성과 적용 범위`로 바꾸고 향후 과제 목록 대신 완성된 결과와 각 수치의 적용 범위를 표로 정리하였다.
+- 결론은 후속 작업을 열거하지 않고 통합 시스템이 달성한 아날로그 정합, 분류, FPGA 구현과 처리 결과로 끝맺었다.
+
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 19개 생성(12 SVG+7 MATLAB PNG), LTspice handoff 10개 보존, FIG-P05 포함 31개 index
-- `tools/check_integrated_technical_report.py`: PASS — 807 rules, 0 conflicts, chars 66,254, figures 26, evidence rows 76
+- `tools/check_integrated_technical_report.py`: PASS — 794 rules, 0 conflicts, chars 61,658, figures 26, evidence rows 76
 - `tools/check_integrated_repository.py`: PASS — 499 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

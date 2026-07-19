@@ -4,16 +4,16 @@
 
 ## 독자가 처음 읽을 때의 이해 흐름
 
-- [x] 초록은 문제·구조·대표 결과·한계만 한 문단으로 요약하고 세부 회로값과 알고리즘 설명은 본문으로 보낸다.
+- [x] 초록은 완성된 통합 시스템의 구성·동작·대표 성능만 한 문단으로 요약한다.
 - [x] 제2장은 알고리즘 이름보다 “얼마나 긴 ECG를 보고 마지막에 무엇을 출력하는가”를 먼저 설명한다.
 - [x] 성능 수치는 `확인할 질문 → 결과 → 그 결과가 뜻하는 것` 순서로 서술하고, 정밀 원자료는 표와 부록에 남긴다.
-- [x] 본문은 9개 장으로 구성하고, 연구 진행 순서가 MATLAB→AFE·ADC/XMODEL→디지털 IP→benchmark→통합 검증→결과→논의·한계로 이어진다.
+- [x] 본문은 9개 장으로 구성하고, MATLAB→AFE·ADC/XMODEL→디지털 IP→benchmark→통합 검증→결과→시스템 특성·적용 범위로 이어진다.
 - [x] MATLAB 공칭 사전검증을 디지털 아키텍처보다 먼저 제시하고, 그 출력 파라미터와 기준 벡터가 AFE·ADC XMODEL의 입력 기준이 됨을 설명한다.
 - [x] AFE·ADC XMODEL 검증 뒤에 signed stream을 소비하는 디지털 가속기 IP를 배치하여 아날로그 앞단과 디지털 뒷단의 인과관계를 유지한다.
 - [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, NO_BOARD 수치와 physical board pending을 구분한다.
 - [x] 초록의 대표 수치는 각각 아날로그 인계, 분류 성능, FPGA 재현성이라는 의미가 바로 드러난다.
 - [x] 디지털 Figure는 QRS 검출 뒤 rhythm·morphology 경로를 분기하고 class scoring에서 합친 뒤 Snapshot 30개를 Final Membrane으로 누적한다.
-- [x] AFE 설명은 필요성→구성→설계값→검증→다음 블록 연결 순서를 각 블록에 적용한다.
+- [x] AFE 설명은 최종 회로의 기능→구성→설계값→검증 결과 순서로 제시한다.
 - [x] `token age`와 같은 내부 신호명은 직관적인 한국어 기능 설명 뒤에 필요한 경우만 제시한다.
 - [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, Exact C++ 측정·cycle-derived core·estimated power를 구분한다.
 
@@ -24,7 +24,7 @@
 - [x] DeepHHF가 본 연구와 구조적 흐름이 가장 유사함을 인정하되, 미래 위험 예측과 현재 기록 분류라는 질문의 차이를 전면에 둔다.
 - [x] 비교표는 서로 다른 과업·데이터셋·판정 단위의 정확도를 직접 순위 비교하지 않는다.
 - [x] 본 연구의 핵심을 간헐적 질환 구간을 포착하고 반복 증거를 모아 현재 기록의 네 클래스를 판정하는 흐름으로 설명한다.
-- [x] “세계 최초”라고 단정하지 않고, 현재 검증 입력은 30분이며 24시간 성능은 미검증이라는 경계를 유지한다.
+- [x] “세계 최초”라고 단정하지 않고 본 시스템의 입력 규약을 30분 ECG로 명시한다.
 
 ## AFE·ADC 설계와 MATLAB/LTspice/XMODEL 근거
 
@@ -34,7 +34,7 @@
 - [x] active Twin-T의 26.526 kΩ/100 nF, 200 nF/13.263 kΩ, k=0.95, Q≈5를 제시한다.
 - [x] ADC ±1.65 V, 12 bit, 1 kSPS, 0.80586 mV/LSB와 0 V code mapping을 설명한다.
 - [x] MATLAB은 공칭 필터·이득·동적 범위·기준 벡터, LTspice는 실제 schematic·전원·S/H·ADC mapping과 회로 stress, XMODEL은 비이상성·간섭·장시간 stream과 RTL 인계를 담당한다고 구분한다.
-- [x] IA 수렴, notch loading, LPF cutoff, CMRR margin, ADC log off-by-one, passive→active notch 변경을 실제 수정 이력으로 기록한다.
+- [x] 최종 AFE를 `vcvs` op-amp, active Twin-T, unity buffer, 150 Hz LPF와 edge-aligned ADC 기록으로 설명한다.
 - [x] 주파수응답, clipping/headroom, 50/60 Hz PLI, R/C mismatch, GBW/VOS, ADC 비이상성과 장시간 stream 결과를 수치로 제시한다.
 - [x] MATLAB 기준→LTspice schematic 검증→XMODEL signed stream→SHA256→RTL handoff를 설명한다.
 - [x] XMODEL-aligned LTspice `.asc`·`.net`·전용 op-amp 모델과 실제 회로 캡처를 보존하고, FIG-15 설명용 흐름도와 SPICE-02 실제 schematic을 구분한다.
@@ -57,7 +57,7 @@
 - [x] database–class confounding과 physical PCB/silicon/post-layout/clinical gap을 명시한다.
 - [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
 - [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
-- [x] 30분 prototype 결과를 임상적 24시간 Holter의 대체·동등성으로 해석하지 않고, 24시간 확장 시 Final Membrane 재검증이 필요함을 명시한다.
+- [x] 분류·처리시간 결과가 `60초 Snapshot × 30개`의 30분 입력 규약에 대응함을 명시한다.
 - [x] accelerator benchmark는 `09e4d840...`의 Exact C++ 1,777.699800 ms, cycle-derived core 54.012600 ms와 32.912687배 추정 비교를 사용한다.
 - [x] Exact C++ timing 전에 pred 36/36, membrane 144/144와 Snapshot 1,080/1,080 등가성을 확인한다.
 - [x] Python cycle model과 Verilator simulation runtime을 대표 CPU inference 기준선으로 사용하지 않는다.

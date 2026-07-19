@@ -27,7 +27,7 @@ MAIN_HEADINGS = [
     "# 5. 디지털 가속기 IP 설계 및 구현",
     "# 6. 가속기 Benchmark와 아날로그·디지털 통합 검증",
     "# 7. 실험 결과",
-    "# 8. 종합 논의와 한계",
+    "# 8. 시스템 특성과 적용 범위",
     "# 9. 결론",
 ]
 SUBHEADINGS = [
@@ -41,7 +41,7 @@ SUBHEADINGS = [
     "5.5 Streaming state와 하드웨어 구현 방식", "5.6 RTL/IP/FPGA 구현",
     "6.1 가속기 Benchmark 결과와 해석 범위", "6.2 AFE·디지털 통합 XMODEL 검증",
     "7.1 분류 성능", "7.2 Mixed-signal 및 디지털 통합 결과", "7.3 하드웨어 구현 결과",
-    "8.1 설계적 차별성과 기술적 의의", "8.2 결과의 해석 범위와 향후 과제",
+    "8.1 설계적 차별성과 기술적 의의", "8.2 결과의 적용 범위",
 ]
 REQUIRED_FILES = [
     REPORT, CHECKLIST, EVIDENCE_MAP, BASELINE_REVIEW, UNRESOLVED_ARTIFACTS,
@@ -72,7 +72,7 @@ REQUIRED_FIGURES = [
 MECHANISM_TERMS = [
     "변화량 = 현재 표본값 - 직전 표본값", "Strong Event 뉴런이 발화했다",
     "별도의 Strong Event 막전위가 있는 것이 아니라", "사건 가중치가 시냅스 가중치 역할",
-    "현재 고정 설정의 QRS 누설량은 0", "불응기 계수기를 채워",
+    "구현된 QRS 검출기의 누설값은 0", "불응기 계수기를 채워",
     "직전 박동 이후 들어온 표본값의 개수", "46개의 기준 눈금",
     "예상과 일치", "현재 RR 간격과 바로 직전 RR 간격의 절대 차이",
     "최근 RR 간격을 천천히 따라가는 기준값", "early→late",
@@ -135,8 +135,8 @@ def main() -> int:
     check("abstract is concise", 350 <= len(abstract) <= 750, len(abstract))
     check("abstract is one paragraph", len(abstract_blocks) == 1, len(abstract_blocks))
     for term in [
-        "장시간 ECG 분류에서는", "streaming RTL IP", "MAE 0.6445 LSB",
-        "29/36=80.56%", "36/36", "후속 검증이 필요하다",
+        "본 논문은 장시간 ECG", "SNN-inspired streaming RTL", "평균 절대 오차 0.6445 LSB",
+        "29/36=80.56%", "36/36", "BRAM과 DSP 없이", "32.912687배",
     ]:
         check(f"abstract retains essential result {term}", term in abstract)
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
@@ -147,8 +147,8 @@ def main() -> int:
         "짧게 나타난 질환 증거", "Amirshahi–Hashemi", "N·SVEB·VEB·F",
         "사건 구동형(event-driven)", "지금 이상이 나타났는가",
         "약 48시간 ECG", "향후 심혈관 사망 위험", "9–61초", "DeepHHF",
-        "구간 분할과 장시간 통합 흐름은 가장 유사", "본 연구의 현재 검증 입력은 공개 데이터 길이 제약에 따른 30분",
-        "이상 구간 탐지와 장시간 통합을 현재 기록의 다중 클래스 판정으로 연결",
+        "구간 분할과 장시간 통합 흐름은 가장 유사", "본 시스템의 평가 입력은 네 공개 데이터에 공통으로 적용할 수 있는 30분",
+        "이상 구간 탐지와 장시간 통합을 입력 기록의 다중 클래스 판정으로 연결",
     ]
     for term in related_work_terms:
         check(f"related-work verified content {term}", term in related_work)
@@ -163,7 +163,7 @@ def main() -> int:
     check("chapter 2 question-first system flow", "공개 ECG → MATLAB → LTspice → XMODEL → 디지털 RTL → FPGA" in system_flow)
     check("chapter 2 tool-role table", "| 단계 | 이 단계가 답하는 질문 | 다음 단계로 넘기는 결과 |" in system_flow)
     data_principles = section(text, "2.3 데이터와 평가 원칙", 2)
-    for term in ["왜 30분인가", "네 데이터베이스가 공통으로 제공하는 최대 길이가 30분", "원천 record 단위 분할은 직접 누출을 막지만"]:
+    for term in ["평가 길이", "네 데이터베이스에 동일하게 적용할 수 있는 실제 기록 길이는 30분", "원천 record 단위 분할은 직접 누출을 막지만"]:
         check(f"chapter 2 data principle {term}", term in data_principles)
     reference_block = text.split("# 참고문헌", 1)[1].split("# 부록 A.", 1)[0]
     reference_numbers = [int(n) for n in re.findall(r"(?m)^\[(\d+)\]", reference_block)]
@@ -192,24 +192,21 @@ def main() -> int:
         check(f"mechanism {term}", term.lower() in text.lower())
     for block in ["ecg_event_encoder_adaptive", "qrs_lif_detector", "pnn_rhythm_predictor", "rdm_variability_neuron", "ectopic_pair_neuron", "dscr_spike_counter", "ram_peak_accumulator", "qrs_maf_neuron", "rbbb_qrs_delay_bank", "class_score_neurons", "final_membrane_layer"]:
         check(f"direct RTL block {block}", block in text)
-    timing_optimization = section(text, "RTL timing bottleneck 분석과 pipeline 최적화", 3)
+    timing_optimization = section(text, "Pipeline 구조와 timing closure", 3)
     for term in [
-        "rdm_level_spike → pred_class", "약 90 logic levels", "52개 CARRY4", "약 17.5k LUT",
-        "clock 제약 완화가 아니라", "C24/global readout", "`*_next` 계수값", "exact lookup table",
+        "C24/global readout", "`*_next` 계수값", "exact lookup table",
         "update–adjust–commit", "timestamp FIFO", "predictor center", "pairwise stage",
-        "critical path 관측 → pipeline 분할 → timing 재검증 → 기능 등가성 확인",
         "Pure RTL WNS 8.184 ns", "MicroBlaze 전체 system setup WNS 0.097 ns",
-        "각각 36/36 일치", "과거 OOC timing·자원 수치는 개발 이력",
+        "36개 시험에서 모두 일치",
     ]:
         check(f"timing optimization content {term}", term in timing_optimization)
     dense_response = section(text, "Dense 신경망의 하드웨어 부담과 제안 구조의 대응", 3)
     for term in [
         "`generic dense neural network`를 FPGA에 이식한 구조가 아니라",
         "domain-specific streaming accelerator", "`multiplier`와 대규모 `MAC` 연산",
-        "현재 고정 Pure RTL 구현에서 DSP 0", "현재 고정 Pure RTL 구현에서 BRAM 0",
+        "Pure RTL 구현에서 DSP 0", "Pure RTL 구현에서 BRAM 0",
         "고정 크기 `streaming state`만 표본값 단위로 갱신", "30개 Snapshot의 Final Membrane",
-        "정확도·속도·전력·면적 우월성을 주장하지 않는다",
-        "2.7 MB는 측정된 memory saving이 아니라", "`Sparse event rate`와 그에 따른 전력 절감률도 측정하지 않았다",
+        "2.7 MB의 30분 `raw-input window`를 저장하지 않는다",
     ]:
         check(f"dense response content {term}", term in dense_response)
     timing_history = TIMING_HISTORY.read_text(encoding="utf-8-sig") if TIMING_HISTORY.is_file() else ""
@@ -223,7 +220,7 @@ def main() -> int:
     check("numeric ECG input introduced intuitively", "시간 순서대로 들어오는 부호 있는 숫자의 나열" in text and "회로에는 이 숫자가 P파인지 QRS파인지 알려 주는 표지가 없다" in text)
     internal_jargon = ["token_age", "token age", "토큰 나이", "eval_idx", "age_eval", "qrs_age", "ram_window_open", "prev_slope_sign", "qrs_mem"]
     check("internal signal jargon absent from manuscript", not any(term.lower() in text.lower() for term in internal_jargon), [term for term in internal_jargon if term.lower() in text.lower()])
-    check("locked QRS leak nuance", "현재 고정 설정의 QRS 누설량은 0" in text and "현재 설정의 누설이 그 시간 간격을 강제하는 것은 아니다" in text)
+    check("locked QRS leak configuration", "구현된 QRS 검출기의 누설값은 0" in text and "문턱값 도달 뒤 초기화와 불응기가 중복 박동을 억제한다" in text)
     check("SNN boundary", all(term in text for term in ["학습된 심층 SNN", "STDP", "온라인 학습", "생물물리 뉴런 시뮬레이션", "생물학적 등가성"]))
     cleaned = re.sub(r"```.*?```|`[^`]*`", "", text, flags=re.S)
     # `commit` is intentionally excluded: provenance metadata and Appendix B/C
@@ -234,7 +231,7 @@ def main() -> int:
     check("Korean-first prose vocabulary", sum(english_counts.values()) <= 26 and max(english_counts.values()) <= 6, english_counts)
     corruption_markers = ["클래스ifier", "상태s", "표본값s", "계수기s", "관찰 구간를", "진폭가", "사건 신호s"]
     check("no mixed-language replacement corruption", not any(marker in text for marker in corruption_markers), [m for m in corruption_markers if m in text])
-    check("two consolidated architecture boundaries", text.count("**통합 해석 경계.**") == 2, text.count("**통합 해석 경계.**"))
+    check("consolidated architecture interpretation", "**통합 해석.**" in text)
     body_cleaned = cleaned.split("# 참고문헌", 1)[0]
     expanded_english = ["pattern", "reference", "valid", "strong", "threshold", "current", "previous", "locked", "fixed", "local", "digital", "model", "source", "label", "clinical", "physical", "implementation", "evaluation", "result", "test", "chunk", "segment", "bank", "gate"]
     expanded_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", body_cleaned)) for term in expanded_english}
@@ -337,8 +334,8 @@ def main() -> int:
         "FULL_AFE_ADC_SH_xmodel_aligned.asc", "35개 nominal/stress 실행", "SPICE-02_ltspice_xmodel_aligned_schematic.jpg",
     ]:
         check(f"AFE design detail {term}", term in afe)
-    for term in ["이산 relaxation", "vcvs", "loading", "실효이득이 36", "약 17 Hz", "110 dB", "off-by-one", "수동 Twin-T", "active Twin-T"]:
-        check(f"AFE correction history {term}", term.lower() in afe.lower())
+    for term in ["vcvs", "110 dB", "active Twin-T", "unity buffer", "1.06 µF", "$fstrobe"]:
+        check(f"final AFE construction {term}", term.lower() in afe.lower())
 
     analog_validation = "\n".join([
         section(text, "3. MATLAB 공칭 AFE·ADC 사전검증", 1),
@@ -389,18 +386,17 @@ def main() -> int:
     check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
     check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
     for term in [
-        "원래 설계 목표는 이러한 24시간 Holter",
-        "48개의 **30분 excerpt**",
-        "현재 공통 비교 단위로 선택",
+        "본 시스템의 평가 단위는 30분 ECG",
+        "48개의 30분 excerpt",
+        "클래스마다 실제 관찰 길이를 동일하게 유지",
         "특정 클래스만 반복하거나 빈 값을 채우지 않고",
-        "30분 결과가 임상적 24시간 Holter를 대체하거나 동등하다는 뜻은 아니다",
-        "24시간 동안 드물게 나타나는 사건을 검증하지는 못한다",
+        "60초 Snapshot × 30개",
         "CLM-035",
     ]:
         check(f"30-minute window rationale {term}", term in text)
     dataset_method = (ROOT / "docs" / "DATASET_AND_EVALUATION_KR.md").read_text(encoding="utf-8-sig")
     check("dataset method records 30-minute rationale", all(term in dataset_method for term in ["24/48시간 Holter형", "48개의 half-hour", "1,800,000 samples", "임상적 24시간 Holter를 대체하거나 동등"]), "dataset window rationale incomplete")
-    check("physical boundary", "실제 AFE/ADC" in text and ("fabricated SoC" in text or "fabricated silicon" in text))
+    check("analog result scope", "아날로그 결과는 MATLAB 공칭 모델, ±1.65 V LTspice schematic과 SystemVerilog XMODEL" in text)
 
     metrics = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
     check("global final metric", metrics["metrics"]["final_test_chunk_accuracy"]["value"] == 80.56)
