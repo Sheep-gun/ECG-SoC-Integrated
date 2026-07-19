@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600" viewBox="0 0 1600 600" role="img" aria-label="Counter-derived full-top XSim sequence for 36 complete 30-minute cases">
+<title>Full-top 제어 흐름 검증 결과</title>
+<desc>Counter-derived full-top XSim sequence for 36 complete 30-minute cases</desc>
+<rect width="1600" height="600" fill="#ffffff"/>
+<text x="800.0" y="48" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="28" font-weight="700" fill="#182230">Full-top 제어 흐름 검증 결과</text>
+<text x="800" y="82" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#475467">36개 모든 case에서 동일한 sample → Snapshot → final decision 순서를 확인</text>
+<line x1="120" y1="260" x2="1480" y2="260" stroke="#475467" stroke-width="4"/>
+<line x1="120.0" y1="212" x2="120.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<text x="120.0" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="700" fill="#344054">START</text>
+<line x1="165.33333333333334" y1="212" x2="165.33333333333334" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<text x="165.33333333333334" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="700" fill="#344054">S1</text>
+<line x1="210.66666666666669" y1="212" x2="210.66666666666669" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<text x="210.66666666666669" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="700" fill="#344054">S2</text>
+<line x1="256.0" y1="212" x2="256.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="301.33333333333337" y1="212" x2="301.33333333333337" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="346.66666666666663" y1="212" x2="346.66666666666663" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="392.0" y1="212" x2="392.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="437.3333333333333" y1="212" x2="437.3333333333333" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="482.6666666666667" y1="212" x2="482.6666666666667" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="528.0" y1="212" x2="528.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="573.3333333333333" y1="212" x2="573.3333333333333" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="618.6666666666667" y1="212" x2="618.6666666666667" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="664.0" y1="212" x2="664.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="709.3333333333334" y1="212" x2="709.3333333333334" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="754.6666666666666" y1="212" x2="754.6666666666666" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="800.0" y1="212" x2="800.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="845.3333333333334" y1="212" x2="845.3333333333334" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="890.6666666666666" y1="212" x2="890.6666666666666" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="936.0" y1="212" x2="936.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="981.3333333333334" y1="212" x2="981.3333333333334" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1026.6666666666665" y1="212" x2="1026.6666666666665" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1072.0" y1="212" x2="1072.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1117.3333333333335" y1="212" x2="1117.3333333333335" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1162.6666666666667" y1="212" x2="1162.6666666666667" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1208.0" y1="212" x2="1208.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1253.3333333333333" y1="212" x2="1253.3333333333333" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1298.6666666666667" y1="212" x2="1298.6666666666667" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1344.0" y1="212" x2="1344.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1389.3333333333333" y1="212" x2="1389.3333333333333" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<line x1="1434.6666666666667" y1="212" x2="1434.6666666666667" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<text x="1434.6666666666667" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="700" fill="#344054">S29</text>
+<line x1="1480.0" y1="212" x2="1480.0" y2="308" stroke="#98a2b3" stroke-width="1"/>
+<text x="1480.0" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="700" fill="#344054">FINAL</text>
+<text x="800.0" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="17" font-weight="700" fill="#344054">… 60,000 accepted samples per Snapshot × 30 …</text>
+<circle cx="120" cy="260" r="8" fill="#2563a8"/>
+<circle cx="1480" cy="260" r="10" fill="#12b76a"/>
+<rect x="80" y="365" width="260" height="115" rx="8" fill="#f8fafc" stroke="#667085" stroke-width="2"/>
+<text x="210.0" y="399" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Accepted samples</text>
+<text x="210.0" y="433" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">1,800,000 / case</text>
+<rect x="380" y="365" width="260" height="115" rx="8" fill="#f8fafc" stroke="#667085" stroke-width="2"/>
+<text x="510.0" y="399" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Snapshots</text>
+<text x="510.0" y="433" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">30 / case</text>
+<rect x="680" y="365" width="260" height="115" rx="8" fill="#f8fafc" stroke="#667085" stroke-width="2"/>
+<text x="810.0" y="399" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Final decisions</text>
+<text x="810.0" y="433" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">1 / case</text>
+<rect x="980" y="365" width="260" height="115" rx="8" fill="#f8fafc" stroke="#667085" stroke-width="2"/>
+<text x="1110.0" y="399" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Window latency</text>
+<text x="1110.0" y="433" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">180,038 cycles</text>
+<rect x="1280" y="365" width="260" height="115" rx="8" fill="#f8fafc" stroke="#667085" stroke-width="2"/>
+<text x="1410.0" y="399" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Total</text>
+<text x="1410.0" y="433" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">5,401,260 cycles</text>
+<text x="800" y="550" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#067647">final_valid 36/36 · sample/window/decision counter invariant 36/36 · 제어 오류 0건</text>
+</svg>

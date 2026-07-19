@@ -1,0 +1,33 @@
+﻿{
+    "status":  "PASS",
+    "simulator":  "Vivado XSim 2020.2",
+    "tests":  [
+                  {
+                      "name":  "accelerator_smoke",
+                      "top":  "tb_snn_ecg_axi_smoke",
+                      "simulator":  "Vivado XSim 2020.2",
+                      "status":  "PASS",
+                      "pass_marker":  "AXI_SMOKE_PASS",
+                      "source_directory":  "components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src",
+                      "testbench":  "components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/tb_snn_ecg_axi_smoke.v",
+                      "log":  "validation/digital_section4/axi_ip/logs/accelerator_smoke.log",
+                      "selected_trace":  "validation/digital_section4/axi_ip/traces/accelerator_smoke.selected_trace.json",
+                      "raw_vcd_bytes":  283956,
+                      "raw_vcd_sha256":  "f1a77e591107ebd9e5f636dfbf3c5d906cf771c4e14af11c03bc5c47b562640e"
+                  },
+                  {
+                      "name":  "sample_feeder_smoke",
+                      "top":  "tb_axi_lite_axis_sample_feeder",
+                      "simulator":  "Vivado XSim 2020.2",
+                      "status":  "PASS",
+                      "pass_marker":  "FEEDER_SMOKE_PASS",
+                      "source_directory":  "components/digital_accelerator/ip_repo/axi_lite_axis_sample_feeder/src",
+                      "testbench":  "components/digital_accelerator/ip_repo/axi_lite_axis_sample_feeder/src/tb_axi_lite_axis_sample_feeder.v",
+                      "log":  "validation/digital_section4/axi_ip/logs/sample_feeder_smoke.log",
+                      "selected_trace":  "validation/digital_section4/axi_ip/traces/sample_feeder_smoke.selected_trace.json",
+                      "raw_vcd_bytes":  12292,
+                      "raw_vcd_sha256":  "5d93ae2070335ce3df592451a351c7fa83c2a09aafd861d005a0169657354e15"
+                  }
+              ],
+    "note":  "Raw VCD/WDB files are regenerable temporary products; logs and selected traces are retained."
+}

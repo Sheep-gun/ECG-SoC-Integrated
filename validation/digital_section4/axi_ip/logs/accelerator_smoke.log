@@ -1,0 +1,111 @@
+﻿INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/abandoned_feature_stubs.v" into library work
+INFO: [VRFC 10-311] analyzing module rcd_feature
+INFO: [VRFC 10-311] analyzing module rcd2_feature
+INFO: [VRFC 10-311] analyzing module ipb_feature
+INFO: [VRFC 10-311] analyzing module nsr_normality_gate
+INFO: [VRFC 10-311] analyzing module rbbb_lateslope_gate
+INFO: [VRFC 10-311] analyzing module etmc_feature
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/class_score_neurons.v" into library work
+INFO: [VRFC 10-311] analyzing module class_score_neurons
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/dscr_spike_counter.v" into library work
+INFO: [VRFC 10-311] analyzing module dscr_spike_counter
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/ecg_event_encoder_adaptive.v" into library work
+INFO: [VRFC 10-311] analyzing module ecg_event_encoder_adaptive
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/ectopic_pair_neuron.v" into library work
+INFO: [VRFC 10-311] analyzing module ectopic_pair_neuron
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/final_membrane_layer.v" into library work
+INFO: [VRFC 10-311] analyzing module final_membrane_layer
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/pnn_rhythm_predictor.v" into library work
+INFO: [VRFC 10-311] analyzing module pnn_rhythm_predictor
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/qrs_lif_detector.v" into library work
+INFO: [VRFC 10-311] analyzing module qrs_lif_detector
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/qrs_maf_neuron.v" into library work
+INFO: [VRFC 10-311] analyzing module qrs_maf_neuron
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/ram_peak_accumulator.v" into library work
+INFO: [VRFC 10-311] analyzing module ram_peak_accumulator
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/rbbb_qrs_delay_bank.v" into library work
+INFO: [VRFC 10-311] analyzing module rbbb_qrs_delay_bank
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/rdm_variability_neuron.v" into library work
+INFO: [VRFC 10-311] analyzing module rdm_variability_neuron
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/reset_sync.v" into library work
+INFO: [VRFC 10-311] analyzing module reset_sync
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_30min_final_top.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_30min_final_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_3feat_top.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_3feat_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_axi_lite_stream_top.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_axi_lite_stream_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_input_normalizer.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_input_normalizer
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/tb_snn_ecg_axi_smoke.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_snn_ecg_axi_smoke
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe -debug typical -top tb_snn_ecg_axi_smoke -snapshot accelerator_smoke_sim
+Multi-threading is on. Using 30 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'high_irreg_bin_count' [<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_3feat_top.v:1347]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'mid_irreg_bin_count' [<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_3feat_top.v:1349]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'low_irreg_bin_count' [<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_3feat_top.v:1351]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'burst_count' [<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_3feat_top.v:1353]
+WARNING: [VRFC 10-3645] port 'strong_event' remains unconnected for this instance [<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/snn_ecg_30min_final_top.v:144]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.reset_sync
+Compiling module work.snn_ecg_input_normalizer(ENABLE_...
+Compiling module work.ecg_event_encoder_adaptive(T_EVE...
+Compiling module work.qrs_lif_detector(LEAK_QRS=0,T_QR...
+Compiling module work.pnn_rhythm_predictor
+Compiling module work.dscr_spike_counter(SLOPE_THRESHO...
+Compiling module work.ram_peak_accumulator(BANK_BASE=3...
+Compiling module work.rdm_variability_neuron
+Compiling module work.ectopic_pair_neuron_default
+Compiling module work.qrs_maf_neuron_default
+Compiling module work.rcd_feature
+Compiling module work.rcd2_feature
+Compiling module work.ipb_feature
+Compiling module work.nsr_normality_gate
+Compiling module work.rbbb_lateslope_gate
+Compiling module work.rbbb_qrs_delay_bank(ACTIVITY_MOD...
+Compiling module work.etmc_feature
+Compiling module work.class_score_neurons(BIAS_NSR=-52...
+Compiling module work.snn_ecg_3feat_top
+Compiling module work.final_membrane_layer
+Compiling module work.snn_ecg_30min_final_top(SNAPSHOT...
+Compiling module work.snn_ecg_axi_lite_stream_top(SNAP...
+Compiling module work.tb_snn_ecg_axi_smoke
+Built simulation snapshot accelerator_smoke_sim
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source <USERPROFILE>/AppData/Local/Temp/ecg_soc_section4_axi_ip/accelerator_smoke/xsim.dir/accelerator_smoke_sim/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Mon Jul 20 00:37:04 2026...
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/accelerator_smoke_sim/xsim_script.tcl
+# xsim {accelerator_smoke_sim} -autoloadwcfg -tclbatch {<REPO>/validation/digital_section4/axi_ip/capture_accelerator.tcl}
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+source <REPO>/validation/digital_section4/axi_ip/capture_accelerator.tcl
+## open_vcd accelerator_smoke.vcd
+## log_vcd [get_objects -r /tb_snn_ecg_axi_smoke/*]
+INFO: HDL object /tb_snn_ecg_axi_smoke/dut/u_core/u_snapshot/u_event_encoder/hist is an unpacked array. VCD does not support unpacked array type according to IEEE LRM 1800-2009, section21.7.5.
+INFO: HDL object /tb_snn_ecg_axi_smoke/dut/u_core/u_snapshot/u_event_encoder/bank_count is an unpacked array. VCD does not support unpacked array type according to IEEE LRM 1800-2009, section21.7.5.
+INFO: HDL object /tb_snn_ecg_axi_smoke/dut/u_core/u_snapshot/u_qrs_maf/pre_energy_sr is an unpacked array. VCD does not support unpacked array type according to IEEE LRM 1800-2009, section21.7.5.
+INFO: HDL object /tb_snn_ecg_axi_smoke/dut/u_core/u_snapshot/u_qrs_maf/pre_strong_time_fifo is an unpacked array. VCD does not support unpacked array type according to IEEE LRM 1800-2009, section21.7.5.
+## run all
+AXI_SMOKE_PASS
+$finish called at time : 2095 ns : File "<REPO>/components/digital_accelerator/ip_repo/snn_ecg_axi_accelerator/src/tb_snn_ecg_axi_smoke.v" Line 299
+## close_vcd
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Jul 20 00:37:12 2026...

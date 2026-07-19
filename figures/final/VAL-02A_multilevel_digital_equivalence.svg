@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="680" viewBox="0 0 1600 680" role="img" aria-label="Locked Python integer reference and independent Exact C++ checks converge on the same RTL XSim implementation">
+<title>다층 디지털 등가성 검증 결과</title>
+<desc>Locked Python integer reference and independent Exact C++ checks converge on the same RTL XSim implementation</desc>
+<rect width="1600" height="680" fill="#ffffff"/>
+<text x="800.0" y="48" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="28" font-weight="700" fill="#182230">다층 디지털 등가성 검증 결과</text>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475467"/></marker></defs>
+<text x="800" y="82" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#475467">최종 출력만이 아니라 고정폭 연산 → 내부 상태 → Snapshot → 최종 상태까지 단계별 비교</text>
+<rect x="55" y="130" width="350" height="190" rx="8" fill="#eff6ff" stroke="#2563a8" stroke-width="2"/>
+<text x="230.0" y="164" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">2-1  Python 정수 기준</text>
+<text x="230.0" y="198" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">Prediction  36/36</text>
+<text x="230.0" y="225" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">Final Membrane  144/144</text>
+<text x="230.0" y="252" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">mismatch = 0</text>
+<rect x="55" y="385" width="350" height="190" rx="8" fill="#f5f3ff" stroke="#6941c6" stroke-width="2"/>
+<text x="230.0" y="419" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">2-2  Exact C++ 기준</text>
+<text x="230.0" y="453" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">독립 handwritten 구현</text>
+<text x="230.0" y="480" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">고정폭·내부 상태 추적</text>
+<text x="230.0" y="507" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">RTL/XSim과 단계별 비교</text>
+<rect x="625" y="205" width="350" height="300" rx="8" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+<text x="800.0" y="239" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Locked RTL / XSim</text>
+<text x="800.0" y="273" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">동일 12-bit 입력</text>
+<text x="800.0" y="300" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">동일 1 kSPS cadence</text>
+<text x="800.0" y="327" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">동일 60 s Snapshot</text>
+<text x="800.0" y="354" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">동일 30-Snapshot final state</text>
+<text x="800.0" y="381" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<line x1="405" y1="225" x2="625" y2="285" stroke="#475467" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="405" y1="480" x2="625" y2="425" stroke="#475467" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1085" y="135" width="205" height="112" rx="8" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1187.5" y="169" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">고정폭 primitive</text>
+<text x="1187.5" y="203" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">793,595/793,595</text>
+<text x="1187.5" y="230" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<rect x="1320" y="135" width="205" height="112" rx="8" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1422.5" y="169" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Module microtrace</text>
+<text x="1422.5" y="203" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">18/18</text>
+<text x="1422.5" y="230" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<rect x="1085" y="285" width="205" height="112" rx="8" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1187.5" y="319" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Accepted-sample state</text>
+<text x="1187.5" y="353" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">240000/240000</text>
+<text x="1187.5" y="380" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<rect x="1320" y="285" width="205" height="112" rx="8" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1422.5" y="319" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Snapshot boundary</text>
+<text x="1422.5" y="353" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">1080/1080</text>
+<text x="1422.5" y="380" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<rect x="1085" y="435" width="205" height="112" rx="8" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1187.5" y="469" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Final prediction</text>
+<text x="1187.5" y="503" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">36/36</text>
+<text x="1187.5" y="530" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<rect x="1320" y="435" width="205" height="112" rx="8" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1422.5" y="469" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="700" fill="#182230">Final membranes</text>
+<text x="1422.5" y="503" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">144/144</text>
+<text x="1422.5" y="530" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#344054">PASS</text>
+<line x1="975" y1="355" x2="1085" y2="355" stroke="#475467" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="800" y="630" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="17" font-weight="700" fill="#067647">결론: Python 최종 출력과 Exact C++ 내부 상태 검증이 모두 locked RTL/XSim에 대해 불일치 0건</text>
+</svg>

@@ -50,12 +50,45 @@ Generated integrated figures and immutable team-provided analog validation figur
 
 - File: `figures/final/VAL-02_digital_validation_flow.svg`
 - Owner: 양건(통합 편집)
-- Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv`, `components/digital_accelerator/sim/tb_snn_ecg_axi_smoke.v`, `components/digital_accelerator/sim/tb_axi_lite_axis_sample_feeder.v`
+- Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv`, `validation/digital_section4/axi_ip/axi_ip_smoke_summary.json`
 - Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 09e4d840827ad20856f5e23be4743ddd01565e30, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Python과 Exact C++ 기준을 RTL/XSim에 비교한 뒤 Full-top 제어와 AXI/IP 인터페이스로 확장하는 디지털 검증 흐름
 - Evidence scope: digital functional and interface verification sequence
-- Limitations: AXI/IP smoke-test source exists; a report-facing rerun transcript and waveform remain to be captured
+- Limitations: AXI/IP smoke tests are reduced protocol tests; canonical full-length control is verified separately
+
+## VAL-02A
+
+- File: `figures/final/VAL-02A_multilevel_digital_equivalence.svg`
+- Owner: 양건(통합 편집)
+- Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `tools/generate_section4_validation_artifacts.py`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 09e4d840827ad20856f5e23be4743ddd01565e30, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Python 최종 출력과 Exact C++ 내부 상태를 locked RTL/XSim에 단계별로 비교한 다층 등가성 검증 결과
+- Evidence scope: 36 final outputs plus fixed-width, microtrace, accepted-sample state, and Snapshot-boundary checks
+- Limitations: Exact C++ is an independent cross-check; locked Python and canonical XSim remain the final reference and implementation authorities
+
+## VAL-02B
+
+- File: `figures/final/VAL-02B_fulltop_control_timeline.svg`
+- Owner: 양건(통합 편집)
+- Source files: `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv`, `tools/generate_section4_validation_artifacts.py`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: 36개 full-top XSim case의 counter에서 확인한 sample·Snapshot·final decision 제어 순서
+- Evidence scope: 36 complete 1,800,000-sample cases, 30 Snapshots and one decision per case
+- Limitations: counter-derived control sequence, not a literal 5.4-million-cycle waveform screenshot
+
+## VAL-02C
+
+- File: `figures/final/VAL-02C_axi_ip_protocol_waveform.svg`
+- Owner: 양건(통합 편집)
+- Source files: `validation/digital_section4/axi_ip/axi_ip_smoke_summary.json`, `validation/digital_section4/axi_ip/traces/accelerator_smoke.selected_trace.json`, `validation/digital_section4/axi_ip/traces/sample_feeder_smoke.selected_trace.json`, `validation/digital_section4/axi_ip/logs/accelerator_smoke.log`, `validation/digital_section4/axi_ip/logs/sample_feeder_smoke.log`, `tools/generate_section4_validation_artifacts.py`
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, INTEGRATED
+- Source-data path: `figures/source/figure_data.json`
+- Caption: Vivado XSim VCD에서 추출한 AXI-Lite·AXI-Stream handshake, backpressure, TLAST 및 done/IRQ 파형
+- Evidence scope: packaged accelerator and sample-feeder IP smoke tests in Vivado XSim 2020.2
+- Limitations: reduced 16-sample accelerator protocol test; canonical full-length control is covered by VAL-02B
 
 ## VAL-03
 

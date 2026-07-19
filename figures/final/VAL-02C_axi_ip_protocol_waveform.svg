@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-label="Selected signal traces captured from actual Vivado 2020.2 XSim smoke-test VCD files">
+<title>AXI-Lite / AXI-Stream IP 검증 파형</title>
+<desc>Selected signal traces captured from actual Vivado 2020.2 XSim smoke-test VCD files</desc>
+<rect width="1600" height="760" fill="#ffffff"/>
+<text x="800.0" y="48" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="28" font-weight="700" fill="#182230">AXI-Lite / AXI-Stream IP 검증 파형</text>
+<text x="800" y="79" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="16" font-weight="500" fill="#475467">실제 XSim VCD에서 추출한 handshake · backpressure · TLAST · done/IRQ 파형</text>
+<rect x="40" y="105" width="740" height="570" rx="8" fill="#ffffff" stroke="#98a2b3" stroke-width="1.5"/>
+<rect x="820" y="105" width="740" height="570" rx="8" fill="#ffffff" stroke="#98a2b3" stroke-width="1.5"/>
+<text x="410" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="700" fill="#182230">Sample Feeder IP</text>
+<text x="1190" y="138" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="700" fill="#182230">SNN ECG Accelerator IP</text>
+<text x="410" y="162" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="14" font-weight="700" fill="#067647">FEEDER_SMOKE_PASS · 665 ns</text>
+<text x="1190" y="162" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="14" font-weight="700" fill="#067647">AXI_SMOKE_PASS · 2,095 ns</text>
+<line x1="173.0" y1="185" x2="173.0" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="173.0" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">0</text>
+<line x1="317.75" y1="185" x2="317.75" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="317.75" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">166</text>
+<line x1="462.5" y1="185" x2="462.5" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="462.5" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">332</text>
+<line x1="607.25" y1="185" x2="607.25" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="607.25" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">499</text>
+<line x1="752.0" y1="185" x2="752.0" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="752.0" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">665</text>
+<text x="462.5" y="612" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="500" fill="#667085">time (ns)</text>
+<rect x="55" y="185.0" width="705" height="64.16666666666667" fill="#f8fafc"/>
+<text x="163" y="224.78333333333333" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">AWVALID</text>
+<polyline points="173.0,231.2 316.7,231.2 316.7,203.0 334.1,203.0 334.1,231.2 351.5,231.2 351.5,203.0 368.9,203.0 368.9,231.2 386.3,231.2 386.3,203.0 403.7,203.0 403.7,231.2 691.1,231.2 691.1,203.0 708.5,203.0 708.5,231.2 752.0,231.2" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="163" y="288.95000000000005" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">WVALID</text>
+<polyline points="173.0,295.4 316.7,295.4 316.7,267.1 334.1,267.1 334.1,295.4 351.5,295.4 351.5,267.1 368.9,267.1 368.9,295.4 386.3,295.4 386.3,267.1 403.7,267.1 403.7,295.4 691.1,295.4 691.1,267.1 708.5,267.1 708.5,295.4 752.0,295.4" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<rect x="55" y="313.33333333333337" width="705" height="64.16666666666667" fill="#f8fafc"/>
+<text x="163" y="353.11666666666673" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">BVALID</text>
+<polyline points="173.0,345.4 177.4,345.4 177.4,359.5 325.4,359.5 325.4,331.3 334.1,331.3 334.1,359.5 360.2,359.5 360.2,331.3 368.9,331.3 368.9,359.5 395.0,359.5 395.0,331.3 403.7,331.3 403.7,359.5 699.8,359.5 699.8,331.3 708.5,331.3 708.5,359.5 752.0,359.5" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="163" y="417.28333333333336" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">TVALID</text>
+<polyline points="173.0,409.6 177.4,409.6 177.4,423.7 325.4,423.7 325.4,395.5 560.5,395.5 560.5,423.7 752.0,423.7" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<rect x="55" y="441.6666666666667" width="705" height="64.16666666666667" fill="#f8fafc"/>
+<text x="163" y="481.45000000000005" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">TREADY</text>
+<polyline points="173.0,487.9 499.5,487.9 499.5,459.6 508.2,459.6 508.2,487.9 525.6,487.9 525.6,459.6 534.3,459.6 534.3,487.9 551.7,487.9 551.7,459.6 560.5,459.6 560.5,487.9 752.0,487.9" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="163" y="545.6166666666667" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">TLAST</text>
+<polyline points="173.0,537.9 325.4,537.9 325.4,552.0 534.3,552.0 534.3,523.8 560.5,523.8 560.5,537.9 699.8,537.9 699.8,552.0 752.0,552.0" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<line x1="953.0" y1="185" x2="953.0" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="953.0" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">0</text>
+<line x1="1097.75" y1="185" x2="1097.75" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="1097.75" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">524</text>
+<line x1="1242.5" y1="185" x2="1242.5" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="1242.5" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">1048</text>
+<line x1="1387.25" y1="185" x2="1387.25" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="1387.25" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">1571</text>
+<line x1="1532.0" y1="185" x2="1532.0" y2="570" stroke="#d0d5dd" stroke-width="1"/>
+<text x="1532.0" y="592" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="400" fill="#667085">2095</text>
+<text x="1242.5" y="612" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="12" font-weight="500" fill="#667085">time (ns)</text>
+<rect x="835" y="185.0" width="705" height="55.0" fill="#f8fafc"/>
+<text x="943" y="219.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">START</text>
+<polyline points="953.0,212.5 954.4,212.5 954.4,224.6 1034.5,224.6 1034.5,200.4 1037.3,200.4 1037.3,224.6 1532.0,224.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="943" y="274.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">RUN</text>
+<polyline points="953.0,267.5 954.4,267.5 954.4,279.6 1034.5,279.6 1034.5,255.4 1418.7,255.4 1418.7,279.6 1532.0,279.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<rect x="835" y="295.0" width="705" height="55.0" fill="#f8fafc"/>
+<text x="943" y="329.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">TVALID</text>
+<polyline points="953.0,334.6 1089.8,334.6 1089.8,310.4 1288.8,310.4 1288.8,334.6 1532.0,334.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="943" y="384.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">TREADY</text>
+<polyline points="953.0,377.5 954.4,377.5 954.4,389.6 1037.3,389.6 1037.3,365.4 1098.1,365.4 1098.1,389.6 1100.9,389.6 1100.9,365.4 1103.6,365.4 1103.6,389.6 1106.4,389.6 1106.4,365.4 1109.2,365.4 1109.2,389.6 1111.9,389.6 1111.9,365.4 1114.7,365.4 1114.7,389.6 1117.4,389.6 1117.4,365.4 1120.2,365.4 1120.2,389.6 1123.0,389.6 1123.0,365.4 1125.7,365.4 1125.7,389.6 1128.5,389.6 1128.5,365.4 1131.3,365.4 1131.3,389.6 1134.0,389.6 1134.0,365.4 1136.8,365.4 1136.8,389.6 1258.4,389.6 1258.4,365.4 1261.2,365.4 1261.2,389.6 1263.9,389.6 1263.9,365.4 1266.7,365.4 1266.7,389.6 1269.4,389.6 1269.4,365.4 1272.2,365.4 1272.2,389.6 1275.0,389.6 1275.0,365.4 1277.7,365.4 1277.7,389.6 1280.5,389.6 1280.5,365.4 1283.3,365.4 1283.3,389.6 1286.0,389.6 1286.0,365.4 1288.8,365.4 1288.8,389.6 1532.0,389.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<rect x="835" y="405.0" width="705" height="55.0" fill="#f8fafc"/>
+<text x="943" y="439.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">TLAST</text>
+<polyline points="953.0,444.6 1283.3,444.6 1283.3,420.4 1288.8,420.4 1288.8,444.6 1532.0,444.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="943" y="494.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">DONE</text>
+<polyline points="953.0,487.5 954.4,487.5 954.4,499.6 1418.7,499.6 1418.7,475.4 1512.7,475.4 1512.7,499.6 1532.0,499.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<rect x="835" y="515.0" width="705" height="55.0" fill="#f8fafc"/>
+<text x="943" y="549.1" text-anchor="end" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#344054">IRQ</text>
+<polyline points="953.0,542.5 954.4,542.5 954.4,554.6 1418.7,554.6 1418.7,530.4 1512.7,530.4 1512.7,554.6 1532.0,554.6" fill="none" stroke="#2563a8" stroke-width="2" stroke-linejoin="miter"/>
+<text x="410" y="635" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#344054">3 samples retained under stall; 3 transfers; TLAST on final sample</text>
+<text x="1190" y="635" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#344054">16-sample reduced smoke case; start → stream → done/result/IRQ → clear</text>
+<text x="800" y="718" text-anchor="middle" font-family="Arial, Noto Sans KR, Malgun Gothic, sans-serif" font-size="14" font-weight="500" fill="#475467">범위: packaged IP protocol smoke test. Canonical 1,800,000-sample control은 VAL-02B의 36-case full-top regression으로 별도 검증.</text>
+</svg>

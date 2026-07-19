@@ -1,0 +1,46 @@
+﻿INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/axi_lite_axis_sample_feeder/src/axi_lite_axis_sample_feeder.v" into library work
+INFO: [VRFC 10-311] analyzing module axi_lite_axis_sample_feeder
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPO>/components/digital_accelerator/ip_repo/axi_lite_axis_sample_feeder/src/tb_axi_lite_axis_sample_feeder.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi_lite_axis_sample_feeder
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe -debug typical -top tb_axi_lite_axis_sample_feeder -snapshot sample_feeder_smoke_sim
+Multi-threading is on. Using 30 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.axi_lite_axis_sample_feeder(FIFO...
+Compiling module work.tb_axi_lite_axis_sample_feeder
+Built simulation snapshot sample_feeder_smoke_sim
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source <USERPROFILE>/AppData/Local/Temp/ecg_soc_section4_axi_ip/sample_feeder_smoke/xsim.dir/sample_feeder_smoke_sim/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Mon Jul 20 00:37:17 2026...
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/sample_feeder_smoke_sim/xsim_script.tcl
+# xsim {sample_feeder_smoke_sim} -autoloadwcfg -tclbatch {<REPO>/validation/digital_section4/axi_ip/capture_feeder.tcl}
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+source <REPO>/validation/digital_section4/axi_ip/capture_feeder.tcl
+## open_vcd sample_feeder_smoke.vcd
+## log_vcd [get_objects -r /tb_axi_lite_axis_sample_feeder/*]
+INFO: HDL object /tb_axi_lite_axis_sample_feeder/dut/fifo_data is an unpacked array. VCD does not support unpacked array type according to IEEE LRM 1800-2009, section21.7.5.
+INFO: HDL object /tb_axi_lite_axis_sample_feeder/dut/fifo_last is an unpacked array. VCD does not support unpacked array type according to IEEE LRM 1800-2009, section21.7.5.
+## run all
+FEEDER_SMOKE_PASS
+$finish called at time : 665 ns : File "<REPO>/components/digital_accelerator/ip_repo/axi_lite_axis_sample_feeder/src/tb_axi_lite_axis_sample_feeder.v" Line 211
+## close_vcd
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Jul 20 00:37:23 2026...
