@@ -2,7 +2,7 @@
 
 ## 1. Contract Summary
 
-The digital accelerator starts at the signed 12-bit ECG stream boundary. Upstream MATLAB and XMODEL repositories establish stream provenance; this repository verifies the accelerator from that stream onward.
+The digital accelerator starts at the signed 12-bit ECG stream boundary. Upstream MATLAB pre-design, LTspice schematic verification and SystemVerilog XMODEL establish stream provenance; this repository mirrors their report evidence and verifies the accelerator from that stream onward.
 
 | Item | Contract |
 |---|---:|
@@ -30,6 +30,7 @@ This cadence is part of the digital validation protocol for board replay compari
 
 | Concept | Meaning | Owned by |
 |---|---|---|
+| Analog model correlation | MATLAB design intent, LTspice circuit response and XMODEL ADC stream are compared before the digital boundary | upstream analog repos, report mirror here |
 | Digital full-top XSim expected outputs | Locked full-top RTL produces expected `final_pred` and `final_mem` for 36 final_test cases | this repo |
 | Vitis/MicroBlaze board replay vs expected outputs | MicroBlaze and sample feeder replay each 30-minute stream on FPGA and compare output with XSim expected | this repo |
 | Upstream AFE-to-locked RTL integration evidence | XMODEL-generated stream is fed into locked RTL using the canonical cadence | XMODEL teammate repo |
@@ -51,7 +52,8 @@ Board replay validates the digital accelerator integration path. It does not val
 
 | Upstream or digital artifact | Expected connection |
 |---|---|
-| MATLAB nominal plots/reports | Explain nominal AFE intent before XMODEL verification |
+| MATLAB nominal plots/reports | Explain nominal AFE intent before circuit implementation |
+| LTspice schematic/tables/plots | Verify the real R/C/op-amp/S&H/ADC realization before XMODEL handoff |
 | XMODEL generated signed 12-bit `.mem` streams | Must satisfy this repo's signed 12-bit, 1 kSPS input contract |
 | XMODEL AFE-to-locked RTL integration transcript | Should use this repo's canonical full-top XSim cadence, `sample_gap_cycles=2` |
 | `reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv` | Digital expected outputs for board-facing comparison |

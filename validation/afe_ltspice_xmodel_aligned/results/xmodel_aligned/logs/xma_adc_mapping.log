@@ -1,0 +1,16 @@
+LTspice 26.0.1 for Windows
+Circuit: C:\Users\YangGeon\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\xma_adc_mapping.cir
+Start Time: Wed Jul 15 20:07:52 2026
+Options:plotwinsize=0
+solver = Normal
+Maximum thread count: 32
+tnom = 27
+temp = 27
+method = trap
+AsciiRawFile = true
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 0.187 seconds.
+
+Files loaded:
+C:\Users\YangGeon\Desktop\ECG_AFE_LTspice\ltspice_validation\schematics\xmodel_aligned\xma_adc_mapping.cir
+

@@ -1,0 +1,10 @@
+# SHA256 captured before validation copies/testbenches were created (2026-07-15 KST)
+A256FB8D38CB34825958BFE9CD9F7C0C44032A842190D9E8B9434B82E662EA31  FULL_AFE_ADC_SH.asc
+5C8DE5435F97C6F9320B398869538CD6992CAA6250825D89A9FD3D019FECCA36  patient100_ecg_10s.txt
+03BFBCE909ED42B9B65BA3B8B8E9FAF516B9C4F97EA853BFDF7147537118D0BC  ECG_AFE_ADC_Schematic_정리.docx
+
+# A transient Microsoft Word owner/lock file was present during initial inventory and later disappeared normally.
+F2E9AE5015491AA2D95A018F42083C624A7858D0668FB1D4D5C8F6B8676D06F4  ~$G_AFE_ADC_Schematic_정리.docx (initially observed; not a design input)
+
+# Installed LTspice library used by U1-U6; external to the workspace.
+68CA9F57957C7006E09F9A5349A0823FA93E9E1F2618A6FC0D2EBC7A83B1271E  C:\Users\YangGeon\AppData\Local\LTspice\lib\sub\UniversalOpAmp2.lib

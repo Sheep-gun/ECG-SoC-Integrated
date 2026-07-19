@@ -1,0 +1,11 @@
+results/xmodel_aligned/raw/
+results/xmodel_aligned/xmodel_reference/work/
+results/xmodel_aligned/nominal/transient_export_50us.csv
+schematics/xmodel_aligned/drive_*.txt
+*.raw
+*.op.raw
+__pycache__/
+*.pyc
+
+# Repository root ignores *.log globally, but these small execution records are evidence.
+!results/xmodel_aligned/logs/*.log

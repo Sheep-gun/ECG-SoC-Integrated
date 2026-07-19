@@ -1,0 +1,6 @@
+﻿test_id,variant,source_schematic,simulation_type,metric,target,measured,unit,deviation,status,evidence_path,notes
+TIMESTEP,XMODEL_ALIGNED_5us_vs_10us,schematics/xmodel_aligned/xma_nominal_convergence_10u.cir,TRAN,sample_count,,2000,samples,,MEASURED,results/xmodel_aligned/raw/xma_nominal_convergence_10u.raw,final 5us graphical raw vs 2s 10us companion
+TIMESTEP,XMODEL_ALIGNED_5us_vs_10us,schematics/xmodel_aligned/xma_nominal_convergence_10u.cir,TRAN,AFE_OUT_rms_difference,,6.04355638764e-07,V,,MEASURED,results/xmodel_aligned/raw/xma_nominal_convergence_10u.raw,
+TIMESTEP,XMODEL_ALIGNED_5us_vs_10us,schematics/xmodel_aligned/xma_nominal_convergence_10u.cir,TRAN,AFE_OUT_max_absolute_difference,,2.27766928317e-05,V,,MEASURED,results/xmodel_aligned/raw/xma_nominal_convergence_10u.raw,
+TIMESTEP,XMODEL_ALIGNED_5us_vs_10us,schematics/xmodel_aligned/xma_nominal_convergence_10u.cir,TRAN,direct_code_difference_count,,0,samples,,MEASURED,results/xmodel_aligned/raw/xma_nominal_convergence_10u.raw,
+TIMESTEP,XMODEL_ALIGNED_5us_vs_10us,schematics/xmodel_aligned/xma_nominal_convergence_10u.cir,TRAN,track_hold_code_difference_count,,0,samples,,MEASURED,results/xmodel_aligned/raw/xma_nominal_convergence_10u.raw,

@@ -7,3 +7,6 @@
 *.mem text eol=lf
 *.bit binary
 *.png binary
+*.jpg binary
+*.svg binary
+*.log whitespace=-blank-at-eof

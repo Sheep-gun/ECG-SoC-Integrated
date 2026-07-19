@@ -1,0 +1,14 @@
+item,report_value,schematic_value,status,evidence_file,note
+op_amp_supply,+/-1.65 V,VPLUS=+1.65 V and VMINUS=-1.65 V for U1-U6,MATCH,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net,Original +/-5 V ASC is pre-alignment only
+op_amp_open_loop_gain,100 dB,AOL_DB=100 for U1-U6,MATCH,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net,Dedicated validation subcircuit
+op_amp_cmrr,110 dB,CMRR_DB=110 for U1-U6,MATCH,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net,
+op_amp_output_resistance,1 ohm,ROUT=1 ohm,MATCH,schematics/xmodel_aligned/XOpAmp_XMODEL.lib,
+op_amp_nominal_noise_offset,none,VOS=0 and no noise source,MATCH,schematics/xmodel_aligned/XOpAmp_XMODEL.lib,
+nominal_input_drive,ECG+=patient and ECG-=0,V3 drives INP_RAW-to-ground and V5 holds INN_RAW at 0,MATCH,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net,Patient value is applied on 50us update contract
+bootstrap,0.95 divider independent of rail,K_DIV is separate from VPLUS and drives U5 follower,MATCH,schematics/xmodel_aligned/FULL_AFE_ADC_SH_xmodel_aligned.net,Corrects original node collision in validation copy only
+sampling_aperture,first falling edge 1.000 ms,S/H turns off by 1.000ms and direct aperture is 1.000ms,MATCH,tables/xmodel_aligned_track_hold_metrics.csv,Direct and S/H streams remain separate
+dc_offset_start,step after startup from zero,disturbance changes from zero at 50us,MATCH,schematics/xmodel_aligned/drive_dc_p200m_pos.txt,Operating-point precharge no longer hides startup recovery
+adc_mapping,floor endpoint 0..4095 and signed minus 2048,Behavioral B sources match all specified plateaus,MATCH,tables/xmodel_aligned_adc_mapping_metrics.csv,Not a physical SAR ADC
+ltspice_xmodel_direct_code_correlation,fixed XMODEL is reference,Follow-up team handoff completed 10000-sample comparison,SUPERSEDED_BY_HANDOFF,tables/xmodel_ltspice_handoff_metrics.csv,MAE=0.6445 LSB correlation=0.999518 within_5LSB=98.74% within_10LSB=99.89%; original pending table retained as pre-run snapshot
+track_and_hold_in_xmodel,no S/H block in fixed XMODEL,LTspice-only additional implementation,NOT_APPLICABLE,tables/xmodel_aligned_track_hold_metrics.csv,Reported separately from direct stream
+adc_noise_jitter_long_regression,XMODEL-owned,Not duplicated as final LTspice stress,NOT_APPLICABLE,tables/xmodel_aligned_stress_matrix.csv,XMODEL_OWNED
