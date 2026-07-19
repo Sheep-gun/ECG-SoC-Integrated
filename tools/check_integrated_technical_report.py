@@ -32,7 +32,7 @@ MAIN_HEADINGS = [
 ]
 SUBHEADINGS = [
     "1.1 연구 배경과 문제 정의", "1.2 연구 목표와 주요 기여",
-    "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", "2.2 데이터셋과 평가 프로토콜",
+    "2.1 관련 연구가 답하는 질문", "2.2 전체 시스템 흐름과 역할", "2.3 데이터와 평가 원칙",
     "3.1 MATLAB 사전검증의 역할과 흐름", "3.2 공칭 주파수응답과 동적 범위 검증",
     "3.3 기준 벡터 생성과 LTspice 인계",
     "4.1 LTspice AFE·ADC 회로 구현 및 검증", "4.2 LTspice→XMODEL 정합과 비이상성 검증",
@@ -130,32 +130,41 @@ def main() -> int:
     check("digital architecture remains substantive", len(chapter5) >= 12000, len(chapter5))
     check("MATLAB LTspice and XMODEL depth comparable to digital", len(chapter3) + len(chapter4) >= int(len(chapter5) * 0.65), (len(chapter3), len(chapter4), len(chapter5)))
     check("research-flow chapter order", [text.index(h) for h in MAIN_HEADINGS] == sorted(text.index(h) for h in MAIN_HEADINGS))
+    abstract = section(text, "초록", 1)
+    abstract_blocks = [block for block in abstract.split("\n\n") if block.strip()]
+    check("abstract is concise", 350 <= len(abstract) <= 750, len(abstract))
+    check("abstract is one paragraph", len(abstract_blocks) == 1, len(abstract_blocks))
+    for term in [
+        "장시간 ECG 분류에서는", "streaming RTL IP", "MAE 0.6445 LSB",
+        "29/36=80.56%", "36/36", "후속 검증이 필요하다",
+    ]:
+        check(f"abstract retains essential result {term}", term in abstract)
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
-    related_work = section(text, "2.1 장시간 ECG 분석과 사건 기반 분류 선행연구", 2)
+    check("chapter 2 is concise", 4000 <= len(chapter2) <= 7000, len(chapter2))
+    related_work = section(text, "2.1 관련 연구가 답하는 질문", 2)
     related_work_terms = [
-        "ECG를 어느 범위까지 보고, 마지막에 어떤 질문에 답하는가",
-        "장시간 기록의 일부 구간에서 나타난 질환 증거", "기록 전체는 NSR·CHF·ARR·AFF 가운데 어느 클래스인가",
-        "R-peak 전 0.25초와 후 0.45초", "Poisson spike train", "STDP 계층", "보상", "벌점", "심박 하나와 장시간 기록 전체",
-        "사건 구동형(event-driven)", "파형이 기준보다 크게 변한 순간", "QRS처럼 짧은 시간에 크게 오르내리면",
-        "지금 ECG에 평소와 다른 병리 패턴이 나타났는가", "이상 구간을 발견해 알리는 단계", "기록 전체의 네 클래스를 구분하는 단계",
-        "레벨 교차 ADC(level-crossing ADC, LC-ADC)", "N·SVEB·VEB·F", "개별 심박의 종류",
-        "약 48시간 ECG", "위험도가 높은 상위 20%", "대부분의 심박은 정상처럼 보일 수 있지만", "향후 심혈관 사망 위험",
-        "9–61초", "시간 평균", "양방향 LSTM", "긴 연속 기록에서 일부 질환성 구간",
-        "Modeling day-long ECG signals to predict heart failure risk with explainable AI",
-        "24시간 Holter ECG를 30초 구간으로 나눈다", "Transformer가 시간 순서대로", "5년 안에 심부전으로 진행할 위험 점수",
+        "입력으로 얼마만큼의 ECG를 보고, 마지막에 무엇을 출력하는가",
+        "짧게 나타난 질환 증거", "Amirshahi–Hashemi", "N·SVEB·VEB·F",
+        "사건 구동형(event-driven)", "지금 이상이 나타났는가",
+        "약 48시간 ECG", "향후 심혈관 사망 위험", "9–61초", "DeepHHF",
         "구간 분할과 장시간 통합 흐름은 가장 유사", "본 연구의 현재 검증 입력은 공개 데이터 길이 제약에 따른 30분",
-        "이상 구간 탐지와 장시간 구간 통합을 기록 단위 다중 클래스 분류로 연결",
-        "24시간 이상의 정확도, 실시간 처리시간과 전력은 아직 검증하지 않았다",
+        "이상 구간 탐지와 장시간 통합을 현재 기록의 다중 클래스 판정으로 연결",
     ]
     for term in related_work_terms:
         check(f"related-work verified content {term}", term in related_work)
-    comparison_header = "| 연구 | 이 연구가 묻는 핵심 질문 | ECG를 보는 범위 | 최종 출력 | 본 연구와의 거시적 관계 |"
+    comparison_header = "| 연구 | 보는 범위 | 마지막에 답하는 질문 | 본 연구와의 차이 |"
     check("related-work comparison table", comparison_header in related_work)
     for row_name in ["Amirshahi–Hashemi", "Bauer et al.", "Chen et al.", "Shanmugam et al.", "Zihlmann et al.", "DeepHHF", "본 연구"]:
         check(f"related-work comparison row {row_name}", f"| {row_name}" in related_work)
     check("no world-first claim", "세계 최초" not in text)
     check("no absolute identical-study claim", "동일한 연구가 없다" not in text)
-    check("scoped novelty statement", "검토한 대표 선행연구 범위에서는" in related_work and "제한된 비교" in related_work)
+    check("scoped novelty statement", "검토한 대표 선행연구 범위" in related_work and "문헌 전체에 대한 최초성 주장은 아니다" in related_work)
+    system_flow = section(text, "2.2 전체 시스템 흐름과 역할", 2)
+    check("chapter 2 question-first system flow", "공개 ECG → MATLAB → LTspice → XMODEL → 디지털 RTL → FPGA" in system_flow)
+    check("chapter 2 tool-role table", "| 단계 | 이 단계가 답하는 질문 | 다음 단계로 넘기는 결과 |" in system_flow)
+    data_principles = section(text, "2.3 데이터와 평가 원칙", 2)
+    for term in ["왜 30분인가", "네 데이터베이스가 공통으로 제공하는 최대 길이가 30분", "원천 record 단위 분할은 직접 누출을 막지만"]:
+        check(f"chapter 2 data principle {term}", term in data_principles)
     reference_block = text.split("# 참고문헌", 1)[1].split("# 부록 A.", 1)[0]
     reference_numbers = [int(n) for n in re.findall(r"(?m)^\[(\d+)\]", reference_block)]
     check("references sequential 1 through 14", reference_numbers == list(range(1, 15)), reference_numbers)
@@ -313,7 +322,7 @@ def main() -> int:
     check("FIG-15 white vector canvas", 'fill="#ffffff"' in figure15 and "<svg" in figure15[:500])
     check("reader-facing caption states parallel morphology grouping", "네 파형 형태 블록은 독자를 위한 개념적 묶음" in text and "실제 post-synthesis netlist 연결을 뜻하지 않는다" in text)
     check("reader-facing caption states analog stress scope", "유한 GBW는 능동 연산증폭기 단계 전체에서 평가했고 VOS 스트레스는 IA 입력쌍에 적용했다" in text)
-    check("reader-facing caption forbids post-lock retuning", "모델·문턱값·구조 재조정을 허용하지 않는다" in text)
+    check("reader-facing caption forbids post-lock retuning", "FPGA 단계에서는 설계를 다시 조정하지 않고 같은 결과가 재현되는지만 확인한다" in text)
     old_english_figure_phrases = ["Sample / Beat", "60-second Snapshot", "Event / State", "Signed-stream handoff integrity", "Locked classification result", "old state 읽기", "Peak 진폭", "Class 상태 입력"]
     used_svg_text = "\n".join((ROOT / "figures" / "final" / filename).read_text(encoding="utf-8") for filename in reader_figure_requirements)
     check("old English-heavy figure labels absent", not any(phrase in used_svg_text for phrase in old_english_figure_phrases), [p for p in old_english_figure_phrases if p in used_svg_text])
@@ -337,11 +346,11 @@ def main() -> int:
         section(text, "6.2 AFE·디지털 통합 XMODEL 검증", 2),
     ])
     for term in [
-        "MATLAB은 공칭", "LTspice", "XMODEL", "평균 RMS 차이는 1.95 LSB", "60 Hz에서 RMS 0.92 mV",
-        "50 Hz에서 118 mV", "100.7 dB", "80.0 dB", "100 kHz", "2.04 code",
+        "MATLAB은 공칭", "LTspice", "XMODEL", "평균 RMS 차이는 1.95 LSB", "60 Hz 간섭의 잔류는 RMS 0.92 mV",
+        "50 Hz에서는 118 mV", "100.7 dB", "80.0 dB", "100 kHz", "2.04 code",
         "train/val/test 1,200개 모두 0", "shift 중앙값 1.0 ms", "RR 오차 중앙값 0 ms",
-        "final_pred 15/16", "SHA256 36/36", "final_pred", "final_mem", "MAE 0.6445 LSB",
-        "zero-lag correlation 0.999518", "±5 LSB", "98.74%", "±10 LSB", "99.89%",
+        "final_pred 15/16", "SHA256 36/36", "final_pred", "final_mem", "평균 절대 오차는 0.6445 LSB",
+        "시간 지연은 0표본", "±5 LSB", "98.74%", "±10 LSB", "99.89%",
     ]:
         check(f"MATLAB XMODEL verification {term}", term in analog_validation)
     for source_name in [
@@ -357,8 +366,16 @@ def main() -> int:
     check("LTspice schematic present", (ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc").is_file())
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "LUT 9,719", "FF 5,038", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "−83.5557 dB", "11.721 Hz", "5.119", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "2,007.549250 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "0.099 W", "0.005347247400 J/decision"]:
+    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "2,007.549250 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "0.099 W", "0.005347247400 J/decision"]:
         check(f"required result {value}", value in text)
+    for name, meaning in [
+        ("60 Hz attenuation meaning", "간섭 진폭을 약 1/15,000로 줄인다는 뜻"),
+        ("sub-LSB handoff meaning", "평균 오차는 0.6445 LSB로 ADC 한 단계보다 작았고"),
+        ("classification count meaning", "36개 구간 중 29개를 맞히고 7개를 틀렸다"),
+        ("equivalence meaning", "분류 정확도가 100%라는 뜻이 아니라"),
+    ]:
+        check(name, meaning in text)
+    check("LTspice results include reader meaning column", "| 확인한 성능 | LTspice 결과 | 이 결과가 뜻하는 것 |" in text)
     benchmark_section = section(text, "6.1 가속기 Benchmark 결과와 해석 범위", 2)
     for term in [
         "09e4d840", "최종 예측 36/36", "네 막전위 144/144", "Snapshot 경계 1,080/1,080",
@@ -368,14 +385,14 @@ def main() -> int:
     ]:
         check(f"benchmark scope {term}", term in benchmark_section)
     check("old benchmark import placeholder absent", "PENDING_EXTERNAL_BENCHMARK_IMPORT" not in text)
-    check("validation boundary", "검증 결과 32/32=100.00%는 Final Membrane 모델 선택" in text and "최종 일반화 성능으로 승격하지 않는다" in text)
+    check("validation boundary", "학습·검증 결과는 모델을 선택하는 데 사용했기 때문에 최종 성능으로 보지 않는다" in text and "| 검증 | 32/32 | 100.00% | — | 모델 선택 전용 |" in text)
     check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
     check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
     for term in [
         "원래 설계 목표는 이러한 24시간 Holter",
         "48개의 **30분 excerpt**",
         "현재 공통 비교 단위로 선택",
-        "padding·반복·추정 데이터를 만들지 않도록",
+        "특정 클래스만 반복하거나 빈 값을 채우지 않고",
         "30분 결과가 임상적 24시간 Holter를 대체하거나 동등하다는 뜻은 아니다",
         "24시간 동안 드물게 나타나는 사건을 검증하지는 못한다",
         "CLM-035",

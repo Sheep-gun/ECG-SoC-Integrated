@@ -97,10 +97,18 @@
 - 세 검증 결과는 하나의 설계·통합 판단 마름모로 모인다. 불충족 시 MATLAB이 아니라 XMODEL·RTL 수정 단계로 돌아가며, 충족 시 Design Lock을 거쳐 격리된 Locked Test를 최초 1회만 사용한다.
 - final-test 재튜닝 금지, physical AFE, 24시간 성능과 clinical validation 경계는 본문과 caption에 유지하였다.
 
+## 독자 중심 서술 간결화 (2026-07-19)
+
+- 초록을 문제, 구현 구조, 대표 검증 결과와 한계만 남긴 한 문단으로 축약하였다.
+- 제2장은 세부 기술 나열을 줄이고 `선행연구가 답하는 질문 → 전체 시스템 흐름 → 데이터와 평가 원칙` 순서로 재구성하였다.
+- MATLAB·LTspice·XMODEL·RTL·FPGA가 각각 무엇을 확인하고 다음 단계에 무엇을 넘기는지 질문형 표로 정리하였다.
+- 본문 성능 서술은 `확인하려는 질문 → 수치 → 독자에게 의미하는 바` 순서로 바꾸었다. 예를 들어 −83.557 dB는 60 Hz 진폭 약 1/15,000, 0.6445 LSB는 평균적으로 ADC 한 단계 미만, 29/36은 7개 오류, 36/36은 정확도가 아닌 구현 등가성으로 해석하였다.
+- 재현에 필요한 정밀 수치는 결과표와 부록에 유지하고, 결론에서는 세부 소자값과 내부 블록 설명의 반복을 제거하였다.
+
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 19개 생성(12 SVG+7 MATLAB PNG), LTspice handoff 10개 보존, FIG-P05 포함 31개 index
-- `tools/check_integrated_technical_report.py`: PASS — 813 rules, 0 conflicts, chars 74,676, figures 26, evidence rows 76
+- `tools/check_integrated_technical_report.py`: PASS — 807 rules, 0 conflicts, chars 66,254, figures 26, evidence rows 76
 - `tools/check_integrated_repository.py`: PASS — 499 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증
