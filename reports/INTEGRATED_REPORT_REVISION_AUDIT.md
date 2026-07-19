@@ -113,11 +113,12 @@
 - RTL timing 절은 과거 병목 수치 대신 구현된 pipeline 단계, 최종 WNS와 36/36 기능 등가성만 제시한다.
 - 제8장을 `시스템 특성과 적용 범위`로 바꾸고 향후 과제 목록 대신 완성된 결과와 각 수치의 적용 범위를 표로 정리하였다.
 - 결론은 후속 작업을 열거하지 않고 통합 시스템이 달성한 아날로그 정합, 분류, FPGA 구현과 처리 결과로 끝맺었다.
+- 30분 입력은 연구자가 서로 다른 데이터베이스를 임의로 조합한 결과가 아니라, 사용 가능한 공개 ECG 데이터셋의 서로 다른 기록 길이에 공통 적용할 수 있는 실제 관찰 길이라는 인과관계로 바로잡았다.
 
 ## 최종 자동 검증
 
 - `tools/generate_integrated_figures.py`: PASS — 19개 생성(12 SVG+7 MATLAB PNG), LTspice handoff 10개 보존, FIG-P05 포함 31개 index
-- `tools/check_integrated_technical_report.py`: PASS — 794 rules, 0 conflicts, chars 61,658, figures 26, evidence rows 76
+- `tools/check_integrated_technical_report.py`: PASS — 797 rules, 0 conflicts, chars 61,611, figures 26, evidence rows 76
 - `tools/check_integrated_repository.py`: PASS — 499 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

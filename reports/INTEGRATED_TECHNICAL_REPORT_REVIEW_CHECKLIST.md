@@ -57,7 +57,7 @@
 - [x] database–class confounding과 physical PCB/silicon/post-layout/clinical gap을 명시한다.
 - [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
 - [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
-- [x] 분류·처리시간 결과가 `60초 Snapshot × 30개`의 30분 입력 규약에 대응함을 명시한다.
+- [x] 사용 가능한 공개 ECG 데이터셋의 기록 길이가 서로 달라, 반복·padding 없이 공통 적용 가능한 30분으로 입력을 통일했음을 명시한다.
 - [x] accelerator benchmark는 `09e4d840...`의 Exact C++ 1,777.699800 ms, cycle-derived core 54.012600 ms와 32.912687배 추정 비교를 사용한다.
 - [x] Exact C++ timing 전에 pred 36/36, membrane 144/144와 Snapshot 1,080/1,080 등가성을 확인한다.
 - [x] Python cycle model과 Verilator simulation runtime을 대표 CPU inference 기준선으로 사용하지 않는다.

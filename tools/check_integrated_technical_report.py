@@ -147,7 +147,7 @@ def main() -> int:
         "짧게 나타난 질환 증거", "Amirshahi–Hashemi", "N·SVEB·VEB·F",
         "사건 구동형(event-driven)", "지금 이상이 나타났는가",
         "약 48시간 ECG", "향후 심혈관 사망 위험", "9–61초", "DeepHHF",
-        "구간 분할과 장시간 통합 흐름은 가장 유사", "본 시스템의 평가 입력은 네 공개 데이터에 공통으로 적용할 수 있는 30분",
+        "구간 분할과 장시간 통합 흐름은 가장 유사", "사용한 공개 데이터셋의 서로 다른 기록 길이를 30분으로 통일",
         "이상 구간 탐지와 장시간 통합을 입력 기록의 다중 클래스 판정으로 연결",
     ]
     for term in related_work_terms:
@@ -163,8 +163,10 @@ def main() -> int:
     check("chapter 2 question-first system flow", "공개 ECG → MATLAB → LTspice → XMODEL → 디지털 RTL → FPGA" in system_flow)
     check("chapter 2 tool-role table", "| 단계 | 이 단계가 답하는 질문 | 다음 단계로 넘기는 결과 |" in system_flow)
     data_principles = section(text, "2.3 데이터와 평가 원칙", 2)
-    for term in ["평가 길이", "네 데이터베이스에 동일하게 적용할 수 있는 실제 기록 길이는 30분", "원천 record 단위 분할은 직접 누출을 막지만"]:
+    for term in ["평가 길이", "공개 데이터셋의 기록 길이가 서로 다르므로", "모든 클래스에 동일하게 적용할 수 있는 실제 기록 길이인 30분", "원천 record 단위 분할은 직접 누출을 막지만"]:
         check(f"chapter 2 data principle {term}", term in data_principles)
+    check("dataset-length causality is explicit", "사용 가능한 NSR·CHF·ARR·AFF 공개 ECG 데이터셋은 기록 길이가 서로 다르다" in text)
+    check("no researcher-composed cohort wording", "길이가 같은 단일 cohort가 아니라" not in text and "서로 다른 공개 데이터베이스에서 구성" not in text)
     reference_block = text.split("# 참고문헌", 1)[1].split("# 부록 A.", 1)[0]
     reference_numbers = [int(n) for n in re.findall(r"(?m)^\[(\d+)\]", reference_block)]
     check("references sequential 1 through 14", reference_numbers == list(range(1, 15)), reference_numbers)
@@ -386,10 +388,10 @@ def main() -> int:
     check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
     check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
     for term in [
-        "본 시스템의 평가 단위는 30분 ECG",
+        "사용 가능한 NSR·CHF·ARR·AFF 공개 ECG 데이터셋은 기록 길이가 서로 다르다",
         "48개의 30분 excerpt",
-        "클래스마다 실제 관찰 길이를 동일하게 유지",
-        "특정 클래스만 반복하거나 빈 값을 채우지 않고",
+        "반복이나 padding 없이 모든 클래스에 공통으로 적용할 수 있는 실제 관찰 길이",
+        "특정 클래스의 신호를 반복하거나 빈 값을 채우지 않으며",
         "60초 Snapshot × 30개",
         "CLM-035",
     ]:
