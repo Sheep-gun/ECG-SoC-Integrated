@@ -19,7 +19,7 @@ CHUNKS = [
     ("ARR_mitdb_105_chunk00",  37, 2),   # golden ARR 8/1/21/0 (경계, 구통합 실패했던 레코드)
     ("NSR_nsrdb_16483_chunk10", 110, 0), # golden NSR 30/0/0/0
     ("CHF_chfdb_chf09_chunk29", 91, 1),  # golden CHF 0/29/0/1
-    ("AFF_afdb_06995_chunk16",  16, 3),  # golden AFF 0/0/0/30
+    ("AF_afdb_06995_chunk16",  16, 3),  # golden AF 0/0/0/30
 ]
 # (라벨, kwargs) 최악 수준
 PERTS = [

@@ -2,15 +2,15 @@
 
 **작성:** 이수환 (AFE / 통합검증) · **수신:** 디지털(양건) · 알고리즘팀 · **일자:** 2026-06-25
 **근거:** `~/ECG-SoC` 실제 코드·로그(2026-06-25 재실행) + `person_data_record_split_strict_varlen` 데이터셋
-**한 줄 결론:** 통합 시뮬은 **에러 0**으로 완전 동작. 분류 이슈는 2종 — ① **NSR→ARR은 AFE와 무관한 분류기 baseline 오류**, ② **ARR→AFF만 AFE(대역통과 필터링) 유발**. 둘 다 해법은 분류기 재학습.
+**한 줄 결론:** 통합 시뮬은 **에러 0**으로 완전 동작. 분류 이슈는 2종 — ① **NSR→ARR은 AFE와 무관한 분류기 baseline 오류**, ② **ARR→AF만 AFE(대역통과 필터링) 유발**. 둘 다 해법은 분류기 재학습.
 
 ---
 
 ## 📌 먼저: class code mapping (요청 5 — 가장 중요)
 
-**`pred_class 0=NSR, 1=CHF, 2=ARR, 3=AFF` 가 맞습니다.** 3개 독립 출처로 확정:
-1. `tb/tb_mixed_signal.sv` 주석(L8): `pred_class (0=NSR 1=CHF 2=ARR 3=AFF)`
-2. **데이터셋 manifest** `dataset_manifest_*_varlen_meta.csv`의 `class_id` 열: NSR=0, CHF=1, ARR=2, AFF=3
+**`pred_class 0=NSR, 1=CHF, 2=ARR, 3=AF` 가 맞습니다.** 3개 독립 출처로 확정:
+1. `tb/tb_mixed_signal.sv` 주석(L8): `pred_class (0=NSR 1=CHF 2=ARR 3=AF)`
+2. **데이터셋 manifest** `dataset_manifest_*_varlen_meta.csv`의 `class_id` 열: NSR=0, CHF=1, ARR=2, AF=3
 3. 디지털 단독 기준(digref)이 팀원 공식 RTL CSV와 4/4 일치(셋업 검증됨)
 
 ### ❗ "integration_report에 NSR이 2로 적힌 건 오타인가?" → **오타 아님. 표의 의미 오해입니다.**
@@ -22,7 +22,7 @@
 | NSR | **2** | **2** | ✅ |
 | CHF | 1 | 1 | ✅ |
 | ARR | 2 | 3 | ❌ |
-| AFF | 3 | 3 | ✅ |
+| AF | 3 | 3 | ✅ |
 
 - **열 ①** = AFE 없이 원본 .mem을 분류기에 직접 넣은 결과
 - **열 ②** = AFE를 통과시킨 결과
@@ -39,7 +39,7 @@
 | NSR(16539) | 0 | 2 ❌ | 2 ❌ |
 | CHF(chf05) | 1 | 1 ✅ | 1 ✅ |
 | ARR(105) | 2 | 2 ✅ | 3 ❌ |
-| AFF(04015) | 3 | 3 ✅ | 3 ✅ |
+| AF(04015) | 3 | 3 ✅ | 3 ✅ |
 | **정확도** | | **3/4** | **2/4** |
 
 > ⚠️ 이는 **클래스당 대표 1레코드** 결과입니다. 전체 정확도는 요청 1의 전체 데이터셋으로 평가해야 합니다(아래).
@@ -68,7 +68,7 @@ afe_output_strict/
 `segment_id, record_id, class_label, class_id, raw_mem_file, afe_adc_signed_file, afe_adc_unsigned_file, start_time_s, duration_s, n_samples`
 
 **적용 필터:** `scripts/filter_mem.py "full"` 과 **동일 계수**의 AFE 등가 선형필터
-(HPF 0.48Hz → 60Hz notch Q5 → LPF 150Hz). 이 필터는 격리실험에서 **XModel AFE 통합결과를 정확히 재현**함이 입증됨(`digref_full == AFE_integration`, full→NSR2 CHF1 ARR3 AFF3). 즉 느린 XModel AFE(레코드당 ~2-3분)를 전수 돌리는 대신, **검증된 등가 디지털 필터로 720 segment 전체를 일관 생성**한 것입니다. (XModel 풀-AFE는 대표 4레코드에 교차검증용으로 실행.)
+(HPF 0.48Hz → 60Hz notch Q5 → LPF 150Hz). 이 필터는 격리실험에서 **XModel AFE 통합결과를 정확히 재현**함이 입증됨(`digref_full == AFE_integration`, full→NSR2 CHF1 ARR3 AF3). 즉 느린 XModel AFE(레코드당 ~2-3분)를 전수 돌리는 대신, **검증된 등가 디지털 필터로 720 segment 전체를 일관 생성**한 것입니다. (XModel 풀-AFE는 대표 4레코드에 교차검증용으로 실행.)
 
 > **알고리즘팀 권장 사용법:** `afe_output_strict/train/signed/` 로 재학습 → `val`,`test`로 평가.
 > 이렇게 하면 "AFE 통과 신호 기준" 실제 4클래스 정확도와 NSR/ARR 취약 레코드 영향을 정량화할 수 있습니다.
@@ -121,11 +121,11 @@ afe_output_strict/
 [NSR] MIXED_RESULT pwl=ecg_NSR.pwl startsec=2.0 endsec=60.0 pred_valid=1 pred_class=2 | Errors: 0
 [CHF] MIXED_RESULT pwl=ecg_CHF.pwl startsec=2.0 endsec=60.0 pred_valid=1 pred_class=1 | Errors: 0
 [ARR] MIXED_RESULT pwl=ecg_ARR.pwl startsec=2.0 endsec=60.0 pred_valid=1 pred_class=3 | Errors: 0
-[AFF] MIXED_RESULT pwl=ecg_AFF.pwl startsec=2.0 endsec=60.0 pred_valid=1 pred_class=3 | Errors: 0
+[AF] MIXED_RESULT pwl=ecg_AF.pwl startsec=2.0 endsec=60.0 pred_valid=1 pred_class=3 | Errors: 0
 ```
 - **XModel/Questa log:** FLEXlm `FEATURE 'XMODEL' checked out` 정상, **Errors: 0 / Warnings: 4**(무해), pred_valid=1, 클래스당 ~2–3분.
-- **class mapping:** 0=NSR 1=CHF 2=ARR 3=AFF (위 §5 확정)
-- **AFE ADC output log:** `scripts/run_afe_sim.sh` → `adc_output.txt`, 클래스별 `sim_out/multiclass/adc_{NSR,ARR,AFF,CHF}.txt` 보유. 전계층 파형(VCD)은 `make vcd`로 생성 가능.
+- **class mapping:** 0=NSR 1=CHF 2=ARR 3=AF (위 §5 확정)
+- **AFE ADC output log:** `scripts/run_afe_sim.sh` → `adc_output.txt`, 클래스별 `sim_out/multiclass/adc_{NSR,ARR,AF,CHF}.txt` 보유. 전계층 파형(VCD)은 `make vcd`로 생성 가능.
 - **입출력 waveform 캡처:** 현재 텍스트 ADC 로그/VCD 형태로 보유. 이미지 캡처가 필요하면 요청 주세요(VCD→파형 캡처 추출).
 
 > 통합 메커니즘(AFE→어댑터→core)은 완전 동작. 어댑터: ①`core_adc = {~afe_adc[11], afe_adc[10:0]}`(offset→signed), ②매 샘플 sample_valid·rhythm_tick 펄스 생성.
@@ -133,9 +133,9 @@ afe_output_strict/
 ---
 
 ## 5. (위 상단 📌에서 상세) — 요약
-- 매핑 0/1/2/3 = NSR/CHF/ARR/AFF **확정**.
+- 매핑 0/1/2/3 = NSR/CHF/ARR/AF **확정**.
 - integration_report의 NSR=2는 **오타 아님**. "일치" 열은 AFE 투명성(①=②)이지 정답 일치가 아님.
-- **NSR→ARR = 분류기 baseline 오류(AFE 무관)**, **ARR→AFF = AFE 대역통과 필터링 유발**.
+- **NSR→ARR = 분류기 baseline 오류(AFE 무관)**, **ARR→AF = AFE 대역통과 필터링 유발**.
 
 ---
 

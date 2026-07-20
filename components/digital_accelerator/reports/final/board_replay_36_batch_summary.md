@@ -18,15 +18,15 @@
 
 | case_id | label | expected_pred | board_pred | pred_match | mem_match | samples | snapshots | status |
 |---|---|---:|---:|---:|---:|---:|---:|---|
-| `AFF_afdb_06995_chunk01` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk03` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk05` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk07` | AFF | 2 | 2 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk10` | AFF | 0 | 0 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk12` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk14` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk16` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
-| `AFF_afdb_06995_chunk18` | AFF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk01` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk03` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk05` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk07` | AF | 2 | 2 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk10` | AF | 0 | 0 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk12` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk14` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk16` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
+| `AF_afdb_06995_chunk18` | AF | 3 | 3 | 1 | 1 | 1800000 | 30 | PASS |
 | `ARR_mitdb_102_chunk00` | ARR | 2 | 2 | 1 | 1 | 1800000 | 30 | PASS |
 | `ARR_mitdb_105_chunk00` | ARR | 2 | 2 | 1 | 1 | 1800000 | 30 | PASS |
 | `ARR_mitdb_118_chunk00` | ARR | 2 | 2 | 1 | 1 | 1800000 | 30 | PASS |

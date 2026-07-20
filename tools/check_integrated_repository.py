@@ -385,7 +385,8 @@ def main() -> int:
             failures.append(f"manifest commit mismatch: {rel}")
         upstream_blob = upstream_blob_maps[row["component"]].get(row["upstream_path"], "")
         index_blob = local_index_blobs.get(rel, "")
-        if upstream_blob != index_blob and rel not in redaction_paths:
+        normalized = row["verification_status"] == "HASH_VERIFIED_AF_NORMALIZED"
+        if upstream_blob != index_blob and rel not in redaction_paths and not normalized:
             failures.append(f"retained integrated Git blob differs from upstream Git object: {rel}")
     checked.append("all manifest files exist and SHA256-match")
     actual_paths = set()

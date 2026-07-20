@@ -18,7 +18,7 @@ module tb_snapshot_c24_dataset #(
     wire signed [63:0] c24_mem_nsr;
     wire signed [63:0] c24_mem_chf;
     wire signed [63:0] c24_mem_arr;
-    wire signed [63:0] c24_mem_aff;
+    wire signed [63:0] c24_mem_af;
 
     reg [11:0] sample_mem [0:MAX_SAMPLES-1];
 
@@ -101,7 +101,7 @@ module tb_snapshot_c24_dataset #(
         .BIAS_NSR(-5213),
         .BIAS_CHF(-22414),
         .BIAS_ARR(-7298),
-        .BIAS_AFF(32767)
+        .BIAS_AF(32767)
     ) dut (
         .clk(clk),
         .rst(rst),
@@ -113,7 +113,7 @@ module tb_snapshot_c24_dataset #(
         .c24_mem_nsr(c24_mem_nsr),
         .c24_mem_chf(c24_mem_chf),
         .c24_mem_arr(c24_mem_arr),
-        .c24_mem_aff(c24_mem_aff),
+        .c24_mem_af(c24_mem_af),
         .pred_class(pred_class),
         .pred_valid(pred_valid)
     );
@@ -192,7 +192,7 @@ module tb_snapshot_c24_dataset #(
                       c24_mem_nsr,
                       c24_mem_chf,
                       c24_mem_arr,
-                      c24_mem_aff);
+                      c24_mem_af);
             $display("SNAPSHOT_RESULT case=%0d expected=%0d pred=%0d correct=%0d valid=%0d",
                      case_id,
                      expected_class,
@@ -223,7 +223,7 @@ module tb_snapshot_c24_dataset #(
             $display("FAIL cannot open result csv: %s", RESULT_CSV);
             $finish;
         end
-        $fdisplay(out_fd, "case_id,expected_class,pred_class,correct,pred_valid,class_mem_NSR,class_mem_CHF,class_mem_ARR,class_mem_AFF");
+        $fdisplay(out_fd, "case_id,expected_class,pred_class,correct,pred_valid,class_mem_NSR,class_mem_CHF,class_mem_ARR,class_mem_AF");
 
         while (!$feof(manifest_fd)) begin
             path = 0;

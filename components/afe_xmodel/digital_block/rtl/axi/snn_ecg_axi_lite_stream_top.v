@@ -54,7 +54,7 @@ module snn_ecg_axi_lite_stream_top #(
     localparam [AXI_ADDR_WIDTH-1:0] ADDR_FINAL_MEM_NSR    = 12'h020;
     localparam [AXI_ADDR_WIDTH-1:0] ADDR_FINAL_MEM_CHF    = 12'h024;
     localparam [AXI_ADDR_WIDTH-1:0] ADDR_FINAL_MEM_ARR    = 12'h028;
-    localparam [AXI_ADDR_WIDTH-1:0] ADDR_FINAL_MEM_AFF    = 12'h02c;
+    localparam [AXI_ADDR_WIDTH-1:0] ADDR_FINAL_MEM_AF    = 12'h02c;
     localparam [AXI_ADDR_WIDTH-1:0] ADDR_FINAL_PRED       = 12'h030;
     localparam [AXI_ADDR_WIDTH-1:0] ADDR_PROFILE_BASE     = 12'h100;
 
@@ -109,7 +109,7 @@ module snn_ecg_axi_lite_stream_top #(
     wire signed [31:0] core_final_mem_nsr;
     wire signed [31:0] core_final_mem_chf;
     wire signed [31:0] core_final_mem_arr;
-    wire signed [31:0] core_final_mem_aff;
+    wire signed [31:0] core_final_mem_af;
     wire [5:0] core_snapshot_index;
     wire [PROF_COUNTER_W-1:0] prof_total_cycle_counter;
     wire [PROF_COUNTER_W-1:0] prof_busy_cycle_counter;
@@ -129,7 +129,7 @@ module snn_ecg_axi_lite_stream_top #(
     reg signed [31:0] final_mem_nsr_latched;
     reg signed [31:0] final_mem_chf_latched;
     reg signed [31:0] final_mem_arr_latched;
-    reg signed [31:0] final_mem_aff_latched;
+    reg signed [31:0] final_mem_af_latched;
     reg [31:0] samples_accepted_count;
     reg [31:0] samples_consumed_count;
     reg [31:0] error_status;
@@ -205,7 +205,7 @@ module snn_ecg_axi_lite_stream_top #(
                 ADDR_FINAL_MEM_NSR: read_reg = final_mem_nsr_latched;
                 ADDR_FINAL_MEM_CHF: read_reg = final_mem_chf_latched;
                 ADDR_FINAL_MEM_ARR: read_reg = final_mem_arr_latched;
-                ADDR_FINAL_MEM_AFF: read_reg = final_mem_aff_latched;
+                ADDR_FINAL_MEM_AF: read_reg = final_mem_af_latched;
                 ADDR_FINAL_PRED: begin
                     read_reg = 32'd0;
                     read_reg[0] = result_valid_reg;
@@ -251,7 +251,7 @@ module snn_ecg_axi_lite_stream_top #(
                 ADDR_FINAL_MEM_NSR,
                 ADDR_FINAL_MEM_CHF,
                 ADDR_FINAL_MEM_ARR,
-                ADDR_FINAL_MEM_AFF,
+                ADDR_FINAL_MEM_AF,
                 ADDR_FINAL_PRED,
                 ADDR_PROFILE_BASE + 12'h000,
                 ADDR_PROFILE_BASE + 12'h004,
@@ -355,7 +355,7 @@ module snn_ecg_axi_lite_stream_top #(
             final_mem_nsr_latched <= 32'sd0;
             final_mem_chf_latched <= 32'sd0;
             final_mem_arr_latched <= 32'sd0;
-            final_mem_aff_latched <= 32'sd0;
+            final_mem_af_latched <= 32'sd0;
             samples_accepted_count <= 32'd0;
             samples_consumed_count <= 32'd0;
             error_status <= 32'd0;
@@ -481,7 +481,7 @@ module snn_ecg_axi_lite_stream_top #(
                 final_mem_nsr_latched <= core_final_mem_nsr;
                 final_mem_chf_latched <= core_final_mem_chf;
                 final_mem_arr_latched <= core_final_mem_arr;
-                final_mem_aff_latched <= core_final_mem_aff;
+                final_mem_af_latched <= core_final_mem_af;
                 latch_profile_shadow();
             end else if (ctrl_profile_snapshot_req) begin
                 latch_profile_shadow();
@@ -509,7 +509,7 @@ module snn_ecg_axi_lite_stream_top #(
         .final_mem_nsr(core_final_mem_nsr),
         .final_mem_chf(core_final_mem_chf),
         .final_mem_arr(core_final_mem_arr),
-        .final_mem_aff(core_final_mem_aff),
+        .final_mem_af(core_final_mem_af),
         .snapshot_index_dbg(core_snapshot_index),
         .prof_total_cycle_counter(prof_total_cycle_counter),
         .prof_busy_cycle_counter(prof_busy_cycle_counter),

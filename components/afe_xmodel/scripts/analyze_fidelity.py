@@ -33,7 +33,7 @@ def corr(a, b):
     return num/(da*db) if da*db else 0
 
 print(f"{'CLS':4} {'상관도(signed,지연보정)':>20} {'지연ms':>6} {'AFE signed범위':>16} {'클리핑':>6}")
-for cls in ["NSR","ARR","AFF","CHF"]:
+for cls in ["NSR","ARR","AF","CHF"]:
     adc = load_adc_signed(os.path.join(W, f"adc_{cls}.txt"))
     mem = load_mem_signed(os.path.join(DATA, f"mem_{cls}.mem"))
     idxs = sorted(i for i in adc if VALID <= i < 9900)

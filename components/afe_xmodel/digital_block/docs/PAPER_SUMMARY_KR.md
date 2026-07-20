@@ -2,11 +2,11 @@
 
 ## 핵심 요약
 
-본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AFF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 거쳐 signed 12-bit stream을 만든 뒤, RTL accelerator에서 60초 Snapshot Readout과 30분 Final Membrane Readout을 수행한다.
+본 프로젝트는 AFE+ADC XMODEL output stream을 입력으로 받아 NSR/CHF/ARR/AF를 분류하는 SNN-inspired ECG Classification Accelerator IP Core이다. 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 거쳐 signed 12-bit stream을 만든 뒤, RTL accelerator에서 60초 Snapshot Readout과 30분 Final Membrane Readout을 수행한다.
 
 ![Final system architecture](../reports/final/figures/final_system_architecture.png)
 
-최종 locked model은 `structural_guarded_silent_aff_1008710`이다. Snapshot은 고정하고 Final Membrane만 strict record-wise train/validation 기준으로 lock했다. Locked final_test는 모델 선택이나 파라미터 탐색에 사용하지 않았고, lock 이후 1회만 평가했다.
+최종 locked model은 `structural_guarded_silent_af_1008710`이다. Snapshot은 고정하고 Final Membrane만 strict record-wise train/validation 기준으로 lock했다. Locked final_test는 모델 선택이나 파라미터 탐색에 사용하지 않았고, lock 이후 1회만 평가했다.
 
 ## 최종 결과
 
@@ -18,10 +18,10 @@
 | Validation | 32 / 32 = 100.00% |
 | Final test 30분 chunk | 29 / 36 = 80.56% |
 | Final test 30분 chunk macro F1 / balanced accuracy | 80.44% / 80.56% |
-| Final test 30분 chunk class recall | NSR 100.00%, CHF 66.67%, ARR 77.78%, AFF 77.78% |
+| Final test 30분 chunk class recall | NSR 100.00%, CHF 66.67%, ARR 77.78%, AF 77.78% |
 | Final test record-majority | 16 / 19 = 84.21% |
 | Final test record-majority macro F1 / balanced accuracy | 80.80% / 88.19% |
-| Final test record-majority class recall | NSR 100.00%, CHF 75.00%, ARR 77.78%, AFF 100.00% |
+| Final test record-majority class recall | NSR 100.00%, CHF 75.00%, ARR 77.78%, AF 100.00% |
 | Test evaluation count | 1 |
 | Test used for selection | false |
 

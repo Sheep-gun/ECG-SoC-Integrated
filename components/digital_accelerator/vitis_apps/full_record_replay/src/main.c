@@ -18,7 +18,7 @@
 #define SNN_FINAL_MEM_NSR    0x020U
 #define SNN_FINAL_MEM_CHF    0x024U
 #define SNN_FINAL_MEM_ARR    0x028U
-#define SNN_FINAL_MEM_AFF    0x02cU
+#define SNN_FINAL_MEM_AF    0x02cU
 #define SNN_FINAL_PRED       0x030U
 #define SNN_PROFILE_TOTAL_LO      0x100U
 #define SNN_PROFILE_TOTAL_HI      0x104U
@@ -239,11 +239,11 @@ int main(void)
                samples_accepted, samples_consumed, snapshot_count, decision_count);
     xil_printf("BOARD_RESULT final_pred_reg=0x%x final_valid=%u done=%u final_pred=%u\r\n",
                final_pred_reg, final_valid, done, final_pred);
-    xil_printf("BOARD_RESULT final_mem_nsr=%d final_mem_chf=%d final_mem_arr=%d final_mem_aff=%d\r\n",
+    xil_printf("BOARD_RESULT final_mem_nsr=%d final_mem_chf=%d final_mem_arr=%d final_mem_af=%d\r\n",
                rd_s32(SNN_BASE, SNN_FINAL_MEM_NSR),
                rd_s32(SNN_BASE, SNN_FINAL_MEM_CHF),
                rd_s32(SNN_BASE, SNN_FINAL_MEM_ARR),
-               rd_s32(SNN_BASE, SNN_FINAL_MEM_AFF));
+               rd_s32(SNN_BASE, SNN_FINAL_MEM_AF));
     xil_printf("BOARD_RESULT feeder_write_count=%u feeder_tx_count=%u feeder_tlast_count=%u\r\n",
                feeder_write_count, feeder_tx_count, feeder_tlast_count);
     xil_printf("BOARD_RESULT status=0x%x snn_error=0x%x feeder_error=0x%x\r\n",

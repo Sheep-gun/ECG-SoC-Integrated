@@ -217,7 +217,7 @@ module tb_snn_ecg_3feat_dataset;
         .BIAS_NSR(-5213),
         .BIAS_CHF(-22414),
         .BIAS_ARR(-7298),
-        .BIAS_AFF(32767)
+        .BIAS_AF(32767)
     ) dut (
         .clk(clk),
         .rst(rst),
@@ -467,9 +467,9 @@ module tb_snn_ecg_3feat_dataset;
                     $fwrite(subwindow_fd, ",%0d", 0);
                 $fwrite(subwindow_fd, ",%0d,%0d,%0d,%0d,%0d,%0d,%0d,%0d,%0d",
                         dut.u_class.local_nsr_next, dut.u_class.local_chf_next,
-                        dut.u_class.local_arr_next, dut.u_class.local_aff_next,
+                        dut.u_class.local_arr_next, dut.u_class.local_af_next,
                         dut.u_class.score_nsr_next, dut.u_class.score_chf_next,
-                        dut.u_class.score_arr_next, dut.u_class.score_aff_next,
+                        dut.u_class.score_arr_next, dut.u_class.score_af_next,
                         0);
                 $fwrite(subwindow_fd, "\n");
                 subwindow_id <= subwindow_id + 1;
@@ -560,7 +560,7 @@ module tb_snn_ecg_3feat_dataset;
                           rdm_ge_count[6], rdm_ge_count[7], rdm_ge_count[8],
                           rdm_ge_count[9], rdm_ge_count[10], rdm_ge_count[11],
                           rdm_ge_count[12], rdm_ge_count[13], rdm_ge_count[14],
-                          dut.score_nsr, dut.score_chf, dut.score_arr, dut.score_aff,
+                          dut.score_nsr, dut.score_chf, dut.score_arr, dut.score_af,
                           ectopic_pair_count, rr_alt_count, amp_jump_count, width_jump_count,
                           qrs_maf_valid_count, qrs_maf_count, qrs_maf_code_sum,
                           qrs_width_abn_count, qrs_complex_abn_count, qrs_energy_abn_count,
@@ -687,7 +687,7 @@ module tb_snn_ecg_3feat_dataset;
                 $display("FAIL cannot open result csv: %0s", RESULT_CSV);
                 $finish;
             end
-            $fdisplay(result_fd, "case_id,label,expected_class,pred_class,pred_valid,correct,beat_count,pnn_match_count,pnn_mismatch_count,dscr_flip_count,dscr_slope_count,ram_code_sum,ram_code_count,rdm_valid_count,rdm_code_sum,rdm_ge10_count,rdm_ge20_count,rdm_ge30_count,rdm_ge40_count,rdm_ge50_count,rdm_ge60_count,rdm_ge70_count,rdm_ge80_count,rdm_ge90_count,rdm_ge100_count,rdm_ge110_count,rdm_ge120_count,rdm_ge130_count,rdm_ge140_count,rdm_ge150_count,score_nsr,score_chf,score_arr,score_aff,ectopic_pair_count,rr_alt_count,amp_jump_count,width_jump_count,qrs_maf_valid_count,qrs_maf_count,qrs_maf_code_sum,qrs_width_abn_count,qrs_complex_abn_count,qrs_energy_abn_count,qrs_terminal_delay_count,qrs_late_energy_count,qrs_asymmetry_count,qrs_peak_to_tail_count,qrs_pvc_like_count,qrs_rbbb_like_count,qrs_maf_width_sum,qrs_maf_complex_sum,qrs_maf_energy_sum,qrs_maf_late_event_sum,qrs_maf_late_energy_sum,qrs_maf_asymmetry_sum,qrs_maf_peak_tail_sum,qrs_template_mismatch_count,qrs_template_strong_count,qrs_template_width_count,qrs_template_energy_count,qrs_template_tail_count,qrs_template_score_sum,qrs_template_ready_count,abnormal_beat_valid_count,abnormal_beat_count,abnormal_beat_mid_count,abnormal_beat_high_count,abnormal_beat_strong_count,abnormal_beat_score_sum,rbbb_delay_valid_count,rbbb_delay_wide_count,rbbb_delay_terminal_count,rbbb_delay_like_count,rbbb_delay_segment_count,rbbb_delay_applied_count,mem_file");
+            $fdisplay(result_fd, "case_id,label,expected_class,pred_class,pred_valid,correct,beat_count,pnn_match_count,pnn_mismatch_count,dscr_flip_count,dscr_slope_count,ram_code_sum,ram_code_count,rdm_valid_count,rdm_code_sum,rdm_ge10_count,rdm_ge20_count,rdm_ge30_count,rdm_ge40_count,rdm_ge50_count,rdm_ge60_count,rdm_ge70_count,rdm_ge80_count,rdm_ge90_count,rdm_ge100_count,rdm_ge110_count,rdm_ge120_count,rdm_ge130_count,rdm_ge140_count,rdm_ge150_count,score_nsr,score_chf,score_arr,score_af,ectopic_pair_count,rr_alt_count,amp_jump_count,width_jump_count,qrs_maf_valid_count,qrs_maf_count,qrs_maf_code_sum,qrs_width_abn_count,qrs_complex_abn_count,qrs_energy_abn_count,qrs_terminal_delay_count,qrs_late_energy_count,qrs_asymmetry_count,qrs_peak_to_tail_count,qrs_pvc_like_count,qrs_rbbb_like_count,qrs_maf_width_sum,qrs_maf_complex_sum,qrs_maf_energy_sum,qrs_maf_late_event_sum,qrs_maf_late_energy_sum,qrs_maf_asymmetry_sum,qrs_maf_peak_tail_sum,qrs_template_mismatch_count,qrs_template_strong_count,qrs_template_width_count,qrs_template_energy_count,qrs_template_tail_count,qrs_template_score_sum,qrs_template_ready_count,abnormal_beat_valid_count,abnormal_beat_count,abnormal_beat_mid_count,abnormal_beat_high_count,abnormal_beat_strong_count,abnormal_beat_score_sum,rbbb_delay_valid_count,rbbb_delay_wide_count,rbbb_delay_terminal_count,rbbb_delay_like_count,rbbb_delay_segment_count,rbbb_delay_applied_count,mem_file");
         end
 
         if (WRITE_SUBWINDOW_CSV) begin
@@ -699,7 +699,7 @@ module tb_snn_ecg_3feat_dataset;
             $fwrite(subwindow_fd, "case_id,label,expected_class,subwindow_id,scale_q4");
             for (feature_i = 0; feature_i < 184; feature_i = feature_i + 1)
                 $fwrite(subwindow_fd, ",f%0d", feature_i);
-            $fwrite(subwindow_fd, ",local_nsr,local_chf,local_arr,local_aff,seg_nsr,seg_chf,seg_arr,seg_aff,arr_burst_spike");
+            $fwrite(subwindow_fd, ",local_nsr,local_chf,local_arr,local_af,seg_nsr,seg_chf,seg_arr,seg_af,arr_burst_spike");
             $fwrite(subwindow_fd, "\n");
         end
 
@@ -742,7 +742,7 @@ module tb_snn_ecg_3feat_dataset;
         $display("CLASS_NSR correct/total = %0d/%0d", class_correct[0], class_total[0]);
         $display("CLASS_CHF correct/total = %0d/%0d", class_correct[1], class_total[1]);
         $display("CLASS_ARR correct/total = %0d/%0d", class_correct[2], class_total[2]);
-        $display("CLASS_AFF correct/total = %0d/%0d", class_correct[3], class_total[3]);
+        $display("CLASS_AF correct/total = %0d/%0d", class_correct[3], class_total[3]);
 
         if ((errors == 0) && (total_cases > 0))
             $display("PASS: tb_snn_ecg_3feat_dataset completed");

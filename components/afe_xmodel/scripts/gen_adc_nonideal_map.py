@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(os.environ.get("ECG_SOC_ROOT", Path(__file__).resolve().parents[1]))
 AFE = ROOT / "docs/afe_stress"
 CASES = ROOT / "digital_block/reports/final/board_replay_36_cases.csv"
-LBL = ["NSR", "CHF", "ARR", "AFF"]
+LBL = ["NSR", "CHF", "ARR", "AF"]
 
 # clean golden: src_case_id -> (pred, (mem4))
 clean = {}
@@ -43,18 +43,18 @@ for mid, pm in sorted(pmap.items(), key=lambda x: int(x[0])):
         record_id=rec, chunk_id=cid, perturb_type=ptype, perturb_value=pval,
         clean_pred=LBL[cp], pert_pred=LBL[op], flipped=str(op != cp).lower(),
         final_mem_drift_NSR=omem[0]-cmem[0], final_mem_drift_CHF=omem[1]-cmem[1],
-        final_mem_drift_ARR=omem[2]-cmem[2], final_mem_drift_AFF=omem[3]-cmem[3]))
+        final_mem_drift_ARR=omem[2]-cmem[2], final_mem_drift_AF=omem[3]-cmem[3]))
 
 # noise threshold 확인 케이스(NSR 16483 w010, 둘 다 NSR 유지, drift 0)
 for mid, pv in [("2000", "0.5 LSB rms"), ("2001", "1.0 LSB rms")]:
     rows.append(dict(manifest_id=mid, base_case_id="110", class_label="NSR",
         record_id="16483", chunk_id=10, perturb_type="noise", perturb_value=pv,
         clean_pred="NSR", pert_pred="NSR", flipped="false",
-        final_mem_drift_NSR=0, final_mem_drift_CHF=0, final_mem_drift_ARR=0, final_mem_drift_AFF=0))
+        final_mem_drift_NSR=0, final_mem_drift_CHF=0, final_mem_drift_ARR=0, final_mem_drift_AF=0))
 
 cols = ["manifest_id", "base_case_id", "class_label", "record_id", "chunk_id",
         "perturb_type", "perturb_value", "clean_pred", "pert_pred", "flipped",
-        "final_mem_drift_NSR", "final_mem_drift_CHF", "final_mem_drift_ARR", "final_mem_drift_AFF"]
+        "final_mem_drift_NSR", "final_mem_drift_CHF", "final_mem_drift_ARR", "final_mem_drift_AF"]
 with open(AFE / "adc_nonideal_finalpred_xsim_map.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=cols); w.writeheader(); w.writerows(rows)
 flips = sum(1 for r in rows if r["flipped"] == "true")

@@ -20,7 +20,7 @@ controlled_definitions:
   Holter-oriented: "24/48시간 장시간 ECG의 국소 증거와 지속성을 함께 다루려는 설계 지향성; 현재 검증 창은 공개 데이터 길이 제약에 따른 30분이며 임상 Holter 인증·동등성 주장이 아님"
   SNN-inspired: "이벤트와 시간 누적 상태를 사용하는 정수형 구조; 학습형 deep SNN 또는 생물학적 등가 주장이 아님"
   functional_equivalence: "같은 입력에서 구현 출력이 기준 출력과 일치함; 정답 label과의 정확도와 별개"
-  public-dataset_class: "NSR/CHF/ARR/AFF 원천 데이터베이스 label을 사용한 공학적 분류 범주"
+  public-dataset_class: "NSR/CHF/ARR/AF 원천 데이터베이스 label을 사용한 공학적 분류 범주"
 forbidden_or_avoided:
   - hotler
   - four diseases diagnosed

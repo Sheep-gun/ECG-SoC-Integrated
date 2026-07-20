@@ -16,7 +16,7 @@ module tb_snn_ecg_30min_debug_case;
     wire signed [31:0] final_mem_nsr;
     wire signed [31:0] final_mem_chf;
     wire signed [31:0] final_mem_arr;
-    wire signed [31:0] final_mem_aff;
+    wire signed [31:0] final_mem_af;
     wire [5:0] snapshot_index_dbg;
     wire [63:0] prof_total_cycle_counter;
     wire [63:0] prof_busy_cycle_counter;
@@ -55,7 +55,7 @@ module tb_snn_ecg_30min_debug_case;
         .final_mem_nsr(final_mem_nsr),
         .final_mem_chf(final_mem_chf),
         .final_mem_arr(final_mem_arr),
-        .final_mem_aff(final_mem_aff),
+        .final_mem_af(final_mem_af),
         .snapshot_index_dbg(snapshot_index_dbg),
         .prof_total_cycle_counter(prof_total_cycle_counter),
         .prof_busy_cycle_counter(prof_busy_cycle_counter),
@@ -78,7 +78,7 @@ module tb_snn_ecg_30min_debug_case;
                      dut.c24_mem_nsr,
                      dut.c24_mem_chf,
                      dut.c24_mem_arr,
-                     dut.c24_mem_aff,
+                     dut.c24_mem_af,
                      dut.beat_count,
                      dut.pnn_mismatch_count,
                      dut.dscr_flip_count,
@@ -130,7 +130,7 @@ module tb_snn_ecg_30min_debug_case;
 
         $display("DEBUG_FINAL valid=%0d pred=%0d mem=%0d,%0d,%0d,%0d samples=%0d cycles=%0d",
                  final_valid, final_pred_class,
-                 final_mem_nsr, final_mem_chf, final_mem_arr, final_mem_aff,
+                 final_mem_nsr, final_mem_chf, final_mem_arr, final_mem_af,
                  sample_index, cycles);
         $finish;
     end

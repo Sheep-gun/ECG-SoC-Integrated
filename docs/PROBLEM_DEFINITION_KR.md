@@ -2,7 +2,7 @@
 
 ## 입력과 출력
 
-입력은 공개 ECG record에서 생성한 1 kSPS, signed 12-bit two's-complement sample stream이다. 출력은 30분 window당 NSR, CHF, ARR, AFF 가운데 하나의 public-dataset class와 네 class의 Final Membrane state이다.
+입력은 공개 ECG record에서 생성한 1 kSPS, signed 12-bit two's-complement sample stream이다. 출력은 30분 window당 NSR, CHF, ARR, AF 가운데 하나의 public-dataset class와 네 class의 Final Membrane state이다.
 
 이 네 출력은 네 가지 질병의 임상 진단을 뜻하지 않는다. NSR은 정상 동율동 label이고, ARR은 넓은 부정맥 label이며, CHF는 chfdb에서 가져온 engineering-evaluation label이다. 따라서 문제는 “네 질환을 확진”하는 것이 아니라 “현재 공개 데이터 구성에서 네 ECG class를 분류”하는 것이다.
 

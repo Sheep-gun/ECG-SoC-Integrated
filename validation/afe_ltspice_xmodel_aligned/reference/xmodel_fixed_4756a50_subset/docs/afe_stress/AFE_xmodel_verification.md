@@ -15,7 +15,7 @@
 | NSR (9) | 2.27 ~ 2.60 | 19 ~ 28 | 0 |
 | CHF (9) | 1.22 ~ 1.77 | 12 ~ 17 | 0 |
 | ARR (9) | 0.85 ~ 1.49 | 8 ~ 23 | 0 |
-| AFF (9) | 2.51 ~ 2.90 | 26 ~ 30 | 0 |
+| AF (9) | 2.51 ~ 2.90 | 26 ~ 30 | 0 |
 | **전체 36** | **평균 1.95 LSB** | ≤ 30 | 0 |
 
 - **평균 RMS 1.95 LSB < 2 LSB 기준 충족**, 전 세그 lag 0(위상 일치). 기존 8세그 검증(2.01 LSB, max~27)과 일관.
@@ -143,7 +143,7 @@
 | ARR 105 | ARR | ARR | ARR | ARR |
 | NSR 16483 | NSR | NSR | **CHF (flip)** | NSR |
 | CHF chf09 | CHF | CHF | CHF | CHF |
-| AFF 06995 | AFF | AFF | AFF | AFF |
+| AF 06995 | AF | AF | AF | AF |
 
 - **final_pred 유지 15/16.** offset(±5LSB)·gain(±1%)·jitter(100µs)는 **전 클래스 flip 0** (offset은 membrane drift도 0 — 디지털 delta/normalizer가 DC 제거).
 - **유일 flip = NSR@noise 2LSB rms.** 임계 확인: noise **0.5·1.0 LSB → NSR 완전 유지(30/0/0/0)**, 2.0 LSB에서만 flip. 즉 **현실적 ADC 잡음(≤1 LSB)에선 견고**하고, 2 LSB(ENOB~10, nominal보다 잡음 많음) 백색잡음이 깨끗한 NSR의 저변동성 feature를 부풀려 발생하는 **분류기 민감성**(ARR-105와 동류의 cross-domain 발견, 알고리즘팀 영역).

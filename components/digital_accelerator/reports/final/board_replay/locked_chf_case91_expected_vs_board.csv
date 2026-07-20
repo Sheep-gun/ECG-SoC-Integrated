@@ -11,7 +11,7 @@ final_pred,1,1,1
 final_mem_NSR,0,0,1
 final_mem_CHF,29,29,1
 final_mem_ARR,0,0,1
-final_mem_AFF,1,1,1
+final_mem_AF,1,1,1
 feeder_tlast_count,1,1,1
 snn_error,0,0,1
 feeder_error,0,0,1

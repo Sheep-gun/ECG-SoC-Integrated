@@ -10,9 +10,9 @@ W="$PRJ/sim_out/digref"; rm -rf "$W"; mkdir -p "$W"; cd "$W" || exit 1
 "$VLIB" work >/dev/null
 "$VLOG" -sv -mfcu -work work "$PRJ"/digital/*.v >c1.log 2>&1 || { tail -20 c1.log; exit 1; }
 "$VLOG" -sv -mfcu -work work "$PRJ/tb/tb_digital_ref.sv" >c2.log 2>&1 || { tail c2.log; exit 1; }
-echo "COMPILE_OK (기대: NSR=0 CHF=1 ARR=2 AFF=3)"
+echo "COMPILE_OK (기대: NSR=0 CHF=1 ARR=2 AF=3)"
 NS="${1:-60000}"; ST="${2:-0}"
-for c in NSR CHF ARR AFF; do
+for c in NSR CHF ARR AF; do
   ln -sf "$PRJ/data/mem_$c.mem" "mem_$c.mem"
   "$VSIM" -c -work work tb_digital_ref "+mem=mem_$c.mem" "+nsamp=$NS" "+start=$ST" -do "run -all; quit -f" 2>&1 | grep "DIGREF"
 done

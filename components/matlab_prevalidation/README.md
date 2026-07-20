@@ -102,14 +102,14 @@ matlab_afe_validation/
 
 ## 검증 결과 요약
 
-MATLAB nominal pre-validation 결과, NSR/CHF/ARR/AFF 대표 ECG 입력에 대해 AFE 출력은 모두 ADC 입력 범위인 ±1.65 V 내에서 동작했으며 clipping ratio는 0%였다.
+MATLAB nominal pre-validation 결과, NSR/CHF/ARR/AF 대표 ECG 입력에 대해 AFE 출력은 모두 ADC 입력 범위인 ±1.65 V 내에서 동작했으며 clipping ratio는 0%였다.
 
 | Class | AFE Output Min [V] | AFE Output Max [V] | ADC Code Range | Clipping Ratio |
 |---|---:|---:|---:|---:|
 | NSR | -0.111193 | 0.385184 | 1909-2525 | 0.0% |
 | CHF | -0.278713 | 0.557422 | 1701-2739 | 0.0% |
 | ARR | -0.630367 | 0.466399 | 1265-2626 | 0.0% |
-| AFF | -0.350374 | 0.326538 | 1612-2452 | 0.0% |
+| AF | -0.350374 | 0.326538 | 1612-2452 | 0.0% |
 
 주요 해석은 다음과 같다.
 
@@ -185,7 +185,7 @@ MATLAB time-domain chain의 60 Hz digital notch approximation은 정확히 60 Hz
 
 ## 입력 source traceability
 
-대표 NSR/CHF/ARR/AFF 입력은 `matlab_afe_validation/docs/INPUT_DATASET_MANIFEST.md`와 `matlab_afe_validation/results_dataset/input_dataset_manifest.csv`에서 source database, record ID, segment duration, traceability status를 확인할 수 있다. 현재 MATLAB repo에서는 exact segment start를 추적하지 않으며, checked-in reference input과 SHA256 hash를 기준으로 동일성을 추적한다.
+대표 NSR/CHF/ARR/AF 입력은 `matlab_afe_validation/docs/INPUT_DATASET_MANIFEST.md`와 `matlab_afe_validation/results_dataset/input_dataset_manifest.csv`에서 source database, record ID, segment duration, traceability status를 확인할 수 있다. 현재 MATLAB repo에서는 exact segment start를 추적하지 않으며, checked-in reference input과 SHA256 hash를 기준으로 동일성을 추적한다.
 
 ## 범위와 한계
 

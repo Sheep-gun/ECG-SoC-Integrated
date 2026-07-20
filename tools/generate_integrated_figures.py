@@ -342,7 +342,7 @@ def main() -> int:
     write_svg("FIG-05_strict_recordwise_protocol.svg", s)
 
     # FIG-06 MATLAB
-    s = canvas("MATLAB nominal pre-validation summary", "대표 NSR/CHF/ARR/AFF 60초 record")
+    s = canvas("MATLAB nominal pre-validation summary", "대표 NSR/CHF/ARR/AF 60초 record")
     s += box(80, 170, 430, 260, "Representative clipping", [f"{data['matlab']['clipping_percent']:.1f}%", "4 / 4 classes", "no rail hits"], fill="#e6fcf5")
     s += box(690, 170, 430, 260, "Minimum rail headroom", [f"{data['matlab']['minimum_headroom_v']:.4f} V", "minimum across 4 records", "nominal MATLAB model"], fill="#e7f5ff")
     footer(s, "Selected nominal records only; not physical AFE/ADC measurement")
@@ -441,7 +441,7 @@ def main() -> int:
     s += paper_path([(1525, 370), (1525, 420)])
     s += paper_box(1430, 545, 190, 120, ["30 min Final", "Membrane"], "#fdf4ff", "#9c36b5")
     s += paper_path([(1525, 495), (1525, 545)])
-    for y, label in [(565, "NSR"), (595, "CHF"), (625, "ARR"), (655, "AFF")]:
+    for y, label in [(565, "NSR"), (595, "CHF"), (625, "ARR"), (655, "AF")]:
         s += paper_path([(1620, y), (1645, y)], arrow=False)
         s.append(txt(1652, y + 6, label, 16, "#182230", 700))
     s.append('</svg>')

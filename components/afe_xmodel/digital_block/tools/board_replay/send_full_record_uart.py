@@ -30,7 +30,7 @@ EXPECTED_DECISIONS = 1
 DEFAULT_FLOW_CHUNK_SAMPLES = 4096
 FLOW_ACK_BYTE = 0xA5
 
-CLASS_LABELS = ["NSR", "CHF", "ARR", "AFF"]
+CLASS_LABELS = ["NSR", "CHF", "ARR", "AF"]
 
 
 def import_serial() -> Any:
@@ -157,7 +157,7 @@ def expected_from_predictions(case_id: str) -> dict[str, Any] | None:
                 "NSR": int(row["final_mem_NSR"]),
                 "CHF": int(row["final_mem_CHF"]),
                 "ARR": int(row["final_mem_ARR"]),
-                "AFF": int(row["final_mem_AFF"]),
+                "AF": int(row["final_mem_AF"]),
             },
             "samples": int(row.get("samples_driven") or EXPECTED_SAMPLES),
             "snapshot_count": int(row.get("prof_windows") or EXPECTED_WINDOWS),
@@ -202,7 +202,7 @@ def write_expected_template(path: Path, mem_path: Path, case_name: str) -> None:
         "snapshot_count": None,
         "decision_count": None,
         "final_pred": None,
-        "final_mem": {"NSR": None, "CHF": None, "ARR": None, "AFF": None},
+        "final_mem": {"NSR": None, "CHF": None, "ARR": None, "AF": None},
         "note": "Fill from Python/XSim golden result only. Do not invent expected values.",
     }
     path.write_text(json.dumps(template, indent=2), encoding="utf-8")
@@ -419,7 +419,7 @@ def write_summary(
         "final_mem_nsr",
         "final_mem_chf",
         "final_mem_arr",
-        "final_mem_aff",
+        "final_mem_af",
         "snn_error",
         "feeder_error",
     ]:
@@ -459,7 +459,7 @@ def update_replay_summary(
             "NSR": board.get("final_mem_nsr"),
             "CHF": board.get("final_mem_chf"),
             "ARR": board.get("final_mem_arr"),
-            "AFF": board.get("final_mem_aff"),
+            "AF": board.get("final_mem_af"),
         },
         "snn_error": board.get("snn_error"),
         "feeder_error": board.get("feeder_error"),

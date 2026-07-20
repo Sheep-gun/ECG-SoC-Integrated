@@ -10,5 +10,5 @@ gen() {  # $1=file $2=yc
 }
 gen "$W/adc_NSR.txt" 70
 gen "$W/adc_ARR.txt" 190
-gen "$W/adc_AFF.txt" 310
+gen "$W/adc_AF.txt" 310
 gen "$W/adc_CHF.txt" 430

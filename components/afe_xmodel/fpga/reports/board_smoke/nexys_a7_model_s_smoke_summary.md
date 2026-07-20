@@ -17,15 +17,15 @@ This is a board-level interactive demo, not a full dataset accuracy test. The wr
 - Demo NSR ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_nsr.mem`
 - Demo CHF ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem`
 - Demo ARR ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem`
-- Demo AFF ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_aff.mem`
+- Demo AF ROM: `<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_af.mem`
 
 ## Button Mapping
 
 - `BTNU`: NSR example
 - `BTNL`: ARR example
 - `BTND`: CHF example
-- `BTNR`: AFF example
-- `BTNC`: pseudo-random one of NSR / CHF / ARR / AFF
+- `BTNR`: AF example
+- `BTNC`: pseudo-random one of NSR / CHF / ARR / AF
 - `CPU_RESETN`: board demo reset
 
 After a button is pressed, the selected 60-second test segment is streamed into the Model S core. The logical segment length is 60,000 samples. The board wrapper feeds one sample on every 1 MHz core-clock cycle, matching the strict XSim dataset testbench's valid-sample cadence. The result appears after about 60 ms instead of 60 seconds.
@@ -38,14 +38,14 @@ The 8-digit 7-segment display is split into two 4-digit fields.
   - `NSR`
   - `CHF`
   - `ARR`
-  - `AFF`
+  - `AF`
 - Right 4 digits, `AN[3:0]`: correctness result
   - `CORR` if predicted class equals the selected example class
   - `ERR` if predicted class differs from the selected example class
 
 Before the classifier produces a prediction, all 7-segment digits are blank. After `pred_valid`, the left field shows the Model S result and the right field shows `CORR` or `ERR`.
 
-The board wrapper clears the displayed result on every new button press. While a new selected segment is running, `AN[7:0]` is held inactive so stale results are not shown. The ECG playback now uses a continuous valid-sample cadence. Debug simulation showed that inserting idle core-clock cycles between samples reproduced the observed board mismatch, where the CHF demo was classified as NSR and the ARR demo was classified as AFF. Removing that idle gap restores the same timing behavior as the strict XSim dataset testbench.
+The board wrapper clears the displayed result on every new button press. While a new selected segment is running, `AN[7:0]` is held inactive so stale results are not shown. The ECG playback now uses a continuous valid-sample cadence. Debug simulation showed that inserting idle core-clock cycles between samples reproduced the observed board mismatch, where the CHF demo was classified as NSR and the ARR demo was classified as AF. Removing that idle gap restores the same timing behavior as the strict XSim dataset testbench.
 
 ## LED Mapping
 

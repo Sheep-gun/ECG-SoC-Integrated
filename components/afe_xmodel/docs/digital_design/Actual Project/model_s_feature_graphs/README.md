@@ -1,6 +1,6 @@
 # Model S Feature Graphs
 
-Class order is AFF / ARR / CHF / NSR. Orange line = median, green triangle = mean.
+Class order is AF / ARR / CHF / NSR. Orange line = median, green triangle = mean.
 The plots are generated from RTL case result dumps, RBBB debug dumps, and the Model S EERG feature table.
 
 ## Main files

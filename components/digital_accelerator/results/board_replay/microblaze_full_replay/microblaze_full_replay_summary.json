@@ -53,10 +53,10 @@
   "baremetal_elf": "<LOCAL_DIGITAL_REPOSITORY>\\results\\board_replay\\microblaze_full_replay\\snn_ecg_mb_full_replay_app.elf",
   "baremetal_elf_exists": true,
   "last_full_record_replay": {
-    "case_name": "locked_aff_case16",
-    "transcript": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\board_replay\\locked_aff_case16_uart_full_replay.txt",
-    "comparison": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\board_replay\\locked_aff_case16_expected_vs_board.csv",
-    "summary": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\board_replay\\locked_aff_case16_summary.md",
+    "case_name": "locked_af_case16",
+    "transcript": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\board_replay\\locked_af_case16_uart_full_replay.txt",
+    "comparison": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\board_replay\\locked_af_case16_expected_vs_board.csv",
+    "summary": "<LOCAL_DIGITAL_REPOSITORY>\\reports\\final\\board_replay\\locked_af_case16_summary.md",
     "board_internal_pass": true,
     "expected_vs_board_pass": true,
     "samples_received": 1800000,
@@ -70,7 +70,7 @@
       "NSR": 0,
       "CHF": 0,
       "ARR": 0,
-      "AFF": 30
+      "AF": 30
     },
     "snn_error": 0,
     "feeder_error": 0

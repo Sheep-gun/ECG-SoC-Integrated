@@ -19,14 +19,14 @@
   ✅    221  |   3600 samples  |  Vpp=2.195 mV  →  real_ecg_ARR_221.pwl
 
 =======================================================
-  클래스: AFF  |  DB: afdb  |  Fs: 250 Hz
+  클래스: AF  |  DB: afdb  |  Fs: 250 Hz
 =======================================================
-  ✅  04015  |   2500 samples  |  Vpp=3.680 mV  →  real_ecg_AFF_04015.pwl
-  ✅  04043  |   2500 samples  |  Vpp=1.850 mV  →  real_ecg_AFF_04043.pwl
-  ✅  04746  |   2500 samples  |  Vpp=0.755 mV  →  real_ecg_AFF_04746.pwl
-  ✅  05091  |   2500 samples  |  Vpp=2.175 mV  →  real_ecg_AFF_05091.pwl
-  ✅  06453  |   2500 samples  |  Vpp=1.935 mV  →  real_ecg_AFF_06453.pwl
-  ✅  08405  |   2500 samples  |  Vpp=4.715 mV  →  real_ecg_AFF_08405.pwl
+  ✅  04015  |   2500 samples  |  Vpp=3.680 mV  →  real_ecg_AF_04015.pwl
+  ✅  04043  |   2500 samples  |  Vpp=1.850 mV  →  real_ecg_AF_04043.pwl
+  ✅  04746  |   2500 samples  |  Vpp=0.755 mV  →  real_ecg_AF_04746.pwl
+  ✅  05091  |   2500 samples  |  Vpp=2.175 mV  →  real_ecg_AF_05091.pwl
+  ✅  06453  |   2500 samples  |  Vpp=1.935 mV  →  real_ecg_AF_06453.pwl
+  ✅  08405  |   2500 samples  |  Vpp=4.715 mV  →  real_ecg_AF_08405.pwl
 
 =======================================================
   클래스: CHF  |  DB: chfdb  |  Fs: 250 Hz

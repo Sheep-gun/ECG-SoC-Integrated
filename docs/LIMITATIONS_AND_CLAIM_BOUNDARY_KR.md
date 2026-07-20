@@ -19,7 +19,7 @@ Analog robustness는 LTspice schematic stress와 XMODEL representative regressio
 ## 금지되는 주장
 
 - 임상적으로 검증된 진단 또는 독립적 clinical decision
-- NSR/CHF/ARR/AFF 네 질환의 확진
+- NSR/CHF/ARR/AF 네 질환의 확진
 - physical AFE PCB, ADC silicon, fabricated SoC, transistor/post-layout 또는 silicon-proven 결과
 - live electrode acquisition
 - board 36/36을 근거로 한 100% classification accuracy

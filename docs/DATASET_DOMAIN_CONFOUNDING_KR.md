@@ -2,7 +2,7 @@
 
 ## 공개해야 하는 사실
 
-1. NSR, CHF, ARR, AFF는 각각 nsrdb, chfdb, mitdb, afdb라는 서로 다른 공개 source database에서 왔다.
+1. NSR, CHF, ARR, AF는 각각 nsrdb, chfdb, mitdb, afdb라는 서로 다른 공개 source database에서 왔다.
 2. Strict source-record-wise split은 동일한 physical source record가 train, validation, final-test partition을 넘나드는 것을 방지한다.
 3. 이 분리는 direct record leakage를 방지하지만 database-to-class confounding을 제거하지 않는다.
 4. Database별 acquisition condition, amplitude scale, noise, preprocessing, lead configuration, sampling과 record distribution 차이가 classification에 기여했을 수 있다.

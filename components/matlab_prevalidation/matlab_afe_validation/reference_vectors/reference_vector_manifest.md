@@ -15,11 +15,11 @@
 
 | Class | File role | Relative path | Bytes | SHA256 |
 |---|---|---|---:|---|
-| AFF | adc_offset_binary.mem | `reference_vectors/AFF/adc_offset_binary.mem` | 240000 | `0f03e0e2c8f50e9c188a1c859c5c0e914a80877dbd73d5624993e1f8f96e93d8` |
-| AFF | adc_signed.txt | `reference_vectors/AFF/adc_signed.txt` | 206825 | `cedcd000123a013172f9d5bb0b19fca85cc38d9985dc92ab4d41a0eb8e3f3994` |
-| AFF | adc_signed_twos_complement.mem | `reference_vectors/AFF/adc_signed_twos_complement.mem` | 240000 | `232a83b062eefbed8fbb81f45e53a61e821f75cf8c5e4704d112b9917306fa46` |
-| AFF | input.csv | `reference_vectors/AFF/input.csv` | 1586150 | `d55bba730a8c2a0dd521a1c880ac56dd587182ab981f454686d43ea56bec4d7f` |
-| AFF | matlab_stage_outputs.csv | `reference_vectors/AFF/matlab_stage_outputs.csv` | 7450548 | `33c55e2e1f11b0b7d07dc3f97de3c2ba97519eb0fde8cc067076b497c99d3dbb` |
+| AF | adc_offset_binary.mem | `reference_vectors/AF/adc_offset_binary.mem` | 240000 | `0f03e0e2c8f50e9c188a1c859c5c0e914a80877dbd73d5624993e1f8f96e93d8` |
+| AF | adc_signed.txt | `reference_vectors/AF/adc_signed.txt` | 206825 | `cedcd000123a013172f9d5bb0b19fca85cc38d9985dc92ab4d41a0eb8e3f3994` |
+| AF | adc_signed_twos_complement.mem | `reference_vectors/AF/adc_signed_twos_complement.mem` | 240000 | `232a83b062eefbed8fbb81f45e53a61e821f75cf8c5e4704d112b9917306fa46` |
+| AF | input.csv | `reference_vectors/AF/input.csv` | 1586150 | `d55bba730a8c2a0dd521a1c880ac56dd587182ab981f454686d43ea56bec4d7f` |
+| AF | matlab_stage_outputs.csv | `reference_vectors/AF/matlab_stage_outputs.csv` | 7450548 | `33c55e2e1f11b0b7d07dc3f97de3c2ba97519eb0fde8cc067076b497c99d3dbb` |
 | ARR | adc_offset_binary.mem | `reference_vectors/ARR/adc_offset_binary.mem` | 240000 | `1c218ac363c580317d7acd18a7a869c58ef0c11c7420f12d4b0191083c5bb6ca` |
 | ARR | adc_signed.txt | `reference_vectors/ARR/adc_signed.txt` | 219589 | `19e3152e9112afbe04de6c73616f57ac07c8e040f9ce1ce6f5c046621218e7bc` |
 | ARR | adc_signed_twos_complement.mem | `reference_vectors/ARR/adc_signed_twos_complement.mem` | 240000 | `3b6b78c5a7a78daf4efdc42dafd49fccf7a82642377f1fd0e45d2c1e249aad7b` |

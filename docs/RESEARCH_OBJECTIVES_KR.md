@@ -2,7 +2,7 @@
 
 ## 핵심 목표
 
-공개 ECG 데이터에서 생성한 AFE+ADC-compatible signed 12-bit stream을 sample-by-sample으로 받아, 단기 beat·morphology evidence와 장기 persistence를 결합해 NSR, CHF, ARR, AFF 네 public-dataset class를 분류하는 streaming SNN-inspired accelerator IP를 설계하고 검증한다.
+공개 ECG 데이터에서 생성한 AFE+ADC-compatible signed 12-bit stream을 sample-by-sample으로 받아, 단기 beat·morphology evidence와 장기 persistence를 결합해 NSR, CHF, ARR, AF 네 public-dataset class를 분류하는 streaming SNN-inspired accelerator IP를 설계하고 검증한다.
 
 ## 세부 목표
 
@@ -20,4 +20,4 @@
 
 ## 전체 연구 흐름
 
-`public digitized ECG → MATLAB nominal AFE+ADC pre-validation → LTspice schematic implementation/verification → SystemVerilog AFE+ADC XMODEL verification → signed 12-bit 1 kSPS stream → 60-second Snapshot Readout → 30-minute Final Membrane Readout → NSR/CHF/ARR/AFF → RTL/XSim/Vivado/IP-XACT/Vitis/FPGA replay`
+`public digitized ECG → MATLAB nominal AFE+ADC pre-validation → LTspice schematic implementation/verification → SystemVerilog AFE+ADC XMODEL verification → signed 12-bit 1 kSPS stream → 60-second Snapshot Readout → 30-minute Final Membrane Readout → NSR/CHF/ARR/AF → RTL/XSim/Vivado/IP-XACT/Vitis/FPGA replay`

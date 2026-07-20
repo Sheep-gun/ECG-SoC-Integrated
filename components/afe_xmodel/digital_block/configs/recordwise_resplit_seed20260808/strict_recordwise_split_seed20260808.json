@@ -18,7 +18,7 @@
       "val": 8,
       "test": 9
     },
-    "AFF": {
+    "AF": {
       "train": 17,
       "val": 8,
       "test": 9
@@ -26,8 +26,8 @@
   },
   "record_lists": {
     "train": [
-      "AFF_afdb_06426",
-      "AFF_afdb_07162",
+      "AF_afdb_06426",
+      "AF_afdb_07162",
       "ARR_mitdb_100",
       "ARR_mitdb_104",
       "ARR_mitdb_106",
@@ -62,7 +62,7 @@
       "NSR_nsrdb_19830"
     ],
     "val": [
-      "AFF_afdb_07859",
+      "AF_afdb_07859",
       "ARR_mitdb_124",
       "ARR_mitdb_200",
       "ARR_mitdb_207",
@@ -81,7 +81,7 @@
       "NSR_nsrdb_19088"
     ],
     "test": [
-      "AFF_afdb_06995",
+      "AF_afdb_06995",
       "ARR_mitdb_102",
       "ARR_mitdb_105",
       "ARR_mitdb_118",
@@ -127,7 +127,7 @@
       "test": 9,
       "val": 8
     },
-    "AFF": {
+    "AF": {
       "train": 17,
       "test": 9,
       "val": 8

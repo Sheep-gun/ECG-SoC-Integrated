@@ -24,7 +24,7 @@ function generate_prevalidation_reference_package()
     ensure_dir(figures_dir);
     ensure_dir(ref_dir);
 
-    classes = {'NSR','CHF','ARR','AFF'};
+    classes = {'NSR','CHF','ARR','AF'};
 
     %% A. AFE+ADC parameter reference
     param_table = make_parameter_reference_table(p);
@@ -546,10 +546,10 @@ function T = make_input_dataset_manifest(classes, ref_dir, p)
                 source_database(i) = "mitdb";
                 source_record_id(i) = "105";
                 source_selection_note(i) = "nominal headroom/reference-vector 검증용 대표 ARR 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음";
-            case 'AFF'
+            case 'AF'
                 source_database(i) = "afdb";
                 source_record_id(i) = "04015";
-                source_selection_note(i) = "nominal headroom/reference-vector 검증용 대표 AFF 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음";
+                source_selection_note(i) = "nominal headroom/reference-vector 검증용 대표 AF 입력; upstream dataset flow에서 생성됨; exact segment start는 이 MATLAB repo에서 추적하지 않음";
             otherwise
                 source_database(i) = "not tracked";
                 source_record_id(i) = "not tracked";
@@ -930,7 +930,7 @@ function s = compose_input_manifest_doc(T)
         ''
         '이 문서는 MATLAB nominal pre-validation에 사용한 source input dataset의 재현성 정보를 정리한다. 새로 clone한 환경에서 raw ECG input부터 완전 재생성하려면 `afe_input_dataset/`이 필요하다. 해당 폴더가 없으면 top-level script는 checked-in `results_dataset/` artifact를 기반으로 secondary report, figure, manifest를 재생성한다.'
         ''
-        '아래 source traceability column은 대표 NSR/CHF/ARR/AFF 입력이 어느 database/record/segment에서 왔는지 추적하기 위한 정보이다. 현재 MATLAB repo에서는 exact segment start를 복구하지 않고, checked-in reference input과 SHA256 hash를 기준으로 동일성을 추적한다. 따라서 source start가 불명확한 항목은 추측하지 않고 `not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided`로 명시한다.'
+        '아래 source traceability column은 대표 NSR/CHF/ARR/AF 입력이 어느 database/record/segment에서 왔는지 추적하기 위한 정보이다. 현재 MATLAB repo에서는 exact segment start를 복구하지 않고, checked-in reference input과 SHA256 hash를 기준으로 동일성을 추적한다. 따라서 source start가 불명확한 항목은 추측하지 않고 `not tracked in this MATLAB repo; checked-in reference input and SHA256 are provided`로 명시한다.'
         ''
         '## Source traceability column 정의'
         ''
@@ -1058,7 +1058,7 @@ function s = compose_validation_status_doc()
         '| Dynamic range / headroom | PASS | `docs/dynamic_range_headroom_reference.md` | representative inputs 기준 clipping 0% |'
         '| ADC code mapping | PASS | `docs/adc_code_mapping_convention.md` | offset-binary, signed decimal, signed two''s-complement hex convention 명시 |'
         '| Downstream canonical replay format | PASS | `reference_vectors/<CLASS>/adc_signed_twos_complement.mem` | 1 kSPS signed 12-bit two''s-complement hex `.mem`, 한 줄당 3자리 대문자 hex |'
-        '| Reference vectors | PASS | `reference_vectors/reference_vector_manifest.md` | NSR/CHF/ARR/AFF SHA256 tracked, signed two''s-complement `.mem` 포함 |'
+        '| Reference vectors | PASS | `reference_vectors/reference_vector_manifest.md` | NSR/CHF/ARR/AF SHA256 tracked, signed two''s-complement `.mem` 포함 |'
         '| Reference vector manifest verification | PASS | `verify_reference_vector_manifest.m` | 파일 존재 여부, byte 수, SHA256 불일치 시 MATLAB error |'
         '| Input dataset source traceability | PARTIAL | `docs/INPUT_DATASET_MANIFEST.md` | source database/record는 기록, exact segment start는 이 MATLAB repo에서 not tracked |'
         '| MATLAB-vs-XMODEL equivalence | NOT DONE | XMODEL 담당 | claim 금지 |'
@@ -1069,7 +1069,7 @@ function s = compose_validation_status_doc()
         '## 최종 claim'
         ''
         'MATLAB 단계는 SystemVerilog XMODEL 구현 이전의 nominal system-level pre-validation 및 reference generation 단계이다.'
-        '본 단계는 schematic 기반 AFE 필터 파라미터, frequency-response reference, ADC headroom, code-mapping convention, 그리고 대표 NSR/CHF/ARR/AFF 입력에 대한 SHA256-tracked reference vector를 정의한다.'
+        '본 단계는 schematic 기반 AFE 필터 파라미터, frequency-response reference, ADC headroom, code-mapping convention, 그리고 대표 NSR/CHF/ARR/AF 입력에 대한 SHA256-tracked reference vector를 정의한다.'
         '본 단계는 transistor-level, PCB-level, silicon-level, clinical validation 또는 MATLAB-vs-XMODEL bit-exact equivalence를 주장하지 않는다.'
     };
     s = strjoin(lines, newline);
@@ -1098,7 +1098,7 @@ function s = compose_figure_captions_doc()
         ['| `fig_afe_chain_overview` | MATLAB nominal model에서 사용한 AFE+ADC 신호 처리 체인을 나타낸다. 입력 ECG 전압은 HPF, IA, 60 Hz notch, LPF, ADC quantizer를 거쳐 offset-binary ADC code, signed decimal stream, signed two''s-complement hex `.mem`으로 변환된다. ' note_ko ' |']
         ['| `fig_total_frequency_response` | MATLAB nominal AFE+ADC chain의 전체 frequency response reference를 나타낸다. HPF cutoff, 60 Hz notch target, LPF cutoff를 확인하기 위한 기준 그래프이다. 단, MATLAB time-domain digital notch approximation의 60 Hz ideal zero는 실제 analog attenuation claim이 아니다. ' note_ko ' |']
         ['| `fig_notch_dense_sweep` | Active Twin-T 60 Hz notch의 dense frequency-domain reference를 나타낸다. 본 figure는 60 Hz target notch 특성을 보여주며, 50 Hz까지 완전 제거한다고 주장하지 않는다. ' note_ko ' |']
-        ['| `fig_dynamic_range_headroom` | 대표 NSR/CHF/ARR/AFF 입력에 대한 ADC rail 대비 AFE 출력 headroom을 나타낸다. 모든 클래스에서 clipping ratio가 0%임을 nominal 기준에서 확인하기 위한 figure이다. ' note_ko ' |']
+        ['| `fig_dynamic_range_headroom` | 대표 NSR/CHF/ARR/AF 입력에 대한 ADC rail 대비 AFE 출력 headroom을 나타낸다. 모든 클래스에서 clipping ratio가 0%임을 nominal 기준에서 확인하기 위한 figure이다. ' note_ko ' |']
         ['| `fig_adc_code_distribution` | 대표 ECG 입력에서 생성된 ADC code distribution을 나타낸다. ADC code가 0 또는 4095 rail에 붙지 않는지 확인하기 위한 figure이며, downstream RTL replay의 canonical format은 signed two''s-complement `.mem`이다. ' note_ko ' |']
         ['| `fig_reference_vector_handoff` | MATLAB reference vector가 후속 XMODEL 등가성 검증 및 locked digital RTL replay로 전달되는 흐름을 나타낸다. canonical replay vector는 `adc_signed_twos_complement.mem`이다. ' note_ko ' |']
     };

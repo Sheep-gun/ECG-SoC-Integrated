@@ -373,7 +373,7 @@
      fill="#182230"
      class="signal"
      id="text16"
-     style="font-size:21.3333px;-inkscape-font-specification:'Arial, Helvetica, sans-serif, Semi-Bold';font-family:Arial, Helvetica, sans-serif;font-weight:600;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#182230;stroke:#ffffff;stroke-width:5px;stroke-linejoin:round;paint-order:stroke">class_mem_aff[63:0]</text>
+     style="font-size:21.3333px;-inkscape-font-specification:'Arial, Helvetica, sans-serif, Semi-Bold';font-family:Arial, Helvetica, sans-serif;font-weight:600;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#182230;stroke:#ffffff;stroke-width:5px;stroke-linejoin:round;paint-order:stroke">class_mem_af[63:0]</text>
   <rect
      x="856"
      y="300"
@@ -488,7 +488,7 @@
      fill="#182230"
      class="signal"
      id="text21"
-     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:21.3333px;font-family:Arial, Helvetica, sans-serif;-inkscape-font-specification:'Arial, Helvetica, sans-serif, Semi-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">final_mem_aff[31:0]</text>
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:21.3333px;font-family:Arial, Helvetica, sans-serif;-inkscape-font-specification:'Arial, Helvetica, sans-serif, Semi-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">final_mem_af[31:0]</text>
   <rect
      x="1156"
      y="302"

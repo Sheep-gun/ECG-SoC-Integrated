@@ -11,14 +11,14 @@
                                          "sha256":  "0e49b0a1f6d8f092059f759cbd1e7e2af676a55ebccd69217214cb1d7318042b"
                                      }
                                  ],
-    "selected_candidate_id":  "structural_guarded_silent_aff_1008710",
+    "selected_candidate_id":  "structural_guarded_silent_af_1008710",
     "selected_candidate_params_hash":  "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
     "params":  {
-                   "aff_cnt":  12,
-                   "aff_chf_cnt":  14,
-                   "aff_morph_le":  3000,
-                   "aff_rhythm_ge":  12000,
-                   "aff_qrs_le":  1000,
+                   "af_cnt":  12,
+                   "af_chf_cnt":  14,
+                   "af_morph_le":  3000,
+                   "af_rhythm_ge":  12000,
+                   "af_qrs_le":  1000,
                    "nsr_cnt":  4,
                    "nsr_chf_cnt":  8,
                    "nsr_morph_le":  100,
@@ -35,25 +35,25 @@
                    "arr_nsr_qrs_low_le":  30,
                    "arr_nsr_ect_low_le":  40,
                    "arr_nsr_rhythm_low_le":  10000,
-                   "arr_aff_aff_cnt":  10,
-                   "arr_aff_arr_cnt":  3,
-                   "arr_aff_morph_ge":  500,
-                   "arr_aff_ect_ge":  400,
-                   "arr_aff_qrs_le":  200,
-                   "aff_boost":  80,
-                   "aff_inh_chf":  40,
-                   "aff_inh_arr":  0,
+                   "arr_af_af_cnt":  10,
+                   "arr_af_arr_cnt":  3,
+                   "arr_af_morph_ge":  500,
+                   "arr_af_ect_ge":  400,
+                   "arr_af_qrs_le":  200,
+                   "af_boost":  80,
+                   "af_inh_chf":  40,
+                   "af_inh_arr":  0,
                    "nsr_boost":  40,
                    "nsr_inh_chf":  40,
                    "nsr_inh_arr":  20,
                    "arr_nsr_boost":  40,
                    "arr_nsr_inh_nsr":  40,
                    "arr_nsr_inh_chf":  40,
-                   "arr_nsr_inh_aff":  10,
-                   "arr_aff_boost":  40,
-                   "arr_aff_inh_aff":  40,
-                   "candidate_id":  "structural_guarded_silent_aff_1008710",
-                   "family":  "F1_F6_F10_guarded_rescue_silent_aff"
+                   "arr_nsr_inh_af":  10,
+                   "arr_af_boost":  40,
+                   "arr_af_inh_af":  40,
+                   "candidate_id":  "structural_guarded_silent_af_1008710",
+                   "family":  "F1_F6_F10_guarded_rescue_silent_af"
                },
     "train_metrics":  {
                           "correct":  61,
@@ -82,7 +82,7 @@
                                                         "f1":  0.8235294117647058,
                                                         "support":  17
                                                     },
-                                            "AFF":  {
+                                            "AF":  {
                                                         "precision":  1.0,
                                                         "recall":  0.9411764705882353,
                                                         "f1":  0.9696969696969697,
@@ -143,7 +143,7 @@
                                                       "f1":  1.0,
                                                       "support":  8
                                                   },
-                                          "AFF":  {
+                                          "AF":  {
                                                       "precision":  1.0,
                                                       "recall":  1.0,
                                                       "f1":  1.0,

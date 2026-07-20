@@ -12027,20 +12027,20 @@ Slack (MET) :             0.426ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -12212,20 +12212,20 @@ Slack (MET) :             0.434ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -12847,20 +12847,20 @@ Slack (MET) :             0.510ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -12944,20 +12944,20 @@ Slack (MET) :             0.530ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -13041,20 +13041,20 @@ Slack (MET) :             0.542ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -13135,20 +13135,20 @@ Slack (MET) :             0.550ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -13722,7 +13722,7 @@ Slack (MET) :             0.621ns  (required time - arrival time)
 Slack (MET) :             0.622ns  (required time - arrival time)
   Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_event_delta_pending_reg/C
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[61]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[61]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Setup (Max at Slow Process Corner)
@@ -13753,67 +13753,67 @@ Slack (MET) :             0.622ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X35Y98         FDRE (Prop_fdre_C_Q)         0.456     5.700 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_event_delta_pending_reg/Q
                          net (fo=817, routed)         1.735     7.435    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_event_delta_pending
-    SLICE_X54Y90         LUT4 (Prop_lut4_I1_O)        0.124     7.559 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[3]_i_18/O
-                         net (fo=1, routed)           0.000     7.559    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[3]_i_18_n_0
+    SLICE_X54Y90         LUT4 (Prop_lut4_I1_O)        0.124     7.559 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[3]_i_18/O
+                         net (fo=1, routed)           0.000     7.559    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[3]_i_18_n_0
     SLICE_X54Y90         CARRY4 (Prop_carry4_S[3]_CO[3])
-                                                      0.376     7.935 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[3]_i_12/CO[3]
-                         net (fo=1, routed)           0.000     7.935    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[3]_i_12_n_0
+                                                      0.376     7.935 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[3]_i_12/CO[3]
+                         net (fo=1, routed)           0.000     7.935    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[3]_i_12_n_0
     SLICE_X54Y91         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117     8.052 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[7]_i_13/CO[3]
-                         net (fo=1, routed)           0.000     8.052    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[7]_i_13_n_0
+                                                      0.117     8.052 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[7]_i_13/CO[3]
+                         net (fo=1, routed)           0.000     8.052    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[7]_i_13_n_0
     SLICE_X54Y92         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.323     8.375 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_19/O[1]
-                         net (fo=3, routed)           0.695     9.069    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_19_n_6
-    SLICE_X51Y92         LUT4 (Prop_lut4_I3_O)        0.301     9.370 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[11]_i_13/O
-                         net (fo=1, routed)           0.724    10.094    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[11]_i_13_n_0
+                                                      0.323     8.375 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_19/O[1]
+                         net (fo=3, routed)           0.695     9.069    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_19_n_6
+    SLICE_X51Y92         LUT4 (Prop_lut4_I3_O)        0.301     9.370 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[11]_i_13/O
+                         net (fo=1, routed)           0.724    10.094    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[11]_i_13_n_0
     SLICE_X49Y92         CARRY4 (Prop_carry4_DI[1]_CO[3])
-                                                      0.715    10.809 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[11]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    10.809    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[11]_i_10_n_0
+                                                      0.715    10.809 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[11]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    10.809    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[11]_i_10_n_0
     SLICE_X49Y93         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.923 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    10.923    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_10_n_0
+                                                      0.114    10.923 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    10.923    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_10_n_0
     SLICE_X49Y94         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.037 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[19]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.037    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[19]_i_10_n_0
+                                                      0.114    11.037 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[19]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.037    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[19]_i_10_n_0
     SLICE_X49Y95         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.151 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[23]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.151    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[23]_i_10_n_0
+                                                      0.114    11.151 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[23]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.151    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[23]_i_10_n_0
     SLICE_X49Y96         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.265 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[27]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.265    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[27]_i_10_n_0
+                                                      0.114    11.265 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[27]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.265    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[27]_i_10_n_0
     SLICE_X49Y97         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.379 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[31]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.379    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[31]_i_10_n_0
+                                                      0.114    11.379 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[31]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.379    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[31]_i_10_n_0
     SLICE_X49Y98         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.493 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[35]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.493    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[35]_i_10_n_0
+                                                      0.114    11.493 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[35]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.493    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[35]_i_10_n_0
     SLICE_X49Y99         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334    11.827 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[39]_i_10/O[1]
-                         net (fo=2, routed)           0.927    12.754    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_apply_delta_aff[37]
-    SLICE_X29Y99         LUT5 (Prop_lut5_I4_O)        0.303    13.057 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[39]_i_8/O
-                         net (fo=1, routed)           0.000    13.057    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[39]_i_8_n_0
+                                                      0.334    11.827 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[39]_i_10/O[1]
+                         net (fo=2, routed)           0.927    12.754    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_apply_delta_af[37]
+    SLICE_X29Y99         LUT5 (Prop_lut5_I4_O)        0.303    13.057 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[39]_i_8/O
+                         net (fo=1, routed)           0.000    13.057    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[39]_i_8_n_0
     SLICE_X29Y99         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550    13.607 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[39]_i_1/CO[3]
-                         net (fo=1, routed)           0.001    13.608    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[39]_i_1_n_0
+                                                      0.550    13.607 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[39]_i_1/CO[3]
+                         net (fo=1, routed)           0.001    13.608    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[39]_i_1_n_0
     SLICE_X29Y100        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    13.722 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[43]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    13.722    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[43]_i_1_n_0
+                                                      0.114    13.722 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[43]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    13.722    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[43]_i_1_n_0
     SLICE_X29Y101        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    13.836 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[47]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    13.836    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[47]_i_1_n_0
+                                                      0.114    13.836 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[47]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    13.836    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[47]_i_1_n_0
     SLICE_X29Y102        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    13.950 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[51]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    13.950    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[51]_i_1_n_0
+                                                      0.114    13.950 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[51]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    13.950    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[51]_i_1_n_0
     SLICE_X29Y103        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    14.064 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[55]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    14.064    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[55]_i_1_n_0
+                                                      0.114    14.064 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[55]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    14.064    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[55]_i_1_n_0
     SLICE_X29Y104        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    14.178 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[59]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    14.178    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[59]_i_1_n_0
+                                                      0.114    14.178 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[59]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    14.178    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[59]_i_1_n_0
     SLICE_X29Y105        CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334    14.512 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]_i_1/O[1]
-                         net (fo=1, routed)           0.000    14.512    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]_i_1_n_6
-    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[61]/D
+                                                      0.334    14.512 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]_i_1/O[1]
+                         net (fo=1, routed)           0.000    14.512    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]_i_1_n_6
+    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[61]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -13824,10 +13824,10 @@ Slack (MET) :             0.622ns  (required time - arrival time)
                          net (fo=1, routed)           1.920    13.331    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    13.422 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        1.505    14.927    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[61]/C
+    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[61]/C
                          clock pessimism              0.180    15.107    
                          clock uncertainty           -0.035    15.072    
-    SLICE_X29Y105        FDRE (Setup_fdre_C_D)        0.062    15.134    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[61]
+    SLICE_X29Y105        FDRE (Setup_fdre_C_D)        0.062    15.134    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[61]
   -------------------------------------------------------------------
                          required time                         15.134    
                          arrival time                         -14.512    
@@ -13868,20 +13868,20 @@ Slack (MET) :             0.626ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -14133,7 +14133,7 @@ Slack (MET) :             0.638ns  (required time - arrival time)
 Slack (MET) :             0.643ns  (required time - arrival time)
   Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_event_delta_pending_reg/C
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Setup (Max at Slow Process Corner)
@@ -14164,67 +14164,67 @@ Slack (MET) :             0.643ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X35Y98         FDRE (Prop_fdre_C_Q)         0.456     5.700 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_event_delta_pending_reg/Q
                          net (fo=817, routed)         1.735     7.435    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_event_delta_pending
-    SLICE_X54Y90         LUT4 (Prop_lut4_I1_O)        0.124     7.559 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[3]_i_18/O
-                         net (fo=1, routed)           0.000     7.559    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[3]_i_18_n_0
+    SLICE_X54Y90         LUT4 (Prop_lut4_I1_O)        0.124     7.559 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[3]_i_18/O
+                         net (fo=1, routed)           0.000     7.559    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[3]_i_18_n_0
     SLICE_X54Y90         CARRY4 (Prop_carry4_S[3]_CO[3])
-                                                      0.376     7.935 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[3]_i_12/CO[3]
-                         net (fo=1, routed)           0.000     7.935    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[3]_i_12_n_0
+                                                      0.376     7.935 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[3]_i_12/CO[3]
+                         net (fo=1, routed)           0.000     7.935    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[3]_i_12_n_0
     SLICE_X54Y91         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117     8.052 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[7]_i_13/CO[3]
-                         net (fo=1, routed)           0.000     8.052    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[7]_i_13_n_0
+                                                      0.117     8.052 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[7]_i_13/CO[3]
+                         net (fo=1, routed)           0.000     8.052    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[7]_i_13_n_0
     SLICE_X54Y92         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.323     8.375 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_19/O[1]
-                         net (fo=3, routed)           0.695     9.069    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_19_n_6
-    SLICE_X51Y92         LUT4 (Prop_lut4_I3_O)        0.301     9.370 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[11]_i_13/O
-                         net (fo=1, routed)           0.724    10.094    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[11]_i_13_n_0
+                                                      0.323     8.375 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_19/O[1]
+                         net (fo=3, routed)           0.695     9.069    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_19_n_6
+    SLICE_X51Y92         LUT4 (Prop_lut4_I3_O)        0.301     9.370 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[11]_i_13/O
+                         net (fo=1, routed)           0.724    10.094    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[11]_i_13_n_0
     SLICE_X49Y92         CARRY4 (Prop_carry4_DI[1]_CO[3])
-                                                      0.715    10.809 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[11]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    10.809    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[11]_i_10_n_0
+                                                      0.715    10.809 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[11]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    10.809    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[11]_i_10_n_0
     SLICE_X49Y93         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.923 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    10.923    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[15]_i_10_n_0
+                                                      0.114    10.923 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    10.923    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[15]_i_10_n_0
     SLICE_X49Y94         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.037 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[19]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.037    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[19]_i_10_n_0
+                                                      0.114    11.037 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[19]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.037    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[19]_i_10_n_0
     SLICE_X49Y95         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.151 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[23]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.151    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[23]_i_10_n_0
+                                                      0.114    11.151 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[23]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.151    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[23]_i_10_n_0
     SLICE_X49Y96         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.265 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[27]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.265    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[27]_i_10_n_0
+                                                      0.114    11.265 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[27]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.265    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[27]_i_10_n_0
     SLICE_X49Y97         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.379 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[31]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.379    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[31]_i_10_n_0
+                                                      0.114    11.379 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[31]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.379    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[31]_i_10_n_0
     SLICE_X49Y98         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.493 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[35]_i_10/CO[3]
-                         net (fo=1, routed)           0.000    11.493    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[35]_i_10_n_0
+                                                      0.114    11.493 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[35]_i_10/CO[3]
+                         net (fo=1, routed)           0.000    11.493    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[35]_i_10_n_0
     SLICE_X49Y99         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334    11.827 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[39]_i_10/O[1]
-                         net (fo=2, routed)           0.927    12.754    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_apply_delta_aff[37]
-    SLICE_X29Y99         LUT5 (Prop_lut5_I4_O)        0.303    13.057 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[39]_i_8/O
-                         net (fo=1, routed)           0.000    13.057    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg[39]_i_8_n_0
+                                                      0.334    11.827 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[39]_i_10/O[1]
+                         net (fo=2, routed)           0.927    12.754    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_apply_delta_af[37]
+    SLICE_X29Y99         LUT5 (Prop_lut5_I4_O)        0.303    13.057 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[39]_i_8/O
+                         net (fo=1, routed)           0.000    13.057    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg[39]_i_8_n_0
     SLICE_X29Y99         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550    13.607 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[39]_i_1/CO[3]
-                         net (fo=1, routed)           0.001    13.608    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[39]_i_1_n_0
+                                                      0.550    13.607 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[39]_i_1/CO[3]
+                         net (fo=1, routed)           0.001    13.608    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[39]_i_1_n_0
     SLICE_X29Y100        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    13.722 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[43]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    13.722    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[43]_i_1_n_0
+                                                      0.114    13.722 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[43]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    13.722    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[43]_i_1_n_0
     SLICE_X29Y101        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    13.836 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[47]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    13.836    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[47]_i_1_n_0
+                                                      0.114    13.836 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[47]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    13.836    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[47]_i_1_n_0
     SLICE_X29Y102        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    13.950 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[51]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    13.950    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[51]_i_1_n_0
+                                                      0.114    13.950 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[51]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    13.950    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[51]_i_1_n_0
     SLICE_X29Y103        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    14.064 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[55]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    14.064    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[55]_i_1_n_0
+                                                      0.114    14.064 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[55]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    14.064    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[55]_i_1_n_0
     SLICE_X29Y104        CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    14.178 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[59]_i_1/CO[3]
-                         net (fo=1, routed)           0.000    14.178    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[59]_i_1_n_0
+                                                      0.114    14.178 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[59]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    14.178    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[59]_i_1_n_0
     SLICE_X29Y105        CARRY4 (Prop_carry4_CI_O[3])
-                                                      0.313    14.491 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]_i_1/O[3]
-                         net (fo=1, routed)           0.000    14.491    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]_i_1_n_4
-    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]/D
+                                                      0.313    14.491 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]_i_1/O[3]
+                         net (fo=1, routed)           0.000    14.491    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]_i_1_n_4
+    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -14235,10 +14235,10 @@ Slack (MET) :             0.643ns  (required time - arrival time)
                          net (fo=1, routed)           1.920    13.331    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    13.422 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        1.505    14.927    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]/C
+    SLICE_X29Y105        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]/C
                          clock pessimism              0.180    15.107    
                          clock uncertainty           -0.035    15.072    
-    SLICE_X29Y105        FDRE (Setup_fdre_C_D)        0.062    15.134    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_aff_reg_reg[63]
+    SLICE_X29Y105        FDRE (Setup_fdre_C_D)        0.062    15.134    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_delta_af_reg_reg[63]
   -------------------------------------------------------------------
                          required time                         15.134    
                          arrival time                         -14.491    
@@ -14365,20 +14365,20 @@ Slack (MET) :             0.646ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -14679,20 +14679,20 @@ Slack (MET) :             0.659ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -14770,20 +14770,20 @@ Slack (MET) :             0.667ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y54         FDRE (Prop_fdre_C_Q)         0.456     5.693 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf_reg[31]/Q
                          net (fo=2, routed)           0.952     6.645    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/dec_qrs_maf[31]
-    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12/O
-                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_12_n_0
-    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8/O
-                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_8_n_0
-    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5/O
-                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_5_n_0
-    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2/O
-                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_aff_r_i_2_n_0
+    SLICE_X48Y48         LUT4 (Prop_lut4_I1_O)        0.124     6.769 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12/O
+                         net (fo=1, routed)           0.805     7.574    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_12_n_0
+    SLICE_X48Y46         LUT5 (Prop_lut5_I2_O)        0.124     7.698 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8/O
+                         net (fo=2, routed)           0.171     7.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_8_n_0
+    SLICE_X48Y46         LUT3 (Prop_lut3_I2_O)        0.124     7.993 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5/O
+                         net (fo=2, routed)           0.502     8.495    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_5_n_0
+    SLICE_X48Y48         LUT2 (Prop_lut2_I1_O)        0.124     8.619 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2/O
+                         net (fo=3, routed)           0.465     9.084    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_chf_from_af_r_i_2_n_0
     SLICE_X48Y46         LUT2 (Prop_lut2_I0_O)        0.124     9.208 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27/O
                          net (fo=3, routed)           0.660     9.868    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_base_nsr_from_chf_r_i_27_n_0
     SLICE_X48Y46         LUT3 (Prop_lut3_I0_O)        0.150    10.018 f  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3/O
                          net (fo=2, routed)           0.650    10.668    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_arr[2]_i_3_n_0
     SLICE_X50Y45         LUT6 (Prop_lut6_I0_O)        0.326    10.994 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_8/O
-                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_aff
+                         net (fo=11, routed)          0.813    11.807    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/gate_struct_silent_af
     SLICE_X53Y41         LUT2 (Prop_lut2_I0_O)        0.124    11.931 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12/O
                          net (fo=1, routed)           0.000    11.931    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/struct_mem_chf[11]_i_12_n_0
     SLICE_X53Y41         CARRY4 (Prop_carry4_S[0]_CO[3])
@@ -15238,9 +15238,9 @@ Slack (MET) :             0.019ns  (arrival time - required time)
                          slack                                  0.019    
 
 Slack (MET) :             0.024ns  (arrival time - required time)
-  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/final_mem_aff_reg[5]/C
+  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/final_mem_af_reg[5]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_aff_latched_reg[5]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_af_latched_reg[5]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -15262,11 +15262,11 @@ Slack (MET) :             0.024ns  (arrival time - required time)
                          net (fo=1, routed)           0.644     0.894    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.920 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.628     1.548    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/s_axi_aclk
-    SLICE_X52Y38         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/final_mem_aff_reg[5]/C
+    SLICE_X52Y38         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/final_mem_af_reg[5]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X52Y38         FDRE (Prop_fdre_C_Q)         0.141     1.689 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/final_mem_aff_reg[5]/Q
-                         net (fo=1, routed)           0.212     1.901    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/core_final_mem_aff[5]
-    SLICE_X51Y35         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_aff_latched_reg[5]/D
+    SLICE_X52Y38         FDRE (Prop_fdre_C_Q)         0.141     1.689 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_final/final_mem_af_reg[5]/Q
+                         net (fo=1, routed)           0.212     1.901    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/core_final_mem_af[5]
+    SLICE_X51Y35         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_af_latched_reg[5]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -15277,9 +15277,9 @@ Slack (MET) :             0.024ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.900     2.065    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/s_axi_aclk
-    SLICE_X51Y35         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_aff_latched_reg[5]/C
+    SLICE_X51Y35         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_af_latched_reg[5]/C
                          clock pessimism             -0.254     1.811    
-    SLICE_X51Y35         FDRE (Hold_fdre_C_D)         0.066     1.877    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_aff_latched_reg[5]
+    SLICE_X51Y35         FDRE (Hold_fdre_C_D)         0.066     1.877    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/final_mem_af_latched_reg[5]
   -------------------------------------------------------------------
                          required time                         -1.877    
                          arrival time                           1.901    
@@ -15887,9 +15887,9 @@ Slack (MET) :             0.059ns  (arrival time - required time)
                          slack                                  0.059    
 
 Slack (MET) :             0.060ns  (arrival time - required time)
-  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[31]/C
+  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[31]/C
                             (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[31]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[31]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -15911,13 +15911,13 @@ Slack (MET) :             0.060ns  (arrival time - required time)
                          net (fo=1, routed)           0.644     0.894    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.920 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.564     1.483    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X52Y96         FDSE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[31]/C
+    SLICE_X52Y96         FDSE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[31]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X52Y96         FDSE (Prop_fdse_C_Q)         0.141     1.624 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[31]/Q
-                         net (fo=4, routed)           0.245     1.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg_n_0_[31]
-    SLICE_X45Y97         LUT3 (Prop_lut3_I0_O)        0.051     1.920 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[31]_i_1/O
-                         net (fo=1, routed)           0.000     1.920    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[31]_i_1_n_0
-    SLICE_X45Y97         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[31]/D
+    SLICE_X52Y96         FDSE (Prop_fdse_C_Q)         0.141     1.624 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[31]/Q
+                         net (fo=4, routed)           0.245     1.869    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg_n_0_[31]
+    SLICE_X45Y97         LUT3 (Prop_lut3_I0_O)        0.051     1.920 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[31]_i_1/O
+                         net (fo=1, routed)           0.000     1.920    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[31]_i_1_n_0
+    SLICE_X45Y97         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[31]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -15928,9 +15928,9 @@ Slack (MET) :             0.060ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.839     2.004    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X45Y97         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[31]/C
+    SLICE_X45Y97         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[31]/C
                          clock pessimism             -0.250     1.753    
-    SLICE_X45Y97         FDRE (Hold_fdre_C_D)         0.107     1.860    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[31]
+    SLICE_X45Y97         FDRE (Hold_fdre_C_D)         0.107     1.860    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[31]
   -------------------------------------------------------------------
                          required time                         -1.860    
                          arrival time                           1.920    
@@ -15940,7 +15940,7 @@ Slack (MET) :             0.060ns  (arrival time - required time)
 Slack (MET) :             0.062ns  (arrival time - required time)
   Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg[40]/C
                             (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[40]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[40]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -15966,9 +15966,9 @@ Slack (MET) :             0.062ns  (arrival time - required time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y101        FDSE (Prop_fdse_C_Q)         0.141     1.621 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg[40]/Q
                          net (fo=4, routed)           0.230     1.851    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg_n_0_[40]
-    SLICE_X53Y101        LUT3 (Prop_lut3_I2_O)        0.045     1.896 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[40]_i_1/O
-                         net (fo=1, routed)           0.000     1.896    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[40]_i_1_n_0
-    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[40]/D
+    SLICE_X53Y101        LUT3 (Prop_lut3_I2_O)        0.045     1.896 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[40]_i_1/O
+                         net (fo=1, routed)           0.000     1.896    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[40]_i_1_n_0
+    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[40]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -15979,9 +15979,9 @@ Slack (MET) :             0.062ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.828     1.994    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[40]/C
+    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[40]/C
                          clock pessimism             -0.250     1.743    
-    SLICE_X53Y101        FDRE (Hold_fdre_C_D)         0.091     1.834    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[40]
+    SLICE_X53Y101        FDRE (Hold_fdre_C_D)         0.091     1.834    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[40]
   -------------------------------------------------------------------
                          required time                         -1.834    
                          arrival time                           1.896    
@@ -15991,7 +15991,7 @@ Slack (MET) :             0.062ns  (arrival time - required time)
 Slack (MET) :             0.066ns  (arrival time - required time)
   Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg[42]/C
                             (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[42]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[42]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -16017,9 +16017,9 @@ Slack (MET) :             0.066ns  (arrival time - required time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y101        FDSE (Prop_fdse_C_Q)         0.141     1.621 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg[42]/Q
                          net (fo=4, routed)           0.249     1.870    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg_n_0_[42]
-    SLICE_X44Y98         LUT3 (Prop_lut3_I2_O)        0.045     1.915 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[42]_i_1/O
-                         net (fo=1, routed)           0.000     1.915    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[42]_i_1_n_0
-    SLICE_X44Y98         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[42]/D
+    SLICE_X44Y98         LUT3 (Prop_lut3_I2_O)        0.045     1.915 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[42]_i_1/O
+                         net (fo=1, routed)           0.000     1.915    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[42]_i_1_n_0
+    SLICE_X44Y98         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[42]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -16030,9 +16030,9 @@ Slack (MET) :             0.066ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.839     2.004    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X44Y98         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[42]/C
+    SLICE_X44Y98         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[42]/C
                          clock pessimism             -0.245     1.758    
-    SLICE_X44Y98         FDRE (Hold_fdre_C_D)         0.091     1.849    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[42]
+    SLICE_X44Y98         FDRE (Hold_fdre_C_D)         0.091     1.849    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[42]
   -------------------------------------------------------------------
                          required time                         -1.849    
                          arrival time                           1.915    
@@ -16570,9 +16570,9 @@ Slack (MET) :             0.090ns  (arrival time - required time)
                          slack                                  0.090    
 
 Slack (MET) :             0.091ns  (arrival time - required time)
-  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[3]/C
+  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[3]/C
                             (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[3]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[3]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -16594,13 +16594,13 @@ Slack (MET) :             0.091ns  (arrival time - required time)
                          net (fo=1, routed)           0.644     0.894    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.920 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.562     1.481    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X52Y89         FDSE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[3]/C
+    SLICE_X52Y89         FDSE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[3]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X52Y89         FDSE (Prop_fdse_C_Q)         0.141     1.622 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[3]/Q
-                         net (fo=4, routed)           0.303     1.925    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg_n_0_[3]
-    SLICE_X46Y95         LUT3 (Prop_lut3_I0_O)        0.048     1.973 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[3]_i_1/O
-                         net (fo=1, routed)           0.000     1.973    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[3]_i_1_n_0
-    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[3]/D
+    SLICE_X52Y89         FDSE (Prop_fdse_C_Q)         0.141     1.622 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[3]/Q
+                         net (fo=4, routed)           0.303     1.925    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg_n_0_[3]
+    SLICE_X46Y95         LUT3 (Prop_lut3_I0_O)        0.048     1.973 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[3]_i_1/O
+                         net (fo=1, routed)           0.000     1.973    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[3]_i_1_n_0
+    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[3]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -16611,9 +16611,9 @@ Slack (MET) :             0.091ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.837     2.002    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[3]/C
+    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[3]/C
                          clock pessimism             -0.250     1.751    
-    SLICE_X46Y95         FDRE (Hold_fdre_C_D)         0.131     1.882    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[3]
+    SLICE_X46Y95         FDRE (Hold_fdre_C_D)         0.131     1.882    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[3]
   -------------------------------------------------------------------
                          required time                         -1.882    
                          arrival time                           1.973    
@@ -17228,9 +17228,9 @@ Slack (MET) :             0.095ns  (arrival time - required time)
                          slack                                  0.095    
 
 Slack (MET) :             0.095ns  (arrival time - required time)
-  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[7]/C
+  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[7]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[7]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[7]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -17252,13 +17252,13 @@ Slack (MET) :             0.095ns  (arrival time - required time)
                          net (fo=1, routed)           0.644     0.894    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.920 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.563     1.482    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X52Y90         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[7]/C
+    SLICE_X52Y90         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[7]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X52Y90         FDRE (Prop_fdre_C_Q)         0.141     1.623 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[7]/Q
-                         net (fo=4, routed)           0.305     1.928    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg_n_0_[7]
-    SLICE_X46Y95         LUT3 (Prop_lut3_I0_O)        0.049     1.977 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[7]_i_1/O
-                         net (fo=1, routed)           0.000     1.977    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[7]_i_1_n_0
-    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[7]/D
+    SLICE_X52Y90         FDRE (Prop_fdre_C_Q)         0.141     1.623 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[7]/Q
+                         net (fo=4, routed)           0.305     1.928    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg_n_0_[7]
+    SLICE_X46Y95         LUT3 (Prop_lut3_I0_O)        0.049     1.977 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[7]_i_1/O
+                         net (fo=1, routed)           0.000     1.977    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[7]_i_1_n_0
+    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[7]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -17269,9 +17269,9 @@ Slack (MET) :             0.095ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.837     2.002    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[7]/C
+    SLICE_X46Y95         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[7]/C
                          clock pessimism             -0.250     1.751    
-    SLICE_X46Y95         FDRE (Hold_fdre_C_D)         0.131     1.882    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[7]
+    SLICE_X46Y95         FDRE (Hold_fdre_C_D)         0.131     1.882    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[7]
   -------------------------------------------------------------------
                          required time                         -1.882    
                          arrival time                           1.977    
@@ -17432,9 +17432,9 @@ Slack (MET) :             0.097ns  (arrival time - required time)
                          slack                                  0.097    
 
 Slack (MET) :             0.097ns  (arrival time - required time)
-  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[14]/C
+  Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[14]/C
                             (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[14]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[14]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -17456,13 +17456,13 @@ Slack (MET) :             0.097ns  (arrival time - required time)
                          net (fo=1, routed)           0.644     0.894    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.920 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.563     1.482    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X52Y92         FDSE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[14]/C
+    SLICE_X52Y92         FDSE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[14]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X52Y92         FDSE (Prop_fdse_C_Q)         0.141     1.623 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg[14]/Q
-                         net (fo=4, routed)           0.301     1.924    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_aff_reg_n_0_[14]
-    SLICE_X46Y94         LUT3 (Prop_lut3_I0_O)        0.045     1.969 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[14]_i_1/O
-                         net (fo=1, routed)           0.000     1.969    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[14]_i_1_n_0
-    SLICE_X46Y94         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[14]/D
+    SLICE_X52Y92         FDSE (Prop_fdse_C_Q)         0.141     1.623 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg[14]/Q
+                         net (fo=4, routed)           0.301     1.924    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_af_reg_n_0_[14]
+    SLICE_X46Y94         LUT3 (Prop_lut3_I0_O)        0.045     1.969 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[14]_i_1/O
+                         net (fo=1, routed)           0.000     1.969    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[14]_i_1_n_0
+    SLICE_X46Y94         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[14]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -17473,9 +17473,9 @@ Slack (MET) :             0.097ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.837     2.002    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X46Y94         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[14]/C
+    SLICE_X46Y94         FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[14]/C
                          clock pessimism             -0.250     1.751    
-    SLICE_X46Y94         FDRE (Hold_fdre_C_D)         0.121     1.872    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[14]
+    SLICE_X46Y94         FDRE (Hold_fdre_C_D)         0.121     1.872    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[14]
   -------------------------------------------------------------------
                          required time                         -1.872    
                          arrival time                           1.969    
@@ -17590,7 +17590,7 @@ Slack (MET) :             0.097ns  (arrival time - required time)
 Slack (MET) :             0.099ns  (arrival time - required time)
   Source:                 snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg[44]/C
                             (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[44]/D
+  Destination:            snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[44]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
@@ -17616,9 +17616,9 @@ Slack (MET) :             0.099ns  (arrival time - required time)
   -------------------------------------------------------------------    -------------------
     SLICE_X47Y102        FDSE (Prop_fdse_C_Q)         0.141     1.621 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg[44]/Q
                          net (fo=4, routed)           0.267     1.889    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_mem_arr_reg_n_0_[44]
-    SLICE_X53Y101        LUT3 (Prop_lut3_I2_O)        0.045     1.934 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[44]_i_1/O
-                         net (fo=1, routed)           0.000     1.934    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg[44]_i_1_n_0
-    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[44]/D
+    SLICE_X53Y101        LUT3 (Prop_lut3_I2_O)        0.045     1.934 r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[44]_i_1/O
+                         net (fo=1, routed)           0.000     1.934    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg[44]_i_1_n_0
+    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[44]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -17629,9 +17629,9 @@ Slack (MET) :             0.099ns  (arrival time - required time)
                          net (fo=1, routed)           0.699     1.136    CLK100MHZ_IBUF
     BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     1.165 r  CLK100MHZ_IBUF_BUFG_inst/O
                          net (fo=8586, routed)        0.828     1.994    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/s_axi_aclk
-    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[44]/C
+    SLICE_X53Y101        FDRE                                         r  snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[44]/C
                          clock pessimism             -0.250     1.743    
-    SLICE_X53Y101        FDRE (Hold_fdre_C_D)         0.092     1.835    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_aff_score_reg_reg[44]
+    SLICE_X53Y101        FDRE (Hold_fdre_C_D)         0.092     1.835    snn_ecg_mb_full_replay_i/snn_ecg_axi_accelerator_0/inst/u_core/u_snapshot/u_class/c24_wta_arr_af_score_reg_reg[44]
   -------------------------------------------------------------------
                          required time                         -1.835    
                          arrival time                           1.934    

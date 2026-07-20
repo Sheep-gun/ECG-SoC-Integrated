@@ -2,8 +2,8 @@ function [t, v_ecg_diff, src, meta] = load_afe_input_record(record_name, p, pref
 %LOAD_AFE_INPUT_RECORD  Load official AFE input dataset record.
 %
 % Supported official repo dataset layout:
-%   afe_input_dataset/afe_input_{NSR,CHF,ARR,AFF}.csv
-%   afe_input_dataset/afe_input_{NSR,CHF,ARR,AFF}.pwl
+%   afe_input_dataset/afe_input_{NSR,CHF,ARR,AF}.csv
+%   afe_input_dataset/afe_input_{NSR,CHF,ARR,AF}.pwl
 %   afe_input_dataset/afe_input_record100_NSR.csv
 %   afe_input_dataset/afe_input_record100_NSR.pwl
 %

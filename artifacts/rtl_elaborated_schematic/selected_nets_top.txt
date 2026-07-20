@@ -1,5 +1,5 @@
 Figure A selected/inspected handoff nets from the elaborated design
-SCHEMATIC_SELECTION=adc_data[11:0]; c24_mem_nsr/chf/arr/aff[63:0]; final_valid; final_pred_class[1:0]; final_mem_nsr/chf/arr/aff[31:0]
+SCHEMATIC_SELECTION=adc_data[11:0]; c24_mem_nsr/chf/arr/af[63:0]; final_valid; final_pred_class[1:0]; final_mem_nsr/chf/arr/af[31:0]
 SIGNAL=adc_data* | MATCHES=72 | FIRST=adc_data[0] | LAST=u_snapshot/u_ram/adc_data[11]
 SIGNAL=sample_valid | MATCHES=9 | FIRST=sample_valid | LAST=u_snapshot/u_rbbb_qrs_delay/sample_valid
 SIGNAL=sample_ready | MATCHES=1 | FIRST=sample_ready | LAST=sample_ready
@@ -10,10 +10,10 @@ SIGNAL=final_chunk_done | MATCHES=1 | FIRST=final_chunk_done | LAST=final_chunk_
 SIGNAL=c24_mem_nsr* | MATCHES=257 | FIRST=c24_mem_nsr[0] | LAST=u_snapshot/u_class/c24_mem_nsr_i_n_0
 SIGNAL=c24_mem_chf* | MATCHES=257 | FIRST=c24_mem_chf[0] | LAST=u_snapshot/u_class/c24_mem_chf_i_n_0
 SIGNAL=c24_mem_arr* | MATCHES=257 | FIRST=c24_mem_arr[0] | LAST=u_snapshot/u_class/c24_mem_arr_i_n_0
-SIGNAL=c24_mem_aff* | MATCHES=257 | FIRST=c24_mem_aff[0] | LAST=u_snapshot/u_class/c24_mem_aff_i_n_0
+SIGNAL=c24_mem_af* | MATCHES=257 | FIRST=c24_mem_af[0] | LAST=u_snapshot/u_class/c24_mem_af_i_n_0
 SIGNAL=final_pred_class* | MATCHES=7 | FIRST=final_pred_class[0] | LAST=u_final/final_pred_class_i_n_0
 SIGNAL=final_valid | MATCHES=2 | FIRST=final_valid | LAST=u_final/final_valid
 SIGNAL=final_mem_nsr* | MATCHES=65 | FIRST=final_mem_nsr[0] | LAST=u_final/final_mem_nsr_i_n_0
 SIGNAL=final_mem_chf* | MATCHES=65 | FIRST=final_mem_chf[0] | LAST=u_final/final_mem_chf_i_n_0
 SIGNAL=final_mem_arr* | MATCHES=65 | FIRST=final_mem_arr[0] | LAST=u_final/final_mem_arr_i_n_0
-SIGNAL=final_mem_aff* | MATCHES=65 | FIRST=final_mem_aff[0] | LAST=u_final/final_mem_aff_i_n_0
+SIGNAL=final_mem_af* | MATCHES=65 | FIRST=final_mem_af[0] | LAST=u_final/final_mem_af_i_n_0

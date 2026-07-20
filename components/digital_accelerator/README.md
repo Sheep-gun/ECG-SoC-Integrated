@@ -1,6 +1,6 @@
 # SNN ECG 4-Class Classification Accelerator IP Core
 
-이 repository는 **signed 12-bit ECG stream**을 입력으로 받아 NSR / CHF / ARR / AFF를 분류하는 **SNN-based Long-window ECG 4-Class Classification Accelerator IP Core**의 디지털 구현과 검증(digital RTL/IP/FPGA validation)을 담당한다. 본 repo가 소유하는 범위는 locked strict record-wise protocol, Snapshot Readout과 Final Membrane Readout RTL, XSim golden comparison, Vivado implementation, AXI/IP-XACT packaging, Vitis/MicroBlaze board replay, 그리고 디지털 hardware evidence이다.
+이 repository는 **signed 12-bit ECG stream**을 입력으로 받아 NSR / CHF / ARR / AF를 분류하는 **SNN-based Long-window ECG 4-Class Classification Accelerator IP Core**의 디지털 구현과 검증(digital RTL/IP/FPGA validation)을 담당한다. 본 repo가 소유하는 범위는 locked strict record-wise protocol, Snapshot Readout과 Final Membrane Readout RTL, XSim golden comparison, Vivado implementation, AXI/IP-XACT packaging, Vitis/MicroBlaze board replay, 그리고 디지털 hardware evidence이다.
 
 상위 시스템 흐름은 유지하되, MATLAB AFE+ADC nominal pre-validation과 AFE+ADC XMODEL stress/integration verification은 teammate repository에서 관리한다. 이 repo는 그 upstream 검증 결과로 정의되는 **signed 12-bit, 1 kSPS ECG stream input contract**부터 시작하여 digital accelerator path를 검증한다.
 
@@ -17,7 +17,7 @@ flowchart LR
     C --> D["60 s SNN Snapshot Readout"]
     D --> E["30 min Final Membrane Readout"]
     E --> F["RTL / XSim / Vivado / IP-XACT / Vitis board replay"]
-    E --> G["NSR / CHF / ARR / AFF"]
+    E --> G["NSR / CHF / ARR / AF"]
 ```
 
 Upstream analog chain은 merged paper에서 `HPF 0.482 Hz -> IA x201 -> 60 Hz notch -> LPF 150 Hz -> 12-bit ADC`로 연결된다. 이 repo의 main body에서는 해당 chain의 상세 MATLAB/XMODEL robustness를 재검증하지 않고, digital IP가 소비하는 stream contract와 downstream RTL/IP/FPGA evidence에 집중한다.
@@ -40,7 +40,7 @@ Upstream analog chain은 merged paper에서 `HPF 0.482 Hz -> IA x201 -> 60 Hz no
 | Final decision window | 1,800,000 samples = 30 min |
 | Snapshots per final decision | 30 |
 | Canonical full-top XSim cadence | `sample_gap_cycles=2` |
-| Final classes | NSR, CHF, ARR, AFF |
+| Final classes | NSR, CHF, ARR, AF |
 
 세 가지 검증 개념은 분리해서 해석한다.
 
@@ -56,7 +56,7 @@ Upstream analog chain은 merged paper에서 `HPF 0.482 Hz -> IA x201 -> 60 Hz no
 
 | 항목 | 결과 |
 |---|---:|
-| Locked candidate | `structural_guarded_silent_aff_1008710` |
+| Locked candidate | `structural_guarded_silent_af_1008710` |
 | Train | 61 / 68 = 89.71% |
 | Validation | 32 / 32 = 100.00% |
 | Validation interpretation | model-selection only |

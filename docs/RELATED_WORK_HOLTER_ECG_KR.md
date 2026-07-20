@@ -13,7 +13,7 @@
 - 저자 원고: https://arxiv.org/abs/1905.02954
 - 확인 범위: R-peak 전 0.25초와 후 0.45초의 개별 심박을 입력으로 사용한다. 심박을 겹치는 구간으로 나누고 진폭에 비례하는 Poisson spike train으로 변환한다. STDP 계층은 spike timing 특징을 학습하고 R-STDP 출력 계층은 reward/punishment로 개별 심박 클래스를 학습한다.
 - 경계: 장시간 기록의 여러 Snapshot을 기록 단위 질환 클래스로 집계하지 않는다.
-- 거시적 비교: 이 연구는 “한 심박이 어떤 종류인가”를 묻고, 본 연구는 “여러 구간을 포함한 기록 전체가 NSR·CHF·ARR·AFF 중 무엇인가”를 묻는다.
+- 거시적 비교: 이 연구는 “한 심박이 어떤 종류인가”를 묻고, 본 연구는 “여러 구간을 포함한 기록 전체가 NSR·CHF·ARR·AF 중 무엇인가”를 묻는다.
 
 ## RW-002 Bauer–Muir–Indiveri event-driven anomaly detector
 
@@ -66,14 +66,14 @@
 - DOI: https://doi.org/10.1038/s41746-026-02835-8
 - 출판 상태: 2026년 5월 24일 accepted된 정식 journal article. 이전 arXiv 원고만을 근거로 사용하지 않는다.
 - 확인 범위: 24시간 단일유도 Holter에서 30초 window encoder를 먼저 학습하고, frozen encoder가 만든 시간 순서 특징을 Transformer sequential head로 통합해 전체 Holter의 5년 HF 위험 score를 출력한다. 논문 방법에서는 24시간당 720개 window sequence를 사용한다.
-- 경계: 실제 24시간 window-to-record 통합의 검증 가능한 사례지만, binary prognosis software model이며 NSR·CHF·ARR·AFF RTL classifier가 아니다.
-- 거시적 비교: 장시간 ECG를 짧은 구간으로 나누고 다시 하나의 결과로 합치는 흐름은 검토한 연구 중 본 연구와 가장 유사하다. DeepHHF는 향후 5년 심부전 위험을 예측하고, 본 연구는 현재 기록이 NSR·CHF·ARR·AFF 가운데 어느 클래스인지 판정한다. DeepHHF는 24시간 입력을 사용했지만 본 연구의 현재 검증 범위는 30분이다.
+- 경계: 실제 24시간 window-to-record 통합의 검증 가능한 사례지만, binary prognosis software model이며 NSR·CHF·ARR·AF RTL classifier가 아니다.
+- 거시적 비교: 장시간 ECG를 짧은 구간으로 나누고 다시 하나의 결과로 합치는 흐름은 검토한 연구 중 본 연구와 가장 유사하다. DeepHHF는 향후 5년 심부전 위험을 예측하고, 본 연구는 현재 기록이 NSR·CHF·ARR·AF 가운데 어느 클래스인지 판정한다. DeepHHF는 24시간 입력을 사용했지만 본 연구의 현재 검증 범위는 30분이다.
 
 ## 통합 비교 경계
 
 검토한 대표 선행연구는 개별 심박 SNN, 연속 ECG anomaly trigger, event-driven input compression, patient-level MIL, 가변 길이 CNN/LSTM, 24시간 Transformer 통합을 각각 보여준다. 이 검토 범위에서는 다음 요소를 한 시스템에 함께 적용한 사례를 확인하지 못했다.
 
-- NSR·CHF·ARR·AFF 기록 단위 분류
+- NSR·CHF·ARR·AF 기록 단위 분류
 - Snapshot별 리듬·파형 형태·질환 증거의 명시적 고정 폭 상태화
 - 간헐적 강한 Snapshot의 출현 빈도·반복성과 장시간 일관성 누적
 - RTL/IP/FPGA 구현

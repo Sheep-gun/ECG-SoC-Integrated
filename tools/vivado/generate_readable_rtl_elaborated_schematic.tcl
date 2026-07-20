@@ -330,7 +330,7 @@ foreach cell_name $top_cell_names {
 set top_cell_lines [list \
     "Figure A selected elaborated cells" \
     "The top timer/control FSM is internal logic and is not represented as a fabricated module." \
-    "SELECTED_TOP_PORTS=adc_data\[11:0\], final_valid, final_pred_class\[1:0\], final_mem_nsr/chf/arr/aff\[31:0\]" \
+    "SELECTED_TOP_PORTS=adc_data\[11:0\], final_valid, final_pred_class\[1:0\], final_mem_nsr/chf/arr/af\[31:0\]" \
 ]
 foreach line [describe_cells $top_cells] {
     lappend top_cell_lines $line
@@ -348,17 +348,17 @@ set top_net_patterns [list \
     "c24_mem_nsr*" \
     "c24_mem_chf*" \
     "c24_mem_arr*" \
-    "c24_mem_aff*" \
+    "c24_mem_af*" \
     "final_pred_class*" \
     "final_valid" \
     "final_mem_nsr*" \
     "final_mem_chf*" \
     "final_mem_arr*" \
-    "final_mem_aff*" \
+    "final_mem_af*" \
 ]
 set top_net_lines [list \
     "Figure A selected/inspected handoff nets from the elaborated design" \
-    {SCHEMATIC_SELECTION=adc_data[11:0]; c24_mem_nsr/chf/arr/aff[63:0]; final_valid; final_pred_class[1:0]; final_mem_nsr/chf/arr/aff[31:0]} \
+    {SCHEMATIC_SELECTION=adc_data[11:0]; c24_mem_nsr/chf/arr/af[63:0]; final_valid; final_pred_class[1:0]; final_mem_nsr/chf/arr/af[31:0]} \
 ]
 foreach line [collect_existing_nets $top_net_patterns] {
     lappend top_net_lines $line
@@ -405,7 +405,7 @@ set snapshot_net_patterns [list \
     "c24_mem_nsr*" \
     "c24_mem_chf*" \
     "c24_mem_arr*" \
-    "c24_mem_aff*" \
+    "c24_mem_af*" \
 ]
 set snapshot_net_lines [list \
     "Figure B selected/inspected handoff nets from the elaborated design" \
@@ -457,13 +457,13 @@ if {$do_gui} {
     append_pin_pair fig_a_pin_pairs {u_snapshot/c24_mem_nsr[0]} {u_final/class_mem_nsr[0]}
     append_pin_pair fig_a_pin_pairs {u_snapshot/c24_mem_chf[0]} {u_final/class_mem_chf[0]}
     append_pin_pair fig_a_pin_pairs {u_snapshot/c24_mem_arr[0]} {u_final/class_mem_arr[0]}
-    append_pin_pair fig_a_pin_pairs {u_snapshot/c24_mem_aff[0]} {u_final/class_mem_aff[0]}
+    append_pin_pair fig_a_pin_pairs {u_snapshot/c24_mem_af[0]} {u_final/class_mem_af[0]}
     append_pin_port_pair fig_a_pin_pairs {u_final/final_valid} {final_valid}
     append_pin_port_pair fig_a_pin_pairs {u_final/final_pred_class[0]} {final_pred_class[0]}
     append_pin_port_pair fig_a_pin_pairs {u_final/final_mem_nsr[0]} {final_mem_nsr[0]}
     append_pin_port_pair fig_a_pin_pairs {u_final/final_mem_chf[0]} {final_mem_chf[0]}
     append_pin_port_pair fig_a_pin_pairs {u_final/final_mem_arr[0]} {final_mem_arr[0]}
-    append_pin_port_pair fig_a_pin_pairs {u_final/final_mem_aff[0]} {final_mem_aff[0]}
+    append_pin_port_pair fig_a_pin_pairs {u_final/final_mem_af[0]} {final_mem_af[0]}
     show_schematic -pin_pairs -name $fig_a_name $fig_a_pin_pairs
     show_schematic -pin_pairs -name $fig_a_name -regenerate $fig_a_pin_pairs
     write_schematic -force -format pdf -orientation landscape -scope all -name $fig_a_name \

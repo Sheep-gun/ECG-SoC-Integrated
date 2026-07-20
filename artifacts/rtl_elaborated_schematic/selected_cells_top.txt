@@ -1,5 +1,5 @@
 Figure A selected elaborated cells
 The top timer/control FSM is internal logic and is not represented as a fabricated module.
-SELECTED_TOP_PORTS=adc_data[11:0], final_valid, final_pred_class[1:0], final_mem_nsr/chf/arr/aff[31:0]
+SELECTED_TOP_PORTS=adc_data[11:0], final_valid, final_pred_class[1:0], final_mem_nsr/chf/arr/af[31:0]
 CELL=u_final | REF_NAME=final_membrane_layer | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>
 CELL=u_snapshot | REF_NAME=snn_ecg_3feat_top | ORIG_REF_NAME= | IS_PRIMITIVE=0 | IS_LEAF=<unsupported>

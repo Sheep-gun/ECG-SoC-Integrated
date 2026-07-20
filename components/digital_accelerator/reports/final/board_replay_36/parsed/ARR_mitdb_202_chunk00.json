@@ -15,7 +15,7 @@
       "NSR": 15,
       "CHF": 0,
       "ARR": 4,
-      "AFF": 11
+      "AF": 11
     },
     "samples": 1800000,
     "snapshot_count": 30,
@@ -44,7 +44,7 @@
     "final_mem_nsr": 15,
     "final_mem_chf": 0,
     "final_mem_arr": 4,
-    "final_mem_aff": 11,
+    "final_mem_af": 11,
     "feeder_write_count": 1800000,
     "feeder_tx_count": 1800000,
     "feeder_tlast_count": 1,

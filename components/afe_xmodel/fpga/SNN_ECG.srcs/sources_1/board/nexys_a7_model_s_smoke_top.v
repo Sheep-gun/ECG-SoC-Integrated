@@ -23,7 +23,7 @@ module nexys_a7_model_s_smoke_top (
     localparam [1:0] CLASS_NSR = 2'd0;
     localparam [1:0] CLASS_CHF = 2'd1;
     localparam [1:0] CLASS_ARR = 2'd2;
-    localparam [1:0] CLASS_AFF = 2'd3;
+    localparam [1:0] CLASS_AF = 2'd3;
 
     localparam [2:0] ST_IDLE  = 3'd0;
     localparam [2:0] ST_RESET = 3'd1;
@@ -146,13 +146,13 @@ module nexys_a7_model_s_smoke_top (
     (* rom_style = "block" *) reg [11:0] demo_nsr_rom [0:SEGMENT_TICKS-1];
     (* rom_style = "block" *) reg [11:0] demo_chf_rom [0:SEGMENT_TICKS-1];
     (* rom_style = "block" *) reg [11:0] demo_arr_rom [0:SEGMENT_TICKS-1];
-    (* rom_style = "block" *) reg [11:0] demo_aff_rom [0:SEGMENT_TICKS-1];
+    (* rom_style = "block" *) reg [11:0] demo_af_rom [0:SEGMENT_TICKS-1];
 
     initial begin
         $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_nsr.mem", demo_nsr_rom);
         $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_chf.mem", demo_chf_rom);
         $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_arr.mem", demo_arr_rom);
-        $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_aff.mem", demo_aff_rom);
+        $readmemh("<LOCAL_DIGITAL_REPOSITORY>/SNN_ECG.srcs/sources_1/board/demo_af.mem", demo_af_rom);
     end
 
     assign core_rst = rst_core_sync || (state == ST_RESET);
@@ -165,7 +165,7 @@ module nexys_a7_model_s_smoke_top (
                 CLASS_NSR: demo_sample = demo_nsr_rom[sample_idx];
                 CLASS_CHF: demo_sample = demo_chf_rom[sample_idx];
                 CLASS_ARR: demo_sample = demo_arr_rom[sample_idx];
-                default:    demo_sample = demo_aff_rom[sample_idx];
+                default:    demo_sample = demo_af_rom[sample_idx];
             endcase
         end
     endfunction
@@ -216,7 +216,7 @@ module nexys_a7_model_s_smoke_top (
                 correct_latched <= 1'b0;
                 trial_count <= trial_count + 4'd1;
             end else if (btn_pulse[1]) begin
-                expected_class <= CLASS_AFF;
+                expected_class <= CLASS_AF;
                 state <= ST_RESET;
                 reset_count <= 3'd0;
                 pred_seen <= 1'b0;

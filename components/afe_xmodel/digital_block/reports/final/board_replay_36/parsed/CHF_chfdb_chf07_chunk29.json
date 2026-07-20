@@ -10,12 +10,12 @@
     "class_id": 1,
     "ground_truth_label": "CHF",
     "expected_final_pred": 3,
-    "expected_final_pred_name": "AFF",
+    "expected_final_pred_name": "AF",
     "final_mem": {
       "NSR": 0,
       "CHF": -3,
       "ARR": 9,
-      "AFF": 34
+      "AF": 34
     },
     "samples": 1800000,
     "snapshot_count": 30,
@@ -44,7 +44,7 @@
     "final_mem_nsr": 0,
     "final_mem_chf": -3,
     "final_mem_arr": 9,
-    "final_mem_aff": 34,
+    "final_mem_af": 34,
     "feeder_write_count": 1800000,
     "feeder_tx_count": 1800000,
     "feeder_tlast_count": 1,

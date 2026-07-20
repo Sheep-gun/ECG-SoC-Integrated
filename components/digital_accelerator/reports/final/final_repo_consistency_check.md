@@ -1,7 +1,7 @@
 # Final Repository Consistency Check
 
 - Status: `PASS`
-- Final model: `structural_guarded_silent_aff_1008710`
+- Final model: `structural_guarded_silent_af_1008710`
 
 ## 확인 항목
 

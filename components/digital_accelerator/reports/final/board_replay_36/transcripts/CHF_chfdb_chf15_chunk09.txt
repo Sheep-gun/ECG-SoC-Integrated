@@ -447,7 +447,7 @@ BOARD_PROGRESS samples_received=1800000 samples_sent_to_ip=1800000
 BOARD_RESULT samples_received=1800000 samples_sent_to_ip=1800000
 BOARD_RESULT samples_accepted=1800000 samples_consumed=1800000 snapshot_count=30 decision_count=1
 BOARD_RESULT final_pred_reg=0x103 final_valid=1 done=1 final_pred=1
-BOARD_RESULT final_mem_nsr=0 final_mem_chf=25 final_mem_arr=5 final_mem_aff=0
+BOARD_RESULT final_mem_nsr=0 final_mem_chf=25 final_mem_arr=5 final_mem_af=0
 BOARD_RESULT feeder_write_count=1800000 feeder_tx_count=1800000 feeder_tlast_count=1
 BOARD_RESULT status=0x11D06 snn_error=0x0 feeder_error=0x0
 BOARD_PROFILE profile_total_lo=1916254478 profile_total_hi=4

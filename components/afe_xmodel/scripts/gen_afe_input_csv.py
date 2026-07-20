@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # AFE 최초 입력(원본 digitized ECG)을 MATLAB 친화 CSV로 변환.
-#  입력: data/mem_{NSR,CHF,ARR,AFF}.mem  (signed 12-bit hex, 1kSPS, 60s)
+#  입력: data/mem_{NSR,CHF,ARR,AF}.mem  (signed 12-bit hex, 1kSPS, 60s)
 #  출력: afe_input_dataset/afe_input_{class}.csv  (sample_index,time_s,code_signed,voltage_V)
 #        + real_ecg_100(360Hz native NSR record 100) → afe_input_record100_NSR.csv
 #  스케일: voltage_V = code_signed / 200000  (= AFE .sv 주입식과 동일)
@@ -57,7 +57,7 @@ def conv_pwl100():
 
 if __name__ == "__main__":
     summ = []
-    for cls in ["NSR", "CHF", "ARR", "AFF"]:
+    for cls in ["NSR", "CHF", "ARR", "AF"]:
         summ.append((cls,) + conv_mem(cls))
     conv_pwl100()
     print("DONE ->", OUT)

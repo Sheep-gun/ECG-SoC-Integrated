@@ -6,7 +6,7 @@ W=$HOME/ECG-SoC/sim_out/afe_val
 mkdir -p "$W/raw" "$W/emu" "$W/xmodel" "$W/pwl"
 rm -f "$W/raw"/*.mem "$W/emu"/*.adc "$W/xmodel"/*.adc "$W/pwl"/*.pwl "$W"/conc_*.adc "$W"/conc_*.log
 : > "$W/list.txt"
-for c in NSR CHF ARR AFF; do
+for c in NSR CHF ARR AF; do
   ls "$D"/*.mem | sort | awk -F/ -v c="_${c}_" '$NF ~ c' | head -9 | while read -r f; do
     cp "$f" "$W/raw/"
     basename "$f" >> "$W/list.txt"

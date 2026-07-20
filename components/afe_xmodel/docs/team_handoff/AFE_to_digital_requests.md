@@ -5,7 +5,7 @@
 ## A. 최우선 — 1.5 완전 확장을 위한 30분 windowing 정의
 1. **`fullrec_afe_30min_annotation_valid_balanced` 데이터셋 빌드 스크립트(또는 window→sample-offset 매핑 표)** 를 공유해 주세요.
    - 각 `<rec>_30min_wXXX.mem`가 원본 연속 스트림의 **어느 1,800,000 샘플 구간**인지(stride, `annotation_valid_balanced` 선택 규칙).
-   - 현재 우리는 mitdb ARR(레코드=정확히 30.1분)만 `w000=첫 1.8M 샘플`로 명확해, ARR 105/118/214 3개를 **최신 locked model에서 bit-exact 재현 완료**(final_pred·final_membrane 일치). 위 매핑이 있으면 NSR/CHF/AFF 다-윈도우 chunk까지 **36개 전부 bit-exact 확장** 가능.
+   - 현재 우리는 mitdb ARR(레코드=정확히 30.1분)만 `w000=첫 1.8M 샘플`로 명확해, ARR 105/118/214 3개를 **최신 locked model에서 bit-exact 재현 완료**(final_pred·final_membrane 일치). 위 매핑이 있으면 NSR/CHF/AF 다-윈도우 chunk까지 **36개 전부 bit-exact 확장** 가능.
 2. 그 30분 .mem이 **우리가 전달한 `fullrec_afe`(afe_emu 파이프라인)를 슬라이스한 것인지**, 아니면 별도 재생성인지 확인 부탁. 전자면 "최신 모델 성능=우리 AFE 경로 위" 링크가 bit-exact로 확정됩니다.
 
 ## B. 1.4 (emu↔XModel 정합) 대상 정렬

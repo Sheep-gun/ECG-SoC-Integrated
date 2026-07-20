@@ -80,7 +80,7 @@ MECHANISM_TERMS = [
     "박동 전 120표본", "박동 후 100표본", "첫 강한 사건 위치", "방향 전환 횟수",
     "기준선에서 떨어진 거리", "박동 전 활동 사건", "경과 80~160표본", "90~170표본",
     "여러 번 반복", "승자 횟수", "충돌 억제(guard)", "구조 보강(rescue)",
-    "반대 증거 억제(veto)", "조용한 AFF 보정(silent-AFF)", "클 때만",
+    "반대 증거 억제(veto)", "조용한 AF 보정(silent-AF)", "클 때만",
     "IDLE→CORE_RESET→SEG_START→RUN→SEG_DONE→FLUSH→COMMIT→DONE",
 ]
 
@@ -165,7 +165,7 @@ def main() -> int:
     data_principles = section(text, "2.3 데이터와 평가 원칙", 2)
     for term in ["평가 길이", "공개 데이터셋의 기록 길이가 서로 다르므로", "모든 클래스에 동일하게 적용할 수 있는 실제 기록 길이인 30분", "원천 record 단위 분할은 직접 누출을 막지만"]:
         check(f"chapter 2 data principle {term}", term in data_principles)
-    check("dataset-length causality is explicit", "사용 가능한 NSR·CHF·ARR·AFF 공개 ECG 데이터셋은 기록 길이가 서로 다르다" in text)
+    check("dataset-length causality is explicit", "사용 가능한 NSR·CHF·ARR·AF 공개 ECG 데이터셋은 기록 길이가 서로 다르다" in text)
     check("no researcher-composed cohort wording", "길이가 같은 단일 cohort가 아니라" not in text and "서로 다른 공개 데이터베이스에서 구성" not in text)
     reference_block = text.split("# 참고문헌", 1)[1].split("# 부록 A.", 1)[0]
     reference_numbers = [int(n) for n in re.findall(r"(?m)^\[(\d+)\]", reference_block)]
@@ -286,7 +286,7 @@ def main() -> int:
     check("FIG-12 final matches approved SVG master", figure12_master.is_file() and figure12_path.read_bytes() == figure12_master.read_bytes())
     check("FIG-15 final matches approved SVG master", figure15_master.is_file() and figure15_path.read_bytes() == figure15_master.read_bytes())
     figure12 = figure12_path.read_text(encoding="utf-8")
-    for label in ["Signed ECG", "ΔECG", "Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AFF"]:
+    for label in ["Signed ECG", "ΔECG", "Calculation", "Strong-Event", "Detector", "QRS LIF", "Neuron", "Rhythm Feature Path", "RR Counter", "PNN / RDM /", "Ectopic Evidence", "Morphology Feature Path", "DSCR", "RAM", "QRS MAF", "RBBB-like", "Feature Accumulation", "&amp; Class Scoring", "60s Snapshot", "30-Snapshot", "Accumulation", "30 min Final", "Membrane", "NSR", "CHF", "ARR", "AF"]:
         check(f"FIG-12 Korean label {label}", label in figure12)
     check("FIG-12 rhythm and morphology branch-merge structure", figure12.count("<polyline") >= 20 and all(label in figure12 for label in ["Rhythm Feature Path", "Morphology Feature Path", "Feature Accumulation"]))
     check("FIG-12 rhythm path preserved", figure12.index("RR Counter") < figure12.index("PNN / RDM /") < figure12.index("Feature Accumulation"))
@@ -388,7 +388,7 @@ def main() -> int:
     check("equivalence not accuracy", "classifier의 정답 표지 정확도를 100%로 만들지는 않는다" in text)
     check("dataset confounding", "원천 record 단위 분할은 직접 누출을 막지만" in text.lower())
     for term in [
-        "사용 가능한 NSR·CHF·ARR·AFF 공개 ECG 데이터셋은 기록 길이가 서로 다르다",
+        "사용 가능한 NSR·CHF·ARR·AF 공개 ECG 데이터셋은 기록 길이가 서로 다르다",
         "48개의 30분 excerpt",
         "반복이나 padding 없이 모든 클래스에 공통으로 적용할 수 있는 실제 관찰 길이",
         "특정 클래스의 신호를 반복하거나 빈 값을 채우지 않으며",

@@ -28,21 +28,21 @@ EERG means Episodic Ectopic Rescue Gate.
 
 ## Model S Test Segment Confusion
 
-|actual|NSR|CHF|ARR|AFF|
+|actual|NSR|CHF|ARR|AF|
 |---|---|---|---|---|
 |NSR|31|0|9|0|
 |CHF|0|37|3|0|
 |ARR|6|0|28|6|
-|AFF|0|3|2|35|
+|AF|0|3|2|35|
 
 ## Model S Test Record Confusion
 
-|actual|NSR|CHF|ARR|AFF|
+|actual|NSR|CHF|ARR|AF|
 |---|---|---|---|---|
 |NSR|3|0|0|0|
 |CHF|0|3|0|0|
 |ARR|0|0|8|1|
-|AFF|0|0|0|4|
+|AF|0|0|0|4|
 
 ## ARR Subtype Effect
 

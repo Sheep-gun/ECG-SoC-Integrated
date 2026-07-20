@@ -5,7 +5,7 @@ W = os.path.join(os.path.dirname(__file__), "..", "sim_out", "multiclass")
 VALID = 2000      # t>=2s (HPF 정착 후)
 REFRACT = 200     # R-peak 최소 간격 200ms(200샘플)
 print(f"{'CLS':4} {'코드범위':>12} {'span':>5} {'clip':>5} {'beats':>6} {'RR평균(ms)':>10} {'RR표준편차':>10} {'RR_CV%':>7}")
-for cls in ["NSR", "ARR", "AFF", "CHF"]:
+for cls in ["NSR", "ARR", "AF", "CHF"]:
     p = os.path.join(W, f"adc_{cls}.txt")
     if not os.path.exists(p):
         print(f"{cls}: 파일 없음"); continue
@@ -36,4 +36,4 @@ for cls in ["NSR", "ARR", "AFF", "CHF"]:
         print(f"{cls:4} {mn:5d}~{mx:<5d} {mx-mn:5d} {clip:5d} {len(peaks):6d} {rmean:10.1f} {rstd:10.1f} {cv:7.1f}")
     else:
         print(f"{cls:4} {mn:5d}~{mx:<5d} {mx-mn:5d} {clip:5d} {len(peaks):6d}   (RR 산출 불가)")
-print("\n해석: NSR/CHF=규칙적(낮은 CV), AFF=불규칙(높은 CV), ARR=중간/이상박동")
+print("\n해석: NSR/CHF=규칙적(낮은 CV), AF=불규칙(높은 CV), ARR=중간/이상박동")

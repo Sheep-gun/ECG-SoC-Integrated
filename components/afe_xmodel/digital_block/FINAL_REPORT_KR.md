@@ -2,9 +2,9 @@
 
 ## 1. Abstract
 
-본 프로젝트는 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit stream을 생성한 뒤, 이를 SNN-inspired ECG Classification Accelerator IP Core에 입력하여 NSR, CHF, ARR, AFF 4-class 장시간 ECG classification을 수행하는 FPGA/VLSI engineering prototype이다.
+본 프로젝트는 공개 digitized ECG record를 analog-equivalent `vin`으로 재구성하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit stream을 생성한 뒤, 이를 SNN-inspired ECG Classification Accelerator IP Core에 입력하여 NSR, CHF, ARR, AF 4-class 장시간 ECG classification을 수행하는 FPGA/VLSI engineering prototype이다.
 
-최종 모델은 `structural_guarded_silent_aff_1008710`이다. Snapshot Readout은 고정하고, 30분 Final Membrane Readout만 strict record-wise train/validation 기준으로 structural-grid search 후 lock했다. Locked final_test는 모델 선택, 파라미터 탐색, 외부 논의 context에 사용하지 않았고, lock 이후 1회만 평가했다.
+최종 모델은 `structural_guarded_silent_af_1008710`이다. Snapshot Readout은 고정하고, 30분 Final Membrane Readout만 strict record-wise train/validation 기준으로 structural-grid search 후 lock했다. Locked final_test는 모델 선택, 파라미터 탐색, 외부 논의 context에 사용하지 않았고, lock 이후 1회만 평가했다.
 
 최종 성능은 final_test 30분 chunk 기준 29/36 = 80.56%, record-majority 기준 16/19 = 84.21%이다. RTL/XSim bit-accurate 비교, Vivado implementation, AXI/IP-XACT packaging, Vitis/MicroBlaze 36-case full-record board replay까지 engineering validation을 수행했다.
 
@@ -12,7 +12,7 @@
 
 ## 2. Introduction
 
-ECG rhythm classification은 단일 sample이나 짧은 beat 하나만으로 안정적으로 결정하기 어렵다. NSR, CHF, ARR, AFF는 rhythm regularity, beat-to-beat variability, QRS morphology, 장시간 evidence 누적이 함께 반영되어야 한다.
+ECG rhythm classification은 단일 sample이나 짧은 beat 하나만으로 안정적으로 결정하기 어렵다. NSR, CHF, ARR, AF는 rhythm regularity, beat-to-beat variability, QRS morphology, 장시간 evidence 누적이 함께 반영되어야 한다.
 
 일반적인 dense CNN/RNN/MLP classifier를 FPGA에 그대로 올리면 multiplier, DSP, BRAM, weight memory, activation buffer가 설계 병목이 된다. 본 프로젝트는 ECG domain knowledge를 event/spike evidence로 바꾸고, counter, comparator, signed accumulator, WTA 기반의 integer-only datapath로 장시간 classification을 수행하도록 설계했다.
 
@@ -29,13 +29,13 @@ flowchart LR
     C --> D["signed 12-bit ECG stream"]
     D --> E["60 s Snapshot Readout"]
     E --> F["30 min Final Membrane Readout"]
-    F --> G["NSR / CHF / ARR / AFF"]
+    F --> G["NSR / CHF / ARR / AF"]
     F --> H["RTL / XSim / Vivado / IP-XACT / Vitis"]
 ```
 
 전체 flow는 공개 digitized ECG record에서 시작한다. 입력 code를 `vin_v = code / 200000` 기준의 voltage-equivalent waveform으로 해석하고, AFE+ADC XMODEL을 통과시켜 signed 12-bit `.mem` stream으로 변환한다.
 
-이 stream은 RTL/IP에 입력되어 60초 단위 Snapshot Readout을 만든다. 이후 30개 snapshot evidence를 Final Membrane Readout이 누적하고, class별 final membrane을 WTA로 비교하여 NSR/CHF/ARR/AFF 중 하나를 출력한다.
+이 stream은 RTL/IP에 입력되어 60초 단위 Snapshot Readout을 만든다. 이후 30개 snapshot evidence를 Final Membrane Readout이 누적하고, class별 final membrane을 WTA로 비교하여 NSR/CHF/ARR/AF 중 하나를 출력한다.
 
 ## 4. AFE+ADC XMODEL Input Generation
 
@@ -117,7 +117,7 @@ PNN의 핵심은 현재 RR의 winner neuron이 다음 RR을 평가할 predictor 
 | `pnn_match_spike` | rhythm이 직전 winner가 만든 예측을 지킴 |
 | `pnn_mismatch_spike` | rhythm이 직전 winner 예측에서 벗어남 |
 | match 반복 | 비교적 규칙적인 rhythm evidence |
-| mismatch 반복 | ARR/AFF 계열 irregular rhythm evidence |
+| mismatch 반복 | ARR/AF 계열 irregular rhythm evidence |
 
 ### 5.3 RDM Variability Neuron
 
@@ -201,14 +201,14 @@ wide_qrs_spike와 terminal_delay_spike가 함께 만족하면 rbbb_like_beat_spi
 
 ### 5.9 Class Score Neurons
 
-각 feature block의 spike와 count는 `class_score_neurons.v`로 들어간다. 이 block은 NSR, CHF, ARR, AFF class membrane을 유지하고, feature evidence마다 fixed signed integer weight를 더하거나 뺀다.
+각 feature block의 spike와 count는 `class_score_neurons.v`로 들어간다. 이 block은 NSR, CHF, ARR, AF class membrane을 유지하고, feature evidence마다 fixed signed integer weight를 더하거나 뺀다.
 
 ```text
 feature evidence 발생:
     class_mem[NSR] += W_feature_to_NSR
     class_mem[CHF] += W_feature_to_CHF
     class_mem[ARR] += W_feature_to_ARR
-    class_mem[AFF] += W_feature_to_AFF
+    class_mem[AF] += W_feature_to_AF
 
 60초 segment_done:
     snapshot_pred = WTA(class_mem)
@@ -218,12 +218,12 @@ Positive weight는 해당 class에 excitatory evidence를 주고, negative weigh
 
 ## 6. Final Membrane Readout
 
-Final Membrane Readout은 30개 snapshot의 WTA output과 evidence counter를 class별 signed membrane에 누적한다. 단순 majority vote가 아니라, snapshot winner, guarded evidence, silent AFF guard, rescue/boost 조건이 locked 구조 안에서 class membrane update로 반영된다.
+Final Membrane Readout은 30개 snapshot의 WTA output과 evidence counter를 class별 signed membrane에 누적한다. 단순 majority vote가 아니라, snapshot winner, guarded evidence, silent AF guard, rescue/boost 조건이 locked 구조 안에서 class membrane update로 반영된다.
 
 최종 locked candidate는 다음과 같다.
 
 ```text
-structural_guarded_silent_aff_1008710
+structural_guarded_silent_af_1008710
 ```
 
 이 candidate는 train/validation만 사용한 structural-grid search 후 lock되었다. Lock 이후 final_test 결과를 보고 구조나 파라미터를 수정하지 않았다.
@@ -237,7 +237,7 @@ structural_guarded_silent_aff_1008710
 | 항목 | 값 |
 |---|---|
 | Split 단위 | `source_record_id` |
-| Final model | `structural_guarded_silent_aff_1008710` |
+| Final model | `structural_guarded_silent_af_1008710` |
 | final_test used for selection | false |
 | final_test used for parameter search | false |
 | final_test used for ChatGPT context | false |
@@ -259,7 +259,7 @@ Validation 32/32 = 100.00%는 model-selection 성능이다. 최종 성능 주장
 
 Class별 recall은 다음과 같다.
 
-| 평가 단위 | NSR recall | CHF recall | ARR recall | AFF recall |
+| 평가 단위 | NSR recall | CHF recall | ARR recall | AF recall |
 |---|---:|---:|---:|---:|
 | Final test 30분 chunk | 100.00% | 66.67% | 77.78% | 77.78% |
 | Final test record-majority | 100.00% | 75.00% | 77.78% | 100.00% |

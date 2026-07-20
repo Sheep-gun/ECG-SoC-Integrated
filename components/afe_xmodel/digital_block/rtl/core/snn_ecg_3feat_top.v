@@ -314,7 +314,7 @@ module snn_ecg_3feat_top #(
 
     parameter W_ETMC_ARR = 0,
 
-    parameter W_ETMC_AFF = 0,
+    parameter W_ETMC_AF = 0,
 
     parameter W_RCD_NSR = 0,
 
@@ -322,7 +322,7 @@ module snn_ecg_3feat_top #(
 
     parameter W_RCD_ARR = 0,
 
-    parameter W_RCD_AFF = 0,
+    parameter W_RCD_AF = 0,
 
     parameter W_RCD2_NSR = 0,
 
@@ -330,7 +330,7 @@ module snn_ecg_3feat_top #(
 
     parameter W_RCD2_ARR = 0,
 
-    parameter W_RCD2_AFF = 0,
+    parameter W_RCD2_AF = 0,
 
     parameter W_IPB_PERSIST_NSR = 0,
 
@@ -338,7 +338,7 @@ module snn_ecg_3feat_top #(
 
     parameter W_IPB_PERSIST_ARR = 0,
 
-    parameter W_IPB_PERSIST_AFF = 0,
+    parameter W_IPB_PERSIST_AF = 0,
 
     parameter W_IPB_EPISODIC_NSR = 0,
 
@@ -346,7 +346,7 @@ module snn_ecg_3feat_top #(
 
     parameter W_IPB_EPISODIC_ARR = 0,
 
-    parameter W_IPB_EPISODIC_AFF = 0,
+    parameter W_IPB_EPISODIC_AF = 0,
 
     parameter W_IPB_BURST_NSR = 0,
 
@@ -354,7 +354,7 @@ module snn_ecg_3feat_top #(
 
     parameter W_IPB_BURST_ARR = 0,
 
-    parameter W_IPB_BURST_AFF = 0,
+    parameter W_IPB_BURST_AF = 0,
 
     parameter BIAS_NSR = -5213,
 
@@ -362,7 +362,7 @@ module snn_ecg_3feat_top #(
 
     parameter BIAS_ARR = -7298,
 
-    parameter BIAS_AFF = 32767
+    parameter BIAS_AF = 32767
 
 )(
 
@@ -668,7 +668,7 @@ module snn_ecg_3feat_top #(
 
     output signed [31:0] score_arr_before_rbbb_late,
 
-    output signed [31:0] score_aff_before_rbbb_late,
+    output signed [31:0] score_af_before_rbbb_late,
 
     output signed [31:0] score_nsr_before_rbbb_delay,
 
@@ -676,7 +676,7 @@ module snn_ecg_3feat_top #(
 
     output signed [31:0] score_arr_before_rbbb_delay,
 
-    output signed [31:0] score_aff_before_rbbb_delay,
+    output signed [31:0] score_af_before_rbbb_delay,
 
     output signed [63:0] c24_mem_nsr,
 
@@ -684,7 +684,7 @@ module snn_ecg_3feat_top #(
 
     output signed [63:0] c24_mem_arr,
 
-    output signed [63:0] c24_mem_aff,
+    output signed [63:0] c24_mem_af,
 
     output [1:0] pred_class,
 
@@ -755,7 +755,7 @@ module snn_ecg_3feat_top #(
 
     wire signed [31:0] score_arr;
 
-    wire signed [31:0] score_aff;
+    wire signed [31:0] score_af;
 
     wire qrs_maf_valid_i;
 
@@ -1676,7 +1676,7 @@ module snn_ecg_3feat_top #(
 
         .BIAS_ARR(BIAS_ARR),
 
-        .BIAS_AFF(BIAS_AFF),
+        .BIAS_AF(BIAS_AF),
 
         .W_ETMC_NSR(W_ETMC_NSR),
 
@@ -1684,7 +1684,7 @@ module snn_ecg_3feat_top #(
 
         .W_ETMC_ARR(W_ETMC_ARR),
 
-        .W_ETMC_AFF(W_ETMC_AFF),
+        .W_ETMC_AF(W_ETMC_AF),
 
         .W_RCD_NSR(W_RCD_NSR),
 
@@ -1692,7 +1692,7 @@ module snn_ecg_3feat_top #(
 
         .W_RCD_ARR(W_RCD_ARR),
 
-        .W_RCD_AFF(W_RCD_AFF),
+        .W_RCD_AF(W_RCD_AF),
 
         .W_RCD2_NSR(W_RCD2_NSR),
 
@@ -1700,7 +1700,7 @@ module snn_ecg_3feat_top #(
 
         .W_RCD2_ARR(W_RCD2_ARR),
 
-        .W_RCD2_AFF(W_RCD2_AFF),
+        .W_RCD2_AF(W_RCD2_AF),
 
         .W_IPB_PERSIST_NSR(W_IPB_PERSIST_NSR),
 
@@ -1708,7 +1708,7 @@ module snn_ecg_3feat_top #(
 
         .W_IPB_PERSIST_ARR(W_IPB_PERSIST_ARR),
 
-        .W_IPB_PERSIST_AFF(W_IPB_PERSIST_AFF),
+        .W_IPB_PERSIST_AF(W_IPB_PERSIST_AF),
 
         .W_IPB_EPISODIC_NSR(W_IPB_EPISODIC_NSR),
 
@@ -1716,7 +1716,7 @@ module snn_ecg_3feat_top #(
 
         .W_IPB_EPISODIC_ARR(W_IPB_EPISODIC_ARR),
 
-        .W_IPB_EPISODIC_AFF(W_IPB_EPISODIC_AFF),
+        .W_IPB_EPISODIC_AF(W_IPB_EPISODIC_AF),
 
         .W_IPB_BURST_NSR(W_IPB_BURST_NSR),
 
@@ -1724,7 +1724,7 @@ module snn_ecg_3feat_top #(
 
         .W_IPB_BURST_ARR(W_IPB_BURST_ARR),
 
-        .W_IPB_BURST_AFF(W_IPB_BURST_AFF),
+        .W_IPB_BURST_AF(W_IPB_BURST_AF),
 
         .ENABLE_NSR_NORMALITY_GATE(ENABLE_NSR_NORMALITY_GATE),
 
@@ -1838,7 +1838,7 @@ module snn_ecg_3feat_top #(
 
         .score_arr(score_arr),
 
-        .score_aff(score_aff),
+        .score_af(score_af),
 
         .score_nsr_before_suppress(score_nsr_before_suppress),
 
@@ -1848,7 +1848,7 @@ module snn_ecg_3feat_top #(
 
         .score_arr_before_rbbb_late(score_arr_before_rbbb_late),
 
-        .score_aff_before_rbbb_late(score_aff_before_rbbb_late),
+        .score_af_before_rbbb_late(score_af_before_rbbb_late),
 
         .score_nsr_before_rbbb_delay(score_nsr_before_rbbb_delay),
 
@@ -1856,7 +1856,7 @@ module snn_ecg_3feat_top #(
 
         .score_arr_before_rbbb_delay(score_arr_before_rbbb_delay),
 
-        .score_aff_before_rbbb_delay(score_aff_before_rbbb_delay),
+        .score_af_before_rbbb_delay(score_af_before_rbbb_delay),
 
         .nsr_suppress_applied(nsr_suppress_applied),
 
@@ -1870,7 +1870,7 @@ module snn_ecg_3feat_top #(
 
         .c24_mem_arr(c24_mem_arr),
 
-        .c24_mem_aff(c24_mem_aff),
+        .c24_mem_af(c24_mem_af),
 
         .pred_class(pred_class),
 

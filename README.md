@@ -12,7 +12,7 @@
 
 ## 1. 프로젝트 정체성
 
-본 프로젝트는 공개 ECG로부터 Holter형 장시간 분석을 수행하기 위해 60초 Snapshot Readout과 30분 Final Membrane Readout을 결합한 다중 시간축 SNN-inspired 분류 구조를 제안하고, 이를 1 kSPS signed 12-bit streaming RTL accelerator IP로 구현·검증한 반도체 IP 공학 연구이다. 출력은 NSR·CHF·ARR·AFF 네 public-dataset class이며, 임상 진단이나 상용 wearable과의 성능 비교를 주장하지 않는다.
+본 프로젝트는 공개 ECG로부터 Holter형 장시간 분석을 수행하기 위해 60초 Snapshot Readout과 30분 Final Membrane Readout을 결합한 다중 시간축 SNN-inspired 분류 구조를 제안하고, 이를 1 kSPS signed 12-bit streaming RTL accelerator IP로 구현·검증한 반도체 IP 공학 연구이다. 출력은 NSR·CHF·ARR·AF 네 public-dataset class이며, 임상 진단이나 상용 wearable과의 성능 비교를 주장하지 않는다.
 
 소비자 ECG 배경은 특정 제품 문서의 사례이며 모든 wearable의 공통 기능으로 일반화하지 않는다.
 
@@ -69,7 +69,7 @@ PhysioNet raw waveform은 public Git에 번들하지 않는다. 고정 version 1
 
 ## 5. 한계와 claim 경계
 
-- NSR·CHF·ARR·AFF가 서로 다른 source DB와 결합되어 database–class confounding이 남는다. Strict source-record-wise split은 직접 record leakage를 막지만 이 confounding을 해소하지 않는다.
+- NSR·CHF·ARR·AF가 서로 다른 source DB와 결합되어 database–class confounding이 남는다. Strict source-record-wise split은 직접 record leakage를 막지만 이 confounding을 해소하지 않는다.
 - MATLAB/LTspice/XMODEL은 공칭·schematic·behavioral model 기반 AFE/ADC 검증이며 physical AFE PCB, ADC silicon, transistor/post-layout, live-electrode 또는 fabricated SoC의 증거가 아니다.
 - Board 36/36은 XSim 기준 출력에 대한 기능 등가성이고 classification accuracy는 29/36이다.
 - 본 결과는 임상적으로 검증된 진단, 네 질환의 확진, 또는 상용 wearable 대비 우월성을 뜻하지 않는다.

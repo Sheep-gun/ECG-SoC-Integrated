@@ -8,7 +8,7 @@ import sys, csv
 ECG = _ROOT + ""
 CASES = ECG + "/digital_block/reports/final/board_replay_36_cases.csv"
 PMAP = ECG + "/sim_out/chunks_pert/pert_map.csv"
-LBL = ["NSR", "CHF", "ARR", "AFF"]
+LBL = ["NSR", "CHF", "ARR", "AF"]
 # clean golden: src_case_id -> (pred, mem)  (board_replay expected)
 clean = {}
 for r in csv.DictReader(open(CASES)):

@@ -3,7 +3,7 @@
   "project_identity": "Holter-oriented long-window, multi-timescale, SNN-inspired ECG four-class classification accelerator IP",
   "metrics": {
     "locked_model_id": {
-      "value": "structural_guarded_silent_aff_1008710",
+      "value": "structural_guarded_silent_af_1008710",
       "unit": "identifier",
       "scope": "locked digital classifier",
       "evidence_type": "JSON",
@@ -329,7 +329,7 @@
     "matlab_representative_clipping_ratio": {
       "value": 0.0,
       "unit": "percent",
-      "scope": "NSR/CHF/ARR/AFF representative 60-second nominal MATLAB records",
+      "scope": "NSR/CHF/ARR/AF representative 60-second nominal MATLAB records",
       "evidence_type": "CSV aggregate",
       "evidence_path": "components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv",
       "upstream_repository": "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation",
@@ -341,7 +341,7 @@
     "matlab_minimum_representative_headroom": {
       "value": 1.019633440086,
       "unit": "V",
-      "scope": "minimum across NSR/CHF/ARR/AFF representative nominal records",
+      "scope": "minimum across NSR/CHF/ARR/AF representative nominal records",
       "evidence_type": "CSV aggregate",
       "evidence_path": "components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv",
       "upstream_repository": "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation",

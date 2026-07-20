@@ -6,7 +6,7 @@
 
 ## 프로젝트 개요
 
-공개 digitized ECG record를 **analog-equivalent 신호로 재구성**해 팀 설계 **AFE+ADC XMODEL**에 통과시켜 **1 kSPS signed 12-bit stream**을 만들고, 이를 **SNN-inspired 가속기 IP Core**에 입력하여 **NSR/CHF/ARR/AFF 4클래스**를 분류하는 FPGA/VLSI engineering prototype입니다.
+공개 digitized ECG record를 **analog-equivalent 신호로 재구성**해 팀 설계 **AFE+ADC XMODEL**에 통과시켜 **1 kSPS signed 12-bit stream**을 만들고, 이를 **SNN-inspired 가속기 IP Core**에 입력하여 **NSR/CHF/ARR/AF 4클래스**를 분류하는 FPGA/VLSI engineering prototype입니다.
 
 LTspice 회로 설계 + XModel(Questa) 통합 검증 + FPGA(Nexys A7) board replay로 검증한 **model-based mixed-signal-to-digital ECG accelerator**입니다. (물리 전극 실측/AFE PCB/CMOS layout·clinical 검증은 범위 밖 — 아래 한계 참조)
 
@@ -23,7 +23,7 @@ LTspice 회로 설계 + XModel(Questa) 통합 검증 + FPGA(Nexys A7) board repl
   → 1 kSPS signed 12-bit stream (.mem)
   → 60초 Snapshot SNN Readout   (event / rhythm / morphology / variability evidence)
   → 30분 Final Membrane Readout (30 snapshot signed 누적, WTA)
-  → NSR / CHF / ARR / AFF
+  → NSR / CHF / ARR / AF
 ```
 
 ## 분류 대상 — 4클래스 ECG
@@ -33,7 +33,7 @@ LTspice 회로 설계 + XModel(Questa) 통합 검증 + FPGA(Nexys A7) board repl
 | NSR | 정상 심전도 | 규칙적 RR, 정상 QRS | nsrdb (~24h) |
 | CHF | 울혈성 심부전 | QRS 폭 증가, 전압 감소 | chfdb (~20h) |
 | ARR | 부정맥 계열 | 조기수축, 이상 박동 | mitdb (30분 excerpt) |
-| AFF | 심방세동 | RR 완전 불규칙 | afdb (~10h) |
+| AF | 심방세동 | RR 완전 불규칙 | afdb (~10h) |
 
 ---
 
@@ -77,7 +77,7 @@ LTspice 회로 설계 + XModel(Questa) 통합 검증 + FPGA(Nexys A7) board repl
 - **60초 Snapshot Readout**: QRS LIF beat 검출 + feature 뉴런(rhythm pNNx, RR variability, morphology, R-peak amplitude, ectopic pair, terminal delay)이 event·counter evidence 생성
 - **30분 Final Membrane Readout**: 30개 snapshot을 class별 signed membrane에 누적(guarded/silent/rescue 로직) → WTA로 최종 class
 - 정수 datapath (counter/comparator/signed accumulate, **DSP·BRAM 0**)
-- **최종모델** `structural_guarded_silent_aff_1008710` — final test(30분 chunk) **80.56%**, record-majority 84.21%
+- **최종모델** `structural_guarded_silent_af_1008710` — final test(30분 chunk) **80.56%**, record-majority 84.21%
 - **HW**: 9,719 LUT / 5,038 FF / 0 DSP (pure RTL) · board replay **36/36 exact**
 
 ---

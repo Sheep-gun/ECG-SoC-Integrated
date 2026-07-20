@@ -27,4 +27,4 @@ afe_v=[afe[i] for i in range(2000,9900) if i in afe]
 print("=== ARR 기울기(delta) 비교: 유효구간 ===")
 stats(raw_v, "raw .mem")
 stats(afe_v, "AFE 출력")
-print("\nAFE의 max|delta|·strong 이벤트가 raw보다 작으면 → AFE 대역제한이 QRS 기울기를 무디게 함(=ARR→AFF 플립 원인)")
+print("\nAFE의 max|delta|·strong 이벤트가 raw보다 작으면 → AFE 대역제한이 QRS 기울기를 무디게 함(=ARR→AF 플립 원인)")

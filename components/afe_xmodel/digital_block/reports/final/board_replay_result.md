@@ -9,7 +9,7 @@ Vitis/MicroBlaze full-record replay flow는 locked model 기준으로 다시 빌
 | `locked_nsr_case117` | NSR | 1,800,000 | 30 | 0 | 29/0/1/0 | PASS |
 | `locked_chf_case91` | CHF | 1,800,000 | 30 | 1 | 0/29/0/1 | PASS |
 | `locked_arr_case45` | ARR | 1,800,000 | 30 | 2 | 7/1/21/1 | PASS |
-| `locked_aff_case16` | AFF | 1,800,000 | 30 | 3 | 0/0/0/30 | PASS |
+| `locked_af_case16` | AF | 1,800,000 | 30 | 3 | 0/0/0/30 | PASS |
 
 4개 case 모두 full-top XSim expected와 `final_pred`, `final_mem[4]`가 일치했다.
 

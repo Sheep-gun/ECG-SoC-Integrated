@@ -49,7 +49,7 @@
 <path d="M240 100h10" />
 <text x="248" y="99" fill="black" stroke-width="0" font-size="10" text-anchor="end">adc_data[11:0]</text>
 <path d="M320 80h-10" />
-<text x="312" y="79" fill="black" stroke-width="0" font-size="10">c24_mem_aff[63:0]</text>
+<text x="312" y="79" fill="black" stroke-width="0" font-size="10">c24_mem_af[63:0]</text>
 <path d="M320 100h-10" />
 <text x="312" y="99" fill="black" stroke-width="0" font-size="10">c24_mem_arr[63:0]</text>
 <path d="M320 120h-10" />
@@ -79,7 +79,7 @@
 </g>
 <g stroke="black" stroke-width="3">
 <path d="M560 80h10" />
-<text x="568" y="79" fill="black" stroke-width="0" font-size="10" text-anchor="end">class_mem_aff[63:0]</text>
+<text x="568" y="79" fill="black" stroke-width="0" font-size="10" text-anchor="end">class_mem_af[63:0]</text>
 <path d="M560 100h10" />
 <text x="568" y="99" fill="black" stroke-width="0" font-size="10" text-anchor="end">class_mem_arr[63:0]</text>
 <path d="M560 120h10" />
@@ -87,7 +87,7 @@
 <path d="M560 140h10" />
 <text x="568" y="139" fill="black" stroke-width="0" font-size="10" text-anchor="end">class_mem_nsr[63:0]</text>
 <path d="M640 60h-10" />
-<text x="632" y="59" fill="black" stroke-width="0" font-size="10">final_mem_aff[31:0]</text>
+<text x="632" y="59" fill="black" stroke-width="0" font-size="10">final_mem_af[31:0]</text>
 <path d="M640 80h-10" />
 <text x="632" y="79" fill="black" stroke-width="0" font-size="10">final_mem_arr[31:0]</text>
 <path d="M640 100h-10" />
@@ -111,7 +111,7 @@
 <path d="M620 120h10" />
 <path d="M620 140h10" />
 <path d="M830 30v-7h14l7 7l-7 7h-14z" />
-<text x="855" y="30" fill="black" stroke-width="0" dy="3.85">final_mem_aff[31:0]</text>
+<text x="855" y="30" fill="black" stroke-width="0" dy="3.85">final_mem_af[31:0]</text>
 <path d="M830 60v-7h14l7 7l-7 7h-14z" />
 <text x="855" y="60" fill="black" stroke-width="0" dy="3.85">final_mem_arr[31:0]</text>
 <path d="M830 90v-7h14l7 7l-7 7h-14z" />

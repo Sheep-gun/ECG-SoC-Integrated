@@ -19,9 +19,9 @@ CLASS_SEGMENT_MAP = {
     "ARR": "ARR",
     "MITDB": "ARR",
     "MIT-BIH": "ARR",
-    "AFF": "AFF",
-    "AFDB": "AFF",
-    "AF": "AFF",
+    "AF": "AF",
+    "AFDB": "AF",
+    "AF": "AF",
 }
 
 GENERATED_NAMES = {
@@ -214,9 +214,9 @@ def run_batch(args: argparse.Namespace) -> dict[str, object]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Batch-build XMODEL ECG stimulus artifacts by class.")
-    parser.add_argument("--input-root", required=True, help="Root containing NSR/CHF/ARR/AFF or nsrdb/chfdb/mitdb/afdb data.")
+    parser.add_argument("--input-root", required=True, help="Root containing NSR/CHF/ARR/AF or nsrdb/chfdb/mitdb/afdb data.")
     parser.add_argument("--output-root", default=str(Path("build") / "xmodel_stimulus"), help="Output root.")
-    parser.add_argument("--classes", default="NSR,CHF,ARR,AFF", help="Comma-separated class filter.")
+    parser.add_argument("--classes", default="NSR,CHF,ARR,AF", help="Comma-separated class filter.")
     parser.add_argument("--channel", default="0")
     parser.add_argument("--value-col", default=None)
     parser.add_argument("--time-col", default=None)

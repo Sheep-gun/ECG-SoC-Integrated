@@ -20,7 +20,7 @@ Persistent state는 다음과 같이 유한하다.
 - DSCR/R-peak/ectopic/QRS MAF/RBBB-like morphology state
 - Snapshot 구간의 event/evidence counters와 class-score state
 - 네 class의 Final Membrane vote/evidence accumulator
-- guard/rescue/veto/silent-AFF 및 WTA pipeline state
+- guard/rescue/veto/silent-AF 및 WTA pipeline state
 - top controller, sample counter, Snapshot index와 interface state
 
 각 signal/group, width, reset, update 조건은 `tables/streaming_state_inventory.csv`에 연결했다. 대형 parameterized `class_score_neurons`처럼 단일 total width를 안전하게 산출하지 않은 항목은 `UNRESOLVED_FROM_STATIC_AUDIT`로 표시한다.

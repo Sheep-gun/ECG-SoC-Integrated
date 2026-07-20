@@ -28,5 +28,5 @@ for line in open(LIST):
 with open(OUT, "w", newline="") as o:
     w = csv.DictWriter(o, fieldnames=cols); w.writeheader(); w.writerows(rows)
 print(f"{len(rows)} segments -> {OUT}")
-for c in ["NSR", "CHF", "ARR", "AFF"]:
+for c in ["NSR", "CHF", "ARR", "AF"]:
     print(f"  {c}: {sum(1 for r in rows if r['class_label']==c)}")

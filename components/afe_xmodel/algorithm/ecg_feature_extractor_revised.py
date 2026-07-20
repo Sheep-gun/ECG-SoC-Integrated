@@ -15,7 +15,7 @@ SAVE_FEATURE_FILENAME = "ecg_extended_features_revised.csv"
 SAVE_SUMMARY_FILENAME = "ecg_feature_summary_by_class.csv"
 
 CLASS_MAPPING = {
-    "afdb": "AFF",
+    "afdb": "AF",
     "chfdb": "CHF",
     "mitdb": "ARR",
     "nsrdb": "NSR",
@@ -423,7 +423,7 @@ def default_feature_dict() -> Dict[str, float]:
         "RMSSD": np.nan,
         "pNN50": np.nan,
 
-        # RR 변동성/이상치: AFF/ARR 구분에 중요
+        # RR 변동성/이상치: AF/ARR 구분에 중요
         "HR_Mean": np.nan,
         "HR_Std": np.nan,
         "RR_Median": np.nan,
@@ -548,7 +548,7 @@ def extract_extended_features(ecg_signal: np.ndarray, fs: float, original_fs: Op
 
         rr_median = np.median(rr_ms)
         if rr_median > 0:
-            # 중앙 RR 대비 ±20% 이상 벗어난 interval 비율: ARR/AFF 후보 특징
+            # 중앙 RR 대비 ±20% 이상 벗어난 interval 비율: ARR/AF 후보 특징
             outlier_ratio = np.mean(np.abs(rr_ms - rr_median) > 0.2 * rr_median)
             feature_dict["RR_OutlierRatio_20pct"] = round(float(outlier_ratio), 4)
 

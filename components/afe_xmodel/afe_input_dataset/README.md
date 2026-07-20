@@ -16,7 +16,7 @@ MATLAB에서 AFE를 모델링하려면 이 신호를 입력으로 넣고 아래 
 | 정상(NSR) | `afe_input_NSR.csv` | `afe_input_NSR.pwl` | 60000 | −98 ~ 424 | −0.49 ~ 2.12 mV |
 | 울혈성심부전(CHF) | `afe_input_CHF.csv` | `afe_input_CHF.pwl` | 60000 | −318 ~ 626 | −1.59 ~ 3.13 mV |
 | 부정맥(ARR) | `afe_input_ARR.csv` | `afe_input_ARR.pwl` | 60000 | −604 ~ 502 | −3.02 ~ 2.51 mV |
-| 심방세동(AFF) | `afe_input_AFF.csv` | `afe_input_AFF.pwl` | 60000 | −389 ~ 368 | −1.95 ~ 1.84 mV |
+| 심방세동(AF) | `afe_input_AF.csv` | `afe_input_AF.pwl` | 60000 | −389 ~ 368 | −1.95 ~ 1.84 mV |
 | MIT-BIH rec100(NSR) | `afe_input_record100_NSR.csv` | `afe_input_record100_NSR.pwl` | 3600 | (360Hz native) | XModel 단일-레코드 주입본 |
 
 > `.pwl`은 XModel AFE 테스트벤치에 실제 주입하는 자극 파일(`data/ecg_*.pwl`과 동일 생성경로).
@@ -73,7 +73,7 @@ code = min(max(floor((y+1.65)/3.3*4095),0),4095) - 2048;  % ADC signed
 > 참고: 위 iirnotch/butter는 근사이고, 우리 XModel AFE는 능동 Twin-T·부트스트랩까지 반영. 정밀 비교는 `scripts/afe_emu.py`(bilinear 계수) 기준으로.
 
 ## 6. 출처 / 전체 데이터셋
-- 이 4개는 **4클래스 대표 레코드**(NSR 16539 · CHF chf05 · ARR 105 · AFF 04015 계열), mixed-signal 통합검증에 사용한 것과 동일.
+- 이 4개는 **4클래스 대표 레코드**(NSR 16539 · CHF chf05 · ARR 105 · AF 04015 계열), mixed-signal 통합검증에 사용한 것과 동일.
 - 원본 `.mem`: `data/mem_{class}.mem`, 주입 PWL: `data/ecg_{class}.pwl` (repo에는 `.gitignore`로 제외 — 대용량).
 - **전체 record별 dataset**(train/val/test 수백 세그)은 `datasets/strict60_large/raw/`에 있으나 gitignore(1.6G). 필요하면 말해줘 — 같은 포맷으로 원하는 만큼 뽑아줄게.
 - 생성 스크립트: `scripts/gen_afe_input_csv.py`.

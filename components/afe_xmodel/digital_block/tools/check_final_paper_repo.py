@@ -14,7 +14,7 @@ from PIL import Image
 
 
 REPO = Path(__file__).resolve().parents[1]
-FINAL_MODEL = "structural_guarded_silent_aff_1008710"
+FINAL_MODEL = "structural_guarded_silent_af_1008710"
 
 EXPECTED = {
     ("train", "correct"): 61,
@@ -36,8 +36,8 @@ EXPECTED = {
 }
 
 EXPECTED_RECALL = {
-    "final_test_chunk": {"NSR": 100.0, "CHF": 66.67, "ARR": 77.78, "AFF": 77.78},
-    "final_test_record_majority": {"NSR": 100.0, "CHF": 75.0, "ARR": 77.78, "AFF": 100.0},
+    "final_test_chunk": {"NSR": 100.0, "CHF": 66.67, "ARR": 77.78, "AF": 77.78},
+    "final_test_record_majority": {"NSR": 100.0, "CHF": 75.0, "ARR": 77.78, "AF": 100.0},
 }
 
 REQUIRED_FILES = [
@@ -161,7 +161,7 @@ BOARD_CASES = [
     "locked_nsr_case117",
     "locked_chf_case91",
     "locked_arr_case45",
-    "locked_aff_case16",
+    "locked_af_case16",
 ]
 
 

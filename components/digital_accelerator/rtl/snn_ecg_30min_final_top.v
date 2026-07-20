@@ -27,7 +27,7 @@ module snn_ecg_30min_final_top #(
     output signed [31:0] final_mem_nsr,
     output signed [31:0] final_mem_chf,
     output signed [31:0] final_mem_arr,
-    output signed [31:0] final_mem_aff,
+    output signed [31:0] final_mem_af,
     output [5:0] snapshot_index_dbg,
     output reg [PROF_COUNTER_W-1:0] prof_total_cycle_counter,
     output reg [PROF_COUNTER_W-1:0] prof_busy_cycle_counter,
@@ -110,7 +110,7 @@ module snn_ecg_30min_final_top #(
     wire signed [63:0] c24_mem_nsr;
     wire signed [63:0] c24_mem_chf;
     wire signed [63:0] c24_mem_arr;
-    wire signed [63:0] c24_mem_aff;
+    wire signed [63:0] c24_mem_af;
 
     reg [31:0] beat_count;
     reg [31:0] pnn_match_count;
@@ -207,7 +207,7 @@ module snn_ecg_30min_final_top #(
         .BIAS_NSR(-5213),
         .BIAS_CHF(-22414),
         .BIAS_ARR(-7298),
-        .BIAS_AFF(32767)
+        .BIAS_AF(32767)
     ) u_snapshot (
         .clk(clk),
         .rst(core_rst),
@@ -237,7 +237,7 @@ module snn_ecg_30min_final_top #(
         .c24_mem_nsr(c24_mem_nsr),
         .c24_mem_chf(c24_mem_chf),
         .c24_mem_arr(c24_mem_arr),
-        .c24_mem_aff(c24_mem_aff),
+        .c24_mem_af(c24_mem_af),
         .pred_class(snapshot_pred_class),
         .pred_valid(snapshot_pred_valid)
     );
@@ -253,7 +253,7 @@ module snn_ecg_30min_final_top #(
         .class_mem_nsr(c24_mem_nsr),
         .class_mem_chf(c24_mem_chf),
         .class_mem_arr(c24_mem_arr),
-        .class_mem_aff(c24_mem_aff),
+        .class_mem_af(c24_mem_af),
         .beat_count(beat_count),
         .pnn_mismatch_count(pnn_mismatch_count),
         .ectopic_pair_count(ectopic_pair_count),
@@ -280,7 +280,7 @@ module snn_ecg_30min_final_top #(
         .final_mem_nsr(final_mem_nsr),
         .final_mem_chf(final_mem_chf),
         .final_mem_arr(final_mem_arr),
-        .final_mem_aff(final_mem_aff)
+        .final_mem_af(final_mem_af)
     );
 
     always @(posedge clk) begin

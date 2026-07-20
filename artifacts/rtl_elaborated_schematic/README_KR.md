@@ -15,7 +15,7 @@ Figure A는 design root `snn_ecg_30min_final_top` 아래의 실제 instance 두 
 - `u_snapshot : snn_ecg_3feat_top`
 - `u_final : final_membrane_layer`
 
-signed ADC 입력, `u_snapshot`에서 `u_final`로 전달되는 NSR·CHF·ARR·AFF class membrane, `u_final`의 최종 valid/class/membrane 출력만 선택한다. Snapshot timer와 control FSM은 top 내부 `always` logic과 register로 구현되어 있으므로 별도 module처럼 만들지 않았다.
+signed ADC 입력, `u_snapshot`에서 `u_final`로 전달되는 NSR·CHF·ARR·AF class membrane, `u_final`의 최종 valid/class/membrane 출력만 선택한다. Snapshot timer와 control FSM은 top 내부 `always` logic과 register로 구현되어 있으므로 별도 module처럼 만들지 않았다.
 
 Figure B는 다음 10개 실제 `u_snapshot` child instance를 사용한다.
 

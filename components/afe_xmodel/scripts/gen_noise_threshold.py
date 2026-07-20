@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(os.environ.get("ECG_SOC_ROOT", Path(__file__).resolve().parents[1]))
 AFE = ROOT / "docs/afe_stress"
 CASES = ROOT / "digital_block/reports/final/board_replay_36_cases.csv"
-LBL = ["NSR", "CHF", "ARR", "AFF"]
+LBL = ["NSR", "CHF", "ARR", "AF"]
 
 # clean golden: src_case_id -> (pred, mem4)
 clean = {}
@@ -24,7 +24,7 @@ sel.sort(key=lambda r: nval(r["perturb_value"]))
 
 cols = ["manifest_id", "base_case_id", "class_label", "record_id", "noise_rms_lsb",
         "clean_pred", "pert_pred", "flipped",
-        "final_mem_NSR", "final_mem_CHF", "final_mem_ARR", "final_mem_AFF"]
+        "final_mem_NSR", "final_mem_CHF", "final_mem_ARR", "final_mem_AF"]
 rows = []
 for r in sel:
     cp, cmem = clean[r["base_case_id"]]
@@ -33,7 +33,7 @@ for r in sel:
                      class_label=r["class_label"], record_id=r["record_id"],
                      noise_rms_lsb=nval(r["perturb_value"]),
                      clean_pred=r["clean_pred"], pert_pred=r["pert_pred"], flipped=r["flipped"],
-                     final_mem_NSR=fm[0], final_mem_CHF=fm[1], final_mem_ARR=fm[2], final_mem_AFF=fm[3]))
+                     final_mem_NSR=fm[0], final_mem_CHF=fm[1], final_mem_ARR=fm[2], final_mem_AF=fm[3]))
 with open(AFE / "adc_nonideal_noise_threshold_xsim.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=cols); w.writeheader(); w.writerows(rows)
 with open(AFE / "adc_nonideal_noise_threshold_xsim.md", "w", encoding="utf-8") as f:
@@ -44,8 +44,8 @@ with open(AFE / "adc_nonideal_noise_threshold_xsim.md", "w", encoding="utf-8") a
     f.write("|---|---|---|---|---|\n")
     for r in rows:
         f.write(f"| {r['noise_rms_lsb']} | {r['clean_pred']} | {r['pert_pred']} | {r['flipped']} | "
-                f"{r['final_mem_NSR']}/{r['final_mem_CHF']}/{r['final_mem_ARR']}/{r['final_mem_AFF']} |\n")
+                f"{r['final_mem_NSR']}/{r['final_mem_CHF']}/{r['final_mem_ARR']}/{r['final_mem_AF']} |\n")
     f.write("\n**noise 0.5·1.0 LSB → NSR 유지(30/0/0/0), 2.0 LSB에서만 CHF flip.** → classification stability는 noise ≤1 LSB에서 안정, 2 LSB는 extreme stress 민감성.\n")
 print(f"{len(rows)} rows -> adc_nonideal_noise_threshold_xsim.csv/.md")
 for r in rows:
-    print(f"  noise {r['noise_rms_lsb']} LSB -> {r['pert_pred']} ({r['final_mem_NSR']}/{r['final_mem_CHF']}/{r['final_mem_ARR']}/{r['final_mem_AFF']})")
+    print(f"  noise {r['noise_rms_lsb']} LSB -> {r['pert_pred']} ({r['final_mem_NSR']}/{r['final_mem_CHF']}/{r['final_mem_ARR']}/{r['final_mem_AF']})")

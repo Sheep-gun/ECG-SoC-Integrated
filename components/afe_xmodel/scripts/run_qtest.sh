@@ -8,10 +8,10 @@ for q in 10 15 20 40; do
   python3 "$PRJ/scripts/filter_mem.py" full "$q" "fullQ$q" >/dev/null
 done
 cd "$PRJ/sim_out/digref" || exit 1
-echo "기준: raw ARR=2, AFE(Q5)통합 ARR=3 (NSR2 CHF1 AFF3 일정)"
+echo "기준: raw ARR=2, AFE(Q5)통합 ARR=3 (NSR2 CHF1 AF3 일정)"
 for q in 10 15 20 40; do
   echo "--- 노치 Q=$q (full) ---"
-  for c in NSR CHF ARR AFF; do
+  for c in NSR CHF ARR AF; do
     ln -sf "$PRJ/data/mem_${c}_fullQ${q}.mem" "mem_${c}_fullQ${q}.mem"
     "$QH/bin/vsim" -c -work work tb_digital_ref "+mem=mem_${c}_fullQ${q}.mem" "+nsamp=60000" "+start=0" \
       -do "run -all; quit -f" 2>&1 | grep DIGREF

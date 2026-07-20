@@ -16,7 +16,7 @@ METRICS_JSON = FINAL / "final_metrics.json"
 SUMMARY_JSON = FINAL / "strict_recordwise" / "strict_recordwise_metric_summary.json"
 CHUNK_CLASS_CSV = FINAL / "strict_recordwise" / "final_test_chunk_class_metrics.csv"
 RECORD_CLASS_CSV = FINAL / "strict_recordwise" / "final_test_record_majority_class_metrics.csv"
-CLASS_LABELS = ["NSR", "CHF", "ARR", "AFF"]
+CLASS_LABELS = ["NSR", "CHF", "ARR", "AF"]
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -116,7 +116,7 @@ def main() -> int:
     record_summary = summary_from_rows(read_rows(RECORD_CSV))
 
     expected = {
-        "final_model_id": "structural_guarded_silent_aff_1008710",
+        "final_model_id": "structural_guarded_silent_af_1008710",
         "final_test_chunk": compact_metrics(chunk_summary),
         "final_test_record_majority": compact_metrics(record_summary),
     }

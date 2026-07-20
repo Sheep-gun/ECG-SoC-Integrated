@@ -20,7 +20,7 @@ module class_score_neurons #(
 
     parameter BIAS_ARR = -7298,
 
-    parameter BIAS_AFF = 32767,
+    parameter BIAS_AF = 32767,
 
     parameter W_ETMC_NSR = 0,
 
@@ -28,7 +28,7 @@ module class_score_neurons #(
 
     parameter W_ETMC_ARR = 0,
 
-    parameter W_ETMC_AFF = 0,
+    parameter W_ETMC_AF = 0,
 
     parameter W_RCD_NSR = 0,
 
@@ -36,7 +36,7 @@ module class_score_neurons #(
 
     parameter W_RCD_ARR = 0,
 
-    parameter W_RCD_AFF = 0,
+    parameter W_RCD_AF = 0,
 
     parameter W_RCD2_NSR = 0,
 
@@ -44,7 +44,7 @@ module class_score_neurons #(
 
     parameter W_RCD2_ARR = 0,
 
-    parameter W_RCD2_AFF = 0,
+    parameter W_RCD2_AF = 0,
 
     parameter W_IPB_PERSIST_NSR = 0,
 
@@ -52,7 +52,7 @@ module class_score_neurons #(
 
     parameter W_IPB_PERSIST_ARR = 0,
 
-    parameter W_IPB_PERSIST_AFF = 0,
+    parameter W_IPB_PERSIST_AF = 0,
 
     parameter W_IPB_EPISODIC_NSR = 0,
 
@@ -60,7 +60,7 @@ module class_score_neurons #(
 
     parameter W_IPB_EPISODIC_ARR = 0,
 
-    parameter W_IPB_EPISODIC_AFF = 0,
+    parameter W_IPB_EPISODIC_AF = 0,
 
     parameter W_IPB_BURST_NSR = 0,
 
@@ -68,7 +68,7 @@ module class_score_neurons #(
 
     parameter W_IPB_BURST_ARR = 0,
 
-    parameter W_IPB_BURST_AFF = 0,
+    parameter W_IPB_BURST_AF = 0,
 
     parameter ENABLE_NSR_NORMALITY_GATE = 0,
 
@@ -184,7 +184,7 @@ module class_score_neurons #(
 
     output reg signed [SCORE_WIDTH-1:0] score_arr,
 
-    output reg signed [SCORE_WIDTH-1:0] score_aff,
+    output reg signed [SCORE_WIDTH-1:0] score_af,
 
     output reg signed [SCORE_WIDTH-1:0] score_nsr_before_suppress,
 
@@ -194,7 +194,7 @@ module class_score_neurons #(
 
     output reg signed [SCORE_WIDTH-1:0] score_arr_before_rbbb_late,
 
-    output reg signed [SCORE_WIDTH-1:0] score_aff_before_rbbb_late,
+    output reg signed [SCORE_WIDTH-1:0] score_af_before_rbbb_late,
 
     output reg signed [SCORE_WIDTH-1:0] score_nsr_before_rbbb_delay,
 
@@ -202,7 +202,7 @@ module class_score_neurons #(
 
     output reg signed [SCORE_WIDTH-1:0] score_arr_before_rbbb_delay,
 
-    output reg signed [SCORE_WIDTH-1:0] score_aff_before_rbbb_delay,
+    output reg signed [SCORE_WIDTH-1:0] score_af_before_rbbb_delay,
 
     output reg signed [SCORE_WIDTH-1:0] score_arr_before_eerg,
 
@@ -244,7 +244,7 @@ module class_score_neurons #(
 
     localparam [1:0] CLASS_ARR = 2'd2;
 
-    localparam [1:0] CLASS_AFF = 2'd3;
+    localparam [1:0] CLASS_AF = 2'd3;
 
 
 
@@ -254,7 +254,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_PNN_MATCH_ARR = -32'sd746;
 
-    localparam signed [SCORE_WIDTH-1:0] W_PNN_MATCH_AFF =  32'sd427;
+    localparam signed [SCORE_WIDTH-1:0] W_PNN_MATCH_AF =  32'sd427;
 
     localparam signed [SCORE_WIDTH-1:0] W_PNN_MIS_NSR   = -32'sd955;
 
@@ -262,7 +262,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_PNN_MIS_ARR   = -32'sd643;
 
-    localparam signed [SCORE_WIDTH-1:0] W_PNN_MIS_AFF   =  32'sd948;
+    localparam signed [SCORE_WIDTH-1:0] W_PNN_MIS_AF   =  32'sd948;
 
 
 
@@ -278,11 +278,11 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_RAM_SUM_ARR   = -32'sd23;
 
-    localparam signed [SCORE_WIDTH-1:0] W_RAM_SUM_AFF   = -32'sd92;
+    localparam signed [SCORE_WIDTH-1:0] W_RAM_SUM_AF   = -32'sd92;
 
     localparam signed [SCORE_WIDTH-1:0] W_RAM_COUNT_ARR = -32'sd987;
 
-    localparam signed [SCORE_WIDTH-1:0] W_RAM_COUNT_AFF =  32'sd577;
+    localparam signed [SCORE_WIDTH-1:0] W_RAM_COUNT_AF =  32'sd577;
 
 
 
@@ -292,7 +292,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_RDM_VALID_ARR = -32'sd1059;
 
-    localparam signed [SCORE_WIDTH-1:0] W_RDM_VALID_AFF =  32'sd871;
+    localparam signed [SCORE_WIDTH-1:0] W_RDM_VALID_AF =  32'sd871;
 
     localparam signed [SCORE_WIDTH-1:0] W_RDM_CODE_NSR  = -32'sd16;
 
@@ -300,7 +300,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_RDM_CODE_ARR  =  32'sd18;
 
-    localparam signed [SCORE_WIDTH-1:0] W_RDM_CODE_AFF  =  32'sd10;
+    localparam signed [SCORE_WIDTH-1:0] W_RDM_CODE_AF  =  32'sd10;
 
 
 
@@ -310,7 +310,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_SEC_ARR = -32'sd424;
 
-    localparam signed [SCORE_WIDTH-1:0] W_SEC_AFF = -32'sd2281;
+    localparam signed [SCORE_WIDTH-1:0] W_SEC_AF = -32'sd2281;
 
 
 
@@ -320,7 +320,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_ECT_PAIR_ARR =  32'sd328;
 
-    localparam signed [SCORE_WIDTH-1:0] W_ECT_PAIR_AFF = -32'sd2967;
+    localparam signed [SCORE_WIDTH-1:0] W_ECT_PAIR_AF = -32'sd2967;
 
 
 
@@ -330,7 +330,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_QRS_WIDTH_COUNT_ARR   =  32'sd2600;
 
-    localparam signed [SCORE_WIDTH-1:0] W_QRS_WIDTH_COUNT_AFF   =  32'sd700;
+    localparam signed [SCORE_WIDTH-1:0] W_QRS_WIDTH_COUNT_AF   =  32'sd700;
 
     localparam signed [SCORE_WIDTH-1:0] W_QRS_COMPLEX_COUNT_NSR = -32'sd400;
 
@@ -338,7 +338,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_QRS_COMPLEX_COUNT_ARR = -32'sd200;
 
-    localparam signed [SCORE_WIDTH-1:0] W_QRS_COMPLEX_COUNT_AFF =  32'sd2500;
+    localparam signed [SCORE_WIDTH-1:0] W_QRS_COMPLEX_COUNT_AF =  32'sd2500;
 
     localparam signed [SCORE_WIDTH-1:0] W_QRS_ENERGY_COUNT_NSR  = -32'sd500;
 
@@ -346,7 +346,7 @@ module class_score_neurons #(
 
     localparam signed [SCORE_WIDTH-1:0] W_QRS_ENERGY_COUNT_ARR  = -32'sd1300;
 
-    localparam signed [SCORE_WIDTH-1:0] W_QRS_ENERGY_COUNT_AFF  = -32'sd2700;
+    localparam signed [SCORE_WIDTH-1:0] W_QRS_ENERGY_COUNT_AF  = -32'sd2700;
 
 
 
@@ -388,7 +388,7 @@ module class_score_neurons #(
 
     reg signed [SCORE_WIDTH-1:0] local_arr;
 
-    reg signed [SCORE_WIDTH-1:0] local_aff;
+    reg signed [SCORE_WIDTH-1:0] local_af;
 
     reg signed [SCORE_WIDTH-1:0] local_nsr_next;
 
@@ -396,7 +396,7 @@ module class_score_neurons #(
 
     reg signed [SCORE_WIDTH-1:0] local_arr_next;
 
-    reg signed [SCORE_WIDTH-1:0] local_aff_next;
+    reg signed [SCORE_WIDTH-1:0] local_af_next;
 
     reg signed [SCORE_WIDTH-1:0] score_nsr_next;
 
@@ -404,7 +404,7 @@ module class_score_neurons #(
 
     reg signed [SCORE_WIDTH-1:0] score_arr_next;
 
-    reg signed [SCORE_WIDTH-1:0] score_aff_next;
+    reg signed [SCORE_WIDTH-1:0] score_af_next;
 
     reg signed [SCORE_WIDTH-1:0] commit_nsr;
 
@@ -412,7 +412,7 @@ module class_score_neurons #(
 
     reg signed [SCORE_WIDTH-1:0] commit_arr;
 
-    reg signed [SCORE_WIDTH-1:0] commit_aff;
+    reg signed [SCORE_WIDTH-1:0] commit_af;
 
     reg signed [SCORE_WIDTH-1:0] best_score;
 
@@ -680,7 +680,7 @@ module class_score_neurons #(
 
 
 
-    function signed [SCORE_WIDTH-1:0] w_rdm_ge_aff;
+    function signed [SCORE_WIDTH-1:0] w_rdm_ge_af;
 
         input integer idx;
 
@@ -688,37 +688,37 @@ module class_score_neurons #(
 
             case (idx)
 
-                0: w_rdm_ge_aff =  32'sd211;
+                0: w_rdm_ge_af =  32'sd211;
 
-                1: w_rdm_ge_aff = -32'sd603;
+                1: w_rdm_ge_af = -32'sd603;
 
-                2: w_rdm_ge_aff = -32'sd723;
+                2: w_rdm_ge_af = -32'sd723;
 
-                3: w_rdm_ge_aff =  32'sd51;
+                3: w_rdm_ge_af =  32'sd51;
 
-                4: w_rdm_ge_aff =  32'sd351;
+                4: w_rdm_ge_af =  32'sd351;
 
-                5: w_rdm_ge_aff =  32'sd268;
+                5: w_rdm_ge_af =  32'sd268;
 
-                6: w_rdm_ge_aff =  32'sd12;
+                6: w_rdm_ge_af =  32'sd12;
 
-                7: w_rdm_ge_aff =  32'sd144;
+                7: w_rdm_ge_af =  32'sd144;
 
-                8: w_rdm_ge_aff =  32'sd499;
+                8: w_rdm_ge_af =  32'sd499;
 
-                9: w_rdm_ge_aff =  32'sd1021;
+                9: w_rdm_ge_af =  32'sd1021;
 
-                10: w_rdm_ge_aff =  32'sd566;
+                10: w_rdm_ge_af =  32'sd566;
 
-                11: w_rdm_ge_aff =  32'sd787;
+                11: w_rdm_ge_af =  32'sd787;
 
-                12: w_rdm_ge_aff =  32'sd391;
+                12: w_rdm_ge_af =  32'sd391;
 
-                13: w_rdm_ge_aff =  32'sd329;
+                13: w_rdm_ge_af =  32'sd329;
 
-                14: w_rdm_ge_aff =  32'sd310;
+                14: w_rdm_ge_af =  32'sd310;
 
-                default: w_rdm_ge_aff = 32'sd0;
+                default: w_rdm_ge_af = 32'sd0;
 
             endcase
 
@@ -840,7 +840,7 @@ module class_score_neurons #(
 
         local_arr_next = local_arr;
 
-        local_aff_next = local_aff;
+        local_af_next = local_af;
 
         score_nsr_next = score_nsr;
 
@@ -848,7 +848,7 @@ module class_score_neurons #(
 
         score_arr_next = score_arr;
 
-        score_aff_next = score_aff;
+        score_af_next = score_af;
 
         commit_nsr = 32'sd0;
 
@@ -856,7 +856,7 @@ module class_score_neurons #(
 
         commit_arr = 32'sd0;
 
-        commit_aff = 32'sd0;
+        commit_af = 32'sd0;
 
         rdm_code_calc = 5'd0;
 
@@ -866,7 +866,7 @@ module class_score_neurons #(
 
         score_arr_before_rbbb_late = score_arr_next;
 
-        score_aff_before_rbbb_late = score_aff_next;
+        score_af_before_rbbb_late = score_af_next;
 
         score_nsr_before_rbbb_delay = score_nsr_next;
 
@@ -874,7 +874,7 @@ module class_score_neurons #(
 
         score_arr_before_rbbb_delay = score_arr_next;
 
-        score_aff_before_rbbb_delay = score_aff_next;
+        score_af_before_rbbb_delay = score_af_next;
 
         score_arr_before_eerg = score_arr_next;
 
@@ -942,7 +942,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_PNN_MATCH_ARR;
 
-            local_aff_next = local_aff_next + W_PNN_MATCH_AFF;
+            local_af_next = local_af_next + W_PNN_MATCH_AF;
 
         end
 
@@ -954,7 +954,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_PNN_MIS_ARR;
 
-            local_aff_next = local_aff_next + W_PNN_MIS_AFF;
+            local_af_next = local_af_next + W_PNN_MIS_AF;
 
         end
 
@@ -978,7 +978,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_RAM_COUNT_ARR + (W_RAM_SUM_ARR * $signed({26'd0, ram_amp_code}));
 
-            local_aff_next = local_aff_next + W_RAM_COUNT_AFF + (W_RAM_SUM_AFF * $signed({26'd0, ram_amp_code}));
+            local_af_next = local_af_next + W_RAM_COUNT_AF + (W_RAM_SUM_AF * $signed({26'd0, ram_amp_code}));
 
             ram_count_win_next = ram_count_win_next + 16'd1;
 
@@ -1000,7 +1000,7 @@ module class_score_neurons #(
 
                     local_arr_next = local_arr_next + w_rdm_ge_arr(i);
 
-                    local_aff_next = local_aff_next + w_rdm_ge_aff(i);
+                    local_af_next = local_af_next + w_rdm_ge_af(i);
 
                 end
 
@@ -1012,7 +1012,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_RDM_VALID_ARR + (W_RDM_CODE_ARR * $signed({27'd0, rdm_code_calc}));
 
-            local_aff_next = local_aff_next + W_RDM_VALID_AFF + (W_RDM_CODE_AFF * $signed({27'd0, rdm_code_calc}));
+            local_af_next = local_af_next + W_RDM_VALID_AF + (W_RDM_CODE_AF * $signed({27'd0, rdm_code_calc}));
 
             rdm_valid_win_count_next = rdm_valid_win_count_next + 16'd1;
 
@@ -1032,7 +1032,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_ECT_PAIR_ARR;
 
-            local_aff_next = local_aff_next + W_ECT_PAIR_AFF;
+            local_af_next = local_af_next + W_ECT_PAIR_AF;
 
         end
 
@@ -1044,7 +1044,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_QRS_WIDTH_COUNT_ARR;
 
-            local_aff_next = local_aff_next + W_QRS_WIDTH_COUNT_AFF;
+            local_af_next = local_af_next + W_QRS_WIDTH_COUNT_AF;
 
         end
 
@@ -1056,7 +1056,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_QRS_COMPLEX_COUNT_ARR;
 
-            local_aff_next = local_aff_next + W_QRS_COMPLEX_COUNT_AFF;
+            local_af_next = local_af_next + W_QRS_COMPLEX_COUNT_AF;
 
         end
 
@@ -1068,7 +1068,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_QRS_ENERGY_COUNT_ARR;
 
-            local_aff_next = local_aff_next + W_QRS_ENERGY_COUNT_AFF;
+            local_af_next = local_af_next + W_QRS_ENERGY_COUNT_AF;
 
         end
 
@@ -1080,7 +1080,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_ETMC_ARR;
 
-            local_aff_next = local_aff_next + W_ETMC_AFF;
+            local_af_next = local_af_next + W_ETMC_AF;
 
         end
 
@@ -1092,7 +1092,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_RCD_ARR;
 
-            local_aff_next = local_aff_next + W_RCD_AFF;
+            local_af_next = local_af_next + W_RCD_AF;
 
         end
 
@@ -1104,7 +1104,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_RCD2_ARR;
 
-            local_aff_next = local_aff_next + W_RCD2_AFF;
+            local_af_next = local_af_next + W_RCD2_AF;
 
         end
 
@@ -1116,7 +1116,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_IPB_PERSIST_ARR;
 
-            local_aff_next = local_aff_next + W_IPB_PERSIST_AFF;
+            local_af_next = local_af_next + W_IPB_PERSIST_AF;
 
         end
 
@@ -1128,7 +1128,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_IPB_EPISODIC_ARR;
 
-            local_aff_next = local_aff_next + W_IPB_EPISODIC_AFF;
+            local_af_next = local_af_next + W_IPB_EPISODIC_AF;
 
         end
 
@@ -1140,7 +1140,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_IPB_BURST_ARR;
 
-            local_aff_next = local_aff_next + W_IPB_BURST_AFF;
+            local_af_next = local_af_next + W_IPB_BURST_AF;
 
         end
 
@@ -1152,7 +1152,7 @@ module class_score_neurons #(
 
             local_arr_next = local_arr_next + W_SEC_ARR;
 
-            local_aff_next = local_aff_next + W_SEC_AFF;
+            local_af_next = local_af_next + W_SEC_AF;
 
         end
 
@@ -1284,7 +1284,7 @@ module class_score_neurons #(
 
             commit_arr = scale_score_q4(local_arr_next - BIAS_ARR, window_scale_q4);
 
-            commit_aff = scale_score_q4(local_aff_next - BIAS_AFF, window_scale_q4);
+            commit_af = scale_score_q4(local_af_next - BIAS_AF, window_scale_q4);
 
             score_nsr_next = score_nsr + commit_nsr;
 
@@ -1292,7 +1292,7 @@ module class_score_neurons #(
 
             score_arr_next = score_arr + commit_arr;
 
-            score_aff_next = score_aff + commit_aff;
+            score_af_next = score_af + commit_af;
 
             if (arr_high_irregular_spike)
 
@@ -1304,7 +1304,7 @@ module class_score_neurons #(
 
             score_arr_before_rbbb_late = score_arr_next;
 
-            score_aff_before_rbbb_late = score_aff_next;
+            score_af_before_rbbb_late = score_af_next;
 
             if (ENABLE_RBBB_LATESLOPE_GATE && rbbb_lateslope_gate_spike) begin
 
@@ -1312,7 +1312,7 @@ module class_score_neurons #(
 
                                            (score_nsr_next >= score_arr_next) &&
 
-                                           (score_nsr_next >= score_aff_next);
+                                           (score_nsr_next >= score_af_next);
 
                 rbbb_late_chf_block_before = (score_chf_next >
 
@@ -1336,7 +1336,7 @@ module class_score_neurons #(
 
             score_arr_before_rbbb_delay = score_arr_next;
 
-            score_aff_before_rbbb_delay = score_aff_next;
+            score_af_before_rbbb_delay = score_af_next;
 
             if (ENABLE_RBBB_QRS_DELAY_GATE && rbbb_qrs_delay_segment_spike) begin
 
@@ -1344,7 +1344,7 @@ module class_score_neurons #(
 
                                             (score_nsr_next >= score_arr_next) &&
 
-                                            (score_nsr_next >= score_aff_next);
+                                            (score_nsr_next >= score_af_next);
 
                 rbbb_delay_chf_block_before = (RBBB_DELAY_CHF_OVER_ARR_BLOCK != 0) &&
 
@@ -1374,7 +1374,7 @@ module class_score_neurons #(
 
             score_arr_before_rbbb_late = score_arr_next;
 
-            score_aff_before_rbbb_late = score_aff_next;
+            score_af_before_rbbb_late = score_af_next;
 
             if (ENABLE_RBBB_LATESLOPE_GATE && rbbb_lateslope_gate_spike) begin
 
@@ -1382,7 +1382,7 @@ module class_score_neurons #(
 
                                            (score_nsr_next >= score_arr_next) &&
 
-                                           (score_nsr_next >= score_aff_next);
+                                           (score_nsr_next >= score_af_next);
 
                 rbbb_late_chf_block_before = (score_chf_next >
 
@@ -1406,7 +1406,7 @@ module class_score_neurons #(
 
             score_arr_before_rbbb_delay = score_arr_next;
 
-            score_aff_before_rbbb_delay = score_aff_next;
+            score_af_before_rbbb_delay = score_af_next;
 
             if (ENABLE_RBBB_QRS_DELAY_GATE && rbbb_qrs_delay_segment_spike) begin
 
@@ -1414,7 +1414,7 @@ module class_score_neurons #(
 
                                             (score_nsr_next >= score_arr_next) &&
 
-                                            (score_nsr_next >= score_aff_next);
+                                            (score_nsr_next >= score_af_next);
 
                 rbbb_delay_chf_block_before = (RBBB_DELAY_CHF_OVER_ARR_BLOCK != 0) &&
 
@@ -1456,7 +1456,7 @@ module class_score_neurons #(
 
         if (score_arr_next > best_score) begin best_score = score_arr_next; best_class = CLASS_ARR; end
 
-        if (score_aff_next > best_score) begin best_score = score_aff_next; best_class = CLASS_AFF; end
+        if (score_af_next > best_score) begin best_score = score_af_next; best_class = CLASS_AF; end
 
     end
 
@@ -1472,7 +1472,7 @@ module class_score_neurons #(
 
             local_arr <= BIAS_ARR;
 
-            local_aff <= BIAS_AFF;
+            local_af <= BIAS_AF;
 
             score_nsr <= BIAS_NSR;
 
@@ -1480,7 +1480,7 @@ module class_score_neurons #(
 
             score_arr <= BIAS_ARR;
 
-            score_aff <= BIAS_AFF;
+            score_af <= BIAS_AF;
 
             pred_class <= CLASS_NSR;
 
@@ -1548,7 +1548,7 @@ module class_score_neurons #(
 
             local_arr <= BIAS_ARR;
 
-            local_aff <= BIAS_AFF;
+            local_af <= BIAS_AF;
 
             score_nsr <= BIAS_NSR;
 
@@ -1556,7 +1556,7 @@ module class_score_neurons #(
 
             score_arr <= BIAS_ARR;
 
-            score_aff <= BIAS_AFF;
+            score_af <= BIAS_AF;
 
             pred_class <= CLASS_NSR;
 
@@ -1624,7 +1624,7 @@ module class_score_neurons #(
 
             score_arr <= score_arr_next;
 
-            score_aff <= score_aff_next;
+            score_af <= score_af_next;
 
 
 
@@ -1636,7 +1636,7 @@ module class_score_neurons #(
 
                 local_arr <= BIAS_ARR;
 
-                local_aff <= BIAS_AFF;
+                local_af <= BIAS_AF;
 
                 ectopic_pair_win_count <= 8'd0;
 
@@ -1656,7 +1656,7 @@ module class_score_neurons #(
 
                 dscr_high <= local_nsr_next >= local_chf_next;
 
-                ram_high <= local_arr_next >= local_aff_next;
+                ram_high <= local_arr_next >= local_af_next;
 
             end else begin
 
@@ -1666,7 +1666,7 @@ module class_score_neurons #(
 
                 local_arr <= local_arr_next;
 
-                local_aff <= local_aff_next;
+                local_af <= local_af_next;
 
                 ectopic_pair_win_count <= ectopic_pair_win_count_next;
 

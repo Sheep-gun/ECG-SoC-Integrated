@@ -15,13 +15,13 @@ PhysioNet public digitized ECG
   → event/state feature updates
   → 60-second Snapshot Readout
   → 30-Snapshot signed Final Membrane accumulation
-  → WTA: NSR / CHF / ARR / AFF
+  → WTA: NSR / CHF / ARR / AF
   → RTL / XSim / Vivado / IP-XACT / Vitis / FPGA replay
 ```
 
 ## Layer 1: MATLAB nominal pre-validation
 
-MATLAB component는 HPF, IA gain, notch, LPF와 12-bit ADC의 nominal intent를 정의하고, frequency response, dynamic range, clipping/headroom과 signed reference vector를 검증한다. 대표 NSR/CHF/ARR/AFF 60초 record에서 clipping ratio는 모두 0%였고, 네 record의 최소 rail headroom은 약 1.0196 V였다. 이는 selected nominal model 결과이며 physical analog measurement가 아니다.
+MATLAB component는 HPF, IA gain, notch, LPF와 12-bit ADC의 nominal intent를 정의하고, frequency response, dynamic range, clipping/headroom과 signed reference vector를 검증한다. 대표 NSR/CHF/ARR/AF 60초 record에서 clipping ratio는 모두 0%였고, 네 record의 최소 rail headroom은 약 1.0196 V였다. 이는 selected nominal model 결과이며 physical analog measurement가 아니다.
 
 ## Layer 2: LTspice schematic verification
 

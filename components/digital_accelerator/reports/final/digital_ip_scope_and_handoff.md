@@ -8,7 +8,7 @@ This report defines the scope of `Sheep-gun/SNN-ECG-4-Class-Classifier` as the *
 
 | Area | Owned evidence |
 |---|---|
-| Locked SNN protocol | `structural_guarded_silent_aff_1008710`, strict record-wise lock, final_test evaluation count 1 |
+| Locked SNN protocol | `structural_guarded_silent_af_1008710`, strict record-wise lock, final_test evaluation count 1 |
 | Digital model result | final_test 30-minute chunk 29/36 = 80.56%, record-majority 16/19 = 84.21% |
 | RTL and XSim | Snapshot Readout, Final Membrane Readout, full-top XSim expected outputs |
 | Vivado/IP-XACT | pure RTL resource/timing, AXI accelerator IP, sample feeder IP, `component.xml` artifacts |

@@ -5,7 +5,7 @@
 //   어댑터2: AFE 매 샘플(negedge clk_samp)마다 core에 sample_valid·rhythm_tick 1펄스
 //   HPF 정착(START_SEC) 후 segment_start, 이후 깨끗한 ECG를 core에 전달, 끝에 segment_done.
 //   plusarg: +pwl=<파일> +endsec=<초> +startsec=<초>
-//   결과: MIXED_RESULT ... pred_valid pred_class (0=NSR 1=CHF 2=ARR 3=AFF)
+//   결과: MIXED_RESULT ... pred_valid pred_class (0=NSR 1=CHF 2=ARR 3=AF)
 // ================================================================
 `timescale 1ns/1ns
 module tb_mixed_signal;

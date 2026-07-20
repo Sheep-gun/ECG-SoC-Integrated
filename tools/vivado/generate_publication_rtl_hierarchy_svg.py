@@ -59,11 +59,11 @@ def require_source_evidence() -> None:
         "class_mem_nsr[63:0]",
         "class_mem_chf[63:0]",
         "class_mem_arr[63:0]",
-        "class_mem_aff[63:0]",
+        "class_mem_af[63:0]",
         "final_mem_nsr[31:0]",
         "final_mem_chf[31:0]",
         "final_mem_arr[31:0]",
-        "final_mem_aff[31:0]",
+        "final_mem_af[31:0]",
         "final_pred_class[1:0]",
         "final_valid",
     }
@@ -215,7 +215,7 @@ def build_svg() -> str:
         (190, "class_mem_nsr[63:0]"),
         (228, "class_mem_chf[63:0]"),
         (266, "class_mem_arr[63:0]"),
-        (304, "class_mem_aff[63:0]"),
+        (304, "class_mem_af[63:0]"),
     ]
     for y, label in class_signals:
         parts.append(port(580, y))
@@ -227,7 +227,7 @@ def build_svg() -> str:
         (174, "final_mem_nsr[31:0]"),
         (205, "final_mem_chf[31:0]"),
         (236, "final_mem_arr[31:0]"),
-        (267, "final_mem_aff[31:0]"),
+        (267, "final_mem_af[31:0]"),
         (306, "final_pred_class[1:0]"),
         (335, "final_valid"),
     ]

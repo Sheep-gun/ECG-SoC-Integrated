@@ -5,7 +5,7 @@
 | 항목 | 확인 결과 | 경로/값 | 비고 |
 |---|---|---|---|
 | final_test chunk count | 확인됨 | 36 cases, class별 9개 | `reports/final/board_replay_36_cases.csv` 생성 시 전 case 검증 |
-| locked model | 확인됨 | `structural_guarded_silent_aff_1008710` | `configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json` |
+| locked model | 확인됨 | `structural_guarded_silent_af_1008710` | `configs/recordwise_resplit_seed20260808/best_final_membrane_structural_grid_locked.json` |
 | mem list source | 확인됨 | `reports/final/strict_recordwise/structural_final_test_predictions.csv` | 36개 `.mem` path를 manifest로 변환 |
 | full-record mem root | 확인됨 | `fullrec_afe_30min_annotation_valid_balanced/` | 각 file 1,800,000 sample 확인 |
 | expected source | 확인됨 | `reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv` | board consistency 기준은 full-top RTL XSim expected |

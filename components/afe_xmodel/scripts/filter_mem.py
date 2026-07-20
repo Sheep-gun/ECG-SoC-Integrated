@@ -22,7 +22,7 @@ def to12(v):
     if v>2047: v=2047
     if v<-2048: v=-2048
     return v & 0xFFF
-for cls in ["NSR","CHF","ARR","AFF"]:
+for cls in ["NSR","CHF","ARR","AF"]:
     x=[sgn(int(l.strip(),16)) for i,l in enumerate(open(os.path.join(DATA,f"mem_{cls}.mem"))) if l.strip()]
     y=list(x)
     do_hpf   = mode in ("hpf","hpflpf","full")

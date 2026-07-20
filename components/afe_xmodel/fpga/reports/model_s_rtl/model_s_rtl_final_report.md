@@ -24,21 +24,21 @@
 
 ## Test Segment Confusion
 
-| actual | pred NSR | pred CHF | pred ARR | pred AFF |
+| actual | pred NSR | pred CHF | pred ARR | pred AF |
 |---|---:|---:|---:|---:|
 | NSR | 31 | 0 | 9 | 0 |
 | CHF | 0 | 37 | 3 | 0 |
 | ARR | 6 | 0 | 28 | 6 |
-| AFF | 0 | 3 | 2 | 35 |
+| AF | 0 | 3 | 2 | 35 |
 
 ## Test Record Confusion
 
-| actual | pred NSR | pred CHF | pred ARR | pred AFF |
+| actual | pred NSR | pred CHF | pred ARR | pred AF |
 |---|---:|---:|---:|---:|
 | NSR | 3 | 0 | 0 | 0 |
 | CHF | 0 | 3 | 0 | 0 |
 | ARR | 0 | 0 | 8 | 1 |
-| AFF | 0 | 0 | 0 | 4 |
+| AF | 0 | 0 | 0 | 4 |
 
 ## Notes
 

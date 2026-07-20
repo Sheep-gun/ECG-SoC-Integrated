@@ -14,7 +14,7 @@ The digital accelerator starts at the signed 12-bit ECG stream boundary. Upstrea
 | Samples per final decision | 1,800,000 |
 | Snapshots per final decision | 30 |
 | Canonical board-facing full-top XSim cadence | `sample_gap_cycles=2` |
-| Output classes | NSR, CHF, ARR, AFF |
+| Output classes | NSR, CHF, ARR, AF |
 
 ## 2. Canonical Cadence
 

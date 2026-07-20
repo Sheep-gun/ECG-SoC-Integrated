@@ -5,15 +5,15 @@
 
 | case_id | record | chunk | start_sample | gen_sha256(앞12) | board_sha256(앞12) | match |
 |---|---|---|---|---|---|---|
-| AFF_afdb_06995_chunk01 | AFF_afdb_06995 | 1 | 1,802,000 | `fe984d3ac495` | `fe984d3ac495` | true |
-| AFF_afdb_06995_chunk03 | AFF_afdb_06995 | 3 | 5,402,000 | `a7d6dbd67666` | `a7d6dbd67666` | true |
-| AFF_afdb_06995_chunk05 | AFF_afdb_06995 | 5 | 9,002,000 | `e7c0e16c7877` | `e7c0e16c7877` | true |
-| AFF_afdb_06995_chunk07 | AFF_afdb_06995 | 7 | 12,602,000 | `a62fc2ba7a54` | `a62fc2ba7a54` | true |
-| AFF_afdb_06995_chunk10 | AFF_afdb_06995 | 10 | 18,002,000 | `d30b6af5c747` | `d30b6af5c747` | true |
-| AFF_afdb_06995_chunk12 | AFF_afdb_06995 | 12 | 21,602,000 | `6c1da7b13004` | `6c1da7b13004` | true |
-| AFF_afdb_06995_chunk14 | AFF_afdb_06995 | 14 | 25,202,000 | `7220ebd13279` | `7220ebd13279` | true |
-| AFF_afdb_06995_chunk16 | AFF_afdb_06995 | 16 | 28,802,000 | `48cab839586a` | `48cab839586a` | true |
-| AFF_afdb_06995_chunk18 | AFF_afdb_06995 | 18 | 32,402,000 | `37ecff187d0b` | `37ecff187d0b` | true |
+| AF_afdb_06995_chunk01 | AF_afdb_06995 | 1 | 1,802,000 | `fe984d3ac495` | `fe984d3ac495` | true |
+| AF_afdb_06995_chunk03 | AF_afdb_06995 | 3 | 5,402,000 | `a7d6dbd67666` | `a7d6dbd67666` | true |
+| AF_afdb_06995_chunk05 | AF_afdb_06995 | 5 | 9,002,000 | `e7c0e16c7877` | `e7c0e16c7877` | true |
+| AF_afdb_06995_chunk07 | AF_afdb_06995 | 7 | 12,602,000 | `a62fc2ba7a54` | `a62fc2ba7a54` | true |
+| AF_afdb_06995_chunk10 | AF_afdb_06995 | 10 | 18,002,000 | `d30b6af5c747` | `d30b6af5c747` | true |
+| AF_afdb_06995_chunk12 | AF_afdb_06995 | 12 | 21,602,000 | `6c1da7b13004` | `6c1da7b13004` | true |
+| AF_afdb_06995_chunk14 | AF_afdb_06995 | 14 | 25,202,000 | `7220ebd13279` | `7220ebd13279` | true |
+| AF_afdb_06995_chunk16 | AF_afdb_06995 | 16 | 28,802,000 | `48cab839586a` | `48cab839586a` | true |
+| AF_afdb_06995_chunk18 | AF_afdb_06995 | 18 | 32,402,000 | `37ecff187d0b` | `37ecff187d0b` | true |
 | ARR_mitdb_102_chunk00 | ARR_mitdb_102 | 0 | 2,000 | `99a94295c8ee` | `99a94295c8ee` | true |
 | ARR_mitdb_105_chunk00 | ARR_mitdb_105 | 0 | 2,000 | `85f3a1fc2f06` | `85f3a1fc2f06` | true |
 | ARR_mitdb_118_chunk00 | ARR_mitdb_118 | 0 | 2,000 | `cbe8acf71a01` | `cbe8acf71a01` | true |

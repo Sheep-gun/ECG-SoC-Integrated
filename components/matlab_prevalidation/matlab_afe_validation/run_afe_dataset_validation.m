@@ -5,7 +5,7 @@
 %    afe_input_dataset/afe_input_NSR.csv
 %    afe_input_dataset/afe_input_CHF.csv
 %    afe_input_dataset/afe_input_ARR.csv
-%    afe_input_dataset/afe_input_AFF.csv
+%    afe_input_dataset/afe_input_AF.csv
 %
 %  Optional:
 %    afe_input_dataset/afe_input_record100_NSR.csv
@@ -32,7 +32,7 @@ filt = design_afe_filters(p);
 print_afe_spec_summary(p, results_dir);
 plot_afe_frequency_response(p, filt, results_dir);
 
-required_records = {'NSR', 'CHF', 'ARR', 'AFF'};
+required_records = {'NSR', 'CHF', 'ARR', 'AF'};
 optional_records = {'record100_NSR'};
 prefer_format = 'csv';   % CSV is recommended for MATLAB analysis. Use 'pwl' to test PWL parsing.
 

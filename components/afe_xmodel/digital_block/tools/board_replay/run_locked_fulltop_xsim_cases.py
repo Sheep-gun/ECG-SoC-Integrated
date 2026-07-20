@@ -67,10 +67,10 @@ CASES = [
         "mem": REPO / "fullrec_afe_30min_annotation_valid_balanced/test/ARR/118/118_30min_w000.mem",
     },
     {
-        "case_name": "locked_aff_case16",
+        "case_name": "locked_af_case16",
         "case_id": "16",
         "expected_class": 3,
-        "mem": REPO / "fullrec_afe_30min_annotation_valid_balanced/test/AFF/06995/06995_30min_w016.mem",
+        "mem": REPO / "fullrec_afe_30min_annotation_valid_balanced/test/AF/06995/06995_30min_w016.mem",
     },
 ]
 
@@ -195,7 +195,7 @@ def load_board_case(case_name: str) -> dict[str, int] | None:
                 "final_mem_NSR": int(row["board_final_mem_NSR"]),
                 "final_mem_CHF": int(row["board_final_mem_CHF"]),
                 "final_mem_ARR": int(row["board_final_mem_ARR"]),
-                "final_mem_AFF": int(row["board_final_mem_AFF"]),
+                "final_mem_AF": int(row["board_final_mem_AF"]),
                 "samples_received": samples_sent,
                 "samples_sent_to_ip": samples_sent,
                 "samples_accepted": samples_accepted,
@@ -227,7 +227,7 @@ def write_expected_jsons(xsim_rows: list[dict[str, str]]) -> None:
                 "NSR": int(row["final_mem_NSR"]),
                 "CHF": int(row["final_mem_CHF"]),
                 "ARR": int(row["final_mem_ARR"]),
-                "AFF": int(row["final_mem_AFF"]),
+                "AF": int(row["final_mem_AF"]),
             },
             "samples": int(row["samples_driven"]),
             "snapshot_count": int(row["prof_windows"]),
@@ -266,16 +266,16 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
             "NSR": int(row["final_mem_NSR"]),
             "CHF": int(row["final_mem_CHF"]),
             "ARR": int(row["final_mem_ARR"]),
-            "AFF": int(row["final_mem_AFF"]),
+            "AF": int(row["final_mem_AF"]),
         }
         b_mem = {
             "NSR": board.get("final_mem_NSR"),
             "CHF": board.get("final_mem_CHF"),
             "ARR": board.get("final_mem_ARR"),
-            "AFF": board.get("final_mem_AFF"),
+            "AF": board.get("final_mem_AF"),
         }
         pred_match = board.get("final_pred") == int(row["final_pred_class"])
-        mem_match = all(b_mem[cls] == x_mem[cls] for cls in ("NSR", "CHF", "ARR", "AFF"))
+        mem_match = all(b_mem[cls] == x_mem[cls] for cls in ("NSR", "CHF", "ARR", "AF"))
         transport_ok = all(
             board.get(metric) == 1800000
             for metric in ("samples_received", "samples_sent_to_ip", "samples_accepted", "samples_consumed")
@@ -294,11 +294,11 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
                 "xsim_final_mem_NSR": x_mem["NSR"],
                 "xsim_final_mem_CHF": x_mem["CHF"],
                 "xsim_final_mem_ARR": x_mem["ARR"],
-                "xsim_final_mem_AFF": x_mem["AFF"],
+                "xsim_final_mem_AF": x_mem["AF"],
                 "board_final_mem_NSR": b_mem["NSR"],
                 "board_final_mem_CHF": b_mem["CHF"],
                 "board_final_mem_ARR": b_mem["ARR"],
-                "board_final_mem_AFF": b_mem["AFF"],
+                "board_final_mem_AF": b_mem["AF"],
                 "final_mem_match": int(mem_match),
                 "transport_ok": int(transport_ok),
             }
@@ -326,8 +326,8 @@ def write_summary(result_csv: Path, summary_json: Path, summary_md: Path) -> Non
         lines.append(
             f"| {row['case_name']} | {row['class_id']} | {row.get('transport_ok', 0)} | "
             f"{row.get('final_pred_match', 0)} | {row.get('final_mem_match', 0)} | "
-            f"{row.get('xsim_final_mem_NSR')}/{row.get('xsim_final_mem_CHF')}/{row.get('xsim_final_mem_ARR')}/{row.get('xsim_final_mem_AFF')} | "
-            f"{row.get('board_final_mem_NSR')}/{row.get('board_final_mem_CHF')}/{row.get('board_final_mem_ARR')}/{row.get('board_final_mem_AFF')} |"
+            f"{row.get('xsim_final_mem_NSR')}/{row.get('xsim_final_mem_CHF')}/{row.get('xsim_final_mem_ARR')}/{row.get('xsim_final_mem_AF')} | "
+            f"{row.get('board_final_mem_NSR')}/{row.get('board_final_mem_CHF')}/{row.get('board_final_mem_ARR')}/{row.get('board_final_mem_AF')} |"
         )
     lines.extend(
         [

@@ -52,7 +52,7 @@
 ## 핵심 정본(source of truth)
 - **AFE 설계**: `analog/ecg_afe_xmodel.sv`
 - **AFE+ADC 데이터(팀 학습용)**: `datasets/afe_output_xmodelmatch/` (XModel 검증, 평균 RMS 2.01 LSB)
-- **디지털 블록(정본)**: `digital_block/` (팀원 repo 스냅샷; 최종모델 `structural_guarded_silent_aff_1008710`, final test 80.56%, HW 9719 LUT) · 개요 `docs/DIGITAL_BLOCK.md`. AFE 통합 시뮬용 서브셋=`digital/`
+- **디지털 블록(정본)**: `digital_block/` (팀원 repo 스냅샷; 최종모델 `structural_guarded_silent_af_1008710`, final test 80.56%, HW 9719 LUT) · 개요 `docs/DIGITAL_BLOCK.md`. AFE 통합 시뮬용 서브셋=`digital/`
 - **full-record AFE 데이터(디지털팀 전달)**: `datasets/fullrec_afe/`(59) + `fullrec_afe_remaining/`(68) = DB 전체, 1kSPS signed12 full stream
 - **ADC 방향**: `docs/AFE_ADC_XADC_decision.md` (FPGA=XADC, 커스텀 SAR=SoC 설계물)
 

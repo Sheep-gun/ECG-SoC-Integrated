@@ -28,7 +28,7 @@ DEFAULT_SUMMARY_JSON = REPO / "reports" / "final" / "board_replay_36_batch_summa
 EXPECTED_SAMPLES = 1_800_000
 EXPECTED_SNAPSHOTS = 30
 EXPECTED_DECISIONS = 1
-CLASS_LABELS = ["NSR", "CHF", "ARR", "AFF"]
+CLASS_LABELS = ["NSR", "CHF", "ARR", "AF"]
 
 
 def load_single_sender_module() -> Any:
@@ -79,7 +79,7 @@ def expected_from_case(case: dict[str, str]) -> dict[str, Any]:
             "NSR": int(case["expected_final_mem_NSR"]),
             "CHF": int(case["expected_final_mem_CHF"]),
             "ARR": int(case["expected_final_mem_ARR"]),
-            "AFF": int(case["expected_final_mem_AFF"]),
+            "AF": int(case["expected_final_mem_AF"]),
         },
         "samples": int(case["sample_count_expected"]),
         "snapshot_count": int(case["snapshot_count_expected"]),
@@ -104,7 +104,7 @@ def validate_cases(cases: list[dict[str, str]]) -> None:
         "expected_final_mem_NSR",
         "expected_final_mem_CHF",
         "expected_final_mem_ARR",
-        "expected_final_mem_AFF",
+        "expected_final_mem_AF",
         "ground_truth_label",
         "sample_count_expected",
         "snapshot_count_expected",
@@ -167,7 +167,7 @@ def compare_case(
         "NSR": board_value(board, "final_mem_nsr"),
         "CHF": board_value(board, "final_mem_chf"),
         "ARR": board_value(board, "final_mem_arr"),
-        "AFF": board_value(board, "final_mem_aff"),
+        "AF": board_value(board, "final_mem_af"),
     }
     pred_match = board.get("final_pred") == expected["expected_final_pred"]
     mem_matches = {
@@ -224,9 +224,9 @@ def compare_case(
         "expected_final_mem_ARR": expected["final_mem"]["ARR"],
         "board_final_mem_ARR": "" if b_mem["ARR"] is None else b_mem["ARR"],
         "mem_ARR_match": int(mem_matches["ARR"]) if status == "completed" else "",
-        "expected_final_mem_AFF": expected["final_mem"]["AFF"],
-        "board_final_mem_AFF": "" if b_mem["AFF"] is None else b_mem["AFF"],
-        "mem_AFF_match": int(mem_matches["AFF"]) if status == "completed" else "",
+        "expected_final_mem_AF": expected["final_mem"]["AF"],
+        "board_final_mem_AF": "" if b_mem["AF"] is None else b_mem["AF"],
+        "mem_AF_match": int(mem_matches["AF"]) if status == "completed" else "",
         "final_mem_exact_match": int(final_mem_exact_match) if status == "completed" else "",
         "samples_expected": expected["samples"],
         "samples_sent": "" if board.get("samples_received") is None else board["samples_received"],
@@ -600,9 +600,9 @@ def main() -> int:
         "expected_final_mem_ARR",
         "board_final_mem_ARR",
         "mem_ARR_match",
-        "expected_final_mem_AFF",
-        "board_final_mem_AFF",
-        "mem_AFF_match",
+        "expected_final_mem_AF",
+        "board_final_mem_AF",
+        "mem_AF_match",
         "final_mem_exact_match",
         "samples_expected",
         "samples_sent",

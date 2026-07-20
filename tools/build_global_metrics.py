@@ -44,11 +44,11 @@ def metric(value, unit, scope, evidence_type, evidence_path, repo, commit, owner
 def main() -> int:
     digital_path = "components/digital_accelerator/reports/final/final_metrics.json"
     d = read_json(digital_path)
-    assert d["final_model_id"] == "structural_guarded_silent_aff_1008710"
+    assert d["final_model_id"] == "structural_guarded_silent_af_1008710"
     assert d["final_test_chunk"] == {
         "correct": 29, "total": 36, "accuracy_percent": 80.56,
         "macro_f1_percent": 80.44, "balanced_accuracy_percent": 80.56,
-        "class_recall_percent": {"NSR": 100.0, "CHF": 66.67, "ARR": 77.78, "AFF": 77.78},
+        "class_recall_percent": {"NSR": 100.0, "CHF": 66.67, "ARR": 77.78, "AF": 77.78},
     }
     assert d["board_replay_36"]["pred_match_correct"] == 36
     assert d["board_replay_36"]["final_mem_match_correct"] == 36
@@ -67,7 +67,7 @@ def main() -> int:
         raise RuntimeError("XMODEL mean RMS evidence not found")
 
     matlab_path = "components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv"
-    mr = [row for row in read_csv(matlab_path) if row["record_name"] in {"NSR", "CHF", "ARR", "AFF"}]
+    mr = [row for row in read_csv(matlab_path) if row["record_name"] in {"NSR", "CHF", "ARR", "AF"}]
     assert len(mr) == 4
     assert all(float(row["clipping_ratio_percent"]) == 0.0 for row in mr)
     minimum_headroom = min(float(row["minimum_headroom_to_rail_V"]) for row in mr)
@@ -140,8 +140,8 @@ def main() -> int:
             "canonical_sample_gap_cycles": metric(2, "cycles", "board-facing full-top XSim integration cadence", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "canonical integration condition; noncanonical debug cadence excluded"),
             "afe_to_rtl_final_pred_equivalence": metric("36/36", "chunks", "AFE-generated chunks at canonical cadence vs digital golden", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "functional reproduction, not 100% classification accuracy"),
             "afe_to_rtl_final_mem_equivalence": metric("36/36", "chunks", "AFE-generated chunks at canonical cadence vs digital golden", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "functional reproduction, not clinical validation"),
-            "matlab_representative_clipping_ratio": metric(0.0, "percent", "NSR/CHF/ARR/AFF representative 60-second nominal MATLAB records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal model-based pre-validation; not physical measurement"),
-            "matlab_minimum_representative_headroom": metric(round(minimum_headroom, 12), "V", "minimum across NSR/CHF/ARR/AFF representative nominal records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal MATLAB chain and selected representative records only"),
+            "matlab_representative_clipping_ratio": metric(0.0, "percent", "NSR/CHF/ARR/AF representative 60-second nominal MATLAB records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal model-based pre-validation; not physical measurement"),
+            "matlab_minimum_representative_headroom": metric(round(minimum_headroom, 12), "V", "minimum across NSR/CHF/ARR/AF representative nominal records", "CSV aggregate", matlab_path, mr_name, MATLAB_COMMIT, "서민우", "nominal MATLAB chain and selected representative records only"),
             "ltspice_execution_count": metric(35, "runs", "XMODEL-aligned LTspice nominal and stress regression", "execution manifest", ltspice_execution_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "LTspice behavioral op-amp implementation; not transistor-level, PCB, or silicon measurement"),
             "ltspice_xmodel_adc_sample_count": metric(10000, "samples", "same 10-second patient100 input at 1 kSPS", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "team-provided cross-tool comparison; regenerated raw waveforms are intentionally excluded because of size"),
             "ltspice_xmodel_adc_mae": metric(0.6445, "LSB", "LTspice S/H minus XMODEL over the same 10-second, 10,000-sample input", "CSV team handoff", ltspice_handoff_path, integrated_repo, LTSPICE_HANDOFF, "이수환", "model-to-model agreement; not physical ADC error"),

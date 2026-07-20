@@ -4,7 +4,7 @@
 
 | Check | Result |
 |---|---:|
-| Locked candidate | `structural_guarded_silent_aff_1008710` |
+| Locked candidate | `structural_guarded_silent_af_1008710` |
 | Final test cases | 36 |
 | final_pred mismatch | 0 |
 | final_mem mismatch | 0 |

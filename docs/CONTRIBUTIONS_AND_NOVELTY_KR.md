@@ -2,7 +2,7 @@
 
 ## 1. 네 class 장시간 ECG engineering target
 
-본 연구는 짧은 단일 strip의 binary AF-versus-sinus 출력에 머물지 않고, 장시간 public ECG stream에서 NSR/CHF/ARR/AFF 네 class를 다룬다. 이는 임상적·상업적 우월성 주장이 아니라, 더 넓은 engineering classification target을 투명한 hardware architecture로 정의한 기여이다.
+본 연구는 짧은 단일 strip의 binary AF-versus-sinus 출력에 머물지 않고, 장시간 public ECG stream에서 NSR/CHF/ARR/AF 네 class를 다룬다. 이는 임상적·상업적 우월성 주장이 아니라, 더 넓은 engineering classification target을 투명한 hardware architecture로 정의한 기여이다.
 
 ## 2. 60초 Snapshot + 30분 Final Membrane
 

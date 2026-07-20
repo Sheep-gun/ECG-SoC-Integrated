@@ -19,6 +19,6 @@
 | final_mem_nsr | 7 |
 | final_mem_chf | 1 |
 | final_mem_arr | 21 |
-| final_mem_aff | 1 |
+| final_mem_af | 1 |
 | snn_error | 0 |
 | feeder_error | 0 |

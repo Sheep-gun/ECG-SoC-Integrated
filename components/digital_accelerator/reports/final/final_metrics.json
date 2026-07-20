@@ -1,5 +1,5 @@
 {
-  "final_model_id": "structural_guarded_silent_aff_1008710",
+  "final_model_id": "structural_guarded_silent_af_1008710",
   "locked_params_hash": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
   "protocol": "fully_blind_strict_recordwise_locked_final_holdout",
   "train": {
@@ -23,7 +23,7 @@
       "NSR": 100.0,
       "CHF": 66.67,
       "ARR": 77.78,
-      "AFF": 77.78
+      "AF": 77.78
     }
   },
   "final_test_record_majority": {
@@ -36,7 +36,7 @@
       "NSR": 100.0,
       "CHF": 75.0,
       "ARR": 77.78,
-      "AFF": 100.0
+      "AF": 100.0
     }
   },
   "test_evaluation_count": 1,
@@ -69,7 +69,7 @@
       "NSR",
       "CHF",
       "ARR",
-      "AFF"
+      "AF"
     ],
     "samples_per_case": 1800000,
     "snapshots_per_case": 30,

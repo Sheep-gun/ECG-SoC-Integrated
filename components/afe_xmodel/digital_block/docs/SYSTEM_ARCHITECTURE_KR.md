@@ -12,7 +12,7 @@ flowchart LR
     D --> E["Signed 12-bit ECG stream"]
     E --> F["60 s Snapshot SNN Readout"]
     F --> G["30 min Final Membrane Readout"]
-    G --> H["NSR / CHF / ARR / AFF"]
+    G --> H["NSR / CHF / ARR / AF"]
 ```
 
 본 시스템은 public ECG record에서 시작하지만, 이를 raw analog acquisition으로 주장하지 않는다. Digitized code를 analog-equivalent `vin`으로 재구성하고 AFE+ADC XMODEL을 통과시켜, digital accelerator가 실제로 받을 signed 12-bit stream을 만든다.
@@ -49,7 +49,7 @@ Snapshot Readout은 ECG stream을 다음 evidence로 압축한다.
 | Ectopic pair | `ectopic_pair_neuron.v` | early/late RR pair pattern 감지 |
 | Terminal delay proxy | `rbbb_qrs_delay_bank.v` | wide QRS와 terminal activity 반복 여부 감지 |
 
-Final Membrane Readout은 snapshot WTA 결과만 단순 투표하지 않는다. Snapshot winner와 evidence counter를 class별 signed membrane에 누적하고, guarded/silent AFF/rescue/boost 조건을 통해 30분 evidence를 반영한다.
+Final Membrane Readout은 snapshot WTA 결과만 단순 투표하지 않는다. Snapshot winner와 evidence counter를 class별 signed membrane에 누적하고, guarded/silent AF/rescue/boost 조건을 통해 30분 evidence를 반영한다.
 
 ## Accelerator IP Core 관점
 

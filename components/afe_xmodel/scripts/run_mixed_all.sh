@@ -24,7 +24,7 @@ if [ ! -d "$W/work" ]; then
   "$VLOG" $COMMON +acc "$PRJ/tb/tb_mixed_signal.sv" >c5.log 2>&1 || { tail -20 c5.log; exit 1; }
   echo "COMPILE_OK"
 else cd "$W" || exit 1; fi
-for c in NSR CHF ARR AFF; do
+for c in NSR CHF ARR AF; do
   ln -sf "$PRJ/data/ecg_$c.pwl" "ecg_$c.pwl"
   echo "[$c] 통합 시뮬 시작 ($(date +%H:%M:%S))"
   "$VSIM" -c -t 1ns -sv_lib "$XMODEL_HOME/lib/x86_64/xmodel_msim" -pli "$XMODEL_HOME/lib/x86_64/xmodel_msim.sl" \

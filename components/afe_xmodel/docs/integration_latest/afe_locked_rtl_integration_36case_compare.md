@@ -10,15 +10,15 @@
 
 | case | record | chunk | exp_pred | rep_pred | pred✓ | exp_mem(N/C/A/F) | rep_mem(N/C/A/F) | mem✓ | sha256✓ |
 |---|---|---|---|---|---|---|---|---|---|
-| AFF_afdb_06995_chunk01 | AFF_afdb_06995 | 1 | AFF | AFF | true | 0/0/0/30 | 0/0/0/30 | true | true |
-| AFF_afdb_06995_chunk03 | AFF_afdb_06995 | 3 | AFF | AFF | true | 0/0/5/25 | 0/0/5/25 | true | true |
-| AFF_afdb_06995_chunk05 | AFF_afdb_06995 | 5 | AFF | AFF | true | 10/-15/14/31 | 10/-15/14/31 | true | true |
-| AFF_afdb_06995_chunk07 | AFF_afdb_06995 | 7 | ARR | ARR | true | 12/0/17/1 | 12/0/17/1 | true | true |
-| AFF_afdb_06995_chunk10 | AFF_afdb_06995 | 10 | NSR | NSR | true | 17/0/8/5 | 17/0/8/5 | true | true |
-| AFF_afdb_06995_chunk12 | AFF_afdb_06995 | 12 | AFF | AFF | true | 7/0/8/15 | 7/0/8/15 | true | true |
-| AFF_afdb_06995_chunk14 | AFF_afdb_06995 | 14 | AFF | AFF | true | 2/0/0/28 | 2/0/0/28 | true | true |
-| AFF_afdb_06995_chunk16 | AFF_afdb_06995 | 16 | AFF | AFF | true | 0/0/0/30 | 0/0/0/30 | true | true |
-| AFF_afdb_06995_chunk18 | AFF_afdb_06995 | 18 | AFF | AFF | true | 0/0/0/30 | 0/0/0/30 | true | true |
+| AF_afdb_06995_chunk01 | AF_afdb_06995 | 1 | AF | AF | true | 0/0/0/30 | 0/0/0/30 | true | true |
+| AF_afdb_06995_chunk03 | AF_afdb_06995 | 3 | AF | AF | true | 0/0/5/25 | 0/0/5/25 | true | true |
+| AF_afdb_06995_chunk05 | AF_afdb_06995 | 5 | AF | AF | true | 10/-15/14/31 | 10/-15/14/31 | true | true |
+| AF_afdb_06995_chunk07 | AF_afdb_06995 | 7 | ARR | ARR | true | 12/0/17/1 | 12/0/17/1 | true | true |
+| AF_afdb_06995_chunk10 | AF_afdb_06995 | 10 | NSR | NSR | true | 17/0/8/5 | 17/0/8/5 | true | true |
+| AF_afdb_06995_chunk12 | AF_afdb_06995 | 12 | AF | AF | true | 7/0/8/15 | 7/0/8/15 | true | true |
+| AF_afdb_06995_chunk14 | AF_afdb_06995 | 14 | AF | AF | true | 2/0/0/28 | 2/0/0/28 | true | true |
+| AF_afdb_06995_chunk16 | AF_afdb_06995 | 16 | AF | AF | true | 0/0/0/30 | 0/0/0/30 | true | true |
+| AF_afdb_06995_chunk18 | AF_afdb_06995 | 18 | AF | AF | true | 0/0/0/30 | 0/0/0/30 | true | true |
 | ARR_mitdb_102_chunk00 | ARR_mitdb_102 | 0 | ARR | ARR | true | 0/1/29/0 | 0/1/29/0 | true | true |
 | ARR_mitdb_105_chunk00 | ARR_mitdb_105 | 0 | ARR | ARR | true | 8/1/21/0 | 8/1/21/0 | true | true |
 | ARR_mitdb_118_chunk00 | ARR_mitdb_118 | 0 | ARR | ARR | true | 7/1/21/1 | 7/1/21/1 | true | true |
@@ -29,10 +29,10 @@
 | ARR_mitdb_220_chunk00 | ARR_mitdb_220 | 0 | NSR | NSR | true | 27/0/3/0 | 27/0/3/0 | true | true |
 | ARR_mitdb_231_chunk00 | ARR_mitdb_231 | 0 | ARR | ARR | true | 6/0/24/0 | 6/0/24/0 | true | true |
 | CHF_chfdb_chf06_chunk06 | CHF_chfdb_chf06 | 6 | CHF | CHF | true | 0/35/2/3 | 0/35/2/3 | true | true |
-| CHF_chfdb_chf06_chunk19 | CHF_chfdb_chf06 | 19 | AFF | AFF | true | 1/-3/10/32 | 1/-3/10/32 | true | true |
+| CHF_chfdb_chf06_chunk19 | CHF_chfdb_chf06 | 19 | AF | AF | true | 1/-3/10/32 | 1/-3/10/32 | true | true |
 | CHF_chfdb_chf06_chunk32 | CHF_chfdb_chf06 | 32 | CHF | CHF | true | 0/42/4/-6 | 0/42/4/-6 | true | true |
 | CHF_chfdb_chf07_chunk09 | CHF_chfdb_chf07 | 9 | CHF | CHF | true | 0/25/4/1 | 0/25/4/1 | true | true |
-| CHF_chfdb_chf07_chunk29 | CHF_chfdb_chf07 | 29 | AFF | AFF | true | 0/-3/9/34 | 0/-3/9/34 | true | true |
+| CHF_chfdb_chf07_chunk29 | CHF_chfdb_chf07 | 29 | AF | AF | true | 0/-3/9/34 | 0/-3/9/34 | true | true |
 | CHF_chfdb_chf09_chunk09 | CHF_chfdb_chf09 | 9 | NSR | NSR | true | 17/12/1/0 | 17/12/1/0 | true | true |
 | CHF_chfdb_chf09_chunk29 | CHF_chfdb_chf09 | 29 | CHF | CHF | true | 0/29/0/1 | 0/29/0/1 | true | true |
 | CHF_chfdb_chf15_chunk03 | CHF_chfdb_chf15 | 3 | CHF | CHF | true | 2/27/1/0 | 2/27/1/0 | true | true |

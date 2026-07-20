@@ -102,7 +102,7 @@ plt.close()
 
 # =========================================================
 # Missing rate plot 생성
-# AFF처럼 NNTot가 전부 NaN인 class 확인용
+# AF처럼 NNTot가 전부 NaN인 class 확인용
 # =========================================================
 plt.figure(figsize=(8, 5))
 plt.bar(summary_df["Class"], summary_df["missing_rate_percent"])
@@ -135,4 +135,4 @@ print(summary_df.to_string(index=False))
 
 print("\n[주의]")
 print("NNTot가 전부 NaN인 class는 boxplot에 표시되지 않습니다.")
-print("예를 들어 AFF class의 NNTot가 모두 NaN이면 boxplot에는 ARR/CHF/NSR만 표시됩니다.")
+print("예를 들어 AF class의 NNTot가 모두 NaN이면 boxplot에는 ARR/CHF/NSR만 표시됩니다.")

@@ -7,7 +7,7 @@ _ROOT = _os.environ.get('ECG_SOC_ROOT', str(_pl.Path(__file__).resolve().parents
 import sys, csv, os
 ECG = _ROOT + ""
 GOLD = ECG + "/digital_block/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv"
-LBL = ["NSR", "CHF", "ARR", "AFF"]
+LBL = ["NSR", "CHF", "ARR", "AF"]
 our = {r["case_id"]: r for r in csv.DictReader(open(sys.argv[1]))}
 gold = {r["case_id"]: r for r in csv.DictReader(open(GOLD))}
 pm = mm = 0; tot = 0; bad = []

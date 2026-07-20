@@ -20,7 +20,7 @@
   "train_val_chunk_file_hash": "d658d06b7fb107ac766bc8b7597eed41edd994b53be1e3040913238dd7dbb598",
   "test_chunk_file_hash": "6d5f1110c3f939e005b276f45dc6d8097d30be51d379d0ef4ddd5b0843e753b8",
   "test_source_records": [
-    "AFF_afdb_06995",
+    "AF_afdb_06995",
     "ARR_mitdb_102",
     "ARR_mitdb_105",
     "ARR_mitdb_118",
@@ -65,10 +65,10 @@
     "NSR": 5,
     "CHF": 4,
     "ARR": 9,
-    "AFF": 1
+    "AF": 1
   },
   "test_chunk_count_by_class": {
-    "AFF": 9,
+    "AF": 9,
     "ARR": 9,
     "CHF": 9,
     "NSR": 9

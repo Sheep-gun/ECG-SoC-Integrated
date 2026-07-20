@@ -46,7 +46,7 @@
 - [x] Event encoder의 signed 차분, one-cycle pulse와 adaptive bank 선택을 설명한다.
 - [x] QRS의 이전 상태→누설→사건 가산→문턱 비교→reset/refractory 순서와 locked leak=0을 구분한다.
 - [x] PNN, RDM, ectopic, DSCR, RAM, QRS MAF와 RBBB-like 경로의 관찰 목적과 상태 갱신을 설명한다.
-- [x] Snapshot의 현재 `*_next` 저장과 Final base/guard/rescue/veto/silent-AFF/WTA를 설명한다.
+- [x] Snapshot의 현재 `*_next` 저장과 Final base/guard/rescue/veto/silent-AF/WTA를 설명한다.
 - [x] 디지털 기존 설명의 깊이와 고정 결과를 낮추거나 변경하지 않는다.
 
 ## 결과와 claim 경계

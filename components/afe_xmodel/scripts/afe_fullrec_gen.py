@@ -46,7 +46,7 @@ byc = OrderedDict()
 for c, rid, db in recs:
     byc.setdefault(c, []).append((rid, db))
 sel = []
-for c in ["NSR", "CHF", "ARR", "AFF"]:
+for c in ["NSR", "CHF", "ARR", "AF"]:
     lst = byc.get(c, [])
     sel += [(c, rid, db) for rid, db in (lst[:N] if mode == "pilot" else lst)]
 

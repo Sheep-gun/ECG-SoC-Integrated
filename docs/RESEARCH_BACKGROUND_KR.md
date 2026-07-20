@@ -8,7 +8,7 @@ Ambulatory ECG에서는 증상의 발생 빈도와 관찰 목적에 따라 24/48
 
 ## 2. 기존 기능 범위와 본 연구 문제의 차이
 
-위 규제 문서 사례의 AF/sinus 중심 screening과 본 연구의 공개 데이터 기반 네 class 분류는 intended use와 평가 조건이 다르다. 본 연구는 상용 제품을 대체하거나 임상 성능을 비교하지 않는다. 연구 문제는 공개 digitized ECG를 공통 signed 12-bit stream으로 변환한 뒤, NSR/CHF/ARR/AFF 네 public-dataset class를 장시간 다중 시간축 event/state 구조로 분류하고 RTL IP로 구현하는 것이다.
+위 규제 문서 사례의 AF/sinus 중심 screening과 본 연구의 공개 데이터 기반 네 class 분류는 intended use와 평가 조건이 다르다. 본 연구는 상용 제품을 대체하거나 임상 성능을 비교하지 않는다. 연구 문제는 공개 digitized ECG를 공통 signed 12-bit stream으로 변환한 뒤, NSR/CHF/ARR/AF 네 public-dataset class를 장시간 다중 시간축 event/state 구조로 분류하고 RTL IP로 구현하는 것이다.
 
 두 평가의 대상, 데이터 구성, recording 조건, label 정의와 intended use가 다르므로 정확도 수치를 직접 비교할 수 없다. 특히 본 연구의 CHF는 chfdb에서 유래한 source-dataset label이며, ARR은 광범위한 arrhythmia-labelled 범주이다.
 
@@ -21,7 +21,7 @@ Ambulatory ECG에서는 증상의 발생 빈도와 관찰 목적에 따라 24/48
 | NSR | MIT-BIH Normal Sinus Rhythm Database | EXT-003 |
 | CHF | BIDMC Congestive Heart Failure Database | EXT-004 |
 | ARR | MIT-BIH Arrhythmia Database | EXT-005 |
-| AFF | MIT-BIH Atrial Fibrillation Database | EXT-006 |
+| AF | MIT-BIH Atrial Fibrillation Database | EXT-006 |
 
 각 데이터베이스는 서로 다른 모집단·장비·sampling·recording 맥락을 가질 수 있다. 이 차이는 장시간 ECG를 제공한다는 장점과 동시에 database-class confounding이라는 중요한 한계를 만든다. Raw waveform은 public Git에 번들하지 않고 `datasets/dataset_manifest.yaml`의 고정 버전 URL과 `SHA256SUMS_EXPECTED.txt`로 복원한다. License와 citation은 `datasets/DATASET_LICENSES.md`, 상세 한계는 `DATASET_DOMAIN_CONFOUNDING_KR.md`에 둔다.
 

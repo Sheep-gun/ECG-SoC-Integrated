@@ -1,7 +1,7 @@
 {
   "project_title_kr": "AFE+ADC XMODEL 연동 SNN 기반 장시간 ECG 4-Class Classification Accelerator IP Core 설계",
   "project_title_en": "AFE+ADC XMODEL-linked SNN ECG 4-Class Classification Accelerator IP Core",
-  "final_model_id": "structural_guarded_silent_aff_1008710",
+  "final_model_id": "structural_guarded_silent_af_1008710",
   "locked_params_hash": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",
   "protocol": "fully_blind_strict_recordwise_locked_final_holdout",
   "split_unit": "source_record_id",
@@ -34,7 +34,7 @@
       "NSR": 100.0,
       "CHF": 66.67,
       "ARR": 77.78,
-      "AFF": 77.78
+      "AF": 77.78
     }
   },
   "final_test_record_majority": {
@@ -47,7 +47,7 @@
       "NSR": 100.0,
       "CHF": 75.0,
       "ARR": 77.78,
-      "AFF": 100.0
+      "AF": 100.0
     }
   },
   "hardware": {

@@ -5,10 +5,10 @@
 > 임포트 스냅샷: `digital_block/` (upstream commit `91cad84`, 2026-07-06) — 상세는 `digital_block/_UPSTREAM_COMMIT.txt`
 
 ## 1. 위치와 역할
-AFE+ADC(우리 담당)가 만든 **1kSPS signed 12-bit ECG stream**을 입력받아, SNN-inspired 방식으로 **NSR/CHF/ARR/AFF 4클래스**를 분류하는 RTL/IP accelerator. 파이프라인:
+AFE+ADC(우리 담당)가 만든 **1kSPS signed 12-bit ECG stream**을 입력받아, SNN-inspired 방식으로 **NSR/CHF/ARR/AF 4클래스**를 분류하는 RTL/IP accelerator. 파이프라인:
 ```
 공개 digitized ECG → analog-equivalent vin(code/200000) → AFE+ADC XMODEL
-   → signed 12-bit stream → 60초 Snapshot Readout → 30분 Final Membrane Readout → WTA → NSR/CHF/ARR/AFF
+   → signed 12-bit stream → 60초 Snapshot Readout → 30분 Final Membrane Readout → WTA → NSR/CHF/ARR/AF
 ```
 - **60초 Snapshot Readout**: 60초마다 event/rhythm/morphology/variability evidence를 spike·counter로 압축
 - **30분 Final Membrane Readout**: 30개 snapshot(=30분)을 signed membrane에 누적(단순 다수결 아님, guarded/silent/rescue 로직) → 최종 class
@@ -41,7 +41,7 @@ AFE+ADC(우리 담당)가 만든 **1kSPS signed 12-bit ECG stream**을 입력받
 - `common/reset_sync.v` — reset 동기화
 
 ## 3. 최종 모델 & 결과
-- **Locked model**: `structural_guarded_silent_aff_1008710` (Snapshot Readout 고정, Final Membrane만 strict record-wise train/val로 lock; test는 lock 후 1회만 평가)
+- **Locked model**: `structural_guarded_silent_af_1008710` (Snapshot Readout 고정, Final Membrane만 strict record-wise train/val로 lock; test는 lock 후 1회만 평가)
 
 | 평가 | 결과 |
 |---|---|
@@ -49,8 +49,8 @@ AFE+ADC(우리 담당)가 만든 **1kSPS signed 12-bit ECG stream**을 입력받
 | Validation (32 records) | 32/32 = 100.00% (model-selection 성능) |
 | **Final test 30분 chunk (36)** | **29/36 = 80.56%** (macro F1 80.44 / bal.acc 80.56) |
 | Final test record-majority (19) | 16/19 = 84.21% |
-| chunk class recall | NSR 100 · CHF 66.67(최약) · ARR 77.78 · AFF 77.78 |
-| record-majority class recall | NSR 100 · CHF 75 · ARR 77.78 · AFF 100 |
+| chunk class recall | NSR 100 · CHF 66.67(최약) · ARR 77.78 · AF 77.78 |
+| record-majority class recall | NSR 100 · CHF 75 · ARR 77.78 · AF 100 |
 
 ## 4. 하드웨어 검증
 - **Pure RTL(Vivado)**: LUT 9,719 / FF 5,038 / BRAM 0 / DSP 0 / WNS 8.184ns / 추정전력 0.099W

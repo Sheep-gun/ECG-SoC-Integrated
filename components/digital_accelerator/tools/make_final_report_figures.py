@@ -179,7 +179,7 @@ def final_system_architecture(metrics: dict) -> None:
         ("Signed 12-bit stream", ".mem / AXIS-style samples used by RTL and board replay."),
         ("Snapshot SNN Readout", "60-second event, rhythm, morphology, variability evidence."),
         ("Final Membrane", "30 snapshots accumulated by locked candidate."),
-        ("4-class output", "NSR / CHF / ARR / AFF"),
+        ("4-class output", "NSR / CHF / ARR / AF"),
     ]
     x0, y0, w, h, gap = 70, 210, 190, 150, 22
     upstream_band = (x0, 160, x0 + 3 * w + 2 * gap, 196)
@@ -220,7 +220,7 @@ def snapshot_pipeline(metrics: dict) -> None:
     arrow(draw, (750, 285), (895, 285))
     box(draw, (910, 210, 1190, 360), "Class membrane update", "Snapshot WTA and guarded evidence update signed class membranes.", fill="#f8fff9", outline=GREEN)
     arrow(draw, (1190, 285), (1310, 285))
-    box(draw, (1325, 210, 1515, 360), "Final WTA", "Largest final membrane selects NSR/CHF/ARR/AFF.", fill="#fff8f5", outline=ORANGE)
+    box(draw, (1325, 210, 1515, 360), "Final WTA", "Largest final membrane selects NSR/CHF/ARR/AF.", fill="#fff8f5", outline=ORANGE)
     box(draw, (250, 525, 650, 690), "Locked candidate", metrics["final_model_id"], fill="#f9f7ff", outline=PURPLE)
     box(draw, (780, 525, 1180, 690), "Protocol guard", "Final test was not used for selection, parameter search, or ChatGPT context.", fill="#fffaf4", outline=ORANGE)
     footnote(draw, "This figure describes the locked final model only; it is not a majority-vote-only classifier.")

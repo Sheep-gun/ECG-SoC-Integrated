@@ -13,9 +13,9 @@ Board-facing expected는 full-top RTL XSim을 `sample_gap_cycles=2`로 재생성
 | 항목 | 결과 |
 |---|---|
 | Affected case | `CHF_chfdb_chf06_chunk19` |
-| Previous direct 0-gap expected final_mem | `NSR=1, CHF=-3, ARR=9, AFF=33` |
-| Board final_mem | `NSR=1, CHF=-3, ARR=10, AFF=32` |
-| Board-equivalent XSim expected final_mem | `NSR=1, CHF=-3, ARR=10, AFF=32` |
+| Previous direct 0-gap expected final_mem | `NSR=1, CHF=-3, ARR=9, AF=33` |
+| Board final_mem | `NSR=1, CHF=-3, ARR=10, AF=32` |
+| Board-equivalent XSim expected final_mem | `NSR=1, CHF=-3, ARR=10, AF=32` |
 | Final 36-case final_pred match | 36/36 |
 | Final 36-case final_mem exact match | 36/36 |
 

@@ -7,7 +7,7 @@ DATA = os.path.join(os.path.dirname(__file__), "..", "data")
 SECS = 60
 SCALE = 1.0/200000.0
 UP = 4                       # 샘플당 보간 분할수 (1=ZOH)
-for cls in ["NSR", "CHF", "ARR", "AFF"]:
+for cls in ["NSR", "CHF", "ARR", "AF"]:
     src = os.path.join(DATA, f"mem_{cls}.mem")
     dst = os.path.join(DATA, f"ecg_{cls}.pwl")
     n = SECS * 1000

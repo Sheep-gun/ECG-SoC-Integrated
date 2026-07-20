@@ -36,7 +36,7 @@ Digital top은 1 kSPS signed 12-bit sample, valid/segment control을 받아 samp
 
 ## 30-minute Final Membrane Readout
 
-Final Membrane layer는 30개의 Snapshot readout을 signed class state에 누적한다. Positive/negative evidence와 guarded update가 class별 persistence를 반영하며, 30번째 Snapshot 이후 WTA가 NSR/CHF/ARR/AFF 중 하나를 선택한다. Locked model ID는 `structural_guarded_silent_aff_1008710`이고 parameter hash는 digital fixed snapshot에 기록돼 있다.
+Final Membrane layer는 30개의 Snapshot readout을 signed class state에 누적한다. Positive/negative evidence와 guarded update가 class별 persistence를 반영하며, 30번째 Snapshot 이후 WTA가 NSR/CHF/ARR/AF 중 하나를 선택한다. Locked model ID는 `structural_guarded_silent_af_1008710`이고 parameter hash는 digital fixed snapshot에 기록돼 있다.
 
 ## SNN-inspired라는 표현의 경계
 

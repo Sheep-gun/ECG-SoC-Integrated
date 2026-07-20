@@ -23,7 +23,7 @@ module tb_snn_ecg_30min_chunk_dataset #(
     wire signed [31:0] final_mem_nsr;
     wire signed [31:0] final_mem_chf;
     wire signed [31:0] final_mem_arr;
-    wire signed [31:0] final_mem_aff;
+    wire signed [31:0] final_mem_af;
     wire [5:0] snapshot_index_dbg;
     wire [63:0] prof_total_cycle_counter;
     wire [63:0] prof_busy_cycle_counter;
@@ -71,7 +71,7 @@ module tb_snn_ecg_30min_chunk_dataset #(
         .final_mem_nsr(final_mem_nsr),
         .final_mem_chf(final_mem_chf),
         .final_mem_arr(final_mem_arr),
-        .final_mem_aff(final_mem_aff),
+        .final_mem_af(final_mem_af),
         .snapshot_index_dbg(snapshot_index_dbg),
         .prof_total_cycle_counter(prof_total_cycle_counter),
         .prof_busy_cycle_counter(prof_busy_cycle_counter),
@@ -165,7 +165,7 @@ module tb_snn_ecg_30min_chunk_dataset #(
                       final_mem_nsr,
                       final_mem_chf,
                       final_mem_arr,
-                      final_mem_aff,
+                      final_mem_af,
                       cycles,
                       prof_total_cycle_counter,
                       prof_busy_cycle_counter,
@@ -219,7 +219,7 @@ module tb_snn_ecg_30min_chunk_dataset #(
             $display("FAIL cannot open result csv: %s", RESULT_CSV);
             $finish;
         end
-        $fdisplay(out_fd, "case_id,expected_class,final_pred_class,correct,final_valid,samples_driven,final_mem_NSR,final_mem_CHF,final_mem_ARR,final_mem_AFF,cycles,prof_total_cycles,prof_busy_cycles,prof_run_cycles,prof_input_wait_cycles,prof_accepted_samples,prof_windows,prof_decisions,prof_last_window_latency,prof_max_window_latency,prof_last_decision_latency");
+        $fdisplay(out_fd, "case_id,expected_class,final_pred_class,correct,final_valid,samples_driven,final_mem_NSR,final_mem_CHF,final_mem_ARR,final_mem_AF,cycles,prof_total_cycles,prof_busy_cycles,prof_run_cycles,prof_input_wait_cycles,prof_accepted_samples,prof_windows,prof_decisions,prof_last_window_latency,prof_max_window_latency,prof_last_decision_latency");
 
         while (!$feof(manifest_fd)) begin
             path = 0;

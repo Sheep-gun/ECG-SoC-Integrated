@@ -262,7 +262,7 @@ def main() -> int:
     python_rows = read_csv(ROOT / "components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv")
     assert len(python_rows) == 36
     python_pred = sum(row["python_pred_class"] == row["xsim_pred_class"] for row in python_rows)
-    membrane_cols = ["NSR", "CHF", "ARR", "AFF"]
+    membrane_cols = ["NSR", "CHF", "ARR", "AF"]
     python_mem = sum(
         row[f"python_final_mem_{label}"] == row[f"xsim_final_mem_{label}"]
         for row in python_rows for label in membrane_cols
