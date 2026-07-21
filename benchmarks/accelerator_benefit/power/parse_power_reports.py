@@ -213,6 +213,26 @@ def main() -> int:
         "activity_method": "Post-implementation vectorless Vivado power estimate",
         "scopes": scopes,
     }
+    activity_summary = RESULTS / "activity_power_summary.json"
+    clock_enable_summary = RESULTS / "clock_enable_summary.json"
+    wearable_budget = RESULTS / "wearable_power_budget.json"
+    if activity_summary.exists():
+        payload["activity_based_power"] = {
+            "path": rel(activity_summary),
+            "sha256": sha256(activity_summary),
+            "description": "Real-ECG SAIF post-route mode-separated power estimates",
+        }
+    if clock_enable_summary.exists():
+        payload["clock_enable_evidence"] = {
+            "path": rel(clock_enable_summary),
+            "sha256": sha256(clock_enable_summary),
+        }
+    if wearable_budget.exists():
+        payload["wearable_power_budget"] = {
+            "path": rel(wearable_budget),
+            "sha256": sha256(wearable_budget),
+            "complete": False,
+        }
     SUMMARY_JSON.parent.mkdir(parents=True, exist_ok=True)
     SUMMARY_JSON.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 

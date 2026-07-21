@@ -1,0 +1,14 @@
+field,evidence_class,value,unit,required_source,status
+process_node,MEASURED,,,PDK and library manifest,BLOCKED_NO_PDK
+pvt_corner,MEASURED,,,Liberty corner,BLOCKED_NO_PDK
+core_voltage,MEASURED,,V,Liberty operating condition,BLOCKED_NO_PDK
+post_route_dynamic_power,ESTIMATED,,W,extracted netlist plus real-ECG SAIF,BLOCKED_NO_PDK
+post_route_internal_power,ESTIMATED,,W,Liberty internal-power tables,BLOCKED_NO_PDK
+post_route_switching_power,ESTIMATED,,W,extracted capacitance plus SAIF,BLOCKED_NO_PDK
+post_route_leakage_power,ESTIMATED,,W,Liberty leakage tables,BLOCKED_NO_PDK
+retained_state_bits,DERIVED,,bit,UPF and retention register list,BLOCKED_NO_UPF
+retention_leakage,ESTIMATED,,W,retention-cell Liberty tables,BLOCKED_NO_UPF
+isolation_leakage,ESTIMATED,,W,isolation-cell Liberty tables,BLOCKED_NO_UPF
+power_switch_area,ESTIMATED,,um^2,power-grid and IR-drop design,BLOCKED_NO_UPF
+wake_energy,ESTIMATED,,J,power-state transient simulation,BLOCKED_NO_UPF
+wake_latency,ESTIMATED,,s,power-state transient simulation,BLOCKED_NO_UPF

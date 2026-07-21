@@ -146,11 +146,11 @@ def main() -> int:
     matched_power = power_by_name.get("Pure RTL accelerator, 100 MHz core", {})
     if (
         matched_power.get("core_clock_mhz") != "100.000000"
-        or matched_power.get("power_w") != "0.183000"
-        or matched_power.get("dynamic_power_w") != "0.085000"
+        or matched_power.get("power_w") != "0.149500"
+        or matched_power.get("dynamic_power_w") != "0.052500"
         or matched_power.get("device_static_power_w") != "0.097000"
-        or matched_power.get("energy_per_decision_j") != "0.006590360700"
-        or matched_power.get("active_dynamic_energy_per_decision_j") != "0.003061096500"
+        or matched_power.get("energy_per_decision_j") != "0.005383928550"
+        or matched_power.get("active_dynamic_energy_per_decision_j") != "0.001890677250"
         or matched_power.get("energy_class") != "DERIVED_ESTIMATE"
     ):
         failures.append("100 MHz Pure RTL power or clock-matched energy is invalid")
@@ -414,6 +414,57 @@ def main() -> int:
         path = REPO / row["path"]
         if not path.exists() or digest(path) != row["sha256"]:
             failures.append(f"benchmark input changed: {row['case_id']}")
+
+    activity_path = BENCH / "power/results/activity_power_summary.json"
+    if activity_path.exists():
+        activity = json.loads(activity_path.read_text(encoding="utf-8"))
+        activity_rows = activity.get("records", [])
+        expected_pairs = {
+            (implementation, mode)
+            for implementation in ("baseline", "power_opt")
+            for mode in ("burst_full_record", "streaming_1ksps_prefix")
+        }
+        actual_pairs = {(row.get("implementation"), row.get("mode")) for row in activity_rows}
+        if len(activity_rows) != 16 or actual_pairs != expected_pairs:
+            failures.append(f"activity power records/pairs invalid: {len(activity_rows)} {sorted(actual_pairs)}")
+        for row in activity_rows:
+            report = REPO / row.get("raw_power_report", "")
+            saif = REPO / row.get("saif", "")
+            if (
+                row.get("evidence_class") != "ESTIMATED"
+                or row.get("power_estimation_confidence") != "Medium"
+                or not str(row.get("design_nets_matched", "")).startswith("12%")
+                or float(row.get("timing_wns_ns", -1)) < 0
+                or not report.exists()
+                or digest(report) != row.get("raw_power_report_sha256")
+                or not saif.exists()
+                or digest(saif) != row.get("saif_sha256")
+            ):
+                failures.append(f"activity power evidence invalid: {row.get('implementation')}/{row.get('case_id')}/{row.get('mode')}")
+        if activity.get("physical_board_power_measured") is not False:
+            failures.append("activity summary mislabels physical board power")
+
+        ce = json.loads((BENCH / "power/results/clock_enable_summary.json").read_text(encoding="utf-8"))
+        if (
+            ce.get("functional_rtl_changed") is not False
+            or ce.get("slice_registers_total") != 5044
+            or ce.get("slice_registers_user_gated", 0) <= 0
+            or ce.get("slice_registers_tool_gated", 0) <= 0
+            or ce.get("slice_registers_percent_gated", 0) <= 0
+        ):
+            failures.append("clock-enable/power-opt evidence invalid")
+
+        board_power = json.loads((BENCH / "power/results/board_measurement_availability.json").read_text(encoding="utf-8"))
+        if board_power.get("physical_board_power_measured") is not False or board_power.get("external_power_meter_detected") is not False:
+            failures.append("physical rail measurement boundary invalid")
+
+        asic = json.loads((BENCH / "asic_handoff/asic_environment.json").read_text(encoding="utf-8"))
+        if asic.get("status") != "BLOCKED_NO_PDK_OR_ASIC_TOOLCHAIN":
+            failures.append("ASIC PPA blocker status invalid")
+
+        wearable = json.loads((BENCH / "power/results/wearable_power_budget.json").read_text(encoding="utf-8"))
+        if wearable.get("complete_wearable_budget_available") is not False:
+            failures.append("incomplete wearable power budget incorrectly marked complete")
 
     limitation = (REPORTS / "BENCHMARK_LIMITATIONS.md").read_text(encoding="utf-8")
     if "scope" not in limitation.lower() or "speedup" not in limitation.lower():

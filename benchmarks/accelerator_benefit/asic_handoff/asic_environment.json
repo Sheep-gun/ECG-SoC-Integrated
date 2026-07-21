@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-07-21T22:16:00.5554245+09:00",
+  "status": "BLOCKED_NO_PDK_OR_ASIC_TOOLCHAIN",
+  "tools": {
+    "yosys": false,
+    "openroad": false,
+    "opensta": false,
+    "cadence_genus": false,
+    "cadence_innovus": false,
+    "synopsys_design_compiler": false,
+    "synopsys_ic_compiler_ii": false,
+    "synopsys_prime_time": false
+  },
+  "pdk_or_liberty_environment_detected": false,
+  "available_inputs": {
+    "locked_rtl_filelist": "benchmarks/accelerator_benefit/asic_handoff/rtl_files.f",
+    "clock_sdc": "benchmarks/accelerator_benefit/asic_handoff/snn_ecg_100mhz.sdc",
+    "real_ecg_activity": "benchmarks/accelerator_benefit/power/results/activity/activity_manifest.json"
+  },
+  "claim_boundary": "No 55/65/28 nm synthesis, post-layout power, leakage, retention or power-gating overhead number is reported."
+}

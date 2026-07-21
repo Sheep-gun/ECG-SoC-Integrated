@@ -19,6 +19,11 @@ Regenerate and verify:
 
 ```powershell
 vivado -mode batch -source benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+python benchmarks/accelerator_benefit/power/capture_ecg_activity.py
+python benchmarks/accelerator_benefit/power/run_activity_power.py
+python benchmarks/accelerator_benefit/power/parse_activity_power.py
+python benchmarks/accelerator_benefit/power/generate_wearable_power_budget.py
+python benchmarks/accelerator_benefit/power/generate_wearable_reports.py
 python benchmarks/accelerator_benefit/power/parse_power_reports.py
 python benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py
 python benchmarks/accelerator_benefit/tools/check_benchmark_integrity.py
@@ -30,4 +35,4 @@ Only the hand-written single-thread transaction-level **Exact C++** implementati
 
 The UART-paced raw counter interval is retained only as a transport diagnostic. Integrated-system compute latency, speedup, and energy are not inferred from it; those require preloaded input plus an independent system timer.
 
-Power operating points are separate. The retained 0.099 W result is the 1 MHz Pure RTL vectorless estimate and is not combined with the 100 MHz active latency. The direct-100-MHz Pure RTL route met timing at WNS 0.035 ns and produced 0.183 W total, 0.085 W dynamic, and 0.097 W device-static estimates. Only this 100 MHz power is combined with the 36.0129 ms active latency, giving 0.006590360700 J/decision total and 0.003061096500 J/decision active dynamic energy as DERIVED ESTIMATES. All power values are post-implementation vectorless Vivado estimates without SAIF/VCD; physical board power remains unmeasured.
+Power operating points are separate. The retained 0.099 W result is the 1 MHz Pure RTL vectorless estimate and is not combined with the 100 MHz active latency. The reportable direct-100-MHz accelerator result uses the median of four class-representative real-ECG burst SAIF runs: accelerator-hierarchy dynamic power is 0.052500 W and the allocated FPGA total (hierarchy dynamic plus 0.097000 W device static) is 0.149500 W. Combining that clock-matched estimate with the 36.0129 ms active latency gives 0.005383928550 J/decision allocated total and 0.001890677250 J/decision active dynamic energy as DERIVED ESTIMATES. Routed-net SAIF match is about 12%; unmatched nets retain vectorless propagation and Vivado confidence is Medium. Literal 1 kS/s, preloaded burst, and power-optimized runs are reported separately. Physical board power remains unmeasured, and no FPGA result is presented as target-node ASIC power.

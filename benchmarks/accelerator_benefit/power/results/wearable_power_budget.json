@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "complete_wearable_budget_available": false,
+  "reason": "Memory, MCU, BLE, PMIC workload and target ASIC post-layout power are not specified.",
+  "afe_reference_url": "https://www.analog.com/en/products/max30001.html",
+  "rows": [
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "ECG AFE/ADC",
+      "evidence_class": "EXTERNAL_DATASHEET",
+      "power_w": 8.5e-05,
+      "status": "REFERENCE_ONLY",
+      "basis": "MAX30001 ECG channel typical power; verify exact configuration"
+    },
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "Pure RTL FPGA on-chip",
+      "evidence_class": "ESTIMATED",
+      "power_w": 0.14200000000000002,
+      "status": "AVAILABLE",
+      "basis": "Median post-route literal-1-kS/s ECG SAIF Total On-Chip Power"
+    },
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "Pure RTL FPGA dynamic subset",
+      "evidence_class": "ESTIMATED",
+      "power_w": 0.045,
+      "status": "AVAILABLE",
+      "basis": "Median post-route literal-1-kS/s ECG SAIF Dynamic Power; subset, not additive"
+    },
+    {
+      "scenario": "fpga_preloaded_burst_30min",
+      "component": "Pure RTL FPGA without power gating",
+      "evidence_class": "DERIVED",
+      "power_w": 0.09700105037625001,
+      "status": "AVAILABLE",
+      "basis": "FPGA static plus active dynamic scaled by 36.0129 ms / 1800 s; assumes global clock gating while idle"
+    },
+    {
+      "scenario": "fpga_preloaded_burst_30min",
+      "component": "Pure RTL dynamic subset",
+      "evidence_class": "DERIVED",
+      "power_w": 1.05037625e-06,
+      "status": "AVAILABLE",
+      "basis": "Active FPGA dynamic scaled by 36.0129 ms / 1800 s; subset, not additive"
+    },
+    {
+      "scenario": "idealized_power_gated_ip",
+      "component": "Pure RTL FPGA-equivalent IP",
+      "evidence_class": "DERIVED",
+      "power_w": 2.9910714166666663e-06,
+      "status": "UPPER_BOUND_ASSUMPTION",
+      "basis": "Active total energy / 1800 s; excludes retention, isolation, wake, switch and off leakage"
+    },
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "sample memory",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "MCU/control",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "BLE radio",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_streaming_always_clocked",
+      "component": "PMIC/regulator loss",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_preloaded_burst_30min",
+      "component": "sample memory",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_preloaded_burst_30min",
+      "component": "MCU/control",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_preloaded_burst_30min",
+      "component": "BLE radio",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "fpga_preloaded_burst_30min",
+      "component": "PMIC/regulator loss",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "asic_wearable_target",
+      "component": "sample memory",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "asic_wearable_target",
+      "component": "MCU/control",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "asic_wearable_target",
+      "component": "BLE radio",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "asic_wearable_target",
+      "component": "PMIC/regulator loss",
+      "evidence_class": "MEASUREMENT_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED",
+      "basis": "Select the device and workload, then measure or use the matching vendor operating point"
+    },
+    {
+      "scenario": "asic_wearable_target",
+      "component": "SNN accelerator IP",
+      "evidence_class": "ESTIMATION_REQUIRED",
+      "power_w": "",
+      "status": "BLOCKED_NO_PDK_POST_LAYOUT",
+      "basis": "Requires target-node post-layout leakage/dynamic power with real-ECG SAIF and low-power intent"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 # Vivado generated files
 *.jou
 *.log
+!benchmarks/accelerator_benefit/power/results/activity/**/*_simulation.log
 *.err
 *.pid
 *.str

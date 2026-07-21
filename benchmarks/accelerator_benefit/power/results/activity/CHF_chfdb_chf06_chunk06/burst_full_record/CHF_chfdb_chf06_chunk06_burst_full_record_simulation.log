@@ -1,0 +1,21 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_snn_ecg_power_activity/xsim_script.tcl
+# xsim {tb_snn_ecg_power_activity} -testplusarg MEM../../../../../fullrec_afe_30min_annotation_valid_balanced/train/CHF/chf06/chf06_30min_w006.mem -testplusarg SAMPLES1800000 -testplusarg GAP_CYCLES0 -testplusarg REQUIRE_FINAL1 -testplusarg EXPECTED_PRED1 -testplusarg EXPECTED_MEM_NSR0 -testplusarg EXPECTED_MEM_CHF35 -testplusarg EXPECTED_MEM_ARR2 -testplusarg EXPECTED_MEM_AFF3 -autoloadwcfg -tclbatch {{C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/CHF_chfdb_chf06_chunk06/burst_full_record/capture_burst_full_record.tcl}} -onfinish stop
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+source {C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/CHF_chfdb_chf06_chunk06/burst_full_record/capture_burst_full_record.tcl}
+## open_saif {C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/CHF_chfdb_chf06_chunk06/burst_full_record/CHF_chfdb_chf06_chunk06_burst_full_record.saif}
+## log_saif [get_objects -r /tb_snn_ecg_power_activity/uut/*]
+## run all
+ACTIVITY_FINAL pred=1 mem=0/35/2/3 expected=1/0/35/2/3
+ACTIVITY_PASS samples=1800000 gap_cycles=0 require_final=1
+$finish called at time : 36013215 ns : File "C:/Users/YangGeon/SNN ECG Classifier/sim/tb_snn_ecg_power_activity.v" Line 188
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:03:11 . Memory (MB): peak = 926.242 ; gain = 0.000
+## close_saif
+## quit
+INFO: [Common 17-206] Exiting xsim at Tue Jul 21 22:28:33 2026...

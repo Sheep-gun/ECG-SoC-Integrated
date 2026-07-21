@@ -1,0 +1,13 @@
+VIVADO_VERSION=2020.2
+PART=xc7a100tcsg324-1
+TOP=snn_ecg_v2_nexys_a7_100mhz_top
+IMPLEMENTATION_STATUS=routed
+DCP=C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/work/pure_rtl_100mhz/pure_rtl_100mhz_routed.dcp
+SAIF=C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/NSR_nsrdb_16272_chunk03/streaming_1ksps_prefix/NSR_nsrdb_16272_chunk03_streaming_1ksps_prefix.saif
+SAIF_STRIP_PATH=tb_snn_ecg_power_activity/uut
+ACTIVITY_SOURCE=Literal 100 MHz / 1 kS/s representative-prefix real-ECG RTL SAIF
+RESET_POLICY=set_switching_activity -deassert_resets before read_saif
+REGISTER_PRIMITIVES=5049
+REGISTER_CE_PINS=5049
+REGISTER_CE_PINS_WITH_DRIVEN_NET=5049
+CLOCK=core_clk_100mhz PERIOD_NS=10.000

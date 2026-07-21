@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-07-21T22:16:00.5554245+09:00",
+  "evidence_class": "MEASURED",
+  "board": "Nexys A7-100T",
+  "jtag": {
+    "hw_server_url": "tcp:127.0.0.1:3121",
+    "fpga_target": "xc7a100t",
+    "microblaze_debug_module": "MicroBlaze Debug Module at USER2",
+    "microblaze_target": "MicroBlaze #0 (Running)",
+    "connected": true
+  },
+  "uart": {
+    "device": "USB Serial Port (COM8)",
+    "usb_vid_pid": "0403:6010",
+    "present": true
+  },
+  "external_power_meter_detected": false,
+  "onboard_software_current_monitor_available": false,
+  "physical_board_power_measured": false,
+  "conclusion": "JTAG and USB-UART are available, but neither XSDB nor the Nexys A7 exposes a calibrated rail-power reading. Idle/active differential power requires external instrumentation."
+}

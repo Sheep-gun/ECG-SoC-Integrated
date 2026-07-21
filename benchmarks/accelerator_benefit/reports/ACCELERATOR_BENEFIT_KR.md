@@ -14,10 +14,10 @@
 | UART-paced raw interval median | 187144.750920 ms | transport diagnostic, MEASURED |
 | Integrated-system compute latency/speedup | 미측정 | DDR 사전 적재와 독립 timer 필요 |
 | Pure RTL 1 MHz power | 0.099000 W | 저속 구성 Vivado post-implementation vectorless, ESTIMATED; energy 미산출 |
-| Pure RTL 100 MHz total / dynamic / static power | 0.183000 / 0.085000 / 0.097000 W | 성능 대응 구성 Vivado post-implementation vectorless, ESTIMATED |
+| Pure RTL 100 MHz accelerator+static / hierarchy dynamic / static power | 0.149500 / 0.052500 / 0.097000 W | real-ECG SAIF, ESTIMATED |
 | Integrated FPGA system power | 0.271000 W | Vivado post-implementation vectorless, ESTIMATED |
-| Pure RTL 100 MHz total energy/decision | 0.006590360700 J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
-| Pure RTL 100 MHz active dynamic energy/decision | 0.003061096500 J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz total energy/decision | 0.005383928550 J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz active dynamic energy/decision | 0.001890677250 J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
 | Integrated system energy/decision | 미측정 | 유효한 integrated compute latency 없음 |
 | Board physical power | 미측정 | 외부 전력계 없음 |
 
@@ -29,4 +29,4 @@
 
 기존 0.099000 W는 `CORE_DIV_HALF=50`과 `core_clk_1mhz`를 사용한 1 MHz Pure RTL 저속 구성의 유효한 전력 추정치로 보존한다. 하지만 100 MHz active latency와 결합하지 않는다. 새 성능 대응 Pure RTL top은 분주기나 generated core clock 없이 가속기를 직접 100 MHz로 구동하며, route WNS 0.035 ns로 timing을 통과했다. 이 구성의 자원은 9759 LUT/5049 FF/0 BRAM/0 DSP다. 종전 mixed-clock energy 계산은 최종 성능값에서 철회했다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
 
-세 전력 범위 모두 SAIF/VCD 없이 Vivado 기본 vectorless propagation을 사용한 **Post-implementation vectorless Vivado power estimate**다. confidence는 1 MHz Pure RTL `Medium`, 100 MHz Pure RTL `Medium`, system `Medium`이며 clock은 각각 sys_clk_pin 100.000 MHz, core_clk_1mhz 1.000 MHz; core_clk_100mhz 100.000 MHz; snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK 30.000 MHz, snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE 30.000 MHz, sys_clk_pin 100.000 MHz다. 물리 보드 입력 전력과 가속기 실측 에너지는 측정하지 않았다.
+1 MHz Pure RTL과 통합 MicroBlaze 범위는 vectorless 추정으로 남는다. 보고 가능한 100 MHz 가속기 값은 네 class의 실제 ECG burst SAIF 중앙값이며, routed-net match는 약 12%라서 미매칭 net에는 vectorless propagation이 적용되고 confidence는 `Medium`이다. literal 1 kS/s trace는 별도로 보고한다. 물리 보드 입력 전력과 가속기 실측 에너지는 측정하지 않았다.

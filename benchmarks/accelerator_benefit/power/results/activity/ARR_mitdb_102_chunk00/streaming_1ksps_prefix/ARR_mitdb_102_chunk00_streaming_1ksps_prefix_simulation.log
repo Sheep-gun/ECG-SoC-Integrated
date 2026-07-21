@@ -1,0 +1,20 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_snn_ecg_power_activity/xsim_script.tcl
+# xsim {tb_snn_ecg_power_activity} -testplusarg MEM../../../../../fullrec_afe_30min_annotation_valid_balanced/val/ARR/102/102_30min_w000.mem -testplusarg SAMPLES100 -testplusarg GAP_CYCLES99999 -testplusarg REQUIRE_FINAL0 -testplusarg EXPECTED_PRED2 -testplusarg EXPECTED_MEM_NSR0 -testplusarg EXPECTED_MEM_CHF1 -testplusarg EXPECTED_MEM_ARR29 -testplusarg EXPECTED_MEM_AFF0 -autoloadwcfg -tclbatch {{C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/ARR_mitdb_102_chunk00/streaming_1ksps_prefix/capture_streaming_1ksps_prefix.tcl}} -onfinish stop
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+source {C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/ARR_mitdb_102_chunk00/streaming_1ksps_prefix/capture_streaming_1ksps_prefix.tcl}
+## open_saif {C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/results/activity/ARR_mitdb_102_chunk00/streaming_1ksps_prefix/ARR_mitdb_102_chunk00_streaming_1ksps_prefix.saif}
+## log_saif [get_objects -r /tb_snn_ecg_power_activity/uut/*]
+## run all
+ACTIVITY_PASS samples=100 gap_cycles=99999 require_final=0
+$finish called at time : 99000525 ns : File "C:/Users/YangGeon/SNN ECG Classifier/sim/tb_snn_ecg_power_activity.v" Line 188
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:01:30 . Memory (MB): peak = 926.051 ; gain = 0.000
+## close_saif
+## quit
+INFO: [Common 17-206] Exiting xsim at Tue Jul 21 22:25:17 2026...

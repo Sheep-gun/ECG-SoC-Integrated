@@ -1,0 +1,7 @@
+VIVADO_VERSION=2020.2
+PART=xc7a100tcsg324-1
+TOP=snn_ecg_accelerator_power_top
+TIMING_STATUS=FAILED
+WNS_NS=-0.749
+CONSTRAINT=C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/constraints/snn_ecg_accelerator_100mhz.xdc
+SCOPE=Locked accelerator RTL only; excludes LFSR, LED, MicroBlaze, UART, sample memory and board peripherals

@@ -14,10 +14,10 @@ Raw firmware/schema retain the legacy `AFF` label; report-facing medical text us
 | UART-paced raw interval median | 187144.750920 ms | transport diagnostic, MEASURED |
 | Integrated-system compute latency/speedup | Not measured | requires preloaded input and independent timer |
 | Pure RTL 1 MHz power | 0.099000 W | low-frequency post-implementation vectorless Vivado, ESTIMATED; no energy derived |
-| Pure RTL 100 MHz total / dynamic / static power | 0.183000 / 0.085000 / 0.097000 W | performance-matched post-implementation vectorless Vivado, ESTIMATED |
+| Pure RTL 100 MHz accelerator+static / hierarchy dynamic / static power | 0.149500 / 0.052500 / 0.097000 W | four-class real-ECG burst SAIF median, accelerator hierarchy plus allocated FPGA static, ESTIMATED |
 | Integrated FPGA system power | 0.271000 W | post-implementation vectorless Vivado, ESTIMATED |
-| Pure RTL 100 MHz total energy/decision | 0.006590360700 J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
-| Pure RTL 100 MHz active dynamic energy/decision | 0.003061096500 J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz total energy/decision | 0.005383928550 J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz active dynamic energy/decision | 0.001890677250 J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
 | Integrated system energy/decision | Not measured | no valid integrated compute latency |
 | Physical board power | Not measured | no external power meter |
 
@@ -29,4 +29,4 @@ Raw `core_cycles/system_cycles` intervals are retained only as UART-paced transp
 
 The retained 0.099 W result is the valid 1 MHz Pure RTL low-frequency estimate and is not combined with the 100 MHz active latency. The direct-100-MHz Pure RTL route met timing with WNS 0.035 ns and provides the clock-matched power used for energy. The former mixed-clock energy calculation is withdrawn from final performance claims.
 
-All three power scopes are **Post-implementation vectorless Vivado power estimates** with no SAIF/VCD. Confidence is `Medium` for 1 MHz Pure RTL, `Medium` for 100 MHz Pure RTL, and `Medium` for the integrated system. Physical board input power and measured accelerator energy were not obtained.
+The 1 MHz Pure RTL and integrated-system scopes remain vectorless. The reportable 100 MHz accelerator value uses four real-ECG burst SAIF traces, with approximately 12% routed-net matching and vectorless propagation for unmatched nets; confidence remains Medium. Literal 1 kS/s traces are reported separately. Physical board input power and measured accelerator energy were not obtained.
