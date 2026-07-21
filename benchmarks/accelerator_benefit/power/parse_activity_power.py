@@ -38,6 +38,15 @@ def rel(path: Path) -> str:
     return path.resolve().relative_to(REPO).as_posix()
 
 
+def portable_path(value: str) -> str:
+    """Convert report-emitted paths inside the repository to portable paths."""
+    candidate = Path(value.strip())
+    try:
+        return candidate.resolve().relative_to(REPO.resolve()).as_posix()
+    except (OSError, ValueError):
+        return candidate.as_posix()
+
+
 def required(pattern: str, text: str, name: str) -> str:
     match = re.search(pattern, text, re.MULTILINE)
     if not match:
@@ -135,7 +144,7 @@ def parse_record(
         },
         "power_estimation_confidence": required(r"\| Confidence Level\s*\|\s*([^|]+)", text, "confidence"),
         "junction_temperature_c": numeric_power(r"\| Junction Temperature \(C\)\s*\|\s*([0-9.]+)", text, "junction temperature"),
-        "simulation_activity_file": required(r"\| Simulation Activity File\s*\|\s*([^|]+)", text, "SAIF path"),
+        "simulation_activity_file": portable_path(required(r"\| Simulation Activity File\s*\|\s*([^|]+)", text, "SAIF path")),
         "design_nets_matched": required(r"\| Design Nets Matched\s*\|\s*([^|]+)", text, "matched nets"),
         "activity_source": env_values.get("activity_source"),
         "saif_strip_path": env_values.get("saif_strip_path"),
