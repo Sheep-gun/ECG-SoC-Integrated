@@ -1,5 +1,5 @@
 label,value,status
-1. Program immutable BIT/ELF,prepared,AUDIT
-2. Execute 36 streams,PENDING_BOARD,PENDING_BOARD
-3. Parse hardware counters,parser ready,AUDIT
-4. Regenerate reports,deterministic command ready,AUDIT
+1. Program immutable BIT/ELF,complete,MEASURED
+2. Execute 36 streams,36/36,MEASURED
+3. Parse hardware counters,complete,MEASURED
+4. Regenerate reports,complete,DERIVED

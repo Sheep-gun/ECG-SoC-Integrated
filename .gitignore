@@ -34,6 +34,12 @@ fullrec_afe_remaining/
 annotation_cache_ascii/
 
 # Local verification workdirs
+benchmarks/accelerator_benefit/power/work/
+benchmarks/accelerator_benefit/board/preflight_dry_run/
+benchmarks/accelerator_benefit/board/preflight_wrapper_dry_run/
+benchmarks/accelerator_benefit/board/smoke_run/
+benchmarks/accelerator_benefit/board/smoke_run_230400/
+benchmarks/accelerator_benefit/board/work/
 results/c24_rtl_equivalence/xsim_work/
 results/c24_rtl_equivalence/xsim_*_manifest.txt
 results/**/xsim_work/

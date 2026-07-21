@@ -1,10 +1,9 @@
 claim_id,claim,status,evidence_type,evidence_path,limitation
-C1,Canonical RTL matches locked board-facing expected outputs 36/36.,SUPPORTED,cycle/profile artifact,benchmarks/accelerator_benefit/results/rtl_cycle_benchmark.csv,"functional equivalence, not 100% accuracy"
-C2,Stored-data RTL latency is 54.012600 ms at 100 MHz.,SUPPORTED,CYCLE_DERIVED,benchmarks/accelerator_benefit/results/rtl_cycle_summary.json,not live observation latency
-C3,Live final decision requires a 30-minute observation window.,SUPPORTED,input contract,configs/final_submission_locked_model.json,none
-C4,0.099 W is measured board power.,FORBIDDEN,none,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md,Vivado estimate only
-C5,Python-kernel to canonical RTL stored-data speedup is 2288.745397x.,SUPPORTED,MEASURED_NOW / CYCLE_DERIVED,benchmarks/accelerator_benefit/results/accelerator_benefit_summary.csv,stored-data processing only; not live decision latency
-C6,Board timer latency.,PENDING_BOARD,pending,benchmarks/accelerator_benefit/READY_FOR_BOARD_BENCHMARK.md,no board in this run
-C7,Verilator-generated RTL simulation per-case-median host runtime is 2456.708125 ms.,SUPPORTED,MEASURED_NOW,benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json,RTL simulation/verification runtime; not the Exact C++ native CPU baseline; no CPU speedup claim
-C8,Transaction-level Exact C++ kernel all-run median latency is 1777.699800 ms.,SUPPORTED,MEASURED_NOW,benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md,single thread; fixed affinity; -O3 -march=native; transaction-level cadence compression
-C9,Transaction-level Exact C++ versus cycle-derived FPGA-core speedup estimate is 32.912687x.,SUPPORTED,MEASURED_NOW / CYCLE_DERIVED,benchmarks/accelerator_benefit/exact_cpp/results/cpu_fpga_comparison.csv,"not measured FPGA/board speedup; excludes host, MicroBlaze, UART, and board system scope"
+C1,Board matches Golden final predictions 36/36 and Final Membrane values 144/144.,SUPPORTED,MEASURED,benchmarks/accelerator_benefit/board/board_timing_results.csv,"functional equivalence, not 100% annotation accuracy"
+C2,Measured FPGA core-counter median latency is 187144.750920 ms.,SUPPORTED,MEASURED,benchmarks/accelerator_benefit/board/board_timing_results.csv,includes input-wait behavior
+C3,Measured FPGA system-counter median latency is 187144.750920 ms.,SUPPORTED,MEASURED,benchmarks/accelerator_benefit/board/board_timing_results.csv,UART result printing excluded
+C4,Pure RTL post-implementation vectorless Vivado power is 0.099000 W.,SUPPORTED,ESTIMATED,benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_power_post_route.rpt,not physical board power
+C5,Integrated-system post-implementation vectorless Vivado power is 0.271000 W.,SUPPORTED,ESTIMATED,benchmarks/accelerator_benefit/power/results/microblaze_system/system_power_post_route.rpt,not physical board power
+C6,Physical board power was measured.,FORBIDDEN,none,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md,no external power meter
+C7,Exact C++ divided by the measured FPGA core interval is 0.009499063x; the interval is 105.273540x longer than Exact C++.,SUPPORTED,DERIVED from two MEASURED latencies,benchmarks/accelerator_benefit/board/board_timing_results.csv,counter interval includes UART-paced input wait
+C8,Pure RTL/system estimated energies are 18.527330341/50.716227499 J per decision.,SUPPORTED,DERIVED estimated power times measured latency,benchmarks/accelerator_benefit/results/power_energy_summary.csv,not measured energy or physical-board power

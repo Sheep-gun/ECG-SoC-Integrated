@@ -1,0 +1,57 @@
+{
+  "evidence_class": "MEASURED",
+  "board": "Nexys A7-100T",
+  "uart_port": "COM8",
+  "uart_baud": 230400,
+  "cases_completed": 36,
+  "samples_per_case": 1800000,
+  "snapshots_per_case": 30,
+  "decisions_per_case": 1,
+  "board_golden_final_pred": "36/36",
+  "board_golden_final_membrane_values": "144/144",
+  "classification_accuracy": "29/36 (80.56%)",
+  "core_latency_ms": {
+    "median": 187144.75092000002,
+    "mean": 188068.19989,
+    "std": 1864.9647442247372,
+    "min": 186492.78174,
+    "max": 191686.15098
+  },
+  "system_latency_ms": {
+    "median": 187144.75092000002,
+    "mean": 188068.19989,
+    "std": 1864.9647442247372,
+    "min": 186492.78174,
+    "max": 191686.15098
+  },
+  "system_throughput_samples_per_s": {
+    "median": 9618.22328,
+    "mean": 9571.925659416667,
+    "std": 93.74406160171712,
+    "min": 9390.34975,
+    "max": 9651.848094
+  },
+  "system_realtime_margin_vs_1ksps": {
+    "median": 9.61822328,
+    "mean": 9.571925659416667,
+    "std": 0.09374406160171712,
+    "min": 9.390349749999999,
+    "max": 9.651848094
+  },
+  "core_system_equal_cases": 36,
+  "input_wait_latency_ms": {
+    "median": 187108.73802,
+    "mean": 188032.18699,
+    "std": 1864.9647442247383,
+    "min": 186456.76884,
+    "max": 191650.13808
+  },
+  "non_wait_counter_difference_ms": {
+    "median": 36.01290000000154,
+    "mean": 36.01289999999992,
+    "std": 6.666564837954519e-12,
+    "min": 36.01289999997243,
+    "max": 36.01290000000154
+  },
+  "counter_scope_note": "core last-decision and system transaction intervals include UART-paced input wait; UART result printing occurs after counters stop"
+}

@@ -1,3 +1,3 @@
 label,value,status
-Pure RTL accelerator,9719 LUT / 5038 FF / 0 BRAM / 0 DSP,AUDIT
-MicroBlaze replay system,12494 LUT / 8494 FF / 16 BRAM / 3 DSP,AUDIT
+Pure RTL accelerator,9749 LUT / 5045 FF / 0 BRAM / 0 DSP,DERIVED
+MicroBlaze replay system,12494 LUT / 8494 FF / 16 BRAM / 3 DSP,DERIVED

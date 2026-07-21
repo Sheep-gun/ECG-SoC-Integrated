@@ -1,5 +1,7 @@
 label,value,status
-Python integer kernel,123621.090 ms,MEASURED_NOW
-Exact C++ native CPU kernel,1777.700 ms,MEASURED_NOW
-Verilator-generated RTL simulation,2456.708 ms,MEASURED_NOW
-Pure RTL,54.012600 ms,CYCLE_DERIVED
+Python integer kernel,123621.090 ms,MEASURED
+Exact C++ native CPU kernel,1777.700 ms,MEASURED
+Verilator-generated RTL simulation,2456.708 ms,MEASURED
+Pure RTL,54.012600 ms,DERIVED
+FPGA board core counter,187144.751 ms,MEASURED
+FPGA board system counter,187144.751 ms,MEASURED

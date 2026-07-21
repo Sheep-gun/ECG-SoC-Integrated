@@ -21,6 +21,9 @@
   "log": "C:\\Users\\YangGeon\\SNN ECG Classifier\\benchmarks\\accelerator_benefit\\board\\build\\build_instrumented_app.log",
   "elf_sha256": "c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16",
   "elf_bytes": 142260,
-  "physical_execution": "NOT_EXECUTED_NO_BOARD",
-  "instrumented_elf": "benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf"
+  "physical_execution": "COMPLETED_36_OF_36",
+  "instrumented_elf": "benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf",
+  "board": "Nexys A7-100T",
+  "uart_port": "COM8",
+  "uart_baud": 230400
 }

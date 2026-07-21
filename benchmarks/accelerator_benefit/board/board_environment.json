@@ -1,0 +1,15 @@
+{
+  "board": "Nexys A7-100T",
+  "fpga_target": "xc7a100t",
+  "jtag_cable": "Digilent USB/JTAG",
+  "microblaze_target_recognized": true,
+  "uart_port": "COM8",
+  "uart_baud": 230400,
+  "vivado_vitis_version": "2020.2",
+  "python_version": "3.12.13",
+  "bit_path": "results/board_replay/microblaze_full_replay/snn_ecg_mb_full_replay.bit",
+  "bit_sha256": "61dfb3dddee1f55b9e2ce42009cb9693bb1c8ff9c7b65b71f0d59d6b2a34dd58",
+  "elf_path": "benchmarks/accelerator_benefit/board/build/snn_ecg_mb_full_replay_benchmark.elf",
+  "elf_sha256": "c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16",
+  "physical_board_power_meter": "not available"
+}

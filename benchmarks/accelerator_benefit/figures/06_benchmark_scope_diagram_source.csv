@@ -1,5 +1,5 @@
 label,value,status
-CPU kernel,loaded samples -> result,AUDIT
-RTL cycles,accelerator start -> final_valid,CYCLE_DERIVED
-Existing board,functional equivalence only,AUDIT
-Future board,timer-based scopes,PENDING_BOARD
+Exact C++ kernel,MEASURED CPU,MEASURED
+FPGA core counter,MEASURED hardware cycles,MEASURED
+FPGA system counter,MEASURED hardware cycles,MEASURED
+Vivado power,ESTIMATED vectorless,ESTIMATED

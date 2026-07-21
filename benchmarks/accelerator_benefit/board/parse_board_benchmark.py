@@ -41,13 +41,18 @@ def u64(tokens: dict[str, str], base: str) -> int:
 
 
 def parse_one(path: Path, expected: dict[str, str]) -> dict[str, object]:
-    tokens = parse_tokens(path.read_text(encoding="utf-8", errors="replace"))
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if text.count("SNN_ECG_FULL_REPLAY_BOARD_PASS") != 1:
+        raise ValueError("expected exactly one BOARD_PASS marker")
+    tokens = parse_tokens(text)
     frequency = int(tokens["timer_frequency_hz"], 0)
     core_cycles = u64(tokens, "core_cycles")
     system_cycles = u64(tokens, "system_cycles")
     samples = int(tokens["sample_count"], 0)
     final_pred = int(tokens["final_pred"], 0)
     memories = {cls: int(tokens[f"final_mem_{cls}"], 0) for cls in CLASSES}
+    if frequency <= 0 or core_cycles <= 0 or system_cycles <= 0:
+        raise ValueError("timer frequency and core/system cycles must be positive")
     core_ms = core_cycles * 1000.0 / frequency
     system_ms = system_cycles * 1000.0 / frequency
     throughput = samples / (system_ms / 1000.0)

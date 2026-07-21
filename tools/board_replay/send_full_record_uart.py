@@ -5,6 +5,7 @@ import csv
 import json
 import os
 import re
+import socket
 import struct
 import subprocess
 import sys
@@ -16,6 +17,7 @@ from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
 RESULTS = REPO / "results" / "board_replay" / "microblaze_full_replay"
+BOARD_WORK = REPO / "benchmarks" / "accelerator_benefit" / "board" / "work"
 REPORTS = REPO / "reports" / "final" / "board_replay"
 TRANSCRIPTS = REPORTS
 COMPARISONS = REPORTS
@@ -74,6 +76,14 @@ def find_hw_server() -> Path | None:
     if found:
         return found
     return first_existing([r"C:\Xilinx\Vitis\*\bin\hw_server.bat", r"C:\Xilinx\Vivado\*\bin\hw_server.bat"])
+
+
+def hw_server_is_listening(host: str = "127.0.0.1", port: int = 3121) -> bool:
+    try:
+        with socket.create_connection((host, port), timeout=0.5):
+            return True
+    except OSError:
+        return False
 
 
 def slash(path: Path) -> str:
@@ -306,7 +316,7 @@ class SerialMonitor:
 
 
 def write_program_tcl(bit: Path, elf: Path) -> Path:
-    path = RESULTS / "program_microblaze_full_replay_board.tcl"
+    path = BOARD_WORK / "program_microblaze_full_replay_board.tcl"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         f"""connect -url tcp:127.0.0.1:3121
@@ -340,7 +350,7 @@ def program_board(bit: Path, elf: Path) -> int:
         raise FileNotFoundError(elf)
     hw_server = find_hw_server()
     hw_proc: subprocess.Popen[str] | None = None
-    if hw_server is not None:
+    if hw_server is not None and not hw_server_is_listening():
         log = RESULTS / "hw_server_full_replay.log"
         log.parent.mkdir(parents=True, exist_ok=True)
         f = log.open("w", encoding="utf-8", errors="replace")

@@ -1,0 +1,10 @@
+VIVADO_VERSION=2020.2
+PART=xc7a100tcsg324-1
+TOP=snn_ecg_mb_full_replay_wrapper
+IMPLEMENTATION_STATUS=route_design Complete!
+CONSTRAINT=C:/Users/YangGeon/SNN ECG Classifier/constraints/nexys_a7_microblaze_full_replay.xdc
+ACTIVITY_SOURCE=Post-implementation vectorless Vivado power estimate; no SAIF/VCD
+SWITCHING_ACTIVITY=Vivado default vectorless propagation and default toggle-rate assumptions
+CLOCK=snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK PERIOD_NS=33.333
+CLOCK=snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE PERIOD_NS=33.333
+CLOCK=sys_clk_pin PERIOD_NS=10.000

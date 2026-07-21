@@ -1,8 +1,8 @@
 {
-  "starting_commit_sha": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
+  "starting_commit_sha": "795d3dbffc8dd3fbb45ad1f4ce39df92e3d33bdc",
   "branch": "codex/accelerator-benefit-benchmark",
-  "mode": "NO_BOARD",
-  "protocol_sha256": "09d4fff305b74af3934db1aafc08dc9a6e3b9085da835b6944d4b89bbd8ce241",
+  "mode": "BOARD_MEASURED_TIMING_AND_VIVADO_ESTIMATED_POWER",
+  "protocol_sha256": "816590532a4bed15e8141c447368365df6b13cb5bf86fbef02b4750bfc4618a4",
   "locked_config_sha256": "3ed5fa3399b99cace22a5cd7821be2c598a58ef27012da11a4e213a0f4c5672d",
   "locked_params_file_sha256": "e0c1a649515ea50bbccc7c72d2dada9080c136e9d0e23de84dcc07f93744ae53",
   "locked_params_payload_sha256": "7a4383441d6a6b2c9d88dba253ca6809f424ce36ca0a09a2876dac3696d33c1b",

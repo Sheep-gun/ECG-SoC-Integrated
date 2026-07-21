@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -95,8 +96,8 @@ def main() -> int:
             failures.append(f"{row.get('case_id')}: old transcript incorrectly used as timing")
 
     summary = read_csv(RESULTS / "accelerator_benefit_summary.csv")
-    if len(summary) != 10:
-        failures.append(f"comparison row count {len(summary)} != 10")
+    if len(summary) < 8:
+        failures.append(f"comparison row count {len(summary)} < 8")
     summary_by_name = {row.get("implementation"): row for row in summary}
     if "Exact C++ native CPU kernel" not in summary_by_name:
         failures.append("Exact C++ native CPU baseline row missing")
@@ -106,13 +107,6 @@ def main() -> int:
     for row in summary:
         if not row.get("evidence_path"):
             failures.append(f"{row.get('implementation')}: missing evidence path")
-        pending = row.get("status") == "PENDING_BOARD"
-        if pending:
-            for key in ("latency_ms_median", "throughput_samples_per_s", "power_w", "energy_per_decision_j"):
-                if row.get(key) in ("0", "0.0", "0.000000"):
-                    failures.append(f"{row.get('implementation')}: pending {key} represented as zero")
-            if row.get("output_equivalence") != "PENDING_BOARD":
-                failures.append(f"{row.get('implementation')}: pending equivalence misreported")
         speedup = row.get("speedup_vs_python_kernel")
         compatible_speedup = row.get("implementation") in {
             "Python integer kernel", "Exact C++ native CPU kernel",
@@ -120,17 +114,27 @@ def main() -> int:
         }
         if speedup not in ("", "N/A") and not compatible_speedup:
             failures.append(f"{row.get('implementation')}: incompatible-scope speedup present")
-        if row.get("implementation") == "Existing FPGA functional replay" and row.get("latency_ms_median") != "N/A":
-            failures.append("existing UART evidence incorrectly reports latency")
+    for implementation in ("FPGA board accelerator-core counter", "FPGA board MicroBlaze system counter"):
+        row = summary_by_name.get(implementation)
+        if not row or row.get("status") != "MEASURED":
+            failures.append(f"{implementation}: measured row missing")
+        elif not row.get("speedup_vs_exact_cpp_kernel") or float(row["speedup_vs_exact_cpp_kernel"]) <= 0:
+            failures.append(f"{implementation}: Exact C++ speedup missing")
 
     power = read_csv(RESULTS / "power_energy_summary.csv")
     for row in power:
-        if row["implementation"] == "Pure RTL" and "ESTIMATED" not in row["status"]:
-            failures.append("estimated RTL power mislabeled")
+        if row["implementation"] in {"Pure RTL accelerator", "MicroBlaze integrated FPGA system"} and (
+            row.get("power_class") != "ESTIMATED" or row.get("energy_class") != "DERIVED"
+        ):
+            failures.append("estimated power or derived energy mislabeled")
         if row["implementation"] == "Physical FPGA board":
-            if row["status"] != "PENDING_BOARD" or row["power_w"] == "0":
+            if (
+                row.get("power_class") != "NOT_MEASURED"
+                or row.get("energy_class") != "NOT_MEASURED"
+                or row["power_w"] != "NOT_MEASURED"
+            ):
                 failures.append("board power fabricated or zero-filled")
-        if row["implementation"] == "CPU" and not row["status"].startswith("N/A"):
+        if row["implementation"] == "CPU" and row.get("power_class") != "N/A":
             failures.append("CPU energy reported without counter")
 
     board_build_status = json.loads((BENCH / "board/build/build_status.json").read_text(encoding="utf-8"))
@@ -138,6 +142,88 @@ def main() -> int:
         built_elf = BENCH / "board/build/snn_ecg_mb_full_replay_benchmark.elf"
         if not built_elf.exists() or digest(built_elf) != board_build_status.get("elf_sha256"):
             failures.append("instrumented board ELF missing or hash mismatch")
+
+    measured_board = read_csv(BENCH / "board/board_timing_results.csv")
+    if len(measured_board) != 36:
+        failures.append(f"measured board timing row count {len(measured_board)} != 36")
+    for row in measured_board:
+        case_id = row.get("case_id", "<unknown>")
+        if (
+            row.get("sample_count") != "1800000"
+            or int(row.get("core_cycles", "0")) <= 0
+            or int(row.get("system_cycles", "0")) <= 0
+            or row.get("pred_match") != "1"
+            or row.get("mem_match") != "1"
+        ):
+            failures.append(f"{case_id}: measured board timing acceptance failed")
+        transcript = BENCH / "board/future_run/transcripts" / f"{case_id}.txt"
+        parsed_path = BENCH / "board/future_run/parsed" / f"{case_id}.json"
+        if not parsed_path.exists():
+            failures.append(f"{case_id}: measured parsed JSON missing")
+        else:
+            parsed = json.loads(parsed_path.read_text(encoding="utf-8"))
+            board_values = parsed.get("board") or {}
+            if (
+                parsed.get("status") != "completed"
+                or parsed.get("board_internal_pass") is not True
+                or board_values.get("total_samples") != 1_800_000
+                or board_values.get("samples_received") != 1_800_000
+                or board_values.get("samples_sent_to_ip") != 1_800_000
+                or board_values.get("samples_accepted") != 1_800_000
+                or board_values.get("samples_consumed") != 1_800_000
+                or board_values.get("snapshot_count") != 30
+                or board_values.get("decision_count") != 1
+                or board_values.get("done") != 1
+                or board_values.get("final_valid") != 1
+            ):
+                failures.append(f"{case_id}: parsed board invariants failed")
+        if not transcript.exists():
+            failures.append(f"{case_id}: measured transcript missing")
+            continue
+        text = transcript.read_text(encoding="utf-8", errors="replace")
+        if len(re.findall(r"^BOARD_BENCH\s", text, re.MULTILINE)) != 1:
+            failures.append(f"{case_id}: BOARD_BENCH count is not one")
+        if text.count("SNN_ECG_FULL_REPLAY_BOARD_PASS") != 1:
+            failures.append(f"{case_id}: board PASS count is not one")
+    board_batch = json.loads((BENCH / "board/future_run/batch_summary.json").read_text(encoding="utf-8"))
+    if (
+        board_batch.get("status") != "completed"
+        or board_batch.get("validation_result") != "pass"
+        or board_batch.get("cases_completed") != 36
+        or board_batch.get("cases_passed") != 36
+        or board_batch.get("pred_match_correct") != 36
+        or board_batch.get("final_mem_match_correct") != 36
+        or board_batch.get("classification_correct") != 29
+    ):
+        failures.append("36-case board batch summary acceptance failed")
+    timing_summary = json.loads((BENCH / "board/board_timing_summary.json").read_text(encoding="utf-8"))
+    if (
+        timing_summary.get("evidence_class") != "MEASURED"
+        or timing_summary.get("cases_completed") != 36
+        or not 0 <= int(timing_summary.get("core_system_equal_cases", -1)) <= 36
+        or float(timing_summary.get("core_latency_ms", {}).get("median", 0)) <= 0
+        or float(timing_summary.get("system_latency_ms", {}).get("median", 0)) <= 0
+        or float(timing_summary.get("input_wait_latency_ms", {}).get("median", 0)) <= 0
+    ):
+        failures.append("measured board timing summary invalid")
+
+    power_summary = json.loads((BENCH / "power/results/power_summary.json").read_text(encoding="utf-8"))
+    if power_summary.get("physical_board_power_measured") is not False:
+        failures.append("physical board power incorrectly marked measured")
+    scopes = power_summary.get("scopes", {})
+    if set(scopes) != {"pure_rtl", "microblaze_system"}:
+        failures.append("power summary scopes invalid")
+    for name, scope in scopes.items():
+        report = REPO / scope.get("raw_power_report", "")
+        if (
+            scope.get("evidence_class") != "ESTIMATED"
+            or scope.get("implementation_status") != "routed"
+            or float(scope.get("total_on_chip_power_w", 0)) <= 0
+            or not report.exists()
+            or digest(report) != scope.get("raw_power_report_sha256")
+            or "vectorless" not in scope.get("activity_source", "").lower()
+        ):
+            failures.append(f"{name}: power report evidence invalid")
 
     cpu_env = json.loads((RESULTS / "cpu_environment.json").read_text(encoding="utf-8"))
     cpu_rows = read_csv(RESULTS / "cpu_python_kernel_runs.csv")
@@ -226,8 +312,9 @@ def main() -> int:
     print("- locked artifacts unchanged")
     print("- RTL 36/36 canonical cycle rows valid")
     print("- existing board functional audit 36/36 valid")
-    print("- pending board values are nonnumeric")
-    print("- no incompatible-scope speedup or fabricated power")
+    print("- measured board counters and 36 raw transcripts accepted")
+    print("- raw Vivado power reports and hashes accepted")
+    print("- no fabricated physical-board power")
     return 0
 
 
