@@ -17,6 +17,10 @@ CLASSES = ("NSR", "CHF", "ARR", "AFF")
 FIELDS = [
     "case_id", "sample_count", "core_cycles", "core_latency_ms",
     "system_cycles", "system_latency_ms", "samples_per_second", "realtime_margin",
+    "profile_total_cycles", "profile_run_cycles", "profile_input_wait_cycles",
+    "profile_accepted_samples", "core_active_cycles", "core_active_latency_ms",
+    "core_run_active_cycles", "core_run_active_latency_ms", "non_run_overhead_cycles",
+    "core_active_samples_per_second", "core_active_realtime_margin",
     "final_pred", "final_mem_NSR", "final_mem_CHF", "final_mem_ARR", "final_mem_AFF",
     "pred_match", "mem_match", "timing_source", "timer_frequency_hz",
 ]
@@ -34,6 +38,25 @@ def parse_tokens(text: str) -> dict[str, str]:
     return dict(re.findall(r"([A-Za-z0-9_]+)=([^\s]+)", matches[0]))
 
 
+def parse_profile_tokens(text: str) -> dict[str, str]:
+    lines = re.findall(r"^BOARD_PROFILE\s+(.+)$", text, re.MULTILINE)
+    tokens: dict[str, str] = {}
+    for line in lines:
+        for key, value in re.findall(r"([A-Za-z0-9_]+)=([^\s]+)", line):
+            if key in tokens:
+                raise ValueError(f"duplicate BOARD_PROFILE token: {key}")
+            tokens[key] = value
+    required = {
+        f"profile_{name}_{half}"
+        for name in ("total", "run", "input_wait", "accepted", "windows", "decisions")
+        for half in ("lo", "hi")
+    }
+    missing = sorted(required - set(tokens))
+    if missing:
+        raise ValueError(f"missing BOARD_PROFILE tokens: {', '.join(missing)}")
+    return tokens
+
+
 def u64(tokens: dict[str, str], base: str) -> int:
     lo = int(tokens[f"{base}_lo"], 0)
     hi = int(tokens[f"{base}_hi"], 0)
@@ -45,17 +68,38 @@ def parse_one(path: Path, expected: dict[str, str]) -> dict[str, object]:
     if text.count("SNN_ECG_FULL_REPLAY_BOARD_PASS") != 1:
         raise ValueError("expected exactly one BOARD_PASS marker")
     tokens = parse_tokens(text)
+    profile = parse_profile_tokens(text)
     frequency = int(tokens["timer_frequency_hz"], 0)
     core_cycles = u64(tokens, "core_cycles")
     system_cycles = u64(tokens, "system_cycles")
+    profile_total = u64(profile, "profile_total")
+    profile_run = u64(profile, "profile_run")
+    profile_input_wait = u64(profile, "profile_input_wait")
+    profile_accepted = u64(profile, "profile_accepted")
+    profile_windows = u64(profile, "profile_windows")
+    profile_decisions = u64(profile, "profile_decisions")
     samples = int(tokens["sample_count"], 0)
     final_pred = int(tokens["final_pred"], 0)
     memories = {cls: int(tokens[f"final_mem_{cls}"], 0) for cls in CLASSES}
     if frequency <= 0 or core_cycles <= 0 or system_cycles <= 0:
         raise ValueError("timer frequency and core/system cycles must be positive")
+    if not (profile_total == core_cycles == system_cycles):
+        raise ValueError("profile-total/core/system counter equality failed")
+    if not (0 <= profile_input_wait <= profile_run <= profile_total):
+        raise ValueError("profile counter ordering failed")
+    if profile_accepted != samples or profile_windows != 30 or profile_decisions != 1:
+        raise ValueError("profile accepted/window/decision invariant failed")
+    core_active_cycles = profile_total - profile_input_wait
+    core_run_active_cycles = profile_run - profile_input_wait
+    non_run_overhead_cycles = profile_total - profile_run
+    if core_active_cycles <= 0 or core_run_active_cycles <= 0:
+        raise ValueError("active-cycle result must be positive")
     core_ms = core_cycles * 1000.0 / frequency
     system_ms = system_cycles * 1000.0 / frequency
     throughput = samples / (system_ms / 1000.0)
+    core_active_ms = core_active_cycles * 1000.0 / frequency
+    core_run_active_ms = core_run_active_cycles * 1000.0 / frequency
+    core_active_throughput = samples / (core_active_ms / 1000.0)
     return {
         "case_id": expected["case_id"],
         "sample_count": samples,
@@ -65,6 +109,17 @@ def parse_one(path: Path, expected: dict[str, str]) -> dict[str, object]:
         "system_latency_ms": f"{system_ms:.9f}",
         "samples_per_second": f"{throughput:.6f}",
         "realtime_margin": f"{throughput / 1000.0:.6f}",
+        "profile_total_cycles": profile_total,
+        "profile_run_cycles": profile_run,
+        "profile_input_wait_cycles": profile_input_wait,
+        "profile_accepted_samples": profile_accepted,
+        "core_active_cycles": core_active_cycles,
+        "core_active_latency_ms": f"{core_active_ms:.9f}",
+        "core_run_active_cycles": core_run_active_cycles,
+        "core_run_active_latency_ms": f"{core_run_active_ms:.9f}",
+        "non_run_overhead_cycles": non_run_overhead_cycles,
+        "core_active_samples_per_second": f"{core_active_throughput:.6f}",
+        "core_active_realtime_margin": f"{core_active_throughput / 1000.0:.6f}",
         "final_pred": final_pred,
         **{f"final_mem_{cls}": memories[cls] for cls in CLASSES},
         "pred_match": str(int(final_pred == int(expected["expected_final_pred"]))),

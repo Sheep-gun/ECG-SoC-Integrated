@@ -1,3 +1,3 @@
 label,value,status
-System throughput,9618.223 samples/s,DERIVED
-Margin versus 1 kSPS,9.618x,DERIVED
+Active-core throughput,49982089.751 samples/s,DERIVED
+Margin versus 1 kSPS,49982.090x,DERIVED

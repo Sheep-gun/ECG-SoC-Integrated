@@ -21,5 +21,8 @@ Status: **COMPLETED**, Nexys A7-100T, `COM8`, 230400 baud.
 - annotation accuracy: 29/36 (80.56%)
 - every transcript: exactly one `BOARD_BENCH` and one board PASS marker
 - every core/system counter: greater than zero
+- active-core metric: `profile_total - profile_input_wait` = 3601290 cycles = 36.012900 ms in 36/36 cases
+- Exact C++ kernel / FPGA active-core speedup: 49.362862x
+- integrated-system compute latency/speedup/energy: not measured; requires preloaded input and an independent timer
 
 Raw evidence is in `benchmarks/accelerator_benefit/board/future_run`. Use `--resume` only after a transport interruption; completed transcript/parsed pairs are retained. The immutable UARTLite configuration is 230400 baud.

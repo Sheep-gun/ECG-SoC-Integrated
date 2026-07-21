@@ -121,34 +121,52 @@ def load_board_timing() -> dict[str, Any]:
         int(row["sample_count"]) != 1_800_000
         or int(row["core_cycles"]) <= 0
         or int(row["system_cycles"]) <= 0
+        or int(row["core_active_cycles"]) <= 0
         or row["pred_match"] != "1"
         or row["mem_match"] != "1"
         for row in rows
     ):
         raise SystemExit("board timing acceptance failed")
-    core = [float(row["core_latency_ms"]) for row in rows]
-    system = [float(row["system_latency_ms"]) for row in rows]
-    throughput = [float(row["samples_per_second"]) for row in rows]
-    input_wait_ms: list[float] = []
-    non_wait_ms: list[float] = []
+    uart_core = [float(row["core_latency_ms"]) for row in rows]
+    uart_transaction = [float(row["system_latency_ms"]) for row in rows]
+    uart_throughput = [float(row["samples_per_second"]) for row in rows]
+    active_cycles = [int(row["core_active_cycles"]) for row in rows]
+    active_ms = [float(row["core_active_latency_ms"]) for row in rows]
+    active_run_cycles = [int(row["core_run_active_cycles"]) for row in rows]
+    active_run_ms = [float(row["core_run_active_latency_ms"]) for row in rows]
+    non_run_cycles = [int(row["non_run_overhead_cycles"]) for row in rows]
+    active_throughput = [float(row["core_active_samples_per_second"]) for row in rows]
+    input_wait_ms = [int(row["profile_input_wait_cycles"]) * 1000.0 / int(row["timer_frequency_hz"]) for row in rows]
+
+    cases = {row["case_id"]: row for row in read_csv(CASES_CSV)}
+    xsim = {row["case_id"]: row for row in read_csv(XSIM_CSV)}
+    xsim_active_by_case: dict[str, int] = {}
     for row in rows:
-        parsed_path = BOARD / "future_run" / "parsed" / f"{row['case_id']}.json"
-        parsed = json.loads(parsed_path.read_text(encoding="utf-8"))
-        values = parsed["board"]
-        wait_cycles = (int(values["profile_input_wait_hi"]) << 32) | int(values["profile_input_wait_lo"])
-        frequency = int(values["timer_frequency_hz"])
-        wait_value_ms = wait_cycles * 1000.0 / frequency
-        input_wait_ms.append(wait_value_ms)
-        non_wait_ms.append(float(row["core_latency_ms"]) - wait_value_ms)
+        case = cases[row["case_id"]]
+        xsim_row = xsim[case["source_prediction_case_id"]]
+        expected_active = int(xsim_row["prof_total_cycles"]) - int(xsim_row["prof_input_wait_cycles"])
+        xsim_active_by_case[row["case_id"]] = expected_active
+        if int(row["core_active_cycles"]) != expected_active:
+            raise SystemExit(f"board/XSim active-cycle mismatch: {row['case_id']}")
     return {
-        "evidence_class": "MEASURED",
+        "evidence_class": "MEASURED_COUNTERS_AND_DERIVED_ACTIVE_CYCLES",
         "rows": rows,
-        "core_latency_ms": stats(core),
-        "system_latency_ms": stats(system),
-        "system_throughput_samples_per_s": stats(throughput),
-        "system_realtime_margin_vs_1ksps": stats([value / 1000 for value in throughput]),
+        "uart_paced_core_counter_interval_ms": stats(uart_core),
+        "uart_paced_transaction_counter_interval_ms": stats(uart_transaction),
+        "uart_paced_throughput_samples_per_s": stats(uart_throughput),
+        "uart_paced_realtime_margin_vs_1ksps": stats([value / 1000 for value in uart_throughput]),
         "input_wait_latency_ms": stats(input_wait_ms),
-        "non_wait_counter_difference_ms": stats(non_wait_ms),
+        "core_active_cycles": stats(active_cycles),
+        "core_active_latency_ms": stats(active_ms),
+        "core_run_active_cycles": stats(active_run_cycles),
+        "core_run_active_latency_ms": stats(active_run_ms),
+        "non_run_overhead_cycles": stats(non_run_cycles),
+        "core_active_throughput_samples_per_s": stats(active_throughput),
+        "core_active_realtime_margin_vs_1ksps": stats([value / 1000 for value in active_throughput]),
+        "active_cycle_unique_values": sorted(set(active_cycles)),
+        "xsim_active_cycle_unique_values": sorted(set(xsim_active_by_case.values())),
+        "xsim_active_cycle_crosscheck": "36/36",
+        "system_compute_latency_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
         "core_system_equal_cases": sum(row["core_cycles"] == row["system_cycles"] for row in rows),
         "classification_correct": batch["classification_correct"],
         "classification_total": batch["classification_total"],
@@ -173,8 +191,10 @@ def generate_protocol() -> str:
 - Canonical RTL cadence: `sample_gap_cycles=2`
 - Clock: 100 MHz, verified by the 10.000 ns constraints and implemented-system timing report
 - CPU validity gate: timing is reportable only after current locked Python output matches canonical RTL `final_pred` and all four `final_mem` values 36/36.
-- RTL scope: cycle-derived stored-data processing latency; XSim host wall time is forbidden.
-- Board core/system timing: measured from 36 hardware-counter UART transcripts.
+- RTL scope: active cycles are `prof_total_cycles - prof_input_wait_cycles`; XSim host wall time is forbidden.
+- Board core timing: `profile_total - profile_input_wait`, derived from two measured 100 MHz hardware counters in each of 36 UART transcripts.
+- Board raw transaction interval: retained only as a UART-paced transport diagnostic.
+- Integrated-system compute latency: not measured; it requires preloaded DDR/BRAM input and an independent system timer.
 - Power: post-implementation vectorless Vivado estimate; physical board power is not measured.
 - Live interpretation: a 30-minute final decision still requires a 30-minute observation window at 1 kSPS.
 - No model, threshold, feature, class-weight, Snapshot, Final Membrane, RTL datapath, dataset, prediction, or metric change is permitted.
@@ -542,7 +562,10 @@ def generate_rtl() -> dict[str, Any]:
         "case_id", "sample_gap_cycles", "clock_frequency_hz", "prof_total_cycles",
         "prof_run_cycles", "prof_input_wait_cycles", "accepted_samples", "windows",
         "decisions", "total_latency_ms", "run_latency_ms", "input_wait_latency_ms",
-        "throughput_samples_per_s", "realtime_margin", "final_pred_match", "final_mem_match",
+        "active_total_cycles", "active_total_latency_ms", "active_run_cycles",
+        "active_run_latency_ms", "non_run_overhead_cycles", "active_throughput_samples_per_s",
+        "active_realtime_margin", "gap_inclusive_throughput_samples_per_s",
+        "gap_inclusive_realtime_margin", "final_pred_match", "final_mem_match",
     ]
     rows = []
     for case in cases:
@@ -553,6 +576,9 @@ def generate_rtl() -> dict[str, Any]:
         run = int(src["prof_run_cycles"])
         wait = int(src["prof_input_wait_cycles"])
         accepted = int(src["prof_accepted_samples"])
+        active_total = total - wait
+        active_run = run - wait
+        non_run = total - run
         row = {
             "case_id": case["case_id"], "sample_gap_cycles": 2, "clock_frequency_hz": CLOCK_HZ,
             "prof_total_cycles": total, "prof_run_cycles": run, "prof_input_wait_cycles": wait,
@@ -561,31 +587,41 @@ def generate_rtl() -> dict[str, Any]:
             "total_latency_ms": f"{total * 1000 / CLOCK_HZ:.9f}",
             "run_latency_ms": f"{run * 1000 / CLOCK_HZ:.9f}",
             "input_wait_latency_ms": f"{wait * 1000 / CLOCK_HZ:.9f}",
-            "throughput_samples_per_s": f"{accepted * CLOCK_HZ / total:.6f}",
-            "realtime_margin": f"{accepted * CLOCK_HZ / total / 1000:.6f}",
+            "active_total_cycles": active_total,
+            "active_total_latency_ms": f"{active_total * 1000 / CLOCK_HZ:.9f}",
+            "active_run_cycles": active_run,
+            "active_run_latency_ms": f"{active_run * 1000 / CLOCK_HZ:.9f}",
+            "non_run_overhead_cycles": non_run,
+            "active_throughput_samples_per_s": f"{accepted * CLOCK_HZ / active_total:.6f}",
+            "active_realtime_margin": f"{accepted * CLOCK_HZ / active_total / 1000:.6f}",
+            "gap_inclusive_throughput_samples_per_s": f"{accepted * CLOCK_HZ / total:.6f}",
+            "gap_inclusive_realtime_margin": f"{accepted * CLOCK_HZ / total / 1000:.6f}",
             "final_pred_match": str(pred_match).lower(), "final_mem_match": str(memories).lower(),
         }
         if accepted != 1_800_000 or row["windows"] != 30 or row["decisions"] != 1 or not pred_match or not memories:
             raise SystemExit(f"RTL acceptance failed: {case['case_id']}")
         rows.append(row)
     write_csv(RESULTS / "rtl_cycle_benchmark.csv", rows, fields)
-    latencies = [float(row["total_latency_ms"]) for row in rows]
-    throughput = [float(row["throughput_samples_per_s"]) for row in rows]
+    gap_inclusive_latencies = [float(row["total_latency_ms"]) for row in rows]
+    active_latencies = [float(row["active_total_latency_ms"]) for row in rows]
+    active_throughput = [float(row["active_throughput_samples_per_s"]) for row in rows]
     summary = {
-        "status": "CYCLE_DERIVED", "case_count": 36, "sample_gap_cycles": 2,
+        "status": "COUNTER_DERIVED", "case_count": 36, "sample_gap_cycles": 2,
         "clock_frequency_hz": CLOCK_HZ,
         "clock_evidence": [
             "constraints/snn_ecg_axi_ooc.xdc: create_clock period 10.000 ns",
             "constraints/nexys_a7_microblaze_full_replay.xdc: create_clock period 10.000 ns",
             "results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt: 100.000 MHz",
         ],
-        "total_latency_ms": {"median": statistics.median(latencies), "mean": statistics.mean(latencies), "std": statistics.pstdev(latencies), "min": min(latencies), "max": max(latencies), "iqr": quantile(latencies, .75) - quantile(latencies, .25)},
-        "throughput_samples_per_s": statistics.mean(throughput),
-        "throughput_msamples_per_s": statistics.mean(throughput) / 1e6,
-        "realtime_margin_vs_1ksps": statistics.mean(throughput) / 1000,
-        "active_snapshot_latency_ms": int(xsim[cases[0]["source_prediction_case_id"]]["prof_last_window_latency"]) * 1000 / CLOCK_HZ,
-        "active_decision_latency_ms": int(xsim[cases[0]["source_prediction_case_id"]]["prof_last_decision_latency"]) * 1000 / CLOCK_HZ,
-        "maximum_validated_stream_acceptance_rate_samples_per_s": statistics.mean(throughput),
+        "gap_inclusive_total_latency_ms": stats(gap_inclusive_latencies),
+        "active_total_cycles": stats([int(row["active_total_cycles"]) for row in rows]),
+        "active_total_latency_ms": stats(active_latencies),
+        "active_run_cycles": stats([int(row["active_run_cycles"]) for row in rows]),
+        "non_run_overhead_cycles": stats([int(row["non_run_overhead_cycles"]) for row in rows]),
+        "active_throughput_samples_per_s": statistics.mean(active_throughput),
+        "active_throughput_msamples_per_s": statistics.mean(active_throughput) / 1e6,
+        "active_realtime_margin_vs_1ksps": statistics.mean(active_throughput) / 1000,
+        "board_active_cycle_crosscheck": "3,601,290 cycles in all 36 board cases",
         "equivalence": "final_pred 36/36; final_mem 36/36",
     }
     write_json(RESULTS / "rtl_cycle_summary.json", summary)
@@ -593,9 +629,9 @@ def generate_rtl() -> dict[str, Any]:
 
 The committed full-top XSim profile is used at canonical `sample_gap_cycles=2`. Host simulator wall time is not used. The implemented clock is 100 MHz from the 10.000 ns XDC constraint and the committed Vivado timing report.
 
-For each case: latency = cycles / 100,000,000; throughput = 1,800,000 / latency; real-time margin = throughput / 1,000. All 36 rows validate 1,800,000 accepted samples, 30 windows, one decision, final_pred exact, and final_mem exact.
+For each case, active accelerator cycles are `prof_total_cycles - prof_input_wait_cycles`. The input-wait counter increments only while the core is in RUN, ready to accept a sample, and `sample_valid` is absent. Internal back-pressure cycles, snapshot/decision work, and non-RUN control overhead therefore remain in the active interval. Latency = active cycles / 100,000,000; throughput = 1,800,000 / latency; real-time margin = throughput / 1,000.
 
-Stored-data processing latency is {summary['total_latency_ms']['median']:.6f} ms. Live ECG still requires 30 minutes to observe the decision window.
+The XSim active result is {summary['active_total_cycles']['median']:.0f} cycles ({summary['active_total_latency_ms']['median']:.6f} ms), exactly matching all 36 board-counter differences. The canonical gap-inclusive XSim interval remains {summary['gap_inclusive_total_latency_ms']['median']:.6f} ms and is not used as no-stall core latency. All 36 rows validate 1,800,000 accepted samples, 30 windows, one decision, final_pred exact, and final_mem exact. Live ECG still requires 30 minutes to observe the decision window.
 """)
     return summary
 
@@ -648,19 +684,19 @@ The accelerator updates state sample by sample and does not instantiate a 1,800,
 
 Pure RTL uses {pure_util['bram_tile']} BRAM and {pure_util['dsp']} DSP. The {pure_util['flip_flop']:,} post-route FFs provide a conservative {pure_util['flip_flop']:,}-bit ({pure_util['flip_flop'] / 8:.3f}-byte) upper bound on all sequential storage, but this is deliberately not called exact inference-state memory: it includes persistent inference state, pipeline registers, counters, control, and interface state. A per-category split is unavailable.
 """)
-    pure_energy = pure["total_on_chip_power_w"] * board["core_latency_ms"]["median"] / 1000
-    system_energy = system["total_on_chip_power_w"] * board["system_latency_ms"]["median"] / 1000
+    pure_energy = pure["total_on_chip_power_w"] * board["core_active_latency_ms"]["median"] / 1000
     rows = [
-        {"implementation": "Pure RTL accelerator", "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": f"{pure_energy:.12f}", "energy_class": "DERIVED", "evidence_type": "Vivado-estimated power * measured FPGA core-counter latency", "scope": "accelerator implementation estimate", "evidence_path": f"{pure['raw_power_report']}; {repo_rel(BOARD_TIMING_CSV)}"},
-        {"implementation": "MicroBlaze integrated FPGA system", "power_w": f"{system['total_on_chip_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": f"{system_energy:.12f}", "energy_class": "DERIVED", "evidence_type": "Vivado-estimated power * measured FPGA system-counter latency", "scope": "MicroBlaze, BRAM, AXI, UART, feeder, and accelerator", "evidence_path": f"{system['raw_power_report']}; {repo_rel(BOARD_TIMING_CSV)}"},
+        {"implementation": "Pure RTL accelerator", "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": f"{pure_energy:.12f}", "energy_class": "DERIVED", "evidence_type": "Vivado-estimated power * hardware-counter-derived active core latency", "scope": "accelerator implementation estimate", "evidence_path": f"{pure['raw_power_report']}; {repo_rel(BOARD_TIMING_CSV)}"},
+        {"implementation": "MicroBlaze integrated FPGA system", "power_w": f"{system['total_on_chip_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": "NOT_MEASURED", "energy_class": "NOT_MEASURED", "evidence_type": "integrated compute latency unavailable; UART-paced counter is not used", "scope": "MicroBlaze, BRAM, AXI, UART, feeder, and accelerator", "evidence_path": system["raw_power_report"]},
         {"implementation": "Physical FPGA board", "power_w": "NOT_MEASURED", "power_class": "NOT_MEASURED", "energy_per_decision_j": "NOT_MEASURED", "energy_class": "NOT_MEASURED", "evidence_type": "none; no external power meter", "scope": "board input power", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md"},
         {"implementation": "CPU", "power_w": "N/A", "power_class": "N/A", "energy_per_decision_j": "N/A", "energy_class": "N/A", "evidence_type": "none", "scope": "CPU", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md"},
     ]
     write_csv(RESULTS / "power_energy_summary.csv", rows, list(rows[0]))
     write_text(REPORTS / "POWER_ENERGY_METHODOLOGY.md", f"""# Power and Energy Methodology
 
-- Pure RTL: {pure['total_on_chip_power_w']:.6f} W is a post-implementation vectorless Vivado estimate, not board-measured power. Derived energy is **estimated power x measured FPGA core-counter latency**: {pure['total_on_chip_power_w']:.6f} W x {board['core_latency_ms']['median'] / 1000:.9f} s = {pure_energy:.12f} J/decision.
-- Integrated system: {system['total_on_chip_power_w']:.6f} W is a separate post-implementation vectorless estimate for MicroBlaze, BRAM, AXI, UART, feeder, and accelerator. Derived energy is **estimated power x measured FPGA system-counter latency**: {system['total_on_chip_power_w']:.6f} W x {board['system_latency_ms']['median'] / 1000:.9f} s = {system_energy:.12f} J/decision.
+- Pure RTL: {pure['total_on_chip_power_w']:.6f} W is a post-implementation vectorless Vivado estimate, not board-measured power. Derived energy is **estimated power x hardware-counter-derived active core latency**: {pure['total_on_chip_power_w']:.6f} W x {board['core_active_latency_ms']['median'] / 1000:.9f} s = {pure_energy:.12f} J/decision.
+- The active core latency comes from `profile_total - profile_input_wait` in each board transcript. Both operands are MEASURED 100 MHz hardware counters; the subtraction is DERIVED. It retains internal stalls and snapshot/final-decision overhead.
+- Integrated system: {system['total_on_chip_power_w']:.6f} W is a separate post-implementation vectorless estimate for MicroBlaze, BRAM, AXI, UART, feeder, and accelerator. Integrated compute energy is **NOT_MEASURED/NOT DERIVED** because the current BIT has neither preloaded input nor an independent system timer. Multiplying this power by the UART-paced replay interval would measure transport waiting, not integrated compute energy.
 - Activity: no SAIF/VCD was supplied. Both results use Vivado default vectorless propagation and are explicitly labeled **Post-implementation vectorless Vivado power estimate**.
 - Physical board power was not measured because no external power meter was available. These values must not be described as board power or measured accelerator energy.
 - CPU: N/A because no RAPL/powercap or equivalent defensible counter is available.
@@ -675,8 +711,8 @@ def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp:
     pure = power["scopes"]["pure_rtl"]
     system_power = power["scopes"]["microblaze_system"]
     exact_ms = native_cpp["kernel"]["all_run_latency_ms"]["median"] if native_cpp else None
-    core_ms = board["core_latency_ms"]["median"]
-    system_ms = board["system_latency_ms"]["median"]
+    core_ms = board["core_active_latency_ms"]["median"]
+    uart_interval_ms = board["uart_paced_transaction_counter_interval_ms"]["median"]
     fields = ["implementation", "measurement_scope", "status", "evidence_type", "sample_count", "latency_ms_median", "latency_ms_mean", "latency_ms_std", "throughput_samples_per_s", "realtime_margin_vs_1ksps", "speedup_vs_python_kernel", "speedup_vs_exact_cpp_kernel", "power_w", "power_evidence", "energy_per_decision_j", "energy_evidence", "LUT", "FF", "BRAM", "DSP", "full_input_buffer_required", "output_equivalence", "evidence_path", "notes"]
     na_cpu = {
         "sample_count": 1_800_000, "latency_ms_median": "N/A", "latency_ms_mean": "N/A", "latency_ms_std": "N/A",
@@ -698,7 +734,7 @@ def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp:
         native_kernel = native_cpp["kernel"]
         native_e2e = native_cpp["end_to_end"]
         native_rows = [
-            {"implementation": "Exact C++ native CPU kernel", "measurement_scope": "preloaded signed-12 samples to final result", "status": "MEASURED_NOW", "evidence_type": "QueryPerformanceCounter after full exact-equivalence gate", "sample_count": 1_800_000, "latency_ms_median": f"{native_kernel['all_run_latency_ms']['median']:.6f}", "latency_ms_mean": f"{native_kernel['all_run_latency_ms']['mean']:.6f}", "latency_ms_std": f"{native_kernel['all_run_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{native_kernel['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{native_kernel['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": (f"{py_all_run_ms / native_kernel['all_run_latency_ms']['median']:.6f}" if py_all_run_ms else "N/A"), "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 144/144 mem; 1080/1080 snapshots", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md", "notes": f"hand-written transaction-level CPU code; single thread; fixed affinity; -O3 -march=native; all-360-run median; CPU/FPGA-core estimate {native_cpp['fpga_core_speedup_estimate']:.6f}x"},
+            {"implementation": "Exact C++ native CPU kernel", "measurement_scope": "preloaded signed-12 samples to final result", "status": "MEASURED_NOW", "evidence_type": "QueryPerformanceCounter after full exact-equivalence gate", "sample_count": 1_800_000, "latency_ms_median": f"{native_kernel['all_run_latency_ms']['median']:.6f}", "latency_ms_mean": f"{native_kernel['all_run_latency_ms']['mean']:.6f}", "latency_ms_std": f"{native_kernel['all_run_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{native_kernel['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{native_kernel['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": (f"{py_all_run_ms / native_kernel['all_run_latency_ms']['median']:.6f}" if py_all_run_ms else "N/A"), "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 144/144 mem; 1080/1080 snapshots", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md", "notes": f"hand-written transaction-level CPU code; single thread; fixed affinity; -O3 -march=native; all-360-run median; active-core comparison {native_kernel['all_run_latency_ms']['median'] / core_ms:.6f}x"},
             {"implementation": "Exact C++ native CPU end-to-end", "measurement_scope": "file open/parse through flushed result JSON", "status": "MEASURED_NOW", "evidence_type": "QueryPerformanceCounter after full exact-equivalence gate", "sample_count": 1_800_000, "latency_ms_median": f"{native_e2e['all_run_latency_ms']['median']:.6f}", "latency_ms_mean": f"{native_e2e['all_run_latency_ms']['mean']:.6f}", "latency_ms_std": f"{native_e2e['all_run_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{native_e2e['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{native_e2e['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": "N/A", "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 144/144 mem; 1080/1080 snapshots", "evidence_path": "benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md", "notes": "hand-written transaction-level CPU code; includes file open, signed-12 parsing, inference, and result JSON write/flush"},
         ]
     rows = [
@@ -706,9 +742,9 @@ def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp:
         *native_rows,
         ({"implementation": "Verilator-generated RTL simulation", "measurement_scope": "host runtime of generated cycle-accurate RTL model", "status": "MEASURED_NOW", "evidence_type": "host steady-clock simulation timing after exact 36/36 equivalence", "sample_count": 1_800_000, "latency_ms_median": f"{cpp['per_case_median_latency_ms']['median']:.6f}", "latency_ms_mean": f"{cpp['per_case_median_latency_ms']['mean']:.6f}", "latency_ms_std": f"{cpp['per_case_median_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{cpp['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{cpp['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": "N/A", "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 36/36 mem", "evidence_path": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json", "notes": "Verilator-generated RTL simulation/verification runtime; explicitly not the Exact C++ native CPU baseline"} if cpp else
          {"implementation": "C/C++ integer kernel", "measurement_scope": "loaded samples to final result", "status": "NOT_COMPLETED", "evidence_type": "blocker", **na_cpu, "evidence_path": "benchmarks/accelerator_benefit/reports/CPP_BASELINE_NOT_COMPLETED.md", "notes": "Approximate translation forbidden"}),
-        {"implementation": "Pure RTL canonical cycle-derived", "measurement_scope": "stored-data accelerator start to final decision", "status": "DERIVED", "evidence_type": "validated RTL cycle counters", "sample_count": 1_800_000, "latency_ms_median": f"{rtl['total_latency_ms']['median']:.9f}", "latency_ms_mean": f"{rtl['total_latency_ms']['mean']:.9f}", "latency_ms_std": f"{rtl['total_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{rtl['throughput_samples_per_s']:.6f}", "realtime_margin_vs_1ksps": f"{rtl['realtime_margin_vs_1ksps']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / rtl['total_latency_ms']['median']:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / rtl['total_latency_ms']['median']:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * rtl['total_latency_ms']['median'] / 1000:.12f}", "energy_evidence": "DERIVED estimated power * cycle-derived latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "no", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"benchmarks/accelerator_benefit/results/rtl_cycle_benchmark.csv; {pure['raw_power_report']}", "notes": "Legacy cycle-derived latency retained separately from measured board counters"},
-        {"implementation": "FPGA board accelerator-core counter", "measurement_scope": "accelerator last-decision hardware counter", "status": "MEASURED", "evidence_type": "100 MHz FPGA hardware cycle counter parsed from UART", "sample_count": 1_800_000, "latency_ms_median": f"{core_ms:.9f}", "latency_ms_mean": f"{board['core_latency_ms']['mean']:.9f}", "latency_ms_std": f"{board['core_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{1_800_000 / (core_ms / 1000):.6f}", "realtime_margin_vs_1ksps": f"{1_800_000 / core_ms:.6f}", "speedup_vs_python_kernel": "N/A", "speedup_vs_exact_cpp_kernel": (f"{exact_ms / core_ms:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * core_ms / 1000:.12f}", "energy_evidence": "DERIVED estimated Pure RTL power * MEASURED core-counter latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "host streamed", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {pure['raw_power_report']}", "notes": "UART output occurs after the counter stops; counter includes accelerator input-wait behavior"},
-        {"implementation": "FPGA board MicroBlaze system counter", "measurement_scope": "full transaction counter", "status": "MEASURED", "evidence_type": "100 MHz FPGA hardware cycle counter parsed from UART", "sample_count": 1_800_000, "latency_ms_median": f"{system_ms:.9f}", "latency_ms_mean": f"{board['system_latency_ms']['mean']:.9f}", "latency_ms_std": f"{board['system_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{board['system_throughput_samples_per_s']['median']:.6f}", "realtime_margin_vs_1ksps": f"{board['system_realtime_margin_vs_1ksps']['median']:.6f}", "speedup_vs_python_kernel": "N/A", "speedup_vs_exact_cpp_kernel": (f"{exact_ms / system_ms:.6f}" if exact_ms else "N/A"), "power_w": f"{system_power['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{system_power['total_on_chip_power_w'] * system_ms / 1000:.12f}", "energy_evidence": "DERIVED estimated integrated-system power * MEASURED system-counter latency", "LUT": system_power["utilization"]["lut"], "FF": system_power["utilization"]["flip_flop"], "BRAM": system_power["utilization"]["bram_tile"], "DSP": system_power["utilization"]["dsp"], "full_input_buffer_required": "host streamed", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {system_power['raw_power_report']}", "notes": "Includes MicroBlaze, BRAM, AXI, UART, sample feeder, and accelerator; UART result printing excluded"},
+        {"implementation": "Pure RTL XSim active-cycle cross-check", "measurement_scope": "prof_total minus prof_input_wait", "status": "DERIVED", "evidence_type": "validated RTL counter subtraction", "sample_count": 1_800_000, "latency_ms_median": f"{rtl['active_total_latency_ms']['median']:.9f}", "latency_ms_mean": f"{rtl['active_total_latency_ms']['mean']:.9f}", "latency_ms_std": f"{rtl['active_total_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{rtl['active_throughput_samples_per_s']:.6f}", "realtime_margin_vs_1ksps": f"{rtl['active_realtime_margin_vs_1ksps']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / rtl['active_total_latency_ms']['median']:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / rtl['active_total_latency_ms']['median']:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * rtl['active_total_latency_ms']['median'] / 1000:.12f}", "energy_evidence": "DERIVED estimated power * XSim active-cycle latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "no", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"benchmarks/accelerator_benefit/results/rtl_cycle_benchmark.csv; {pure['raw_power_report']}", "notes": "Exactly matches the board active-cycle difference in 36/36 cases"},
+        {"implementation": "FPGA board accelerator active-cycle latency", "measurement_scope": "profile_total minus profile_input_wait", "status": "DERIVED", "evidence_type": "difference of two MEASURED 100 MHz FPGA hardware counters", "sample_count": 1_800_000, "latency_ms_median": f"{core_ms:.9f}", "latency_ms_mean": f"{board['core_active_latency_ms']['mean']:.9f}", "latency_ms_std": f"{board['core_active_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{board['core_active_throughput_samples_per_s']['median']:.6f}", "realtime_margin_vs_1ksps": f"{board['core_active_realtime_margin_vs_1ksps']['median']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / core_ms:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / core_ms:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * core_ms / 1000:.12f}", "energy_evidence": "DERIVED estimated Pure RTL power * hardware-counter-derived active latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "host streamed; input-wait subtracted", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {pure['raw_power_report']}", "notes": "Retains internal stalls, snapshot/final-decision work, and 1320 non-RUN control cycles; XSim match 36/36"},
+        {"implementation": "FPGA board UART-paced transaction diagnostic", "measurement_scope": "raw start-to-final-decision counter including input starvation", "status": "MEASURED", "evidence_type": "100 MHz FPGA hardware counter parsed from UART", "sample_count": 1_800_000, "latency_ms_median": f"{uart_interval_ms:.9f}", "latency_ms_mean": f"{board['uart_paced_transaction_counter_interval_ms']['mean']:.9f}", "latency_ms_std": f"{board['uart_paced_transaction_counter_interval_ms']['std']:.9f}", "throughput_samples_per_s": f"{board['uart_paced_throughput_samples_per_s']['median']:.6f}", "realtime_margin_vs_1ksps": f"{board['uart_paced_realtime_margin_vs_1ksps']['median']:.6f}", "speedup_vs_python_kernel": "N/A", "speedup_vs_exact_cpp_kernel": "N/A", "power_w": f"{system_power['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": "N/A", "energy_evidence": "N/A; transport-wait interval is not integrated compute latency", "LUT": system_power["utilization"]["lut"], "FF": system_power["utilization"]["flip_flop"], "BRAM": system_power["utilization"]["bram_tile"], "DSP": system_power["utilization"]["dsp"], "full_input_buffer_required": "host streamed", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {system_power['raw_power_report']}", "notes": "Not used for accelerator or integrated-system speedup/energy; DDR preload plus independent timer is required"},
     ]
     for row in rows:
         if row["status"] == "MEASURED_NOW":
@@ -757,8 +793,8 @@ def generate_figures(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: di
     board = load_board_timing()
     pure = power["scopes"]["pure_rtl"]
     system = power["scopes"]["microblaze_system"]
-    core_ms = board["core_latency_ms"]["median"]
-    system_ms = board["system_latency_ms"]["median"]
+    core_ms = board["core_active_latency_ms"]["median"]
+    uart_interval_ms = board["uart_paced_transaction_counter_interval_ms"]["median"]
     cpu_boxes = ([
         ("Python integer kernel", f"{python['kernel']['per_case_median_latency_ms']['median']:.3f} ms", "MEASURED"),
     ] if python else [("Python integer kernel", "NOT COMPLETED (equivalence gate)", "AUDIT")])
@@ -766,16 +802,16 @@ def generate_figures(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: di
         cpu_boxes.append(("Exact C++ native CPU kernel", f"{native_cpp['kernel']['all_run_latency_ms']['median']:.3f} ms", "MEASURED"))
     if cpp:
         cpu_boxes.append(("Verilator-generated RTL simulation", f"{cpp['per_case_median_latency_ms']['median']:.3f} ms", "MEASURED"))
-    cpu_boxes.append(("Pure RTL", f"{rtl['total_latency_ms']['median']:.6f} ms", "DERIVED"))
-    cpu_boxes.append(("FPGA board core counter", f"{core_ms:.3f} ms", "MEASURED"))
-    cpu_boxes.append(("FPGA board system counter", f"{system_ms:.3f} ms", "MEASURED"))
+    cpu_boxes.append(("Pure RTL XSim active-cycle cross-check", f"{rtl['active_total_latency_ms']['median']:.6f} ms", "DERIVED"))
+    cpu_boxes.append(("FPGA board active-cycle latency", f"{core_ms:.6f} ms", "DERIVED"))
+    cpu_boxes.append(("UART-paced transaction diagnostic", f"{uart_interval_ms:.3f} ms", "MEASURED"))
     specs = [
         ("01_cpu_vs_rtl_latency", "CPU, RTL, and measured-board latency", cpu_boxes, ("Exact C++ is the native CPU baseline; Verilator is separately labeled RTL simulation runtime." if python else "Python latency and Python speedup remain absent.")),
-        ("02_throughput_realtime_margin", "Measured-board throughput and real-time margin", [("System throughput", f"{board['system_throughput_samples_per_s']['median']:.3f} samples/s", "DERIVED"), ("Margin versus 1 kSPS", f"{board['system_realtime_margin_vs_1ksps']['median']:.3f}x", "DERIVED")], "Derived from measured system cycles; live final decision still needs 30 minutes."),
+        ("02_throughput_realtime_margin", "FPGA active-core throughput and real-time margin", [("Active-core throughput", f"{board['core_active_throughput_samples_per_s']['median']:.3f} samples/s", "DERIVED"), ("Margin versus 1 kSPS", f"{board['core_active_realtime_margin_vs_1ksps']['median']:.3f}x", "DERIVED")], "Derived from measured total/input-wait counters; live final decision still needs 30 minutes."),
         ("03_resource_scope", "Post-route resource scope comparison", [("Pure RTL accelerator", f"{pure['utilization']['lut']} LUT / {pure['utilization']['flip_flop']} FF / {pure['utilization']['bram_tile']} BRAM / {pure['utilization']['dsp']} DSP", "DERIVED"), ("MicroBlaze replay system", f"{system['utilization']['lut']} LUT / {system['utilization']['flip_flop']} FF / {system['utilization']['bram_tile']} BRAM / {system['utilization']['dsp']} DSP", "DERIVED")], "Parsed from separate post-route utilization reports."),
         ("04_streaming_memory", "Streaming-memory benefit", [("Full raw window avoided", "2,700,000 bytes", "DERIVED"), ("All pure-RTL FF state upper bound", f"<={pure['utilization']['flip_flop'] / 8:.3f} bytes", "DERIVED")], "The FF upper bound includes pipeline, control, and interface state."),
-        ("05_power_energy_status", "Estimated power and derived energy", [("Pure RTL power", f"{pure['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Pure RTL energy", f"{pure['total_on_chip_power_w'] * core_ms / 1000:.6f} J DERIVED", "DERIVED"), ("Integrated system power", f"{system['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Integrated system energy", f"{system['total_on_chip_power_w'] * system_ms / 1000:.6f} J DERIVED", "DERIVED"), ("Physical board", "NOT MEASURED", "N/A")], "Post-implementation vectorless estimates; no external power meter."),
-        ("06_benchmark_scope_diagram", "Benchmark scopes remain separate", [("Exact C++ kernel", "MEASURED CPU", "MEASURED"), ("FPGA core counter", "MEASURED hardware cycles", "MEASURED"), ("FPGA system counter", "MEASURED hardware cycles", "MEASURED"), ("Vivado power", "ESTIMATED vectorless", "ESTIMATED")], "Energy is derived from estimated power times measured latency."),
+        ("05_power_energy_status", "Estimated power and derived energy", [("Pure RTL power", f"{pure['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Pure RTL active energy", f"{pure['total_on_chip_power_w'] * core_ms / 1000:.6f} J DERIVED", "DERIVED"), ("Integrated system power", f"{system['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Integrated system energy", "NOT MEASURED", "N/A"), ("Physical board", "NOT MEASURED", "N/A")], "System compute energy requires preloaded input and an independent timer; no external power meter."),
+        ("06_benchmark_scope_diagram", "Benchmark scopes remain separate", [("Exact C++ kernel", "MEASURED CPU", "MEASURED"), ("FPGA active cycles", "DERIVED from MEASURED counters", "DERIVED"), ("UART-paced interval", "TRANSPORT DIAGNOSTIC", "MEASURED"), ("Integrated compute latency", "NOT MEASURED", "N/A"), ("Vivado power", "ESTIMATED vectorless", "ESTIMATED")], "Pure RTL energy uses active-core latency; integrated energy remains unavailable."),
         ("07_future_board_completion", "Board measurement completion", [("1. Program immutable BIT/ELF", "complete", "MEASURED"), ("2. Execute 36 streams", "36/36", "MEASURED"), ("3. Parse hardware counters", "complete", "MEASURED"), ("4. Regenerate reports", "complete", "DERIVED")], "Physical board power remains unmeasured."),
     ]
     index = ["# Figure Index", "", "| Figure | Source CSV | Scope | Evidence | Limitation |", "|---|---|---|---|---|"]
@@ -1032,7 +1068,7 @@ All timer-based board latency and physical board power remain PENDING_BOARD. The
 
 def generate_board_docs() -> None:
     board = load_board_timing()
-    schema = ["case_id", "sample_count", "core_cycles", "core_latency_ms", "system_cycles", "system_latency_ms", "samples_per_second", "realtime_margin", "final_pred", "final_mem_NSR", "final_mem_CHF", "final_mem_ARR", "final_mem_AFF", "pred_match", "mem_match", "timing_source", "timer_frequency_hz"]
+    schema = ["case_id", "sample_count", "core_cycles", "core_latency_ms", "system_cycles", "system_latency_ms", "samples_per_second", "realtime_margin", "profile_total_cycles", "profile_run_cycles", "profile_input_wait_cycles", "profile_accepted_samples", "core_active_cycles", "core_active_latency_ms", "core_run_active_cycles", "core_run_active_latency_ms", "non_run_overhead_cycles", "core_active_samples_per_second", "core_active_realtime_margin", "final_pred", "final_mem_NSR", "final_mem_CHF", "final_mem_ARR", "final_mem_AFF", "pred_match", "mem_match", "timing_source", "timer_frequency_hz"]
     write_csv(BOARD / "result_schema.csv", [], schema)
     first_transcript = sorted((BOARD / "future_run" / "transcripts").glob("*.txt"))[0]
     evidence_lines = [
@@ -1041,7 +1077,7 @@ def generate_board_docs() -> None:
     ]
     write_text(BOARD / "transcript_example.txt", "\n".join(evidence_lines))
     write_json(BOARD / "board_timing_summary.json", {
-        "evidence_class": "MEASURED",
+        "evidence_class": "MEASURED_COUNTERS_AND_DERIVED_ACTIVE_CYCLES",
         "board": "Nexys A7-100T",
         "uart_port": board["port"],
         "uart_baud": board["baud"],
@@ -1052,14 +1088,25 @@ def generate_board_docs() -> None:
         "board_golden_final_pred": "36/36",
         "board_golden_final_membrane_values": "144/144",
         "classification_accuracy": "29/36 (80.56%)",
-        "core_latency_ms": board["core_latency_ms"],
-        "system_latency_ms": board["system_latency_ms"],
-        "system_throughput_samples_per_s": board["system_throughput_samples_per_s"],
-        "system_realtime_margin_vs_1ksps": board["system_realtime_margin_vs_1ksps"],
+        "core_active_formula": "profile_total_cycles - profile_input_wait_cycles",
+        "core_active_cycles": board["core_active_cycles"],
+        "core_active_latency_ms": board["core_active_latency_ms"],
+        "core_run_active_cycles": board["core_run_active_cycles"],
+        "core_run_active_latency_ms": board["core_run_active_latency_ms"],
+        "non_run_overhead_cycles": board["non_run_overhead_cycles"],
+        "core_active_throughput_samples_per_s": board["core_active_throughput_samples_per_s"],
+        "core_active_realtime_margin_vs_1ksps": board["core_active_realtime_margin_vs_1ksps"],
+        "uart_paced_core_counter_interval_ms": board["uart_paced_core_counter_interval_ms"],
+        "uart_paced_transaction_counter_interval_ms": board["uart_paced_transaction_counter_interval_ms"],
+        "uart_paced_throughput_samples_per_s": board["uart_paced_throughput_samples_per_s"],
+        "uart_paced_realtime_margin_vs_1ksps": board["uart_paced_realtime_margin_vs_1ksps"],
         "core_system_equal_cases": board["core_system_equal_cases"],
         "input_wait_latency_ms": board["input_wait_latency_ms"],
-        "non_wait_counter_difference_ms": board["non_wait_counter_difference_ms"],
-        "counter_scope_note": "core last-decision and system transaction intervals include UART-paced input wait; UART result printing occurs after counters stop",
+        "active_cycle_unique_values": board["active_cycle_unique_values"],
+        "xsim_active_cycle_unique_values": board["xsim_active_cycle_unique_values"],
+        "xsim_active_cycle_crosscheck": board["xsim_active_cycle_crosscheck"],
+        "system_compute_latency_status": board["system_compute_latency_status"],
+        "counter_scope_note": "active core latency subtracts only RUN-state sample-valid starvation; raw core/system intervals remain UART-paced transport diagnostics",
     })
     bit = REPO / "results" / "board_replay" / "microblaze_full_replay" / "snn_ecg_mb_full_replay.bit"
     elf = BOARD / "build" / "snn_ecg_mb_full_replay_benchmark.elf"
@@ -1095,7 +1142,9 @@ Status: **COMPLETED** on Nexys A7-100T, `{board['port']}`, {board['baud']} baud.
 
 The immutable BIT and instrumented ELF were programmed before each case. All 36 cases sent 1,800,000 samples, produced 30 snapshots and one decision, emitted exactly one `BOARD_BENCH` line and a board PASS marker, and matched Golden Reference final predictions 36/36 and all Final Membrane values 144/144.
 
-`core_cycles` is the accelerator last-decision hardware counter. `system_cycles` is the accelerator total transaction counter. UART result printing occurs after both counters stop. The immutable XSA has no independent AXI Timer, so neither value is relabeled as host wall latency. Core and system counters were equal in {board['core_system_equal_cases']}/36 cases because both counters stop at the final decision and the measured interval includes UART-paced input wait. `profile_input_wait` is retained only as a DERIVED diagnostic in `board_timing_summary.json`; it is not substituted for the required measured core/system counters. The integrated AXI UARTLite in the immutable BIT is configured for 230400 baud; 115200 produces undecodable bytes.
+The reportable accelerator performance metric is `core_active_cycles = profile_total_cycles - profile_input_wait_cycles`. Both operands are measured 100 MHz hardware counters. The RTL increments `profile_input_wait` only in RUN while the accelerator is ready and `sample_valid` is absent, so the subtraction removes upstream UART/MicroBlaze starvation but retains internal back-pressure, snapshot/final-decision work, and 1,320 non-RUN control cycles. All 36 cases produced exactly {board['core_active_cycles']['median']:.0f} active cycles ({board['core_active_latency_ms']['median']:.6f} ms), matching the canonical XSim subtraction 36/36.
+
+Raw `core_cycles` and `system_cycles` are retained unchanged as UART-paced transaction diagnostics; they were equal in {board['core_system_equal_cases']}/36 cases. They are not used for accelerator speedup or energy. Integrated-system compute latency, speedup, and energy remain unmeasured because the immutable XSA has no preloaded input path or independent AXI Timer. UART result printing occurs after counters stop. The integrated AXI UARTLite is configured for 230400 baud; 115200 produces undecodable bytes.
 
 Reproduce the manifest-only preflight:
 
@@ -1144,6 +1193,9 @@ Status: **COMPLETED**, Nexys A7-100T, `{board['port']}`, {board['baud']} baud.
 - annotation accuracy: 29/36 (80.56%)
 - every transcript: exactly one `BOARD_BENCH` and one board PASS marker
 - every core/system counter: greater than zero
+- active-core metric: `profile_total - profile_input_wait` = {board['core_active_cycles']['median']:.0f} cycles = {board['core_active_latency_ms']['median']:.6f} ms in 36/36 cases
+- Exact C++ kernel / FPGA active-core speedup: {1777.6998 / board['core_active_latency_ms']['median']:.6f}x
+- integrated-system compute latency/speedup/energy: not measured; requires preloaded input and an independent timer
 
 Raw evidence is in `benchmarks/accelerator_benefit/board/future_run`. Use `--resume` only after a transport interruption; completed transcript/parsed pairs are retained. The immutable UARTLite configuration is 230400 baud.
 """)
@@ -1156,14 +1208,10 @@ def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, A
     system = power["scopes"]["microblaze_system"]
     historical_pure = json.loads(FINAL_METRICS.read_text(encoding="utf-8-sig"))["pure_rtl_vivado"]
     exact_ms = native_cpp["kernel"]["all_run_latency_ms"]["median"] if native_cpp else float("nan")
-    core = board["core_latency_ms"]
-    syslat = board["system_latency_ms"]
+    core = board["core_active_latency_ms"]
+    uart_interval = board["uart_paced_transaction_counter_interval_ms"]
     core_speedup = exact_ms / core["median"]
-    system_speedup = exact_ms / syslat["median"]
-    core_slowdown = core["median"] / exact_ms
-    system_slowdown = syslat["median"] / exact_ms
     pure_energy = pure["total_on_chip_power_w"] * core["median"] / 1000
-    system_energy = system["total_on_chip_power_w"] * syslat["median"] / 1000
     pure_clocks = ", ".join(f"{item['name']} {item['frequency_mhz']:.3f} MHz" for item in pure["clocks"])
     system_clocks = ", ".join(f"{item['name']} {item['frequency_mhz']:.3f} MHz" for item in system["clocks"])
 
@@ -1176,20 +1224,23 @@ def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, A
 | 분류 정확도 | 29/36, 80.56% | final-test annotation, MEASURED |
 | 보드-Golden final_pred | 36/36 | UART board replay, MEASURED |
 | 보드-Golden Final Membrane | 144/144 | UART board replay, MEASURED |
-| FPGA core latency median / mean / range | {core['median']:.6f} / {core['mean']:.6f} / {core['min']:.6f}-{core['max']:.6f} ms | hardware cycle counter, MEASURED |
-| FPGA system latency median / mean / range | {syslat['median']:.6f} / {syslat['mean']:.6f} / {syslat['min']:.6f}-{syslat['max']:.6f} ms | transaction counter, MEASURED |
-| System throughput / 1 kSPS margin | {board['system_throughput_samples_per_s']['median']:.6f} samples/s / {board['system_realtime_margin_vs_1ksps']['median']:.6f}x | DERIVED from measured cycles |
-| Exact C++ 대비 core speedup | {core_speedup:.9f}x | CPU MEASURED / FPGA MEASURED, DERIVED |
-| Exact C++ 대비 system speedup | {system_speedup:.9f}x | CPU MEASURED / FPGA MEASURED, DERIVED |
+| FPGA core active latency median / mean / range | {core['median']:.6f} / {core['mean']:.6f} / {core['min']:.6f}-{core['max']:.6f} ms | 두 hardware counter의 차, DERIVED |
+| FPGA core active cycles | {board['core_active_cycles']['median']:.0f} cycles, 36/36 동일 | `profile_total - profile_input_wait`, DERIVED from MEASURED counters |
+| FPGA core throughput / 1 kSPS margin | {board['core_active_throughput_samples_per_s']['median']:.6f} samples/s / {board['core_active_realtime_margin_vs_1ksps']['median']:.6f}x | DERIVED |
+| Exact C++ 대비 core speedup | {core_speedup:.9f}x | CPU MEASURED / FPGA counter-derived, DERIVED |
+| UART-paced raw interval median | {uart_interval['median']:.6f} ms | transport diagnostic, MEASURED |
+| Integrated-system compute latency/speedup | 미측정 | DDR 사전 적재와 독립 timer 필요 |
 | Pure RTL power | {pure['total_on_chip_power_w']:.6f} W | Vivado post-implementation vectorless, ESTIMATED |
 | Integrated FPGA system power | {system['total_on_chip_power_w']:.6f} W | Vivado post-implementation vectorless, ESTIMATED |
 | Pure RTL energy/decision | {pure_energy:.9f} J | estimated power x measured core latency, DERIVED |
-| Integrated system energy/decision | {system_energy:.9f} J | estimated power x measured system latency, DERIVED |
+| Integrated system energy/decision | 미측정 | 유효한 integrated compute latency 없음 |
 | Board physical power | 미측정 | 외부 전력계 없음 |
 
-보드는 Nexys A7-100T, UART `{board['port']}`/{board['baud']} baud였다. `core_cycles`는 accelerator last-decision counter이고 `system_cycles`는 accelerator total transaction counter다. UART 결과 출력은 counter 정지 후 수행되므로 제외된다. 고정 XSA에는 독립 AXI Timer가 없으므로 두 counter를 host wall latency로 재표기하지 않는다. 이번 workload에서는 두 counter가 동일한 값을 기록했으며, 입력 UART pacing과 accelerator input-wait가 계측 범위에 포함된다. 따라서 기존 32.912687x는 cycle-derived 54.0126 ms에 대한 추정치로만 남기고, 위 표의 실보드 speedup과 분리해 해석한다.
+보드는 Nexys A7-100T, UART `{board['port']}`/{board['baud']} baud였다. 코어 성능은 `profile_total_cycles - profile_input_wait_cycles`로 산출했다. 두 피연산자는 모두 실보드 100 MHz hardware counter에서 MEASURED 되었고, latency·throughput·speedup은 그 차로부터 DERIVED 되었다. RTL에서 input-wait counter는 RUN 상태에서 코어가 입력을 받을 준비가 되었지만 `sample_valid`가 없을 때만 증가한다. 따라서 이 계산은 UART/MicroBlaze 입력 starvation만 제거하며 내부 back-pressure, snapshot/final-decision 처리와 {board['non_run_overhead_cycles']['median']:.0f} control cycles를 유지한다.
 
-실보드 비율 {core_speedup:.9f}x는 1보다 작으므로 가속을 의미하지 않는다. 반대로 표현하면 FPGA core 계측 구간은 Exact C++ kernel보다 {core_slowdown:.6f}배 길었고 system 계측 구간은 {system_slowdown:.6f}배 길었다. 이는 accelerator 연산 자체만의 no-stall 성능이 아니라 230400-baud 입력 대기가 포함된 고정 firmware counter 범위의 실측 결과다.
+36개 보드 case의 UART-paced raw interval은 서로 달랐지만 active-cycle 차는 모두 정확히 {board['core_active_cycles']['median']:.0f} cycles였다. canonical XSim에서도 `5,401,260 - 1,799,970 = 3,601,290 cycles`로 동일해 36/36 교차 검증되었다. 과거 54.0126 ms와 32.912687x는 canonical sample gap을 포함한 값이므로 no-stall 코어 성능으로 사용하지 않는다. 현재 코어 결과는 {core['median']:.6f} ms 및 {core_speedup:.9f}x다.
+
+원시 `core_cycles/system_cycles` 구간은 입력 대기를 포함하므로 UART-paced transport diagnostic으로만 보존한다. 이를 integrated-system 속도나 energy로 사용하지 않는다. 진짜 통합 시스템 계측에는 ECG를 DDR2 등에 먼저 적재하고 독립 AXI Timer로 feeder 시작부터 최종 decision까지 측정해야 한다.
 
 Pure RTL 전력은 기존 {historical_pure['estimated_total_power_w']:.6f} W를 동일 RTL/part/clock으로 재현했다. 새 route 자원은 {pure['utilization']['lut']} LUT/{pure['utilization']['flip_flop']} FF로 과거 {historical_pure['lut']}/{historical_pure['ff']}와 소폭 다르며 route WNS도 새 보고서 값을 사용한다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
 
@@ -1206,20 +1257,23 @@ Raw firmware/schema retain the legacy `AFF` label; report-facing medical text us
 | Classification accuracy | 29/36 (80.56%) | final-test annotation, MEASURED |
 | Board-Golden final prediction | 36/36 | UART replay, MEASURED |
 | Board-Golden Final Membrane | 144/144 | UART replay, MEASURED |
-| FPGA core latency median / mean / range | {core['median']:.6f} / {core['mean']:.6f} / {core['min']:.6f}-{core['max']:.6f} ms | hardware counter, MEASURED |
-| FPGA system latency median / mean / range | {syslat['median']:.6f} / {syslat['mean']:.6f} / {syslat['min']:.6f}-{syslat['max']:.6f} ms | transaction counter, MEASURED |
-| System throughput / 1 kSPS margin | {board['system_throughput_samples_per_s']['median']:.6f} samples/s / {board['system_realtime_margin_vs_1ksps']['median']:.6f}x | DERIVED |
-| Exact C++ / FPGA core speedup | {core_speedup:.9f}x | measured CPU / measured FPGA, DERIVED |
-| Exact C++ / FPGA system speedup | {system_speedup:.9f}x | measured CPU / measured FPGA, DERIVED |
+| FPGA active-core latency median / mean / range | {core['median']:.6f} / {core['mean']:.6f} / {core['min']:.6f}-{core['max']:.6f} ms | difference of two hardware counters, DERIVED |
+| FPGA active-core cycles | {board['core_active_cycles']['median']:.0f} cycles, identical in 36/36 | `profile_total - profile_input_wait`, DERIVED from MEASURED counters |
+| FPGA active-core throughput / 1 kSPS margin | {board['core_active_throughput_samples_per_s']['median']:.6f} samples/s / {board['core_active_realtime_margin_vs_1ksps']['median']:.6f}x | DERIVED |
+| Exact C++ / FPGA active-core speedup | {core_speedup:.9f}x | CPU MEASURED / FPGA counter-derived, DERIVED |
+| UART-paced raw interval median | {uart_interval['median']:.6f} ms | transport diagnostic, MEASURED |
+| Integrated-system compute latency/speedup | Not measured | requires preloaded input and independent timer |
 | Pure RTL power | {pure['total_on_chip_power_w']:.6f} W | post-implementation vectorless Vivado, ESTIMATED |
 | Integrated FPGA system power | {system['total_on_chip_power_w']:.6f} W | post-implementation vectorless Vivado, ESTIMATED |
 | Pure RTL energy/decision | {pure_energy:.9f} J | estimated power x measured core latency, DERIVED |
-| Integrated system energy/decision | {system_energy:.9f} J | estimated power x measured system latency, DERIVED |
+| Integrated system energy/decision | Not measured | no valid integrated compute latency |
 | Physical board power | Not measured | no external power meter |
 
-The Nexys A7-100T ran on `{board['port']}` at {board['baud']} baud. UART result printing occurs after the hardware counters stop. The immutable XSA has no independent AXI Timer, so neither counter is relabeled as host wall latency. For this workload the core and system counters recorded equal values because both stop at the final decision and UART pacing plus accelerator input-wait behavior are inside the measured interval. The previous 32.912687x figure remains explicitly identified as measured CPU divided by cycle-derived 54.0126 ms RTL latency; it is not the measured-board speedup.
+The Nexys A7-100T ran on `{board['port']}` at {board['baud']} baud. Active-core performance is `profile_total_cycles - profile_input_wait_cycles`. Both operands are MEASURED 100 MHz on-board hardware counters; latency, throughput, and speedup are DERIVED from their difference. The RTL increments input-wait only in RUN when the core is ready but `sample_valid` is absent. The subtraction therefore removes UART/MicroBlaze input starvation while retaining internal back-pressure, snapshot/final-decision work, and {board['non_run_overhead_cycles']['median']:.0f} control cycles.
 
-The measured-board ratio of {core_speedup:.9f}x is below one and therefore is not an acceleration. Equivalently, the FPGA core interval was {core_slowdown:.6f}x longer than the Exact C++ kernel, and the system interval was {system_slowdown:.6f}x longer. This is the immutable firmware counter scope with 230400-baud input wait, not the accelerator's no-stall compute-only performance.
+Although UART-paced raw intervals varied among cases, all 36 board differences were exactly {board['core_active_cycles']['median']:.0f} cycles. Canonical XSim independently gives `5,401,260 - 1,799,970 = 3,601,290 cycles`, a 36/36 cross-check. The former 54.0126 ms and 32.912687x values include the canonical sample gap and are not used as no-stall core performance. The corrected active-core result is {core['median']:.6f} ms and {core_speedup:.9f}x versus Exact C++.
+
+Raw `core_cycles/system_cycles` intervals are retained only as UART-paced transport diagnostics. They are not used for integrated-system speedup or energy. A valid integrated measurement requires preloading the ECG in DDR2 (or equivalent) and bracketing feeder start through final decision with an independent AXI Timer.
 
 Both power results are **Post-implementation vectorless Vivado power estimates** with no SAIF/VCD. Confidence is `{pure['power_estimation_confidence']}` for Pure RTL and `{system['power_estimation_confidence']}` for the integrated system. Physical board input power and measured accelerator energy were not obtained.
 """
@@ -1227,9 +1281,11 @@ Both power results are **Post-implementation vectorless Vivado power estimates**
 
     write_text(REPORTS / "BENCHMARK_LIMITATIONS.md", f"""# Benchmark Limitations
 
-- FPGA core/system latency is measured with hardware cycle counters, but the last-decision core interval includes input wait caused by UART pacing; it is not the 54.0126 ms no-stall cycle-derived latency.
+- Active-core latency is a DERIVED subtraction of two MEASURED hardware counters, not host wall time or an independent external timing measurement.
+- The counter definition removes only RUN-state input starvation; its interpretation depends on the locked RTL semantics documented in `rtl/snn_ecg_30min_final_top.v`.
 - Exact C++ is a single-thread hand-written transaction-level implementation with audited cadence compression; it is not a literal event-driven RTL simulation.
-- The historical 32.912687x value combines measured CPU latency with cycle-derived FPGA latency and is not measured-board speedup.
+- Historical 54.0126 ms/32.912687x values include canonical sample-gap cycles and are superseded for active-core performance by 36.0129 ms/49.362862x.
+- Integrated-system compute latency, speedup, and energy are not measured; DDR/preload plus an independent system timer is required.
 - Pure RTL and integrated MicroBlaze power are separate post-implementation vectorless Vivado estimates with Medium confidence and no SAIF/VCD.
 - Physical board input power was not measured; no value is presented as board power or measured energy.
 - Pure RTL and integrated-system resource/power scopes are not directly equivalent.
@@ -1238,13 +1294,14 @@ Both power results are **Post-implementation vectorless Vivado power estimates**
 
     claims = [
         {"claim_id": "C1", "claim": "Board matches Golden final predictions 36/36 and Final Membrane values 144/144.", "status": "SUPPORTED", "evidence_type": "MEASURED", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "functional equivalence, not 100% annotation accuracy"},
-        {"claim_id": "C2", "claim": f"Measured FPGA core-counter median latency is {core['median']:.6f} ms.", "status": "SUPPORTED", "evidence_type": "MEASURED", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "includes input-wait behavior"},
-        {"claim_id": "C3", "claim": f"Measured FPGA system-counter median latency is {syslat['median']:.6f} ms.", "status": "SUPPORTED", "evidence_type": "MEASURED", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "UART result printing excluded"},
+        {"claim_id": "C2", "claim": f"FPGA active-core median latency is {core['median']:.6f} ms from {board['core_active_cycles']['median']:.0f} cycles.", "status": "SUPPORTED", "evidence_type": "DERIVED from two MEASURED hardware counters", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "counter-semantics dependent; not host wall time"},
+        {"claim_id": "C3", "claim": f"UART-paced raw transaction median is {uart_interval['median']:.6f} ms.", "status": "SUPPORTED_DIAGNOSTIC_ONLY", "evidence_type": "MEASURED", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "not accelerator or integrated-system compute latency"},
         {"claim_id": "C4", "claim": f"Pure RTL post-implementation vectorless Vivado power is {pure['total_on_chip_power_w']:.6f} W.", "status": "SUPPORTED", "evidence_type": "ESTIMATED", "evidence_path": pure["raw_power_report"], "limitation": "not physical board power"},
         {"claim_id": "C5", "claim": f"Integrated-system post-implementation vectorless Vivado power is {system['total_on_chip_power_w']:.6f} W.", "status": "SUPPORTED", "evidence_type": "ESTIMATED", "evidence_path": system["raw_power_report"], "limitation": "not physical board power"},
         {"claim_id": "C6", "claim": "Physical board power was measured.", "status": "FORBIDDEN", "evidence_type": "none", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md", "limitation": "no external power meter"},
-        {"claim_id": "C7", "claim": f"Exact C++ divided by the measured FPGA core interval is {core_speedup:.9f}x; the interval is {core_slowdown:.6f}x longer than Exact C++.", "status": "SUPPORTED", "evidence_type": "DERIVED from two MEASURED latencies", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "counter interval includes UART-paced input wait"},
-        {"claim_id": "C8", "claim": f"Pure RTL/system estimated energies are {pure_energy:.9f}/{system_energy:.9f} J per decision.", "status": "SUPPORTED", "evidence_type": "DERIVED estimated power times measured latency", "evidence_path": "benchmarks/accelerator_benefit/results/power_energy_summary.csv", "limitation": "not measured energy or physical-board power"},
+        {"claim_id": "C7", "claim": f"Exact C++ divided by FPGA active-core latency is {core_speedup:.9f}x.", "status": "SUPPORTED", "evidence_type": "DERIVED from CPU MEASURED and FPGA counter-derived latency", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "core scope only; excludes integrated feeder/memory latency"},
+        {"claim_id": "C8", "claim": f"Pure RTL estimated energy is {pure_energy:.9f} J per decision.", "status": "SUPPORTED", "evidence_type": "DERIVED estimated power times counter-derived active latency", "evidence_path": "benchmarks/accelerator_benefit/results/power_energy_summary.csv", "limitation": "not measured energy or physical-board power"},
+        {"claim_id": "C9", "claim": "Integrated-system compute latency, speedup, and energy were measured.", "status": "FORBIDDEN", "evidence_type": "none", "evidence_path": "benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md", "limitation": "requires preloaded input and independent timer"},
     ]
     write_csv(REPORTS / "CLAIM_REGISTRY.csv", claims, list(claims[0]))
 
@@ -1265,7 +1322,7 @@ def main() -> int:
     generate_board_docs()
     ready_doc()
     reports(rtl, python, cpp, native_cpp)
-    print(json.dumps({"status": "generated", "rtl_latency_ms": rtl["total_latency_ms"]["median"], "throughput_msps": rtl["throughput_msamples_per_s"]}, indent=2))
+    print(json.dumps({"status": "generated", "active_core_latency_ms": rtl["active_total_latency_ms"]["median"], "active_core_throughput_msps": rtl["active_throughput_msamples_per_s"]}, indent=2))
     return 0
 
 

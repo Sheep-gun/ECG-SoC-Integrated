@@ -1,6 +1,6 @@
 # Accelerator-Benefit Benchmark
 
-This directory is the reproducible NO_BOARD benchmark package for the locked `structural_guarded_silent_aff_1008710` SNN ECG accelerator.
+This directory is the reproducible board-performance and Vivado-power package for the locked `structural_guarded_silent_aff_1008710` SNN ECG accelerator.
 
 - Main results: `results/accelerator_benefit_summary.csv`
 - Exact Python kernel results: `results/cpu_python_kernel_summary.json`
@@ -11,8 +11,8 @@ This directory is the reproducible NO_BOARD benchmark package for the locked `st
 - Korean report: `reports/ACCELERATOR_BENEFIT_KR.md`
 - English report: `reports/ACCELERATOR_BENEFIT_EN.md`
 - Canonical RTL cycles: `results/rtl_cycle_benchmark.csv`
-- Existing board audit: `reports/EXISTING_BOARD_EVIDENCE_AUDIT.md`
-- Future-board checklist: `READY_FOR_BOARD_BENCHMARK.md`
+- Completed board package: `board/`
+- Board completion record: `READY_FOR_BOARD_BENCHMARK.md`
 - Figures: `figures/FIGURE_INDEX.md`
 
 Regenerate and verify:
@@ -22,8 +22,8 @@ python benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py
 python benchmarks/accelerator_benefit/tools/check_benchmark_integrity.py
 ```
 
-The benchmark-scoped Python clock model matches the current cadence-sensitive RTL for all 36 cases (`final_pred` and all four `final_mem` values). Its single-process, single-thread kernel and end-to-end timings use three warmups and ten measured repetitions per case. The like-for-like stored-data comparison reports a 2288.745397x Python-kernel-to-RTL speedup.
+The benchmark-scoped Python clock model and the board match the locked Golden result for all 36 cases (`final_pred` and all four `final_mem` values). The reportable board active-core metric is `profile_total_cycles - profile_input_wait_cycles`: 3,601,290 cycles, 36.0129 ms at 100 MHz, in every one of the 36 cases. The subtraction removes only upstream sample starvation and retains internal back-pressure, snapshot/final-decision work, and non-RUN control overhead. Canonical XSim gives the same active-cycle result.
 
-Only the hand-written single-thread transaction-level **Exact C++** implementation is the native CPU inference baseline: 36/36 final predictions, 144/144 final membranes, and 1,080/1,080 Snapshot boundaries match; its measured 360-run kernel median is 1777.699800 ms. Comparing that measured CPU median with the cycle-derived FPGA-core latency gives an explicitly scoped 32.912687x estimate, not measured board speedup.
+Only the hand-written single-thread transaction-level **Exact C++** implementation is the native CPU inference baseline: 36/36 final predictions, 144/144 final membranes, and 1,080/1,080 Snapshot boundaries match; its measured 360-run kernel median is 1777.699800 ms. Dividing this by the hardware-counter-derived FPGA active-core latency gives 49.362862x. Historical 54.0126 ms/32.912687x values include the canonical sample gap and are not used as active-core performance.
 
-The separately retained Verilator artifact is a generated cycle-accurate **RTL simulation/verification runtime**. Its host timing is not labeled as Exact C++, is not treated as a CPU inference baseline, and has no CPU-baseline speedup claim. Physical board timing and power remain `PENDING_BOARD`.
+The UART-paced raw counter interval is retained only as a transport diagnostic. Integrated-system compute latency, speedup, and energy are not inferred from it; those require preloaded input plus an independent system timer. Vivado power is post-implementation vectorless ESTIMATED power, Pure RTL energy is DERIVED from that power and active-core latency, and physical board power remains unmeasured.

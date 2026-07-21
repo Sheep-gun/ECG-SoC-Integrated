@@ -1,5 +1,6 @@
 label,value,status
 Exact C++ kernel,MEASURED CPU,MEASURED
-FPGA core counter,MEASURED hardware cycles,MEASURED
-FPGA system counter,MEASURED hardware cycles,MEASURED
+FPGA active cycles,DERIVED from MEASURED counters,DERIVED
+UART-paced interval,TRANSPORT DIAGNOSTIC,MEASURED
+Integrated compute latency,NOT MEASURED,N/A
 Vivado power,ESTIMATED vectorless,ESTIMATED

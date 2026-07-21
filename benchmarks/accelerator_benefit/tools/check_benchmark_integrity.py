@@ -85,6 +85,13 @@ def main() -> int:
             failures.append(f"{case}: RTL output mismatch")
         if not row.get("clock_frequency_hz"):
             failures.append(f"{case}: missing clock")
+        if (
+            int(row.get("active_total_cycles", "0")) != 3_601_290
+            or int(row.get("active_run_cycles", "0")) != 3_599_970
+            or int(row.get("non_run_overhead_cycles", "0")) != 1_320
+            or row.get("active_total_latency_ms") != "36.012900000"
+        ):
+            failures.append(f"{case}: RTL active-cycle invariant failed")
 
     board = read_csv(RESULTS / "existing_board_functional_audit.csv")
     if len(board) != 36:
@@ -110,23 +117,36 @@ def main() -> int:
         speedup = row.get("speedup_vs_python_kernel")
         compatible_speedup = row.get("implementation") in {
             "Python integer kernel", "Exact C++ native CPU kernel",
-            "Pure RTL canonical cycle-derived",
+            "Pure RTL XSim active-cycle cross-check",
+            "FPGA board accelerator active-cycle latency",
         }
         if speedup not in ("", "N/A") and not compatible_speedup:
             failures.append(f"{row.get('implementation')}: incompatible-scope speedup present")
-    for implementation in ("FPGA board accelerator-core counter", "FPGA board MicroBlaze system counter"):
-        row = summary_by_name.get(implementation)
-        if not row or row.get("status") != "MEASURED":
-            failures.append(f"{implementation}: measured row missing")
-        elif not row.get("speedup_vs_exact_cpp_kernel") or float(row["speedup_vs_exact_cpp_kernel"]) <= 0:
-            failures.append(f"{implementation}: Exact C++ speedup missing")
+    active_row = summary_by_name.get("FPGA board accelerator active-cycle latency")
+    if not active_row or active_row.get("status") != "DERIVED":
+        failures.append("FPGA board active-cycle row missing or mislabeled")
+    elif active_row.get("speedup_vs_exact_cpp_kernel") != "49.362862":
+        failures.append("FPGA active-core Exact C++ speedup mismatch")
+    uart_row = summary_by_name.get("FPGA board UART-paced transaction diagnostic")
+    if not uart_row or uart_row.get("status") != "MEASURED":
+        failures.append("UART-paced diagnostic row missing or mislabeled")
+    elif uart_row.get("speedup_vs_exact_cpp_kernel") != "N/A" or uart_row.get("energy_per_decision_j") != "N/A":
+        failures.append("UART-paced interval incorrectly used for speedup or energy")
 
     power = read_csv(RESULTS / "power_energy_summary.csv")
     for row in power:
-        if row["implementation"] in {"Pure RTL accelerator", "MicroBlaze integrated FPGA system"} and (
-            row.get("power_class") != "ESTIMATED" or row.get("energy_class") != "DERIVED"
+        if row["implementation"] == "Pure RTL accelerator" and (
+            row.get("power_class") != "ESTIMATED"
+            or row.get("energy_class") != "DERIVED"
+            or row.get("energy_per_decision_j") != "0.003565277100"
         ):
-            failures.append("estimated power or derived energy mislabeled")
+            failures.append("Pure RTL power or active energy mislabeled")
+        if row["implementation"] == "MicroBlaze integrated FPGA system" and (
+            row.get("power_class") != "ESTIMATED"
+            or row.get("energy_class") != "NOT_MEASURED"
+            or row.get("energy_per_decision_j") != "NOT_MEASURED"
+        ):
+            failures.append("integrated system energy incorrectly inferred")
         if row["implementation"] == "Physical FPGA board":
             if (
                 row.get("power_class") != "NOT_MEASURED"
@@ -146,6 +166,7 @@ def main() -> int:
     measured_board = read_csv(BENCH / "board/board_timing_results.csv")
     if len(measured_board) != 36:
         failures.append(f"measured board timing row count {len(measured_board)} != 36")
+    active_cycle_values: set[int] = set()
     for row in measured_board:
         case_id = row.get("case_id", "<unknown>")
         if (
@@ -156,6 +177,29 @@ def main() -> int:
             or row.get("mem_match") != "1"
         ):
             failures.append(f"{case_id}: measured board timing acceptance failed")
+        try:
+            total = int(row.get("profile_total_cycles", "0"))
+            run = int(row.get("profile_run_cycles", "0"))
+            wait = int(row.get("profile_input_wait_cycles", "0"))
+            active = int(row.get("core_active_cycles", "0"))
+            run_active = int(row.get("core_run_active_cycles", "0"))
+            non_run = int(row.get("non_run_overhead_cycles", "0"))
+            active_cycle_values.add(active)
+            if (
+                total != int(row.get("core_cycles", "0"))
+                or total != int(row.get("system_cycles", "0"))
+                or int(row.get("profile_accepted_samples", "0")) != 1_800_000
+                or active != total - wait
+                or run_active != run - wait
+                or non_run != total - run
+                or active != 3_601_290
+                or run_active != 3_599_970
+                or non_run != 1_320
+                or row.get("core_active_latency_ms") != "36.012900000"
+            ):
+                failures.append(f"{case_id}: active-cycle derivation failed")
+        except ValueError:
+            failures.append(f"{case_id}: active-cycle field is not numeric")
         transcript = BENCH / "board/future_run/transcripts" / f"{case_id}.txt"
         parsed_path = BENCH / "board/future_run/parsed" / f"{case_id}.json"
         if not parsed_path.exists():
@@ -185,6 +229,8 @@ def main() -> int:
             failures.append(f"{case_id}: BOARD_BENCH count is not one")
         if text.count("SNN_ECG_FULL_REPLAY_BOARD_PASS") != 1:
             failures.append(f"{case_id}: board PASS count is not one")
+    if active_cycle_values != {3_601_290}:
+        failures.append(f"board active-cycle values are not invariant: {sorted(active_cycle_values)}")
     board_batch = json.loads((BENCH / "board/future_run/batch_summary.json").read_text(encoding="utf-8"))
     if (
         board_batch.get("status") != "completed"
@@ -198,12 +244,14 @@ def main() -> int:
         failures.append("36-case board batch summary acceptance failed")
     timing_summary = json.loads((BENCH / "board/board_timing_summary.json").read_text(encoding="utf-8"))
     if (
-        timing_summary.get("evidence_class") != "MEASURED"
+        timing_summary.get("evidence_class") != "MEASURED_COUNTERS_AND_DERIVED_ACTIVE_CYCLES"
         or timing_summary.get("cases_completed") != 36
         or not 0 <= int(timing_summary.get("core_system_equal_cases", -1)) <= 36
-        or float(timing_summary.get("core_latency_ms", {}).get("median", 0)) <= 0
-        or float(timing_summary.get("system_latency_ms", {}).get("median", 0)) <= 0
+        or float(timing_summary.get("core_active_cycles", {}).get("median", 0)) != 3_601_290
+        or float(timing_summary.get("core_active_latency_ms", {}).get("median", 0)) != 36.0129
         or float(timing_summary.get("input_wait_latency_ms", {}).get("median", 0)) <= 0
+        or timing_summary.get("xsim_active_cycle_crosscheck") != "36/36"
+        or timing_summary.get("system_compute_latency_status") != "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER"
     ):
         failures.append("measured board timing summary invalid")
 

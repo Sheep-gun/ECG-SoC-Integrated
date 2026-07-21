@@ -1,6 +1,6 @@
 label,value,status
 Pure RTL power,0.099 W ESTIMATED,ESTIMATED
-Pure RTL energy,18.527330 J DERIVED,DERIVED
+Pure RTL active energy,0.003565 J DERIVED,DERIVED
 Integrated system power,0.271 W ESTIMATED,ESTIMATED
-Integrated system energy,50.716227 J DERIVED,DERIVED
+Integrated system energy,NOT MEASURED,N/A
 Physical board,NOT MEASURED,N/A

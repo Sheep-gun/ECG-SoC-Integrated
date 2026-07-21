@@ -1,8 +1,10 @@
 # Benchmark Limitations
 
-- FPGA core/system latency is measured with hardware cycle counters, but the last-decision core interval includes input wait caused by UART pacing; it is not the 54.0126 ms no-stall cycle-derived latency.
+- Active-core latency is a DERIVED subtraction of two MEASURED hardware counters, not host wall time or an independent external timing measurement.
+- The counter definition removes only RUN-state input starvation; its interpretation depends on the locked RTL semantics documented in `rtl/snn_ecg_30min_final_top.v`.
 - Exact C++ is a single-thread hand-written transaction-level implementation with audited cadence compression; it is not a literal event-driven RTL simulation.
-- The historical 32.912687x value combines measured CPU latency with cycle-derived FPGA latency and is not measured-board speedup.
+- Historical 54.0126 ms/32.912687x values include canonical sample-gap cycles and are superseded for active-core performance by 36.0129 ms/49.362862x.
+- Integrated-system compute latency, speedup, and energy are not measured; DDR/preload plus an independent system timer is required.
 - Pure RTL and integrated MicroBlaze power are separate post-implementation vectorless Vivado estimates with Medium confidence and no SAIF/VCD.
 - Physical board input power was not measured; no value is presented as board power or measured energy.
 - Pure RTL and integrated-system resource/power scopes are not directly equivalent.

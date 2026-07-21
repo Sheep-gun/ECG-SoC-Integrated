@@ -7,20 +7,23 @@
 | 분류 정확도 | 29/36, 80.56% | final-test annotation, MEASURED |
 | 보드-Golden final_pred | 36/36 | UART board replay, MEASURED |
 | 보드-Golden Final Membrane | 144/144 | UART board replay, MEASURED |
-| FPGA core latency median / mean / range | 187144.750920 / 188068.199890 / 186492.781740-191686.150980 ms | hardware cycle counter, MEASURED |
-| FPGA system latency median / mean / range | 187144.750920 / 188068.199890 / 186492.781740-191686.150980 ms | transaction counter, MEASURED |
-| System throughput / 1 kSPS margin | 9618.223280 samples/s / 9.618223x | DERIVED from measured cycles |
-| Exact C++ 대비 core speedup | 0.009499063x | CPU MEASURED / FPGA MEASURED, DERIVED |
-| Exact C++ 대비 system speedup | 0.009499063x | CPU MEASURED / FPGA MEASURED, DERIVED |
+| FPGA core active latency median / mean / range | 36.012900 / 36.012900 / 36.012900-36.012900 ms | 두 hardware counter의 차, DERIVED |
+| FPGA core active cycles | 3601290 cycles, 36/36 동일 | `profile_total - profile_input_wait`, DERIVED from MEASURED counters |
+| FPGA core throughput / 1 kSPS margin | 49982089.751172 samples/s / 49982.089751x | DERIVED |
+| Exact C++ 대비 core speedup | 49.362861641x | CPU MEASURED / FPGA counter-derived, DERIVED |
+| UART-paced raw interval median | 187144.750920 ms | transport diagnostic, MEASURED |
+| Integrated-system compute latency/speedup | 미측정 | DDR 사전 적재와 독립 timer 필요 |
 | Pure RTL power | 0.099000 W | Vivado post-implementation vectorless, ESTIMATED |
 | Integrated FPGA system power | 0.271000 W | Vivado post-implementation vectorless, ESTIMATED |
-| Pure RTL energy/decision | 18.527330341 J | estimated power x measured core latency, DERIVED |
-| Integrated system energy/decision | 50.716227499 J | estimated power x measured system latency, DERIVED |
+| Pure RTL energy/decision | 0.003565277 J | estimated power x measured core latency, DERIVED |
+| Integrated system energy/decision | 미측정 | 유효한 integrated compute latency 없음 |
 | Board physical power | 미측정 | 외부 전력계 없음 |
 
-보드는 Nexys A7-100T, UART `COM8`/230400 baud였다. `core_cycles`는 accelerator last-decision counter이고 `system_cycles`는 accelerator total transaction counter다. UART 결과 출력은 counter 정지 후 수행되므로 제외된다. 고정 XSA에는 독립 AXI Timer가 없으므로 두 counter를 host wall latency로 재표기하지 않는다. 이번 workload에서는 두 counter가 동일한 값을 기록했으며, 입력 UART pacing과 accelerator input-wait가 계측 범위에 포함된다. 따라서 기존 32.912687x는 cycle-derived 54.0126 ms에 대한 추정치로만 남기고, 위 표의 실보드 speedup과 분리해 해석한다.
+보드는 Nexys A7-100T, UART `COM8`/230400 baud였다. 코어 성능은 `profile_total_cycles - profile_input_wait_cycles`로 산출했다. 두 피연산자는 모두 실보드 100 MHz hardware counter에서 MEASURED 되었고, latency·throughput·speedup은 그 차로부터 DERIVED 되었다. RTL에서 input-wait counter는 RUN 상태에서 코어가 입력을 받을 준비가 되었지만 `sample_valid`가 없을 때만 증가한다. 따라서 이 계산은 UART/MicroBlaze 입력 starvation만 제거하며 내부 back-pressure, snapshot/final-decision 처리와 1320 control cycles를 유지한다.
 
-실보드 비율 0.009499063x는 1보다 작으므로 가속을 의미하지 않는다. 반대로 표현하면 FPGA core 계측 구간은 Exact C++ kernel보다 105.273540배 길었고 system 계측 구간은 105.273540배 길었다. 이는 accelerator 연산 자체만의 no-stall 성능이 아니라 230400-baud 입력 대기가 포함된 고정 firmware counter 범위의 실측 결과다.
+36개 보드 case의 UART-paced raw interval은 서로 달랐지만 active-cycle 차는 모두 정확히 3601290 cycles였다. canonical XSim에서도 `5,401,260 - 1,799,970 = 3,601,290 cycles`로 동일해 36/36 교차 검증되었다. 과거 54.0126 ms와 32.912687x는 canonical sample gap을 포함한 값이므로 no-stall 코어 성능으로 사용하지 않는다. 현재 코어 결과는 36.012900 ms 및 49.362861641x다.
+
+원시 `core_cycles/system_cycles` 구간은 입력 대기를 포함하므로 UART-paced transport diagnostic으로만 보존한다. 이를 integrated-system 속도나 energy로 사용하지 않는다. 진짜 통합 시스템 계측에는 ECG를 DDR2 등에 먼저 적재하고 독립 AXI Timer로 feeder 시작부터 최종 decision까지 측정해야 한다.
 
 Pure RTL 전력은 기존 0.099000 W를 동일 RTL/part/clock으로 재현했다. 새 route 자원은 9749 LUT/5045 FF로 과거 9719/5038와 소폭 다르며 route WNS도 새 보고서 값을 사용한다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
 
