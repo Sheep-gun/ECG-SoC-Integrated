@@ -51,7 +51,7 @@ Generated integrated figures and immutable team-provided analog validation figur
 - File: `figures/final/VAL-02_digital_validation_flow.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv`, `validation/digital_section4/axi_ip/axi_ip_smoke_summary.json`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 95d7966c32ec0bad7af2dca4aa23e7e638a9103a, INTEGRATED
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, d44e67517650f1f95ca67b93c2788f41e99f1a5e, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Python과 Exact C++ 기준을 RTL/XSim에 비교한 뒤 Full-top 제어와 AXI/IP 인터페이스로 확장하는 디지털 검증 흐름
 - Evidence scope: digital functional and interface verification sequence
@@ -62,7 +62,7 @@ Generated integrated figures and immutable team-provided analog validation figur
 - File: `figures/final/VAL-02A_multilevel_digital_equivalence.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `tools/generate_section4_validation_artifacts.py`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 95d7966c32ec0bad7af2dca4aa23e7e638a9103a, INTEGRATED
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, d44e67517650f1f95ca67b93c2788f41e99f1a5e, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Python 최종 출력과 Exact C++ 내부 상태를 locked RTL/XSim에 단계별로 비교한 다층 등가성 검증 결과
 - Evidence scope: 36 final outputs plus fixed-width, microtrace, accepted-sample state, and Snapshot-boundary checks

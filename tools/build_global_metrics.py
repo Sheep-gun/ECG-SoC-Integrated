@@ -11,7 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
-BENCHMARK_COMMIT = "6298a8e030d45da6d989fec6ccccd74714070ee9"
+BENCHMARK_COMMIT = "d44e67517650f1f95ca67b93c2788f41e99f1a5e"
 XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
 LTSPICE_HANDOFF = "INTEGRATED_LTSPICE_2026-07-19"
@@ -102,6 +102,12 @@ def main() -> int:
     board_benchmark = read_json(board_benchmark_path)
     power_benchmark_path = "benchmarks/accelerator_benefit/results/power_summary.json"
     power_benchmark = read_json(power_benchmark_path)
+    activity_power_path = "benchmarks/accelerator_benefit/power/results/activity_power_summary.json"
+    activity_power = read_json(activity_power_path)
+    burst_activity = activity_power["groups"]["baseline:burst_full_record"]
+    streaming_activity = activity_power["groups"]["baseline:streaming_1ksps_prefix"]
+    clock_enable_path = "benchmarks/accelerator_benefit/power/results/clock_enable_summary.json"
+    clock_enable = read_json(clock_enable_path)
     power_energy = read_csv("benchmarks/accelerator_benefit/results/power_energy_summary.csv")
     pure_rtl_1mhz_power = power_benchmark["scopes"]["pure_rtl_1mhz"]
     pure_rtl_power = power_benchmark["scopes"]["pure_rtl_100mhz"]
@@ -154,9 +160,11 @@ def main() -> int:
             "board_active_core_cycles": metric(board_benchmark["core_active_cycles"]["median"], "cycles", "profile total minus input-wait hardware counters", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "identical in 36/36 board cases and XSim cross-check"),
             "board_active_core_throughput_median": metric(board_benchmark["core_active_throughput_samples_per_s"]["median"], "samples/s", "1,800,000 samples divided by active-core latency", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "stored-data active-core scope; live decision still needs 30 minutes"),
             "board_uart_paced_interval_median": metric(board_benchmark["uart_paced_transaction_counter_interval_ms"]["median"], "ms", "raw start-to-final-decision counter including input starvation", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "transport diagnostic only; not integrated-system compute latency"),
-            "pure_rtl_estimated_power": metric(pure_rtl_power["total_on_chip_power_w"], "W", "pure RTL accelerator at the performance-matched 100 MHz core clock", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; no SAIF/VCD; not physical board input power"),
-            "pure_rtl_100mhz_dynamic_power": metric(pure_rtl_power["dynamic_power_w"], "W", "pure RTL accelerator at 100 MHz", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "vectorless dynamic estimate; active dynamic energy is derived separately"),
+            "pure_rtl_estimated_power": metric(burst_activity["accelerator_plus_device_static_power_w"]["median"], "W", "100 MHz accelerator hierarchy dynamic plus allocated FPGA device static under four-class real-ECG burst SAIF", "post-implementation real-ECG SAIF Vivado estimate", activity_power_path, dr, BENCHMARK_COMMIT, "양건", "about 12 percent routed-net SAIF match; unmatched nets vectorless; not physical board input power"),
+            "pure_rtl_100mhz_dynamic_power": metric(burst_activity["accelerator_hierarchy_dynamic_power_w"]["median"], "W", "100 MHz accelerator hierarchy under four-class real-ECG burst SAIF", "post-implementation real-ECG SAIF Vivado estimate", activity_power_path, dr, BENCHMARK_COMMIT, "양건", "accelerator hierarchy dynamic only; active dynamic energy is derived separately"),
             "pure_rtl_100mhz_device_static_power": metric(pure_rtl_power["device_static_power_w"], "W", "pure RTL accelerator at 100 MHz", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "device-static component of Total On-Chip Power"),
+            "pure_rtl_1ksps_estimated_power": metric(streaming_activity["accelerator_plus_device_static_power_w"]["median"], "W", "literal 1 kS/s 100-sample real-ECG prefix; accelerator hierarchy dynamic plus allocated FPGA static", "post-implementation real-ECG SAIF Vivado estimate", activity_power_path, dr, BENCHMARK_COMMIT, "양건", "100-sample prefix rather than a full 30-minute trace; about 12 percent routed-net match"),
+            "pure_rtl_clock_enable_coverage": metric(clock_enable["slice_registers_percent_gated"], "percent", "power_opt_design slice registers with user or tool gating", "Vivado power optimization report", clock_enable_path, dr, BENCHMARK_COMMIT, "양건", "gating coverage is implementation evidence; it did not materially change median power at 1 mW report resolution"),
             "pure_rtl_1mhz_estimated_power": metric(pure_rtl_1mhz_power["total_on_chip_power_w"], "W", "legacy low-frequency pure RTL implementation at 1 MHz core", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "power-only operating point; must not be multiplied by the 100 MHz active latency"),
             "microblaze_system_estimated_power": metric(system_power["total_on_chip_power_w"], "W", "MicroBlaze integrated FPGA system", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
             "pure_rtl_power_reroute_lut": metric(pure_rtl_power["utilization"]["lut"], "LUT", "100 MHz Pure RTL power-report implementation", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "direct 100 MHz wrapper implementation; resource values belong to this route"),
@@ -200,11 +208,13 @@ def main() -> int:
             "exact_cpp_to_integrated_system_speedup": None,
             "legacy_gap_inclusive_rtl_latency_ms": float(bc["fpga_latency_ms"]),
             "legacy_gap_inclusive_speedup_estimate": float(bc["ratio_cpu_over_fpga"]),
-            "estimated_power_w": pure_rtl_power["total_on_chip_power_w"],
-            "estimated_pure_rtl_power_w": pure_rtl_power["total_on_chip_power_w"],
-            "estimated_pure_rtl_100mhz_total_power_w": pure_rtl_power["total_on_chip_power_w"],
-            "estimated_pure_rtl_100mhz_dynamic_power_w": pure_rtl_power["dynamic_power_w"],
+            "estimated_power_w": burst_activity["accelerator_plus_device_static_power_w"]["median"],
+            "estimated_pure_rtl_power_w": burst_activity["accelerator_plus_device_static_power_w"]["median"],
+            "estimated_pure_rtl_100mhz_total_power_w": burst_activity["accelerator_plus_device_static_power_w"]["median"],
+            "estimated_pure_rtl_100mhz_dynamic_power_w": burst_activity["accelerator_hierarchy_dynamic_power_w"]["median"],
             "estimated_pure_rtl_100mhz_device_static_power_w": pure_rtl_power["device_static_power_w"],
+            "estimated_pure_rtl_literal_1ksps_power_w": streaming_activity["accelerator_plus_device_static_power_w"]["median"],
+            "clock_enable_coverage_percent": clock_enable["slice_registers_percent_gated"],
             "estimated_pure_rtl_1mhz_power_w": pure_rtl_1mhz_power["total_on_chip_power_w"],
             "estimated_system_power_w": system_power["total_on_chip_power_w"],
             "measured_board_power_w": None,
@@ -218,8 +228,8 @@ def main() -> int:
             "board_timing_status": "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE",
             "integrated_system_timing_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
             "board_power_status": "NOT_MEASURED",
-            "power_estimate_status": "POST_IMPLEMENTATION_VECTORLESS_ESTIMATED",
-            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined only with the 100 MHz Pure RTL vectorless estimate; the 1 MHz 0.099 W result is power-only; integrated-system latency is unmeasured; physical board input power was not measured",
+            "power_estimate_status": "POST_IMPLEMENTATION_REAL_ECG_SAIF_ESTIMATED_MEDIUM_CONFIDENCE",
+            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined with a four-class real-ECG burst-SAIF accelerator estimate with about 12 percent routed-net match; unmatched nets remain vectorless; the 1 MHz 0.099 W result is power-only; integrated-system latency and physical board input power are unmeasured",
         },
     }
     out = ROOT / "source_of_truth" / "global_metrics.yaml"

@@ -1,0 +1,4 @@
+run_id,state,bit_sha256,elf_sha256,supply_voltage_v,current_mean_a,current_median_a,current_std_a,power_mean_w,duration_s,ambient_c,instrument,calibration_date,notes
+1,idle,61dfb3dddee1f55b9e2ce42009cb9693bb1c8ff9c7b65b71f0d59d6b2a34dd58,c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16,,,,,,,,,
+2,streaming_1ksps,61dfb3dddee1f55b9e2ce42009cb9693bb1c8ff9c7b65b71f0d59d6b2a34dd58,c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16,,,,,,,,,
+3,preloaded_burst,61dfb3dddee1f55b9e2ce42009cb9693bb1c8ff9c7b65b71f0d59d6b2a34dd58,c61d53e33fb9824f1b6bdc27e14ce7209a9d377b271ec398fa91da0c52a05b16,,,,,,,,,

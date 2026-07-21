@@ -280,7 +280,7 @@ def main() -> int:
 
     check("independent Git worktree exists", (ROOT / ".git").exists())
     active_branch = git(ROOT, "branch", "--show-current")
-    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final", "codex/analog-validation-flow"}, active_branch)
+    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final", "codex/analog-validation-flow", "codex/wearable-activity-power-update"}, active_branch)
     for rel in REQUIRED:
         check(f"required path {rel}", (ROOT / rel).exists())
     check("14 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 14)
@@ -370,11 +370,11 @@ def main() -> int:
             check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_index_path(row["tracked_path"]) == row["sanitized_sha256"])
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
-    benchmark_commit = "6298a8e030d45da6d989fec6ccccd74714070ee9"
+    benchmark_commit = "d44e67517650f1f95ca67b93c2788f41e99f1a5e"
     benchmark_commit_check = subprocess.run([GIT, "-C", str(repo_by_component["digital_accelerator"]), "cat-file", "-e", f"{benchmark_commit}^{{commit}}"])
     check("benchmark evidence commit exists", benchmark_commit_check.returncode == 0, benchmark_commit)
     benchmark_manifest = read_csv("source_of_truth/benchmark_import_manifest.csv")
-    check("benchmark import manifest has 17 rows", len(benchmark_manifest) == 17, str(len(benchmark_manifest)))
+    check("benchmark import manifest has 43 rows", len(benchmark_manifest) == 43, str(len(benchmark_manifest)))
     for row in benchmark_manifest:
         check(f"benchmark manifest commit {row['integrated_path']}", row["source_commit"] == benchmark_commit)
         check(f"benchmark manifest path {row['integrated_path']}", (ROOT / row["integrated_path"]).is_file(), row["integrated_path"])
@@ -495,10 +495,12 @@ def main() -> int:
     check("benchmark active-core speedup", round(benchmark.get("exact_cpp_to_active_core_speedup", 0), 9) == 49.362861641)
     check("benchmark UART interval diagnostic", benchmark.get("uart_paced_raw_interval_ms") == 187144.75092000002)
     check("benchmark integrated timing unmeasured", benchmark.get("integrated_system_compute_latency_ms") is None and benchmark.get("exact_cpp_to_integrated_system_speedup") is None)
-    check("benchmark 100 MHz power values estimated", benchmark.get("estimated_pure_rtl_power_w") == 0.183 and benchmark.get("estimated_pure_rtl_100mhz_dynamic_power_w") == 0.085 and benchmark.get("estimated_pure_rtl_100mhz_device_static_power_w") == 0.097)
+    check("benchmark 100 MHz activity power values estimated", benchmark.get("estimated_pure_rtl_power_w") == 0.1495 and benchmark.get("estimated_pure_rtl_100mhz_dynamic_power_w") == 0.0525 and benchmark.get("estimated_pure_rtl_100mhz_device_static_power_w") == 0.097)
+    check("benchmark literal 1 kS/s activity power", round(benchmark.get("estimated_pure_rtl_literal_1ksps_power_w", 0), 6) == 0.142)
+    check("benchmark clock-enable coverage", benchmark.get("clock_enable_coverage_percent") == 68.735)
     check("benchmark 1 MHz power retained separately", benchmark.get("estimated_pure_rtl_1mhz_power_w") == 0.099 and benchmark.get("legacy_1mhz_power_energy_status") == "NOT_DERIVED_CLOCK_MISMATCH")
     check("benchmark integrated system power estimated", benchmark.get("estimated_system_power_w") == 0.271)
-    check("benchmark clock-matched derived energy values", benchmark.get("derived_pure_rtl_energy_per_decision_j") == 0.0065903607 and benchmark.get("derived_pure_rtl_active_dynamic_energy_per_decision_j") == 0.0030610965 and benchmark.get("derived_system_energy_per_decision_j") is None)
+    check("benchmark clock-matched derived energy values", benchmark.get("derived_pure_rtl_energy_per_decision_j") == 0.00538392855 and benchmark.get("derived_pure_rtl_active_dynamic_energy_per_decision_j") == 0.00189067725 and benchmark.get("derived_system_energy_per_decision_j") is None)
     check("legacy mixed-clock energy removed", benchmark.get("legacy_gap_inclusive_pure_rtl_energy_per_decision_j") is None)
     check("physical board power remains unmeasured", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE" and benchmark.get("integrated_system_timing_status") == "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER" and benchmark.get("board_power_status") == "NOT_MEASURED")
     benchmark_package_text = "\n".join(
@@ -509,7 +511,7 @@ def main() -> int:
             "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md",
         ]
     )
-    for phrase in ["3,601,290", "36.012900", "49.362861641", "187144.750920", "0.099 W", "0.183000 W", "0.085000 W", "0.271000 W", "0.006590360700", "0.003061096500", "물리 보드 입력 전력과 가속기 실측 에너지"]:
+    for phrase in ["3,601,290", "36.012900", "49.362861641", "187144.750920", "0.099 W", "0.149500 W", "0.052500 W", "0.271000 W", "0.005383928550", "0.001890677250", "물리 보드 입력 전력과 가속기 실측 에너지"]:
         check(f"benchmark package boundary {phrase}", phrase in benchmark_package_text)
     comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
     check("benchmark comparison one row", len(comparison) == 1)
@@ -622,7 +624,7 @@ def main() -> int:
     check("superseded flow figures removed from manuscript and index", not any(name in manuscript or name in fig_index for name in superseded_flows), [name for name in superseded_flows if name in manuscript or name in fig_index])
     check("superseded flow figure files deleted", not any((ROOT / "figures" / "final" / name).exists() for name in superseded_flows), [name for name in superseded_flows if (ROOT / "figures" / "final" / name).exists()])
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
-    for required in ["1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "0.099 W", "0.183 W", "0.085 W", "0.097 W", "0.271 W", "0.006590360700 J", "0.003061096500 J"]:
+    for required in ["1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "0.099 W", "0.149500 W", "0.052500 W", "0.097000 W", "0.271 W", "0.005383928550 J", "0.001890677250 J"]:
         check(f"benchmark value promoted with scope: {required}", required in text)
     check("invalid mixed-clock 3.565 mJ value absent", "0.003565277100" not in text)
     check("benchmark live boundary", "실제 ECG가 1 kSPS로 들어오면 최종 판정에는 여전히 30분 관찰이 필요" in text)

@@ -1,0 +1,6 @@
+label,value,status
+Exact C++ kernel,MEASURED CPU,MEASURED
+FPGA active cycles,DERIVED from MEASURED counters,DERIVED
+UART-paced interval,TRANSPORT DIAGNOSTIC,MEASURED
+Integrated compute latency,NOT MEASURED,N/A
+100 MHz accelerator power,ESTIMATED real-ECG SAIF,ESTIMATED

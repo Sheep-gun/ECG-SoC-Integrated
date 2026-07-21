@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-07-21T12:16:40.894825+00:00",
+  "generated_at_utc": "2026-07-21T14:09:41.389001+00:00",
   "evidence_class": "ESTIMATED",
   "physical_board_power_measured": false,
   "activity_method": "Post-implementation vectorless Vivado power estimate",
@@ -176,5 +176,19 @@
       "routed_checkpoint": "benchmarks/accelerator_benefit/power/work/microblaze_system/microblaze_system_routed.dcp",
       "routed_checkpoint_sha256": "d64e9393073ec96051f2d17a83230e69f9a26c3f72a6ed86618649e730898aa6"
     }
+  },
+  "activity_based_power": {
+    "path": "benchmarks/accelerator_benefit/power/results/activity_power_summary.json",
+    "sha256": "b3da4c7d4e67558a2cebe04ddbabb3dc627101502397d28b3aeb9bb6da987d0f",
+    "description": "Real-ECG SAIF post-route mode-separated power estimates"
+  },
+  "clock_enable_evidence": {
+    "path": "benchmarks/accelerator_benefit/power/results/clock_enable_summary.json",
+    "sha256": "6f002618b5515a0e872b22be168f398aa5b23ec89165a35df30d27e6d618ec33"
+  },
+  "wearable_power_budget": {
+    "path": "benchmarks/accelerator_benefit/power/results/wearable_power_budget.json",
+    "sha256": "0261307ff2b295b711672ca099b4d6124c07e2a995c63a911ae098da8b16f59a",
+    "complete": false
   }
 }

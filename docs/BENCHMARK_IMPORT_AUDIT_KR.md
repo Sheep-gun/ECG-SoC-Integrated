@@ -4,7 +4,7 @@
 
 - 저장소: `https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier`
 - 원격 branch: `codex/accelerator-benefit-benchmark`
-- 반입 commit: `6298a8e030d45da6d989fec6ccccd74714070ee9`
+- 반입 commit: `d44e67517650f1f95ca67b93c2788f41e99f1a5e`
 - 고정 분류기·RTL·36-case 입력은 변경하지 않았다.
 - raw/internal legacy label `AFF`는 upstream에 유지하고 report-facing 표기는 `AF`를 사용한다.
 
@@ -37,17 +37,19 @@ FPGA active-core는 `profile_total-profile_input_wait=3,601,290 cycles`이며 Ex
 ## 전력과 에너지
 
 - Pure RTL, 1 MHz core: 0.099 W, ESTIMATED power-only operating point
-- Pure RTL, direct 100 MHz core: Total/Dynamic/Device Static 0.183/0.085/0.097 W, ESTIMATED
+- Pure RTL, direct 100 MHz core: four-class real-ECG burst SAIF accelerator+static/hierarchy dynamic/device static 0.149500/0.052500/0.097000 W, ESTIMATED
+- Literal 1 kS/s 100-sample prefix: accelerator+static/hierarchy dynamic 0.142000/0.045000 W, ESTIMATED
 - MicroBlaze integrated system: 0.271 W, ESTIMATED
-- Pure RTL 100 MHz total energy: 0.006590360700 J/decision, DERIVED_ESTIMATE
-- Pure RTL 100 MHz active dynamic energy: 0.003061096500 J/decision, DERIVED_ESTIMATE
+- Pure RTL 100 MHz allocated total energy: 0.005383928550 J/decision, DERIVED_ESTIMATE
+- Pure RTL 100 MHz active dynamic energy: 0.001890677250 J/decision, DERIVED_ESTIMATE
 - 1 MHz 0.099 W는 100 MHz active latency와 결합하지 않음, NOT_DERIVED_CLOCK_MISMATCH
 - Integrated-system energy: NOT_MEASURED
 - Physical board input power/energy: NOT_MEASURED
 
-세 operating point의 power는 Vivado 2020.2, `xc7a100tcsg324-1`, SAIF/VCD 없는 Medium-confidence
-post-implementation vectorless estimate다. Pure RTL과 MicroBlaze/BRAM/AXI/UART/feeder를
-포함한 integrated-system scope를 섞지 않는다.
+1 MHz Pure RTL과 integrated system은 Vivado 2020.2 `xc7a100tcsg324-1`의 Medium-confidence
+vectorless estimate다. 100 MHz 가속기 대표값은 실제 ECG SAIF 기반이지만 routed-net match가 약
+12%라서 미매칭 net에는 vectorless propagation이 남는다. Pure RTL과 MicroBlaze/BRAM/AXI/UART/feeder를
+포함한 integrated-system scope를 섞지 않는다. 물리 보드 rail 전력과 ASIC post-layout PPA도 별도 미측정·미완료 항목이다.
 
 ## 선별 반입 파일
 

@@ -1,0 +1,11 @@
+{
+  "evidence_class": "ESTIMATED",
+  "vivado_operation": "power_opt_design",
+  "functional_rtl_changed": false,
+  "slice_registers_total": 5044,
+  "slice_registers_user_gated": 2740,
+  "slice_registers_tool_gated": 727,
+  "slice_registers_percent_gated": 68.735,
+  "raw_report": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz_power_opt/pure_rtl_100mhz_power_opt_transformations.rpt",
+  "raw_report_sha256": "067e4bfa5951966b3a8e529b94e572428c93a6efca41119f5b6cc5f4f98f2857"
+}
