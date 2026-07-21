@@ -386,12 +386,13 @@ def main() -> int:
         )
         check(f"benchmark source object exists {row['source_path']}", source_blob.returncode == 0, source_blob.stderr.decode("utf-8", errors="replace"))
         integrated_file = ROOT / row["integrated_path"]
-        source_file = repo_by_component["digital_accelerator"] / row["source_path"]
         identity_required = row["import_mode"] != "CURATED_ACTIVE_CORE_SUMMARY"
+        source_digest = hashlib.sha256(source_blob.stdout).hexdigest() if source_blob.returncode == 0 else ""
+        integrated_digest = hash_index_path(row["integrated_path"]) if integrated_file.is_file() else ""
         check(
             f"benchmark imported SHA256 identity {row['integrated_path']}",
-            source_blob.returncode == 0 and source_file.is_file() and integrated_file.is_file() and (
-                not identity_required or hash_path(source_file) == hash_path(integrated_file)
+            source_blob.returncode == 0 and integrated_file.is_file() and (
+                not identity_required or source_digest == integrated_digest
             ),
         )
     upstream_blob_maps = {}
