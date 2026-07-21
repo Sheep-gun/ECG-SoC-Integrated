@@ -35,24 +35,27 @@
 | 중앙 처리량 | 1,012,544.413 samples/s | 896,615.633 samples/s |
 | 정확한 출력 | 360/360 | 360/360 |
 
-## FPGA-core 비교
+## FPGA active-core 비교
 
 - accepted samples: 1,800,000
-- canonical `sample_gap_cycles`: 2
-- profile total cycles: 5,401,260
+- measured board profile total/input-wait counter: case별 값은 다르지만 차는 36/36 동일
+- active cycles: `profile_total - profile_input_wait = 3,601,290`
 - implemented clock: 100 MHz
-- cycle-derived accelerator-core latency: 54.012600 ms
+- hardware-counter-derived active-core latency: 36.012900 ms
+- active-core throughput: 49,982,089.751172 samples/s
 
-`1777.699800 ms / 54.012600 ms = 32.912687×`
+`1777.699800 ms / 36.012900 ms = 49.362861641×`
 
-따라서 이 값의 보고 가능한 명칭은 **single-thread Exact C++ versus cycle-derived FPGA-core speedup estimate**다. 실제 보드에서 측정한 speedup이나 전체 system speedup이 아니다.
+따라서 이 값의 보고 가능한 명칭은 **single-thread Exact C++ 대비 FPGA active-core speedup**이다. CPU 측은 MEASURED이고 FPGA 측은 두 MEASURED hardware counter의 차에서 DERIVED 되었다. RTL input-wait 정의에 의존하는 core-scope 결과이며 전체 system speedup은 아니다.
 
-## 후속 실보드 결과와 남은 범위
+canonical `sample_gap_cycles=2`의 gap-inclusive XSim 결과 5,401,260 cycles, 54.012600 ms와 그에 따른 32.912687×는 과거 비교값으로만 보존한다. input-wait 1,799,970 cycles를 제외하면 XSim도 3,601,290 cycles로 실보드 36/36과 정확히 일치한다.
 
-- Nexys A7-100T core/system hardware-counter 중앙값: `187144.750920 ms`, MEASURED
-- Exact C++ 대비 measured-board ratio: `0.009499063×`, DERIVED; 가속이 아님
-- counter interval에는 약 99.98%의 UART-paced input wait가 포함됨
-- 고정 XSA에 독립 AXI Timer가 없어 core와 system counter가 36개 모두 동일함
+## 실보드 결과와 남은 범위
+
+- Nexys A7-100T active-core latency: `36.012900 ms`, DERIVED from MEASURED counters
+- Exact C++ 대비 active-core speedup: `49.362861641×`, DERIVED
+- UART-paced raw counter 중앙값: `187144.750920 ms`, MEASURED diagnostic only
+- 고정 XSA에 독립 AXI Timer와 preloaded-input 경로가 없어 integrated-system compute latency/speedup/energy는 `NOT_MEASURED`
 - host wall-clock transfer latency: 별도 측정하지 않음
 - physical board input power/energy: 외부 전력계가 없어 `NOT_MEASURED`
 - Pure RTL/system `0.099/0.271 W`: Vivado post-implementation vectorless `ESTIMATED`

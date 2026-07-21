@@ -2,9 +2,9 @@
 
 ## Result: PASS
 
-- Rules checked: 527
+- Rules checked: 533
 - Conflicts found: 0
-- Benchmark import: PASS (measured board timing and Vivado-estimated power)
+- Benchmark import: PASS (counter-derived active-core timing and Vivado-estimated power)
 
 ## Rules checked
 
@@ -369,9 +369,10 @@
 - PASS — metric evidence exists: board_final_pred_equivalence
 - PASS — metric evidence exists: board_final_mem_equivalence
 - PASS — metric evidence exists: board_label_accuracy
-- PASS — metric evidence exists: board_core_latency_median
-- PASS — metric evidence exists: board_system_latency_median
-- PASS — metric evidence exists: board_system_throughput_median
+- PASS — metric evidence exists: board_active_core_latency_median
+- PASS — metric evidence exists: board_active_core_cycles
+- PASS — metric evidence exists: board_active_core_throughput_median
+- PASS — metric evidence exists: board_uart_paced_interval_median
 - PASS — metric evidence exists: pure_rtl_estimated_power
 - PASS — metric evidence exists: microblaze_system_estimated_power
 - PASS — metric evidence exists: pure_rtl_power_reroute_lut
@@ -398,20 +399,24 @@
 - PASS — metric evidence exists: raw_input_window_samples
 - PASS — metric evidence exists: avoided_full_raw_input_window_bits
 - PASS — metric evidence exists: avoided_full_raw_input_window_bytes
-- PASS — benchmark status includes measured board timing and Vivado power
+- PASS — benchmark status includes active-core timing and Vivado power
 - PASS — benchmark source commit exact
 - PASS — benchmark Exact C++ values
-- PASS — benchmark RTL values
-- PASS — benchmark speedup estimate
-- PASS — benchmark measured board values
+- PASS — benchmark active-core values
+- PASS — benchmark active-core speedup
+- PASS — benchmark UART interval diagnostic
+- PASS — benchmark integrated timing unmeasured
 - PASS — benchmark power values estimated
 - PASS — benchmark derived energy values
 - PASS — physical board power remains unmeasured
-- PASS — benchmark README boundary 0.009499063
-- PASS — benchmark README boundary 105.273540
+- PASS — benchmark README boundary 3,601,290
+- PASS — benchmark README boundary 36.012900
+- PASS — benchmark README boundary 49.362861641
+- PASS — benchmark README boundary 187,144.750920
 - PASS — benchmark README boundary 30분 관찰
 - PASS — benchmark README boundary 0.099 W
 - PASS — benchmark README boundary 0.271 W
+- PASS — benchmark README boundary 0.003565277100
 - PASS — benchmark README boundary 물리 보드 전력이나 실측 에너지
 - PASS — benchmark comparison one row
 - PASS — benchmark comparison formula values
@@ -523,13 +528,14 @@
 - PASS — superseded flow figure files deleted
 - PASS — manuscript raw-data policy
 - PASS — benchmark value promoted with scope: 1,777.699800 ms
+- PASS — benchmark value promoted with scope: 3,601,290 cycles
+- PASS — benchmark value promoted with scope: 36.012900 ms
+- PASS — benchmark value promoted with scope: 49,982,089.751172 samples/s
+- PASS — benchmark value promoted with scope: 49.362861641×
 - PASS — benchmark value promoted with scope: 187,144.750920 ms
-- PASS — benchmark value promoted with scope: 0.009499063
-- PASS — benchmark value promoted with scope: 105.273540
 - PASS — benchmark value promoted with scope: 0.099 W
 - PASS — benchmark value promoted with scope: 0.271 W
-- PASS — benchmark value promoted with scope: 18.527330341080 J
-- PASS — benchmark value promoted with scope: 50.716227499320 J
+- PASS — benchmark value promoted with scope: 0.003565277100 J
 - PASS — benchmark live boundary
 - PASS — benchmark board-speedup boundary
 - PASS — integrated repo absent from parent index
@@ -542,12 +548,12 @@
 
 ## Unresolved evidence / bounded scope
 
-- Physical board input power and measured energy remain unavailable because no external power meter was used; board counter timing is measured and Vivado on-chip power is estimated.
+- Integrated-system compute timing remains unavailable without preloaded input and an independent timer; physical board input power and measured energy remain unavailable because no external power meter was used. Active-core timing is derived from measured counters and Vivado on-chip power is estimated.
 - Physical AFE/ADC/silicon and clinical validation are outside the completed scope.
 - Database-class confounding requires future same-acquisition or cross-domain validation.
 
 ## Benchmark-import verification
 
-- Status is `IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER`.
-- Exact C++ measurement, measured FPGA hardware-counter timing, legacy cycle-derived timing, and Vivado-estimated power are distinguished.
-- Physical board input power and measured energy remain `NOT_MEASURED`.
+- Status is `IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER`.
+- Exact C++ measurement, hardware-counter-derived FPGA active-core timing, UART transport diagnostic, and Vivado-estimated power are distinguished.
+- Integrated-system compute timing and energy, physical board input power, and measured energy remain `NOT_MEASURED`.

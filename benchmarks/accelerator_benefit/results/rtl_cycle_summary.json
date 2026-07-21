@@ -1,13 +1,51 @@
 {
-  "status": "CYCLE_DERIVED",
+  "status": "COUNTER_DERIVED",
   "case_count": 36,
   "sample_gap_cycles": 2,
   "clock_frequency_hz": 100000000,
-  "profile_total_cycles": 5401260,
-  "total_latency_ms": 54.0126,
-  "throughput_samples_per_s": 33325557.369947,
-  "throughput_msamples_per_s": 33.325557369947,
-  "realtime_margin_vs_1ksps": 33325.557369947004,
-  "equivalence": "final_pred 36/36; final_mem 36/36",
-  "limitation": "stored-data FPGA accelerator-core scope; not live observation or measured board system latency"
+  "clock_evidence": [
+    "constraints/snn_ecg_axi_ooc.xdc: create_clock period 10.000 ns",
+    "constraints/nexys_a7_microblaze_full_replay.xdc: create_clock period 10.000 ns",
+    "results/board_replay/microblaze_full_replay/reports/system_timing_summary.rpt: 100.000 MHz"
+  ],
+  "gap_inclusive_total_latency_ms": {
+    "median": 54.0126,
+    "mean": 54.0126,
+    "std": 0.0,
+    "min": 54.0126,
+    "max": 54.0126
+  },
+  "active_total_cycles": {
+    "median": 3601290.0,
+    "mean": 3601290,
+    "std": 0.0,
+    "min": 3601290,
+    "max": 3601290
+  },
+  "active_total_latency_ms": {
+    "median": 36.0129,
+    "mean": 36.0129,
+    "std": 0.0,
+    "min": 36.0129,
+    "max": 36.0129
+  },
+  "active_run_cycles": {
+    "median": 3599970.0,
+    "mean": 3599970,
+    "std": 0.0,
+    "min": 3599970,
+    "max": 3599970
+  },
+  "non_run_overhead_cycles": {
+    "median": 1320.0,
+    "mean": 1320,
+    "std": 0.0,
+    "min": 1320,
+    "max": 1320
+  },
+  "active_throughput_samples_per_s": 49982089.751172,
+  "active_throughput_msamples_per_s": 49.982089751172,
+  "active_realtime_margin_vs_1ksps": 49982.089751171996,
+  "board_active_cycle_crosscheck": "3,601,290 cycles in all 36 board cases",
+  "equivalence": "final_pred 36/36; final_mem 36/36"
 }

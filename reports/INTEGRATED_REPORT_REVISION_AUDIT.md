@@ -4,21 +4,21 @@
 
 - 개정 상태: `COMPLETE`
 - 작업 branch: `codex/analog-validation-flow` (검증 후 `main`에 fast-forward push)
-- 작업 시작 기준: `0413aaaf9f94fe498af5d69355de7422a2b7d108` (`origin/main`과 일치 확인)
+- 작업 시작 기준: `35ba5333cfba535ffb04796b62c6cf58e38829d2` (`origin/main`과 일치 확인)
 - 고정 upstream: MATLAB `907f7e1f081a9d6a5703a32095d962143315a192`, XMODEL `4756a5086023547328ef44fd5fd87da3c250dc39`, digital `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
 ## 이번 개정 범위
 
-기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital 저장소의 36-case 실보드 accelerator-benefit benchmark와 Vivado power evidence를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 benchmark evidence commit `46f90224...`을 별도 provenance로 등록하였다.
+기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital 저장소의 36-case 실보드 accelerator-benefit benchmark와 Vivado power evidence를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 corrected active-core benchmark evidence commit `95d7966c...`을 별도 provenance로 등록하였다.
 
 | 항목 | 개정 결과 |
 |---|---:|
 | 본문 장 | 9 |
-| 본문 문자 수 | 74,676 |
-| 통합 생성·보존 FIG SVG | 13 |
+| 본문 문자 수 | 63,017 |
+| 통합 생성·보존 SVG | 19 |
 | 상속 MATLAB PNG | 7 |
 | immutable LTspice handoff 그림 | 10 |
-| 본문 참조 그림 | 26 |
+| 본문 참조 그림 | 28 |
 | Evidence map 행 | 76 |
 | Claim registry 행 | 52 |
 | 참고문헌 | 14 |
@@ -60,12 +60,12 @@
 
 ## 가속기 Benchmark 반입 내용
 
-- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 commit `46f90224fca0dea3a592049a5e14b97680d529e0`으로 고정하였다.
+- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 commit `95d7966c32ec0bad7af2dca4aa23e7e638a9103a`으로 고정하였다.
 - 대표 CPU 기준선은 hand-written single-thread transaction-level Exact C++로 두고 Python cycle model과 Verilator simulation runtime은 speedup 기준선에서 제외하였다.
 - Exact C++ timing 전 pred 36/36, membrane 144/144, Snapshot 1,080/1,080과 post-benchmark equivalence를 확인하였다.
-- Exact C++ kernel 1,777.699800 ms, end-to-end 2,007.549250 ms와 cycle-derived FPGA core 54.012600 ms를 반영하였다.
-- Exact C++와 measured board counter의 비율 0.009499063×를 실측 기반 비교로 제시하고, 32.912687×는 no-stall cycle-derived 추정으로만 유지하였다.
-- Pure RTL/system 0.099/0.271 W는 ESTIMATED, 18.527330341/50.716227499 J/decision은 DERIVED로, physical board 입력 전력과 measured energy는 NOT_MEASURED로 분리하였다.
+- Exact C++ kernel 1,777.699800 ms, end-to-end 2,007.549250 ms와 `profile_total-profile_input_wait` FPGA active-core 3,601,290 cycles, 36.012900 ms를 반영하였다.
+- Exact C++와 FPGA active-core의 비율 49.362861641×를 제시하고, UART-paced raw interval 187,144.750920 ms는 transport diagnostic으로만 유지하였다.
+- Pure RTL/system 0.099/0.271 W는 ESTIMATED, Pure RTL active energy 0.003565277100 J/decision은 DERIVED로, integrated-system energy와 physical board 입력 전력 및 measured energy는 NOT_MEASURED로 분리하였다.
 
 ## 유지한 결과와 경계
 
@@ -75,10 +75,10 @@
 - Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns
 - AFE 입력 SHA256, canonical AFE→RTL pred/mem, FPGA pred/mem의 각 36/36 범위
 - Database–class confounding, physical/clinical/ASIC 한계
-- Accelerator benchmark는 digital commit `46f90224fca0dea3a592049a5e14b97680d529e0`에서 반입
-- Exact C++ kernel 1,777.699800 ms, measured FPGA core/system counter 187,144.750920 ms, 비율 0.009499063×
-- counter interval은 UART-paced input wait를 포함해 CPU보다 105.273540배 길며, 32.912687×는 legacy no-stall cycle-derived 추정
-- Pure RTL/system 0.099/0.271 W는 ESTIMATED, energy 18.527330341/50.716227499 J는 DERIVED; physical board input power는 NOT_MEASURED
+- Accelerator benchmark는 digital commit `95d7966c32ec0bad7af2dca4aa23e7e638a9103a`에서 반입
+- Exact C++ kernel 1,777.699800 ms, FPGA active-core 3,601,290 cycles/36.012900 ms, speedup 49.362861641×
+- UART-paced raw counter 187,144.750920 ms는 transport diagnostic이며 integrated-system compute timing은 NOT_MEASURED
+- Pure RTL/system 0.099/0.271 W는 ESTIMATED, Pure RTL active energy 0.003565277100 J는 DERIVED; system energy와 physical board input power는 NOT_MEASURED
 
 ## Vivado 물리 구현 그림 보강
 
@@ -117,8 +117,8 @@
 
 ## 최종 자동 검증
 
-- `tools/generate_integrated_figures.py`: PASS — 19개 생성(12 SVG+7 MATLAB PNG), LTspice handoff 10개 보존, FIG-P05 포함 31개 index
-- `tools/check_integrated_technical_report.py`: PASS — 797 rules, 0 conflicts, chars 61,611, figures 26, evidence rows 76
-- `tools/check_integrated_repository.py`: PASS — 499 rules, 0 conflicts
+- `tools/generate_integrated_figures.py`: PASS — 26개 생성(19 SVG+7 MATLAB PNG), LTspice handoff 10개 보존, FIG-P05 포함 37개 index
+- `tools/check_integrated_technical_report.py`: PASS — 814 rules, 0 conflicts, chars 63,017, figures 28, evidence rows 76
+- `tools/check_integrated_repository.py`: PASS — 533 rules, 0 conflicts
 - CSV parsing/required columns: PASS
 - `git diff --check`: commit 직전 재검증

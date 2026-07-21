@@ -44,5 +44,5 @@ Imported component bytes는 `artifact_manifest.csv`의 SHA256으로 검증한다
 - LTspice schematic은 검증했으나 physical AFE/ADC와 silicon validation 없음
 - same-acquisition multi-class clinical cohort 없음
 - database-class confounding 미해소
-- digital commit `46f90224...`의 36-case measured-board timing과 Vivado post-implementation power estimate 반입 완료; physical board input power는 미측정
+- digital commit `95d7966c...`의 36-case measured counters, derived active-core timing과 Vivado post-implementation power estimate 반입 완료; integrated-system timing과 physical board input power는 미측정
 - external report HWP 작성은 private downstream task

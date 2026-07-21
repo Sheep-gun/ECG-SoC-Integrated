@@ -4,7 +4,7 @@
 
 - 저장소: `https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier`
 - 원격 branch: `codex/accelerator-benefit-benchmark`
-- 반입 commit: `46f90224fca0dea3a592049a5e14b97680d529e0`
+- 반입 commit: `95d7966c32ec0bad7af2dca4aa23e7e638a9103a`
 - 고정 분류기·RTL·36-case 입력은 변경하지 않았다.
 - raw/internal legacy label `AFF`는 upstream에 유지하고 report-facing 표기는 `AF`를 사용한다.
 
@@ -24,22 +24,22 @@
 | 범위 | 중앙값 | 분류 |
 |---|---:|---|
 | Exact C++ kernel | 1,777.699800 ms | MEASURED |
-| Pure RTL no-stall | 54.012600 ms | DERIVED from canonical cycles |
-| FPGA board core counter | 187,144.750920 ms | MEASURED |
-| FPGA board system counter | 187,144.750920 ms | MEASURED |
+| FPGA active-core | 36.012900 ms | DERIVED from two MEASURED board counters |
+| UART-paced raw interval | 187,144.750920 ms | MEASURED diagnostic |
+| Integrated-system compute | NOT_MEASURED | preload와 독립 timer 필요 |
 
-Measured CPU / measured board 비율은 core/system 모두 0.009499063×다. 1보다 작으므로
-가속이 아니며, 역수로는 board counter interval이 Exact C++보다 105.273540배 길다.
-고정 XSA에는 독립 AXI Timer가 없고, 230400-baud UART-paced input wait가 계측 interval의
-약 99.98%를 차지한다. 기존 32.912687×는 measured CPU / cycle-derived 54.012600 ms의
-별도 no-stall 추정치이며 measured-board speedup으로 승격하지 않는다.
+FPGA active-core는 `profile_total-profile_input_wait=3,601,290 cycles`이며 Exact C++ 대비
+49.362861641×다. input-wait counter는 RUN 상태에서 core가 ready이지만 `sample_valid`가
+없을 때만 증가하므로 입력 starvation만 제외한다. 내부 stall, Snapshot/final-decision 처리와
+1,320 control cycles는 유지한다. 이 차이는 보드 36/36과 XSim에서 동일하다. 기존
+54.012600 ms/32.912687×는 sample gap을 포함하므로 active-core 성능으로 사용하지 않는다.
 
 ## 전력과 에너지
 
 - Pure RTL: 0.099 W, ESTIMATED
 - MicroBlaze integrated system: 0.271 W, ESTIMATED
-- Pure RTL energy: 18.527330341 J/decision, DERIVED
-- Integrated-system energy: 50.716227499 J/decision, DERIVED
+- Pure RTL active energy: 0.003565277100 J/decision, DERIVED
+- Integrated-system energy: NOT_MEASURED
 - Physical board input power/energy: NOT_MEASURED
 
 두 power는 Vivado 2020.2, `xc7a100tcsg324-1`, SAIF/VCD 없는 Medium-confidence

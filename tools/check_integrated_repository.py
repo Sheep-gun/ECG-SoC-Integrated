@@ -366,7 +366,7 @@ def main() -> int:
             check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_index_path(row["tracked_path"]) == row["sanitized_sha256"])
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
-    benchmark_commit = "46f90224fca0dea3a592049a5e14b97680d529e0"
+    benchmark_commit = "95d7966c32ec0bad7af2dca4aa23e7e638a9103a"
     benchmark_commit_check = subprocess.run([GIT, "-C", str(repo_by_component["digital_accelerator"]), "cat-file", "-e", f"{benchmark_commit}^{{commit}}"])
     check("benchmark evidence commit exists", benchmark_commit_check.returncode == 0, benchmark_commit)
     benchmark_manifest = read_csv("source_of_truth/benchmark_import_manifest.csv")
@@ -468,17 +468,18 @@ def main() -> int:
         path = ROOT / item["evidence_path"]
         check(f"metric evidence exists: {name}", path.exists(), item["evidence_path"])
     benchmark = gm["benchmark"]
-    check("benchmark status includes measured board timing and Vivado power", benchmark.get("status") == "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER")
+    check("benchmark status includes active-core timing and Vivado power", benchmark.get("status") == "IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER")
     check("benchmark source commit exact", benchmark.get("upstream_commit") == benchmark_commit)
     check("benchmark Exact C++ values", benchmark.get("cpu_kernel_latency_ms") == 1777.6998 and benchmark.get("cpu_end_to_end_latency_ms") == 2007.54925)
-    check("benchmark RTL values", benchmark.get("rtl_processing_latency_ms") == 54.0126 and benchmark.get("rtl_throughput_samples_per_s") == 33325557.369947)
-    check("benchmark speedup estimate", round(benchmark.get("exact_cpp_to_rtl_speedup_estimate", 0), 6) == 32.912687)
-    check("benchmark measured board values", benchmark.get("board_core_latency_ms") == 187144.75092000002 and benchmark.get("board_system_latency_ms") == 187144.75092000002 and round(benchmark.get("exact_cpp_to_board_core_ratio", 0), 9) == 0.009499063)
+    check("benchmark active-core values", benchmark.get("active_core_cycles") == 3601290 and benchmark.get("active_core_latency_ms") == 36.0129 and benchmark.get("active_core_throughput_samples_per_s") == 49982089.751172)
+    check("benchmark active-core speedup", round(benchmark.get("exact_cpp_to_active_core_speedup", 0), 9) == 49.362861641)
+    check("benchmark UART interval diagnostic", benchmark.get("uart_paced_raw_interval_ms") == 187144.75092000002)
+    check("benchmark integrated timing unmeasured", benchmark.get("integrated_system_compute_latency_ms") is None and benchmark.get("exact_cpp_to_integrated_system_speedup") is None)
     check("benchmark power values estimated", benchmark.get("estimated_pure_rtl_power_w") == 0.099 and benchmark.get("estimated_system_power_w") == 0.271)
-    check("benchmark derived energy values", benchmark.get("derived_pure_rtl_energy_per_decision_j") == 18.52733034108 and benchmark.get("derived_system_energy_per_decision_j") == 50.71622749932)
-    check("physical board power remains unmeasured", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "MEASURED" and benchmark.get("board_power_status") == "NOT_MEASURED")
+    check("benchmark derived energy values", benchmark.get("derived_pure_rtl_energy_per_decision_j") == 0.0035652771 and benchmark.get("derived_system_energy_per_decision_j") is None)
+    check("physical board power remains unmeasured", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE" and benchmark.get("integrated_system_timing_status") == "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER" and benchmark.get("board_power_status") == "NOT_MEASURED")
     benchmark_readme = (ROOT / "benchmarks" / "accelerator_benefit" / "README.md").read_text(encoding="utf-8")
-    for phrase in ["0.009499063", "105.273540", "30분 관찰", "0.099 W", "0.271 W", "물리 보드 전력이나 실측 에너지"]:
+    for phrase in ["3,601,290", "36.012900", "49.362861641", "187,144.750920", "30분 관찰", "0.099 W", "0.271 W", "0.003565277100", "물리 보드 전력이나 실측 에너지"]:
         check(f"benchmark README boundary {phrase}", phrase in benchmark_readme)
     comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
     check("benchmark comparison one row", len(comparison) == 1)
@@ -577,10 +578,10 @@ def main() -> int:
     check("superseded flow figures removed from manuscript and index", not any(name in manuscript or name in fig_index for name in superseded_flows), [name for name in superseded_flows if name in manuscript or name in fig_index])
     check("superseded flow figure files deleted", not any((ROOT / "figures" / "final" / name).exists() for name in superseded_flows), [name for name in superseded_flows if (ROOT / "figures" / "final" / name).exists()])
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
-    for required in ["1,777.699800 ms", "187,144.750920 ms", "0.009499063", "105.273540", "0.099 W", "0.271 W", "18.527330341080 J", "50.716227499320 J"]:
+    for required in ["1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "0.099 W", "0.271 W", "0.003565277100 J"]:
         check(f"benchmark value promoted with scope: {required}", required in text)
     check("benchmark live boundary", "실제 ECG가 1 kSPS로 들어오면 최종 판정에는 여전히 30분 관찰이 필요" in text)
-    check("benchmark board-speedup boundary", "1보다 작으므로 가속이 아니며" in text and "UART-paced input wait" in text)
+    check("benchmark board-speedup boundary", "transport diagnostic" in text and "integrated-system speedup" in text and "미측정" in text)
 
     # The integrated repository may be checked from a standalone Git worktree,
     # so use the explicitly resolved digital repository instead of ROOT.parent.
@@ -598,7 +599,7 @@ def main() -> int:
     ]
     check("parent tracked gitignore untouched by integration", not parent_gitignore_changes, str(parent_gitignore_changes))
 
-    unresolved.append("Physical board input power and measured energy remain unavailable because no external power meter was used; board counter timing is measured and Vivado on-chip power is estimated.")
+    unresolved.append("Integrated-system compute timing remains unavailable without preloaded input and an independent timer; physical board input power and measured energy remain unavailable because no external power meter was used. Active-core timing is derived from measured counters and Vivado on-chip power is estimated.")
     unresolved.append("Physical AFE/ADC/silicon and clinical validation are outside the completed scope.")
     unresolved.append("Database-class confounding requires future same-acquisition or cross-domain validation.")
 
@@ -609,14 +610,14 @@ def main() -> int:
         "",
         f"- Rules checked: {len(checked)}",
         f"- Conflicts found: {len(failures)}",
-        "- Benchmark import: " + ("PASS (measured board timing and Vivado-estimated power)" if benchmark.get("status") == "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER" else "FAIL"),
+        "- Benchmark import: " + ("PASS (counter-derived active-core timing and Vivado-estimated power)" if benchmark.get("status") == "IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER" else "FAIL"),
         "",
         "## Rules checked",
         "",
     ] + [f"- {'PASS' if not any(f.startswith(name + ':') for f in failures) else 'FAIL'} — {name}" for name in checked]
     report += ["", "## Conflicts found", ""] + ([f"- {f}" for f in failures] if failures else ["- None."])
     report += ["", "## Unresolved evidence / bounded scope", ""] + [f"- {u}" for u in unresolved]
-    report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER`.", "- Exact C++ measurement, measured FPGA hardware-counter timing, legacy cycle-derived timing, and Vivado-estimated power are distinguished.", "- Physical board input power and measured energy remain `NOT_MEASURED`.", ""]
+    report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER`.", "- Exact C++ measurement, hardware-counter-derived FPGA active-core timing, UART transport diagnostic, and Vivado-estimated power are distinguished.", "- Integrated-system compute timing and energy, physical board input power, and measured energy remain `NOT_MEASURED`.", ""]
     reports = ROOT / "reports"
     reports.mkdir(exist_ok=True)
     with (reports / "integrated_repository_check.md").open("w", encoding="utf-8", newline="\n") as handle:

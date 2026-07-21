@@ -49,4 +49,4 @@ Nexys A7 replay는 digital IP integration proof다. External electrode, physical
 
 ## Benchmark 분리
 
-Resource와 timing closure에 더해 Nexys A7-100T 36-case hardware counter를 반영한다. Core/system 중앙값은 187,144.750920 ms, 처리량은 9,618.223280 samples/s, Exact C++ 대비 비율은 0.009499063×다. 계측 interval은 UART input wait를 포함하므로 no-stall core 성능과 분리한다. Pure RTL 0.099 W와 MicroBlaze system 0.271 W는 Vivado post-implementation vectorless estimate이며 physical board input power는 미측정이다.
+Resource와 timing closure에 더해 Nexys A7-100T 36-case hardware counter를 반영한다. Active-core는 `profile_total-profile_input_wait=3,601,290 cycles`, 36.012900 ms이고 처리량은 49,982,089.751172 samples/s, Exact C++ 대비 speedup은 49.362861641×다. UART-paced raw interval 187,144.750920 ms는 transport diagnostic으로만 보존하며 integrated-system compute timing은 미측정이다. Pure RTL 0.099 W와 MicroBlaze system 0.271 W는 Vivado post-implementation vectorless estimate이며 physical board input power는 미측정이다.

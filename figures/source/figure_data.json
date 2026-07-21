@@ -117,5 +117,5 @@
       "adc_non_ideality_target": "ADC output code boundary"
     }
   },
-  "benchmark_status": "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER"
+  "benchmark_status": "IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER"
 }

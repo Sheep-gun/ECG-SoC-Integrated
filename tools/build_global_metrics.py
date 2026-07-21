@@ -11,7 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
-BENCHMARK_COMMIT = "46f90224fca0dea3a592049a5e14b97680d529e0"
+BENCHMARK_COMMIT = "95d7966c32ec0bad7af2dca4aa23e7e638a9103a"
 XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
 LTSPICE_HANDOFF = "INTEGRATED_LTSPICE_2026-07-19"
@@ -110,8 +110,9 @@ def main() -> int:
     assert float(bc["cpu_latency_ms"]) == 1777.6998
     assert float(bc["fpga_latency_ms"]) == 54.0126
     assert round(float(bc["ratio_cpu_over_fpga"]), 6) == 32.912687
-    assert rtl_benchmark["sample_gap_cycles"] == 2 and rtl_benchmark["profile_total_cycles"] == 5401260
-    assert board_benchmark["evidence_class"] == "MEASURED"
+    assert rtl_benchmark["sample_gap_cycles"] == 2
+    assert rtl_benchmark["active_total_cycles"]["median"] == 3601290
+    assert board_benchmark["evidence_class"] == "MEASURED_COUNTERS_AND_DERIVED_ACTIVE_CYCLES"
     assert board_benchmark["cases_completed"] == 36
     assert board_benchmark["board_golden_final_pred"] == "36/36"
     assert board_benchmark["board_golden_final_membrane_values"] == "144/144"
@@ -148,9 +149,10 @@ def main() -> int:
             "board_final_pred_equivalence": metric("36/36", "cases", "FPGA board replay vs full-top XSim expected output", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "functional equivalence, not classification accuracy"),
             "board_final_mem_equivalence": metric("36/36", "cases", "FPGA board replay vs full-top XSim expected membrane", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "functional equivalence, not classification accuracy"),
             "board_label_accuracy": metric("29/36", "cases", "board outputs compared with locked final-test labels", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "same classification result as locked final-test chunks"),
-            "board_core_latency_median": metric(board_benchmark["core_latency_ms"]["median"], "ms", "accelerator last-decision hardware-counter interval", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "includes UART-paced input wait; not no-stall accelerator compute time"),
-            "board_system_latency_median": metric(board_benchmark["system_latency_ms"]["median"], "ms", "full transaction hardware-counter interval", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "fixed XSA has no independent AXI Timer; equals core counter for all 36 cases"),
-            "board_system_throughput_median": metric(board_benchmark["system_throughput_samples_per_s"]["median"], "samples/s", "1,800,000-sample hardware transaction", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "UART-paced host streaming is included"),
+            "board_active_core_latency_median": metric(board_benchmark["core_active_latency_ms"]["median"], "ms", "profile total minus input-wait hardware counters", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "core scope; depends on locked RTL input-wait semantics"),
+            "board_active_core_cycles": metric(board_benchmark["core_active_cycles"]["median"], "cycles", "profile total minus input-wait hardware counters", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "identical in 36/36 board cases and XSim cross-check"),
+            "board_active_core_throughput_median": metric(board_benchmark["core_active_throughput_samples_per_s"]["median"], "samples/s", "1,800,000 samples divided by active-core latency", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "stored-data active-core scope; live decision still needs 30 minutes"),
+            "board_uart_paced_interval_median": metric(board_benchmark["uart_paced_transaction_counter_interval_ms"]["median"], "ms", "raw start-to-final-decision counter including input starvation", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "transport diagnostic only; not integrated-system compute latency"),
             "pure_rtl_estimated_power": metric(pure_rtl_power["total_on_chip_power_w"], "W", "pure RTL accelerator", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
             "microblaze_system_estimated_power": metric(system_power["total_on_chip_power_w"], "W", "MicroBlaze integrated FPGA system", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
             "pure_rtl_power_reroute_lut": metric(pure_rtl_power["utilization"]["lut"], "LUT", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "same RTL/part/clock; route differs slightly from locked canonical implementation"),
@@ -179,34 +181,35 @@ def main() -> int:
             "avoided_full_raw_input_window_bytes": metric(2700000, "bytes decimal", "21600000 bits divided by 8", "derived arithmetic from verified interface/window", "docs/STREAMING_STATE_MEMORY_KR.md", "INTEGRATED", "INTEGRATED", "양건", "approximately 2.7 MB decimal; not MicroBlaze runtime memory", "VERIFIED_DERIVED"),
         },
         "benchmark": {
-            "status": "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER",
+            "status": "IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER",
             "upstream_commit": BENCHMARK_COMMIT,
             "cpu_baseline": "single-thread hand-written transaction-level Exact C++",
             "cpu_kernel_latency_ms": float(bc["cpu_latency_ms"]),
             "cpu_end_to_end_latency_ms": 2007.549250,
-            "rtl_processing_latency_ms": float(bc["fpga_latency_ms"]),
-            "rtl_throughput_samples_per_s": rtl_benchmark["throughput_samples_per_s"],
-            "realtime_headroom": rtl_benchmark["realtime_margin_vs_1ksps"],
-            "exact_cpp_to_rtl_speedup_estimate": float(bc["ratio_cpu_over_fpga"]),
-            "board_core_latency_ms": board_benchmark["core_latency_ms"]["median"],
-            "board_system_latency_ms": board_benchmark["system_latency_ms"]["median"],
-            "board_system_throughput_samples_per_s": board_benchmark["system_throughput_samples_per_s"]["median"],
-            "board_realtime_margin_vs_1ksps": board_benchmark["system_realtime_margin_vs_1ksps"]["median"],
-            "exact_cpp_to_board_core_ratio": float(bc["cpu_latency_ms"]) / board_benchmark["core_latency_ms"]["median"],
-            "exact_cpp_to_board_system_ratio": float(bc["cpu_latency_ms"]) / board_benchmark["system_latency_ms"]["median"],
+            "active_core_cycles": board_benchmark["core_active_cycles"]["median"],
+            "active_core_latency_ms": board_benchmark["core_active_latency_ms"]["median"],
+            "active_core_throughput_samples_per_s": board_benchmark["core_active_throughput_samples_per_s"]["median"],
+            "active_core_realtime_margin_vs_1ksps": board_benchmark["core_active_realtime_margin_vs_1ksps"]["median"],
+            "exact_cpp_to_active_core_speedup": float(bc["cpu_latency_ms"]) / board_benchmark["core_active_latency_ms"]["median"],
+            "uart_paced_raw_interval_ms": board_benchmark["uart_paced_transaction_counter_interval_ms"]["median"],
+            "integrated_system_compute_latency_ms": None,
+            "exact_cpp_to_integrated_system_speedup": None,
+            "legacy_gap_inclusive_rtl_latency_ms": float(bc["fpga_latency_ms"]),
+            "legacy_gap_inclusive_speedup_estimate": float(bc["ratio_cpu_over_fpga"]),
             "estimated_power_w": pure_rtl_power["total_on_chip_power_w"],
             "estimated_pure_rtl_power_w": pure_rtl_power["total_on_chip_power_w"],
             "estimated_system_power_w": system_power["total_on_chip_power_w"],
             "measured_board_power_w": None,
             "estimated_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
             "derived_pure_rtl_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
-            "derived_system_energy_per_decision_j": float(system_energy["energy_per_decision_j"]),
-            "legacy_cycle_derived_pure_rtl_energy_per_decision_j": 0.0053472474,
+            "derived_system_energy_per_decision_j": None,
+            "legacy_gap_inclusive_pure_rtl_energy_per_decision_j": 0.0053472474,
             "measured_energy_per_decision_j": None,
-            "board_timing_status": "MEASURED",
+            "board_timing_status": "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE",
+            "integrated_system_timing_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
             "board_power_status": "NOT_MEASURED",
             "power_estimate_status": "POST_IMPLEMENTATION_VECTORLESS_ESTIMATED",
-            "scope_limitation": "measured hardware counters include UART-paced input wait; Vivado power is an on-chip vectorless estimate; physical board input power was not measured",
+            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; integrated-system latency is unmeasured; Vivado power is an on-chip vectorless estimate; physical board input power was not measured",
         },
     }
     out = ROOT / "source_of_truth" / "global_metrics.yaml"

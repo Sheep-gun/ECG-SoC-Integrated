@@ -100,8 +100,8 @@ python tools/check_integrated_repository.py
 
 ## 7. Accelerator benchmark 상태
 
-Status: `IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER`
+Status: `IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER`
 
 Summary: [`benchmarks/accelerator_benefit/README.md`](benchmarks/accelerator_benefit/README.md)
 
-Digital commit `46f90224fca0dea3a592049a5e14b97680d529e0`의 Nexys A7-100T 36-case 실보드 결과와 Vivado power report를 반영했다. Board-Golden 정합은 final prediction 36/36과 Final Membrane 144/144다. Core/system counter 중앙값은 187,144.750920 ms, 처리량은 9,618.223280 samples/s이며 Exact C++ 대비 0.009499063×다. 이 값은 UART input wait를 포함해 가속이 아니라 CPU보다 105.273540배 긴 interval이다. Pure RTL 0.099 W와 MicroBlaze system 0.271 W는 post-implementation vectorless ESTIMATED 값이고, 18.527330341/50.716227499 J는 DERIVED 값이다. Physical board input power는 외부 전력계가 없어 미측정이다.
+Digital commit `95d7966c32ec0bad7af2dca4aa23e7e638a9103a`의 Nexys A7-100T 36-case 실보드 결과와 Vivado power report를 반영했다. Board-Golden 정합은 final prediction 36/36과 Final Membrane 144/144다. Active-core는 `profile_total-profile_input_wait`로 3,601,290 cycles, 36.012900 ms이며 Exact C++ 대비 49.362861641×다. UART-paced raw interval 187,144.750920 ms는 transport diagnostic으로만 보존하며 integrated-system compute latency/speedup/energy는 미측정이다. Pure RTL 0.099 W와 MicroBlaze system 0.271 W는 post-implementation vectorless ESTIMATED 값이고, Pure RTL active energy 0.003565277100 J만 DERIVED 값이다. Physical board input power는 외부 전력계가 없어 미측정이다.

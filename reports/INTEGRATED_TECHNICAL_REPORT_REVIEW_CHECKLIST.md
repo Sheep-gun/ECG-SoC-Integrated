@@ -58,11 +58,11 @@
 - [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
 - [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
 - [x] 사용 가능한 공개 ECG 데이터셋의 기록 길이가 서로 달라, 반복·padding 없이 공통 적용 가능한 30분으로 입력을 통일했음을 명시한다.
-- [x] accelerator benchmark는 `46f90224...`의 Exact C++ 1,777.699800 ms와 measured board counter 187,144.750920 ms의 0.009499063× 비교를 사용하고, 54.012600 ms/32.912687×는 no-stall cycle-derived 추정으로만 분리한다.
+- [x] accelerator benchmark는 `95d7966c...`의 Exact C++ 1,777.699800 ms와 FPGA active-core 36.012900 ms를 비교해 49.362861641×를 산출하고, UART-paced 187,144.750920 ms는 transport diagnostic으로만 분리한다.
 - [x] Exact C++ timing 전에 pred 36/36, membrane 144/144와 Snapshot 1,080/1,080 등가성을 확인한다.
 - [x] Python cycle model과 Verilator simulation runtime을 대표 CPU inference 기준선으로 사용하지 않는다.
-- [x] 54.012600 ms를 live 30분 판정시간으로 표현하지 않고, 32.912687배를 measured board speedup으로 표현하지 않는다.
-- [x] Pure RTL 0.099 W와 system 0.271 W를 ESTIMATED, 18.527330341/50.716227499 J/decision을 DERIVED로 표시하고 physical board 측정값과 구분한다.
+- [x] 36.012900 ms를 live 30분 판정시간으로 표현하지 않고, integrated-system compute latency/speedup은 preload와 독립 timer가 없어 미측정으로 둔다.
+- [x] Pure RTL 0.099 W와 system 0.271 W를 ESTIMATED, Pure RTL active energy 0.003565277100 J/decision을 DERIVED로 표시하고 system energy와 physical board 측정값은 미측정으로 둔다.
 
 ## Artifact와 자동 검증
 
