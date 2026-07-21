@@ -374,6 +374,30 @@
       "limitation": "gating coverage is implementation evidence; it did not materially change median power at 1 mW report resolution",
       "verification_status": "VERIFIED"
     },
+    "pure_rtl_ideal_power_gated_average": {
+      "value": 2.9910714166666663e-06,
+      "unit": "W",
+      "scope": "active accelerator-plus-static energy divided by the 1800-second observation period under complete idle power removal",
+      "evidence_type": "derived upper-bound assumption",
+      "evidence_path": "benchmarks/accelerator_benefit/power/results/wearable_power_budget.csv",
+      "upstream_repository": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier",
+      "upstream_commit": "d44e67517650f1f95ca67b93c2788f41e99f1a5e",
+      "owner": "양건",
+      "limitation": "not current FPGA power; excludes memory, retention, isolation, power switch, wake energy, off-state leakage, AFE, ADC, MCU, BLE and PMIC",
+      "verification_status": "VERIFIED_DERIVED_UPPER_BOUND"
+    },
+    "pure_rtl_dynamic_duty_cycled_average": {
+      "value": 1.05037625e-06,
+      "unit": "W",
+      "scope": "active accelerator dynamic energy divided by the 1800-second observation period",
+      "evidence_type": "derived dynamic-only average",
+      "evidence_path": "benchmarks/accelerator_benefit/power/results/wearable_power_budget.csv",
+      "upstream_repository": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier",
+      "upstream_commit": "d44e67517650f1f95ca67b93c2788f41e99f1a5e",
+      "owner": "양건",
+      "limitation": "dynamic subset only; not additive to the ideal power-gated average and not a complete wearable power budget",
+      "verification_status": "VERIFIED_DERIVED"
+    },
     "pure_rtl_1mhz_estimated_power": {
       "value": 0.099,
       "unit": "W",
@@ -716,6 +740,9 @@
     "estimated_energy_per_decision_j": 0.00538392855,
     "derived_pure_rtl_energy_per_decision_j": 0.00538392855,
     "derived_pure_rtl_active_dynamic_energy_per_decision_j": 0.00189067725,
+    "derived_ideal_power_gated_core_average_power_w": 2.9910714166666663e-06,
+    "derived_dynamic_duty_cycled_average_power_w": 1.05037625e-06,
+    "ideal_power_gated_average_status": "UPPER_BOUND_ASSUMPTION",
     "derived_system_energy_per_decision_j": null,
     "legacy_gap_inclusive_pure_rtl_energy_per_decision_j": null,
     "legacy_1mhz_power_energy_status": "NOT_DERIVED_CLOCK_MISMATCH",
@@ -724,6 +751,6 @@
     "integrated_system_timing_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
     "board_power_status": "NOT_MEASURED",
     "power_estimate_status": "POST_IMPLEMENTATION_REAL_ECG_SAIF_ESTIMATED_MEDIUM_CONFIDENCE",
-    "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined with a four-class real-ECG burst-SAIF accelerator estimate with about 12 percent routed-net match; unmatched nets remain vectorless; the 1 MHz 0.099 W result is power-only; integrated-system latency and physical board input power are unmeasured"
+    "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined with a four-class real-ECG burst-SAIF accelerator estimate with about 12 percent routed-net match; unmatched nets remain vectorless; 2.991071 uW is an ideal complete-power-gating core-average upper-bound assumption that excludes storage, retention, isolation, switch, wake, off-state leakage and all other wearable components; the 1 MHz 0.099 W result is power-only; integrated-system latency and physical board input power are unmeasured"
   }
 }

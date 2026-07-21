@@ -654,11 +654,15 @@ Exact C++를 active-core latency로 나눈 speedup은 49.362861641×다. 두 피
 
 ![그림 12a. CPU와 FPGA active-core latency 및 UART-paced diagnostic](../figures/final/FIG-12a_board_latency.png)
 
-![그림 12b. Vivado 추정전력과 파생 에너지](../figures/final/FIG-12b_power_energy.png)
+![그림 12b. 실제 ECG 기반 FPGA 추정전력과 완전 power-gating 가능성](../figures/final/FIG-12b_power_energy.png)
 
 기존 `54.012600 ms`는 canonical sample gap을 포함한 값이므로 active-core 성능으로 사용하지 않는다. `187,144.750920 ms`는 UART 입력 대기를 포함한 raw counter diagnostic이다. 실제 ECG가 1 kSPS로 들어오면 최종 판정에는 여전히 30분 관찰이 필요하므로 어느 stored-data replay 값도 live 판정시간으로 해석하지 않는다.
 
-Vivado 2020.2 direct-100 MHz timing-closed route는 9,759 LUT, 5,049 FF, BRAM 0, DSP 0, WNS +0.035 ns로 timing MET를 확인했다. 네 class 대표 실제 ECG full-record burst SAIF의 중앙값은 accelerator hierarchy dynamic 0.052500 W이고, FPGA device static 0.097000 W를 배분한 accelerator+static은 0.149500 W이다. Literal 1 kS/s 100-sample prefix는 각각 0.045000 W와 0.142000 W이다. 100 MHz 실보드 counter에서 파생한 active-core latency 0.0360129 s와 burst-SAIF power를 결합하면 allocated total energy는 `0.149500 W × 0.0360129 s = 0.005383928550 J/decision`, active dynamic energy는 `0.052500 W × 0.0360129 s = 0.001890677250 J/decision`이다. 두 값은 측정 에너지가 아니라 DERIVED_ESTIMATE다. SAIF는 functional RTL에서 생성되어 routed net의 약 12%와 match하고 미매칭 net에는 vectorless propagation이 남으므로 confidence는 Medium이다. 기존 1 MHz Pure RTL 0.099 W와 MicroBlaze 통합 system 0.271 W는 별도 post-implementation vectorless 추정전력 근거이며 유효한 integrated compute latency가 없어 integrated-system speedup과 energy는 산출하지 않았다. physical board input power와 measured energy는 외부 전력계가 없어 미측정이다 [CLM-046]. `power_opt_design` 보고서의 user/tool-gated register는 68.735%이나 FPGA static/global clock 지배 때문에 1 mW 보고 해상도에서 중앙값 개선은 뚜렷하지 않았다. ASIC PDK/Liberty/LEF와 signoff tool이 없어 55/65/28 nm post-layout PPA는 미완료이고, AFE·메모리·MCU·BLE·PMIC를 포함한 wearable budget도 아직 닫히지 않았다.
+Vivado 2020.2 direct-100 MHz timing-closed route는 9,759 LUT, 5,049 FF, BRAM 0, DSP 0, WNS +0.035 ns로 timing MET를 확인했다. 네 class 대표 실제 ECG full-record burst SAIF의 중앙값은 accelerator hierarchy dynamic 0.052500 W이고, FPGA device static 0.097000 W를 배분한 accelerator+static은 0.149500 W이다. Literal 1 kS/s 100-sample prefix는 각각 0.045000 W와 0.142000 W이다. 100 MHz 실보드 counter에서 파생한 active-core latency 0.0360129 s와 burst-SAIF power를 결합하면 allocated total energy는 `0.149500 W × 0.0360129 s = 0.005383928550 J/decision`, active dynamic energy는 `0.052500 W × 0.0360129 s = 0.001890677250 J/decision`이다. 두 값은 측정 에너지가 아니라 DERIVED_ESTIMATE다.
+
+30분 관찰 주기마다 동일한 연산을 한 번 수행하고 나머지 시간에는 가속기 전원을 완전히 차단한다고 가정하면, 연산 코어 기준 평균전력은 `0.005383928550 J ÷ 1,800 s = 2.991071 µW`이다. 이 값은 실제 ECG activity와 실보드 active-core 처리시간에서 출발한 계산이므로 저전력 ASIC 구현 가능성을 보여주는 근거로 사용한다. 다만 현재 FPGA의 소비전력이 아니라 **완전 power-gating 가정의 파생값**이며, 입력 메모리, retention, isolation, power switch, wake energy, off-state leakage와 AFE·ADC·MCU·BLE·PMIC 전력을 포함하지 않는다 [CLM-053].
+
+SAIF는 functional RTL에서 생성되어 routed net의 약 12%와 match하고 미매칭 net에는 vectorless propagation이 남으므로 confidence는 Medium이다. 기존 1 MHz Pure RTL 0.099 W와 MicroBlaze 통합 system 0.271 W는 별도 post-implementation vectorless 추정전력 근거이며 유효한 integrated compute latency가 없어 integrated-system speedup과 energy는 산출하지 않았다. physical board input power와 measured energy는 외부 전력계가 없어 미측정이다 [CLM-046]. `power_opt_design` 보고서의 user/tool-gated register는 68.735%이나 FPGA static/global clock 지배 때문에 1 mW 보고 해상도에서 중앙값 개선은 뚜렷하지 않았다. ASIC PDK/Liberty/LEF와 signoff tool이 없어 55/65/28 nm post-layout PPA는 미완료이고, AFE·메모리·MCU·BLE·PMIC를 포함한 wearable budget도 아직 닫히지 않았다.
 
 ## 6.2 AFE·디지털 통합 XMODEL 검증
 
@@ -848,7 +852,7 @@ Pure RTL은 긴 조합 경로를 여러 등록 단계로 분리한다. `C24/glob
 | MicroBlaze | 12494 LUT, 8494 reg, 16 BRAM, 3 DSP, WNS 0.097 ns | CLM-010 |
 | Board | pred/mem 36/36; label 29/36 | CLM-011 |
 | Streaming | 회피한 원시 입력 구간 2,700,000 bytes≈2.7 MB | CLM-023 |
-| Benchmark | Exact C++ 1,777.699800 ms; active-core 36.012900 ms; 49.362861641×; real-ECG burst-SAIF accelerator+static 0.149500 W and 0.005383928550 J estimated/derived; hierarchy dynamic 0.052500 W and 0.001890677250 J; 1 MHz Pure RTL 0.099 W and system 0.271 W vectorless power-only | CLM-018, CLM-043~CLM-047 |
+| Benchmark | Exact C++ 1,777.699800 ms; active-core 36.012900 ms; 49.362861641×; real-ECG burst-SAIF accelerator+static 0.149500 W and 0.005383928550 J estimated/derived; hierarchy dynamic 0.052500 W and 0.001890677250 J; 완전 power-gating 가정의 연산 코어 평균 2.991071 µW; 1 MHz Pure RTL 0.099 W and system 0.271 W vectorless power-only | CLM-018, CLM-043~CLM-047, CLM-053 |
 
 # 부록 B. Claim/증거 mapping
 

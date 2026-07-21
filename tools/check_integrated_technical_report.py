@@ -369,7 +369,7 @@ def main() -> int:
     check("LTspice schematic present", (ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc").is_file())
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "9,618.223280 samples/s", "0.099 W", "0.149500/0.052500/0.097000 W", "0.142000 W", "0.271 W", "0.005383928550 J/decision", "0.001890677250 J/decision"]:
+    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "9,618.223280 samples/s", "0.099 W", "0.149500/0.052500/0.097000 W", "0.142000 W", "0.271 W", "0.005383928550 J/decision", "0.001890677250 J/decision", "2.991071 µW"]:
         check(f"required result {value}", value in text)
     check("invalid mixed-clock 3.565 mJ result absent", "0.003565277100" not in text)
     for name, meaning in [
@@ -386,7 +386,7 @@ def main() -> int:
         "hand-written single-thread transaction-level Exact C++", "profile_total-profile_input_wait", "3,601,290 cycles",
         "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms",
         "transport diagnostic", "integrated-system speedup", "post-implementation vectorless 추정전력",
-        "physical board input power", "미측정",
+        "physical board input power", "미측정", "완전 power-gating 가정", "2.991071 µW",
     ]:
         check(f"benchmark scope {term}", term in benchmark_section)
     check("old benchmark import placeholder absent", "PENDING_EXTERNAL_BENCHMARK_IMPORT" not in text)
@@ -424,6 +424,8 @@ def main() -> int:
     check("benchmark estimated power exact", benchmark["estimated_pure_rtl_power_w"] == 0.1495 and benchmark["estimated_pure_rtl_100mhz_dynamic_power_w"] == 0.0525 and benchmark["estimated_pure_rtl_100mhz_device_static_power_w"] == 0.097 and round(benchmark["estimated_pure_rtl_literal_1ksps_power_w"], 6) == 0.142 and benchmark["estimated_pure_rtl_1mhz_power_w"] == 0.099 and benchmark["estimated_system_power_w"] == 0.271)
     check("benchmark clock-enable exact", benchmark["clock_enable_coverage_percent"] == 68.735)
     check("benchmark derived energy exact", benchmark["derived_pure_rtl_energy_per_decision_j"] == 0.00538392855 and benchmark["derived_pure_rtl_active_dynamic_energy_per_decision_j"] == 0.00189067725 and benchmark["derived_system_energy_per_decision_j"] is None)
+    check("benchmark ideal power-gated average exact", round(benchmark["derived_ideal_power_gated_core_average_power_w"], 15) == round(2.9910714166666663e-06, 15) and benchmark["ideal_power_gated_average_status"] == "UPPER_BOUND_ASSUMPTION")
+    check("benchmark dynamic duty-cycled average exact", benchmark["derived_dynamic_duty_cycled_average_power_w"] == 1.05037625e-06)
     check("benchmark mixed-clock energy rejected", benchmark["legacy_gap_inclusive_pure_rtl_energy_per_decision_j"] is None and benchmark["legacy_1mhz_power_energy_status"] == "NOT_DERIVED_CLOCK_MISMATCH")
     check("physical board power unmeasured", benchmark["measured_board_power_w"] is None and benchmark["measured_energy_per_decision_j"] is None and benchmark["board_timing_status"] == "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE" and benchmark["integrated_system_timing_status"] == "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER" and benchmark["board_power_status"] == "NOT_MEASURED")
     with (ROOT / "source_of_truth" / "claim_registry.csv").open(encoding="utf-8-sig", newline="") as handle:
@@ -433,6 +435,7 @@ def main() -> int:
     check("CLM-048 timing history registered", claim_map.get("CLM-048", {}).get("status") == "CAREFUL")
     check("CLM-048 commit chain", all(commit in claim_map.get("CLM-048", {}).get("upstream_commit", "") for commit in ["c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa", "5e2e5d0a46be47d8086b8642e055066079bfa4e6", "c6b80de19cdcad5b7e43fe7835588b629d847f75"]))
     check("CLM-048 historical limitation", "17.5k LUT" in claim_map.get("CLM-048", {}).get("limitations", ""))
+    check("CLM-053 power-gated potential registered", claim_map.get("CLM-053", {}).get("status") == "CAREFUL" and "not current FPGA power" in claim_map.get("CLM-053", {}).get("limitations", ""))
     with EVIDENCE_MAP.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
     required_columns = {"section", "statement_id", "summarized_statement", "claim_id", "evidence_path", "upstream_repository", "upstream_commit", "owner", "status", "limitation"}

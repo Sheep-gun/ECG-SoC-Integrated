@@ -108,6 +108,10 @@ def main() -> int:
     streaming_activity = activity_power["groups"]["baseline:streaming_1ksps_prefix"]
     clock_enable_path = "benchmarks/accelerator_benefit/power/results/clock_enable_summary.json"
     clock_enable = read_json(clock_enable_path)
+    wearable_budget_path = "benchmarks/accelerator_benefit/power/results/wearable_power_budget.csv"
+    wearable_budget = read_csv(wearable_budget_path)
+    ideal_power_gated = next(row for row in wearable_budget if row["scenario"] == "idealized_power_gated_ip" and row["component"] == "Pure RTL FPGA-equivalent IP")
+    duty_cycled_dynamic = next(row for row in wearable_budget if row["scenario"] == "fpga_preloaded_burst_30min" and row["component"] == "Pure RTL dynamic subset")
     power_energy = read_csv("benchmarks/accelerator_benefit/results/power_energy_summary.csv")
     pure_rtl_1mhz_power = power_benchmark["scopes"]["pure_rtl_1mhz"]
     pure_rtl_power = power_benchmark["scopes"]["pure_rtl_100mhz"]
@@ -165,6 +169,8 @@ def main() -> int:
             "pure_rtl_100mhz_device_static_power": metric(pure_rtl_power["device_static_power_w"], "W", "pure RTL accelerator at 100 MHz", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "device-static component of Total On-Chip Power"),
             "pure_rtl_1ksps_estimated_power": metric(streaming_activity["accelerator_plus_device_static_power_w"]["median"], "W", "literal 1 kS/s 100-sample real-ECG prefix; accelerator hierarchy dynamic plus allocated FPGA static", "post-implementation real-ECG SAIF Vivado estimate", activity_power_path, dr, BENCHMARK_COMMIT, "양건", "100-sample prefix rather than a full 30-minute trace; about 12 percent routed-net match"),
             "pure_rtl_clock_enable_coverage": metric(clock_enable["slice_registers_percent_gated"], "percent", "power_opt_design slice registers with user or tool gating", "Vivado power optimization report", clock_enable_path, dr, BENCHMARK_COMMIT, "양건", "gating coverage is implementation evidence; it did not materially change median power at 1 mW report resolution"),
+            "pure_rtl_ideal_power_gated_average": metric(float(ideal_power_gated["power_w"]), "W", "active accelerator-plus-static energy divided by the 1800-second observation period under complete idle power removal", "derived upper-bound assumption", wearable_budget_path, dr, BENCHMARK_COMMIT, "양건", "not current FPGA power; excludes memory, retention, isolation, power switch, wake energy, off-state leakage, AFE, ADC, MCU, BLE and PMIC", "VERIFIED_DERIVED_UPPER_BOUND"),
+            "pure_rtl_dynamic_duty_cycled_average": metric(float(duty_cycled_dynamic["power_w"]), "W", "active accelerator dynamic energy divided by the 1800-second observation period", "derived dynamic-only average", wearable_budget_path, dr, BENCHMARK_COMMIT, "양건", "dynamic subset only; not additive to the ideal power-gated average and not a complete wearable power budget", "VERIFIED_DERIVED"),
             "pure_rtl_1mhz_estimated_power": metric(pure_rtl_1mhz_power["total_on_chip_power_w"], "W", "legacy low-frequency pure RTL implementation at 1 MHz core", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "power-only operating point; must not be multiplied by the 100 MHz active latency"),
             "microblaze_system_estimated_power": metric(system_power["total_on_chip_power_w"], "W", "MicroBlaze integrated FPGA system", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
             "pure_rtl_power_reroute_lut": metric(pure_rtl_power["utilization"]["lut"], "LUT", "100 MHz Pure RTL power-report implementation", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "direct 100 MHz wrapper implementation; resource values belong to this route"),
@@ -221,6 +227,9 @@ def main() -> int:
             "estimated_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
             "derived_pure_rtl_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
             "derived_pure_rtl_active_dynamic_energy_per_decision_j": float(pure_rtl_energy["active_dynamic_energy_per_decision_j"]),
+            "derived_ideal_power_gated_core_average_power_w": float(ideal_power_gated["power_w"]),
+            "derived_dynamic_duty_cycled_average_power_w": float(duty_cycled_dynamic["power_w"]),
+            "ideal_power_gated_average_status": ideal_power_gated["status"],
             "derived_system_energy_per_decision_j": None,
             "legacy_gap_inclusive_pure_rtl_energy_per_decision_j": None,
             "legacy_1mhz_power_energy_status": "NOT_DERIVED_CLOCK_MISMATCH",
@@ -229,7 +238,7 @@ def main() -> int:
             "integrated_system_timing_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
             "board_power_status": "NOT_MEASURED",
             "power_estimate_status": "POST_IMPLEMENTATION_REAL_ECG_SAIF_ESTIMATED_MEDIUM_CONFIDENCE",
-            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined with a four-class real-ECG burst-SAIF accelerator estimate with about 12 percent routed-net match; unmatched nets remain vectorless; the 1 MHz 0.099 W result is power-only; integrated-system latency and physical board input power are unmeasured",
+            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined with a four-class real-ECG burst-SAIF accelerator estimate with about 12 percent routed-net match; unmatched nets remain vectorless; 2.991071 uW is an ideal complete-power-gating core-average upper-bound assumption that excludes storage, retention, isolation, switch, wake, off-state leakage and all other wearable components; the 1 MHz 0.099 W result is power-only; integrated-system latency and physical board input power are unmeasured",
         },
     }
     out = ROOT / "source_of_truth" / "global_metrics.yaml"

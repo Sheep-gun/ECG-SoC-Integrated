@@ -65,7 +65,7 @@
 - Exact C++ timing 전 pred 36/36, membrane 144/144, Snapshot 1,080/1,080과 post-benchmark equivalence를 확인하였다.
 - Exact C++ kernel 1,777.699800 ms, end-to-end 2,007.549250 ms와 `profile_total-profile_input_wait` FPGA active-core 3,601,290 cycles, 36.012900 ms를 반영하였다.
 - Exact C++와 FPGA active-core의 비율 49.362861641×를 제시하고, UART-paced raw interval 187,144.750920 ms는 transport diagnostic으로만 유지하였다.
-- 1 MHz Pure RTL 0.099 W는 별도 vectorless power-only operating point로 보존하고, performance-matched 100 MHz real-ECG burst-SAIF accelerator+static/hierarchy dynamic/static 0.149500/0.052500/0.097000 W와 system 0.271 W를 분리하였다. 100 MHz allocated-total/active-dynamic energy 0.005383928550/0.001890677250 J/decision은 DERIVED_ESTIMATE이며 integrated-system energy와 physical board 입력 전력 및 measured energy는 NOT_MEASURED다.
+- 1 MHz Pure RTL 0.099 W는 별도 vectorless power-only operating point로 보존하고, performance-matched 100 MHz real-ECG burst-SAIF accelerator+static/hierarchy dynamic/static 0.149500/0.052500/0.097000 W와 system 0.271 W를 분리하였다. 100 MHz allocated-total/active-dynamic energy 0.005383928550/0.001890677250 J/decision은 DERIVED_ESTIMATE다. Allocated active energy를 30분 주기 1,800초로 환산한 2.991071 µW는 완전 power-gating 가정의 연산 코어 평균전력으로만 등록하고, current FPGA·전체 wearable·실측 전력으로 확대하지 않는다. Integrated-system energy와 physical board 입력 전력 및 measured energy는 NOT_MEASURED다.
 
 ## 유지한 결과와 경계
 
@@ -78,7 +78,7 @@
 - Accelerator benchmark는 digital commit `d44e67517650f1f95ca67b93c2788f41e99f1a5e`에서 반입
 - Exact C++ kernel 1,777.699800 ms, FPGA active-core 3,601,290 cycles/36.012900 ms, speedup 49.362861641×
 - UART-paced raw counter 187,144.750920 ms는 transport diagnostic이며 integrated-system compute timing은 NOT_MEASURED
-- Pure RTL 1 MHz 0.099 W는 vectorless power-only, Pure RTL 100 MHz real-ECG burst-SAIF accelerator+static/hierarchy dynamic/static 0.149500/0.052500/0.097000 W와 system 0.271 W는 ESTIMATED, 100 MHz allocated-total/active-dynamic energy 0.005383928550/0.001890677250 J는 DERIVED_ESTIMATE; system energy와 physical board input power는 NOT_MEASURED
+- Pure RTL 1 MHz 0.099 W는 vectorless power-only, Pure RTL 100 MHz real-ECG burst-SAIF accelerator+static/hierarchy dynamic/static 0.149500/0.052500/0.097000 W와 system 0.271 W는 ESTIMATED, 100 MHz allocated-total/active-dynamic energy 0.005383928550/0.001890677250 J는 DERIVED_ESTIMATE, 완전 power-gating 가정의 30분 평균 연산 코어 전력 2.991071 µW는 DERIVED UPPER_BOUND_ASSUMPTION; system energy와 physical board input power는 NOT_MEASURED
 
 ## Vivado 물리 구현 그림 보강
 

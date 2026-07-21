@@ -42,14 +42,14 @@ FPGA active-core는 `profile_total-profile_input_wait=3,601,290 cycles`이며 Ex
 - MicroBlaze integrated system: 0.271 W, ESTIMATED
 - Pure RTL 100 MHz allocated total energy: 0.005383928550 J/decision, DERIVED_ESTIMATE
 - Pure RTL 100 MHz active dynamic energy: 0.001890677250 J/decision, DERIVED_ESTIMATE
+- 30분 주기 완전 power-gating 가정의 연산 코어 평균전력: 2.991071 µW, DERIVED UPPER_BOUND_ASSUMPTION
 - 1 MHz 0.099 W는 100 MHz active latency와 결합하지 않음, NOT_DERIVED_CLOCK_MISMATCH
 - Integrated-system energy: NOT_MEASURED
 - Physical board input power/energy: NOT_MEASURED
 
 1 MHz Pure RTL과 integrated system은 Vivado 2020.2 `xc7a100tcsg324-1`의 Medium-confidence
 vectorless estimate다. 100 MHz 가속기 대표값은 실제 ECG SAIF 기반이지만 routed-net match가 약
-12%라서 미매칭 net에는 vectorless propagation이 남는다. Pure RTL과 MicroBlaze/BRAM/AXI/UART/feeder를
-포함한 integrated-system scope를 섞지 않는다. 물리 보드 rail 전력과 ASIC post-layout PPA도 별도 미측정·미완료 항목이다.
+12%라서 미매칭 net에는 vectorless propagation이 남는다. 2.991071 µW는 5.383929 mJ를 1,800초로 나눈 값으로 계산 근거는 명확하지만, 유휴 정적전력을 완전히 제거하는 가정이며 입력 메모리·상태 유지·전원 제어·기동·누설과 나머지 wearable 부품 전력을 제외한다. Pure RTL과 MicroBlaze/BRAM/AXI/UART/feeder를 포함한 integrated-system scope를 섞지 않는다. 물리 보드 rail 전력과 ASIC post-layout PPA도 별도 미측정·미완료 항목이다.
 
 ## 선별 반입 파일
 

@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 708
+- Rules checked: 711
 - Conflicts found: 0
 - Benchmark import: PASS (counter-derived active-core timing and Vivado-estimated power)
 
@@ -528,6 +528,8 @@
 - PASS — metric evidence exists: pure_rtl_100mhz_device_static_power
 - PASS — metric evidence exists: pure_rtl_1ksps_estimated_power
 - PASS — metric evidence exists: pure_rtl_clock_enable_coverage
+- PASS — metric evidence exists: pure_rtl_ideal_power_gated_average
+- PASS — metric evidence exists: pure_rtl_dynamic_duty_cycled_average
 - PASS — metric evidence exists: pure_rtl_1mhz_estimated_power
 - PASS — metric evidence exists: microblaze_system_estimated_power
 - PASS — metric evidence exists: pure_rtl_power_reroute_lut
@@ -641,6 +643,7 @@
 - PASS — claim evidence exists: CLM-050
 - PASS — claim evidence exists: CLM-051
 - PASS — claim evidence exists: CLM-052
+- PASS — claim evidence exists: CLM-053
 - PASS — CLM-023 registered safe
 - PASS — CLM-023 direct RTL evidence
 - PASS — CLM-048 timing history registered

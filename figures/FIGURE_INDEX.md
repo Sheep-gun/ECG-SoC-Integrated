@@ -2,6 +2,17 @@
 
 Generated integrated figures and immutable team-provided analog validation figures are indexed below. Generated source data: `figures/source/figure_data.json`; analog handoff hashes: `figures/source/team_handoff_analog/README.md`.
 
+## FIG-12b
+
+- File: `figures/final/FIG-12b_power_energy.png`
+- Owner: 양건(통합 편집)
+- Source files: `benchmarks/accelerator_benefit/power/results/activity_power_summary.json`, `benchmarks/accelerator_benefit/power/results/wearable_power_budget.csv`, `benchmarks/accelerator_benefit/results/board_timing_summary.json`
+- Source commits: d44e67517650f1f95ca67b93c2788f41e99f1a5e
+- Generator: `tools/generate_power_possibility_figure.py`
+- Caption: 실제 ECG SAIF 기반 FPGA 동작전력과 30분 주기 완전 power-gating 가정의 연산 코어 평균전력
+- Evidence scope: Vivado-estimated 100 MHz accelerator power, counter-derived active energy and an idealized compute-core average
+- Limitations: 2.991071 µW is not current FPGA or product power; memory, retention, isolation, switching, wake, leakage, AFE, ADC, MCU, BLE and PMIC are excluded
+
 ## FIG-01
 
 - File: `figures/final/FIG-01_long_window_motivation.svg`
