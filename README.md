@@ -75,7 +75,8 @@ Validation 32/32는 final claim이 아니라 locked candidate를 고르는 model
 |---|---:|
 | Locked full-top XSim final_test | final_pred mismatch 0, final_mem mismatch 0 over 36 cases |
 | Pure RTL Vivado | LUT 9719, FF 5038, BRAM 0, DSP 0, WNS 8.184 ns |
-| Pure RTL estimated power | 0.099 W |
+| Pure RTL estimated power, 1 MHz core | 0.099 W (legacy low-frequency vectorless estimate) |
+| Pure RTL estimated power, direct 100 MHz core | 0.183 W total / 0.085 W dynamic / 0.097 W static; WNS 0.035 ns |
 | MicroBlaze full replay system | LUT 12494, FF 8494, BRAM 16, DSP 3, setup WNS 0.097 ns |
 | IP packaging | AXI accelerator IP + MMIO-to-AXIS sample feeder IP-XACT |
 | Board replay | strict final_test 36-case full-record batch, final_pred 36/36, final_mem exact 36/36 |

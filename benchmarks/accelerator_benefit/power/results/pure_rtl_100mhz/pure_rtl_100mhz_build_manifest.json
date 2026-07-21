@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "vivado_exit_code": 0,
+  "completed_at_local": "2026-07-21T21:07:42+09:00",
+  "command": "vivado.bat -mode batch -source benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl",
+  "vivado_version": "2020.2",
+  "part": "xc7a100tcsg324-1",
+  "top": "snn_ecg_v2_nexys_a7_100mhz_top",
+  "implementation_status": "route_design Complete!",
+  "timing_status": "MET",
+  "wns_ns": 0.035,
+  "core_clock_mhz": 100.0,
+  "clock_configuration": "Direct 100 MHz board clock; no generated or divided accelerator core clock",
+  "activity_method": "Post-implementation vectorless Vivado power estimate; no SAIF/VCD",
+  "confidence": "Medium",
+  "power_warning": "Vivado Power 33-332 reported excessive asserted activity on high-fanout reset nets; vectorless activity may therefore be inaccurate and is not workload-based.",
+  "source": {
+    "path": "benchmarks/accelerator_benefit/power/sources/snn_ecg_v2_nexys_a7_100mhz_top.v",
+    "sha256": "4055561e0b7d0ce81783bffd214a9509785b4f7630c90aad6abb88fecfe74aa9"
+  },
+  "constraint": {
+    "path": "benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc",
+    "sha256": "b3e523b2be1ecf187c279f6ac41944b84d2099ad65946133e6759e77848ef457"
+  },
+  "script": {
+    "path": "benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl",
+    "sha256": "9f5194d204ca61d473d2a24883caee71e6c444f6e6207a08c8e58fd7ed91101a"
+  },
+  "reports": {
+    "power": {
+      "path": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_power_post_route.rpt",
+      "sha256": "a893ecaf2d5e42ae8cb92b2d889c56ae2d67c7fe9434ffee7b09a7777540fe45"
+    },
+    "timing": {
+      "path": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_timing_post_route.rpt",
+      "sha256": "810a55c7e2959cbd15656f7001c82d2589b96aa5c4d38156da9f33279676765f"
+    },
+    "utilization": {
+      "path": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_utilization_post_route.rpt",
+      "sha256": "8f05f7cd83c3a51d037e941990145b7476b312e6a021912d2362263f0a2ab815"
+    },
+    "environment": {
+      "path": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_environment.txt",
+      "sha256": "9219eaeeee39f34d04e3308b8ee452391ad6f51b163d342ae1e2d2863fb4f9d9"
+    }
+  },
+  "routed_checkpoint_sha256": "8024841673042cd185e1cabe25cf92816a1831e0a95e46f42f6602965456eeae"
+}

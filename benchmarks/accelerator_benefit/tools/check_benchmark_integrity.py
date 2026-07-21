@@ -134,13 +134,27 @@ def main() -> int:
         failures.append("UART-paced interval incorrectly used for speedup or energy")
 
     power = read_csv(RESULTS / "power_energy_summary.csv")
+    power_by_name = {row["implementation"]: row for row in power}
+    legacy_power = power_by_name.get("Pure RTL accelerator, 1 MHz core", {})
+    if (
+        legacy_power.get("core_clock_mhz") != "1.000000"
+        or legacy_power.get("power_w") != "0.099000"
+        or legacy_power.get("energy_per_decision_j") != "NOT_DERIVED"
+        or legacy_power.get("energy_class") != "NOT_DERIVED_CLOCK_MISMATCH"
+    ):
+        failures.append("1 MHz Pure RTL power is missing or incorrectly combined with 100 MHz latency")
+    matched_power = power_by_name.get("Pure RTL accelerator, 100 MHz core", {})
+    if (
+        matched_power.get("core_clock_mhz") != "100.000000"
+        or matched_power.get("power_w") != "0.183000"
+        or matched_power.get("dynamic_power_w") != "0.085000"
+        or matched_power.get("device_static_power_w") != "0.097000"
+        or matched_power.get("energy_per_decision_j") != "0.006590360700"
+        or matched_power.get("active_dynamic_energy_per_decision_j") != "0.003061096500"
+        or matched_power.get("energy_class") != "DERIVED_ESTIMATE"
+    ):
+        failures.append("100 MHz Pure RTL power or clock-matched energy is invalid")
     for row in power:
-        if row["implementation"] == "Pure RTL accelerator" and (
-            row.get("power_class") != "ESTIMATED"
-            or row.get("energy_class") != "DERIVED"
-            or row.get("energy_per_decision_j") != "0.003565277100"
-        ):
-            failures.append("Pure RTL power or active energy mislabeled")
         if row["implementation"] == "MicroBlaze integrated FPGA system" and (
             row.get("power_class") != "ESTIMATED"
             or row.get("energy_class") != "NOT_MEASURED"
@@ -259,7 +273,7 @@ def main() -> int:
     if power_summary.get("physical_board_power_measured") is not False:
         failures.append("physical board power incorrectly marked measured")
     scopes = power_summary.get("scopes", {})
-    if set(scopes) != {"pure_rtl", "microblaze_system"}:
+    if set(scopes) != {"pure_rtl_1mhz", "pure_rtl_100mhz", "microblaze_system"}:
         failures.append("power summary scopes invalid")
     for name, scope in scopes.items():
         report = REPO / scope.get("raw_power_report", "")
@@ -270,8 +284,62 @@ def main() -> int:
             or not report.exists()
             or digest(report) != scope.get("raw_power_report_sha256")
             or "vectorless" not in scope.get("activity_source", "").lower()
+            or scope.get("timing", {}).get("status") != "MET"
         ):
             failures.append(f"{name}: power report evidence invalid")
+    if (
+        scopes.get("pure_rtl_1mhz", {}).get("core_clock_frequency_mhz") != 1.0
+        or scopes.get("pure_rtl_1mhz", {}).get("total_on_chip_power_w") != 0.099
+    ):
+        failures.append("1 MHz Pure RTL operating point invalid")
+    pure_100 = scopes.get("pure_rtl_100mhz", {})
+    if (
+        pure_100.get("core_clock_frequency_mhz") != 100.0
+        or pure_100.get("total_on_chip_power_w") != 0.183
+        or pure_100.get("dynamic_power_w") != 0.085
+        or pure_100.get("device_static_power_w") != 0.097
+        or pure_100.get("utilization") != {"lut": 9759, "flip_flop": 5049, "bram_tile": 0, "dsp": 0}
+        or pure_100.get("timing", {}).get("wns_ns") != 0.035
+    ):
+        failures.append("100 MHz Pure RTL implementation metrics invalid")
+    for artifact_key, hash_key in [
+        ("utilization_report", "utilization_report_sha256"),
+        ("timing_report", "timing_report_sha256"),
+        ("environment_record", "environment_record_sha256"),
+        ("build_manifest", "build_manifest_sha256"),
+    ]:
+        artifact = REPO / pure_100.get(artifact_key, "")
+        if not artifact.exists() or digest(artifact) != pure_100.get(hash_key):
+            failures.append(f"100 MHz Pure RTL {artifact_key} hash mismatch")
+    build_manifest_path = REPO / pure_100.get("build_manifest", "")
+    if build_manifest_path.exists():
+        build_manifest = json.loads(build_manifest_path.read_text(encoding="utf-8"))
+        if (
+            build_manifest.get("status") != "COMPLETED"
+            or build_manifest.get("vivado_exit_code") != 0
+            or build_manifest.get("timing_status") != "MET"
+            or build_manifest.get("wns_ns") != 0.035
+            or build_manifest.get("core_clock_mhz") != 100.0
+        ):
+            failures.append("100 MHz Pure RTL build manifest status invalid")
+        artifact_entries = [build_manifest.get("source", {}), build_manifest.get("constraint", {}), build_manifest.get("script", {})]
+        artifact_entries.extend(build_manifest.get("reports", {}).values())
+        for entry in artifact_entries:
+            artifact = REPO / entry.get("path", "")
+            if not artifact.exists() or digest(artifact) != entry.get("sha256"):
+                failures.append(f"100 MHz build-manifest artifact hash mismatch: {entry.get('path')}")
+
+    invalid_mixed_energy = "0.003565277"
+    for relative in [
+        "benchmarks/accelerator_benefit/README.md",
+        "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md",
+        "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md",
+        "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md",
+        "benchmarks/accelerator_benefit/results/power_energy_summary.csv",
+        "benchmarks/accelerator_benefit/results/accelerator_benefit_summary.csv",
+    ]:
+        if invalid_mixed_energy in (REPO / relative).read_text(encoding="utf-8"):
+            failures.append(f"mixed-clock energy remains in final artifact: {relative}")
 
     cpu_env = json.loads((RESULTS / "cpu_environment.json").read_text(encoding="utf-8"))
     cpu_rows = read_csv(RESULTS / "cpu_python_kernel_runs.csv")

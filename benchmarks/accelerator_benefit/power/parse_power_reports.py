@@ -19,14 +19,28 @@ SUMMARY_JSON = RESULTS / "power_summary.json"
 SUMMARY_CSV = RESULTS / "power_summary.csv"
 
 SCOPES = {
-    "pure_rtl": {
-        "label": "Pure RTL accelerator",
+    "pure_rtl_1mhz": {
+        "label": "Pure RTL accelerator, 1 MHz core",
         "directory": RESULTS / "pure_rtl",
         "power": "pure_rtl_power_post_route.rpt",
         "utilization": "pure_rtl_utilization_post_route.rpt",
         "timing": "pure_rtl_timing_post_route.rpt",
         "environment": "pure_rtl_environment.txt",
         "checkpoint": POWER / "work" / "pure_rtl" / "pure_rtl_routed.dcp",
+        "core_clock_frequency_mhz": 1.0,
+        "clock_configuration": "100 MHz board input divided by 100 to a 1 MHz generated accelerator core clock",
+    },
+    "pure_rtl_100mhz": {
+        "label": "Pure RTL accelerator, direct 100 MHz core",
+        "directory": RESULTS / "pure_rtl_100mhz",
+        "power": "pure_rtl_100mhz_power_post_route.rpt",
+        "utilization": "pure_rtl_100mhz_utilization_post_route.rpt",
+        "timing": "pure_rtl_100mhz_timing_post_route.rpt",
+        "environment": "pure_rtl_100mhz_environment.txt",
+        "checkpoint": POWER / "work" / "pure_rtl_100mhz" / "pure_rtl_100mhz_routed.dcp",
+        "build_manifest": "pure_rtl_100mhz_build_manifest.json",
+        "core_clock_frequency_mhz": 100.0,
+        "clock_configuration": "Direct 100 MHz board clock; no generated or divided accelerator core clock",
     },
     "microblaze_system": {
         "label": "MicroBlaze full-replay integrated FPGA system",
@@ -36,6 +50,8 @@ SCOPES = {
         "timing": "system_timing_post_route.rpt",
         "environment": "system_environment.txt",
         "checkpoint": POWER / "work" / "microblaze_system" / "microblaze_system_routed.dcp",
+        "core_clock_frequency_mhz": 100.0,
+        "clock_configuration": "MicroBlaze full-replay system and accelerator use the constrained 100 MHz system clock",
     },
 }
 
@@ -132,11 +148,20 @@ def parse_scope(scope: str, config: dict[str, Any]) -> dict[str, Any]:
     timing_text = timing_path.read_text(encoding="utf-8", errors="replace")
     environment = read_environment(env_path)
     checkpoint = Path(config["checkpoint"])
+    build_manifest = directory / config["build_manifest"] if config.get("build_manifest") else None
 
     simulation_activity = required(r"\| Simulation Activity File\s*\|\s*([^|]+)", power_text, "simulation activity file")
     confidence = optional(r"\| Overall confidence level\s*\|\s*([^|]+)", power_text)
     if confidence is None:
         confidence = required(r"\| Confidence Level\s*\|\s*([^|]+)", power_text, "confidence")
+
+    timing = parse_timing(timing_text)
+    if environment.get("timing_status"):
+        timing["status"] = environment["timing_status"]
+    elif timing["wns_ns"] is not None:
+        timing["status"] = "MET" if timing["wns_ns"] >= 0 else "FAILED"
+    else:
+        timing["status"] = "UNKNOWN"
 
     return {
         "scope": scope,
@@ -148,6 +173,8 @@ def parse_scope(scope: str, config: dict[str, Any]) -> dict[str, Any]:
         "design_top": required(r"\| Design\s*:\s*(.+)", power_text, "design top"),
         "implementation_status": required(r"\| Design State\s*:\s*(.+)", power_text, "design state"),
         "clocks": environment["clocks"],
+        "core_clock_frequency_mhz": config["core_clock_frequency_mhz"],
+        "clock_configuration": config["clock_configuration"],
         "total_on_chip_power_w": float(required(r"\| Total On-Chip Power \(W\)\s*\|\s*([0-9.]+)", power_text, "total power")),
         "dynamic_power_w": float(required(r"\| Dynamic \(W\)\s*\|\s*([0-9.]+)", power_text, "dynamic power")),
         "device_static_power_w": float(required(r"\| Device Static \(W\)\s*\|\s*([0-9.]+)", power_text, "static power")),
@@ -160,7 +187,7 @@ def parse_scope(scope: str, config: dict[str, Any]) -> dict[str, Any]:
         "clock_activity": "User-constrained clocks; frequencies listed in clocks; no SAIF/VCD",
         "constraint": portable_path(environment.get("constraint")),
         "utilization": parse_utilization(util_text),
-        "timing": parse_timing(timing_text),
+        "timing": timing,
         "raw_power_report": rel(power_path),
         "raw_power_report_sha256": sha256(power_path),
         "utilization_report": rel(util_path),
@@ -169,6 +196,8 @@ def parse_scope(scope: str, config: dict[str, Any]) -> dict[str, Any]:
         "timing_report_sha256": sha256(timing_path),
         "environment_record": rel(env_path),
         "environment_record_sha256": sha256(env_path),
+        "build_manifest": rel(build_manifest) if build_manifest and build_manifest.exists() else None,
+        "build_manifest_sha256": sha256(build_manifest) if build_manifest and build_manifest.exists() else None,
         "routed_checkpoint": rel(checkpoint) if checkpoint.exists() else None,
         "routed_checkpoint_sha256": sha256(checkpoint) if checkpoint.exists() else None,
     }
@@ -189,11 +218,11 @@ def main() -> int:
 
     fields = [
         "scope", "label", "evidence_class", "estimate_description", "vivado_version",
-        "fpga_part", "design_top", "implementation_status", "clock_frequency_mhz",
+        "fpga_part", "design_top", "implementation_status", "core_clock_frequency_mhz", "clock_configuration", "clock_frequency_mhz",
         "total_on_chip_power_w", "dynamic_power_w", "device_static_power_w", "power_unit",
         "power_estimation_confidence", "junction_temperature_c", "activity_source",
         "simulation_activity_file", "signal_toggle_rate_assumption", "clock_activity", "constraint",
-        "raw_power_report", "raw_power_report_sha256", "routed_checkpoint_sha256",
+        "raw_power_report", "raw_power_report_sha256", "build_manifest", "build_manifest_sha256", "routed_checkpoint_sha256",
     ]
     with SUMMARY_CSV.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")

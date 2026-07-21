@@ -1,0 +1,11 @@
+VIVADO_VERSION=2020.2
+PART=xc7a100tcsg324-1
+TOP=snn_ecg_v2_nexys_a7_100mhz_top
+IMPLEMENTATION_STATUS=route_design Complete!
+TIMING_STATUS=MET
+WNS_NS=0.035
+CONSTRAINT=C:/Users/YangGeon/SNN ECG Classifier/benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc
+CORE_CLOCK_CONFIGURATION=Direct 100 MHz board clock; no generated or divided core clock
+ACTIVITY_SOURCE=Post-implementation vectorless Vivado power estimate; no SAIF/VCD
+SWITCHING_ACTIVITY=Vivado default vectorless propagation and default toggle-rate assumptions
+CLOCK=core_clk_100mhz PERIOD_NS=10.000

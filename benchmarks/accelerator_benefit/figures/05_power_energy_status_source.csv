@@ -1,6 +1,8 @@
 label,value,status
-Pure RTL power,0.099 W ESTIMATED,ESTIMATED
-Pure RTL active energy,0.003565 J DERIVED,DERIVED
+Pure RTL 1 MHz power,0.099 W ESTIMATED,ESTIMATED
+Pure RTL 100 MHz power,0.183 W ESTIMATED,ESTIMATED
+100 MHz total active energy,0.006590361 J DERIVED,DERIVED
+100 MHz dynamic active energy,0.003061097 J DERIVED,DERIVED
 Integrated system power,0.271 W ESTIMATED,ESTIMATED
 Integrated system energy,NOT MEASURED,N/A
 Physical board,NOT MEASURED,N/A

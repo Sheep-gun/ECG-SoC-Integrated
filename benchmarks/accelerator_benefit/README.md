@@ -18,6 +18,8 @@ This directory is the reproducible board-performance and Vivado-power package fo
 Regenerate and verify:
 
 ```powershell
+vivado -mode batch -source benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+python benchmarks/accelerator_benefit/power/parse_power_reports.py
 python benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py
 python benchmarks/accelerator_benefit/tools/check_benchmark_integrity.py
 ```
@@ -26,4 +28,6 @@ The benchmark-scoped Python clock model and the board match the locked Golden re
 
 Only the hand-written single-thread transaction-level **Exact C++** implementation is the native CPU inference baseline: 36/36 final predictions, 144/144 final membranes, and 1,080/1,080 Snapshot boundaries match; its measured 360-run kernel median is 1777.699800 ms. Dividing this by the hardware-counter-derived FPGA active-core latency gives 49.362862x. Historical 54.0126 ms/32.912687x values include the canonical sample gap and are not used as active-core performance.
 
-The UART-paced raw counter interval is retained only as a transport diagnostic. Integrated-system compute latency, speedup, and energy are not inferred from it; those require preloaded input plus an independent system timer. Vivado power is post-implementation vectorless ESTIMATED power, Pure RTL energy is DERIVED from that power and active-core latency, and physical board power remains unmeasured.
+The UART-paced raw counter interval is retained only as a transport diagnostic. Integrated-system compute latency, speedup, and energy are not inferred from it; those require preloaded input plus an independent system timer.
+
+Power operating points are separate. The retained 0.099 W result is the 1 MHz Pure RTL vectorless estimate and is not combined with the 100 MHz active latency. The direct-100-MHz Pure RTL route met timing at WNS 0.035 ns and produced 0.183 W total, 0.085 W dynamic, and 0.097 W device-static estimates. Only this 100 MHz power is combined with the 36.0129 ms active latency, giving 0.006590360700 J/decision total and 0.003061096500 J/decision active dynamic energy as DERIVED ESTIMATES. All power values are post-implementation vectorless Vivado estimates without SAIF/VCD; physical board power remains unmeasured.

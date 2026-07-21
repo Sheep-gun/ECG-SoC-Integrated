@@ -1,7 +1,7 @@
 item,category,bits,bytes,status,evidence,notes
 hypothetical_full_30min_raw_input,avoided_input_buffer,21600000,2700000,derived,1800000 samples * 12 bits,not instantiated
-pure_rtl_total_flip_flops,all_sequential_state_upper_bound,5045,630.625,post_implementation_reported,benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_utilization_post_route.rpt,"includes persistent, pipeline, control, and interface state; not exact inference memory"
-persistent_inference_state,persistent_state,<=5045,<=630.625,upper_bound,benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_utilization_post_route.rpt,exact post-synthesis category split unavailable
-pipeline_control_interface_state,nonpersistent_or_control,included_in_5045,included_in_630.625,not_separately_quantified,RTL declarations and post-route utilization,not misreported as inference memory
-BRAM,resource,0,0,post_implementation_reported,benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_utilization_post_route.rpt,pure RTL
-DSP,resource,N/A,N/A,post_implementation_reported,benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_utilization_post_route.rpt,0 DSP
+pure_rtl_total_flip_flops,all_sequential_state_upper_bound,5049,631.125,post_implementation_reported,benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_utilization_post_route.rpt,"includes persistent, pipeline, control, and interface state; not exact inference memory"
+persistent_inference_state,persistent_state,<=5049,<=631.125,upper_bound,benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_utilization_post_route.rpt,exact post-synthesis category split unavailable
+pipeline_control_interface_state,nonpersistent_or_control,included_in_5049,included_in_631.125,not_separately_quantified,RTL declarations and post-route utilization,not misreported as inference memory
+BRAM,resource,0,0,post_implementation_reported,benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_utilization_post_route.rpt,pure RTL
+DSP,resource,N/A,N/A,post_implementation_reported,benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_utilization_post_route.rpt,0 DSP

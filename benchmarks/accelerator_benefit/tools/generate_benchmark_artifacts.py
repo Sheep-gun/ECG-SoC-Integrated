@@ -89,8 +89,9 @@ def load_power_summary() -> dict[str, Any]:
         raise SystemExit(f"verified power summary missing: {POWER_SUMMARY_JSON}")
     power = json.loads(POWER_SUMMARY_JSON.read_text(encoding="utf-8"))
     scopes = power.get("scopes", {})
-    if set(scopes) != {"pure_rtl", "microblaze_system"}:
-        raise SystemExit("power summary must contain pure_rtl and microblaze_system scopes")
+    required_scopes = {"pure_rtl_1mhz", "pure_rtl_100mhz", "microblaze_system"}
+    if set(scopes) != required_scopes:
+        raise SystemExit(f"power summary must contain exactly {sorted(required_scopes)}")
     for name, scope in scopes.items():
         if scope.get("evidence_class") != "ESTIMATED":
             raise SystemExit(f"{name} power is not labeled ESTIMATED")
@@ -666,7 +667,8 @@ The transcripts contain accelerator profile values but no documented independent
 def generate_memory_power(rtl: dict[str, Any]) -> None:
     power = load_power_summary()
     board = load_board_timing()
-    pure = power["scopes"]["pure_rtl"]
+    pure = power["scopes"]["pure_rtl_100mhz"]
+    legacy_pure = power["scopes"]["pure_rtl_1mhz"]
     system = power["scopes"]["microblaze_system"]
     pure_util = pure["utilization"]
     memory = [
@@ -684,20 +686,24 @@ The accelerator updates state sample by sample and does not instantiate a 1,800,
 
 Pure RTL uses {pure_util['bram_tile']} BRAM and {pure_util['dsp']} DSP. The {pure_util['flip_flop']:,} post-route FFs provide a conservative {pure_util['flip_flop']:,}-bit ({pure_util['flip_flop'] / 8:.3f}-byte) upper bound on all sequential storage, but this is deliberately not called exact inference-state memory: it includes persistent inference state, pipeline registers, counters, control, and interface state. A per-category split is unavailable.
 """)
-    pure_energy = pure["total_on_chip_power_w"] * board["core_active_latency_ms"]["median"] / 1000
+    active_seconds = board["core_active_latency_ms"]["median"] / 1000
+    pure_energy = pure["total_on_chip_power_w"] * active_seconds
+    pure_dynamic_energy = pure["dynamic_power_w"] * active_seconds
     rows = [
-        {"implementation": "Pure RTL accelerator", "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": f"{pure_energy:.12f}", "energy_class": "DERIVED", "evidence_type": "Vivado-estimated power * hardware-counter-derived active core latency", "scope": "accelerator implementation estimate", "evidence_path": f"{pure['raw_power_report']}; {repo_rel(BOARD_TIMING_CSV)}"},
-        {"implementation": "MicroBlaze integrated FPGA system", "power_w": f"{system['total_on_chip_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": "NOT_MEASURED", "energy_class": "NOT_MEASURED", "evidence_type": "integrated compute latency unavailable; UART-paced counter is not used", "scope": "MicroBlaze, BRAM, AXI, UART, feeder, and accelerator", "evidence_path": system["raw_power_report"]},
-        {"implementation": "Physical FPGA board", "power_w": "NOT_MEASURED", "power_class": "NOT_MEASURED", "energy_per_decision_j": "NOT_MEASURED", "energy_class": "NOT_MEASURED", "evidence_type": "none; no external power meter", "scope": "board input power", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md"},
-        {"implementation": "CPU", "power_w": "N/A", "power_class": "N/A", "energy_per_decision_j": "N/A", "energy_class": "N/A", "evidence_type": "none", "scope": "CPU", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md"},
+        {"implementation": "Pure RTL accelerator, 1 MHz core", "core_clock_mhz": "1.000000", "power_w": f"{legacy_pure['total_on_chip_power_w']:.6f}", "dynamic_power_w": f"{legacy_pure['dynamic_power_w']:.6f}", "device_static_power_w": f"{legacy_pure['device_static_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": "NOT_DERIVED", "active_dynamic_energy_per_decision_j": "NOT_DERIVED", "energy_class": "NOT_DERIVED_CLOCK_MISMATCH", "evidence_type": "1 MHz vectorless power retained as a separate operating point; not combined with 100 MHz latency", "scope": "legacy low-frequency accelerator implementation estimate", "evidence_path": legacy_pure["raw_power_report"]},
+        {"implementation": "Pure RTL accelerator, 100 MHz core", "core_clock_mhz": "100.000000", "power_w": f"{pure['total_on_chip_power_w']:.6f}", "dynamic_power_w": f"{pure['dynamic_power_w']:.6f}", "device_static_power_w": f"{pure['device_static_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": f"{pure_energy:.12f}", "active_dynamic_energy_per_decision_j": f"{pure_dynamic_energy:.12f}", "energy_class": "DERIVED_ESTIMATE", "evidence_type": "100 MHz Vivado-estimated power * 100 MHz hardware-counter-derived active core latency", "scope": "performance-matched accelerator implementation estimate", "evidence_path": f"{pure['raw_power_report']}; {repo_rel(BOARD_TIMING_CSV)}"},
+        {"implementation": "MicroBlaze integrated FPGA system", "core_clock_mhz": "100.000000", "power_w": f"{system['total_on_chip_power_w']:.6f}", "dynamic_power_w": f"{system['dynamic_power_w']:.6f}", "device_static_power_w": f"{system['device_static_power_w']:.6f}", "power_class": "ESTIMATED", "energy_per_decision_j": "NOT_MEASURED", "active_dynamic_energy_per_decision_j": "NOT_MEASURED", "energy_class": "NOT_MEASURED", "evidence_type": "integrated compute latency unavailable; UART-paced counter is not used", "scope": "MicroBlaze, BRAM, AXI, UART, feeder, and accelerator", "evidence_path": system["raw_power_report"]},
+        {"implementation": "Physical FPGA board", "core_clock_mhz": "N/A", "power_w": "NOT_MEASURED", "dynamic_power_w": "NOT_MEASURED", "device_static_power_w": "NOT_MEASURED", "power_class": "NOT_MEASURED", "energy_per_decision_j": "NOT_MEASURED", "active_dynamic_energy_per_decision_j": "NOT_MEASURED", "energy_class": "NOT_MEASURED", "evidence_type": "none; no external power meter", "scope": "board input power", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md"},
+        {"implementation": "CPU", "core_clock_mhz": "N/A", "power_w": "N/A", "dynamic_power_w": "N/A", "device_static_power_w": "N/A", "power_class": "N/A", "energy_per_decision_j": "N/A", "active_dynamic_energy_per_decision_j": "N/A", "energy_class": "N/A", "evidence_type": "none", "scope": "CPU", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md"},
     ]
     write_csv(RESULTS / "power_energy_summary.csv", rows, list(rows[0]))
     write_text(REPORTS / "POWER_ENERGY_METHODOLOGY.md", f"""# Power and Energy Methodology
 
-- Pure RTL: {pure['total_on_chip_power_w']:.6f} W is a post-implementation vectorless Vivado estimate, not board-measured power. Derived energy is **estimated power x hardware-counter-derived active core latency**: {pure['total_on_chip_power_w']:.6f} W x {board['core_active_latency_ms']['median'] / 1000:.9f} s = {pure_energy:.12f} J/decision.
+- Legacy 1 MHz Pure RTL: {legacy_pure['total_on_chip_power_w']:.6f} W is retained as a separate low-frequency post-implementation vectorless estimate. It is not combined with the 100 MHz active-core latency, so no energy/decision is derived from it.
+- Performance-matched 100 MHz Pure RTL: total {pure['total_on_chip_power_w']:.6f} W, dynamic {pure['dynamic_power_w']:.6f} W, and device static {pure['device_static_power_w']:.6f} W are post-implementation vectorless Vivado estimates. Total energy is {pure['total_on_chip_power_w']:.6f} W x {active_seconds:.9f} s = {pure_energy:.12f} J/decision. Active dynamic energy is {pure['dynamic_power_w']:.6f} W x {active_seconds:.9f} s = {pure_dynamic_energy:.12f} J/decision.
 - The active core latency comes from `profile_total - profile_input_wait` in each board transcript. Both operands are MEASURED 100 MHz hardware counters; the subtraction is DERIVED. It retains internal stalls and snapshot/final-decision overhead.
 - Integrated system: {system['total_on_chip_power_w']:.6f} W is a separate post-implementation vectorless estimate for MicroBlaze, BRAM, AXI, UART, feeder, and accelerator. Integrated compute energy is **NOT_MEASURED/NOT DERIVED** because the current BIT has neither preloaded input nor an independent system timer. Multiplying this power by the UART-paced replay interval would measure transport waiting, not integrated compute energy.
-- Activity: no SAIF/VCD was supplied. Both results use Vivado default vectorless propagation and are explicitly labeled **Post-implementation vectorless Vivado power estimate**.
+- Activity: no SAIF/VCD was supplied. All three implementation scopes use Vivado default vectorless propagation and are explicitly labeled **Post-implementation vectorless Vivado power estimate**.
 - Physical board power was not measured because no external power meter was available. These values must not be described as board power or measured accelerator energy.
 - CPU: N/A because no RAPL/powercap or equivalent defensible counter is available.
 
@@ -708,7 +714,7 @@ Runtime alone is never converted into energy-efficiency speedup.
 def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None, native_cpp: dict[str, Any] | None) -> None:
     power = load_power_summary()
     board = load_board_timing()
-    pure = power["scopes"]["pure_rtl"]
+    pure = power["scopes"]["pure_rtl_100mhz"]
     system_power = power["scopes"]["microblaze_system"]
     exact_ms = native_cpp["kernel"]["all_run_latency_ms"]["median"] if native_cpp else None
     core_ms = board["core_active_latency_ms"]["median"]
@@ -742,8 +748,8 @@ def generate_comparison(rtl: dict[str, Any], python: dict[str, Any] | None, cpp:
         *native_rows,
         ({"implementation": "Verilator-generated RTL simulation", "measurement_scope": "host runtime of generated cycle-accurate RTL model", "status": "MEASURED_NOW", "evidence_type": "host steady-clock simulation timing after exact 36/36 equivalence", "sample_count": 1_800_000, "latency_ms_median": f"{cpp['per_case_median_latency_ms']['median']:.6f}", "latency_ms_mean": f"{cpp['per_case_median_latency_ms']['mean']:.6f}", "latency_ms_std": f"{cpp['per_case_median_latency_ms']['std']:.6f}", "throughput_samples_per_s": f"{cpp['throughput_samples_per_s_median']:.6f}", "realtime_margin_vs_1ksps": f"{cpp['throughput_samples_per_s_median'] / 1000:.6f}", "speedup_vs_python_kernel": "N/A", "power_w": "N/A", "power_evidence": "N/A", "energy_per_decision_j": "N/A", "energy_evidence": "N/A", "LUT": "N/A", "FF": "N/A", "BRAM": "N/A", "DSP": "N/A", "full_input_buffer_required": "yes", "output_equivalence": "36/36 pred; 36/36 mem", "evidence_path": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_summary.json", "notes": "Verilator-generated RTL simulation/verification runtime; explicitly not the Exact C++ native CPU baseline"} if cpp else
          {"implementation": "C/C++ integer kernel", "measurement_scope": "loaded samples to final result", "status": "NOT_COMPLETED", "evidence_type": "blocker", **na_cpu, "evidence_path": "benchmarks/accelerator_benefit/reports/CPP_BASELINE_NOT_COMPLETED.md", "notes": "Approximate translation forbidden"}),
-        {"implementation": "Pure RTL XSim active-cycle cross-check", "measurement_scope": "prof_total minus prof_input_wait", "status": "DERIVED", "evidence_type": "validated RTL counter subtraction", "sample_count": 1_800_000, "latency_ms_median": f"{rtl['active_total_latency_ms']['median']:.9f}", "latency_ms_mean": f"{rtl['active_total_latency_ms']['mean']:.9f}", "latency_ms_std": f"{rtl['active_total_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{rtl['active_throughput_samples_per_s']:.6f}", "realtime_margin_vs_1ksps": f"{rtl['active_realtime_margin_vs_1ksps']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / rtl['active_total_latency_ms']['median']:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / rtl['active_total_latency_ms']['median']:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * rtl['active_total_latency_ms']['median'] / 1000:.12f}", "energy_evidence": "DERIVED estimated power * XSim active-cycle latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "no", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"benchmarks/accelerator_benefit/results/rtl_cycle_benchmark.csv; {pure['raw_power_report']}", "notes": "Exactly matches the board active-cycle difference in 36/36 cases"},
-        {"implementation": "FPGA board accelerator active-cycle latency", "measurement_scope": "profile_total minus profile_input_wait", "status": "DERIVED", "evidence_type": "difference of two MEASURED 100 MHz FPGA hardware counters", "sample_count": 1_800_000, "latency_ms_median": f"{core_ms:.9f}", "latency_ms_mean": f"{board['core_active_latency_ms']['mean']:.9f}", "latency_ms_std": f"{board['core_active_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{board['core_active_throughput_samples_per_s']['median']:.6f}", "realtime_margin_vs_1ksps": f"{board['core_active_realtime_margin_vs_1ksps']['median']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / core_ms:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / core_ms:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * core_ms / 1000:.12f}", "energy_evidence": "DERIVED estimated Pure RTL power * hardware-counter-derived active latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "host streamed; input-wait subtracted", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {pure['raw_power_report']}", "notes": "Retains internal stalls, snapshot/final-decision work, and 1320 non-RUN control cycles; XSim match 36/36"},
+        {"implementation": "Pure RTL XSim active-cycle cross-check", "measurement_scope": "prof_total minus prof_input_wait", "status": "DERIVED", "evidence_type": "validated RTL counter subtraction", "sample_count": 1_800_000, "latency_ms_median": f"{rtl['active_total_latency_ms']['median']:.9f}", "latency_ms_mean": f"{rtl['active_total_latency_ms']['mean']:.9f}", "latency_ms_std": f"{rtl['active_total_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{rtl['active_throughput_samples_per_s']:.6f}", "realtime_margin_vs_1ksps": f"{rtl['active_realtime_margin_vs_1ksps']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / rtl['active_total_latency_ms']['median']:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / rtl['active_total_latency_ms']['median']:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED 100 MHz post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * rtl['active_total_latency_ms']['median'] / 1000:.12f}", "energy_evidence": "DERIVED matching 100 MHz estimated power * XSim active-cycle latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "no", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"benchmarks/accelerator_benefit/results/rtl_cycle_benchmark.csv; {pure['raw_power_report']}", "notes": "100 MHz power and latency operating points match; active cycles match the board in 36/36 cases"},
+        {"implementation": "FPGA board accelerator active-cycle latency", "measurement_scope": "profile_total minus profile_input_wait", "status": "DERIVED", "evidence_type": "difference of two MEASURED 100 MHz FPGA hardware counters", "sample_count": 1_800_000, "latency_ms_median": f"{core_ms:.9f}", "latency_ms_mean": f"{board['core_active_latency_ms']['mean']:.9f}", "latency_ms_std": f"{board['core_active_latency_ms']['std']:.9f}", "throughput_samples_per_s": f"{board['core_active_throughput_samples_per_s']['median']:.6f}", "realtime_margin_vs_1ksps": f"{board['core_active_realtime_margin_vs_1ksps']['median']:.6f}", "speedup_vs_python_kernel": (f"{py_kernel_ms / core_ms:.6f}" if py_kernel_ms else "N/A"), "speedup_vs_exact_cpp_kernel": (f"{exact_ms / core_ms:.6f}" if exact_ms else "N/A"), "power_w": f"{pure['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED 100 MHz post-implementation vectorless Vivado", "energy_per_decision_j": f"{pure['total_on_chip_power_w'] * core_ms / 1000:.12f}", "energy_evidence": "DERIVED matching 100 MHz estimated Pure RTL power * 100 MHz counter-derived active latency", "LUT": pure["utilization"]["lut"], "FF": pure["utilization"]["flip_flop"], "BRAM": pure["utilization"]["bram_tile"], "DSP": pure["utilization"]["dsp"], "full_input_buffer_required": "host streamed; input-wait subtracted", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {pure['raw_power_report']}", "notes": "Retains internal stalls, snapshot/final-decision work, and 1320 non-RUN control cycles; XSim match 36/36"},
         {"implementation": "FPGA board UART-paced transaction diagnostic", "measurement_scope": "raw start-to-final-decision counter including input starvation", "status": "MEASURED", "evidence_type": "100 MHz FPGA hardware counter parsed from UART", "sample_count": 1_800_000, "latency_ms_median": f"{uart_interval_ms:.9f}", "latency_ms_mean": f"{board['uart_paced_transaction_counter_interval_ms']['mean']:.9f}", "latency_ms_std": f"{board['uart_paced_transaction_counter_interval_ms']['std']:.9f}", "throughput_samples_per_s": f"{board['uart_paced_throughput_samples_per_s']['median']:.6f}", "realtime_margin_vs_1ksps": f"{board['uart_paced_realtime_margin_vs_1ksps']['median']:.6f}", "speedup_vs_python_kernel": "N/A", "speedup_vs_exact_cpp_kernel": "N/A", "power_w": f"{system_power['total_on_chip_power_w']:.6f}", "power_evidence": "ESTIMATED post-implementation vectorless Vivado", "energy_per_decision_j": "N/A", "energy_evidence": "N/A; transport-wait interval is not integrated compute latency", "LUT": system_power["utilization"]["lut"], "FF": system_power["utilization"]["flip_flop"], "BRAM": system_power["utilization"]["bram_tile"], "DSP": system_power["utilization"]["dsp"], "full_input_buffer_required": "host streamed", "output_equivalence": "36/36 pred; 144/144 mem", "evidence_path": f"{repo_rel(BOARD_TIMING_CSV)}; {system_power['raw_power_report']}", "notes": "Not used for accelerator or integrated-system speedup/energy; DDR preload plus independent timer is required"},
     ]
     for row in rows:
@@ -791,7 +797,8 @@ def figure(name: str, title: str, lines: list[str], boxes: list[tuple[str, str, 
 def generate_figures(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None, native_cpp: dict[str, Any] | None) -> None:
     power = load_power_summary()
     board = load_board_timing()
-    pure = power["scopes"]["pure_rtl"]
+    pure = power["scopes"]["pure_rtl_100mhz"]
+    legacy_pure = power["scopes"]["pure_rtl_1mhz"]
     system = power["scopes"]["microblaze_system"]
     core_ms = board["core_active_latency_ms"]["median"]
     uart_interval_ms = board["uart_paced_transaction_counter_interval_ms"]["median"]
@@ -810,8 +817,8 @@ def generate_figures(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: di
         ("02_throughput_realtime_margin", "FPGA active-core throughput and real-time margin", [("Active-core throughput", f"{board['core_active_throughput_samples_per_s']['median']:.3f} samples/s", "DERIVED"), ("Margin versus 1 kSPS", f"{board['core_active_realtime_margin_vs_1ksps']['median']:.3f}x", "DERIVED")], "Derived from measured total/input-wait counters; live final decision still needs 30 minutes."),
         ("03_resource_scope", "Post-route resource scope comparison", [("Pure RTL accelerator", f"{pure['utilization']['lut']} LUT / {pure['utilization']['flip_flop']} FF / {pure['utilization']['bram_tile']} BRAM / {pure['utilization']['dsp']} DSP", "DERIVED"), ("MicroBlaze replay system", f"{system['utilization']['lut']} LUT / {system['utilization']['flip_flop']} FF / {system['utilization']['bram_tile']} BRAM / {system['utilization']['dsp']} DSP", "DERIVED")], "Parsed from separate post-route utilization reports."),
         ("04_streaming_memory", "Streaming-memory benefit", [("Full raw window avoided", "2,700,000 bytes", "DERIVED"), ("All pure-RTL FF state upper bound", f"<={pure['utilization']['flip_flop'] / 8:.3f} bytes", "DERIVED")], "The FF upper bound includes pipeline, control, and interface state."),
-        ("05_power_energy_status", "Estimated power and derived energy", [("Pure RTL power", f"{pure['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Pure RTL active energy", f"{pure['total_on_chip_power_w'] * core_ms / 1000:.6f} J DERIVED", "DERIVED"), ("Integrated system power", f"{system['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Integrated system energy", "NOT MEASURED", "N/A"), ("Physical board", "NOT MEASURED", "N/A")], "System compute energy requires preloaded input and an independent timer; no external power meter."),
-        ("06_benchmark_scope_diagram", "Benchmark scopes remain separate", [("Exact C++ kernel", "MEASURED CPU", "MEASURED"), ("FPGA active cycles", "DERIVED from MEASURED counters", "DERIVED"), ("UART-paced interval", "TRANSPORT DIAGNOSTIC", "MEASURED"), ("Integrated compute latency", "NOT MEASURED", "N/A"), ("Vivado power", "ESTIMATED vectorless", "ESTIMATED")], "Pure RTL energy uses active-core latency; integrated energy remains unavailable."),
+        ("05_power_energy_status", "Clock-matched estimated power and energy", [("Pure RTL 1 MHz power", f"{legacy_pure['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Pure RTL 100 MHz power", f"{pure['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("100 MHz total active energy", f"{pure['total_on_chip_power_w'] * core_ms / 1000:.9f} J DERIVED", "DERIVED"), ("100 MHz dynamic active energy", f"{pure['dynamic_power_w'] * core_ms / 1000:.9f} J DERIVED", "DERIVED"), ("Integrated system power", f"{system['total_on_chip_power_w']:.3f} W ESTIMATED", "ESTIMATED"), ("Integrated system energy", "NOT MEASURED", "N/A"), ("Physical board", "NOT MEASURED", "N/A")], "Only 100 MHz Pure RTL power is combined with the 100 MHz active latency; no SAIF/VCD or external power meter."),
+        ("06_benchmark_scope_diagram", "Benchmark scopes remain separate", [("Exact C++ kernel", "MEASURED CPU", "MEASURED"), ("FPGA active cycles", "DERIVED from MEASURED counters", "DERIVED"), ("UART-paced interval", "TRANSPORT DIAGNOSTIC", "MEASURED"), ("Integrated compute latency", "NOT MEASURED", "N/A"), ("Vivado power", "ESTIMATED vectorless", "ESTIMATED")], "Only direct-100-MHz Pure RTL power is combined with 100 MHz active-core latency; integrated energy remains unavailable."),
         ("07_future_board_completion", "Board measurement completion", [("1. Program immutable BIT/ELF", "complete", "MEASURED"), ("2. Execute 36 streams", "36/36", "MEASURED"), ("3. Parse hardware counters", "complete", "MEASURED"), ("4. Regenerate reports", "complete", "DERIVED")], "Physical board power remains unmeasured."),
     ]
     index = ["# Figure Index", "", "| Figure | Source CSV | Scope | Evidence | Limitation |", "|---|---|---|---|---|"]
@@ -959,7 +966,7 @@ def _legacy_reports_unused(rtl: dict[str, Any], python: dict[str, Any] | None, c
     latency = rtl["total_latency_ms"]["median"]
     throughput = rtl["throughput_msamples_per_s"]
     margin = rtl["realtime_margin_vs_1ksps"]
-    pure_w = load_power_summary()["scopes"]["pure_rtl"]["total_on_chip_power_w"]
+    pure_w = load_power_summary()["scopes"]["pure_rtl_100mhz"]["total_on_chip_power_w"]
     energy = pure_w * latency / 1000
     cpp_kr = (f"Verilator-generated RTL simulation은 36/36 출력 동등성 검증 후 host runtime을 별도 측정했다. Per-case median의 중앙값은 {cpp['per_case_median_latency_ms']['median']:.6f} ms이다. 이는 Exact C++ native CPU baseline이 아니라 RTL simulation/verification runtime이다." if cpp else "Verilator RTL simulation timing은 완료되지 않았다.")
     cpp_en = (f"The Verilator-generated RTL simulation passed 36/36 output equivalence and its host runtime was measured separately. The median of per-case median latencies is {cpp['per_case_median_latency_ms']['median']:.6f} ms. This is an RTL simulation/verification runtime, not the Exact C++ native CPU baseline." if cpp else "The Verilator RTL simulation timing was not completed.")
@@ -1204,14 +1211,16 @@ Raw evidence is in `benchmarks/accelerator_benefit/board/future_run`. Use `--res
 def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, Any] | None, native_cpp: dict[str, Any] | None) -> None:
     board = load_board_timing()
     power = load_power_summary()
-    pure = power["scopes"]["pure_rtl"]
+    pure = power["scopes"]["pure_rtl_100mhz"]
+    legacy_pure = power["scopes"]["pure_rtl_1mhz"]
     system = power["scopes"]["microblaze_system"]
-    historical_pure = json.loads(FINAL_METRICS.read_text(encoding="utf-8-sig"))["pure_rtl_vivado"]
     exact_ms = native_cpp["kernel"]["all_run_latency_ms"]["median"] if native_cpp else float("nan")
     core = board["core_active_latency_ms"]
     uart_interval = board["uart_paced_transaction_counter_interval_ms"]
     core_speedup = exact_ms / core["median"]
     pure_energy = pure["total_on_chip_power_w"] * core["median"] / 1000
+    pure_dynamic_energy = pure["dynamic_power_w"] * core["median"] / 1000
+    legacy_pure_clocks = ", ".join(f"{item['name']} {item['frequency_mhz']:.3f} MHz" for item in legacy_pure["clocks"])
     pure_clocks = ", ".join(f"{item['name']} {item['frequency_mhz']:.3f} MHz" for item in pure["clocks"])
     system_clocks = ", ".join(f"{item['name']} {item['frequency_mhz']:.3f} MHz" for item in system["clocks"])
 
@@ -1230,9 +1239,11 @@ def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, A
 | Exact C++ 대비 core speedup | {core_speedup:.9f}x | CPU MEASURED / FPGA counter-derived, DERIVED |
 | UART-paced raw interval median | {uart_interval['median']:.6f} ms | transport diagnostic, MEASURED |
 | Integrated-system compute latency/speedup | 미측정 | DDR 사전 적재와 독립 timer 필요 |
-| Pure RTL power | {pure['total_on_chip_power_w']:.6f} W | Vivado post-implementation vectorless, ESTIMATED |
+| Pure RTL 1 MHz power | {legacy_pure['total_on_chip_power_w']:.6f} W | 저속 구성 Vivado post-implementation vectorless, ESTIMATED; energy 미산출 |
+| Pure RTL 100 MHz total / dynamic / static power | {pure['total_on_chip_power_w']:.6f} / {pure['dynamic_power_w']:.6f} / {pure['device_static_power_w']:.6f} W | 성능 대응 구성 Vivado post-implementation vectorless, ESTIMATED |
 | Integrated FPGA system power | {system['total_on_chip_power_w']:.6f} W | Vivado post-implementation vectorless, ESTIMATED |
-| Pure RTL energy/decision | {pure_energy:.9f} J | estimated power x measured core latency, DERIVED |
+| Pure RTL 100 MHz total energy/decision | {pure_energy:.12f} J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz active dynamic energy/decision | {pure_dynamic_energy:.12f} J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
 | Integrated system energy/decision | 미측정 | 유효한 integrated compute latency 없음 |
 | Board physical power | 미측정 | 외부 전력계 없음 |
 
@@ -1242,9 +1253,9 @@ def reports(rtl: dict[str, Any], python: dict[str, Any] | None, cpp: dict[str, A
 
 원시 `core_cycles/system_cycles` 구간은 입력 대기를 포함하므로 UART-paced transport diagnostic으로만 보존한다. 이를 integrated-system 속도나 energy로 사용하지 않는다. 진짜 통합 시스템 계측에는 ECG를 DDR2 등에 먼저 적재하고 독립 AXI Timer로 feeder 시작부터 최종 decision까지 측정해야 한다.
 
-Pure RTL 전력은 기존 {historical_pure['estimated_total_power_w']:.6f} W를 동일 RTL/part/clock으로 재현했다. 새 route 자원은 {pure['utilization']['lut']} LUT/{pure['utilization']['flip_flop']} FF로 과거 {historical_pure['lut']}/{historical_pure['ff']}와 소폭 다르며 route WNS도 새 보고서 값을 사용한다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
+기존 {legacy_pure['total_on_chip_power_w']:.6f} W는 `CORE_DIV_HALF=50`과 `core_clk_1mhz`를 사용한 1 MHz Pure RTL 저속 구성의 유효한 전력 추정치로 보존한다. 하지만 100 MHz active latency와 결합하지 않는다. 새 성능 대응 Pure RTL top은 분주기나 generated core clock 없이 가속기를 직접 100 MHz로 구동하며, route WNS {pure['timing']['wns_ns']:.3f} ns로 timing을 통과했다. 이 구성의 자원은 {pure['utilization']['lut']} LUT/{pure['utilization']['flip_flop']} FF/{pure['utilization']['bram_tile']} BRAM/{pure['utilization']['dsp']} DSP다. 종전 mixed-clock energy 계산은 최종 성능값에서 철회했다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
 
-두 전력값 모두 SAIF/VCD 없이 Vivado 기본 vectorless propagation을 사용한 **Post-implementation vectorless Vivado power estimate**다. confidence는 Pure RTL `{pure['power_estimation_confidence']}`, system `{system['power_estimation_confidence']}`이며 clock은 각각 {pure_clocks}; {system_clocks}다. 물리 보드 입력 전력과 가속기 실측 에너지는 측정하지 않았다.
+세 전력 범위 모두 SAIF/VCD 없이 Vivado 기본 vectorless propagation을 사용한 **Post-implementation vectorless Vivado power estimate**다. confidence는 1 MHz Pure RTL `{legacy_pure['power_estimation_confidence']}`, 100 MHz Pure RTL `{pure['power_estimation_confidence']}`, system `{system['power_estimation_confidence']}`이며 clock은 각각 {legacy_pure_clocks}; {pure_clocks}; {system_clocks}다. 물리 보드 입력 전력과 가속기 실측 에너지는 측정하지 않았다.
 """
     write_text(REPORTS / "ACCELERATOR_BENEFIT_KR.md", kr)
 
@@ -1263,9 +1274,11 @@ Raw firmware/schema retain the legacy `AFF` label; report-facing medical text us
 | Exact C++ / FPGA active-core speedup | {core_speedup:.9f}x | CPU MEASURED / FPGA counter-derived, DERIVED |
 | UART-paced raw interval median | {uart_interval['median']:.6f} ms | transport diagnostic, MEASURED |
 | Integrated-system compute latency/speedup | Not measured | requires preloaded input and independent timer |
-| Pure RTL power | {pure['total_on_chip_power_w']:.6f} W | post-implementation vectorless Vivado, ESTIMATED |
+| Pure RTL 1 MHz power | {legacy_pure['total_on_chip_power_w']:.6f} W | low-frequency post-implementation vectorless Vivado, ESTIMATED; no energy derived |
+| Pure RTL 100 MHz total / dynamic / static power | {pure['total_on_chip_power_w']:.6f} / {pure['dynamic_power_w']:.6f} / {pure['device_static_power_w']:.6f} W | performance-matched post-implementation vectorless Vivado, ESTIMATED |
 | Integrated FPGA system power | {system['total_on_chip_power_w']:.6f} W | post-implementation vectorless Vivado, ESTIMATED |
-| Pure RTL energy/decision | {pure_energy:.9f} J | estimated power x measured core latency, DERIVED |
+| Pure RTL 100 MHz total energy/decision | {pure_energy:.12f} J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz active dynamic energy/decision | {pure_dynamic_energy:.12f} J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
 | Integrated system energy/decision | Not measured | no valid integrated compute latency |
 | Physical board power | Not measured | no external power meter |
 
@@ -1275,7 +1288,9 @@ Although UART-paced raw intervals varied among cases, all 36 board differences w
 
 Raw `core_cycles/system_cycles` intervals are retained only as UART-paced transport diagnostics. They are not used for integrated-system speedup or energy. A valid integrated measurement requires preloading the ECG in DDR2 (or equivalent) and bracketing feeder start through final decision with an independent AXI Timer.
 
-Both power results are **Post-implementation vectorless Vivado power estimates** with no SAIF/VCD. Confidence is `{pure['power_estimation_confidence']}` for Pure RTL and `{system['power_estimation_confidence']}` for the integrated system. Physical board input power and measured accelerator energy were not obtained.
+The retained 0.099 W result is the valid 1 MHz Pure RTL low-frequency estimate and is not combined with the 100 MHz active latency. The direct-100-MHz Pure RTL route met timing with WNS {pure['timing']['wns_ns']:.3f} ns and provides the clock-matched power used for energy. The former mixed-clock energy calculation is withdrawn from final performance claims.
+
+All three power scopes are **Post-implementation vectorless Vivado power estimates** with no SAIF/VCD. Confidence is `{legacy_pure['power_estimation_confidence']}` for 1 MHz Pure RTL, `{pure['power_estimation_confidence']}` for 100 MHz Pure RTL, and `{system['power_estimation_confidence']}` for the integrated system. Physical board input power and measured accelerator energy were not obtained.
 """
     write_text(REPORTS / "ACCELERATOR_BENEFIT_EN.md", en)
 
@@ -1286,7 +1301,8 @@ Both power results are **Post-implementation vectorless Vivado power estimates**
 - Exact C++ is a single-thread hand-written transaction-level implementation with audited cadence compression; it is not a literal event-driven RTL simulation.
 - Historical 54.0126 ms/32.912687x values include canonical sample-gap cycles and are superseded for active-core performance by 36.0129 ms/49.362862x.
 - Integrated-system compute latency, speedup, and energy are not measured; DDR/preload plus an independent system timer is required.
-- Pure RTL and integrated MicroBlaze power are separate post-implementation vectorless Vivado estimates with Medium confidence and no SAIF/VCD.
+- The 1 MHz Pure RTL, direct-100-MHz Pure RTL, and integrated MicroBlaze power results are separate post-implementation vectorless Vivado estimates with Medium confidence and no SAIF/VCD.
+- The 1 MHz 0.099 W result must not be multiplied by the 100 MHz active-core latency; the former mixed-clock energy value is invalidated.
 - Physical board input power was not measured; no value is presented as board power or measured energy.
 - Pure RTL and integrated-system resource/power scopes are not directly equivalent.
 - Live ECG still requires a 30-minute observation window even though stored-data replay completes faster.
@@ -1296,12 +1312,14 @@ Both power results are **Post-implementation vectorless Vivado power estimates**
         {"claim_id": "C1", "claim": "Board matches Golden final predictions 36/36 and Final Membrane values 144/144.", "status": "SUPPORTED", "evidence_type": "MEASURED", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "functional equivalence, not 100% annotation accuracy"},
         {"claim_id": "C2", "claim": f"FPGA active-core median latency is {core['median']:.6f} ms from {board['core_active_cycles']['median']:.0f} cycles.", "status": "SUPPORTED", "evidence_type": "DERIVED from two MEASURED hardware counters", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "counter-semantics dependent; not host wall time"},
         {"claim_id": "C3", "claim": f"UART-paced raw transaction median is {uart_interval['median']:.6f} ms.", "status": "SUPPORTED_DIAGNOSTIC_ONLY", "evidence_type": "MEASURED", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "not accelerator or integrated-system compute latency"},
-        {"claim_id": "C4", "claim": f"Pure RTL post-implementation vectorless Vivado power is {pure['total_on_chip_power_w']:.6f} W.", "status": "SUPPORTED", "evidence_type": "ESTIMATED", "evidence_path": pure["raw_power_report"], "limitation": "not physical board power"},
+        {"claim_id": "C4", "claim": f"Direct-100-MHz Pure RTL post-implementation vectorless Vivado power is {pure['total_on_chip_power_w']:.6f} W.", "status": "SUPPORTED", "evidence_type": "ESTIMATED", "evidence_path": pure["raw_power_report"], "limitation": "not physical board power; no SAIF/VCD"},
         {"claim_id": "C5", "claim": f"Integrated-system post-implementation vectorless Vivado power is {system['total_on_chip_power_w']:.6f} W.", "status": "SUPPORTED", "evidence_type": "ESTIMATED", "evidence_path": system["raw_power_report"], "limitation": "not physical board power"},
         {"claim_id": "C6", "claim": "Physical board power was measured.", "status": "FORBIDDEN", "evidence_type": "none", "evidence_path": "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md", "limitation": "no external power meter"},
         {"claim_id": "C7", "claim": f"Exact C++ divided by FPGA active-core latency is {core_speedup:.9f}x.", "status": "SUPPORTED", "evidence_type": "DERIVED from CPU MEASURED and FPGA counter-derived latency", "evidence_path": repo_rel(BOARD_TIMING_CSV), "limitation": "core scope only; excludes integrated feeder/memory latency"},
-        {"claim_id": "C8", "claim": f"Pure RTL estimated energy is {pure_energy:.9f} J per decision.", "status": "SUPPORTED", "evidence_type": "DERIVED estimated power times counter-derived active latency", "evidence_path": "benchmarks/accelerator_benefit/results/power_energy_summary.csv", "limitation": "not measured energy or physical-board power"},
+        {"claim_id": "C8", "claim": f"Clock-matched 100 MHz Pure RTL estimated total energy is {pure_energy:.12f} J per decision.", "status": "SUPPORTED", "evidence_type": "DERIVED ESTIMATE from 100 MHz estimated power times 100 MHz counter-derived active latency", "evidence_path": "benchmarks/accelerator_benefit/results/power_energy_summary.csv", "limitation": "not measured energy or physical-board power"},
         {"claim_id": "C9", "claim": "Integrated-system compute latency, speedup, and energy were measured.", "status": "FORBIDDEN", "evidence_type": "none", "evidence_path": "benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md", "limitation": "requires preloaded input and independent timer"},
+        {"claim_id": "C10", "claim": f"The retained 1 MHz Pure RTL vectorless estimate is {legacy_pure['total_on_chip_power_w']:.6f} W.", "status": "SUPPORTED_POWER_ONLY", "evidence_type": "ESTIMATED", "evidence_path": legacy_pure["raw_power_report"], "limitation": "low-frequency operating point; not used with 100 MHz latency"},
+        {"claim_id": "C11", "claim": f"Clock-matched 100 MHz Pure RTL estimated active dynamic energy is {pure_dynamic_energy:.12f} J per decision.", "status": "SUPPORTED", "evidence_type": "DERIVED ESTIMATE from 100 MHz estimated dynamic power times 100 MHz counter-derived active latency", "evidence_path": "benchmarks/accelerator_benefit/results/power_energy_summary.csv", "limitation": "dynamic component only; not total energy or measured energy"},
     ]
     write_csv(REPORTS / "CLAIM_REGISTRY.csv", claims, list(claims[0]))
 
