@@ -2,7 +2,7 @@
 
 ## Result: PASS
 
-- Rules checked: 533
+- Rules checked: 600
 - Conflicts found: 0
 - Benchmark import: PASS (counter-derived active-core timing and Vivado-estimated power)
 
@@ -55,6 +55,10 @@
 - PASS — required path benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
 - PASS — required path benchmarks/accelerator_benefit/results/power_energy_summary.csv
 - PASS — required path benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
+- PASS — required path benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc
+- PASS — required path benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+- PASS — required path benchmarks/accelerator_benefit/power/sources/snn_ecg_v2_nexys_a7_100mhz_top.v
+- PASS — required path benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_build_manifest.json
 - PASS — required path figures/FIGURE_INDEX.md
 - PASS — required path figures/source/figure_data.json
 - PASS — required path figures/source/team_handoff_analog/README.md
@@ -298,33 +302,75 @@
 - PASS — path-redaction file exists: tools/publication_readiness_audit.py
 - PASS — path-redaction sanitized hash: tools/publication_readiness_audit.py
 - PASS — benchmark evidence commit exists
-- PASS — benchmark import manifest has 13 rows
+- PASS — benchmark import manifest has 17 rows
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/README.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/README.md
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/README.md
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/README.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/results/accelerator_benefit_summary.csv
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/board_timing_summary.json
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/board_timing_summary.json
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/board/board_timing_summary.json
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/board_timing_summary.json
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/power_summary.json
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/power_summary.json
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/power/results/power_summary.json
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/power_summary.json
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/exact_cpp/results/cpu_fpga_comparison.csv
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/power_energy_summary.csv
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/power_energy_summary.csv
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/results/power_energy_summary.csv
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/power_energy_summary.csv
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/exact_cpp/results/post_benchmark_equivalence.json
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/power/sources/snn_ecg_v2_nexys_a7_100mhz_top.v
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/power/sources/snn_ecg_v2_nexys_a7_100mhz_top.v
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/power/sources/snn_ecg_v2_nexys_a7_100mhz_top.v
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/power/sources/snn_ecg_v2_nexys_a7_100mhz_top.v
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_build_manifest.json
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_build_manifest.json
+- PASS — benchmark source object exists benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_build_manifest.json
+- PASS — benchmark imported SHA256 identity benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_build_manifest.json
 - PASS — all manifest files exist and SHA256-match
 - PASS — component trees exactly match manifest
 - PASS — curated component counts
@@ -374,6 +420,9 @@
 - PASS — metric evidence exists: board_active_core_throughput_median
 - PASS — metric evidence exists: board_uart_paced_interval_median
 - PASS — metric evidence exists: pure_rtl_estimated_power
+- PASS — metric evidence exists: pure_rtl_100mhz_dynamic_power
+- PASS — metric evidence exists: pure_rtl_100mhz_device_static_power
+- PASS — metric evidence exists: pure_rtl_1mhz_estimated_power
 - PASS — metric evidence exists: microblaze_system_estimated_power
 - PASS — metric evidence exists: pure_rtl_power_reroute_lut
 - PASS — metric evidence exists: pure_rtl_power_reroute_ff
@@ -406,21 +455,34 @@
 - PASS — benchmark active-core speedup
 - PASS — benchmark UART interval diagnostic
 - PASS — benchmark integrated timing unmeasured
-- PASS — benchmark power values estimated
-- PASS — benchmark derived energy values
+- PASS — benchmark 100 MHz power values estimated
+- PASS — benchmark 1 MHz power retained separately
+- PASS — benchmark integrated system power estimated
+- PASS — benchmark clock-matched derived energy values
+- PASS — legacy mixed-clock energy removed
 - PASS — physical board power remains unmeasured
-- PASS — benchmark README boundary 3,601,290
-- PASS — benchmark README boundary 36.012900
-- PASS — benchmark README boundary 49.362861641
-- PASS — benchmark README boundary 187,144.750920
-- PASS — benchmark README boundary 30분 관찰
-- PASS — benchmark README boundary 0.099 W
-- PASS — benchmark README boundary 0.271 W
-- PASS — benchmark README boundary 0.003565277100
-- PASS — benchmark README boundary 물리 보드 전력이나 실측 에너지
+- PASS — benchmark package boundary 3,601,290
+- PASS — benchmark package boundary 36.012900
+- PASS — benchmark package boundary 49.362861641
+- PASS — benchmark package boundary 187144.750920
+- PASS — benchmark package boundary 0.099 W
+- PASS — benchmark package boundary 0.183000 W
+- PASS — benchmark package boundary 0.085000 W
+- PASS — benchmark package boundary 0.271000 W
+- PASS — benchmark package boundary 0.006590360700
+- PASS — benchmark package boundary 0.003061096500
+- PASS — benchmark package boundary 물리 보드 입력 전력과 가속기 실측 에너지
 - PASS — benchmark comparison one row
 - PASS — benchmark comparison formula values
 - PASS — benchmark equivalence gate
+- PASS — benchmark power scopes separated
+- PASS — benchmark 100 MHz timing met
+- PASS — benchmark 100 MHz evidence exists build_manifest
+- PASS — benchmark 100 MHz evidence hash build_manifest
+- PASS — benchmark 100 MHz personal-path-bearing upstream evidence not duplicated raw_power_report
+- PASS — benchmark 100 MHz personal-path-bearing upstream evidence not duplicated utilization_report
+- PASS — benchmark 100 MHz personal-path-bearing upstream evidence not duplicated timing_report
+- PASS — benchmark 100 MHz personal-path-bearing upstream evidence not duplicated environment_record
 - PASS — claim registry columns
 - PASS — claim statuses controlled
 - PASS — claim evidence exists: CLM-001
@@ -534,8 +596,13 @@
 - PASS — benchmark value promoted with scope: 49.362861641×
 - PASS — benchmark value promoted with scope: 187,144.750920 ms
 - PASS — benchmark value promoted with scope: 0.099 W
+- PASS — benchmark value promoted with scope: 0.183 W
+- PASS — benchmark value promoted with scope: 0.085 W
+- PASS — benchmark value promoted with scope: 0.097 W
 - PASS — benchmark value promoted with scope: 0.271 W
-- PASS — benchmark value promoted with scope: 0.003565277100 J
+- PASS — benchmark value promoted with scope: 0.006590360700 J
+- PASS — benchmark value promoted with scope: 0.003061096500 J
+- PASS — invalid mixed-clock 3.565 mJ value absent
 - PASS — benchmark live boundary
 - PASS — benchmark board-speedup boundary
 - PASS — integrated repo absent from parent index

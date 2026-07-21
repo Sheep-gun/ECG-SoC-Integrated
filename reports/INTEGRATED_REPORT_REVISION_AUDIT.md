@@ -9,7 +9,7 @@
 
 ## 이번 개정 범위
 
-기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital 저장소의 36-case 실보드 accelerator-benefit benchmark와 Vivado power evidence를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 corrected active-core benchmark evidence commit `95d7966c...`을 별도 provenance로 등록하였다.
+기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital 저장소의 36-case 실보드 accelerator-benefit benchmark와 Vivado power evidence를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 corrected active-core benchmark evidence commit `6298a8e...`을 별도 provenance로 등록하였다.
 
 | 항목 | 개정 결과 |
 |---|---:|
@@ -60,12 +60,12 @@
 
 ## 가속기 Benchmark 반입 내용
 
-- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 commit `95d7966c32ec0bad7af2dca4aa23e7e638a9103a`으로 고정하였다.
+- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 commit `6298a8e030d45da6d989fec6ccccd74714070ee9`으로 고정하였다.
 - 대표 CPU 기준선은 hand-written single-thread transaction-level Exact C++로 두고 Python cycle model과 Verilator simulation runtime은 speedup 기준선에서 제외하였다.
 - Exact C++ timing 전 pred 36/36, membrane 144/144, Snapshot 1,080/1,080과 post-benchmark equivalence를 확인하였다.
 - Exact C++ kernel 1,777.699800 ms, end-to-end 2,007.549250 ms와 `profile_total-profile_input_wait` FPGA active-core 3,601,290 cycles, 36.012900 ms를 반영하였다.
 - Exact C++와 FPGA active-core의 비율 49.362861641×를 제시하고, UART-paced raw interval 187,144.750920 ms는 transport diagnostic으로만 유지하였다.
-- Pure RTL/system 0.099/0.271 W는 ESTIMATED, Pure RTL active energy 0.003565277100 J/decision은 DERIVED로, integrated-system energy와 physical board 입력 전력 및 measured energy는 NOT_MEASURED로 분리하였다.
+- 1 MHz Pure RTL 0.099 W는 별도 power-only operating point로 보존하고, performance-matched 100 MHz Pure RTL Total/Dynamic/Static 0.183/0.085/0.097 W와 system 0.271 W는 ESTIMATED로 분리하였다. 100 MHz Total/active-dynamic energy 0.006590360700/0.003061096500 J/decision은 DERIVED_ESTIMATE이며 integrated-system energy와 physical board 입력 전력 및 measured energy는 NOT_MEASURED다.
 
 ## 유지한 결과와 경계
 
@@ -75,10 +75,10 @@
 - Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns
 - AFE 입력 SHA256, canonical AFE→RTL pred/mem, FPGA pred/mem의 각 36/36 범위
 - Database–class confounding, physical/clinical/ASIC 한계
-- Accelerator benchmark는 digital commit `95d7966c32ec0bad7af2dca4aa23e7e638a9103a`에서 반입
+- Accelerator benchmark는 digital commit `6298a8e030d45da6d989fec6ccccd74714070ee9`에서 반입
 - Exact C++ kernel 1,777.699800 ms, FPGA active-core 3,601,290 cycles/36.012900 ms, speedup 49.362861641×
 - UART-paced raw counter 187,144.750920 ms는 transport diagnostic이며 integrated-system compute timing은 NOT_MEASURED
-- Pure RTL/system 0.099/0.271 W는 ESTIMATED, Pure RTL active energy 0.003565277100 J는 DERIVED; system energy와 physical board input power는 NOT_MEASURED
+- Pure RTL 1 MHz 0.099 W는 power-only, Pure RTL 100 MHz Total/Dynamic/Static 0.183/0.085/0.097 W와 system 0.271 W는 ESTIMATED, 100 MHz Total/active-dynamic energy 0.006590360700/0.003061096500 J는 DERIVED_ESTIMATE; system energy와 physical board input power는 NOT_MEASURED
 
 ## Vivado 물리 구현 그림 보강
 

@@ -13,9 +13,11 @@
 | Exact C++ 대비 core speedup | 49.362861641x | CPU MEASURED / FPGA counter-derived, DERIVED |
 | UART-paced raw interval median | 187144.750920 ms | transport diagnostic, MEASURED |
 | Integrated-system compute latency/speedup | 미측정 | DDR 사전 적재와 독립 timer 필요 |
-| Pure RTL power | 0.099000 W | Vivado post-implementation vectorless, ESTIMATED |
+| Pure RTL 1 MHz power | 0.099000 W | 저속 구성 Vivado post-implementation vectorless, ESTIMATED; energy 미산출 |
+| Pure RTL 100 MHz total / dynamic / static power | 0.183000 / 0.085000 / 0.097000 W | 성능 대응 구성 Vivado post-implementation vectorless, ESTIMATED |
 | Integrated FPGA system power | 0.271000 W | Vivado post-implementation vectorless, ESTIMATED |
-| Pure RTL energy/decision | 0.003565277 J | estimated power x measured core latency, DERIVED |
+| Pure RTL 100 MHz total energy/decision | 0.006590360700 J | clock-matched estimated total power x counter-derived latency, DERIVED ESTIMATE |
+| Pure RTL 100 MHz active dynamic energy/decision | 0.003061096500 J | clock-matched estimated dynamic power x counter-derived latency, DERIVED ESTIMATE |
 | Integrated system energy/decision | 미측정 | 유효한 integrated compute latency 없음 |
 | Board physical power | 미측정 | 외부 전력계 없음 |
 
@@ -25,6 +27,6 @@
 
 원시 `core_cycles/system_cycles` 구간은 입력 대기를 포함하므로 UART-paced transport diagnostic으로만 보존한다. 이를 integrated-system 속도나 energy로 사용하지 않는다. 진짜 통합 시스템 계측에는 ECG를 DDR2 등에 먼저 적재하고 독립 AXI Timer로 feeder 시작부터 최종 decision까지 측정해야 한다.
 
-Pure RTL 전력은 기존 0.099000 W를 동일 RTL/part/clock으로 재현했다. 새 route 자원은 9749 LUT/5045 FF로 과거 9719/5038와 소폭 다르며 route WNS도 새 보고서 값을 사용한다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
+기존 0.099000 W는 `CORE_DIV_HALF=50`과 `core_clk_1mhz`를 사용한 1 MHz Pure RTL 저속 구성의 유효한 전력 추정치로 보존한다. 하지만 100 MHz active latency와 결합하지 않는다. 새 성능 대응 Pure RTL top은 분주기나 generated core clock 없이 가속기를 직접 100 MHz로 구동하며, route WNS 0.035 ns로 timing을 통과했다. 이 구성의 자원은 9759 LUT/5049 FF/0 BRAM/0 DSP다. 종전 mixed-clock energy 계산은 최종 성능값에서 철회했다. Integrated system은 MicroBlaze, BRAM, AXI, UART, sample feeder와 accelerator를 모두 포함하므로 Pure RTL 값과 섞지 않는다.
 
-두 전력값 모두 SAIF/VCD 없이 Vivado 기본 vectorless propagation을 사용한 **Post-implementation vectorless Vivado power estimate**다. confidence는 Pure RTL `Medium`, system `Medium`이며 clock은 각각 sys_clk_pin 100.000 MHz, core_clk_1mhz 1.000 MHz; snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK 30.000 MHz, snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE 30.000 MHz, sys_clk_pin 100.000 MHz다. 물리 보드 입력 전력과 가속기 실측 에너지는 측정하지 않았다.
+세 전력 범위 모두 SAIF/VCD 없이 Vivado 기본 vectorless propagation을 사용한 **Post-implementation vectorless Vivado power estimate**다. confidence는 1 MHz Pure RTL `Medium`, 100 MHz Pure RTL `Medium`, system `Medium`이며 clock은 각각 sys_clk_pin 100.000 MHz, core_clk_1mhz 1.000 MHz; core_clk_100mhz 100.000 MHz; snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK 30.000 MHz, snn_ecg_mb_full_replay_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE 30.000 MHz, sys_clk_pin 100.000 MHz다. 물리 보드 입력 전력과 가속기 실측 에너지는 측정하지 않았다.

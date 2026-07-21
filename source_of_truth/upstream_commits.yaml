@@ -50,10 +50,10 @@ repositories:
     name: SNN-ECG-4-Class-Classifier
     normalized_origin_url: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
     remote_branch: main
-    fixed_evidence_commit: 95d7966c32ec0bad7af2dca4aa23e7e638a9103a
-    imported_commit_title: "Correct FPGA active-cycle performance metrics"
+    fixed_evidence_commit: 6298a8e030d45da6d989fec6ccccd74714070ee9
+    imported_commit_title: "Add clock-matched 100 MHz power evidence"
     contributor: 양건
-    scope: "measured board counters, derived active-core timing, and post-route Vivado power evidence; locked classifier RTL remains c6b80de19cdcad5b7e43fe7835588b629d847f75"
+    scope: "measured board counters, derived 100 MHz active-core timing, distinct 1 MHz/100 MHz Pure RTL power evidence, and post-route MicroBlaze system power evidence; locked classifier RTL remains c6b80de19cdcad5b7e43fe7835588b629d847f75"
     import_method: "curated report/result snapshot with integrated claim boundaries"
 
 intentional_exclusions_registry: integration_evidence/excluded_upstream_paths.csv

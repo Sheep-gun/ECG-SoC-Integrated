@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-07-21T10:31:16.418110+00:00",
+  "generated_at_utc": "2026-07-21T12:16:40.894825+00:00",
   "evidence_class": "ESTIMATED",
   "physical_board_power_measured": false,
   "activity_method": "Post-implementation vectorless Vivado power estimate",
   "scopes": {
-    "pure_rtl": {
-      "scope": "pure_rtl",
-      "label": "Pure RTL accelerator",
+    "pure_rtl_1mhz": {
+      "scope": "pure_rtl_1mhz",
+      "label": "Pure RTL accelerator, 1 MHz core",
       "evidence_class": "ESTIMATED",
       "estimate_description": "Post-implementation vectorless Vivado power estimate",
       "vivado_version": "Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020",
@@ -26,6 +26,8 @@
           "frequency_mhz": 1.0
         }
       ],
+      "core_clock_frequency_mhz": 1.0,
+      "clock_configuration": "100 MHz board input divided by 100 to a 1 MHz generated accelerator core clock",
       "total_on_chip_power_w": 0.099,
       "dynamic_power_w": 0.001,
       "device_static_power_w": 0.097,
@@ -44,7 +46,8 @@
         "dsp": 0
       },
       "timing": {
-        "wns_ns": 8.146
+        "wns_ns": 8.146,
+        "status": "MET"
       },
       "raw_power_report": "benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_power_post_route.rpt",
       "raw_power_report_sha256": "046d5abcf30612ac1a888b92196e5806560b70754ac6998495ce5f185efaf70c",
@@ -54,8 +57,62 @@
       "timing_report_sha256": "170cbaf12787b9c0f43b3b73514d74c5ba23577683d76c912f8c2fd30e906170",
       "environment_record": "benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_environment.txt",
       "environment_record_sha256": "7947678113e60605cb06c9679df0ae78f046e09d2102a77fa927bd1beb9c06f9",
+      "build_manifest": null,
+      "build_manifest_sha256": null,
       "routed_checkpoint": "benchmarks/accelerator_benefit/power/work/pure_rtl/pure_rtl_routed.dcp",
       "routed_checkpoint_sha256": "eac05b19911cec138339b1f6f03a91613e6006407c5a75538301b5a980b111e4"
+    },
+    "pure_rtl_100mhz": {
+      "scope": "pure_rtl_100mhz",
+      "label": "Pure RTL accelerator, direct 100 MHz core",
+      "evidence_class": "ESTIMATED",
+      "estimate_description": "Post-implementation vectorless Vivado power estimate",
+      "vivado_version": "Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020",
+      "fpga_part": "xc7a100tcsg324-1",
+      "design_top": "snn_ecg_v2_nexys_a7_100mhz_top",
+      "implementation_status": "routed",
+      "clocks": [
+        {
+          "name": "core_clk_100mhz",
+          "period_ns": 10.0,
+          "frequency_mhz": 100.0
+        }
+      ],
+      "core_clock_frequency_mhz": 100.0,
+      "clock_configuration": "Direct 100 MHz board clock; no generated or divided accelerator core clock",
+      "total_on_chip_power_w": 0.183,
+      "dynamic_power_w": 0.085,
+      "device_static_power_w": 0.097,
+      "power_unit": "W",
+      "power_estimation_confidence": "Medium",
+      "junction_temperature_c": 25.8,
+      "activity_source": "Post-implementation vectorless Vivado power estimate; no SAIF/VCD",
+      "simulation_activity_file": "---",
+      "signal_toggle_rate_assumption": "Vivado default vectorless propagation and default toggle-rate assumptions",
+      "clock_activity": "User-constrained clocks; frequencies listed in clocks; no SAIF/VCD",
+      "constraint": "benchmarks/accelerator_benefit/power/constraints/nexys_a7_snn_ecg_v2_100mhz.xdc",
+      "utilization": {
+        "lut": 9759,
+        "flip_flop": 5049,
+        "bram_tile": 0,
+        "dsp": 0
+      },
+      "timing": {
+        "wns_ns": 0.035,
+        "status": "MET"
+      },
+      "raw_power_report": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_power_post_route.rpt",
+      "raw_power_report_sha256": "a893ecaf2d5e42ae8cb92b2d889c56ae2d67c7fe9434ffee7b09a7777540fe45",
+      "utilization_report": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_utilization_post_route.rpt",
+      "utilization_report_sha256": "8f05f7cd83c3a51d037e941990145b7476b312e6a021912d2362263f0a2ab815",
+      "timing_report": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_timing_post_route.rpt",
+      "timing_report_sha256": "810a55c7e2959cbd15656f7001c82d2589b96aa5c4d38156da9f33279676765f",
+      "environment_record": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_environment.txt",
+      "environment_record_sha256": "9219eaeeee39f34d04e3308b8ee452391ad6f51b163d342ae1e2d2863fb4f9d9",
+      "build_manifest": "benchmarks/accelerator_benefit/power/results/pure_rtl_100mhz/pure_rtl_100mhz_build_manifest.json",
+      "build_manifest_sha256": "b633f62cff78127ed69904950e6ff3b23b2899e7ba5446151e18dcb9251de7cb",
+      "routed_checkpoint": "benchmarks/accelerator_benefit/power/work/pure_rtl_100mhz/pure_rtl_100mhz_routed.dcp",
+      "routed_checkpoint_sha256": "8024841673042cd185e1cabe25cf92816a1831e0a95e46f42f6602965456eeae"
     },
     "microblaze_system": {
       "scope": "microblaze_system",
@@ -83,6 +140,8 @@
           "frequency_mhz": 100.0
         }
       ],
+      "core_clock_frequency_mhz": 100.0,
+      "clock_configuration": "MicroBlaze full-replay system and accelerator use the constrained 100 MHz system clock",
       "total_on_chip_power_w": 0.271,
       "dynamic_power_w": 0.173,
       "device_static_power_w": 0.098,
@@ -101,7 +160,8 @@
         "dsp": 3
       },
       "timing": {
-        "wns_ns": 0.097
+        "wns_ns": 0.097,
+        "status": "MET"
       },
       "raw_power_report": "benchmarks/accelerator_benefit/power/results/microblaze_system/system_power_post_route.rpt",
       "raw_power_report_sha256": "5c1822166cb5ad1e851d8ad8c7c4013b41439cbf17a7f72f015dab08fd3c49d7",
@@ -111,6 +171,8 @@
       "timing_report_sha256": "0b363b551fb9eddfd95dd0d413b57de841ad493bad7aa05b51863e6acacb4764",
       "environment_record": "benchmarks/accelerator_benefit/power/results/microblaze_system/system_environment.txt",
       "environment_record_sha256": "6cc1d85426203f15fbda22083f88ed0be844068e2910b2fa8607ed831a04c698",
+      "build_manifest": null,
+      "build_manifest_sha256": null,
       "routed_checkpoint": "benchmarks/accelerator_benefit/power/work/microblaze_system/microblaze_system_routed.dcp",
       "routed_checkpoint_sha256": "d64e9393073ec96051f2d17a83230e69f9a26c3f72a6ed86618649e730898aa6"
     }

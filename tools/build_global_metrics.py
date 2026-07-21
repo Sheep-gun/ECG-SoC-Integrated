@@ -11,7 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
-BENCHMARK_COMMIT = "95d7966c32ec0bad7af2dca4aa23e7e638a9103a"
+BENCHMARK_COMMIT = "6298a8e030d45da6d989fec6ccccd74714070ee9"
 XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
 LTSPICE_HANDOFF = "INTEGRATED_LTSPICE_2026-07-19"
@@ -103,9 +103,10 @@ def main() -> int:
     power_benchmark_path = "benchmarks/accelerator_benefit/results/power_summary.json"
     power_benchmark = read_json(power_benchmark_path)
     power_energy = read_csv("benchmarks/accelerator_benefit/results/power_energy_summary.csv")
-    pure_rtl_power = power_benchmark["scopes"]["pure_rtl"]
+    pure_rtl_1mhz_power = power_benchmark["scopes"]["pure_rtl_1mhz"]
+    pure_rtl_power = power_benchmark["scopes"]["pure_rtl_100mhz"]
     system_power = power_benchmark["scopes"]["microblaze_system"]
-    pure_rtl_energy = next(row for row in power_energy if row["implementation"] == "Pure RTL accelerator")
+    pure_rtl_energy = next(row for row in power_energy if row["implementation"] == "Pure RTL accelerator, 100 MHz core")
     system_energy = next(row for row in power_energy if row["implementation"] == "MicroBlaze integrated FPGA system")
     assert float(bc["cpu_latency_ms"]) == 1777.6998
     assert float(bc["fpga_latency_ms"]) == 54.0126
@@ -153,11 +154,14 @@ def main() -> int:
             "board_active_core_cycles": metric(board_benchmark["core_active_cycles"]["median"], "cycles", "profile total minus input-wait hardware counters", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "identical in 36/36 board cases and XSim cross-check"),
             "board_active_core_throughput_median": metric(board_benchmark["core_active_throughput_samples_per_s"]["median"], "samples/s", "1,800,000 samples divided by active-core latency", "derived from measured board counters", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "stored-data active-core scope; live decision still needs 30 minutes"),
             "board_uart_paced_interval_median": metric(board_benchmark["uart_paced_transaction_counter_interval_ms"]["median"], "ms", "raw start-to-final-decision counter including input starvation", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "transport diagnostic only; not integrated-system compute latency"),
-            "pure_rtl_estimated_power": metric(pure_rtl_power["total_on_chip_power_w"], "W", "pure RTL accelerator", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
+            "pure_rtl_estimated_power": metric(pure_rtl_power["total_on_chip_power_w"], "W", "pure RTL accelerator at the performance-matched 100 MHz core clock", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; no SAIF/VCD; not physical board input power"),
+            "pure_rtl_100mhz_dynamic_power": metric(pure_rtl_power["dynamic_power_w"], "W", "pure RTL accelerator at 100 MHz", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "vectorless dynamic estimate; active dynamic energy is derived separately"),
+            "pure_rtl_100mhz_device_static_power": metric(pure_rtl_power["device_static_power_w"], "W", "pure RTL accelerator at 100 MHz", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "device-static component of Total On-Chip Power"),
+            "pure_rtl_1mhz_estimated_power": metric(pure_rtl_1mhz_power["total_on_chip_power_w"], "W", "legacy low-frequency pure RTL implementation at 1 MHz core", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "power-only operating point; must not be multiplied by the 100 MHz active latency"),
             "microblaze_system_estimated_power": metric(system_power["total_on_chip_power_w"], "W", "MicroBlaze integrated FPGA system", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
-            "pure_rtl_power_reroute_lut": metric(pure_rtl_power["utilization"]["lut"], "LUT", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "same RTL/part/clock; route differs slightly from locked canonical implementation"),
-            "pure_rtl_power_reroute_ff": metric(pure_rtl_power["utilization"]["flip_flop"], "FF", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "same RTL/part/clock; route differs slightly from locked canonical implementation"),
-            "pure_rtl_power_reroute_wns": metric(pure_rtl_power["timing"]["wns_ns"], "ns", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "timing closure evidence; not processing latency"),
+            "pure_rtl_power_reroute_lut": metric(pure_rtl_power["utilization"]["lut"], "LUT", "100 MHz Pure RTL power-report implementation", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "direct 100 MHz wrapper implementation; resource values belong to this route"),
+            "pure_rtl_power_reroute_ff": metric(pure_rtl_power["utilization"]["flip_flop"], "FF", "100 MHz Pure RTL power-report implementation", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "direct 100 MHz wrapper implementation; resource values belong to this route"),
+            "pure_rtl_power_reroute_wns": metric(pure_rtl_power["timing"]["wns_ns"], "ns", "100 MHz Pure RTL power-report implementation", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "timing MET at 100 MHz; WNS is timing evidence, not processing latency"),
             "xmodel_emulator_mean_rms": metric(1.95, "LSB", "36 representative 60-second segments; emulator vs Questa/XMODEL after settling", "verification report", xmodel_verification_path, xr_name, XMODEL_COMMIT, "이수환", "model-to-model waveform agreement; max local deviations and solver differences remain"),
             "afe_input_sha256_identity": metric("36/36", "chunks", "AFE-generated final-test chunks vs digital board-replay inputs", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "proves byte identity only, not label correctness"),
             "canonical_sample_gap_cycles": metric(2, "cycles", "board-facing full-top XSim integration cadence", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "canonical integration condition; noncanonical debug cadence excluded"),
@@ -198,18 +202,24 @@ def main() -> int:
             "legacy_gap_inclusive_speedup_estimate": float(bc["ratio_cpu_over_fpga"]),
             "estimated_power_w": pure_rtl_power["total_on_chip_power_w"],
             "estimated_pure_rtl_power_w": pure_rtl_power["total_on_chip_power_w"],
+            "estimated_pure_rtl_100mhz_total_power_w": pure_rtl_power["total_on_chip_power_w"],
+            "estimated_pure_rtl_100mhz_dynamic_power_w": pure_rtl_power["dynamic_power_w"],
+            "estimated_pure_rtl_100mhz_device_static_power_w": pure_rtl_power["device_static_power_w"],
+            "estimated_pure_rtl_1mhz_power_w": pure_rtl_1mhz_power["total_on_chip_power_w"],
             "estimated_system_power_w": system_power["total_on_chip_power_w"],
             "measured_board_power_w": None,
             "estimated_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
             "derived_pure_rtl_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
+            "derived_pure_rtl_active_dynamic_energy_per_decision_j": float(pure_rtl_energy["active_dynamic_energy_per_decision_j"]),
             "derived_system_energy_per_decision_j": None,
-            "legacy_gap_inclusive_pure_rtl_energy_per_decision_j": 0.0053472474,
+            "legacy_gap_inclusive_pure_rtl_energy_per_decision_j": None,
+            "legacy_1mhz_power_energy_status": "NOT_DERIVED_CLOCK_MISMATCH",
             "measured_energy_per_decision_j": None,
             "board_timing_status": "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE",
             "integrated_system_timing_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
             "board_power_status": "NOT_MEASURED",
             "power_estimate_status": "POST_IMPLEMENTATION_VECTORLESS_ESTIMATED",
-            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; integrated-system latency is unmeasured; Vivado power is an on-chip vectorless estimate; physical board input power was not measured",
+            "scope_limitation": "active-core latency subtracts RUN-state input starvation from measured counters; the 100 MHz latency is combined only with the 100 MHz Pure RTL vectorless estimate; the 1 MHz 0.099 W result is power-only; integrated-system latency is unmeasured; physical board input power was not measured",
         },
     }
     out = ROOT / "source_of_truth" / "global_metrics.yaml"

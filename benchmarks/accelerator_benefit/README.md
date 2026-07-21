@@ -1,53 +1,33 @@
-# 통합 가속기 Benchmark 근거
+# Accelerator-Benefit Benchmark
 
-이 디렉터리는 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 실보드·Vivado 검증 commit
-`95d7966c32ec0bad7af2dca4aa23e7e638a9103a`에서 보고서에 필요한 정제 결과만 반입한
-snapshot이다. 고정 모델·RTL·36개 입력은 변경하지 않았다. raw firmware/schema의 legacy
-label은 `AFF`지만 통합 보고서의 의료 표기는 `AF`로 통일한다.
+This directory is the reproducible board-performance and Vivado-power package for the locked `structural_guarded_silent_aff_1008710` SNN ECG accelerator.
 
-## 핵심 결과
+- Main results: `results/accelerator_benefit_summary.csv`
+- Exact Python kernel results: `results/cpu_python_kernel_summary.json`
+- Exact Python end-to-end results: `results/cpu_python_end_to_end_summary.json`
+- Native transaction-level Exact C++ package: `exact_cpp/`
+- Native Exact C++ performance report: `exact_cpp/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md`
+- Verilator RTL-simulation host timing: `results/cpu_cpp_kernel_summary.json`
+- Korean report: `reports/ACCELERATOR_BENEFIT_KR.md`
+- English report: `reports/ACCELERATOR_BENEFIT_EN.md`
+- Canonical RTL cycles: `results/rtl_cycle_benchmark.csv`
+- Completed board package: `board/`
+- Board completion record: `READY_FOR_BOARD_BENCHMARK.md`
+- Figures: `figures/FIGURE_INDEX.md`
 
-| 항목 | 결과 | 분류 |
-|---|---:|---|
-| 분류 정확도 | 29/36 (80.56%) | MEASURED |
-| 보드–Golden final prediction | 36/36 | MEASURED |
-| 보드–Golden Final Membrane | 144/144 | MEASURED |
-| FPGA active-core latency | 3,601,290 cycles, 36.012900 ms | DERIVED from two MEASURED counters |
-| Active-core throughput / 1 kSPS margin | 49,982,089.751172 samples/s / 49,982.089751× | DERIVED |
-| Exact C++ 대비 active-core speedup | 49.362861641× | DERIVED |
-| UART-paced raw interval median | 187,144.750920 ms | MEASURED transport diagnostic |
-| Integrated-system compute latency/speedup | 미측정 | preload와 독립 timer 필요 |
-| Pure RTL power | 0.099 W | ESTIMATED, Vivado post-implementation vectorless |
-| MicroBlaze integrated-system power | 0.271 W | ESTIMATED, Vivado post-implementation vectorless |
-| Pure RTL active energy | 0.003565277100 J/decision | DERIVED |
-| Integrated-system energy | 미측정 | 유효한 system compute latency 없음 |
-| Physical board input power | 미측정 | 외부 전력계 없음 |
+Regenerate and verify:
 
-active-core cycles는 `profile_total - profile_input_wait`다. input-wait counter는 RUN 상태에서
-core가 ready이지만 `sample_valid`가 없을 때만 증가하므로, 이 차이는 UART/MicroBlaze 입력
-starvation만 제거하고 내부 stall, Snapshot/final-decision 처리와 1,320 control cycles를 유지한다.
-36개 실보드 case와 canonical XSim이 모두 3,601,290 cycles로 일치했다. 기존
-54.012600 ms/32.912687×는 canonical sample gap을 포함하므로 active-core 성능으로 사용하지
-않는다. Live ECG 최종 판정에는 여전히 30분 관찰 창이 필요하다.
+```powershell
+vivado -mode batch -source benchmarks/accelerator_benefit/power/generate_pure_rtl_100mhz_post_impl.tcl
+python benchmarks/accelerator_benefit/power/parse_power_reports.py
+python benchmarks/accelerator_benefit/tools/generate_benchmark_artifacts.py
+python benchmarks/accelerator_benefit/tools/check_benchmark_integrity.py
+```
 
-두 전력값은 Vivado 2020.2, `xc7a100tcsg324-1`, SAIF/VCD 없는 Medium-confidence
-**Post-implementation vectorless Vivado power estimate**다. Pure RTL과 MicroBlaze
-통합 system의 범위를 섞지 않는다. 통합 compute latency와 energy는 ECG 사전 적재와 독립
-timer가 없어 산출하지 않았고, 물리 보드 전력이나 실측 에너지로 표현하지 않는다.
+The benchmark-scoped Python clock model and the board match the locked Golden result for all 36 cases (`final_pred` and all four `final_mem` values). The reportable board active-core metric is `profile_total_cycles - profile_input_wait_cycles`: 3,601,290 cycles, 36.0129 ms at 100 MHz, in every one of the 36 cases. The subtraction removes only upstream sample starvation and retains internal back-pressure, snapshot/final-decision work, and non-RUN control overhead. Canonical XSim gives the same active-cycle result.
 
-## 정제 근거
+Only the hand-written single-thread transaction-level **Exact C++** implementation is the native CPU inference baseline: 36/36 final predictions, 144/144 final membranes, and 1,080/1,080 Snapshot boundaries match; its measured 360-run kernel median is 1777.699800 ms. Dividing this by the hardware-counter-derived FPGA active-core latency gives 49.362862x. Historical 54.0126 ms/32.912687x values include the canonical sample gap and are not used as active-core performance.
 
-- `reports/ACCELERATOR_BENEFIT_KR.md`
-- `reports/ACCELERATOR_BENEFIT_EN.md`
-- `reports/POWER_ENERGY_METHODOLOGY.md`
-- `reports/BENCHMARK_LIMITATIONS.md`
-- `results/integrated_benchmark_summary.csv`
-- `results/board_timing_summary.json`
-- `results/power_summary.json`
-- `results/power_energy_summary.csv`
-- `figures/01_cpu_vs_rtl_latency.png`
-- `figures/02_throughput_realtime_margin.png`
-- `figures/05_power_energy_status.png`
+The UART-paced raw counter interval is retained only as a transport diagnostic. Integrated-system compute latency, speedup, and energy are not inferred from it; those require preloaded input plus an independent system timer.
 
-원본 UART transcript와 Vivado `.rpt`는 upstream commit에 보존되며, 이 통합 저장소에는
-보고서에 필요한 aggregate와 source CSV만 반입한다.
+Power operating points are separate. The retained 0.099 W result is the 1 MHz Pure RTL vectorless estimate and is not combined with the 100 MHz active latency. The direct-100-MHz Pure RTL route met timing at WNS 0.035 ns and produced 0.183 W total, 0.085 W dynamic, and 0.097 W device-static estimates. Only this 100 MHz power is combined with the 36.0129 ms active latency, giving 0.006590360700 J/decision total and 0.003061096500 J/decision active dynamic energy as DERIVED ESTIMATES. All power values are post-implementation vectorless Vivado estimates without SAIF/VCD; physical board power remains unmeasured.

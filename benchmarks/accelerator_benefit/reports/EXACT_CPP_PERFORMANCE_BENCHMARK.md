@@ -58,4 +58,5 @@ canonical `sample_gap_cycles=2`의 gap-inclusive XSim 결과 5,401,260 cycles, 5
 - 고정 XSA에 독립 AXI Timer와 preloaded-input 경로가 없어 integrated-system compute latency/speedup/energy는 `NOT_MEASURED`
 - host wall-clock transfer latency: 별도 측정하지 않음
 - physical board input power/energy: 외부 전력계가 없어 `NOT_MEASURED`
-- Pure RTL/system `0.099/0.271 W`: Vivado post-implementation vectorless `ESTIMATED`
+- Pure RTL 1 MHz `0.099 W`, Pure RTL 100 MHz Total/Dynamic/Static `0.183/0.085/0.097 W`, system `0.271 W`: Vivado post-implementation vectorless `ESTIMATED`
+- Pure RTL 100 MHz Total/active-dynamic energy `0.006590360700/0.003061096500 J/decision`: clock-matched `DERIVED_ESTIMATE`

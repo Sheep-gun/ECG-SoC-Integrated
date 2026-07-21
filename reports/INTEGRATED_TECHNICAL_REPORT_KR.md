@@ -2,7 +2,7 @@
 
 # 초록
 
-본 논문은 장시간 ECG로부터 NSR·CHF·ARR·AF를 분류하는 AFE–ADC–SNN-inspired streaming RTL 통합 시스템을 제시한다. 아날로그 앞단은 기준선 이동과 60 Hz 간섭을 억제해 1 kSPS signed 12-bit 스트림을 만들고, 디지털 가속기는 60초 리듬·파형 증거를 30개 Snapshot에 누적해 기록 단위 클래스를 출력한다. MATLAB·LTspice·XMODEL 검증에서 동일한 10초 ECG의 LTspice–XMODEL ADC 출력은 평균 절대 오차 0.6445 LSB와 상관계수 0.999518을 보였다. 고정 최종 시험 정확도는 29/36=80.56%였고 FPGA의 최종 클래스와 네 막전위는 XSim 기준과 36/36 일치했다. Nexys A7-100T의 active-core는 3,601,290 cycles와 36.012900 ms였으며 Exact C++ 대비 49.362861641×였다. Vivado 구현 후 vectorless 추정전력은 Pure RTL 0.099 W, MicroBlaze 통합 system 0.271 W였다.
+본 논문은 장시간 ECG로부터 NSR·CHF·ARR·AF를 분류하는 AFE–ADC–SNN-inspired streaming RTL 통합 시스템을 제시한다. 아날로그 앞단은 기준선 이동과 60 Hz 간섭을 억제해 1 kSPS signed 12-bit 스트림을 만들고, 디지털 가속기는 60초 리듬·파형 증거를 30개 Snapshot에 누적해 기록 단위 클래스를 출력한다. MATLAB·LTspice·XMODEL 검증에서 동일한 10초 ECG의 LTspice–XMODEL ADC 출력은 평균 절대 오차 0.6445 LSB와 상관계수 0.999518을 보였다. 고정 최종 시험 정확도는 29/36=80.56%였고 FPGA의 최종 클래스와 네 막전위는 XSim 기준과 36/36 일치했다. Nexys A7-100T의 active-core는 3,601,290 cycles와 36.012900 ms였으며 Exact C++ 대비 49.362861641×였다. 동일한 100 MHz 성능 조건의 Vivado 구현 후 vectorless Pure RTL Total/Dynamic/Static 추정전력은 0.183/0.085/0.097 W였고 MicroBlaze 통합 system은 0.271 W였다.
 
 # 핵심어
 
@@ -636,7 +636,7 @@ AXI wrapper는 시작 신호, valid/ready, 최종 클래스와 네 막전위를 
 
 ## 6.1 가속기 Benchmark 결과와 해석 범위
 
-Benchmark는 고정 분류기와 RTL을 바꾸지 않고 digital 저장소 commit `95d7966c...`에서 정리했다. 36개 입력은 각각 1,800,000개 표본이며 보드는 최종 예측 36/36, 네 막전위 144/144, Snapshot 30회와 decision 1회를 모두 재현했다. Exact C++ 역시 timing 전에 final prediction 36/36, membrane 144/144와 Snapshot 경계 1,080/1,080 등가성을 통과했다 [CLM-018, CLM-047].
+Benchmark는 고정 분류기와 RTL을 바꾸지 않고 digital 저장소 commit `6298a8e...`에서 정리했다. 36개 입력은 각각 1,800,000개 표본이며 보드는 최종 예측 36/36, 네 막전위 144/144, Snapshot 30회와 decision 1회를 모두 재현했다. Exact C++ 역시 timing 전에 final prediction 36/36, membrane 144/144와 Snapshot 경계 1,080/1,080 등가성을 통과했다 [CLM-018, CLM-047].
 
 hand-written single-thread transaction-level Exact C++ kernel의 중앙값은 1,777.699800 ms였다. Nexys A7-100T에서 `profile_total-profile_input_wait`는 36개 case 모두 3,601,290 cycles였고, 100 MHz에서 active-core latency 36.012900 ms에 해당한다. 처리량은 49,982,089.751172 samples/s, 1 kSPS 대비 active-core 연산 여유는 49,982.089751×다 [CLM-043~CLM-047].
 
@@ -658,7 +658,7 @@ Exact C++를 active-core latency로 나눈 speedup은 49.362861641×다. 두 피
 
 기존 `54.012600 ms`는 canonical sample gap을 포함한 값이므로 active-core 성능으로 사용하지 않는다. `187,144.750920 ms`는 UART 입력 대기를 포함한 raw counter diagnostic이다. 실제 ECG가 1 kSPS로 들어오면 최종 판정에는 여전히 30분 관찰이 필요하므로 어느 stored-data replay 값도 live 판정시간으로 해석하지 않는다.
 
-Vivado 2020.2 post-implementation vectorless 추정전력은 Pure RTL 0.099 W, MicroBlaze 통합 system 0.271 W였다. Pure RTL 전력에 active-core latency를 곱한 파생 에너지는 0.003565277100 J/decision이다. integrated-system speedup과 energy는 유효한 integrated compute latency가 없어 산출하지 않았다. 두 power는 SAIF/VCD 없는 Medium-confidence estimate이며, physical board input power와 measured energy는 외부 전력계가 없어 미측정이다 [CLM-046]. Power 재현용 Pure RTL route는 동일 RTL·part·clock에서 9,749 LUT, 5,045 FF, WNS 8.146 ns였고, locked canonical route의 9,719 LUT, 5,038 FF, WNS 8.184 ns와 소폭 달랐지만 Total On-Chip Power 0.099 W를 재현했다. 따라서 자원·timing 표의 locked authority와 power-report 재현 route를 하나의 route 결과처럼 섞지 않는다.
+Vivado 2020.2 post-implementation vectorless 추정에서 direct-100 MHz Pure RTL은 Total On-Chip/Dynamic/Device Static Power 0.183/0.085/0.097 W였고, 9,759 LUT, 5,049 FF, BRAM 0, DSP 0, WNS +0.035 ns로 timing MET를 확인했다. 즉 성능 조건과 일치하는 post-implementation vectorless 추정전력을 새로 확보했다. 100 MHz 실보드 counter에서 파생한 active-core latency 0.0360129 s와 clock-matched 100 MHz power를 결합하면 Total energy는 `0.183 W × 0.0360129 s = 0.006590360700 J/decision`, active dynamic energy는 `0.085 W × 0.0360129 s = 0.003061096500 J/decision`이다. 두 값은 측정 에너지가 아니라 DERIVED_ESTIMATE다. 기존 1 MHz Pure RTL 0.099 W는 별도 low-frequency post-implementation power-only 근거로 보존하고 100 MHz latency와 결합하지 않는다. MicroBlaze 통합 system 0.271 W도 power-only이며 유효한 integrated compute latency가 없어 integrated-system speedup과 energy는 산출하지 않았다. 모든 power는 SAIF/VCD 없는 Medium-confidence estimate이고 physical board input power와 measured energy는 외부 전력계가 없어 미측정이다 [CLM-046]. Locked canonical route의 자원·timing, 1 MHz Pure RTL route, 100 MHz Pure RTL route, MicroBlaze system route는 서로 다른 구현 범위와 operating point이므로 하나의 route 결과처럼 섞지 않는다.
 
 ## 6.2 AFE·디지털 통합 XMODEL 검증
 
@@ -848,7 +848,7 @@ Pure RTL은 긴 조합 경로를 여러 등록 단계로 분리한다. `C24/glob
 | MicroBlaze | 12494 LUT, 8494 reg, 16 BRAM, 3 DSP, WNS 0.097 ns | CLM-010 |
 | Board | pred/mem 36/36; label 29/36 | CLM-011 |
 | Streaming | 회피한 원시 입력 구간 2,700,000 bytes≈2.7 MB | CLM-023 |
-| Benchmark | Exact C++ 1,777.699800 ms; active-core 36.012900 ms; 49.362861641×; Pure/system 0.099/0.271 W estimated | CLM-018, CLM-043~CLM-047 |
+| Benchmark | Exact C++ 1,777.699800 ms; active-core 36.012900 ms; 49.362861641×; 100 MHz Pure RTL 0.183 W and 0.006590360700 J estimated/derived; 1 MHz Pure RTL 0.099 W power-only; system 0.271 W power-only | CLM-018, CLM-043~CLM-047 |
 
 # 부록 B. Claim/증거 mapping
 

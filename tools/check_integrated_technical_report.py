@@ -51,6 +51,7 @@ REQUIRED_FILES = [
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "board_timing_summary.json",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_summary.json",
+    ROOT / "benchmarks" / "accelerator_benefit" / "power" / "results" / "pure_rtl_100mhz" / "pure_rtl_100mhz_build_manifest.json",
     ROOT / "docs" / "MIXED_SIGNAL_VERIFICATION_KR.md",
     ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "README.md",
     ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc",
@@ -139,7 +140,7 @@ def main() -> int:
     check("abstract is one paragraph", len(abstract_blocks) == 1, len(abstract_blocks))
     for term in [
         "본 논문은 장시간 ECG", "SNN-inspired streaming RTL", "평균 절대 오차 0.6445 LSB",
-        "29/36=80.56%", "36/36", "Nexys A7-100T", "36.012900 ms", "49.362861641×", "0.099 W", "0.271 W",
+        "29/36=80.56%", "36/36", "Nexys A7-100T", "36.012900 ms", "49.362861641×", "0.183/0.085/0.097 W", "0.271 W",
     ]:
         check(f"abstract retains essential result {term}", term in abstract)
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
@@ -368,8 +369,9 @@ def main() -> int:
     check("LTspice schematic present", (ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc").is_file())
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "9,618.223280 samples/s", "0.099 W", "0.271 W", "0.003565277100 J/decision"]:
+    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "3,601,290 cycles", "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms", "9,618.223280 samples/s", "0.099 W", "0.183/0.085/0.097 W", "0.271 W", "0.006590360700 J/decision", "0.003061096500 J/decision"]:
         check(f"required result {value}", value in text)
+    check("invalid mixed-clock 3.565 mJ result absent", "0.003565277100" not in text)
     for name, meaning in [
         ("60 Hz attenuation meaning", "간섭 진폭을 약 1/15,000로 줄인다는 뜻"),
         ("sub-LSB handoff meaning", "평균 오차는 0.6445 LSB로 ADC 한 단계보다 작았고"),
@@ -380,7 +382,7 @@ def main() -> int:
     check("LTspice results include reader meaning column", "| 확인한 성능 | LTspice 결과 | 이 결과가 뜻하는 것 |" in text)
     benchmark_section = section(text, "6.1 가속기 Benchmark 결과와 해석 범위", 2)
     for term in [
-        "95d7966c", "최종 예측 36/36", "네 막전위 144/144", "Snapshot 경계 1,080/1,080",
+        "6298a8e", "최종 예측 36/36", "네 막전위 144/144", "Snapshot 경계 1,080/1,080",
         "hand-written single-thread transaction-level Exact C++", "profile_total-profile_input_wait", "3,601,290 cycles",
         "36.012900 ms", "49,982,089.751172 samples/s", "49.362861641×", "187,144.750920 ms",
         "transport diagnostic", "integrated-system speedup", "post-implementation vectorless 추정전력",
@@ -406,16 +408,22 @@ def main() -> int:
 
     metrics = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
     check("global final metric", metrics["metrics"]["final_test_chunk_accuracy"]["value"] == 80.56)
+    power_summary = json.loads((ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_summary.json").read_text(encoding="utf-8"))
+    check("power scopes separated", set(power_summary["scopes"]) == {"pure_rtl_1mhz", "pure_rtl_100mhz", "microblaze_system"})
+    power_100 = power_summary["scopes"]["pure_rtl_100mhz"]
+    check("100 MHz implementation timing met", power_100["core_clock_frequency_mhz"] == 100.0 and power_100["timing"]["status"] == "MET" and power_100["timing"]["wns_ns"] == 0.035)
+    check("100 MHz power components exact", power_100["total_on_chip_power_w"] == 0.183 and power_100["dynamic_power_w"] == 0.085 and power_100["device_static_power_w"] == 0.097)
     benchmark = metrics["benchmark"]
     check("benchmark imported status", benchmark["status"] == "IMPORTED_VERIFIED_ACTIVE_CORE_AND_VIVADO_POWER")
-    check("benchmark commit exact", benchmark["upstream_commit"] == "95d7966c32ec0bad7af2dca4aa23e7e638a9103a")
+    check("benchmark commit exact", benchmark["upstream_commit"] == "6298a8e030d45da6d989fec6ccccd74714070ee9")
     check("benchmark Exact C++ latency exact", benchmark["cpu_kernel_latency_ms"] == 1777.6998 and benchmark["cpu_end_to_end_latency_ms"] == 2007.54925)
     check("benchmark active-core exact", benchmark["active_core_cycles"] == 3601290 and benchmark["active_core_latency_ms"] == 36.0129 and benchmark["active_core_throughput_samples_per_s"] == 49982089.751172)
     check("benchmark active-core speedup exact", round(benchmark["exact_cpp_to_active_core_speedup"], 9) == 49.362861641)
     check("benchmark UART diagnostic exact", benchmark["uart_paced_raw_interval_ms"] == 187144.75092000002)
     check("benchmark integrated timing unmeasured", benchmark["integrated_system_compute_latency_ms"] is None and benchmark["exact_cpp_to_integrated_system_speedup"] is None)
-    check("benchmark estimated power exact", benchmark["estimated_pure_rtl_power_w"] == 0.099 and benchmark["estimated_system_power_w"] == 0.271)
-    check("benchmark derived energy exact", benchmark["derived_pure_rtl_energy_per_decision_j"] == 0.0035652771 and benchmark["derived_system_energy_per_decision_j"] is None)
+    check("benchmark estimated power exact", benchmark["estimated_pure_rtl_power_w"] == 0.183 and benchmark["estimated_pure_rtl_100mhz_dynamic_power_w"] == 0.085 and benchmark["estimated_pure_rtl_100mhz_device_static_power_w"] == 0.097 and benchmark["estimated_pure_rtl_1mhz_power_w"] == 0.099 and benchmark["estimated_system_power_w"] == 0.271)
+    check("benchmark derived energy exact", benchmark["derived_pure_rtl_energy_per_decision_j"] == 0.0065903607 and benchmark["derived_pure_rtl_active_dynamic_energy_per_decision_j"] == 0.0030610965 and benchmark["derived_system_energy_per_decision_j"] is None)
+    check("benchmark mixed-clock energy rejected", benchmark["legacy_gap_inclusive_pure_rtl_energy_per_decision_j"] is None and benchmark["legacy_1mhz_power_energy_status"] == "NOT_DERIVED_CLOCK_MISMATCH")
     check("physical board power unmeasured", benchmark["measured_board_power_w"] is None and benchmark["measured_energy_per_decision_j"] is None and benchmark["board_timing_status"] == "MEASURED_COUNTERS_DERIVED_ACTIVE_CORE" and benchmark["integrated_system_timing_status"] == "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER" and benchmark["board_power_status"] == "NOT_MEASURED")
     with (ROOT / "source_of_truth" / "claim_registry.csv").open(encoding="utf-8-sig", newline="") as handle:
         claim_rows = list(csv.DictReader(handle))

@@ -24,5 +24,5 @@
 
 1. SAFE claim만 단정형으로 쓰며 CAREFUL claim은 같은 문단에서 범위를 제한한다.
 2. Board 36/36은 기능 등가성, final 29/36은 label 정확도로 분리한다.
-3. Benchmark 값은 `95d7966c...`의 MEASURED/ESTIMATED/DERIVED 범위를 유지하고 counter-derived active-core를 integrated-system timing으로, Vivado on-chip estimate를 physical board 입력 전력으로 확대하지 않는다.
+3. Benchmark 값은 `6298a8e...`의 MEASURED/ESTIMATED/DERIVED 범위를 유지하고, 100 MHz latency에는 100 MHz Pure RTL power만 결합한다. counter-derived active-core를 integrated-system timing으로, Vivado on-chip estimate를 physical board 입력 전력으로 확대하지 않는다.
 4. 개인정보·서명·공식 신청서 필드는 private HWP에서만 작성한다.
