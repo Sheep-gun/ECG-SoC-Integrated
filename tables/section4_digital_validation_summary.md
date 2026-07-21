@@ -8,6 +8,7 @@ This table is the compact result source for items 2-1 through 2-4.  It reports i
 | 2-2 Exact C++ vs RTL/XSim internal state | Exhaustive fixed-width primitives, module microtraces, accepted-sample state hashes, Snapshot boundaries, final outputs | Fixed-width 793,595/793,595; microtrace 18/18; states 240000/240000; Snapshot 1080/1080; prediction 36/36; membrane 144/144 | PASS | `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json` |
 | 2-3 Full-top control flow | 36 complete XSim cases; verify `final_valid`, accepted samples, Snapshot count, and decision count | 36/36; 1,800,000 samples, 30 Snapshots, 1 decision per case; 5,401,260 profiled cycles | PASS | `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv` |
 | 2-4 AXI/IP packaging and interface | Rerun packaged accelerator and sample-feeder IP smoke tests in Vivado XSim 2020.2 | 2/2 testbenches PASS; AXI-Lite read/write, AW/W skew, stalled-read stability, AXI-Stream backpressure/TLAST, counters, error clear, done/IRQ | PASS | `validation/digital_section4/axi_ip/axi_ip_smoke_summary.json`; `validation/digital_section4/axi_ip/logs/*.log` |
+| 2-5 Nexys A7 measured replay | 36 full 1,800,000-sample streams; hardware counters and final state | Prediction 36/36; membrane 144/144; core/system median 187,144.750920 ms; throughput 9,618.223280 samples/s | PASS | `benchmarks/accelerator_benefit/results/board_timing_summary.json` |
 
 Notes:
 

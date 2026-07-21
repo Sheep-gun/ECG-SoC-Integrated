@@ -1,0 +1,3 @@
+label,value,status
+System throughput,9618.223 samples/s,DERIVED
+Margin versus 1 kSPS,9.618x,DERIVED

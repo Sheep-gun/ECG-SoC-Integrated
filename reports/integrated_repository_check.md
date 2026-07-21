@@ -2,9 +2,9 @@
 
 ## Result: PASS
 
-- Rules checked: 499
+- Rules checked: 527
 - Conflicts found: 0
-- Benchmark import: PASS (verified NO_BOARD scope)
+- Benchmark import: PASS (measured board timing and Vivado-estimated power)
 
 ## Rules checked
 
@@ -44,9 +44,13 @@
 - PASS — required path docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md
 - PASS — required path benchmarks/accelerator_benefit/README.md
 - PASS — required path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — required path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
 - PASS — required path benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
 - PASS — required path benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — required path benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
 - PASS — required path benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
+- PASS — required path benchmarks/accelerator_benefit/results/board_timing_summary.json
+- PASS — required path benchmarks/accelerator_benefit/results/power_summary.json
 - PASS — required path benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
 - PASS — required path benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
 - PASS — required path benchmarks/accelerator_benefit/results/power_energy_summary.csv
@@ -68,6 +72,8 @@
 - PASS — required path docs/STREAMING_STATE_MEMORY_KR.md
 - PASS — required path tables/streaming_state_inventory.csv
 - PASS — required path figures/final/FIG-12_digital_processing_flow.svg
+- PASS — required path figures/final/FIG-12a_board_latency.png
+- PASS — required path figures/final/FIG-12b_power_energy.png
 - PASS — required path figures/final/FIG-15_afe_adc_signal_flow.svg
 - PASS — required path figures/final/FIG-02_research_workflow.svg
 - PASS — required path figures/source/approved_svg/FIG-12_digital_processing_flow.svg
@@ -292,17 +298,25 @@
 - PASS — path-redaction file exists: tools/publication_readiness_audit.py
 - PASS — path-redaction sanitized hash: tools/publication_readiness_audit.py
 - PASS — benchmark evidence commit exists
-- PASS — benchmark import manifest has 9 rows
+- PASS — benchmark import manifest has 13 rows
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/README.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/README.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/board_timing_summary.json
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/board_timing_summary.json
+- PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/power_summary.json
+- PASS — benchmark manifest path benchmarks/accelerator_benefit/results/power_summary.json
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
 - PASS — benchmark manifest path benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv
 - PASS — benchmark manifest commit benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
@@ -355,6 +369,14 @@
 - PASS — metric evidence exists: board_final_pred_equivalence
 - PASS — metric evidence exists: board_final_mem_equivalence
 - PASS — metric evidence exists: board_label_accuracy
+- PASS — metric evidence exists: board_core_latency_median
+- PASS — metric evidence exists: board_system_latency_median
+- PASS — metric evidence exists: board_system_throughput_median
+- PASS — metric evidence exists: pure_rtl_estimated_power
+- PASS — metric evidence exists: microblaze_system_estimated_power
+- PASS — metric evidence exists: pure_rtl_power_reroute_lut
+- PASS — metric evidence exists: pure_rtl_power_reroute_ff
+- PASS — metric evidence exists: pure_rtl_power_reroute_wns
 - PASS — metric evidence exists: xmodel_emulator_mean_rms
 - PASS — metric evidence exists: afe_input_sha256_identity
 - PASS — metric evidence exists: canonical_sample_gap_cycles
@@ -376,18 +398,21 @@
 - PASS — metric evidence exists: raw_input_window_samples
 - PASS — metric evidence exists: avoided_full_raw_input_window_bits
 - PASS — metric evidence exists: avoided_full_raw_input_window_bytes
-- PASS — benchmark status imported NO_BOARD
+- PASS — benchmark status includes measured board timing and Vivado power
 - PASS — benchmark source commit exact
 - PASS — benchmark Exact C++ values
 - PASS — benchmark RTL values
 - PASS — benchmark speedup estimate
+- PASS — benchmark measured board values
 - PASS — benchmark power values estimated
-- PASS — benchmark physical values pending
-- PASS — benchmark README boundary 32.912687
-- PASS — benchmark README boundary 측정한 speedup이 아니다
+- PASS — benchmark derived energy values
+- PASS — physical board power remains unmeasured
+- PASS — benchmark README boundary 0.009499063
+- PASS — benchmark README boundary 105.273540
 - PASS — benchmark README boundary 30분 관찰
-- PASS — benchmark README boundary PENDING_BOARD
 - PASS — benchmark README boundary 0.099 W
+- PASS — benchmark README boundary 0.271 W
+- PASS — benchmark README boundary 물리 보드 전력이나 실측 에너지
 - PASS — benchmark comparison one row
 - PASS — benchmark comparison formula values
 - PASS — benchmark equivalence gate
@@ -498,10 +523,13 @@
 - PASS — superseded flow figure files deleted
 - PASS — manuscript raw-data policy
 - PASS — benchmark value promoted with scope: 1,777.699800 ms
-- PASS — benchmark value promoted with scope: 54.012600 ms
-- PASS — benchmark value promoted with scope: 32.912687
+- PASS — benchmark value promoted with scope: 187,144.750920 ms
+- PASS — benchmark value promoted with scope: 0.009499063
+- PASS — benchmark value promoted with scope: 105.273540
 - PASS — benchmark value promoted with scope: 0.099 W
-- PASS — benchmark value promoted with scope: PENDING_BOARD
+- PASS — benchmark value promoted with scope: 0.271 W
+- PASS — benchmark value promoted with scope: 18.527330341080 J
+- PASS — benchmark value promoted with scope: 50.716227499320 J
 - PASS — benchmark live boundary
 - PASS — benchmark board-speedup boundary
 - PASS — integrated repo absent from parent index
@@ -514,12 +542,12 @@
 
 ## Unresolved evidence / bounded scope
 
-- Physical board timing, power and energy remain PENDING_BOARD; imported benchmark is NO_BOARD.
+- Physical board input power and measured energy remain unavailable because no external power meter was used; board counter timing is measured and Vivado on-chip power is estimated.
 - Physical AFE/ADC/silicon and clinical validation are outside the completed scope.
 - Database-class confounding requires future same-acquisition or cross-domain validation.
 
 ## Benchmark-import verification
 
-- Status is `IMPORTED_VERIFIED_NO_BOARD`.
-- Exact C++ measurement, cycle-derived FPGA-core timing and estimated power are distinguished.
-- Physical board timing, power and energy remain `PENDING_BOARD`.
+- Status is `IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER`.
+- Exact C++ measurement, measured FPGA hardware-counter timing, legacy cycle-derived timing, and Vivado-estimated power are distinguished.
+- Physical board input power and measured energy remain `NOT_MEASURED`.

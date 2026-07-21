@@ -45,11 +45,14 @@
 
 `1777.699800 ms / 54.012600 ms = 32.912687×`
 
-따라서 보고 가능한 명칭은 **single-thread Exact C++ versus cycle-derived FPGA-core speedup estimate**다. 실제 보드에서 측정한 speedup이나 전체 system speedup이 아니다.
+따라서 이 값의 보고 가능한 명칭은 **single-thread Exact C++ versus cycle-derived FPGA-core speedup estimate**다. 실제 보드에서 측정한 speedup이나 전체 system speedup이 아니다.
 
-## 미완료 범위
+## 후속 실보드 결과와 남은 범위
 
-- board system latency: `PENDING_BOARD`
-- host/board transfer latency: `PENDING_BOARD`
-- MicroBlaze/UART overhead: `PENDING_BOARD`
-- board power/energy: `PENDING_BOARD`
+- Nexys A7-100T core/system hardware-counter 중앙값: `187144.750920 ms`, MEASURED
+- Exact C++ 대비 measured-board ratio: `0.009499063×`, DERIVED; 가속이 아님
+- counter interval에는 약 99.98%의 UART-paced input wait가 포함됨
+- 고정 XSA에 독립 AXI Timer가 없어 core와 system counter가 36개 모두 동일함
+- host wall-clock transfer latency: 별도 측정하지 않음
+- physical board input power/energy: 외부 전력계가 없어 `NOT_MEASURED`
+- Pure RTL/system `0.099/0.271 W`: Vivado post-implementation vectorless `ESTIMATED`

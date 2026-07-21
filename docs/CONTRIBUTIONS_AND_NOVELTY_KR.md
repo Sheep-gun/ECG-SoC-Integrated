@@ -27,7 +27,7 @@ MATLAB은 nominal AFE/ADC intent, headroom, coding과 reference vector를 담당
 
 ## 5. complete digital IP validation chain
 
-Locked Python integer reference, full-top RTL/XSim, Vivado implementation, AXI/IP-XACT packaging, Vitis/MicroBlaze system과 FPGA replay가 하나의 chain으로 연결된다. Pure RTL은 9719 LUT, 5038 FF, 0 BRAM, 0 DSP로 구현됐고 WNS는 8.184 ns였다. Board replay는 final_pred/final_mem 36/36 functional equivalence를 보였다.
+Locked Python integer reference, full-top RTL/XSim, Vivado implementation, AXI/IP-XACT packaging, Vitis/MicroBlaze system과 FPGA replay가 하나의 chain으로 연결된다. 재생성한 Pure RTL route는 9749 LUT, 5045 FF, 0 BRAM, 0 DSP와 WNS 8.146 ns였고, Board replay는 final prediction 36/36 및 Final Membrane 144/144 functional equivalence를 보였다.
 
 Classification accuracy는 별도로 29/36=80.56%이며 hardware equivalence와 혼동하지 않는다.
 
@@ -42,6 +42,6 @@ Classification accuracy는 별도로 29/36=80.56%이며 hardware equivalence와 
 3. 정수형 event/state streaming realization
 4. MATLAB–LTspice–XMODEL–digital handoff와 정량 정합·bit identity
 5. RTL/IP/FPGA 구현 완결성
-6. resource, timing과 완료된 NO_BOARD accelerator benefit benchmark; physical board timing·power는 향후 검증
+6. resource, timing, 36-case measured-board counter와 Vivado post-implementation power estimate; physical board input power는 미측정
 
 즉 속도는 지원 증거이며 본 연구의 주된 novelty가 아니다.

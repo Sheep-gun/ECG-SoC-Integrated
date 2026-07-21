@@ -59,7 +59,7 @@ docs/                   research positioning and technical integration narrative
 integration_evidence/   upstream status and intentional exclusions
 figures/                integrated figures and immutable team-provided analog validation figures
 tables/                 result, integration and streaming-state tables
-benchmarks/             verified NO_BOARD benchmark summary and claim boundaries
+benchmarks/             verified board timing, Vivado power estimates and claim boundaries
 reports/                definitive manuscript, evidence map and audits
 tools/                  import, generation and fail-closed integrity checks
 private_submission/     Git-blocked private-report area
@@ -100,8 +100,8 @@ python tools/check_integrated_repository.py
 
 ## 7. Accelerator benchmark 상태
 
-Status: `IMPORTED_VERIFIED_NO_BOARD`
+Status: `IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER`
 
 Summary: [`benchmarks/accelerator_benefit/README.md`](benchmarks/accelerator_benefit/README.md)
 
-Digital `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`의 완료된 NO_BOARD package를 반영했다. 저장 데이터 기준 Exact C++ kernel 중앙값은 1,777.699800 ms, cycle-derived FPGA core는 54.012600 ms이며 처리시간 비율은 32.912687배다. 이는 측정 board speedup이 아니고 live 최종 판정은 현재 30분 관찰 창을 필요로 한다. 0.099 W와 0.005347247400 J/decision은 추정값이며 physical board timing·power·energy는 `PENDING_BOARD`다. 속도는 본 연구의 주 기여가 아니라 장시간 네 class 분류 구조를 보조하는 구현 평가 항목이다.
+Digital commit `46f90224fca0dea3a592049a5e14b97680d529e0`의 Nexys A7-100T 36-case 실보드 결과와 Vivado power report를 반영했다. Board-Golden 정합은 final prediction 36/36과 Final Membrane 144/144다. Core/system counter 중앙값은 187,144.750920 ms, 처리량은 9,618.223280 samples/s이며 Exact C++ 대비 0.009499063×다. 이 값은 UART input wait를 포함해 가속이 아니라 CPU보다 105.273540배 긴 interval이다. Pure RTL 0.099 W와 MicroBlaze system 0.271 W는 post-implementation vectorless ESTIMATED 값이고, 18.527330341/50.716227499 J는 DERIVED 값이다. Physical board input power는 외부 전력계가 없어 미측정이다.

@@ -50,10 +50,10 @@ repositories:
     name: SNN-ECG-4-Class-Classifier
     normalized_origin_url: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
     remote_branch: main
-    fixed_evidence_commit: 09e4d840827ad20856f5e23be4743ddd01565e30
-    imported_commit_title: "Merge Exact C++ native CPU baseline"
+    fixed_evidence_commit: 46f90224fca0dea3a592049a5e14b97680d529e0
+    imported_commit_title: "Complete measured board benchmark and Vivado power evidence"
     contributor: 양건
-    scope: "accelerator-benefit evidence only; locked classifier RTL remains c6b80de19cdcad5b7e43fe7835588b629d847f75"
+    scope: "measured board timing and post-route Vivado power evidence; locked classifier RTL remains c6b80de19cdcad5b7e43fe7835588b629d847f75"
     import_method: "curated report/result snapshot with integrated claim boundaries"
 
 intentional_exclusions_registry: integration_evidence/excluded_upstream_paths.csv

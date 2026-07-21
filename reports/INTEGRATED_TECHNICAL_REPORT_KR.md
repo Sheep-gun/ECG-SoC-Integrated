@@ -2,7 +2,7 @@
 
 # 초록
 
-본 논문은 장시간 ECG로부터 NSR·CHF·ARR·AF를 분류하는 AFE–ADC–SNN-inspired streaming RTL 통합 시스템을 제시한다. 아날로그 앞단은 기준선 이동과 60 Hz 간섭을 억제해 1 kSPS signed 12-bit 스트림을 만들고, 디지털 가속기는 60초 리듬·파형 증거를 30개 Snapshot에 누적해 기록 단위 클래스를 출력한다. MATLAB·LTspice·XMODEL 검증에서 동일한 10초 ECG의 LTspice–XMODEL ADC 출력은 평균 절대 오차 0.6445 LSB와 상관계수 0.999518을 보였다. 고정 최종 시험 정확도는 29/36=80.56%였고 FPGA의 최종 클래스와 네 막전위는 XSim 기준과 36/36 일치했으며, Pure RTL은 BRAM과 DSP 없이 구현되었다. 저장 ECG의 cycle-derived core 처리시간은 Exact C++보다 32.912687배 짧았다.
+본 논문은 장시간 ECG로부터 NSR·CHF·ARR·AF를 분류하는 AFE–ADC–SNN-inspired streaming RTL 통합 시스템을 제시한다. 아날로그 앞단은 기준선 이동과 60 Hz 간섭을 억제해 1 kSPS signed 12-bit 스트림을 만들고, 디지털 가속기는 60초 리듬·파형 증거를 30개 Snapshot에 누적해 기록 단위 클래스를 출력한다. MATLAB·LTspice·XMODEL 검증에서 동일한 10초 ECG의 LTspice–XMODEL ADC 출력은 평균 절대 오차 0.6445 LSB와 상관계수 0.999518을 보였다. 고정 최종 시험 정확도는 29/36=80.56%였고 FPGA의 최종 클래스와 네 막전위는 XSim 기준과 36/36 일치했다. Nexys A7-100T의 36-case counter 중앙값은 187.144751 s였으며, UART input wait를 포함한 실보드 interval의 Exact C++ 대비 비율은 0.009499063×였다. Vivado 구현 후 vectorless 추정전력은 Pure RTL 0.099 W, MicroBlaze 통합 system 0.271 W였다.
 
 # 핵심어
 
@@ -52,11 +52,11 @@ ECG는 심장의 전기적 활동을 시간에 따라 기록한 전압 파형이
 | 전체 관찰 구간 비저장 | 표본별 지속 상태 갱신 | 측정된 메모리 절감량 아님 |
 | 아날로그 검증·Mixed-signal 인계 | LTspice 35 run, XMODEL 대비 ±5 LSB 98.74%; SHA256와 canonical pred/mem 36/36 | schematic/행동모델 기반 |
 | FPGA IP | Vivado·IP-XACT·MicroBlaze·보드 재생 | 임상 장치/ASIC 아님 |
-| 가속기 효과 | Exact C++ 1,777.699800 ms 대 cycle-derived core 54.012600 ms | 32.912687배 추정; board 측정 아님 |
+| 실보드 처리 | Exact C++ 1,777.699800 ms 대 measured board core/system 187,144.750920 ms | 0.009499063×; input wait 포함 |
 
 *표 1. 연구 목표와 달성 결과. 각 행은 서로 다른 증거 범위를 갖는다. [근거: CLM-003, CLM-004, CLM-008~CLM-013, CLM-018, CLM-023]*
 
-표 1의 가속기 benchmark는 저장 데이터의 CPU kernel과 FPGA accelerator-core 처리범위를 맞춘 보조 구현 결과다. 분류 구조가 주 기여이며, 32.912687배는 measured CPU와 cycle-derived core를 결합한 추정이므로 물리 보드 전체의 고속·저전력 우월성으로 확대하지 않는다 [CLM-043~CLM-046].
+표 1의 가속기 benchmark는 저장 데이터의 Exact C++와 고정 firmware counter 범위를 비교한 보조 구현 결과다. 0.009499063×는 가속이 아니라 UART-paced input wait를 포함한 board interval이 CPU보다 105.273540배 길었다는 뜻이다. 기존 32.912687× no-stall cycle-derived 비교는 별도 추정치로만 유지하며, 어느 값도 물리 보드의 저전력 우월성으로 확대하지 않는다 [CLM-043~CLM-047].
 
 # 2. 관련 기술과 시스템 설계
 
@@ -632,29 +632,32 @@ AXI wrapper는 시작 신호, valid/ready, 최종 클래스와 네 막전위를 
 
 # 6. 가속기 Benchmark와 아날로그·디지털 통합 검증
 
-디지털 IP 구현 뒤에는 두 질문을 분리해 확인한다. 첫째, 동일한 30분 분류 작업에서 가속기 코어가 저장 데이터를 얼마나 빨리 처리하는가. 둘째, AFE XMODEL이 만든 signed stream이 디지털 RTL과 FPGA 경계까지 변형 없이 전달되고 같은 내부 상태와 판정을 만드는가. 첫 질문은 완료된 NO_BOARD benchmark의 measured CPU와 cycle-derived core 결과로, 두 번째 질문은 SHA256과 bit-exact 비교로 검증하였다.
+디지털 IP 구현 뒤에는 두 질문을 분리해 확인한다. 첫째, 동일한 30분 분류 작업에서 Exact C++와 실제 FPGA counter interval이 각각 얼마나 걸리는가. 둘째, AFE XMODEL이 만든 signed stream이 디지털 RTL과 FPGA 경계까지 변형 없이 전달되고 같은 내부 상태와 판정을 만드는가. 첫 질문은 Nexys A7-100T의 36-case hardware counter와 Vivado post-implementation power report로, 두 번째 질문은 SHA256과 bit-exact 비교로 검증하였다.
 
 ## 6.1 가속기 Benchmark 결과와 해석 범위
 
-Benchmark는 고정 분류기와 RTL을 바꾸지 않고 digital 저장소 `main`의 `09e4d840...`에서 수행했다. 36개 입력은 각각 1,800,000개 표본이며 Exact C++ 측정 전에 최종 예측 36/36, 네 막전위 144/144와 Snapshot 경계 1,080/1,080 일치를 확인하였다. 즉 CPU 기준선이 다른 계산을 빠르게 수행한 것이 아니라 고정 RTL과 같은 결과를 만드는지 먼저 통과시켰다 [CLM-018, CLM-047].
+Benchmark는 고정 분류기와 RTL을 바꾸지 않고 digital 저장소 commit `46f90224...`에서 완료했다. 36개 입력은 각각 1,800,000개 표본이며 보드는 최종 예측 36/36, 네 막전위 144/144, Snapshot 30회와 decision 1회를 모두 재현했다. Exact C++ 역시 timing 전에 final prediction 36/36, membrane 144/144와 Snapshot 경계 1,080/1,080 등가성을 통과했다 [CLM-018, CLM-047].
 
-여기서 묻는 질문은 **같은 저장 ECG를 같은 결과로 처리할 때 가속기 코어가 얼마나 계산 여유를 갖는가**이다. hand-written single-thread transaction-level Exact C++는 30분 입력을 평균 약 1.78초에 처리했고, Pure RTL 코어는 5,401,260 cycles와 100 MHz 기준 약 54 ms가 필요했다. 같은 계산 범위의 비율은 32.912687×다 [CLM-043~CLM-045].
+hand-written single-thread transaction-level Exact C++ kernel의 중앙값은 1,777.699800 ms였다. Nexys A7-100T의 accelerator last-decision counter와 total transaction counter는 모두 중앙값 187,144.750920 ms, 평균 188,068.199890 ms, 범위 186,492.781740–191,686.150980 ms였다. 처리량은 9,618.223280 samples/s, 1 kSPS 대비 실시간 여유는 9.618223×다 [CLM-043~CLM-047].
 
-이 값은 measured CPU와 cycle-derived FPGA 코어를 비교한 speedup estimate다. Python 주기 모델은 검증용이고 Verilator host runtime도 RTL simulation 시간이므로 CPU 기준선에서 제외했다. 또한 host 전송·MicroBlaze·UART는 포함하지 않았으므로 측정 보드 speedup으로 해석하지 않는다.
+Exact C++를 measured board interval로 나눈 비율은 core와 system 모두 0.009499063×다. 1보다 작으므로 가속이 아니며, 반대로 board interval이 Exact C++보다 105.273540배 길었다. 고정 XSA에는 독립 AXI Timer가 없고 두 counter 모두 final decision에서 멈추며, interval의 약 99.98%가 230400-baud UART-paced input wait다. 따라서 이 결과는 no-stall accelerator compute만의 성능이나 host wall latency로 재표기하지 않는다. 기존 54.012600 ms와 32.912687×는 cycle-derived no-stall 추정으로만 별도 유지한다.
 
 | 구현·범위 | 처리시간 | 처리량 | 상태와 해석 |
 |---|---:|---:|---|
-| Exact C++ kernel | 1,777.699800 ms | 1,012,544.413 samples/s | measured, single thread, 입력 적재 후 결과까지 |
-| Exact C++ end-to-end | 2,007.549250 ms | 896,615.633 samples/s | measured, 파일 입력과 결과 기록 포함 |
-| Pure RTL FPGA core | 54.012600 ms | 33,325,557.369947 samples/s | cycle-derived, 저장 데이터 accelerator-core 범위 |
-| 기존 FPGA replay | 미측정 | 미측정 | pred/mem 36/36 기능 검증만 완료 |
-| 물리 board timing·power | `PENDING_BOARD` | `PENDING_BOARD` | timer 실행과 실측 전력 필요 |
+| Exact C++ kernel | 1,777.699800 ms | 1,012,544.413 samples/s | MEASURED, single thread |
+| Pure RTL no-stall core | 54.012600 ms | 33,325,557.369947 samples/s | DERIVED from canonical RTL cycles |
+| FPGA board core counter | 187,144.750920 ms | 9,618.223280 samples/s | MEASURED, UART input wait 포함 |
+| FPGA board system counter | 187,144.750920 ms | 9,618.223280 samples/s | MEASURED, 독립 AXI Timer 없음 |
 
-*표 12. 저장된 30분 ECG의 CPU와 FPGA-core 처리 비교. 동일 분류 입력을 사용하지만 measured CPU와 cycle-derived core를 결합한 비교이며 물리 board speedup이 아니다. [직접 근거: `benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv`; `benchmarks/accelerator_benefit/results/rtl_cycle_summary.json`; CLM-043~CLM-045]*
+*표 12. 저장된 30분 ECG의 CPU, no-stall cycle-derived RTL과 measured-board counter 범위 비교. [직접 근거: `benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv`; `benchmarks/accelerator_benefit/results/board_timing_summary.json`; CLM-043~CLM-047]*
 
-`54.012600 ms`는 이미 저장된 표본을 처리하는 active compute time이다. 실제 ECG가 1 kSPS로 들어오면 1,800,000개 표본을 모으는 데 30분이 걸리므로 live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다. 이 처리 여유는 입력이 들어오는 동안 표본별 상태를 갱신하고 다른 시스템 작업과 전력 절감을 설계할 가능성을 보여주는 값이다.
+![그림 12a. CPU, no-stall RTL과 measured-board latency](../figures/final/FIG-12a_board_latency.png)
 
-Vivado 추정 전력 0.099 W에 cycle-derived 처리시간을 곱하면 0.005347247400 J/decision이다. 두 값은 모두 추정 범위이며 물리 보드에서 측정한 전력·에너지가 아니다. 물리 board timing, power와 energy는 계속 `PENDING_BOARD`다 [CLM-046].
+![그림 12b. Vivado 추정전력과 파생 에너지](../figures/final/FIG-12b_power_energy.png)
+
+`54.012600 ms`는 canonical no-stall cycle-derived 값이고, `187,144.750920 ms`는 UART 입력 대기를 포함한 실보드 counter 값이다. 실제 ECG가 1 kSPS로 들어오면 최종 판정에는 여전히 30분 관찰이 필요하므로 어느 저장-data replay 값도 live 판정시간으로 해석하지 않는다.
+
+Vivado 2020.2 post-implementation vectorless 추정전력은 Pure RTL 0.099 W, MicroBlaze 통합 system 0.271 W였다. 각각 measured core/system 중앙값을 곱한 파생 에너지는 18.527330341080 J/decision과 50.716227499320 J/decision이다. 두 power는 SAIF/VCD 없는 Medium-confidence estimate이며, physical board input power와 measured energy는 외부 전력계가 없어 미측정이다 [CLM-046]. Power 재현용 Pure RTL route는 동일 RTL·part·clock에서 9,749 LUT, 5,045 FF, WNS 8.146 ns였고, locked canonical route의 9,719 LUT, 5,038 FF, WNS 8.184 ns와 소폭 달랐지만 Total On-Chip Power 0.099 W를 재현했다. 따라서 자원·timing 표의 locked authority와 power-report 재현 route를 하나의 route 결과처럼 섞지 않는다.
 
 ## 6.2 AFE·디지털 통합 XMODEL 검증
 
@@ -774,7 +777,7 @@ Pure RTL은 긴 조합 경로를 여러 등록 단계로 분리한다. `C24/glob
 
 분류 결과는 표 4의 NSR·CHF·ARR·AF 공개 ECG에 적용된다. 원천 record 단위 분할로 동일 record의 직접 누출을 차단했으며, 최종 시험은 36개 구간과 19개 record로 구성된다. 이 수치는 해당 공개 데이터와 30분 입력 규약에 대한 성능이다.
 
-입력 길이는 모든 클래스에 동일한 30분이며, 한 판정은 60초 Snapshot 30개로 구성된다. 따라서 29/36 정확도, 16/19 record-majority와 32.912687배 처리시간 비율은 이 30분 입력 규약에 대응한다 [CLM-035].
+입력 길이는 모든 클래스에 동일한 30분이며, 한 판정은 60초 Snapshot 30개로 구성된다. 따라서 29/36 정확도, 16/19 record-majority와 0.009499063× measured-board 비율은 이 30분 입력 규약에 대응한다 [CLM-035].
 
 아날로그 결과는 MATLAB 공칭 모델, ±1.65 V LTspice schematic과 SystemVerilog XMODEL의 AFE·S/H·ADC 계약에 적용된다. 디지털 결과는 signed 12-bit 입력, XSim, Vivado 구현과 FPGA replay에 적용된다. 기능 등가성 36/36은 이 경계에서 클래스와 내부 상태가 동일함을 나타낸다.
 
@@ -785,7 +788,7 @@ Pure RTL은 긴 조합 경로를 여러 등록 단계로 분리한다. `C24/glob
 | Mixed-signal 인계 | MAE 0.6445 LSB, corr. 0.999518 | 동일 10초 ECG 10,000표본 |
 | 디지털 기능 등가성 | pred/mem 36/36 | signed input–XSim–FPGA 경계 |
 | FPGA 구현 | 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP | xc7a100tcsg324-1, Vivado 2020.2 |
-| 저장 ECG 처리 | Exact C++ 대비 32.912687배 | measured CPU 대 cycle-derived core |
+| 저장 ECG 실보드 처리 | Exact C++ 대비 0.009499063× | measured CPU 대 measured counter interval; input wait 포함 |
 
 *표 16. 통합 시스템 결과와 각 수치의 적용 범위. [근거: CLM-004, CLM-005, CLM-008~CLM-020, CLM-043~CLM-052]*
 
@@ -795,7 +798,7 @@ Pure RTL은 긴 조합 경로를 여러 등록 단계로 분리한다. `C24/glob
 
 디지털 IP는 1 kSPS ECG를 저장하지 않고 순차 처리하면서 60초마다 리듬·파형 증거를 Snapshot으로 확정하고, 30개 Snapshot을 Final Membrane에 누적해 기록 전체를 분류한다. 고정 최종 시험 29/36=80.56%는 보지 않은 36개 구간 중 29개를 맞히고 7개를 틀렸다는 뜻이며, record-majority 16/19=84.21%는 같은 시험 결과를 원본 record별로 다시 묶은 보조 지표다. Pure RTL은 9,719 LUT와 5,038 FF를 사용하고 BRAM 0, DSP 0, 양의 WNS를 보였다. AFE 입력·RTL·FPGA 출력의 36/36 일치는 분류 정확도가 100%라는 뜻이 아니라, 같은 입력에 대해 구현 결과와 내부 상태가 바뀌지 않았다는 뜻이다 [CLM-004, CLM-005, CLM-008~CLM-013].
 
-본 시스템은 장시간 ECG의 간헐적 증거를 표본값·박동·Snapshot·Final 상태로 연결하고, 아날로그 입력부터 FPGA의 최종 클래스까지 같은 데이터와 내부 상태를 추적한다. 저장 ECG에서 cycle-derived core 처리시간은 Exact C++보다 32.912687배 짧았다. 이 결과는 AFE·ADC 모델, streaming RTL 가속기와 FPGA 구현이 하나의 재현 가능한 장시간 ECG 분류 시스템으로 동작함을 보여준다 [CLM-035, CLM-043~CLM-052].
+본 시스템은 장시간 ECG의 간헐적 증거를 표본값·박동·Snapshot·Final 상태로 연결하고, 아날로그 입력부터 FPGA의 최종 클래스까지 같은 데이터와 내부 상태를 추적한다. 저장 ECG의 measured-board interval은 UART input wait 때문에 Exact C++보다 길었지만 1 kSPS 입력보다 9.618223배 빠르게 stream을 처리했고, 보드는 Golden Reference와 final prediction 36/36 및 Final Membrane 144/144로 일치했다. 이 결과는 AFE·ADC 모델, streaming RTL 가속기와 FPGA 구현이 하나의 재현 가능한 장시간 ECG 분류 시스템으로 동작함을 보여준다 [CLM-035, CLM-043~CLM-052].
 
 # 참고문헌
 
@@ -844,7 +847,7 @@ Pure RTL은 긴 조합 경로를 여러 등록 단계로 분리한다. `C24/glob
 | MicroBlaze | 12494 LUT, 8494 reg, 16 BRAM, 3 DSP, WNS 0.097 ns | CLM-010 |
 | Board | pred/mem 36/36; label 29/36 | CLM-011 |
 | Streaming | 회피한 원시 입력 구간 2,700,000 bytes≈2.7 MB | CLM-023 |
-| Benchmark | Exact C++ 1,777.699800 ms; RTL 54.012600 ms; 32.912687× estimate | CLM-018, CLM-043~CLM-047 |
+| Benchmark | Exact C++ 1,777.699800 ms; board 187,144.750920 ms; 0.009499063×; Pure/system 0.099/0.271 W estimated | CLM-018, CLM-043~CLM-047 |
 
 # 부록 B. Claim/증거 mapping
 

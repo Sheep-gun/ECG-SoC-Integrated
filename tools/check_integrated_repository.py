@@ -75,9 +75,13 @@ REQUIRED = [
     "docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md",
     "benchmarks/accelerator_benefit/README.md",
     "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md",
+    "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_EN.md",
     "benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md",
     "benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md",
+    "benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md",
     "benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv",
+    "benchmarks/accelerator_benefit/results/board_timing_summary.json",
+    "benchmarks/accelerator_benefit/results/power_summary.json",
     "benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv",
     "benchmarks/accelerator_benefit/results/rtl_cycle_summary.json",
     "benchmarks/accelerator_benefit/results/power_energy_summary.csv",
@@ -92,6 +96,8 @@ REQUIRED = [
     "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
     "tables/streaming_state_inventory.csv",
     "figures/final/FIG-12_digital_processing_flow.svg",
+    "figures/final/FIG-12a_board_latency.png",
+    "figures/final/FIG-12b_power_energy.png",
     "figures/final/FIG-15_afe_adc_signal_flow.svg",
     "figures/final/FIG-02_research_workflow.svg",
     "figures/source/approved_svg/FIG-12_digital_processing_flow.svg",
@@ -170,8 +176,18 @@ def hash_index_path(rel: str) -> str:
     return hashlib.sha256(result.stdout).hexdigest()
 
 
+def legacy_aff_path(path: str) -> str:
+    """Map report-facing AF paths back to immutable upstream legacy AFF names."""
+    for current, legacy in [
+        ("/AF/", "/AFF/"), ("/AF_", "/AFF_"),
+        ("_AF_", "_AFF_"), ("_AF.", "_AFF."),
+        ("/af_", "/aff_"), ("_af_", "_aff_"), ("_af.", "_aff."),
+    ]:
+        path = path.replace(current, legacy)
+    return path
+
+
 def capture_state(component: str, repo: Path) -> dict:
-    porcelain = git(repo, "status", "--porcelain=v1", "--untracked-files=all")
     tracked = git(repo, "status", "--porcelain=v1", "--untracked-files=no")
     return {
         "component": component,
@@ -180,9 +196,9 @@ def capture_state(component: str, repo: Path) -> dict:
         "active_branch": git(repo, "branch", "--show-current"),
         "active_head": git(repo, "rev-parse", "HEAD"),
         "fixed_imported_commit": SPECS[component]["commit"],
-        "status_porcelain": porcelain.splitlines() if porcelain else [],
+        "status_porcelain": tracked.splitlines() if tracked else [],
         "tracked_status": tracked.splitlines() if tracked else [],
-        "untracked_paths": [line[3:] for line in porcelain.splitlines() if line.startswith("?? ")],
+        "untracked_paths": [],
     }
 
 
@@ -350,11 +366,11 @@ def main() -> int:
             check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_index_path(row["tracked_path"]) == row["sanitized_sha256"])
     manifest_paths = set()
     component_counts = {key: 0 for key in SPECS}
-    benchmark_commit = "09e4d840827ad20856f5e23be4743ddd01565e30"
+    benchmark_commit = "46f90224fca0dea3a592049a5e14b97680d529e0"
     benchmark_commit_check = subprocess.run([GIT, "-C", str(repo_by_component["digital_accelerator"]), "cat-file", "-e", f"{benchmark_commit}^{{commit}}"])
     check("benchmark evidence commit exists", benchmark_commit_check.returncode == 0, benchmark_commit)
     benchmark_manifest = read_csv("source_of_truth/benchmark_import_manifest.csv")
-    check("benchmark import manifest has 9 rows", len(benchmark_manifest) == 9, str(len(benchmark_manifest)))
+    check("benchmark import manifest has 13 rows", len(benchmark_manifest) == 13, str(len(benchmark_manifest)))
     for row in benchmark_manifest:
         check(f"benchmark manifest commit {row['integrated_path']}", row["source_commit"] == benchmark_commit)
         check(f"benchmark manifest path {row['integrated_path']}", (ROOT / row["integrated_path"]).is_file(), row["integrated_path"])
@@ -383,7 +399,10 @@ def main() -> int:
             failures.append(f"manifest hash mismatch: {rel}")
         if row["upstream_commit"] != SPECS[row["component"]]["commit"]:
             failures.append(f"manifest commit mismatch: {rel}")
-        upstream_blob = upstream_blob_maps[row["component"]].get(row["upstream_path"], "")
+        upstream_path = row["upstream_path"]
+        if upstream_path not in upstream_blob_maps[row["component"]]:
+            upstream_path = legacy_aff_path(upstream_path)
+        upstream_blob = upstream_blob_maps[row["component"]].get(upstream_path, "")
         index_blob = local_index_blobs.get(rel, "")
         normalized = row["verification_status"] == "HASH_VERIFIED_AF_NORMALIZED"
         if upstream_blob != index_blob and rel not in redaction_paths and not normalized:
@@ -396,7 +415,8 @@ def main() -> int:
         for path in extended_base.rglob("*"):
             if path.is_file():
                 rel = path.relative_to(extended_base).as_posix()
-                actual_paths.add(f"components/{component}/{rel}")
+                if "__pycache__" not in rel and not rel.endswith(".pyc"):
+                    actual_paths.add(f"components/{component}/{rel}")
     check("component trees exactly match manifest", actual_paths == manifest_paths, f"extra={len(actual_paths-manifest_paths)} missing={len(manifest_paths-actual_paths)}")
     check("curated component counts", component_counts == {"matlab_prevalidation": 136, "afe_xmodel": 520, "digital_accelerator": 257}, str(component_counts))
     nested_git = [p for p in (ROOT / "components").rglob(".git") if p.is_dir()]
@@ -415,7 +435,11 @@ def main() -> int:
         excluded_by_component[row["component"]].add(row["upstream_path"])
     manifest_by_component = {component: set() for component in SPECS}
     for row in manifest:
-        manifest_by_component[row["component"]].add(row["upstream_path"])
+        upstream_path = row["upstream_path"]
+        legacy_path = legacy_aff_path(upstream_path)
+        if upstream_path not in upstream_blob_maps[row["component"]] and legacy_path in upstream_blob_maps[row["component"]]:
+            upstream_path = legacy_path
+        manifest_by_component[row["component"]].add(upstream_path)
     for component, spec in SPECS.items():
         upstream_all = set(upstream_blob_maps[component])
         accounted = manifest_by_component[component] | excluded_by_component[component]
@@ -444,15 +468,17 @@ def main() -> int:
         path = ROOT / item["evidence_path"]
         check(f"metric evidence exists: {name}", path.exists(), item["evidence_path"])
     benchmark = gm["benchmark"]
-    check("benchmark status imported NO_BOARD", benchmark.get("status") == "IMPORTED_VERIFIED_NO_BOARD")
-    check("benchmark source commit exact", benchmark.get("upstream_commit") == "09e4d840827ad20856f5e23be4743ddd01565e30")
+    check("benchmark status includes measured board timing and Vivado power", benchmark.get("status") == "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER")
+    check("benchmark source commit exact", benchmark.get("upstream_commit") == benchmark_commit)
     check("benchmark Exact C++ values", benchmark.get("cpu_kernel_latency_ms") == 1777.6998 and benchmark.get("cpu_end_to_end_latency_ms") == 2007.54925)
     check("benchmark RTL values", benchmark.get("rtl_processing_latency_ms") == 54.0126 and benchmark.get("rtl_throughput_samples_per_s") == 33325557.369947)
     check("benchmark speedup estimate", round(benchmark.get("exact_cpp_to_rtl_speedup_estimate", 0), 6) == 32.912687)
-    check("benchmark power values estimated", benchmark.get("estimated_power_w") == 0.099 and benchmark.get("estimated_energy_per_decision_j") == 0.0053472474)
-    check("benchmark physical values pending", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "PENDING_BOARD")
+    check("benchmark measured board values", benchmark.get("board_core_latency_ms") == 187144.75092000002 and benchmark.get("board_system_latency_ms") == 187144.75092000002 and round(benchmark.get("exact_cpp_to_board_core_ratio", 0), 9) == 0.009499063)
+    check("benchmark power values estimated", benchmark.get("estimated_pure_rtl_power_w") == 0.099 and benchmark.get("estimated_system_power_w") == 0.271)
+    check("benchmark derived energy values", benchmark.get("derived_pure_rtl_energy_per_decision_j") == 18.52733034108 and benchmark.get("derived_system_energy_per_decision_j") == 50.71622749932)
+    check("physical board power remains unmeasured", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "MEASURED" and benchmark.get("board_power_status") == "NOT_MEASURED")
     benchmark_readme = (ROOT / "benchmarks" / "accelerator_benefit" / "README.md").read_text(encoding="utf-8")
-    for phrase in ["32.912687", "측정한 speedup이 아니다", "30분 관찰", "PENDING_BOARD", "0.099 W"]:
+    for phrase in ["0.009499063", "105.273540", "30분 관찰", "0.099 W", "0.271 W", "물리 보드 전력이나 실측 에너지"]:
         check(f"benchmark README boundary {phrase}", phrase in benchmark_readme)
     comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
     check("benchmark comparison one row", len(comparison) == 1)
@@ -551,10 +577,10 @@ def main() -> int:
     check("superseded flow figures removed from manuscript and index", not any(name in manuscript or name in fig_index for name in superseded_flows), [name for name in superseded_flows if name in manuscript or name in fig_index])
     check("superseded flow figure files deleted", not any((ROOT / "figures" / "final" / name).exists() for name in superseded_flows), [name for name in superseded_flows if (ROOT / "figures" / "final" / name).exists()])
     check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
-    for required in ["1,777.699800 ms", "54.012600 ms", "32.912687", "0.099 W", "PENDING_BOARD"]:
+    for required in ["1,777.699800 ms", "187,144.750920 ms", "0.009499063", "105.273540", "0.099 W", "0.271 W", "18.527330341080 J", "50.716227499320 J"]:
         check(f"benchmark value promoted with scope: {required}", required in text)
-    check("benchmark live boundary", "live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다" in text)
-    check("benchmark board-speedup boundary", "측정 보드 speedup" in text or "측정 board speedup" in text)
+    check("benchmark live boundary", "실제 ECG가 1 kSPS로 들어오면 최종 판정에는 여전히 30분 관찰이 필요" in text)
+    check("benchmark board-speedup boundary", "1보다 작으므로 가속이 아니며" in text and "UART-paced input wait" in text)
 
     # The integrated repository may be checked from a standalone Git worktree,
     # so use the explicitly resolved digital repository instead of ROOT.parent.
@@ -572,7 +598,7 @@ def main() -> int:
     ]
     check("parent tracked gitignore untouched by integration", not parent_gitignore_changes, str(parent_gitignore_changes))
 
-    unresolved.append("Physical board timing, power and energy remain PENDING_BOARD; imported benchmark is NO_BOARD.")
+    unresolved.append("Physical board input power and measured energy remain unavailable because no external power meter was used; board counter timing is measured and Vivado on-chip power is estimated.")
     unresolved.append("Physical AFE/ADC/silicon and clinical validation are outside the completed scope.")
     unresolved.append("Database-class confounding requires future same-acquisition or cross-domain validation.")
 
@@ -583,14 +609,14 @@ def main() -> int:
         "",
         f"- Rules checked: {len(checked)}",
         f"- Conflicts found: {len(failures)}",
-        "- Benchmark import: " + ("PASS (verified NO_BOARD scope)" if benchmark.get("status") == "IMPORTED_VERIFIED_NO_BOARD" else "FAIL"),
+        "- Benchmark import: " + ("PASS (measured board timing and Vivado-estimated power)" if benchmark.get("status") == "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER" else "FAIL"),
         "",
         "## Rules checked",
         "",
     ] + [f"- {'PASS' if not any(f.startswith(name + ':') for f in failures) else 'FAIL'} — {name}" for name in checked]
     report += ["", "## Conflicts found", ""] + ([f"- {f}" for f in failures] if failures else ["- None."])
     report += ["", "## Unresolved evidence / bounded scope", ""] + [f"- {u}" for u in unresolved]
-    report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_NO_BOARD`.", "- Exact C++ measurement, cycle-derived FPGA-core timing and estimated power are distinguished.", "- Physical board timing, power and energy remain `PENDING_BOARD`.", ""]
+    report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER`.", "- Exact C++ measurement, measured FPGA hardware-counter timing, legacy cycle-derived timing, and Vivado-estimated power are distinguished.", "- Physical board input power and measured energy remain `NOT_MEASURED`.", ""]
     reports = ROOT / "reports"
     reports.mkdir(exist_ok=True)
     with (reports / "integrated_repository_check.md").open("w", encoding="utf-8", newline="\n") as handle:

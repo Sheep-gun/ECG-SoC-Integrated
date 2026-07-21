@@ -3,42 +3,50 @@
 ## 원천
 
 - 저장소: `https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier`
-- 원격 branch: `main`
-- 반입 commit: `09e4d840827ad20856f5e23be4743ddd01565e30`
-- commit title: `Merge Exact C++ native CPU baseline`
-- 고정 분류기/RTL authority: `c6b80de19cdcad5b7e43fe7835588b629d847f75`
+- 원격 branch: `codex/accelerator-benefit-benchmark`
+- 반입 commit: `46f90224fca0dea3a592049a5e14b97680d529e0`
+- 고정 분류기·RTL·36-case 입력은 변경하지 않았다.
+- raw/internal legacy label `AFF`는 upstream에 유지하고 report-facing 표기는 `AF`를 사용한다.
 
-Benchmark commit은 고정 분류기, 문턱값, RTL, 최종 시험 예측을 변경한 새 모델이 아니다. 고정 설계와 동일한 36개 입력에서 Exact C++ 등가성을 확립한 뒤 CPU 시간을 측정하고, canonical RTL cycle count와 100 MHz 구현 clock으로 accelerator-core 처리시간을 산출한 후속 근거다.
+## 실보드 acceptance
 
-## 반입 판단
+- Nexys A7-100T, COM8, 230400 baud
+- 36/36 completed and BOARD_PASS
+- case당 1,800,000 samples, Snapshot 30회, decision 1회
+- Board–Golden final prediction 36/36
+- Board–Golden Final Membrane 144/144
+- 분류 정확도 29/36=80.56%
+- 모든 transcript에서 `BOARD_BENCH`와 PASS marker 각각 1개
+- 모든 core/system cycle counter 양수
 
-대표 CPU 기준선은 Python cycle model이나 Verilator host simulation이 아니라 hand-written single-thread transaction-level Exact C++로 고정한다. Python은 검증 모델로 느리고, Verilator는 RTL simulation runtime이므로 대표 CPU inference speedup에 사용하지 않는다.
+## 속도 결과
 
-보고 가능한 대표 비교는 다음과 같다.
+| 범위 | 중앙값 | 분류 |
+|---|---:|---|
+| Exact C++ kernel | 1,777.699800 ms | MEASURED |
+| Pure RTL no-stall | 54.012600 ms | DERIVED from canonical cycles |
+| FPGA board core counter | 187,144.750920 ms | MEASURED |
+| FPGA board system counter | 187,144.750920 ms | MEASURED |
 
-`1777.699800 ms / 54.012600 ms = 32.912687×`
+Measured CPU / measured board 비율은 core/system 모두 0.009499063×다. 1보다 작으므로
+가속이 아니며, 역수로는 board counter interval이 Exact C++보다 105.273540배 길다.
+고정 XSA에는 독립 AXI Timer가 없고, 230400-baud UART-paced input wait가 계측 interval의
+약 99.98%를 차지한다. 기존 32.912687×는 measured CPU / cycle-derived 54.012600 ms의
+별도 no-stall 추정치이며 measured-board speedup으로 승격하지 않는다.
 
-분자는 36 cases × 10 measured runs의 Exact C++ kernel 전체 중앙값이다. 분모는 5,401,260 cycles와 100 MHz에서 얻은 cycle-derived FPGA accelerator-core 지연시간이다. 따라서 이 비율은 측정 board speedup이 아니라 **Exact C++ 대 cycle-derived FPGA-core speedup estimate**다.
+## 전력과 에너지
 
-## 등가성 gate
+- Pure RTL: 0.099 W, ESTIMATED
+- MicroBlaze integrated system: 0.271 W, ESTIMATED
+- Pure RTL energy: 18.527330341 J/decision, DERIVED
+- Integrated-system energy: 50.716227499 J/decision, DERIVED
+- Physical board input power/energy: NOT_MEASURED
 
-- final prediction: 36/36
-- final membrane: 144/144
-- Snapshot boundary: 1,080/1,080
-- accepted-sample state hash: 240,000/240,000
-- fixed-width checks: 793,595, failure 0
-- module/adversarial microtrace: 18/18
-- Debug/Release output identity: 36/36
-
-## 남은 경계
-
-- 54.012600 ms는 저장 데이터의 accelerator-core active processing time이다.
-- live ECG 최종 판정은 현재 입력 창 30분의 관찰을 필요로 한다.
-- host transfer, MicroBlaze, UART와 board software overhead는 포함하지 않는다.
-- 0.099 W와 0.005347247400 J/decision은 Vivado estimate 기반 추정이다.
-- physical board timing, power와 energy는 `PENDING_BOARD`다.
-- 분류 정확도 29/36 및 record-majority 16/19는 바뀌지 않는다.
+두 power는 Vivado 2020.2, `xc7a100tcsg324-1`, SAIF/VCD 없는 Medium-confidence
+post-implementation vectorless estimate다. Pure RTL과 MicroBlaze/BRAM/AXI/UART/feeder를
+포함한 integrated-system scope를 섞지 않는다.
 
 ## 선별 반입 파일
 
-대회 보고서가 직접 인용하는 요약 report, Exact C++ 비교 CSV, RTL cycle JSON, power/energy CSV와 post-benchmark equivalence만 통합 저장소에 보존하였다. 전체 benchmark source, 원시 720-run CSV, executable과 board 준비 package는 원본 저장소의 지정 commit에서 추적한다.
+통합 저장소에는 aggregate report, summary CSV/JSON과 source CSV가 있는 figure만 보존한다.
+원본 UART transcript와 Vivado `.rpt`는 upstream commit에서 SHA-256과 함께 추적한다.

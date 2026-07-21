@@ -30,4 +30,4 @@ The parent digital repository locally ignores `/ECG-SoC-Integrated/` using `.git
 
 ## Verification
 
-`tools/check_integrated_repository.py` verifies origins/commits, component hashes, required structure, source-of-truth consistency, imported benchmark values and NO_BOARD boundaries, claim boundaries, privacy controls, nested-repository isolation and upstream before/after invariants. Its final report is `reports/integrated_repository_check.md`.
+`tools/check_integrated_repository.py` verifies origins/commits, component hashes, required structure, source-of-truth consistency, measured-board timing, Vivado-estimated power boundaries, claim boundaries, privacy controls, nested-repository isolation and upstream before/after invariants. Its final report is `reports/integrated_repository_check.md`.

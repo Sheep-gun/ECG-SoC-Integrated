@@ -51,7 +51,7 @@ Generated integrated figures and immutable team-provided analog validation figur
 - File: `figures/final/VAL-02_digital_validation_flow.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `components/digital_accelerator/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_predictions.csv`, `validation/digital_section4/axi_ip/axi_ip_smoke_summary.json`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 09e4d840827ad20856f5e23be4743ddd01565e30, INTEGRATED
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 46f90224fca0dea3a592049a5e14b97680d529e0, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Python과 Exact C++ 기준을 RTL/XSim에 비교한 뒤 Full-top 제어와 AXI/IP 인터페이스로 확장하는 디지털 검증 흐름
 - Evidence scope: digital functional and interface verification sequence
@@ -62,7 +62,7 @@ Generated integrated figures and immutable team-provided analog validation figur
 - File: `figures/final/VAL-02A_multilevel_digital_equivalence.svg`
 - Owner: 양건(통합 편집)
 - Source files: `components/digital_accelerator/reports/final/xsim_locked_model_predictions.csv`, `benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json`, `tools/generate_section4_validation_artifacts.py`
-- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 09e4d840827ad20856f5e23be4743ddd01565e30, INTEGRATED
+- Source commits: c6b80de19cdcad5b7e43fe7835588b629d847f75, 46f90224fca0dea3a592049a5e14b97680d529e0, INTEGRATED
 - Source-data path: `figures/source/figure_data.json`
 - Caption: Python 최종 출력과 Exact C++ 내부 상태를 locked RTL/XSim에 단계별로 비교한 다층 등가성 검증 결과
 - Evidence scope: 36 final outputs plus fixed-width, microtrace, accepted-sample state, and Snapshot-boundary checks
@@ -408,3 +408,23 @@ Generated integrated figures and immutable team-provided analog validation figur
 - Caption: Actual post-route Device View with hierarchy placement overlay, Vivado native MicroBlaze Block Design와 worst setup path
 - Evidence scope: Vivado 2020.2, xc7a100tcsg324-1, actual Device View plus routed hierarchy/timing evidence
 - Limitations: Hierarchy colors use placed primitive coordinates and are not pblock boundaries; not ASIC layout
+
+## FIG-12a
+
+- File: `figures/final/FIG-12a_board_latency.png`
+- Owner: 양건(통합 편집)
+- Source files: `benchmarks/accelerator_benefit/figures/01_cpu_vs_rtl_latency.png`, `benchmarks/accelerator_benefit/figures/01_cpu_vs_rtl_latency_source.csv`, `benchmarks/accelerator_benefit/results/board_timing_summary.json`
+- Source commits: 46f90224fca0dea3a592049a5e14b97680d529e0
+- Caption: Exact C++와 no-stall RTL 추정 및 measured FPGA counter latency 비교
+- Evidence scope: 저장된 1,800,000-sample ECG; measured counter에는 UART-paced input wait 포함
+- Limitations: 0.009499063×는 가속이 아니며 compute-only FPGA latency가 아님
+
+## FIG-12b
+
+- File: `figures/final/FIG-12b_power_energy.png`
+- Owner: 양건(통합 편집)
+- Source files: `benchmarks/accelerator_benefit/figures/05_power_energy_status.png`, `benchmarks/accelerator_benefit/figures/05_power_energy_status_source.csv`, `benchmarks/accelerator_benefit/results/power_summary.json`, `benchmarks/accelerator_benefit/results/power_energy_summary.csv`
+- Source commits: 46f90224fca0dea3a592049a5e14b97680d529e0
+- Caption: Pure RTL 및 MicroBlaze 통합 시스템의 Vivado 추정전력과 파생 energy/decision
+- Evidence scope: Vivado 2020.2 post-implementation vectorless on-chip power estimate와 measured counter latency의 곱
+- Limitations: 물리 보드 입력 전력과 실측 에너지가 아니며 외부 전력계는 사용하지 않음

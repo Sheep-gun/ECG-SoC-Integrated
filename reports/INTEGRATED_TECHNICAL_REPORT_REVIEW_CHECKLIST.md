@@ -10,7 +10,7 @@
 - [x] 본문은 9개 장으로 구성하고, MATLAB→AFE·ADC/XMODEL→디지털 IP→benchmark→통합 검증→결과→시스템 특성·적용 범위로 이어진다.
 - [x] MATLAB 공칭 사전검증을 디지털 아키텍처보다 먼저 제시하고, 그 출력 파라미터와 기준 벡터가 AFE·ADC XMODEL의 입력 기준이 됨을 설명한다.
 - [x] AFE·ADC XMODEL 검증 뒤에 signed stream을 소비하는 디지털 가속기 IP를 배치하여 아날로그 앞단과 디지털 뒷단의 인과관계를 유지한다.
-- [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, NO_BOARD 수치와 physical board pending을 구분한다.
+- [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, measured counter timing·Vivado estimate·physical board power 미측정을 구분한다.
 - [x] 초록의 대표 수치는 각각 아날로그 인계, 분류 성능, FPGA 재현성이라는 의미가 바로 드러난다.
 - [x] 디지털 Figure는 QRS 검출 뒤 rhythm·morphology 경로를 분기하고 class scoring에서 합친 뒤 Snapshot 30개를 Final Membrane으로 누적한다.
 - [x] AFE 설명은 최종 회로의 기능→구성→설계값→검증 결과 순서로 제시한다.
@@ -58,11 +58,11 @@
 - [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
 - [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
 - [x] 사용 가능한 공개 ECG 데이터셋의 기록 길이가 서로 달라, 반복·padding 없이 공통 적용 가능한 30분으로 입력을 통일했음을 명시한다.
-- [x] accelerator benchmark는 `09e4d840...`의 Exact C++ 1,777.699800 ms, cycle-derived core 54.012600 ms와 32.912687배 추정 비교를 사용한다.
+- [x] accelerator benchmark는 `46f90224...`의 Exact C++ 1,777.699800 ms와 measured board counter 187,144.750920 ms의 0.009499063× 비교를 사용하고, 54.012600 ms/32.912687×는 no-stall cycle-derived 추정으로만 분리한다.
 - [x] Exact C++ timing 전에 pred 36/36, membrane 144/144와 Snapshot 1,080/1,080 등가성을 확인한다.
 - [x] Python cycle model과 Verilator simulation runtime을 대표 CPU inference 기준선으로 사용하지 않는다.
 - [x] 54.012600 ms를 live 30분 판정시간으로 표현하지 않고, 32.912687배를 measured board speedup으로 표현하지 않는다.
-- [x] 0.099 W와 0.005347247400 J/decision을 estimated/derived로 표시하고 physical board 측정값과 구분한다.
+- [x] Pure RTL 0.099 W와 system 0.271 W를 ESTIMATED, 18.527330341/50.716227499 J/decision을 DERIVED로 표시하고 physical board 측정값과 구분한다.
 
 ## Artifact와 자동 검증
 

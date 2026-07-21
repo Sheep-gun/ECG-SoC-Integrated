@@ -9,7 +9,7 @@
 
 ## 이번 개정 범위
 
-기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital `main`의 완료된 NO_BOARD accelerator-benefit benchmark를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 benchmark evidence commit `09e4d840...`을 별도 provenance로 등록하였다.
+기존 9장 연구 흐름과 디지털 RTL 설명의 깊이를 유지하면서 관련 연구를 거시적 연구 질문 중심으로 정리하고, digital 저장소의 36-case 실보드 accelerator-benefit benchmark와 Vivado power evidence를 제6.1절과 source-of-truth에 반영하였다. 분류기와 RTL authority는 `c6b80de...`로 유지하고 benchmark evidence commit `46f90224...`을 별도 provenance로 등록하였다.
 
 | 항목 | 개정 결과 |
 |---|---:|
@@ -60,12 +60,12 @@
 
 ## 가속기 Benchmark 반입 내용
 
-- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`으로 고정하였다.
+- 원천은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 commit `46f90224fca0dea3a592049a5e14b97680d529e0`으로 고정하였다.
 - 대표 CPU 기준선은 hand-written single-thread transaction-level Exact C++로 두고 Python cycle model과 Verilator simulation runtime은 speedup 기준선에서 제외하였다.
 - Exact C++ timing 전 pred 36/36, membrane 144/144, Snapshot 1,080/1,080과 post-benchmark equivalence를 확인하였다.
 - Exact C++ kernel 1,777.699800 ms, end-to-end 2,007.549250 ms와 cycle-derived FPGA core 54.012600 ms를 반영하였다.
-- 같은 저장 데이터 kernel 범위의 처리시간 비율 32.912687배를 `speedup estimate`로 제한하고 measured board speedup으로 표현하지 않았다.
-- 0.099 W와 0.005347247400 J/decision은 estimated/derived로, physical board timing·power·energy는 `PENDING_BOARD`로 분리하였다.
+- Exact C++와 measured board counter의 비율 0.009499063×를 실측 기반 비교로 제시하고, 32.912687×는 no-stall cycle-derived 추정으로만 유지하였다.
+- Pure RTL/system 0.099/0.271 W는 ESTIMATED, 18.527330341/50.716227499 J/decision은 DERIVED로, physical board 입력 전력과 measured energy는 NOT_MEASURED로 분리하였다.
 
 ## 유지한 결과와 경계
 
@@ -75,10 +75,10 @@
 - Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP, WNS 8.184 ns
 - AFE 입력 SHA256, canonical AFE→RTL pred/mem, FPGA pred/mem의 각 36/36 범위
 - Database–class confounding, physical/clinical/ASIC 한계
-- Accelerator benchmark는 digital `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`에서 반입
-- Exact C++ kernel 1,777.699800 ms, cycle-derived FPGA core 54.012600 ms, 처리시간 비율 32.912687배
-- 32.912687배는 measured board speedup이 아니며 live 판정은 여전히 30분 관찰 필요
-- 0.099 W와 0.005347247400 J/decision은 estimated/derived; physical board timing·power·energy는 `PENDING_BOARD`
+- Accelerator benchmark는 digital commit `46f90224fca0dea3a592049a5e14b97680d529e0`에서 반입
+- Exact C++ kernel 1,777.699800 ms, measured FPGA core/system counter 187,144.750920 ms, 비율 0.009499063×
+- counter interval은 UART-paced input wait를 포함해 CPU보다 105.273540배 길며, 32.912687×는 legacy no-stall cycle-derived 추정
+- Pure RTL/system 0.099/0.271 W는 ESTIMATED, energy 18.527330341/50.716227499 J는 DERIVED; physical board input power는 NOT_MEASURED
 
 ## Vivado 물리 구현 그림 보강
 

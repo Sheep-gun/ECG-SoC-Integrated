@@ -11,7 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 DIGITAL_COMMIT = "c6b80de19cdcad5b7e43fe7835588b629d847f75"
-BENCHMARK_COMMIT = "09e4d840827ad20856f5e23be4743ddd01565e30"
+BENCHMARK_COMMIT = "46f90224fca0dea3a592049a5e14b97680d529e0"
 XMODEL_COMMIT = "4756a5086023547328ef44fd5fd87da3c250dc39"
 MATLAB_COMMIT = "907f7e1f081a9d6a5703a32095d962143315a192"
 LTSPICE_HANDOFF = "INTEGRATED_LTSPICE_2026-07-19"
@@ -98,12 +98,25 @@ def main() -> int:
     assert len(benchmark_comparison) == 1
     bc = benchmark_comparison[0]
     rtl_benchmark = read_json("benchmarks/accelerator_benefit/results/rtl_cycle_summary.json")
-    power_benchmark = read_csv("benchmarks/accelerator_benefit/results/power_energy_summary.csv")
-    pure_rtl_power = next(row for row in power_benchmark if row["implementation"] == "Pure RTL")
+    board_benchmark_path = "benchmarks/accelerator_benefit/results/board_timing_summary.json"
+    board_benchmark = read_json(board_benchmark_path)
+    power_benchmark_path = "benchmarks/accelerator_benefit/results/power_summary.json"
+    power_benchmark = read_json(power_benchmark_path)
+    power_energy = read_csv("benchmarks/accelerator_benefit/results/power_energy_summary.csv")
+    pure_rtl_power = power_benchmark["scopes"]["pure_rtl"]
+    system_power = power_benchmark["scopes"]["microblaze_system"]
+    pure_rtl_energy = next(row for row in power_energy if row["implementation"] == "Pure RTL accelerator")
+    system_energy = next(row for row in power_energy if row["implementation"] == "MicroBlaze integrated FPGA system")
     assert float(bc["cpu_latency_ms"]) == 1777.6998
     assert float(bc["fpga_latency_ms"]) == 54.0126
     assert round(float(bc["ratio_cpu_over_fpga"]), 6) == 32.912687
     assert rtl_benchmark["sample_gap_cycles"] == 2 and rtl_benchmark["profile_total_cycles"] == 5401260
+    assert board_benchmark["evidence_class"] == "MEASURED"
+    assert board_benchmark["cases_completed"] == 36
+    assert board_benchmark["board_golden_final_pred"] == "36/36"
+    assert board_benchmark["board_golden_final_membrane_values"] == "144/144"
+    assert power_benchmark["evidence_class"] == "ESTIMATED"
+    assert power_benchmark["physical_board_power_measured"] is False
 
     dr = "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier"
     xr_name = "https://github.com/Hwan-22/ECG-SoC"
@@ -122,11 +135,11 @@ def main() -> int:
             "final_test_record_majority_macro_f1": metric(d["final_test_record_majority"]["macro_f1_percent"], "percent", "19 final-test source records", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "record-majority aggregation on the same locked final-test partition"),
             "final_test_evaluation_count": metric(d["test_evaluation_count"], "count", "locked final-test protocol", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "repository-declared protocol evidence"),
             "test_used_for_selection": metric(d["test_used_for_selection"], "boolean", "locked final-test protocol", "JSON", digital_path, dr, DIGITAL_COMMIT, "양건", "repository-declared protocol evidence"),
-            "pure_rtl_lut": metric(d["pure_rtl_vivado"]["lut"], "LUT", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "device/tool/configuration specific"),
-            "pure_rtl_ff": metric(d["pure_rtl_vivado"]["ff"], "FF", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "device/tool/configuration specific"),
-            "pure_rtl_bram": metric(d["pure_rtl_vivado"]["bram"], "BRAM", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "resource count, not benchmark performance"),
-            "pure_rtl_dsp": metric(d["pure_rtl_vivado"]["dsp"], "DSP", "pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "resource count, not benchmark performance"),
-            "pure_rtl_wns": metric(d["pure_rtl_vivado"]["wns_ns"], "ns", "pure RTL implementation timing closure", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "positive WNS under recorded constraints; not processing latency"),
+            "pure_rtl_lut": metric(d["pure_rtl_vivado"]["lut"], "LUT", "locked pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "locked implementation authority; power reroute used 9749 LUT"),
+            "pure_rtl_ff": metric(d["pure_rtl_vivado"]["ff"], "FF", "locked pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "locked implementation authority; power reroute used 5045 FF"),
+            "pure_rtl_bram": metric(d["pure_rtl_vivado"]["bram"], "BRAM", "locked pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "resource count, not benchmark performance"),
+            "pure_rtl_dsp": metric(d["pure_rtl_vivado"]["dsp"], "DSP", "locked pure RTL implemented design", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "resource count, not benchmark performance"),
+            "pure_rtl_wns": metric(d["pure_rtl_vivado"]["wns_ns"], "ns", "locked pure RTL implementation timing closure", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "positive WNS under recorded constraints; power reroute WNS was 8.146 ns"),
             "microblaze_system_lut": metric(d["microblaze_full_replay_system"]["lut"], "LUT", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource, not pure accelerator resource"),
             "microblaze_system_ff": metric(d["microblaze_full_replay_system"]["slice_reg"], "slice register", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource"),
             "microblaze_system_bram": metric(d["microblaze_full_replay_system"]["bram"], "BRAM", "MicroBlaze full-replay system", "Vivado-derived JSON summary", digital_path, dr, DIGITAL_COMMIT, "양건", "whole-system resource"),
@@ -135,6 +148,14 @@ def main() -> int:
             "board_final_pred_equivalence": metric("36/36", "cases", "FPGA board replay vs full-top XSim expected output", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "functional equivalence, not classification accuracy"),
             "board_final_mem_equivalence": metric("36/36", "cases", "FPGA board replay vs full-top XSim expected membrane", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "functional equivalence, not classification accuracy"),
             "board_label_accuracy": metric("29/36", "cases", "board outputs compared with locked final-test labels", "board batch JSON", "components/digital_accelerator/reports/final/board_replay_36_batch_summary.json", dr, DIGITAL_COMMIT, "양건", "same classification result as locked final-test chunks"),
+            "board_core_latency_median": metric(board_benchmark["core_latency_ms"]["median"], "ms", "accelerator last-decision hardware-counter interval", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "includes UART-paced input wait; not no-stall accelerator compute time"),
+            "board_system_latency_median": metric(board_benchmark["system_latency_ms"]["median"], "ms", "full transaction hardware-counter interval", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "fixed XSA has no independent AXI Timer; equals core counter for all 36 cases"),
+            "board_system_throughput_median": metric(board_benchmark["system_throughput_samples_per_s"]["median"], "samples/s", "1,800,000-sample hardware transaction", "measured board timing JSON", board_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "UART-paced host streaming is included"),
+            "pure_rtl_estimated_power": metric(pure_rtl_power["total_on_chip_power_w"], "W", "pure RTL accelerator", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
+            "microblaze_system_estimated_power": metric(system_power["total_on_chip_power_w"], "W", "MicroBlaze integrated FPGA system", "post-implementation vectorless Vivado estimate", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "estimated on-chip power; not physical board input power"),
+            "pure_rtl_power_reroute_lut": metric(pure_rtl_power["utilization"]["lut"], "LUT", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "same RTL/part/clock; route differs slightly from locked canonical implementation"),
+            "pure_rtl_power_reroute_ff": metric(pure_rtl_power["utilization"]["flip_flop"], "FF", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "same RTL/part/clock; route differs slightly from locked canonical implementation"),
+            "pure_rtl_power_reroute_wns": metric(pure_rtl_power["timing"]["wns_ns"], "ns", "Pure RTL power-report reroute", "post-route Vivado power summary", power_benchmark_path, dr, BENCHMARK_COMMIT, "양건", "timing closure evidence; not processing latency"),
             "xmodel_emulator_mean_rms": metric(1.95, "LSB", "36 representative 60-second segments; emulator vs Questa/XMODEL after settling", "verification report", xmodel_verification_path, xr_name, XMODEL_COMMIT, "이수환", "model-to-model waveform agreement; max local deviations and solver differences remain"),
             "afe_input_sha256_identity": metric("36/36", "chunks", "AFE-generated final-test chunks vs digital board-replay inputs", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "proves byte identity only, not label correctness"),
             "canonical_sample_gap_cycles": metric(2, "cycles", "board-facing full-top XSim integration cadence", "CSV row verification", xmodel_compare_path, xr_name, XMODEL_COMMIT, "이수환", "canonical integration condition; noncanonical debug cadence excluded"),
@@ -158,7 +179,7 @@ def main() -> int:
             "avoided_full_raw_input_window_bytes": metric(2700000, "bytes decimal", "21600000 bits divided by 8", "derived arithmetic from verified interface/window", "docs/STREAMING_STATE_MEMORY_KR.md", "INTEGRATED", "INTEGRATED", "양건", "approximately 2.7 MB decimal; not MicroBlaze runtime memory", "VERIFIED_DERIVED"),
         },
         "benchmark": {
-            "status": "IMPORTED_VERIFIED_NO_BOARD",
+            "status": "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER",
             "upstream_commit": BENCHMARK_COMMIT,
             "cpu_baseline": "single-thread hand-written transaction-level Exact C++",
             "cpu_kernel_latency_ms": float(bc["cpu_latency_ms"]),
@@ -167,13 +188,25 @@ def main() -> int:
             "rtl_throughput_samples_per_s": rtl_benchmark["throughput_samples_per_s"],
             "realtime_headroom": rtl_benchmark["realtime_margin_vs_1ksps"],
             "exact_cpp_to_rtl_speedup_estimate": float(bc["ratio_cpu_over_fpga"]),
-            "estimated_power_w": float(pure_rtl_power["power_w"]),
+            "board_core_latency_ms": board_benchmark["core_latency_ms"]["median"],
+            "board_system_latency_ms": board_benchmark["system_latency_ms"]["median"],
+            "board_system_throughput_samples_per_s": board_benchmark["system_throughput_samples_per_s"]["median"],
+            "board_realtime_margin_vs_1ksps": board_benchmark["system_realtime_margin_vs_1ksps"]["median"],
+            "exact_cpp_to_board_core_ratio": float(bc["cpu_latency_ms"]) / board_benchmark["core_latency_ms"]["median"],
+            "exact_cpp_to_board_system_ratio": float(bc["cpu_latency_ms"]) / board_benchmark["system_latency_ms"]["median"],
+            "estimated_power_w": pure_rtl_power["total_on_chip_power_w"],
+            "estimated_pure_rtl_power_w": pure_rtl_power["total_on_chip_power_w"],
+            "estimated_system_power_w": system_power["total_on_chip_power_w"],
             "measured_board_power_w": None,
-            "estimated_energy_per_decision_j": float(pure_rtl_power["energy_per_decision_j"]),
+            "estimated_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
+            "derived_pure_rtl_energy_per_decision_j": float(pure_rtl_energy["energy_per_decision_j"]),
+            "derived_system_energy_per_decision_j": float(system_energy["energy_per_decision_j"]),
+            "legacy_cycle_derived_pure_rtl_energy_per_decision_j": 0.0053472474,
             "measured_energy_per_decision_j": None,
-            "board_timing_status": "PENDING_BOARD",
-            "board_power_status": "PENDING_BOARD",
-            "scope_limitation": "stored-data FPGA accelerator-core comparison; live decision still requires the 30-minute observation window; not measured board speedup",
+            "board_timing_status": "MEASURED",
+            "board_power_status": "NOT_MEASURED",
+            "power_estimate_status": "POST_IMPLEMENTATION_VECTORLESS_ESTIMATED",
+            "scope_limitation": "measured hardware counters include UART-paced input wait; Vivado power is an on-chip vectorless estimate; physical board input power was not measured",
         },
     }
     out = ROOT / "source_of_truth" / "global_metrics.yaml"

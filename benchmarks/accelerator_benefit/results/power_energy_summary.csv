@@ -1,4 +1,5 @@
-implementation,power_w,energy_per_decision_j,status,evidence_type,scope,evidence_path
-Pure RTL,0.099,0.005347247400,ESTIMATED_DERIVED,Vivado-estimated power * cycle-derived stored-data processing latency,accelerator implementation estimate,reports/final/vivado_locked_model_metrics.md; benchmarks/accelerator_benefit/results/rtl_cycle_summary.json
-Physical FPGA board,PENDING_BOARD,PENDING_BOARD,PENDING_BOARD,pending physical measurement,board-level idle/active/active-minus-idle,benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
-CPU,N/A,N/A,N/A_NO_DEFENSIBLE_COUNTER,none,CPU,benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md
+implementation,power_w,power_class,energy_per_decision_j,energy_class,evidence_type,scope,evidence_path
+Pure RTL accelerator,0.099000,ESTIMATED,18.527330341080,DERIVED,Vivado-estimated power * measured FPGA core-counter latency,accelerator implementation estimate,benchmarks/accelerator_benefit/power/results/pure_rtl/pure_rtl_power_post_route.rpt; benchmarks/accelerator_benefit/board/board_timing_results.csv
+MicroBlaze integrated FPGA system,0.271000,ESTIMATED,50.716227499320,DERIVED,Vivado-estimated power * measured FPGA system-counter latency,"MicroBlaze, BRAM, AXI, UART, feeder, and accelerator",benchmarks/accelerator_benefit/power/results/microblaze_system/system_power_post_route.rpt; benchmarks/accelerator_benefit/board/board_timing_results.csv
+Physical FPGA board,NOT_MEASURED,NOT_MEASURED,NOT_MEASURED,NOT_MEASURED,none; no external power meter,board input power,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md
+CPU,N/A,N/A,N/A,N/A,none,CPU,benchmarks/accelerator_benefit/reports/POWER_ENERGY_METHODOLOGY.md

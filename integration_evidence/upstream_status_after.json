@@ -1,4 +1,38 @@
 {
   "captured_at_utc": "FINAL_INTEGRITY_CHECK",
-  "repositories": []
+  "repositories": [
+    {
+      "component": "matlab_prevalidation",
+      "repository_root": "<LOCAL_MATLAB_REPOSITORY>",
+      "origin": "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation.git",
+      "active_branch": "main",
+      "active_head": "907f7e1f081a9d6a5703a32095d962143315a192",
+      "fixed_imported_commit": "907f7e1f081a9d6a5703a32095d962143315a192",
+      "status_porcelain": [],
+      "tracked_status": [],
+      "untracked_paths": []
+    },
+    {
+      "component": "afe_xmodel",
+      "repository_root": "<LOCAL_AFE_XMODEL_REPOSITORY>",
+      "origin": "https://github.com/Hwan-22/ECG-SoC.git",
+      "active_branch": "main",
+      "active_head": "4756a5086023547328ef44fd5fd87da3c250dc39",
+      "fixed_imported_commit": "4756a5086023547328ef44fd5fd87da3c250dc39",
+      "status_porcelain": [],
+      "tracked_status": [],
+      "untracked_paths": []
+    },
+    {
+      "component": "digital_accelerator",
+      "repository_root": "<LOCAL_DIGITAL_REPOSITORY>",
+      "origin": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier.git",
+      "active_branch": "codex/accelerator-benefit-benchmark",
+      "active_head": "46f90224fca0dea3a592049a5e14b97680d529e0",
+      "fixed_imported_commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
+      "status_porcelain": [],
+      "tracked_status": [],
+      "untracked_paths": []
+    }
+  ]
 }

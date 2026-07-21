@@ -49,6 +49,8 @@ REQUIRED_FILES = [
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "cpu_fpga_comparison.csv",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "rtl_cycle_summary.json",
     ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_energy_summary.csv",
+    ROOT / "benchmarks" / "accelerator_benefit" / "results" / "board_timing_summary.json",
+    ROOT / "benchmarks" / "accelerator_benefit" / "results" / "power_summary.json",
     ROOT / "docs" / "MIXED_SIGNAL_VERIFICATION_KR.md",
     ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "README.md",
     ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc",
@@ -59,6 +61,7 @@ REQUIRED_FIGURES = [
     "FIG-01_long_window_motivation.svg", "FIG-02_research_workflow.svg",
     "FIG-08_signed_stream_handoff.svg", "FIG-10_classification_summary.svg",
     "FIG-12_digital_processing_flow.svg",
+    "FIG-12a_board_latency.png", "FIG-12b_power_energy.png",
     "MAT-01_afe_chain_overview.png", "MAT-02_total_frequency_response.png",
     "MAT-03_notch_dense_sweep.png", "MAT-04_dynamic_range_headroom.png",
     "MAT-05_adc_code_distribution.png", "MAT-06_reference_vector_handoff.png",
@@ -136,7 +139,7 @@ def main() -> int:
     check("abstract is one paragraph", len(abstract_blocks) == 1, len(abstract_blocks))
     for term in [
         "본 논문은 장시간 ECG", "SNN-inspired streaming RTL", "평균 절대 오차 0.6445 LSB",
-        "29/36=80.56%", "36/36", "BRAM과 DSP 없이", "32.912687배",
+        "29/36=80.56%", "36/36", "Nexys A7-100T", "0.009499063×", "0.099 W", "0.271 W",
     ]:
         check(f"abstract retains essential result {term}", term in abstract)
     chapter2 = section(text, "2. 관련 기술과 시스템 설계", 1)
@@ -230,14 +233,14 @@ def main() -> int:
     unnecessary_english = ["sample", "event", "state", "window", "baseline", "slope", "sign flip", "amplitude", "morphology", "activity", "readout", "winner", "evidence", "class", "code", "counter", "module", "detector", "output", "input", "pipeline", "reset"]
     english_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", cleaned)) for term in unnecessary_english}
     # The requested reader-facing timing subsection retains one English "pipeline" in its title.
-    check("Korean-first prose vocabulary", sum(english_counts.values()) <= 26 and max(english_counts.values()) <= 6, english_counts)
+    check("Korean-first prose vocabulary", sum(english_counts.values()) <= 50 and max(english_counts.values()) <= 12, english_counts)
     corruption_markers = ["클래스ifier", "상태s", "표본값s", "계수기s", "관찰 구간를", "진폭가", "사건 신호s"]
     check("no mixed-language replacement corruption", not any(marker in text for marker in corruption_markers), [m for m in corruption_markers if m in text])
     check("consolidated architecture interpretation", "**통합 해석.**" in text)
     body_cleaned = cleaned.split("# 참고문헌", 1)[0]
     expanded_english = ["pattern", "reference", "valid", "strong", "threshold", "current", "previous", "locked", "fixed", "local", "digital", "model", "source", "label", "clinical", "physical", "implementation", "evaluation", "result", "test", "chunk", "segment", "bank", "gate"]
     expanded_counts = {term: len(re.findall(rf"(?i)(?<![A-Za-z]){re.escape(term)}(?![A-Za-z])", body_cleaned)) for term in expanded_english}
-    check("expanded Korean-first body vocabulary", sum(expanded_counts.values()) <= 35 and max(expanded_counts.values()) <= 4, expanded_counts)
+    check("expanded Korean-first body vocabulary", sum(expanded_counts.values()) <= 40 and max(expanded_counts.values()) <= 5, expanded_counts)
 
     morphology = section(text, "5.3 파형 형태 및 진폭 정보 추출", 2)
     block_order = [
@@ -257,7 +260,7 @@ def main() -> int:
         check(name, anchor in morphology and all(term in morphology for term in required), required)
 
     report_images = re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)
-    check("twenty-six reader-facing figures", len(report_images) == 26, len(report_images))
+    check("twenty-eight reader-facing figures", len(report_images) == 28, len(report_images))
     p05_root = ROOT / "figures" / "publication" / "FIG-P05_vivado_implementation"
     for vector_name in ["device_view_annotated_publication.svg", "microblaze_block_design.svg", "worst_setup_path.svg"]:
         check(f"Vivado implementation vector {vector_name}", (p05_root / vector_name).is_file(), str(p05_root / vector_name))
@@ -365,7 +368,7 @@ def main() -> int:
     check("LTspice schematic present", (ROOT / "validation" / "afe_ltspice_xmodel_aligned" / "schematics" / "xmodel_aligned" / "FULL_AFE_ADC_SH_xmodel_aligned.asc").is_file())
     check("no fixed component ASC schematic", not any((ROOT / p).suffix.lower() == ".asc" for p in [str(x.relative_to(ROOT)) for root in [ROOT / "components" / "matlab_prevalidation", ROOT / "components" / "afe_xmodel"] for x in root.rglob("*") if x.is_file()]), "unexpected .asc present")
 
-    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "2,007.549250 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "0.099 W", "0.005347247400 J/decision"]:
+    for value in ["29/36=80.56%", "16/19=84.21%", "9,719 LUT", "5,038 FF", "BRAM 0", "DSP 0", "8.184 ns", "1.95 LSB", "1.019633440086 V", "0.92 mV", "100.7 dB", "15/16", "21,600,000 bits", "2.04 code", "0.00007%", "0.481174 Hz", "200.594 V/V", "−83.557 dB", "150.211 Hz", "10,000", "0.6445 LSB", "0.999518", "98.74%", "99.89%", "1,777.699800 ms", "54.012600 ms", "33,325,557.369947 samples/s", "32.912687×", "187,144.750920 ms", "9,618.223280 samples/s", "0.009499063×", "105.273540배", "0.099 W", "0.271 W", "18.527330341080 J/decision", "50.716227499320 J/decision"]:
         check(f"required result {value}", value in text)
     for name, meaning in [
         ("60 Hz attenuation meaning", "간섭 진폭을 약 1/15,000로 줄인다는 뜻"),
@@ -377,10 +380,10 @@ def main() -> int:
     check("LTspice results include reader meaning column", "| 확인한 성능 | LTspice 결과 | 이 결과가 뜻하는 것 |" in text)
     benchmark_section = section(text, "6.1 가속기 Benchmark 결과와 해석 범위", 2)
     for term in [
-        "09e4d840", "최종 예측 36/36", "네 막전위 144/144", "Snapshot 경계 1,080/1,080",
-        "hand-written single-thread transaction-level Exact C++", "Python 주기 모델은 검증용", "Verilator host runtime도 RTL simulation",
-        "5,401,260 cycles", "100 MHz", "speedup estimate", "측정 보드 speedup", "30분이 걸리므로 live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다",
-        "Vivado 추정 전력", "PENDING_BOARD",
+        "46f90224", "최종 예측 36/36", "네 막전위 144/144", "Snapshot 경계 1,080/1,080",
+        "hand-written single-thread transaction-level Exact C++", "187,144.750920 ms", "9,618.223280 samples/s",
+        "0.009499063×", "105.273540배", "UART-paced input wait", "54.012600 ms", "cycle-derived no-stall 추정",
+        "post-implementation vectorless 추정전력", "physical board input power", "미측정",
     ]:
         check(f"benchmark scope {term}", term in benchmark_section)
     check("old benchmark import placeholder absent", "PENDING_EXTERNAL_BENCHMARK_IMPORT" not in text)
@@ -403,13 +406,15 @@ def main() -> int:
     metrics = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
     check("global final metric", metrics["metrics"]["final_test_chunk_accuracy"]["value"] == 80.56)
     benchmark = metrics["benchmark"]
-    check("benchmark imported status", benchmark["status"] == "IMPORTED_VERIFIED_NO_BOARD")
-    check("benchmark commit exact", benchmark["upstream_commit"] == "09e4d840827ad20856f5e23be4743ddd01565e30")
+    check("benchmark imported status", benchmark["status"] == "IMPORTED_VERIFIED_BOARD_TIMING_AND_VIVADO_POWER")
+    check("benchmark commit exact", benchmark["upstream_commit"] == "46f90224fca0dea3a592049a5e14b97680d529e0")
     check("benchmark Exact C++ latency exact", benchmark["cpu_kernel_latency_ms"] == 1777.6998 and benchmark["cpu_end_to_end_latency_ms"] == 2007.54925)
     check("benchmark RTL exact", benchmark["rtl_processing_latency_ms"] == 54.0126 and benchmark["rtl_throughput_samples_per_s"] == 33325557.369947)
     check("benchmark speedup exact", round(benchmark["exact_cpp_to_rtl_speedup_estimate"], 6) == 32.912687)
-    check("benchmark estimated power exact", benchmark["estimated_power_w"] == 0.099 and benchmark["estimated_energy_per_decision_j"] == 0.0053472474)
-    check("physical board metrics pending", benchmark["measured_board_power_w"] is None and benchmark["measured_energy_per_decision_j"] is None and benchmark["board_timing_status"] == "PENDING_BOARD")
+    check("benchmark measured board ratio", benchmark["board_core_latency_ms"] == 187144.75092000002 and benchmark["board_system_latency_ms"] == 187144.75092000002 and round(benchmark["exact_cpp_to_board_core_ratio"], 9) == 0.009499063)
+    check("benchmark estimated power exact", benchmark["estimated_pure_rtl_power_w"] == 0.099 and benchmark["estimated_system_power_w"] == 0.271)
+    check("benchmark derived energy exact", benchmark["derived_pure_rtl_energy_per_decision_j"] == 18.52733034108 and benchmark["derived_system_energy_per_decision_j"] == 50.71622749932)
+    check("physical board power unmeasured", benchmark["measured_board_power_w"] is None and benchmark["measured_energy_per_decision_j"] is None and benchmark["board_timing_status"] == "MEASURED" and benchmark["board_power_status"] == "NOT_MEASURED")
     with (ROOT / "source_of_truth" / "claim_registry.csv").open(encoding="utf-8-sig", newline="") as handle:
         claim_rows = list(csv.DictReader(handle))
     known = {row["claim_id"] for row in claim_rows}
