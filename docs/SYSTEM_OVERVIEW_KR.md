@@ -1,48 +1,43 @@
 # 시스템 개요
 
-## 프로젝트 정체성
+## 목적
 
-본 프로젝트는 Holter형 장시간 ECG를 제한된 길이의 Snapshot으로 순차 처리하고, 대부분 정상으로 보이는 기록 속에서 간헐적으로 나타나는 강한 질환 증거의 강도·빈도·반복성과 장시간 일관성을 고정 폭 상태에 누적하는 SNN-inspired 기록 단위 분류 구조를 제안한다. 현재 60초 Snapshot 30개와 30분 입력은 공개 데이터셋 길이에 맞춘 구현·검증 조건이며, 구조의 본질이나 24시간 검증 완료를 뜻하지 않는다. 이 구조를 signed 12-bit streaming RTL accelerator IP로 구현·검증하였다.
+본 설계는 장시간 ECG에서 간헐적으로 나타나는 질환 관련 구간을 놓치지 않으면서 입력 기록을 NSR, CHF, ARR, AF 중 하나로 분류하는 SNN 기반 스트리밍 가속기 IP다. 현재 30분 입력은 공개 데이터베이스에서 네 클래스를 동일 조건으로 평가하기 위한 구현·검증 단위이며, 24시간 이상 Holter 처리는 향후 확장 목표다.
 
-## End-to-end flow
+## 전체 흐름
 
 ```text
-PhysioNet public digitized ECG
-  → MATLAB nominal AFE+ADC pre-validation
-  → SystemVerilog AFE+ADC XMODEL/non-ideal verification
-  → 1 kSPS signed 12-bit two's-complement stream
-  → event/state feature updates
-  → 60-second Snapshot Readout
-  → 30-Snapshot signed Final Membrane accumulation
-  → WTA: NSR / CHF / ARR / AFF
-  → RTL / XSim / Vivado / IP-XACT / Vitis / FPGA replay
+Public digitized ECG
+  → PWL voltage reconstruction
+  → MATLAB nominal AFE/ADC design
+  → LTspice circuit simulation
+  → SystemVerilog XMODEL
+  → 1 kSPS signed 12-bit stream
+  → event, beat, rhythm and morphology evidence
+  → 60 s Snapshot Membrane
+  → 30-Snapshot Final Membrane
+  → NSR / CHF / ARR / AF
+  → AXI IP / MicroBlaze / FPGA replay
 ```
 
-## Layer 1: MATLAB nominal pre-validation
+## 아날로그부
 
-MATLAB component는 HPF, IA gain, notch, LPF와 12-bit ADC의 nominal intent를 정의하고, frequency response, dynamic range, clipping/headroom과 signed reference vector를 검증한다. 대표 NSR/CHF/ARR/AFF 60초 record에서 clipping ratio는 모두 0%였고, 네 record의 최소 rail headroom은 약 1.0196 V였다. 이는 selected nominal model 결과이며 physical analog measurement가 아니다.
+AFE는 약 0.5–150 Hz ECG 대역을 형성하고 60 Hz 전원선 성분을 억제한다. 공개 ECG는 이미 digitized된 기록이므로 시간축과 전압축을 맞춘 PWL 자극으로 재구성한다. MATLAB에서 공칭 전달 특성을 정한 뒤 LTspice AFE, S/H, ADC와 SystemVerilog XMODEL로 단계별 정합을 확인한다.
 
-## Layer 2: XMODEL verification
+## 디지털부
 
-SystemVerilog XMODEL component는 AFE+ADC signal chain의 non-ideal/stress 조건을 모델링하고 long signed stream을 생성한다. Emulator와 Questa/XMODEL의 36개 60초 segment 평균 RMS 차이는 1.95 LSB, lag 0으로 보고됐다. 50/60 Hz PLI, offset/wander, R/C mismatch, op-amp GBW/VOS와 ADC non-ideal 범위를 서로 다른 caveat와 함께 관리한다.
+표본 차이에서 Strong Event를 만들고 QRS LIF Neuron으로 박동 후보를 검출한다. 리듬 경로는 PNN, RDM, Ectopic Evidence를, 파형 경로는 DSCR, RAM, QRS MAF, RBBB-like를 사용한다. 각 사건은 클래스별 signed evidence로 변환되어 Snapshot과 Final Membrane에 누적된다.
 
-## Layer 3: Digital SNN-inspired accelerator
+60초 Snapshot과 30분 Final Membrane 자체가 연구의 목적은 아니다. 핵심은 제한된 Window를 순차 처리하면서 일부 구간의 강한 질환 증거와 여러 구간에 걸친 반복성·지속성을 함께 반영하는 계층형 장시간 판정이다.
 
-Digital component는 signed stream을 sample-by-sample 처리한다. Beat timing, RR variability, slope/morphology, R-peak amplitude와 ectopic/QRS-related evidence를 local event/state로 갱신하고, 60초마다 Snapshot class evidence를 만든다. Final Membrane은 30개 Snapshot의 signed evidence를 누적하고 WTA로 한 class를 출력한다.
+## 구현부
 
-## Layer 4: FPGA integration proof
+Pure RTL은 AXI-Lite 제어·결과 레지스터와 AXI-Stream 입력을 갖는 IP로 패키징된다. MicroBlaze는 시작과 결과 확인을, Sample Feeder는 signed 12-bit 표본 공급을 담당한다. 완료 시 done과 IRQ가 발생하고 결과는 UART로 전송된다.
 
-Pure RTL implementation, AXI/IP-XACT package, MicroBlaze replay system과 FPGA board replay가 digital implementation chain을 구성한다. Board replay는 XSim expected output과 final_pred/final_mem이 36/36 일치했다. 이는 구현 functional equivalence이며 label 기준 classification accuracy는 별도의 29/36이다.
+## 현재 검증 경계
 
-## 핵심 interface contract
-
-| 항목 | Canonical value | Evidence |
-|---|---:|---|
-| sample representation | signed 12-bit two's-complement | CLM-002 |
-| sample rate | 1 kSPS | CLM-002 |
-| Snapshot interval | 60 s | CLM-003 |
-| Final Membrane interval | 30 snapshots = 30 min | CLM-003 |
-| XSim integration cadence | sample_gap_cycles=2 | CLM-013 |
-| final output | class + four Final Membrane states | digital final reports |
-
-모든 promoted metric은 `source_of_truth/global_metrics.yaml`에 evidence path, commit, owner와 limitation을 포함한다.
+- 실제 입력 길이: 30분, 1,800,000 samples
+- Snapshot: 60초, 60,000 samples, 총 30개
+- 분류 결과: 29/36, 정확도 80.56%, Macro-F1 80.44%
+- FPGA 등가성: class 36/36, four membranes 144/144
+- 미검증: physical AFE/ADC, ASIC/post-layout, clinical validation, actual 24-hour accuracy/time/power

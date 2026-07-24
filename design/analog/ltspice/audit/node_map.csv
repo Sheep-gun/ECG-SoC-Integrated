@@ -1,0 +1,23 @@
+logical_node,schematic_label,generated_netlist_node,block,meaning,notes
+ECG positive,INP_RAW,INP_RAW,input,PWL source positive terminal,R10=1G DC return to ground
+ECG negative,INN_RAW,INN_RAW,input,PWL source negative terminal,R11=1G DC return to ground
+HPF positive,HPF_P,HPF_P,HPF,positive HPF output,C1 series and R1 shunt
+HPF negative,HPF_N,HPF_N,HPF,negative HPF output,C2 series and R2 shunt
+IA first output,U1_OUT,U1_OUT,IA,U1 output,
+IA second output,U2_OUT,U2_OUT,IA,U2 output,
+IA output,IA_OUT,IA_OUT,IA and notch,U3 output and Twin-T input,NOTCH_IN is an alias on this same physical net
+notch input,NOTCH_IN,IA_OUT,Twin-T,input alias,Label is electrically identical to IA_OUT
+notch sense,NOTCH_SENSE,NOTCH_SENSE,Twin-T,T-network output and U4 non-inverting input,Separate from VK
+notch output,NOTCH_OUT,LPF_IN,Twin-T and LPF,U4 output and LPF input,NOTCH_OUT and LPF_IN are aliases of one physical net
+LPF input,LPF_IN,LPF_IN,LPF,U4 output and R17 input,Same physical net as NOTCH_OUT
+bootstrap divider,K_DIV,K_DIV,Twin-T and supply,R15/R16 midpoint and U5 input,ERROR: also tied to ideal +5 V source V1 and every op-amp V+ pin
+bootstrap drive,VK,VK,Twin-T,U5 output and Twin-T reference,U5 follows clamped K_DIV in source schematic
+LPF pole,LPF_NODE,LPF_NODE,LPF,R17/C6 pole and U6 input,
+AFE output,AFE_OUT,AFE_OUT,buffer and S/H,U6 output and S1 input,
+clock,CLK,CLK,S/H,S1 control,PULSE 0-to-5 V
+held voltage,ADC_HOLD,ADC_HOLD,S/H and ADC,C7 hold node and B1 input,R18=1G leakage return
+clipped voltage,ADC_CLIP,ADC_CLIP,behavioral ADC,B1 output and B2 input,Distinct behavioral voltage node
+unsigned code,ADC_CODE,ADC_CODE,behavioral ADC,B2 output and B3 input,Behavioral voltage representation 0..4095
+signed code,ADC_SIGNED,ADC_SIGNED,behavioral ADC,B3 output,Behavioral voltage representation -2048..2047; not 12 physical bits
+negative rail,(unlabeled),N003,supply,U1-U6 negative rail,-5 V from V2
+positive rail,K_DIV,K_DIV,supply,U1-U6 positive rail,+5 V from V1 but incorrectly shares bootstrap divider label

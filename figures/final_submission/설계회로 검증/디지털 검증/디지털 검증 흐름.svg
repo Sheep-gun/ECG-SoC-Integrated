@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="520" viewBox="0 0 1500 520" role="img" aria-label="Digital verification flow from two software references through RTL XSim, full-top control, and AXI IP validation">
+<defs><marker id="paper-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#364152"/></marker></defs>
+<rect width="1500" height="520" fill="#ffffff"/>
+<title>디지털 회로 검증 흐름</title>
+<desc>Python 최종 출력 기준과 Exact C++ 내부 상태 기준을 RTL XSim에 교차 비교하고 Full-top 제어와 AXI IP 인터페이스를 검증하는 순서</desc>
+<text x="750" y="58" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="27" font-weight="700" fill="#182230">디지털 회로 검증 흐름</text>
+<rect x="65" y="125" width="300" height="120" rx="4" fill="#eff6ff" stroke="#2563a8" stroke-width="2"/>
+<text x="215.0" y="179.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Python 정수 기준</text>
+<text x="215.0" y="205.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">최종 출력 기준</text>
+<rect x="65" y="315" width="300" height="120" rx="4" fill="#f4f3ff" stroke="#6941c6" stroke-width="2"/>
+<text x="215.0" y="369.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Exact C++</text>
+<text x="215.0" y="395.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">고정폭·내부 상태 기준</text>
+<rect x="500" y="220" width="300" height="120" rx="4" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+<text x="650.0" y="274.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">RTL / XSim</text>
+<text x="650.0" y="300.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Core</text>
+<rect x="890" y="220" width="260" height="120" rx="4" fill="#fef3f2" stroke="#b42318" stroke-width="2"/>
+<text x="1020.0" y="274.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Full-top RTL</text>
+<text x="1020.0" y="300.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">표본→Snapshot→판정</text>
+<rect x="1210" y="220" width="240" height="120" rx="4" fill="#ecfdf3" stroke="#2f855a" stroke-width="2"/>
+<text x="1330.0" y="274.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">AXI / IP</text>
+<text x="1330.0" y="300.0" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="18" font-weight="700" fill="#182230">Lite · Stream</text>
+<polyline points="365,185 430,185 430,250 500,250" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="365,375 430,375 430,310 500,310" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="800,280 890,280" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<polyline points="1150,280 1210,280" fill="none" stroke="#364152" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#paper-arrow)"/>
+<text x="430" y="155" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">최종 출력 비교</text>
+<text x="430" y="415" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">내부 상태 비교</text>
+<text x="845" y="205" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">제어 흐름 검증</text>
+<text x="1180" y="205" text-anchor="middle" font-family="Arial, Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#475467">인터페이스 검증</text>
+</svg>

@@ -1,0 +1,23 @@
+functional_block,document_function,schematic_refdes,connections,nominal_value,mismatch_hook,notes
+input,differential PWL source,V3,INP_RAW to INN_RAW,PWL patient100_ecg_10s.txt AC 1,none,Positive file voltage means V(INP_RAW)-V(INN_RAW)>0
+input,DC return paths,"R10; R11","INP_RAW-ground; INN_RAW-ground",1G each,none,Prevents floating differential source terminals
+HPF,positive high-pass,"C1; R1","INP_RAW-HPF_P; HPF_P-ground","33nF; 10Mohm",none,Project excludes HPF mismatch sweep
+HPF,negative high-pass,"C2; R2","INN_RAW-HPF_N; HPF_N-ground","33nF; 10Mohm",none,Symmetric with positive channel
+IA,first-stage feedback,"R3; R4","U1_OUT-U1(-); U2_OUT-U2(-)",100kohm each,MM worst-direction pair,Fixed XMODEL mismatch target
+IA,first-stage gain setting,R9,U1(-)-U2(-),1kohm,MM hook held nominal,Nominal first-stage differential gain 1+2R/Rg=201
+IA,U3 difference-amplifier input pair,"R5; R6","U1_OUT-U3(+); U2_OUT-U3(-)",10kohm each,MM worst-direction pair,Polarity is U1_OUT minus U2_OUT
+IA,U3 difference-amplifier reference/feedback,"R7; R8","U3(+)-ground; IA_OUT-U3(-)",10kohm each,MM worst-direction pair,R8 is the required negative feedback path
+Twin-T,resistive T arms,"R12; R13",IA_OUT-N004-NOTCH_SENSE,26.526kohm each,MM worst-direction pair,Center N004 shunted by C3 to VK
+Twin-T,resistive T center capacitor,C3,N004-VK,200nF,MM hook,2*CNOTCH
+Twin-T,capacitive T arms,"C4; C5",IA_OUT-N007-NOTCH_SENSE,100nF each,MM worst-direction pair,Center N007 shunted by R14 to VK
+Twin-T,capacitive T center resistor,R14,N007-VK,13.263kohm,MM hook,RNOTCH/2
+Twin-T,notch buffer,U4,NOTCH_SENSE to NOTCH_OUT,UniversalOpamp2,GBW hook,Follower feedback is correct
+bootstrap,divider,"R15; R16","NOTCH_OUT-K_DIV; K_DIV-ground","5kohm; 95kohm",none,Excluded from fixed XMODEL mismatch; source K_DIV is clamped to +5 V
+bootstrap,follower,U5,K_DIV to VK,UniversalOpamp2,GBW hook,Function disabled by source-node collision
+LPF,150 Hz pole,"R17; C6","NOTCH_OUT-LPF_NODE; LPF_NODE-ground","1kohm; 1.06uF",none,Project excludes LPF mismatch sweep
+LPF,output buffer,U6,LPF_NODE to AFE_OUT,UniversalOpamp2,GBW hook,Isolates S/H load
+S/H,analog switch,S1,AFE_OUT-ADC_HOLD controlled by CLK,SW_ADC,none,"Ron=1; Roff=1G; Vt=2.5; Vh=0.1"
+S/H,hold capacitor/leakage,"C7; R18",ADC_HOLD-ground,"10nF; 1G",none,
+ADC,input limiter,B1,ADC_HOLD to ADC_CLIP,"limit(x;-1.65;1.65)",none,Behavioral voltage source
+ADC,endpoint quantizer,B2,ADC_CLIP to ADC_CODE,"floor((x+1.65)/3.3*4095)",single code-domain injection follows,Behavioral quantizer; not SAR
+ADC,signed conversion,B3,ADC_CODE to ADC_SIGNED,ADC_CODE-2048,none,No duplicate stress injection here

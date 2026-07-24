@@ -1,0 +1,168 @@
+Reading pref.tcl
+
+# 2024.3
+
+# vsim -c -t 1ns -work work tb_snn_ecg_30min_chunk_dataset -do "run -all; quit -f" -gDUT_SNAPSHOT_SAMPLES=60000 -gDUT_SNAPSHOTS_PER_CHUNK=30 -gRESULT_CSV=<XMODEL_REPOSITORY_ROOT>/verification_e2e/sim_out/rep4/replay_ARR_mitdb_102_chunk00.csv -gMANIFEST_FILE=<XMODEL_REPOSITORY_ROOT>/verification_e2e/sim_out/rep4/replaydmanifest_ARR_mitdb_102_chunk00.txt -gMAX_SAMPLES=1800000 -gDUT_SAMPLE_GAP_CYCLES=2
+# Start time: 20:10:21 on Jul 22,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: rtl/core/snn_ecg_3feat_top.v(1323): (vopt-2241) Connection width does not match width of port 'high_irreg_bin_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(120).
+# ** Warning: rtl/core/snn_ecg_3feat_top.v(1323): (vopt-2241) Connection width does not match width of port 'mid_irreg_bin_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(121).
+# ** Warning: rtl/core/snn_ecg_3feat_top.v(1323): (vopt-2241) Connection width does not match width of port 'low_irreg_bin_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(122).
+# ** Warning: rtl/core/snn_ecg_3feat_top.v(1323): (vopt-2241) Connection width does not match width of port 'burst_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(123).
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2685) [TFMPC] - Too few port connections for 'u_snapshot'.  Expected 162, found 31.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_aff_before_rbbb_delay'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_arr_before_rbbb_delay'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_chf_before_rbbb_delay'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_nsr_before_rbbb_delay'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_aff_before_rbbb_late'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_arr_before_rbbb_late'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_chf_before_rbbb_late'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_nsr_before_rbbb_late'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'score_nsr_before_suppress'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ram_high'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'dscr_high'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'pnn_regular_high'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_observe_active'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_score'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_strong_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_high_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_mid_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'abnormal_beat_valid_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_combo_counts_flat'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_like_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_terminal_delay_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_wide_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_valid_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_max_width'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_terminal_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_last_width'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_high_rdm_irregularity'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_low_irregularity'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_segment_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_terminal_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_wide_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_valid_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_qrs_onset_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_top5_sum'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_top3_sum'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_top2_sum'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_ge_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_slope_max'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_slope_sum'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_slope_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_lateslope_low_irregularity'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_lateslope_applied'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_lateslope_gate_level'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_lateslope_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_late_beat_valid_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_valid_beat_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_repeated_abnormal_beat_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_terminal_activity_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_footprint_width'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_low_irregularity'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rbbb_strict_gate'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_suppress_applied'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_suppress_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_abnormal_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_terminal_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_width_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'nsr_gate_valid_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_current_bin_irreg_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_burst_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_low_irreg_bin_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_mid_irreg_bin_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_high_irreg_bin_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_burst_irreg_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_episodic_irreg_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ipb_persistent_irreg_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_valid_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_beat_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_terminal_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_footprint_value'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_segment_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_terminal_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_width_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd2_valid_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_valid_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_beat_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_width_value'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_terminal_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_segment_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_terminal_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_width_gate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rcd_valid_beat_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_rr_ref'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_compensation_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_candidate_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_qrs_abn_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_late_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'etmc_early_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_score'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_tail_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_energy_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_width_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_strong_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_mismatch_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_template_ready'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_code'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_peak_tail_code'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_asymmetry_code'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_late_energy_code'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_late_event_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_energy_code'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_complex_count'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_width_value'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_rbbb_like_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_pvc_like_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_peak_to_tail_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_asymmetry_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_late_energy_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_terminal_delay_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_maf_valid_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_width_span'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'qrs_width_jump_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ram_amp_jump_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rr_diff_large_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rr_alt_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ectopic_rr_ref'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ectopic_late_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'ectopic_early_spike'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rdm_rr_diff'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'predictor_id'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'winner_id'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'rr_interval'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'token_age'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'slope_valid'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'down_event'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'up_event'.
+# ** Warning: rtl/snn_ecg_30min_final_top.v(211): (vopt-2718) [TFMPC] - Missing connection for port 'strong_event'.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=136.
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2024.3 linux_x86_64 Sep 10 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading sv_std.std
+# Loading work.tb_snn_ecg_30min_chunk_dataset(fast)
+# run -all
+# CHUNK_RESULT case=35 expected=2 pred=2 correct=1 valid=1 samples=1800000 cycles=5401263
+# PROFILE_RESULT case=35 total_cycles=5401260 busy_cycles=5401260 run_cycles=5399940 input_wait_cycles=1799970 accepted_samples=1800000 windows=30 decisions=1 last_window_latency=180038 max_window_latency=180038 last_decision_latency=5401260
+# CHUNK_STREAM_RESULT correct/total=1/1 manifest=<XMODEL_REPOSITORY_ROOT>/verification_e2e/sim_out/rep4/replaydmanifest_ARR_mitdb_102_chunk00.txt
+# ** Note: $finish    : <XMODEL_REPOSITORY_ROOT>/verification_e2e/tb/tb_snn_ecg_30min_chunk_dataset.v(234)
+#    Time: 54012740 ns  Iteration: 1  Instance: /tb_snn_ecg_30min_chunk_dataset
+# End time: 20:12:27 on Jul 22,2026, Elapsed time: 0:02:06
+# Errors: 0, Warnings: 136

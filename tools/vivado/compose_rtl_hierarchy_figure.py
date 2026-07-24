@@ -21,7 +21,7 @@ from reportlab.pdfgen import canvas
 
 
 REPOSITORY = Path(__file__).resolve().parents[2]
-ARTIFACT_DIR = REPOSITORY / "artifacts" / "rtl_elaborated_schematic"
+ARTIFACT_DIR = REPOSITORY / "vivado" / "pure_rtl" / "evidence"
 FIGURE_A_PDF = ARTIFACT_DIR / "FIG-RTL-A_top_hierarchy.pdf"
 FIGURE_A_PNG = ARTIFACT_DIR / "FIG-RTL-A_top_hierarchy.png"
 FIGURE_B_PDF = ARTIFACT_DIR / "FIG-RTL-B_snapshot_core_hierarchy.pdf"

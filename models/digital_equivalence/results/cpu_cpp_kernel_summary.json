@@ -1,0 +1,34 @@
+{
+  "status": "MEASURED_NOW",
+  "implementation": "Verilator-generated cycle-accurate RTL simulation model",
+  "scope": "loaded samples to final result; single generated model; host wall time",
+  "warmups_per_case": 3,
+  "measured_repetitions_per_case": 10,
+  "case_count": 36,
+  "measured_run_count": 360,
+  "sample_count_per_case": 1800000,
+  "all_run_latency_ms": {
+    "median": 2458.9129000000003,
+    "mean": 2539.2001633333334,
+    "std": 265.3086772242534,
+    "min": 2430.4263,
+    "max": 4805.3202,
+    "q1": 2449.2833,
+    "q3": 2476.7811,
+    "iqr": 27.497800000000097
+  },
+  "per_case_median_latency_ms": {
+    "median": 2456.708125,
+    "mean": 2526.4325944444445,
+    "std": 216.38324885489786,
+    "min": 2436.6837,
+    "max": 3575.71325,
+    "q1": 2453.372725,
+    "q3": 2468.0948125,
+    "iqr": 14.722087499999816
+  },
+  "throughput_samples_per_s_median": 732030.8092355,
+  "output_equivalence": "36/36 final_pred; 36/36 all four final_mem",
+  "build_evidence": "benchmarks/accelerator_benefit/tools/cpp/cpp_build_environment.json",
+  "run_evidence": "benchmarks/accelerator_benefit/results/cpu_cpp_kernel_runs.csv"
+}

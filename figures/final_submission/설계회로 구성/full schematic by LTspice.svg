@@ -1,0 +1,4517 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="2200"
+   height="946"
+   viewBox="110 -530 4390 1888"
+   role="img"
+   aria-labelledby="title desc"
+   version="1.1"
+   id="svg538"
+   sodipodi:docname="full schematic by LTspice.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs538">
+    <rect
+       x="387.95785"
+       y="549.60696"
+       width="305.5485"
+       height="58.95438"
+       id="rect540" />
+    <rect
+       x="55.150871"
+       y="172.42571"
+       width="1362.9238"
+       height="415.85025"
+       id="rect539" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview538"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.78874547"
+     inkscape:cx="864.66423"
+     inkscape:cy="258.63857"
+     inkscape:window-width="1276"
+     inkscape:window-height="1481"
+     inkscape:window-x="-9"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="directives" />
+  <title
+     id="title">LTspice XMODEL-aligned full AFE–ADC schematic</title>
+  <desc
+     id="desc">Vector conversion generated directly from the finalized FULL_AFE_ADC_SH_xmodel_aligned.asc used for LTspice validation.</desc>
+  <metadata
+     id="metadata1">Source: FULL_AFE_ADC_SH_xmodel_aligned.asc; representation: editable vector conversion of the LTspice schematic.</metadata>
+  <style
+     id="style1">
+.wire,.symbol-line{fill:none;stroke:#1737b8;stroke-width:2.7;stroke-linecap:square;stroke-linejoin:miter;vector-effect:non-scaling-stroke}
+.component-text,.node-text,.directive-text{font-family:&quot;Arial&quot;,&quot;Malgun Gothic&quot;,sans-serif;fill:#050505}
+.component-text{font-weight:600}
+.node-text{font-weight:700}
+.directive-text{font-weight:500}
+.comment-text{font-family:&quot;Arial&quot;,&quot;Malgun Gothic&quot;,sans-serif;fill:#162cb6;font-weight:700}
+.junction{fill:#1737b8}
+.ground{fill:none;stroke:#1737b8;stroke-width:2.7;vector-effect:non-scaling-stroke}
+</style>
+  <g
+     id="wires">
+    <line
+       x1="3840"
+       y1="-304"
+       x2="3840"
+       y2="-384"
+       class="wire"
+       id="line1" />
+    <line
+       x1="3728"
+       y1="-176"
+       x2="3728"
+       y2="-256"
+       class="wire"
+       id="line2" />
+    <line
+       x1="3840"
+       y1="-160"
+       x2="3840"
+       y2="-224"
+       class="wire"
+       id="line3" />
+    <line
+       x1="1568"
+       y1="-128"
+       x2="1120"
+       y2="-128"
+       class="wire"
+       id="line4" />
+    <line
+       x1="2528"
+       y1="-128"
+       x2="1568"
+       y2="-128"
+       class="wire"
+       id="line5" />
+    <line
+       x1="2944"
+       y1="-128"
+       x2="2528"
+       y2="-128"
+       class="wire"
+       id="line6" />
+    <line
+       x1="3424"
+       y1="-128"
+       x2="2944"
+       y2="-128"
+       class="wire"
+       id="line7" />
+    <line
+       x1="1216"
+       y1="-96"
+       x2="976"
+       y2="-96"
+       class="wire"
+       id="line8" />
+    <line
+       x1="1216"
+       y1="-48"
+       x2="1216"
+       y2="-96"
+       class="wire"
+       id="line9" />
+    <line
+       x1="3072"
+       y1="-48"
+       x2="2848"
+       y2="-48"
+       class="wire"
+       id="line10" />
+    <line
+       x1="1120"
+       y1="-32"
+       x2="1120"
+       y2="-128"
+       class="wire"
+       id="line11" />
+    <line
+       x1="1120"
+       y1="-32"
+       x2="1040"
+       y2="-32"
+       class="wire"
+       id="line12" />
+    <line
+       x1="3616"
+       y1="-32"
+       x2="3616"
+       y2="-112"
+       class="wire"
+       id="line13" />
+    <line
+       x1="3728"
+       y1="-32"
+       x2="3728"
+       y2="-96"
+       class="wire"
+       id="line14" />
+    <line
+       x1="1040"
+       y1="32"
+       x2="1040"
+       y2="-32"
+       class="wire"
+       id="line15" />
+    <line
+       x1="2944"
+       y1="32"
+       x2="2944"
+       y2="-128"
+       class="wire"
+       id="line16" />
+    <line
+       x1="480"
+       y1="48"
+       x2="336"
+       y2="48"
+       class="wire"
+       id="line17" />
+    <line
+       x1="560"
+       y1="48"
+       x2="480"
+       y2="48"
+       class="wire"
+       id="line18" />
+    <line
+       x1="704"
+       y1="48"
+       x2="624"
+       y2="48"
+       class="wire"
+       id="line19" />
+    <line
+       x1="816"
+       y1="48"
+       x2="704"
+       y2="48"
+       class="wire"
+       id="line20" />
+    <line
+       x1="944"
+       y1="48"
+       x2="816"
+       y2="48"
+       class="wire"
+       id="line21" />
+    <line
+       x1="976"
+       y1="48"
+       x2="976"
+       y2="-96"
+       class="wire"
+       id="line22" />
+    <line
+       x1="1008"
+       y1="48"
+       x2="976"
+       y2="48"
+       class="wire"
+       id="line23" />
+    <line
+       x1="2848"
+       y1="48"
+       x2="2848"
+       y2="-48"
+       class="wire"
+       id="line24" />
+    <line
+       x1="2848"
+       y1="48"
+       x2="2208"
+       y2="48"
+       class="wire"
+       id="line25" />
+    <line
+       x1="2912"
+       y1="48"
+       x2="2848"
+       y2="48"
+       class="wire"
+       id="line26" />
+    <line
+       x1="1216"
+       y1="64"
+       x2="1216"
+       y2="32"
+       class="wire"
+       id="line27" />
+    <line
+       x1="1216"
+       y1="64"
+       x2="1072"
+       y2="64"
+       class="wire"
+       id="line28" />
+    <line
+       x1="1264"
+       y1="64"
+       x2="1216"
+       y2="64"
+       class="wire"
+       id="line29" />
+    <line
+       x1="1312"
+       y1="64"
+       x2="1264"
+       y2="64"
+       class="wire"
+       id="line30" />
+    <line
+       x1="1424"
+       y1="64"
+       x2="1392"
+       y2="64"
+       class="wire"
+       id="line31" />
+    <line
+       x1="1504"
+       y1="64"
+       x2="1424"
+       y2="64"
+       class="wire"
+       id="line32" />
+    <line
+       x1="3072"
+       y1="64"
+       x2="3072"
+       y2="-48"
+       class="wire"
+       id="line33" />
+    <line
+       x1="3072"
+       y1="64"
+       x2="2976"
+       y2="64"
+       class="wire"
+       id="line34" />
+    <line
+       x1="944"
+       y1="80"
+       x2="944"
+       y2="48"
+       class="wire"
+       id="line35" />
+    <line
+       x1="1008"
+       y1="80"
+       x2="944"
+       y2="80"
+       class="wire"
+       id="line36" />
+    <line
+       x1="2912"
+       y1="80"
+       x2="2848"
+       y2="80"
+       class="wire"
+       id="line37" />
+    <line
+       x1="976"
+       y1="112"
+       x2="976"
+       y2="48"
+       class="wire"
+       id="line38" />
+    <line
+       x1="3616"
+       y1="112"
+       x2="3616"
+       y2="48"
+       class="wire"
+       id="line39" />
+    <line
+       x1="704"
+       y1="128"
+       x2="704"
+       y2="48"
+       class="wire"
+       id="line40" />
+    <line
+       x1="1040"
+       y1="128"
+       x2="1040"
+       y2="96"
+       class="wire"
+       id="line41" />
+    <line
+       x1="1152"
+       y1="128"
+       x2="1040"
+       y2="128"
+       class="wire"
+       id="line42" />
+    <line
+       x1="1424"
+       y1="128"
+       x2="1424"
+       y2="64"
+       class="wire"
+       id="line43" />
+    <line
+       x1="1776"
+       y1="144"
+       x2="1680"
+       y2="144"
+       class="wire"
+       id="line44" />
+    <line
+       x1="1792"
+       y1="144"
+       x2="1776"
+       y2="144"
+       class="wire"
+       id="line45" />
+    <line
+       x1="1872"
+       y1="144"
+       x2="1792"
+       y2="144"
+       class="wire"
+       id="line46" />
+    <line
+       x1="2016"
+       y1="144"
+       x2="1952"
+       y2="144"
+       class="wire"
+       id="line47" />
+    <line
+       x1="2096"
+       y1="144"
+       x2="2016"
+       y2="144"
+       class="wire"
+       id="line48" />
+    <line
+       x1="2288"
+       y1="144"
+       x2="2176"
+       y2="144"
+       class="wire"
+       id="line49" />
+    <line
+       x1="2944"
+       y1="144"
+       x2="2944"
+       y2="96"
+       class="wire"
+       id="line50" />
+    <line
+       x1="2944"
+       y1="144"
+       x2="2576"
+       y2="144"
+       class="wire"
+       id="line51" />
+    <line
+       x1="480"
+       y1="160"
+       x2="480"
+       y2="48"
+       class="wire"
+       id="line52" />
+    <line
+       x1="1568"
+       y1="160"
+       x2="1568"
+       y2="-128"
+       class="wire"
+       id="line53" />
+    <line
+       x1="336"
+       y1="176"
+       x2="336"
+       y2="128"
+       class="wire"
+       id="line54" />
+    <line
+       x1="1120"
+       y1="176"
+       x2="1120"
+       y2="-32"
+       class="wire"
+       id="line55" />
+    <line
+       x1="1536"
+       y1="176"
+       x2="1488"
+       y2="176"
+       class="wire"
+       id="line56" />
+    <line
+       x1="2848"
+       y1="176"
+       x2="2848"
+       y2="80"
+       class="wire"
+       id="line57" />
+    <line
+       x1="3088"
+       y1="176"
+       x2="2848"
+       y2="176"
+       class="wire"
+       id="line58" />
+    <line
+       x1="1680"
+       y1="192"
+       x2="1680"
+       y2="144"
+       class="wire"
+       id="line59" />
+    <line
+       x1="1680"
+       y1="192"
+       x2="1600"
+       y2="192"
+       class="wire"
+       id="line60" />
+    <line
+       x1="2016"
+       y1="192"
+       x2="2016"
+       y2="144"
+       class="wire"
+       id="line61" />
+    <line
+       x1="3552"
+       y1="192"
+       x2="3328"
+       y2="192"
+       class="wire"
+       id="line62" />
+    <line
+       x1="1504"
+       y1="208"
+       x2="1504"
+       y2="64"
+       class="wire"
+       id="line63" />
+    <line
+       x1="1536"
+       y1="208"
+       x2="1504"
+       y2="208"
+       class="wire"
+       id="line64" />
+    <line
+       x1="3552"
+       y1="208"
+       x2="3552"
+       y2="192"
+       class="wire"
+       id="line65" />
+    <line
+       x1="3888"
+       y1="208"
+       x2="3552"
+       y2="208"
+       class="wire"
+       id="line66" />
+    <line
+       x1="976"
+       y1="224"
+       x2="976"
+       y2="192"
+       class="wire"
+       id="line67" />
+    <line
+       x1="1216"
+       y1="224"
+       x2="976"
+       y2="224"
+       class="wire"
+       id="line68" />
+    <line
+       x1="2528"
+       y1="224"
+       x2="2528"
+       y2="-128"
+       class="wire"
+       id="line69" />
+    <line
+       x1="2496"
+       y1="240"
+       x2="2384"
+       y2="240"
+       class="wire"
+       id="line70" />
+    <line
+       x1="1424"
+       y1="256"
+       x2="1424"
+       y2="208"
+       class="wire"
+       id="line71" />
+    <line
+       x1="2672"
+       y1="256"
+       x2="2560"
+       y2="256"
+       class="wire"
+       id="line72" />
+    <line
+       x1="2752"
+       y1="256"
+       x2="2672"
+       y2="256"
+       class="wire"
+       id="line73" />
+    <line
+       x1="2880"
+       y1="256"
+       x2="2832"
+       y2="256"
+       class="wire"
+       id="line74" />
+    <line
+       x1="3088"
+       y1="256"
+       x2="3088"
+       y2="176"
+       class="wire"
+       id="line75" />
+    <line
+       x1="3088"
+       y1="256"
+       x2="2880"
+       y2="256"
+       class="wire"
+       id="line76" />
+    <line
+       x1="3424"
+       y1="256"
+       x2="3424"
+       y2="-128"
+       class="wire"
+       id="line77" />
+    <line
+       x1="704"
+       y1="272"
+       x2="704"
+       y2="208"
+       class="wire"
+       id="line78" />
+    <line
+       x1="1216"
+       y1="272"
+       x2="1216"
+       y2="224"
+       class="wire"
+       id="line79" />
+    <line
+       x1="2288"
+       y1="272"
+       x2="2288"
+       y2="144"
+       class="wire"
+       id="line80" />
+    <line
+       x1="2496"
+       y1="272"
+       x2="2288"
+       y2="272"
+       class="wire"
+       id="line81" />
+    <line
+       x1="3328"
+       y1="272"
+       x2="3328"
+       y2="192"
+       class="wire"
+       id="line82" />
+    <line
+       x1="3392"
+       y1="272"
+       x2="3328"
+       y2="272"
+       class="wire"
+       id="line83" />
+    <line
+       x1="2016"
+       y1="288"
+       x2="2016"
+       y2="256"
+       class="wire"
+       id="line84" />
+    <line
+       x1="2208"
+       y1="288"
+       x2="2208"
+       y2="48"
+       class="wire"
+       id="line85" />
+    <line
+       x1="2208"
+       y1="288"
+       x2="2016"
+       y2="288"
+       class="wire"
+       id="line86" />
+    <line
+       x1="3552"
+       y1="288"
+       x2="3552"
+       y2="208"
+       class="wire"
+       id="line87" />
+    <line
+       x1="3552"
+       y1="288"
+       x2="3456"
+       y2="288"
+       class="wire"
+       id="line88" />
+    <line
+       x1="3888"
+       y1="288"
+       x2="3888"
+       y2="208"
+       class="wire"
+       id="line89" />
+    <line
+       x1="1120"
+       y1="304"
+       x2="1120"
+       y2="176"
+       class="wire"
+       id="line90" />
+    <line
+       x1="1120"
+       y1="304"
+       x2="1040"
+       y2="304"
+       class="wire"
+       id="line91" />
+    <line
+       x1="3392"
+       y1="304"
+       x2="3296"
+       y2="304"
+       class="wire"
+       id="line92" />
+    <line
+       x1="3840"
+       y1="304"
+       x2="3760"
+       y2="304"
+       class="wire"
+       id="line93" />
+    <line
+       x1="2880"
+       y1="320"
+       x2="2880"
+       y2="256"
+       class="wire"
+       id="line94" />
+    <line
+       x1="2016"
+       y1="336"
+       x2="2016"
+       y2="288"
+       class="wire"
+       id="line95" />
+    <line
+       x1="480"
+       y1="352"
+       x2="336"
+       y2="352"
+       class="wire"
+       id="line96" />
+    <line
+       x1="1040"
+       y1="352"
+       x2="1040"
+       y2="304"
+       class="wire"
+       id="line97" />
+    <line
+       x1="3840"
+       y1="352"
+       x2="3600"
+       y2="352"
+       class="wire"
+       id="line98" />
+    <line
+       x1="480"
+       y1="368"
+       x2="480"
+       y2="352"
+       class="wire"
+       id="line99" />
+    <line
+       x1="560"
+       y1="368"
+       x2="480"
+       y2="368"
+       class="wire"
+       id="line100" />
+    <line
+       x1="704"
+       y1="368"
+       x2="624"
+       y2="368"
+       class="wire"
+       id="line101" />
+    <line
+       x1="816"
+       y1="368"
+       x2="704"
+       y2="368"
+       class="wire"
+       id="line102" />
+    <line
+       x1="944"
+       y1="368"
+       x2="816"
+       y2="368"
+       class="wire"
+       id="line103" />
+    <line
+       x1="976"
+       y1="368"
+       x2="976"
+       y2="224"
+       class="wire"
+       id="line104" />
+    <line
+       x1="1008"
+       y1="368"
+       x2="976"
+       y2="368"
+       class="wire"
+       id="line105" />
+    <line
+       x1="2384"
+       y1="368"
+       x2="2384"
+       y2="240"
+       class="wire"
+       id="line106" />
+    <line
+       x1="2672"
+       y1="368"
+       x2="2672"
+       y2="256"
+       class="wire"
+       id="line107" />
+    <line
+       x1="2672"
+       y1="368"
+       x2="2384"
+       y2="368"
+       class="wire"
+       id="line108" />
+    <line
+       x1="3024"
+       y1="368"
+       x2="2672"
+       y2="368"
+       class="wire"
+       id="line109" />
+    <line
+       x1="3120"
+       y1="368"
+       x2="3024"
+       y2="368"
+       class="wire"
+       id="line110" />
+    <line
+       x1="3296"
+       y1="368"
+       x2="3296"
+       y2="304"
+       class="wire"
+       id="line111" />
+    <line
+       x1="3296"
+       y1="368"
+       x2="3200"
+       y2="368"
+       class="wire"
+       id="line112" />
+    <line
+       x1="336"
+       y1="384"
+       x2="336"
+       y2="352"
+       class="wire"
+       id="line113" />
+    <line
+       x1="1216"
+       y1="384"
+       x2="1216"
+       y2="352"
+       class="wire"
+       id="line114" />
+    <line
+       x1="1216"
+       y1="384"
+       x2="1072"
+       y2="384"
+       class="wire"
+       id="line115" />
+    <line
+       x1="1264"
+       y1="384"
+       x2="1216"
+       y2="384"
+       class="wire"
+       id="line116" />
+    <line
+       x1="1312"
+       y1="384"
+       x2="1264"
+       y2="384"
+       class="wire"
+       id="line117" />
+    <line
+       x1="1424"
+       y1="384"
+       x2="1392"
+       y2="384"
+       class="wire"
+       id="line118" />
+    <line
+       x1="1488"
+       y1="384"
+       x2="1488"
+       y2="176"
+       class="wire"
+       id="line119" />
+    <line
+       x1="1488"
+       y1="384"
+       x2="1424"
+       y2="384"
+       class="wire"
+       id="line120" />
+    <line
+       x1="944"
+       y1="400"
+       x2="944"
+       y2="368"
+       class="wire"
+       id="line121" />
+    <line
+       x1="1008"
+       y1="400"
+       x2="944"
+       y2="400"
+       class="wire"
+       id="line122" />
+    <line
+       x1="3296"
+       y1="432"
+       x2="3296"
+       y2="368"
+       class="wire"
+       id="line123" />
+    <line
+       x1="3888"
+       y1="432"
+       x2="3888"
+       y2="368"
+       class="wire"
+       id="line124" />
+    <line
+       x1="4032"
+       y1="432"
+       x2="3888"
+       y2="432"
+       class="wire"
+       id="line125" />
+    <line
+       x1="4176"
+       y1="432"
+       x2="4032"
+       y2="432"
+       class="wire"
+       id="line126" />
+    <line
+       x1="704"
+       y1="448"
+       x2="704"
+       y2="368"
+       class="wire"
+       id="line127" />
+    <line
+       x1="1424"
+       y1="448"
+       x2="1424"
+       y2="384"
+       class="wire"
+       id="line128" />
+    <line
+       x1="1456"
+       y1="448"
+       x2="1424"
+       y2="448"
+       class="wire"
+       id="line129" />
+    <line
+       x1="1680"
+       y1="448"
+       x2="1680"
+       y2="192"
+       class="wire"
+       id="line130" />
+    <line
+       x1="1680"
+       y1="448"
+       x2="1536"
+       y2="448"
+       class="wire"
+       id="line131" />
+    <line
+       x1="1040"
+       y1="464"
+       x2="1040"
+       y2="416"
+       class="wire"
+       id="line132" />
+    <line
+       x1="1152"
+       y1="464"
+       x2="1152"
+       y2="128"
+       class="wire"
+       id="line133" />
+    <line
+       x1="1152"
+       y1="464"
+       x2="1040"
+       y2="464"
+       class="wire"
+       id="line134" />
+    <line
+       x1="2880"
+       y1="464"
+       x2="2880"
+       y2="400"
+       class="wire"
+       id="line135" />
+    <line
+       x1="1792"
+       y1="480"
+       x2="1792"
+       y2="144"
+       class="wire"
+       id="line136" />
+    <line
+       x1="1888"
+       y1="480"
+       x2="1792"
+       y2="480"
+       class="wire"
+       id="line137" />
+    <line
+       x1="2016"
+       y1="480"
+       x2="2016"
+       y2="416"
+       class="wire"
+       id="line138" />
+    <line
+       x1="2016"
+       y1="480"
+       x2="1952"
+       y2="480"
+       class="wire"
+       id="line139" />
+    <line
+       x1="2112"
+       y1="480"
+       x2="2016"
+       y2="480"
+       class="wire"
+       id="line140" />
+    <line
+       x1="2288"
+       y1="480"
+       x2="2288"
+       y2="272"
+       class="wire"
+       id="line141" />
+    <line
+       x1="2288"
+       y1="480"
+       x2="2176"
+       y2="480"
+       class="wire"
+       id="line142" />
+    <line
+       x1="4032"
+       y1="480"
+       x2="4032"
+       y2="432"
+       class="wire"
+       id="line143" />
+    <line
+       x1="4176"
+       y1="480"
+       x2="4176"
+       y2="432"
+       class="wire"
+       id="line144" />
+    <line
+       x1="336"
+       y1="512"
+       x2="336"
+       y2="464"
+       class="wire"
+       id="line145" />
+    <line
+       x1="480"
+       y1="512"
+       x2="480"
+       y2="368"
+       class="wire"
+       id="line146" />
+    <line
+       x1="3760"
+       y1="528"
+       x2="3760"
+       y2="304"
+       class="wire"
+       id="line147" />
+    <line
+       x1="1120"
+       y1="544"
+       x2="1120"
+       y2="304"
+       class="wire"
+       id="line148" />
+    <line
+       x1="1120"
+       y1="544"
+       x2="1040"
+       y2="544"
+       class="wire"
+       id="line149" />
+    <line
+       x1="1152"
+       y1="544"
+       x2="1152"
+       y2="464"
+       class="wire"
+       id="line150" />
+    <line
+       x1="1568"
+       y1="544"
+       x2="1568"
+       y2="224"
+       class="wire"
+       id="line151" />
+    <line
+       x1="1568"
+       y1="544"
+       x2="1152"
+       y2="544"
+       class="wire"
+       id="line152" />
+    <line
+       x1="3296"
+       y1="544"
+       x2="3296"
+       y2="496"
+       class="wire"
+       id="line153" />
+    <line
+       x1="1152"
+       y1="560"
+       x2="1152"
+       y2="544"
+       class="wire"
+       id="line154" />
+    <line
+       x1="2528"
+       y1="560"
+       x2="2528"
+       y2="288"
+       class="wire"
+       id="line155" />
+    <line
+       x1="2528"
+       y1="560"
+       x2="1152"
+       y2="560"
+       class="wire"
+       id="line156" />
+    <line
+       x1="2576"
+       y1="560"
+       x2="2576"
+       y2="144"
+       class="wire"
+       id="line157" />
+    <line
+       x1="2576"
+       y1="560"
+       x2="2528"
+       y2="560"
+       class="wire"
+       id="line158" />
+    <line
+       x1="1152"
+       y1="576"
+       x2="1152"
+       y2="560"
+       class="wire"
+       id="line159" />
+    <line
+       x1="3424"
+       y1="576"
+       x2="3424"
+       y2="320"
+       class="wire"
+       id="line160" />
+    <line
+       x1="3424"
+       y1="576"
+       x2="1152"
+       y2="576"
+       class="wire"
+       id="line161" />
+    <line
+       x1="704"
+       y1="592"
+       x2="704"
+       y2="528"
+       class="wire"
+       id="line162" />
+    <line
+       x1="3600"
+       y1="592"
+       x2="3600"
+       y2="352"
+       class="wire"
+       id="line163" />
+    <line
+       x1="480"
+       y1="608"
+       x2="480"
+       y2="592"
+       class="wire"
+       id="line164" />
+    <line
+       x1="4032"
+       y1="608"
+       x2="4032"
+       y2="544"
+       class="wire"
+       id="line165" />
+    <line
+       x1="4176"
+       y1="608"
+       x2="4176"
+       y2="560"
+       class="wire"
+       id="line166" />
+    <line
+       x1="1040"
+       y1="624"
+       x2="1040"
+       y2="544"
+       class="wire"
+       id="line167" />
+    <line
+       x1="1152"
+       y1="624"
+       x2="1152"
+       y2="576"
+       class="wire"
+       id="line168" />
+    <line
+       x1="3600"
+       y1="640"
+       x2="3600"
+       y2="592"
+       class="wire"
+       id="line169" />
+    <line
+       x1="1040"
+       y1="736"
+       x2="1040"
+       y2="704"
+       class="wire"
+       id="line170" />
+    <line
+       x1="1152"
+       y1="736"
+       x2="1152"
+       y2="704"
+       class="wire"
+       id="line171" />
+    <line
+       x1="3600"
+       y1="800"
+       x2="3600"
+       y2="720"
+       class="wire"
+       id="line172" />
+  </g>
+  <g
+     id="symbols">
+    <line
+       x1="1008"
+       y1="32"
+       x2="1072"
+       y2="64"
+       class="symbol-line"
+       id="line173" />
+    <line
+       x1="1008"
+       y1="96"
+       x2="1072"
+       y2="64"
+       class="symbol-line"
+       id="line174" />
+    <line
+       x1="1008"
+       y1="32"
+       x2="1008"
+       y2="96"
+       class="symbol-line"
+       id="line175" />
+    <line
+       x1="1012"
+       y1="48"
+       x2="1020"
+       y2="48"
+       class="symbol-line"
+       id="line176" />
+    <line
+       x1="1012"
+       y1="80"
+       x2="1020"
+       y2="80"
+       class="symbol-line"
+       id="line177" />
+    <line
+       x1="1016"
+       y1="84"
+       x2="1016"
+       y2="76"
+       class="symbol-line"
+       id="line178" />
+    <line
+       x1="1040"
+       y1="32"
+       x2="1040"
+       y2="48"
+       class="symbol-line"
+       id="line179" />
+    <line
+       x1="1040"
+       y1="96"
+       x2="1040"
+       y2="80"
+       class="symbol-line"
+       id="line180" />
+    <line
+       x1="1044"
+       y1="44"
+       x2="1052"
+       y2="44"
+       class="symbol-line"
+       id="line181" />
+    <line
+       x1="1048"
+       y1="40"
+       x2="1048"
+       y2="48"
+       class="symbol-line"
+       id="line182" />
+    <line
+       x1="1044"
+       y1="84"
+       x2="1052"
+       y2="84"
+       class="symbol-line"
+       id="line183" />
+    <text
+       x="1056"
+       y="32"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text183"
+       style="font-size:26.61028893px">U1</text>
+    <text
+       x="1056"
+       y="96"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text184"
+       style="font-size:26.61028893px">XOPAMP_XMODEL</text>
+    <line
+       x1="1032"
+       y1="644"
+       x2="1048"
+       y2="644"
+       class="symbol-line"
+       id="line184" />
+    <line
+       x1="1032"
+       y1="684"
+       x2="1048"
+       y2="684"
+       class="symbol-line"
+       id="line185" />
+    <line
+       x1="1040"
+       y1="636"
+       x2="1040"
+       y2="652"
+       class="symbol-line"
+       id="line186" />
+    <line
+       x1="1040"
+       y1="704"
+       x2="1040"
+       y2="696"
+       class="symbol-line"
+       id="line187" />
+    <line
+       x1="1040"
+       y1="624"
+       x2="1040"
+       y2="632"
+       class="symbol-line"
+       id="line188" />
+    <ellipse
+       cx="1040"
+       cy="664"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse188" />
+    <text
+       x="1064"
+       y="624"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text188"
+       style="font-size:26.61028893px">V1</text>
+    <text
+       x="1064"
+       y="704"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text189"
+       style="font-size:26.61028893px">1.65</text>
+    <line
+       x1="1144"
+       y1="644"
+       x2="1160"
+       y2="644"
+       class="symbol-line"
+       id="line189" />
+    <line
+       x1="1144"
+       y1="684"
+       x2="1160"
+       y2="684"
+       class="symbol-line"
+       id="line190" />
+    <line
+       x1="1152"
+       y1="636"
+       x2="1152"
+       y2="652"
+       class="symbol-line"
+       id="line191" />
+    <line
+       x1="1152"
+       y1="704"
+       x2="1152"
+       y2="696"
+       class="symbol-line"
+       id="line192" />
+    <line
+       x1="1152"
+       y1="624"
+       x2="1152"
+       y2="632"
+       class="symbol-line"
+       id="line193" />
+    <ellipse
+       cx="1152"
+       cy="664"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse193" />
+    <text
+       x="1176"
+       y="624"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text193"
+       style="font-size:26.61028893px">V2</text>
+    <text
+       x="1176"
+       y="704"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text194"
+       style="font-size:26.61028893px">-1.65</text>
+    <line
+       x1="472"
+       y1="532"
+       x2="488"
+       y2="532"
+       class="symbol-line"
+       id="line194" />
+    <line
+       x1="472"
+       y1="572"
+       x2="488"
+       y2="572"
+       class="symbol-line"
+       id="line195" />
+    <line
+       x1="480"
+       y1="524"
+       x2="480"
+       y2="540"
+       class="symbol-line"
+       id="line196" />
+    <line
+       x1="480"
+       y1="592"
+       x2="480"
+       y2="584"
+       class="symbol-line"
+       id="line197" />
+    <line
+       x1="480"
+       y1="512"
+       x2="480"
+       y2="520"
+       class="symbol-line"
+       id="line198" />
+    <ellipse
+       cx="480"
+       cy="552"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse198" />
+    <text
+       x="504"
+       y="523.97455"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text198"
+       style="font-size:26.6103px">V5</text>
+    <text
+       x="504"
+       y="592"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text199"
+       style="font-size:26.61028893px">0</text>
+    <line
+       x1="588"
+       y1="48"
+       x2="560"
+       y2="48"
+       class="symbol-line"
+       id="line199" />
+    <line
+       x1="596"
+       y1="48"
+       x2="624"
+       y2="48"
+       class="symbol-line"
+       id="line200" />
+    <line
+       x1="596"
+       y1="32"
+       x2="596"
+       y2="64"
+       class="symbol-line"
+       id="line201" />
+    <line
+       x1="588"
+       y1="32"
+       x2="588"
+       y2="64"
+       class="symbol-line"
+       id="line202" />
+    <text
+       x="595.99152"
+       y="24.016914"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text202"
+       style="font-size:26.6103px">C1</text>
+    <text
+       x="592"
+       y="87.94928"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text203"
+       style="font-size:26.6103px">{CHPF}</text>
+    <line
+       x1="704"
+       y1="200"
+       x2="704"
+       y2="208"
+       class="symbol-line"
+       id="line203" />
+    <line
+       x1="688"
+       y1="192"
+       x2="704"
+       y2="200"
+       class="symbol-line"
+       id="line204" />
+    <line
+       x1="720"
+       y1="176"
+       x2="688"
+       y2="192"
+       class="symbol-line"
+       id="line205" />
+    <line
+       x1="688"
+       y1="160"
+       x2="720"
+       y2="176"
+       class="symbol-line"
+       id="line206" />
+    <line
+       x1="720"
+       y1="144"
+       x2="688"
+       y2="160"
+       class="symbol-line"
+       id="line207" />
+    <line
+       x1="704"
+       y1="128"
+       x2="704"
+       y2="136"
+       class="symbol-line"
+       id="line208" />
+    <line
+       x1="704"
+       y1="136"
+       x2="720"
+       y2="144"
+       class="symbol-line"
+       id="line209" />
+    <text
+       x="724"
+       y="152"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text209"
+       style="font-size:26.61028893px">R1</text>
+    <text
+       x="724"
+       y="188"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text210"
+       style="font-size:26.61028893px">{RHPF}</text>
+    <line
+       x1="588"
+       y1="368"
+       x2="560"
+       y2="368"
+       class="symbol-line"
+       id="line210" />
+    <line
+       x1="596"
+       y1="368"
+       x2="624"
+       y2="368"
+       class="symbol-line"
+       id="line211" />
+    <line
+       x1="596"
+       y1="352"
+       x2="596"
+       y2="384"
+       class="symbol-line"
+       id="line212" />
+    <line
+       x1="588"
+       y1="352"
+       x2="588"
+       y2="384"
+       class="symbol-line"
+       id="line213" />
+    <text
+       x="592"
+       y="336.03381"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text213"
+       style="font-size:26.6103px">C2</text>
+    <text
+       x="592"
+       y="411.94083"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text214"
+       style="font-size:26.6103px">{CHPF}</text>
+    <line
+       x1="704"
+       y1="520"
+       x2="704"
+       y2="528"
+       class="symbol-line"
+       id="line214" />
+    <line
+       x1="688"
+       y1="512"
+       x2="704"
+       y2="520"
+       class="symbol-line"
+       id="line215" />
+    <line
+       x1="720"
+       y1="496"
+       x2="688"
+       y2="512"
+       class="symbol-line"
+       id="line216" />
+    <line
+       x1="688"
+       y1="480"
+       x2="720"
+       y2="496"
+       class="symbol-line"
+       id="line217" />
+    <line
+       x1="720"
+       y1="464"
+       x2="688"
+       y2="480"
+       class="symbol-line"
+       id="line218" />
+    <line
+       x1="704"
+       y1="448"
+       x2="704"
+       y2="456"
+       class="symbol-line"
+       id="line219" />
+    <line
+       x1="704"
+       y1="456"
+       x2="720"
+       y2="464"
+       class="symbol-line"
+       id="line220" />
+    <text
+       x="724"
+       y="472"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text220"
+       style="font-size:26.61028893px">R2</text>
+    <text
+       x="724"
+       y="508"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text221"
+       style="font-size:26.61028893px">{RHPF}</text>
+    <line
+       x1="1008"
+       y1="352"
+       x2="1072"
+       y2="384"
+       class="symbol-line"
+       id="line221" />
+    <line
+       x1="1008"
+       y1="416"
+       x2="1072"
+       y2="384"
+       class="symbol-line"
+       id="line222" />
+    <line
+       x1="1008"
+       y1="352"
+       x2="1008"
+       y2="416"
+       class="symbol-line"
+       id="line223" />
+    <line
+       x1="1012"
+       y1="368"
+       x2="1020"
+       y2="368"
+       class="symbol-line"
+       id="line224" />
+    <line
+       x1="1012"
+       y1="400"
+       x2="1020"
+       y2="400"
+       class="symbol-line"
+       id="line225" />
+    <line
+       x1="1016"
+       y1="404"
+       x2="1016"
+       y2="396"
+       class="symbol-line"
+       id="line226" />
+    <line
+       x1="1040"
+       y1="352"
+       x2="1040"
+       y2="368"
+       class="symbol-line"
+       id="line227" />
+    <line
+       x1="1040"
+       y1="416"
+       x2="1040"
+       y2="400"
+       class="symbol-line"
+       id="line228" />
+    <line
+       x1="1044"
+       y1="364"
+       x2="1052"
+       y2="364"
+       class="symbol-line"
+       id="line229" />
+    <line
+       x1="1048"
+       y1="360"
+       x2="1048"
+       y2="368"
+       class="symbol-line"
+       id="line230" />
+    <line
+       x1="1044"
+       y1="404"
+       x2="1052"
+       y2="404"
+       class="symbol-line"
+       id="line231" />
+    <text
+       x="1056"
+       y="352"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text231"
+       style="font-size:26.61028893px">U2</text>
+    <text
+       x="1056"
+       y="416"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text232"
+       style="font-size:26.61028893px">XOPAMP_XMODEL</text>
+    <line
+       x1="1216"
+       y1="24"
+       x2="1216"
+       y2="32"
+       class="symbol-line"
+       id="line232" />
+    <line
+       x1="1200"
+       y1="16"
+       x2="1216"
+       y2="24"
+       class="symbol-line"
+       id="line233" />
+    <line
+       x1="1232"
+       y1="0"
+       x2="1200"
+       y2="16"
+       class="symbol-line"
+       id="line234" />
+    <line
+       x1="1200"
+       y1="-16"
+       x2="1232"
+       y2="0"
+       class="symbol-line"
+       id="line235" />
+    <line
+       x1="1232"
+       y1="-32"
+       x2="1200"
+       y2="-16"
+       class="symbol-line"
+       id="line236" />
+    <line
+       x1="1216"
+       y1="-48"
+       x2="1216"
+       y2="-40"
+       class="symbol-line"
+       id="line237" />
+    <line
+       x1="1216"
+       y1="-40"
+       x2="1232"
+       y2="-32"
+       class="symbol-line"
+       id="line238" />
+    <text
+       x="1236"
+       y="-24"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text238"
+       style="font-size:26.61028893px">R3</text>
+    <text
+       x="1236"
+       y="12"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text239"
+       style="font-size:26.61028893px">100k</text>
+    <line
+       x1="1216"
+       y1="344"
+       x2="1216"
+       y2="352"
+       class="symbol-line"
+       id="line239" />
+    <line
+       x1="1200"
+       y1="336"
+       x2="1216"
+       y2="344"
+       class="symbol-line"
+       id="line240" />
+    <line
+       x1="1232"
+       y1="320"
+       x2="1200"
+       y2="336"
+       class="symbol-line"
+       id="line241" />
+    <line
+       x1="1200"
+       y1="304"
+       x2="1232"
+       y2="320"
+       class="symbol-line"
+       id="line242" />
+    <line
+       x1="1232"
+       y1="288"
+       x2="1200"
+       y2="304"
+       class="symbol-line"
+       id="line243" />
+    <line
+       x1="1216"
+       y1="272"
+       x2="1216"
+       y2="280"
+       class="symbol-line"
+       id="line244" />
+    <line
+       x1="1216"
+       y1="280"
+       x2="1232"
+       y2="288"
+       class="symbol-line"
+       id="line245" />
+    <text
+       x="1236"
+       y="296"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text245"
+       style="font-size:26.61028893px">R4</text>
+    <text
+       x="1236"
+       y="332"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text246"
+       style="font-size:26.61028893px">100k</text>
+    <line
+       x1="1536"
+       y1="160"
+       x2="1600"
+       y2="192"
+       class="symbol-line"
+       id="line246" />
+    <line
+       x1="1536"
+       y1="224"
+       x2="1600"
+       y2="192"
+       class="symbol-line"
+       id="line247" />
+    <line
+       x1="1536"
+       y1="160"
+       x2="1536"
+       y2="224"
+       class="symbol-line"
+       id="line248" />
+    <line
+       x1="1540"
+       y1="176"
+       x2="1548"
+       y2="176"
+       class="symbol-line"
+       id="line249" />
+    <line
+       x1="1540"
+       y1="208"
+       x2="1548"
+       y2="208"
+       class="symbol-line"
+       id="line250" />
+    <line
+       x1="1544"
+       y1="212"
+       x2="1544"
+       y2="204"
+       class="symbol-line"
+       id="line251" />
+    <line
+       x1="1568"
+       y1="160"
+       x2="1568"
+       y2="176"
+       class="symbol-line"
+       id="line252" />
+    <line
+       x1="1568"
+       y1="224"
+       x2="1568"
+       y2="208"
+       class="symbol-line"
+       id="line253" />
+    <line
+       x1="1572"
+       y1="172"
+       x2="1580"
+       y2="172"
+       class="symbol-line"
+       id="line254" />
+    <line
+       x1="1576"
+       y1="168"
+       x2="1576"
+       y2="176"
+       class="symbol-line"
+       id="line255" />
+    <line
+       x1="1572"
+       y1="212"
+       x2="1580"
+       y2="212"
+       class="symbol-line"
+       id="line256" />
+    <text
+       x="1584"
+       y="160"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text256"
+       style="font-size:26.61028893px">U3</text>
+    <text
+       x="1584"
+       y="224"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text257"
+       style="font-size:26.61028893px">XOPAMP_XMODEL</text>
+    <line
+       x1="1320"
+       y1="64"
+       x2="1312"
+       y2="64"
+       class="symbol-line"
+       id="line257" />
+    <line
+       x1="1328"
+       y1="48"
+       x2="1320"
+       y2="64"
+       class="symbol-line"
+       id="line258" />
+    <line
+       x1="1344"
+       y1="80"
+       x2="1328"
+       y2="48"
+       class="symbol-line"
+       id="line259" />
+    <line
+       x1="1360"
+       y1="48"
+       x2="1344"
+       y2="80"
+       class="symbol-line"
+       id="line260" />
+    <line
+       x1="1376"
+       y1="80"
+       x2="1360"
+       y2="48"
+       class="symbol-line"
+       id="line261" />
+    <line
+       x1="1392"
+       y1="64"
+       x2="1384"
+       y2="64"
+       class="symbol-line"
+       id="line262" />
+    <line
+       x1="1384"
+       y1="64"
+       x2="1376"
+       y2="80"
+       class="symbol-line"
+       id="line263" />
+    <text
+       x="1352"
+       y="36.025372"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text263"
+       style="font-size:26.6103px">R5</text>
+    <text
+       x="1352"
+       y="111.93237"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text264"
+       style="font-size:26.6103px">10k</text>
+    <line
+       x1="1320"
+       y1="384"
+       x2="1312"
+       y2="384"
+       class="symbol-line"
+       id="line264" />
+    <line
+       x1="1328"
+       y1="368"
+       x2="1320"
+       y2="384"
+       class="symbol-line"
+       id="line265" />
+    <line
+       x1="1344"
+       y1="400"
+       x2="1328"
+       y2="368"
+       class="symbol-line"
+       id="line266" />
+    <line
+       x1="1360"
+       y1="368"
+       x2="1344"
+       y2="400"
+       class="symbol-line"
+       id="line267" />
+    <line
+       x1="1376"
+       y1="400"
+       x2="1360"
+       y2="368"
+       class="symbol-line"
+       id="line268" />
+    <line
+       x1="1392"
+       y1="384"
+       x2="1384"
+       y2="384"
+       class="symbol-line"
+       id="line269" />
+    <line
+       x1="1384"
+       y1="384"
+       x2="1376"
+       y2="400"
+       class="symbol-line"
+       id="line270" />
+    <text
+       x="1363.9747"
+       y="364.00845"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text270"
+       style="font-size:26.6103px">R6</text>
+    <text
+       x="1363.9747"
+       y="431.93237"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text271"
+       style="font-size:26.6103px">10k</text>
+    <line
+       x1="1424"
+       y1="200"
+       x2="1424"
+       y2="208"
+       class="symbol-line"
+       id="line271" />
+    <line
+       x1="1408"
+       y1="192"
+       x2="1424"
+       y2="200"
+       class="symbol-line"
+       id="line272" />
+    <line
+       x1="1440"
+       y1="176"
+       x2="1408"
+       y2="192"
+       class="symbol-line"
+       id="line273" />
+    <line
+       x1="1408"
+       y1="160"
+       x2="1440"
+       y2="176"
+       class="symbol-line"
+       id="line274" />
+    <line
+       x1="1440"
+       y1="144"
+       x2="1408"
+       y2="160"
+       class="symbol-line"
+       id="line275" />
+    <line
+       x1="1424"
+       y1="128"
+       x2="1424"
+       y2="136"
+       class="symbol-line"
+       id="line276" />
+    <line
+       x1="1424"
+       y1="136"
+       x2="1440"
+       y2="144"
+       class="symbol-line"
+       id="line277" />
+    <text
+       x="1368.16"
+       y="152"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text277"
+       style="font-size:26.6103px">R7</text>
+    <text
+       x="1364.1685"
+       y="188"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text278"
+       style="font-size:26.6103px">10k</text>
+    <line
+       x1="1464"
+       y1="448"
+       x2="1456"
+       y2="448"
+       class="symbol-line"
+       id="line278" />
+    <line
+       x1="1472"
+       y1="432"
+       x2="1464"
+       y2="448"
+       class="symbol-line"
+       id="line279" />
+    <line
+       x1="1488"
+       y1="464"
+       x2="1472"
+       y2="432"
+       class="symbol-line"
+       id="line280" />
+    <line
+       x1="1504"
+       y1="432"
+       x2="1488"
+       y2="464"
+       class="symbol-line"
+       id="line281" />
+    <line
+       x1="1520"
+       y1="464"
+       x2="1504"
+       y2="432"
+       class="symbol-line"
+       id="line282" />
+    <line
+       x1="1536"
+       y1="448"
+       x2="1528"
+       y2="448"
+       class="symbol-line"
+       id="line283" />
+    <line
+       x1="1528"
+       y1="448"
+       x2="1520"
+       y2="464"
+       class="symbol-line"
+       id="line284" />
+    <text
+       x="1496"
+       y="420.02536"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text284"
+       style="font-size:26.6103px">R8</text>
+    <text
+       x="1496"
+       y="495.93237"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text285"
+       style="font-size:26.6103px">10k</text>
+    <line
+       x1="976"
+       y1="184"
+       x2="976"
+       y2="192"
+       class="symbol-line"
+       id="line285" />
+    <line
+       x1="960"
+       y1="176"
+       x2="976"
+       y2="184"
+       class="symbol-line"
+       id="line286" />
+    <line
+       x1="992"
+       y1="160"
+       x2="960"
+       y2="176"
+       class="symbol-line"
+       id="line287" />
+    <line
+       x1="960"
+       y1="144"
+       x2="992"
+       y2="160"
+       class="symbol-line"
+       id="line288" />
+    <line
+       x1="992"
+       y1="128"
+       x2="960"
+       y2="144"
+       class="symbol-line"
+       id="line289" />
+    <line
+       x1="976"
+       y1="112"
+       x2="976"
+       y2="120"
+       class="symbol-line"
+       id="line290" />
+    <line
+       x1="976"
+       y1="120"
+       x2="992"
+       y2="128"
+       class="symbol-line"
+       id="line291" />
+    <text
+       x="920.16119"
+       y="151.96619"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text291"
+       style="font-size:26.6103px">R9</text>
+    <text
+       x="920.16119"
+       y="183.97464"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text292"
+       style="font-size:26.6103px">1k</text>
+    <line
+       x1="472"
+       y1="180"
+       x2="488"
+       y2="180"
+       class="symbol-line"
+       id="line292" />
+    <line
+       x1="472"
+       y1="220"
+       x2="488"
+       y2="220"
+       class="symbol-line"
+       id="line293" />
+    <line
+       x1="480"
+       y1="172"
+       x2="480"
+       y2="188"
+       class="symbol-line"
+       id="line294" />
+    <line
+       x1="480"
+       y1="240"
+       x2="480"
+       y2="232"
+       class="symbol-line"
+       id="line295" />
+    <line
+       x1="480"
+       y1="160"
+       x2="480"
+       y2="168"
+       class="symbol-line"
+       id="line296" />
+    <ellipse
+       cx="480"
+       cy="200"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse296" />
+    <text
+       x="504"
+       y="160"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text296"
+       style="font-size:26.61028893px">V3</text>
+    <text
+       x="504"
+       y="240"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text297"
+       style="font-size:26.6103px"><tspan
+         sodipodi:role="line"
+         id="tspan541"
+         x="504"
+         y="240">PWL file=patient100_xmodel_drive_10s.txt</tspan><tspan
+         sodipodi:role="line"
+         id="tspan542"
+         x="504"
+         y="273.26288">AC1</tspan></text>
+    <line
+       x1="336"
+       y1="120"
+       x2="336"
+       y2="128"
+       class="symbol-line"
+       id="line297" />
+    <line
+       x1="320"
+       y1="112"
+       x2="336"
+       y2="120"
+       class="symbol-line"
+       id="line298" />
+    <line
+       x1="352"
+       y1="96"
+       x2="320"
+       y2="112"
+       class="symbol-line"
+       id="line299" />
+    <line
+       x1="320"
+       y1="80"
+       x2="352"
+       y2="96"
+       class="symbol-line"
+       id="line300" />
+    <line
+       x1="352"
+       y1="64"
+       x2="320"
+       y2="80"
+       class="symbol-line"
+       id="line301" />
+    <line
+       x1="336"
+       y1="48"
+       x2="336"
+       y2="56"
+       class="symbol-line"
+       id="line302" />
+    <line
+       x1="336"
+       y1="56"
+       x2="352"
+       y2="64"
+       class="symbol-line"
+       id="line303" />
+    <text
+       x="356"
+       y="72"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text303"
+       style="font-size:26.61028893px">R10</text>
+    <text
+       x="356"
+       y="108"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text304"
+       style="font-size:26.61028893px">1G</text>
+    <line
+       x1="336"
+       y1="456"
+       x2="336"
+       y2="464"
+       class="symbol-line"
+       id="line304" />
+    <line
+       x1="320"
+       y1="448"
+       x2="336"
+       y2="456"
+       class="symbol-line"
+       id="line305" />
+    <line
+       x1="352"
+       y1="432"
+       x2="320"
+       y2="448"
+       class="symbol-line"
+       id="line306" />
+    <line
+       x1="320"
+       y1="416"
+       x2="352"
+       y2="432"
+       class="symbol-line"
+       id="line307" />
+    <line
+       x1="352"
+       y1="400"
+       x2="320"
+       y2="416"
+       class="symbol-line"
+       id="line308" />
+    <line
+       x1="336"
+       y1="384"
+       x2="336"
+       y2="392"
+       class="symbol-line"
+       id="line309" />
+    <line
+       x1="336"
+       y1="392"
+       x2="352"
+       y2="400"
+       class="symbol-line"
+       id="line310" />
+    <text
+       x="356"
+       y="408"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text310"
+       style="font-size:26.61028893px">R11</text>
+    <text
+       x="356"
+       y="444"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text311"
+       style="font-size:26.61028893px">1G</text>
+    <line
+       x1="1880"
+       y1="144"
+       x2="1872"
+       y2="144"
+       class="symbol-line"
+       id="line311" />
+    <line
+       x1="1888"
+       y1="128"
+       x2="1880"
+       y2="144"
+       class="symbol-line"
+       id="line312" />
+    <line
+       x1="1904"
+       y1="160"
+       x2="1888"
+       y2="128"
+       class="symbol-line"
+       id="line313" />
+    <line
+       x1="1920"
+       y1="128"
+       x2="1904"
+       y2="160"
+       class="symbol-line"
+       id="line314" />
+    <line
+       x1="1936"
+       y1="160"
+       x2="1920"
+       y2="128"
+       class="symbol-line"
+       id="line315" />
+    <line
+       x1="1952"
+       y1="144"
+       x2="1944"
+       y2="144"
+       class="symbol-line"
+       id="line316" />
+    <line
+       x1="1944"
+       y1="144"
+       x2="1936"
+       y2="160"
+       class="symbol-line"
+       id="line317" />
+    <text
+       x="1912"
+       y="120.01691"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text317"
+       style="font-size:26.6103px">R12</text>
+    <text
+       x="1912"
+       y="183.94928"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text318"
+       style="font-size:26.6103px">{RNOTCH}</text>
+    <line
+       x1="2104"
+       y1="144"
+       x2="2096"
+       y2="144"
+       class="symbol-line"
+       id="line318" />
+    <line
+       x1="2112"
+       y1="128"
+       x2="2104"
+       y2="144"
+       class="symbol-line"
+       id="line319" />
+    <line
+       x1="2128"
+       y1="160"
+       x2="2112"
+       y2="128"
+       class="symbol-line"
+       id="line320" />
+    <line
+       x1="2144"
+       y1="128"
+       x2="2128"
+       y2="160"
+       class="symbol-line"
+       id="line321" />
+    <line
+       x1="2160"
+       y1="160"
+       x2="2144"
+       y2="128"
+       class="symbol-line"
+       id="line322" />
+    <line
+       x1="2176"
+       y1="144"
+       x2="2168"
+       y2="144"
+       class="symbol-line"
+       id="line323" />
+    <line
+       x1="2168"
+       y1="144"
+       x2="2160"
+       y2="160"
+       class="symbol-line"
+       id="line324" />
+    <text
+       x="2132.0085"
+       y="120.01691"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text324"
+       style="font-size:26.6103px">R13</text>
+    <text
+       x="2136"
+       y="179.95773"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text325"
+       style="font-size:26.6103px">{RNOTCH}</text>
+    <line
+       x1="2016"
+       y1="228"
+       x2="2016"
+       y2="256"
+       class="symbol-line"
+       id="line325" />
+    <line
+       x1="2016"
+       y1="220"
+       x2="2016"
+       y2="192"
+       class="symbol-line"
+       id="line326" />
+    <line
+       x1="2000"
+       y1="220"
+       x2="2032"
+       y2="220"
+       class="symbol-line"
+       id="line327" />
+    <line
+       x1="2000"
+       y1="228"
+       x2="2032"
+       y2="228"
+       class="symbol-line"
+       id="line328" />
+    <text
+       x="2024"
+       y="207.98309"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text328"
+       style="font-size:26.6103px">C3</text>
+    <text
+       x="2024"
+       y="251.99155"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text329"
+       style="font-size:26.6103px">200n</text>
+    <line
+       x1="1916"
+       y1="480"
+       x2="1888"
+       y2="480"
+       class="symbol-line"
+       id="line329" />
+    <line
+       x1="1924"
+       y1="480"
+       x2="1952"
+       y2="480"
+       class="symbol-line"
+       id="line330" />
+    <line
+       x1="1924"
+       y1="464"
+       x2="1924"
+       y2="496"
+       class="symbol-line"
+       id="line331" />
+    <line
+       x1="1916"
+       y1="464"
+       x2="1916"
+       y2="496"
+       class="symbol-line"
+       id="line332" />
+    <text
+       x="1920"
+       y="456.01691"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text332"
+       style="font-size:26.6103px">C4</text>
+    <text
+       x="1920"
+       y="519.94922"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text333"
+       style="font-size:26.6103px">{CNOTCH}</text>
+    <line
+       x1="2140"
+       y1="480"
+       x2="2112"
+       y2="480"
+       class="symbol-line"
+       id="line333" />
+    <line
+       x1="2148"
+       y1="480"
+       x2="2176"
+       y2="480"
+       class="symbol-line"
+       id="line334" />
+    <line
+       x1="2148"
+       y1="464"
+       x2="2148"
+       y2="496"
+       class="symbol-line"
+       id="line335" />
+    <line
+       x1="2140"
+       y1="464"
+       x2="2140"
+       y2="496"
+       class="symbol-line"
+       id="line336" />
+    <text
+       x="2144"
+       y="456.01691"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text336"
+       style="font-size:26.6103px">C5</text>
+    <text
+       x="2144"
+       y="519.94922"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text337"
+       style="font-size:26.6103px">{CNOTCH}</text>
+    <line
+       x1="2016"
+       y1="408"
+       x2="2016"
+       y2="416"
+       class="symbol-line"
+       id="line337" />
+    <line
+       x1="2000"
+       y1="400"
+       x2="2016"
+       y2="408"
+       class="symbol-line"
+       id="line338" />
+    <line
+       x1="2032"
+       y1="384"
+       x2="2000"
+       y2="400"
+       class="symbol-line"
+       id="line339" />
+    <line
+       x1="2000"
+       y1="368"
+       x2="2032"
+       y2="384"
+       class="symbol-line"
+       id="line340" />
+    <line
+       x1="2032"
+       y1="352"
+       x2="2000"
+       y2="368"
+       class="symbol-line"
+       id="line341" />
+    <line
+       x1="2016"
+       y1="336"
+       x2="2016"
+       y2="344"
+       class="symbol-line"
+       id="line342" />
+    <line
+       x1="2016"
+       y1="344"
+       x2="2032"
+       y2="352"
+       class="symbol-line"
+       id="line343" />
+    <text
+       x="2036"
+       y="360"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text343"
+       style="font-size:26.61028893px">R14</text>
+    <text
+       x="2036"
+       y="396"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text344"
+       style="font-size:26.61028893px">13.263k</text>
+    <line
+       x1="2496"
+       y1="224"
+       x2="2560"
+       y2="256"
+       class="symbol-line"
+       id="line344" />
+    <line
+       x1="2496"
+       y1="288"
+       x2="2560"
+       y2="256"
+       class="symbol-line"
+       id="line345" />
+    <line
+       x1="2496"
+       y1="224"
+       x2="2496"
+       y2="288"
+       class="symbol-line"
+       id="line346" />
+    <line
+       x1="2500"
+       y1="240"
+       x2="2508"
+       y2="240"
+       class="symbol-line"
+       id="line347" />
+    <line
+       x1="2500"
+       y1="272"
+       x2="2508"
+       y2="272"
+       class="symbol-line"
+       id="line348" />
+    <line
+       x1="2504"
+       y1="276"
+       x2="2504"
+       y2="268"
+       class="symbol-line"
+       id="line349" />
+    <line
+       x1="2528"
+       y1="224"
+       x2="2528"
+       y2="240"
+       class="symbol-line"
+       id="line350" />
+    <line
+       x1="2528"
+       y1="288"
+       x2="2528"
+       y2="272"
+       class="symbol-line"
+       id="line351" />
+    <line
+       x1="2532"
+       y1="236"
+       x2="2540"
+       y2="236"
+       class="symbol-line"
+       id="line352" />
+    <line
+       x1="2536"
+       y1="232"
+       x2="2536"
+       y2="240"
+       class="symbol-line"
+       id="line353" />
+    <line
+       x1="2532"
+       y1="276"
+       x2="2540"
+       y2="276"
+       class="symbol-line"
+       id="line354" />
+    <text
+       x="2544"
+       y="224"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text354"
+       style="font-size:26.61028893px">U4</text>
+    <text
+       x="2544"
+       y="288"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text355"
+       style="font-size:26.61028893px">XOPAMP_XMODEL</text>
+    <line
+       x1="2760"
+       y1="256"
+       x2="2752"
+       y2="256"
+       class="symbol-line"
+       id="line355" />
+    <line
+       x1="2768"
+       y1="240"
+       x2="2760"
+       y2="256"
+       class="symbol-line"
+       id="line356" />
+    <line
+       x1="2784"
+       y1="272"
+       x2="2768"
+       y2="240"
+       class="symbol-line"
+       id="line357" />
+    <line
+       x1="2800"
+       y1="240"
+       x2="2784"
+       y2="272"
+       class="symbol-line"
+       id="line358" />
+    <line
+       x1="2816"
+       y1="272"
+       x2="2800"
+       y2="240"
+       class="symbol-line"
+       id="line359" />
+    <line
+       x1="2832"
+       y1="256"
+       x2="2824"
+       y2="256"
+       class="symbol-line"
+       id="line360" />
+    <line
+       x1="2824"
+       y1="256"
+       x2="2816"
+       y2="272"
+       class="symbol-line"
+       id="line361" />
+    <text
+       x="2807.9658"
+       y="208.06763"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text361"
+       style="font-size:26.6103px">R15</text>
+    <text
+       x="2807.9658"
+       y="236.07608"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text362"
+       style="font-size:26.6103px">{RK1}</text>
+    <line
+       x1="2880"
+       y1="392"
+       x2="2880"
+       y2="400"
+       class="symbol-line"
+       id="line362" />
+    <line
+       x1="2864"
+       y1="384"
+       x2="2880"
+       y2="392"
+       class="symbol-line"
+       id="line363" />
+    <line
+       x1="2896"
+       y1="368"
+       x2="2864"
+       y2="384"
+       class="symbol-line"
+       id="line364" />
+    <line
+       x1="2864"
+       y1="352"
+       x2="2896"
+       y2="368"
+       class="symbol-line"
+       id="line365" />
+    <line
+       x1="2896"
+       y1="336"
+       x2="2864"
+       y2="352"
+       class="symbol-line"
+       id="line366" />
+    <line
+       x1="2880"
+       y1="320"
+       x2="2880"
+       y2="328"
+       class="symbol-line"
+       id="line367" />
+    <line
+       x1="2880"
+       y1="328"
+       x2="2896"
+       y2="336"
+       class="symbol-line"
+       id="line368" />
+    <text
+       x="2804.2051"
+       y="359.96619"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text368"
+       style="font-size:26.6103px">R16</text>
+    <text
+       x="2792.2307"
+       y="395.96619"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text369"
+       style="font-size:26.6103px">{RK2}</text>
+    <line
+       x1="2912"
+       y1="32"
+       x2="2976"
+       y2="64"
+       class="symbol-line"
+       id="line369" />
+    <line
+       x1="2912"
+       y1="96"
+       x2="2976"
+       y2="64"
+       class="symbol-line"
+       id="line370" />
+    <line
+       x1="2912"
+       y1="32"
+       x2="2912"
+       y2="96"
+       class="symbol-line"
+       id="line371" />
+    <line
+       x1="2916"
+       y1="48"
+       x2="2924"
+       y2="48"
+       class="symbol-line"
+       id="line372" />
+    <line
+       x1="2916"
+       y1="80"
+       x2="2924"
+       y2="80"
+       class="symbol-line"
+       id="line373" />
+    <line
+       x1="2920"
+       y1="84"
+       x2="2920"
+       y2="76"
+       class="symbol-line"
+       id="line374" />
+    <line
+       x1="2944"
+       y1="32"
+       x2="2944"
+       y2="48"
+       class="symbol-line"
+       id="line375" />
+    <line
+       x1="2944"
+       y1="96"
+       x2="2944"
+       y2="80"
+       class="symbol-line"
+       id="line376" />
+    <line
+       x1="2948"
+       y1="44"
+       x2="2956"
+       y2="44"
+       class="symbol-line"
+       id="line377" />
+    <line
+       x1="2952"
+       y1="40"
+       x2="2952"
+       y2="48"
+       class="symbol-line"
+       id="line378" />
+    <line
+       x1="2948"
+       y1="84"
+       x2="2956"
+       y2="84"
+       class="symbol-line"
+       id="line379" />
+    <text
+       x="2960"
+       y="32"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text379"
+       style="font-size:26.61028893px">U5</text>
+    <text
+       x="2960"
+       y="96"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text380"
+       style="font-size:26.61028893px">XOPAMP_XMODEL</text>
+    <line
+       x1="3128"
+       y1="368"
+       x2="3120"
+       y2="368"
+       class="symbol-line"
+       id="line380" />
+    <line
+       x1="3136"
+       y1="352"
+       x2="3128"
+       y2="368"
+       class="symbol-line"
+       id="line381" />
+    <line
+       x1="3152"
+       y1="384"
+       x2="3136"
+       y2="352"
+       class="symbol-line"
+       id="line382" />
+    <line
+       x1="3168"
+       y1="352"
+       x2="3152"
+       y2="384"
+       class="symbol-line"
+       id="line383" />
+    <line
+       x1="3184"
+       y1="384"
+       x2="3168"
+       y2="352"
+       class="symbol-line"
+       id="line384" />
+    <line
+       x1="3200"
+       y1="368"
+       x2="3192"
+       y2="368"
+       class="symbol-line"
+       id="line385" />
+    <line
+       x1="3192"
+       y1="368"
+       x2="3184"
+       y2="384"
+       class="symbol-line"
+       id="line386" />
+    <text
+       x="3160"
+       y="332.04227"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text386"
+       style="font-size:26.6103px">R17</text>
+    <text
+       x="3160"
+       y="411.94083"
+       text-anchor="middle"
+       font-size="20"
+       class="component-text"
+       id="text387"
+       style="font-size:26.6103px">{RLPF}</text>
+    <line
+       x1="3296"
+       y1="468"
+       x2="3296"
+       y2="496"
+       class="symbol-line"
+       id="line387" />
+    <line
+       x1="3296"
+       y1="460"
+       x2="3296"
+       y2="432"
+       class="symbol-line"
+       id="line388" />
+    <line
+       x1="3280"
+       y1="460"
+       x2="3312"
+       y2="460"
+       class="symbol-line"
+       id="line389" />
+    <line
+       x1="3280"
+       y1="468"
+       x2="3312"
+       y2="468"
+       class="symbol-line"
+       id="line390" />
+    <text
+       x="3304"
+       y="447.98309"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text390"
+       style="font-size:26.6103px">C6</text>
+    <text
+       x="3304"
+       y="499.97464"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text391"
+       style="font-size:26.6103px">{CLPF}</text>
+    <line
+       x1="3392"
+       y1="256"
+       x2="3456"
+       y2="288"
+       class="symbol-line"
+       id="line391" />
+    <line
+       x1="3392"
+       y1="320"
+       x2="3456"
+       y2="288"
+       class="symbol-line"
+       id="line392" />
+    <line
+       x1="3392"
+       y1="256"
+       x2="3392"
+       y2="320"
+       class="symbol-line"
+       id="line393" />
+    <line
+       x1="3396"
+       y1="272"
+       x2="3404"
+       y2="272"
+       class="symbol-line"
+       id="line394" />
+    <line
+       x1="3396"
+       y1="304"
+       x2="3404"
+       y2="304"
+       class="symbol-line"
+       id="line395" />
+    <line
+       x1="3400"
+       y1="308"
+       x2="3400"
+       y2="300"
+       class="symbol-line"
+       id="line396" />
+    <line
+       x1="3424"
+       y1="256"
+       x2="3424"
+       y2="272"
+       class="symbol-line"
+       id="line397" />
+    <line
+       x1="3424"
+       y1="320"
+       x2="3424"
+       y2="304"
+       class="symbol-line"
+       id="line398" />
+    <line
+       x1="3428"
+       y1="268"
+       x2="3436"
+       y2="268"
+       class="symbol-line"
+       id="line399" />
+    <line
+       x1="3432"
+       y1="264"
+       x2="3432"
+       y2="272"
+       class="symbol-line"
+       id="line400" />
+    <line
+       x1="3428"
+       y1="308"
+       x2="3436"
+       y2="308"
+       class="symbol-line"
+       id="line401" />
+    <text
+       x="3440"
+       y="256"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text401"
+       style="font-size:26.61028893px">U6</text>
+    <text
+       x="3440"
+       y="320"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text402"
+       style="font-size:26.61028893px">XOPAMP_XMODEL</text>
+    <line
+       x1="3608"
+       y1="-12"
+       x2="3624"
+       y2="-12"
+       class="symbol-line"
+       id="line402" />
+    <line
+       x1="3608"
+       y1="28"
+       x2="3624"
+       y2="28"
+       class="symbol-line"
+       id="line403" />
+    <line
+       x1="3616"
+       y1="-20"
+       x2="3616"
+       y2="-4"
+       class="symbol-line"
+       id="line404" />
+    <line
+       x1="3616"
+       y1="48"
+       x2="3616"
+       y2="40"
+       class="symbol-line"
+       id="line405" />
+    <line
+       x1="3616"
+       y1="-32"
+       x2="3616"
+       y2="-24"
+       class="symbol-line"
+       id="line406" />
+    <ellipse
+       cx="3616"
+       cy="8"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse406" />
+    <text
+       x="3640"
+       y="-32"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text406"
+       style="font-size:26.61028893px">B1</text>
+    <text
+       x="3640"
+       y="48"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text407"
+       style="font-size:26.61028893px">V=limit(V(ADC_HOLD),-1.65,1.65)</text>
+    <line
+       x1="3720"
+       y1="-156"
+       x2="3736"
+       y2="-156"
+       class="symbol-line"
+       id="line407" />
+    <line
+       x1="3720"
+       y1="-116"
+       x2="3736"
+       y2="-116"
+       class="symbol-line"
+       id="line408" />
+    <line
+       x1="3728"
+       y1="-164"
+       x2="3728"
+       y2="-148"
+       class="symbol-line"
+       id="line409" />
+    <line
+       x1="3728"
+       y1="-96"
+       x2="3728"
+       y2="-104"
+       class="symbol-line"
+       id="line410" />
+    <line
+       x1="3728"
+       y1="-176"
+       x2="3728"
+       y2="-168"
+       class="symbol-line"
+       id="line411" />
+    <ellipse
+       cx="3728"
+       cy="-136"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse411" />
+    <text
+       x="3752"
+       y="-176"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text411"
+       style="font-size:26.61028893px">B2</text>
+    <text
+       x="3752"
+       y="-96"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text412"
+       style="font-size:26.61028893px">V=limit(floor((V(ADC_CLIP)+1.65)/3.3*4095),0,4095)</text>
+    <line
+       x1="3832"
+       y1="-284"
+       x2="3848"
+       y2="-284"
+       class="symbol-line"
+       id="line412" />
+    <line
+       x1="3832"
+       y1="-244"
+       x2="3848"
+       y2="-244"
+       class="symbol-line"
+       id="line413" />
+    <line
+       x1="3840"
+       y1="-292"
+       x2="3840"
+       y2="-276"
+       class="symbol-line"
+       id="line414" />
+    <line
+       x1="3840"
+       y1="-224"
+       x2="3840"
+       y2="-232"
+       class="symbol-line"
+       id="line415" />
+    <line
+       x1="3840"
+       y1="-304"
+       x2="3840"
+       y2="-296"
+       class="symbol-line"
+       id="line416" />
+    <ellipse
+       cx="3840"
+       cy="-264"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse416" />
+    <text
+       x="3864"
+       y="-304"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text416"
+       style="font-size:26.61028893px">B3</text>
+    <text
+       x="3864"
+       y="-224"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text417"
+       style="font-size:26.61028893px">V=V(ADC_CODE)-2048</text>
+    <line
+       x1="3592"
+       y1="660"
+       x2="3608"
+       y2="660"
+       class="symbol-line"
+       id="line417" />
+    <line
+       x1="3592"
+       y1="700"
+       x2="3608"
+       y2="700"
+       class="symbol-line"
+       id="line418" />
+    <line
+       x1="3600"
+       y1="652"
+       x2="3600"
+       y2="668"
+       class="symbol-line"
+       id="line419" />
+    <line
+       x1="3600"
+       y1="720"
+       x2="3600"
+       y2="712"
+       class="symbol-line"
+       id="line420" />
+    <line
+       x1="3600"
+       y1="640"
+       x2="3600"
+       y2="648"
+       class="symbol-line"
+       id="line421" />
+    <ellipse
+       cx="3600"
+       cy="680"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse421" />
+    <text
+       x="3624"
+       y="640"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text421"
+       style="font-size:26.61028893px">V4</text>
+    <text
+       x="3624"
+       y="720"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text422"
+       style="font-size:26.61028893px">PULSE(0 5 900u 1u 1u 98u 1m)</text>
+    <line
+       x1="3840"
+       y1="304"
+       x2="3856"
+       y2="304"
+       class="symbol-line"
+       id="line422" />
+    <line
+       x1="3856"
+       y1="304"
+       x2="3864"
+       y2="308"
+       class="symbol-line"
+       id="line423" />
+    <line
+       x1="3840"
+       y1="352"
+       x2="3856"
+       y2="352"
+       class="symbol-line"
+       id="line424" />
+    <line
+       x1="3856"
+       y1="352"
+       x2="3864"
+       y2="348"
+       class="symbol-line"
+       id="line425" />
+    <line
+       x1="3888"
+       y1="368"
+       x2="3888"
+       y2="344"
+       class="symbol-line"
+       id="line426" />
+    <line
+       x1="3888"
+       y1="288"
+       x2="3888"
+       y2="308"
+       class="symbol-line"
+       id="line427" />
+    <line
+       x1="3888"
+       y1="308"
+       x2="3908"
+       y2="332"
+       class="symbol-line"
+       id="line428" />
+    <line
+       x1="3840"
+       y1="344"
+       x2="3848"
+       y2="344"
+       class="symbol-line"
+       id="line429" />
+    <line
+       x1="3844"
+       y1="348"
+       x2="3844"
+       y2="340"
+       class="symbol-line"
+       id="line430" />
+    <line
+       x1="3840"
+       y1="312"
+       x2="3848"
+       y2="312"
+       class="symbol-line"
+       id="line431" />
+    <ellipse
+       cx="3888"
+       cy="328"
+       rx="32"
+       ry="32"
+       class="symbol-line"
+       id="ellipse431" />
+    <ellipse
+       cx="3888"
+       cy="344"
+       rx="4"
+       ry="4"
+       class="symbol-line"
+       id="ellipse432" />
+    <ellipse
+       cx="3908"
+       cy="332"
+       rx="4"
+       ry="4"
+       class="symbol-line"
+       id="ellipse433" />
+    <text
+       x="3912"
+       y="288"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text433"
+       style="font-size:26.61028893px">S1</text>
+    <text
+       x="3912"
+       y="368"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text434"
+       style="font-size:26.61028893px">SW_ADC</text>
+    <line
+       x1="4032"
+       y1="516"
+       x2="4032"
+       y2="544"
+       class="symbol-line"
+       id="line434" />
+    <line
+       x1="4032"
+       y1="508"
+       x2="4032"
+       y2="480"
+       class="symbol-line"
+       id="line435" />
+    <line
+       x1="4016"
+       y1="508"
+       x2="4048"
+       y2="508"
+       class="symbol-line"
+       id="line436" />
+    <line
+       x1="4016"
+       y1="516"
+       x2="4048"
+       y2="516"
+       class="symbol-line"
+       id="line437" />
+    <text
+       x="4040"
+       y="495.98309"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text437"
+       style="font-size:26.6103px">C7</text>
+    <text
+       x="4040"
+       y="551.96606"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text438"
+       style="font-size:26.6103px">10n</text>
+    <line
+       x1="4176"
+       y1="552"
+       x2="4176"
+       y2="560"
+       class="symbol-line"
+       id="line438" />
+    <line
+       x1="4160"
+       y1="544"
+       x2="4176"
+       y2="552"
+       class="symbol-line"
+       id="line439" />
+    <line
+       x1="4192"
+       y1="528"
+       x2="4160"
+       y2="544"
+       class="symbol-line"
+       id="line440" />
+    <line
+       x1="4160"
+       y1="512"
+       x2="4192"
+       y2="528"
+       class="symbol-line"
+       id="line441" />
+    <line
+       x1="4192"
+       y1="496"
+       x2="4160"
+       y2="512"
+       class="symbol-line"
+       id="line442" />
+    <line
+       x1="4176"
+       y1="480"
+       x2="4176"
+       y2="488"
+       class="symbol-line"
+       id="line443" />
+    <line
+       x1="4176"
+       y1="488"
+       x2="4192"
+       y2="496"
+       class="symbol-line"
+       id="line444" />
+    <text
+       x="4196"
+       y="500.00845"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text444"
+       style="font-size:26.6103px">R18</text>
+    <text
+       x="4196"
+       y="551.97455"
+       text-anchor="start"
+       font-size="20"
+       class="component-text"
+       id="text445"
+       style="font-size:26.6103px">1G</text>
+  </g>
+  <g
+     id="junctions">
+    <circle
+       cx="480"
+       cy="48"
+       r="8"
+       class="junction"
+       id="circle445" />
+    <circle
+       cx="480"
+       cy="368"
+       r="8"
+       class="junction"
+       id="circle446" />
+    <circle
+       cx="704"
+       cy="48"
+       r="8"
+       class="junction"
+       id="circle447" />
+    <circle
+       cx="704"
+       cy="368"
+       r="8"
+       class="junction"
+       id="circle448" />
+    <circle
+       cx="976"
+       cy="48"
+       r="8"
+       class="junction"
+       id="circle451" />
+    <circle
+       cx="976"
+       cy="224"
+       r="8"
+       class="junction"
+       id="circle452" />
+    <circle
+       cx="1120"
+       cy="-32"
+       r="8"
+       class="junction"
+       id="circle453" />
+    <circle
+       cx="1120"
+       cy="304"
+       r="8"
+       class="junction"
+       id="circle455" />
+    <circle
+       cx="1152"
+       cy="464"
+       r="8"
+       class="junction"
+       id="circle456" />
+    <circle
+       cx="1152"
+       cy="544"
+       r="8"
+       class="junction"
+       id="circle457" />
+    <circle
+       cx="1152"
+       cy="560"
+       r="8"
+       class="junction"
+       id="circle458" />
+    <circle
+       cx="1152"
+       cy="576"
+       r="8"
+       class="junction"
+       id="circle459" />
+    <circle
+       cx="1216"
+       cy="64"
+       r="8"
+       class="junction"
+       id="circle460" />
+    <circle
+       cx="1216"
+       cy="384"
+       r="8"
+       class="junction"
+       id="circle461" />
+    <circle
+       cx="1424"
+       cy="64"
+       r="8"
+       class="junction"
+       id="circle464" />
+    <circle
+       cx="1424"
+       cy="384"
+       r="8"
+       class="junction"
+       id="circle465" />
+    <circle
+       cx="1568"
+       cy="-128"
+       r="8"
+       class="junction"
+       id="circle466" />
+    <circle
+       cx="1680"
+       cy="192"
+       r="8"
+       class="junction"
+       id="circle467" />
+    <circle
+       cx="1792"
+       cy="144"
+       r="8"
+       class="junction"
+       id="circle469" />
+    <circle
+       cx="2016"
+       cy="144"
+       r="8"
+       class="junction"
+       id="circle470" />
+    <circle
+       cx="2016"
+       cy="288"
+       r="8"
+       class="junction"
+       id="circle471" />
+    <circle
+       cx="2016"
+       cy="480"
+       r="8"
+       class="junction"
+       id="circle472" />
+    <circle
+       cx="2288"
+       cy="272"
+       r="8"
+       class="junction"
+       id="circle474" />
+    <circle
+       cx="2528"
+       cy="-128"
+       r="8"
+       class="junction"
+       id="circle475" />
+    <circle
+       cx="2528"
+       cy="560"
+       r="8"
+       class="junction"
+       id="circle476" />
+    <circle
+       cx="2672"
+       cy="256"
+       r="8"
+       class="junction"
+       id="circle477" />
+    <circle
+       cx="2672"
+       cy="368"
+       r="8"
+       class="junction"
+       id="circle478" />
+    <circle
+       cx="2848"
+       cy="48"
+       r="8"
+       class="junction"
+       id="circle479" />
+    <circle
+       cx="2880"
+       cy="256"
+       r="8"
+       class="junction"
+       id="circle480" />
+    <circle
+       cx="2944"
+       cy="-128"
+       r="8"
+       class="junction"
+       id="circle481" />
+    <circle
+       cx="3296"
+       cy="368"
+       r="8"
+       class="junction"
+       id="circle483" />
+    <circle
+       cx="3552"
+       cy="208"
+       r="8"
+       class="junction"
+       id="circle484" />
+    <circle
+       cx="3616"
+       cy="-112"
+       r="8"
+       class="junction"
+       id="circle487" />
+    <circle
+       cx="3728"
+       cy="-256"
+       r="8"
+       class="junction"
+       id="circle488" />
+    <circle
+       cx="3840"
+       cy="-384"
+       r="8"
+       class="junction"
+       id="circle489" />
+    <circle
+       cx="4032"
+       cy="432"
+       r="8"
+       class="junction"
+       id="circle490" />
+  </g>
+  <g
+     id="flags">
+    <path
+       d="M 1040 736 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path491" />
+    <path
+       d="M 704 272 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path492" />
+    <path
+       d="M 704 592 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path493" />
+    <path
+       d="M 1152 736 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path494" />
+    <text
+       x="872.86426"
+       y="39"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text494"
+       style="font-size:26.6103px">HPF_P</text>
+    <text
+       x="876.85577"
+       y="347.02536"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text495"
+       style="font-size:26.6103px">HPF_N</text>
+    <text
+       x="556.82214"
+       y="27.025372"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text496"
+       style="font-size:26.6103px">INP_RAW</text>
+    <text
+       x="465.01691"
+       y="339.04227"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text497"
+       style="font-size:26.6103px">INN_RAW</text>
+    <path
+       d="M 480 240 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path497" />
+    <path
+       d="M 480 608 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path498" />
+    <text
+       x="1145"
+       y="567"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text498"
+       style="font-size:26.61028893px">VMINUS</text>
+    <path
+       d="M 1424 256 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path499" />
+    <text
+       x="1257"
+       y="55"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text499"
+       style="font-size:26.61028893px">U1_OUT</text>
+    <text
+       x="1328.8484"
+       y="375"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text500"
+       style="font-size:26.6103px">U2_OUT</text>
+    <path
+       d="M 336 176 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path500" />
+    <path
+       d="M 336 512 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path501" />
+    <text
+       x="1864.7979"
+       y="123.02536"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text501"
+       style="font-size:26.6103px">NOTCH_IN</text>
+    <text
+       x="2420.7009"
+       y="135"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text502"
+       style="font-size:26.6103px">NOTCH_SENSE</text>
+    <text
+       x="2756.8035"
+       y="243.00845"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text503"
+       style="font-size:26.6103px">NOTCH_OUT</text>
+    <path
+       d="M 2880 464 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path503" />
+    <text
+       x="2944.8462"
+       y="243.00845"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text504"
+       style="font-size:26.6103px">K_DIV</text>
+    <text
+       x="1113"
+       y="167"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text505"
+       style="font-size:26.61028893px">VPLUS</text>
+    <text
+       x="2009"
+       y="279"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text506"
+       style="font-size:26.61028893px">VK</text>
+    <path
+       d="M 3296 544 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path506" />
+    <text
+       x="3036.9573"
+       y="359"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text507"
+       style="font-size:26.6103px">LPF_IN</text>
+    <text
+       x="3448.6582"
+       y="359"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text508"
+       style="font-size:26.6103px">LPF_NODE</text>
+    <text
+       x="1784.7642"
+       y="183"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text509"
+       style="font-size:26.6103px">IA_OUT</text>
+    <text
+       x="3588.906"
+       y="279"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text510"
+       style="font-size:26.6103px">AFE_OUT</text>
+    <path
+       d="M 3616 112 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path510" />
+    <text
+       x="30.194462"
+       y="3592.0342"
+       font-size="19"
+       text-anchor="start"
+       transform="rotate(-90)"
+       class="node-text"
+       id="text511"
+       style="font-size:26.6103px">ADC_CLIP</text>
+    <path
+       d="M 3728 -32 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path511" />
+    <text
+       x="198.14371"
+       y="3704.0342"
+       font-size="19"
+       text-anchor="start"
+       transform="rotate(-90)"
+       class="node-text"
+       id="text512"
+       style="font-size:26.6103px">ADC_CODE</text>
+    <path
+       d="M 3840 -160 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path512" />
+    <text
+       x="306.18597"
+       y="3816.0342"
+       font-size="19"
+       text-anchor="start"
+       transform="rotate(-90)"
+       class="node-text"
+       id="text513"
+       style="font-size:26.6103px">ADC_SIGNED</text>
+    <path
+       d="M 3600 800 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path513" />
+    <text
+       x="3593"
+       y="583"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text514"
+       style="font-size:26.61028893px">CLK</text>
+    <path
+       d="M 3760 528 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path514" />
+    <path
+       d="M 4032 608 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path515" />
+    <path
+       d="M 4176 608 v 10 m -14 0 h 28 l -14 18 z"
+       class="ground"
+       id="path516" />
+    <text
+       x="4169"
+       y="423"
+       font-size="19"
+       text-anchor="end"
+       class="node-text"
+       id="text516"
+       style="font-size:26.61028893px">ADC_HOLD</text>
+  </g>
+  <g
+     id="directives">
+    <text
+       x="320"
+       y="704"
+       text-anchor="start"
+       font-size="20px"
+       class="directive-text"
+       id="text531"
+       style="font-size:26.61028893px;white-space:pre;inline-size:522.762"
+       xml:space="preserve"><tspan
+         x="320"
+         y="704"
+         id="tspan1">.param RHPF=10Meg.
+</tspan><tspan
+         x="320"
+         y="737.26286"
+         id="tspan2">param CHPF=33n.
+</tspan><tspan
+         x="320"
+         y="770.52574"
+         id="tspan3">param RFB=100k.
+</tspan><tspan
+         x="320"
+         y="803.78862"
+         id="tspan4">param RG=1k.
+</tspan><tspan
+         x="320"
+         y="837.0515"
+         id="tspan5">param RDIFF=10k.
+</tspan><tspan
+         x="320"
+         y="870.31438"
+         id="tspan6">param RNOTCH=26.526k.
+</tspan><tspan
+         x="320"
+         y="903.57726"
+         id="tspan7">param CNOTCH=100n.
+</tspan><tspan
+         x="320"
+         y="936.84013"
+         id="tspan8">param RK1=5k.
+</tspan><tspan
+         x="320"
+         y="970.10301"
+         id="tspan9">param RK2=95k.
+</tspan><tspan
+         x="320"
+         y="1003.3659"
+         id="tspan10">param RLPF=1k.
+</tspan><tspan
+         x="320"
+         y="1036.6288"
+         id="tspan11">param CLPF=1.06u.
+</tspan><tspan
+         x="320"
+         y="1069.8916"
+         id="tspan12">param VADC=1.65</tspan></text>
+    <text
+       x="1008"
+       y="864"
+       text-anchor="start"
+       font-size="20"
+       class="directive-text"
+       id="text532"
+       style="font-size:26.61028893px"><tspan
+         x="1008"
+         dy="0"
+         id="tspan532"
+         style="font-size:26.61028893px">.tran 0 10.001 0 5u</tspan></text>
+    <text
+       x="1008"
+       y="912"
+       text-anchor="start"
+       font-size="20"
+       class="directive-text"
+       id="text533"
+       style="font-size:26.61028893px"><tspan
+         x="1008"
+         dy="0"
+         id="tspan533"
+         style="font-size:26.61028893px">.options plotwinsize=0</tspan></text>
+    <text
+       x="1008"
+       y="960"
+       text-anchor="start"
+       font-size="20"
+       class="directive-text"
+       id="text534"
+       style="font-size:26.61028893px"><tspan
+         x="1008"
+         dy="0"
+         id="tspan534"
+         style="font-size:26.61028893px">.save V(VPLUS) V(VMINUS) V(INP_RAW) V(INN_RAW) V(HPF_P) V(HPF_N) V(U1_OUT) V(U2_OUT) V(IA_OUT) V(LPF_IN) V(LPF_NODE) V(AFE_OUT) V(CLK) V(ADC_HOLD) V(ADC_CLIP) V(ADC_CODE) V(ADC_SIGNED) V(K_DIV) V(VK)</tspan></text>
+    <text
+       x="1008"
+       y="1008"
+       text-anchor="start"
+       font-size="20"
+       class="comment-text"
+       id="text535"
+       style="font-size:26.61028893px"><tspan
+         x="1008"
+         dy="0"
+         id="tspan535"
+         style="font-size:26.61028893px">XMODEL-ALIGNED: +/-1.65V, dedicated 100dB/110dB/1ohm op-amp, ECG+=patient, ECG-=0, aperture=1ms.</tspan></text>
+    <text
+       x="3808.2051"
+       y="812.04242"
+       text-anchor="start"
+       font-size="20"
+       class="directive-text"
+       id="text536"
+       style="font-size:26.6103px"><tspan
+         x="3808.2051"
+         dy="0"
+         id="tspan536"
+         style="font-size:26.6103px">.model SW_ADC SW(Ron=1 Roff=1G Vt=2.5 Vh=0.1)</tspan></text>
+    <text
+       x="3808.2051"
+       y="848.06787"
+       text-anchor="start"
+       font-size="20"
+       class="directive-text"
+       id="text537"
+       style="font-size:26.6103px"><tspan
+         x="3808.2051"
+         dy="0"
+         id="tspan537"
+         style="font-size:26.6103px">.include XOpAmp_XMODEL.lib</tspan></text>
+    <text
+       x="316.00845"
+       y="1108.1263"
+       text-anchor="start"
+       font-size="20"
+       class="directive-text"
+       id="text538"
+       style="font-size:26.6103px"><tspan
+         x="316.00845"
+         dy="0"
+         id="tspan538"
+         style="font-size:26.6103px">.param AOL_DB=100 CMRR_DB=110 GBW_HZ=1e9 VOS=0</tspan></text>
+  </g>
+  <text
+     xml:space="preserve"
+     transform="matrix(1.9957717,0,0,1.9957717,109.65116,-530)"
+     id="text539"
+     style="fill:#748193;text-orientation:auto;stroke:#364152;stroke-width:2.35464567;stroke-linejoin:bevel;-inkscape-font-specification:'Sans, Bold';font-family:Sans;font-size:13.33333313px;font-weight:bold;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect539)" />
+  <text
+     xml:space="preserve"
+     transform="matrix(1.9957717,0,0,1.9957717,109.65116,-530)"
+     id="text540"
+     style="fill:#748193;text-orientation:auto;stroke:#364152;stroke-width:2.35464567;stroke-linejoin:bevel;-inkscape-font-specification:'Sans, Bold';font-family:Sans;font-size:13.33333313px;font-weight:bold;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect540)" />
+</svg>

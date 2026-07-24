@@ -3,7 +3,11 @@
   "policy": "Fixed-version PhysioNet source data are fetched outside Git; the public repository retains manifests, hashes, preprocessing code, locked vectors, and derived evidence.",
   "expected_hashes": "datasets/SHA256SUMS_EXPECTED.txt",
   "default_external_destination": "../_ecg_soc_physionet",
-  "split_manifest": "components/digital_accelerator/configs/recordwise_resplit_seed20260808/strict_recordwise_split_seed20260808.json",
+  "derived_locked_input_destination": "../generated_rtl_fpga_test_inputs_36case",
+  "derived_locked_input_generator": "tools/data/generate_locked_digital_36case.py",
+  "derived_locked_input_authority": "design/digital/reports/final/board_replay_36_cases.csv",
+  "derived_locked_input_note": "Reconstructed historical signed-12-bit digital inputs; not actual XMODEL AFE-ADC dumps. Every generated file must match the locked board-replay SHA-256.",
+  "split_manifest": "design/digital/configs/recordwise_resplit_seed20260808/strict_recordwise_split_seed20260808.json",
   "databases": [
     {
       "canonical_name": "MIT-BIH Normal Sinus Rhythm Database",
@@ -18,8 +22,8 @@
       "expected_source_files": "all nsrdb/1.0.0 entries in datasets/SHA256SUMS_EXPECTED.txt",
       "source_sample_rate_hz": 128,
       "local_expected_destination": "nsrdb/1.0.0",
-      "preprocessing_entry_point": "components/afe_xmodel/algorithm/make_60s_wfdb_chunks.py",
-      "derived_artifacts_retained": ["components/afe_xmodel/docs/integration_latest", "components/digital_accelerator/data/final_test", "components/digital_accelerator/reports/final"],
+      "preprocessing_entry_point": "design/analog/xmodel/algorithm/make_60s_wfdb_chunks.py",
+      "derived_artifacts_retained": ["design/analog/xmodel/docs/integration_latest", "design/digital/data/final_test", "design/digital/reports/final"],
       "raw_data_not_bundled_reason": "authoritative fixed-version files are reproducibly downloadable; avoiding duplicate multi-hundred-megabyte payloads keeps public Git history reviewable"
     },
     {
@@ -35,8 +39,8 @@
       "expected_source_files": "all chfdb/1.0.0 entries in datasets/SHA256SUMS_EXPECTED.txt",
       "source_sample_rate_hz": 250,
       "local_expected_destination": "chfdb/1.0.0",
-      "preprocessing_entry_point": "components/afe_xmodel/algorithm/make_60s_wfdb_chunks.py",
-      "derived_artifacts_retained": ["components/afe_xmodel/docs/integration_latest", "components/digital_accelerator/data/final_test", "components/digital_accelerator/reports/final"],
+      "preprocessing_entry_point": "design/analog/xmodel/algorithm/make_60s_wfdb_chunks.py",
+      "derived_artifacts_retained": ["design/analog/xmodel/docs/integration_latest", "design/digital/data/final_test", "design/digital/reports/final"],
       "raw_data_not_bundled_reason": "authoritative fixed-version files are reproducibly downloadable; avoiding duplicate multi-hundred-megabyte payloads keeps public Git history reviewable"
     },
     {
@@ -53,8 +57,8 @@
       "source_sample_rate_hz": 360,
       "source_record_duration_note": "48 half-hour excerpts selected from a set of 24-hour ambulatory ECG recordings; this constrains the current common four-class evaluation window to 30 minutes",
       "local_expected_destination": "mitdb/1.0.0",
-      "preprocessing_entry_point": "components/afe_xmodel/algorithm/make_60s_wfdb_chunks.py",
-      "derived_artifacts_retained": ["components/afe_xmodel/docs/integration_latest", "components/digital_accelerator/data/final_test", "components/digital_accelerator/reports/final"],
+      "preprocessing_entry_point": "design/analog/xmodel/algorithm/make_60s_wfdb_chunks.py",
+      "derived_artifacts_retained": ["design/analog/xmodel/docs/integration_latest", "design/digital/data/final_test", "design/digital/reports/final"],
       "raw_data_not_bundled_reason": "authoritative fixed-version files are reproducibly downloadable; avoiding duplicate raw payloads keeps public Git history reviewable"
     },
     {
@@ -70,8 +74,8 @@
       "expected_source_files": "all afdb/1.0.0 entries in datasets/SHA256SUMS_EXPECTED.txt",
       "source_sample_rate_hz": 250,
       "local_expected_destination": "afdb/1.0.0",
-      "preprocessing_entry_point": "components/afe_xmodel/algorithm/make_60s_wfdb_chunks.py",
-      "derived_artifacts_retained": ["components/afe_xmodel/docs/integration_latest", "components/digital_accelerator/data/final_test", "components/digital_accelerator/reports/final"],
+      "preprocessing_entry_point": "design/analog/xmodel/algorithm/make_60s_wfdb_chunks.py",
+      "derived_artifacts_retained": ["design/analog/xmodel/docs/integration_latest", "design/digital/data/final_test", "design/digital/reports/final"],
       "raw_data_not_bundled_reason": "authoritative fixed-version files are reproducibly downloadable; avoiding duplicate multi-hundred-megabyte payloads keeps public Git history reviewable"
     }
   ]

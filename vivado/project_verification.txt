@@ -1,0 +1,16 @@
+Vivado canonical project verification
+Vivado version: 2020.2
+
+project=pure_rtl
+xpr=vivado/pure_rtl/project/SNN_ECG_PURE_RTL_VISUALIZATION.xpr
+top=snn_ecg_30min_final_top
+part=xc7a100tcsg324-1
+synthesis_source_count=15
+status=PASS
+
+project=microblaze
+xpr=vivado/microblaze/SNN_ECG_MB_FULL_REPLAY.xpr
+top=snn_ecg_mb_full_replay_wrapper
+part=xc7a100tcsg324-1
+synthesis_source_count=17
+status=PASS

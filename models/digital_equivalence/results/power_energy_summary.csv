@@ -1,0 +1,5 @@
+scenario,clock_mhz,total_allocated_power_w,accelerator_dynamic_power_w,fpga_static_power_w,evidence_class,active_time_s,energy_per_decision_j,record_period_s,ideal_full_power_gating_average_w,evidence_path,limitations
+Pure RTL continuous 1 kSPS,100,0.1420,0.0450,0.0970,ESTIMATED,N/A,N/A,N/A,N/A,models/digital_equivalence/results/activity_power_summary.json,"post-route real-ECG SAIF estimate; not physical board measurement"
+Pure RTL 100 MHz burst,100,0.1495,0.0525,0.0970,ESTIMATED,0.0360129,0.00538392855,1800,0.0000029910714,models/digital_equivalence/results/activity_power_summary.json,"ideal average assumes complete power-off outside active time and excludes low-power overheads"
+MicroBlaze integrated system,100,0.2710,0.1730,0.0980,ESTIMATED,N/A,N/A,N/A,N/A,verification/fpga_implementation/raw_vivado_evidence/system_power/power_routed.rpt,"vectorless integrated-system estimate; independent compute energy not measured"
+Physical FPGA board,N/A,N/A,N/A,N/A,NOT_MEASURED,N/A,N/A,N/A,N/A,models/digital_equivalence/reports/POWER_ENERGY_METHODOLOGY.md,"external rail measurement not performed"

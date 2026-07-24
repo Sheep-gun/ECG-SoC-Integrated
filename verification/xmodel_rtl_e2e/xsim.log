@@ -1,0 +1,26 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_xmodel_adc_replay/xsim_script.tcl
+# xsim {tb_xmodel_adc_replay} -autoloadwcfg -tclbatch {run.tcl}
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+source run.tcl
+## run all
+CHUNK_RESULT case=9 expected=3 pred=3 correct=1 valid=1 samples=1800000 cycles=5401263
+PROFILE_RESULT case=9 total_cycles=5401260 busy_cycles=5401260 run_cycles=5399940 input_wait_cycles=1799970 accepted_samples=1800000 windows=30 decisions=1 last_window_latency=180038 max_window_latency=180038 last_decision_latency=5401260
+CHUNK_RESULT case=35 expected=2 pred=2 correct=1 valid=1 samples=1800000 cycles=5401263
+PROFILE_RESULT case=35 total_cycles=5401260 busy_cycles=5401260 run_cycles=5399940 input_wait_cycles=1799970 accepted_samples=1800000 windows=30 decisions=1 last_window_latency=180038 max_window_latency=180038 last_decision_latency=5401260
+CHUNK_RESULT case=83 expected=1 pred=1 correct=1 valid=1 samples=1800000 cycles=5401263
+PROFILE_RESULT case=83 total_cycles=5401260 busy_cycles=5401260 run_cycles=5399940 input_wait_cycles=1799970 accepted_samples=1800000 windows=30 decisions=1 last_window_latency=180038 max_window_latency=180038 last_decision_latency=5401260
+CHUNK_RESULT case=104 expected=0 pred=0 correct=1 valid=1 samples=1800000 cycles=5401263
+PROFILE_RESULT case=104 total_cycles=5401260 busy_cycles=5401260 run_cycles=5399940 input_wait_cycles=1799970 accepted_samples=1800000 windows=30 decisions=1 last_window_latency=180038 max_window_latency=180038 last_decision_latency=5401260
+CHUNK_STREAM_RESULT correct/total=4/4 manifest=replay_manifest_present.txt
+$finish called at time : 216050960 ns : File "<REPOSITORY_ROOT>/design/digital/sim/tb_snn_ecg_30min_chunk_dataset.v" Line 234
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:06:04 . Memory (MB): peak = 925.922 ; gain = 0.000
+## quit
+INFO: [Common 17-206] Exiting xsim at Fri Jul 24 01:17:06 2026...
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat tb_xmodel_adc_replay --nolog -tclbatch run.tcl

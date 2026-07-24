@@ -1,7 +1,7 @@
 metric,value,scope,evidence_path,owner,interpretation
-train_accuracy,61/68 = 89.71%,train chunks,components/digital_accelerator/reports/final/final_metrics.json,양건,training fit
-validation_accuracy,32/32 = 100.00%,validation chunks,components/digital_accelerator/reports/final/final_metrics.json,양건,model-selection only
-final_test_chunk_accuracy,29/36 = 80.56%,locked final-test 30-minute chunks,components/digital_accelerator/reports/final/final_metrics.json,양건,primary held-out engineering result
-final_test_chunk_macro_f1,80.44%,locked final-test 30-minute chunks,components/digital_accelerator/reports/final/final_metrics.json,양건,database-class confounding remains
-final_test_record_majority_accuracy,16/19 = 84.21%,same final-test partition aggregated by source record,components/digital_accelerator/reports/final/final_metrics.json,양건,not an independent test
-final_test_record_majority_macro_f1,80.80%,19 final-test source records,components/digital_accelerator/reports/final/final_metrics.json,양건,record-majority aggregation
+train_accuracy,61/68 = 89.71%,train chunks,design/digital/reports/final/final_metrics.json,양건,training fit
+validation_accuracy,32/32 = 100.00%,validation chunks,design/digital/reports/final/final_metrics.json,양건,model-selection only
+final_test_chunk_accuracy,29/36 = 80.56%,locked final-test 30-minute chunks,design/digital/reports/final/final_metrics.json,양건,primary held-out engineering result
+final_test_chunk_macro_f1,80.44%,locked final-test 30-minute chunks,design/digital/reports/final/final_metrics.json,양건,database-class confounding remains
+final_test_record_majority_accuracy,16/19 = 84.21%,same final-test partition aggregated by source record,design/digital/reports/final/final_metrics.json,양건,not an independent test
+final_test_record_majority_macro_f1,80.80%,19 final-test source records,design/digital/reports/final/final_metrics.json,양건,record-majority aggregation

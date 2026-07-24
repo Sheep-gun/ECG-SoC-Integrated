@@ -1,0 +1,21 @@
+schema_version: 2
+components:
+  matlab_prevalidation:
+    repository: https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation
+    fixed_commit: 907f7e1f081a9d6a5703a32095d962143315a192
+    integrated_path: design/analog/matlab
+  afe_xmodel:
+    repository: https://github.com/Hwan-22/ECG-SoC
+    fixed_commit: 4756a5086023547328ef44fd5fd87da3c250dc39
+    integrated_path: design/analog/xmodel
+  digital_rtl:
+    repository: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
+    fixed_commit: c6b80de19cdcad5b7e43fe7835588b629d847f75
+    integrated_path: design/digital
+    history_evidence:
+      timing_pipeline_commit: c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa
+      timing_margin_commit: 5e2e5d0a46be47d8086b8642e055066079bfa4e6
+      latest_benchmark_commit: d44e67517650f1f95ca67b93c2788f41e99f1a5e
+notes:
+  - Repository URLs and immutable commits are the public authorities; local checkout paths are intentionally excluded.
+  - The two timing-history commits are ancestors of the fixed RTL commit.

@@ -1,0 +1,37 @@
+Validation date: 2026-07-15 (Asia/Seoul)
+Workspace: <LOCAL_LTSPICE_WORKSPACE>
+Validation directory: <LOCAL_LTSPICE_WORKSPACE>\ltspice_validation
+
+OS: Microsoft Windows 11 Home, 64-bit
+OS version/build: 10.0.26200 / 26200
+
+LTspice executable: <LOCAL_LTSPICE_EXECUTABLE>
+LTspice file/product version: 26.0.1.0
+LTspice batch behavior verified: -netlist, -b, and -b -ascii executed successfully on copied/generated inputs.
+LTspice model dependency: <LOCAL_LTSPICE_LIBRARY>\UniversalOpAmp2.lib
+
+Python: 3.12.13
+Python executable: <LOCAL_PYTHON_EXECUTABLE>
+MATLAB: 26.1.0.3203278 (R2026a)
+GNU Octave: not found
+
+MATLAB fixed reference commit: 907f7e1f081a9d6a5703a32095d962143315a192
+MATLAB fixed upstream: https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation
+XMODEL fixed reference commit: 4756a5086023547328ef44fd5fd87da3c250dc39
+XMODEL fixed upstream: https://github.com/Hwan-22/ECG-SoC
+
+Original schematic command evidence: generated netlist identifies LTspice 26.0.1 for Windows.
+All result claims in this package are LTspice schematic/model-based, not PCB, fabricated IC, transistor-level SAR, or post-layout measurements.
+
+XMODEL-alignment rerun:
+- Final LTspice supply: +1.65 V / -1.65 V
+- Final op-amp model: schematics/xmodel_aligned/XOpAmp_XMODEL.lib
+- Model contract: Aol=100 dB, CMRR=110 dB, Rout=1 ohm, nominal GBW=1 GHz, VOS=0
+- Final input contract: ECG+=patient value updated every 50 us; ECG-=0 V
+- Direct aperture: first sample 1.000 ms, then 1 kSPS
+- Track-and-Hold clock: track near 0.900-1.000 ms of each period
+- XMODEL/Questa executables: vsim NOT_FOUND; vlog NOT_FOUND
+- WSL executable: present; configured Linux distributions: none
+- Fixed XMODEL execution status: PENDING_XMODEL_EXECUTION
+- Fixed MATLAB execution: MATLAB R2026a available and executed
+- Final aligned LTspice runs: 35 executed, 0 fatal/warning signatures

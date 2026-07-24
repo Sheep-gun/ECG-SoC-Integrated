@@ -1,0 +1,23 @@
+schema_version: 2
+preferred_terms:
+  SNN: SNN 기반
+  classes: NSR, CHF, ARR, AF
+  input: 1 kSPS signed 12-bit ECG stream
+  short_window: 60초 Snapshot
+  long_readout: 30분 Final Membrane
+  classifier: 분류 가속기 IP
+  split: source-record-wise split
+legacy_terms:
+  AFF:
+    public_replacement: AF
+    allowed_scope: fixed model IDs, RTL ports, configuration keys, raw artifact names
+  SNN-inspired:
+    public_replacement: SNN 기반
+    allowed_scope: historical commit text only
+forbidden_or_qualified:
+  세계 최초: 금지
+  동일한 연구가 없다: 금지
+  24시간 검증 완료: 금지
+  실시간 24시간 정확도: 미검증
+  2.991 uW 소비전력: 완전 power-gating 가정의 조건부 산출값으로만 표기
+  FPGA 정확도 100%: 36/36은 기능 정합이며 분류 정확도는 29/36

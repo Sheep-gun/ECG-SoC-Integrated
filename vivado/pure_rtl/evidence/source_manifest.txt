@@ -1,0 +1,33 @@
+Vivado RTL elaboration minimum source manifest
+TOP=snn_ecg_30min_final_top
+PART=xc7a100tcsg324-1
+FIXED_DIGITAL_COMMIT=c6b80de19cdcad5b7e43fe7835588b629d847f75
+
+repository-relative source path | defined module | parent module / instance | include dependency
+design/digital/rtl/snn_ecg_30min_final_top.v | snn_ecg_30min_final_top | design top | no
+design/digital/rtl/final_membrane_layer.v | final_membrane_layer | snn_ecg_30min_final_top / u_final | yes: strict_recordwise_locked_params.vh
+design/digital/rtl/strict_recordwise_locked_params.vh | localparam include header | final_membrane_layer / textual include | include guard STRICT_RECORDWISE_LOCKED_PARAMS_VH
+design/digital/rtl/core/snn_ecg_3feat_top.v | snn_ecg_3feat_top | snn_ecg_30min_final_top / u_snapshot | no
+design/digital/rtl/core/snn_ecg_input_normalizer.v | snn_ecg_input_normalizer | snn_ecg_3feat_top / u_input_normalizer | no
+design/digital/rtl/core/ecg_event_encoder_adaptive.v | ecg_event_encoder_adaptive | snn_ecg_3feat_top / u_event_encoder | no
+design/digital/rtl/core/qrs_lif_detector.v | qrs_lif_detector | snn_ecg_3feat_top / u_qrs_detector | no
+design/digital/rtl/core/pnn_rhythm_predictor.v | pnn_rhythm_predictor | snn_ecg_3feat_top / u_pnn | no
+design/digital/rtl/core/dscr_spike_counter.v | dscr_spike_counter | snn_ecg_3feat_top / u_dscr | no
+design/digital/rtl/core/ram_peak_accumulator.v | ram_peak_accumulator | snn_ecg_3feat_top / u_ram | no
+design/digital/rtl/core/rdm_variability_neuron.v | rdm_variability_neuron | snn_ecg_3feat_top / u_rdm | no
+design/digital/rtl/core/ectopic_pair_neuron.v | ectopic_pair_neuron | snn_ecg_3feat_top / u_ectopic | no
+design/digital/rtl/core/qrs_maf_neuron.v | qrs_maf_neuron | snn_ecg_3feat_top / u_qrs_maf | no
+design/digital/rtl/core/rbbb_qrs_delay_bank.v | rbbb_qrs_delay_bank | snn_ecg_3feat_top / u_rbbb_qrs_delay | no
+design/digital/rtl/core/class_score_neurons.v | class_score_neurons | snn_ecg_3feat_top / u_class | no
+design/digital/rtl/core/abandoned_feature_stubs.v | rcd_feature | snn_ecg_3feat_top / u_rcd | no
+design/digital/rtl/core/abandoned_feature_stubs.v | rcd2_feature | snn_ecg_3feat_top / u_rcd2 | no
+design/digital/rtl/core/abandoned_feature_stubs.v | ipb_feature | snn_ecg_3feat_top / u_ipb | no
+design/digital/rtl/core/abandoned_feature_stubs.v | nsr_normality_gate | snn_ecg_3feat_top / u_nsr_gate | no
+design/digital/rtl/core/abandoned_feature_stubs.v | rbbb_lateslope_gate | snn_ecg_3feat_top / u_rbbb_late_gate | no
+design/digital/rtl/core/abandoned_feature_stubs.v | etmc_feature | snn_ecg_3feat_top / u_etmc | no
+
+Excluded as outside the recursive Pure RTL dependency closure:
+- design/digital/rtl/axi/*
+- design/digital/rtl/common/reset_sync.v
+- design/digital/rtl/core/ecg_event_encoder.v
+- design/digital/rtl/generated/strict_recordwise_locked_params_pkg.sv

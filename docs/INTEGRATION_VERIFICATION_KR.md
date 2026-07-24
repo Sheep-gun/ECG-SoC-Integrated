@@ -1,46 +1,46 @@
-# 통합 검증
+# 아날로그–디지털 및 FPGA 통합 검증
 
-## 검증 사슬
+## 검증 계층
 
-| Boundary | Input evidence | Output evidence | Acceptance |
-|---|---|---|---|
-| MATLAB nominal | class별 input/reference package | frequency/headroom/coding CSV | nominal intent와 signed vector가 manifest로 고정 |
-| MATLAB/XMODEL | nominal parameter와 vector | XMODEL waveform/stress reports | model scope와 caveat가 명시됨 |
-| XMODEL/digital | full-record AFE stream | 30분 chunk와 SHA256 CSV | board-replay input과 36/36 byte identity |
-| AFE/locked RTL | same 36 chunks | final_pred/final_mem compare CSV | gap=2에서 36/36 bit-exact |
-| Python/RTL | locked model and parameters | XSim final outputs | final-test mismatch 0/36 |
-| RTL/IP/Vivado | synthesizable sources | utilization/timing/package metadata | positive timing closure와 IP-XACT package |
-| XSim/FPGA | same replay inputs and expected outputs | UART/parsed/batch artifacts | board pred/mem 36/36 equivalence |
+1. MATLAB 공칭 전달함수와 LTspice AC sweep 비교
+2. 동일 10초 PWL ECG에 대한 LTspice AFE/S/H/ADC와 XMODEL code 비교
+3. Python과 RTL 최종 class/membrane 비교
+4. Exact C++과 RTL의 정수 연산, module trace, sample state, Snapshot 경계 비교
+5. XMODEL/AFE 생성 stream과 Pure RTL replay acceptance
+6. AXI/IP XSim protocol 검증
+7. MicroBlaze FPGA replay와 XSim 비교
 
-## Canonical AFE-to-digital result
+## 아날로그 모델 정합
 
-`components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv`의 36개 모든 row는 다음 조건을 만족한다.
+LTspice 결과는 HPF 0.481174 Hz, IA gain 200.594 V/V, 60 Hz attenuation −83.557 dB, LPF 150.211 Hz와 clipping 0을 기록했다.
 
-- `input_sha256_match=true`
-- `sample_gap_cycles=2`
-- `samples_driven=accepted_samples=1800000`
-- `windows=30`, `decisions=1`
-- `pred_match=true`, `mem_match=true`
+동일 10초, 10,000 samples의 LTspice–XMODEL 비교 결과는 mean error +0.0221 LSB, MAE 0.6445 LSB, RMS 1.3020 LSB, correlation 0.999518, lag 0 sample이다. ±1 LSB 91.19%, ±5 LSB 98.74%, ±10 LSB 99.89%, maximum 13 LSB였다.
 
-따라서 AFE-generated chunk와 digital board input이 같은 bytes이고, canonical cadence에서 locked RTL이 같은 final state를 재현했음을 말할 수 있다.
+## 디지털 기능 정합
 
-## 서로 다른 36/36의 구분
+- Python–RTL: class 36/36, Final Membrane 144/144
+- Exact C++–RTL: integer operations 793,595/793,595, module microtrace 18/18, sample state 240,000/240,000, Snapshot boundary 1,080/1,080
+- Full-top RTL: 36/36 cases, each 1,800,000 accepted samples, 30 Snapshots, one final decision
 
-1. Input SHA256 36/36: 두 input artifact의 byte identity
-2. AFE-to-RTL 36/36: canonical XSim에서 digital golden reproduction
-3. Board 36/36: FPGA output과 full-top XSim expected output의 functional equivalence
-4. Label accuracy 29/36: output class와 ground-truth public-dataset label의 일치
+## 36-case compact acceptance evidence
 
-앞의 세 결과를 더해 classification accuracy 100%라고 표현하지 않는다.
+`verification/xmodel_rtl_acceptance_36case/`는 AFE 생성 final-test chunk와 digital replay input의 SHA-256 36/36 동일성 및 canonical `sample_gap_cycles=2`에서 class 36/36, four membranes 144/144를 기록한다. 이는 과거 고정 통합 환경에서 생성한 compact CSV와 재현 harness를 보존한 것이다.
 
-## Reproducibility evidence
+이 evidence는 label accuracy가 100%라는 뜻이 아니다. 고정 기준 출력 재현은 36/36이고 ground-truth label accuracy는 29/36이다.
 
-Imported component bytes는 `artifact_manifest.csv`의 SHA256으로 검증한다. Upstream origin, active HEAD와 fixed imported commit은 `upstream_commits.yaml` 및 전후 status JSON에 기록한다. Import tool은 Git object archive를 사용하므로 concurrent benchmark worktree bytes를 읽지 않는다.
+## raw full-30분 XMODEL dump 재감사
 
-## Remaining gaps
+`verification/xmodel_rtl_e2e/`는 실제 raw `accepted_*.mem`을 현재 저장소의 fixed RTL로 다시 replay한 별도 감사다. 4개 보존 파일은 각 1,800,000 samples, 30 Snapshots, one decision을 만들었고 직접 통합 결과와 class 4/4, membranes 16/16 bit-exact였다.
 
-- Physical AFE/ADC와 silicon validation 없음
-- same-acquisition multi-class clinical cohort 없음
-- database-class confounding 미해소
-- digital `main` commit `09e4d840...`의 independent NO_BOARD accelerator-benefit benchmark 반입 완료; physical board timing·power는 대기
-- external report HWP 작성은 private downstream task
+그러나 raw dump 32개가 현재 보존되지 않아 이 패키지만으로 36개 raw XMODEL dump replay를 완결할 수 없다. compact acceptance 36/36과 raw archive 4/36을 구분한다.
+
+## AXI/IP와 FPGA
+
+AXI-Lite control/result register, AXI-Stream backpressure, TLAST, done과 IRQ는 XSim testbench에서 확인했다. MicroBlaze 통합 FPGA에서 36개 final-test input을 replay한 결과 UART class 36/36과 four membranes 144/144가 XSim과 일치했다.
+
+## 해석 경계
+
+- SHA-256 동일성은 byte-level input integrity다.
+- bit-exact equivalence는 implementation fidelity다.
+- label accuracy는 별도의 29/36이다.
+- model-based AFE/XMODEL 결과는 physical analog measurement가 아니다.

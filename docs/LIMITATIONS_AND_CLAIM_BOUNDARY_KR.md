@@ -1,42 +1,43 @@
 # 한계와 claim 경계
 
-## 허용되는 핵심 주장
+## 검증 완료
 
-- Holter-oriented long-window, multi-timescale, SNN-inspired ECG classification architecture
-- 1 kSPS signed 12-bit stream과 60초 Snapshot/30분 Final Membrane 구조
-- locked final-test chunk 29/36=80.56%, record-majority 16/19=84.21%
-- pure RTL resource/timing closure와 packaged IP/FPGA replay
-- board final_pred/final_mem 36/36 functional equivalence
-- AFE input SHA256 36/36와 canonical cadence AFE-to-RTL 36/36 reproduction
-- MATLAB/XMODEL 기반 model-based AFE/ADC verification
+- strict source-record-wise locked 30분 final test
+- 29/36 accuracy 80.56%, Macro-F1 80.44%
+- MATLAB, LTspice와 XMODEL model-level AFE/ADC 정합
+- Python, Exact C++, RTL/XSim 기능 정합
+- Pure RTL and MicroBlaze post-route timing closure
+- MicroBlaze FPGA replay class 36/36, membranes 144/144
+- profiler counter 기반 FPGA core active time와 activity-based power estimate
 
-## 주의해서 표현할 주장
+## 조건부 또는 미완료
 
-`Holter-oriented`는 장시간 ECG 구조의 설계 동기를 뜻하며 임상 Holter 인증이 아니다. `SNN-inspired`는 event/state와 membrane-like accumulation을 뜻하며 trained deep SNN이나 생물학적 등가가 아니다. `low-resource`는 0 BRAM/0 DSP와 구현 자원으로 범위를 한정한다. NO_BOARD benchmark의 처리시간 비율과 추정 전력은 보고할 수 있지만 physical board의 speedup·power·energy superiority는 주장하지 않는다.
+- 24시간 이상 Holter: 설계 지향점이며 실제 accuracy/time/power 미검증
+- XMODEL raw full-30분 archive: 4/36만 현재 저장소에 보존
+- 2.991 µW: 완전 power-gating을 가정한 산출값
+- physical AFE PCB, ADC silicon, ASIC/post-layout, fabricated silicon: 미수행
+- clinical validation와 medical-device certification: 미수행
+- database–class confounding: 해소되지 않음
 
-Analog robustness는 XMODEL stress와 representative regression이 지원하는 model-based 범위로만 쓴다. R/C mismatch의 30분 final_pred stability는 직접 전체 sweep이 아니라 equivalence-based argument임을 유지한다. 60 Hz target 결과를 50 Hz 환경 성능으로 일반화하지 않는다.
+## 허용되는 표현
 
-## 금지되는 주장
+- “30분 public-dataset 조건에서 4-class 분류를 검증했다.”
+- “24시간 이상 Holter ECG를 위한 streaming 확장을 지향한다.”
+- “Pure RTL 구현에서 BRAM 0, DSP 0을 기록했다.”
+- “FPGA 결과는 XSim 기준과 36/36 기능 정합했다.”
+- “이상적 완전 power-gating 조건에서 2.991 µW로 산출된다.”
 
-- 임상적으로 검증된 진단 또는 독립적 clinical decision
-- NSR/CHF/ARR/AFF 네 질환의 확진
-- physical AFE PCB, ADC silicon, fabricated SoC, transistor/post-layout 또는 silicon-proven 결과
-- live electrode acquisition
-- board 36/36을 근거로 한 100% classification accuracy
-- 상용 의료 제품에 대한 clinical superiority
-- 현재 dataset으로 clinical generalization이 증명됐다는 주장
-- 32.912687배를 measured board 또는 전체 system speedup으로 표현하는 문장
-- 54.012600 ms를 live ECG 최종 판정시간으로 표현하는 문장
-- 0.099 W와 0.005347247400 J를 physical board 측정값으로 표현하는 문장
+## 금지되는 표현
 
-## 데이터 한계
+- “24시간 정확도와 실시간 동작을 검증했다.”
+- “FPGA 또는 ASIC의 실측 전력이 2.991 µW다.”
+- “36/36 기능 정합이므로 정확도 100%다.”
+- “물리 AFE, ADC silicon 또는 fabricated SoC를 검증했다.”
+- “임상 진단이 가능하거나 상용 wearable보다 우수하다.”
+- “세계 최초” 또는 “동일 연구가 없다.”
 
-Strict record-wise split은 같은 source record의 직접 leakage를 막지만 database-class confounding을 제거하지 않는다. 네 class가 서로 다른 DB에 결합돼 있으므로 acquisition, lead, amplitude scale, noise, preprocessing와 record distribution 차이가 classification에 기여했을 수 있다. 이 한계는 generalization 해석에 영향을 주지만 RTL correctness, bit-exact equivalence, IP packaging, board replay와 implementation-resource evidence 자체를 무효화하지 않는다.
+## 제한된 최초성 표현
 
-## Analog/physical 한계
+“검토한 대표 선행연구 범위에서는 NSR·CHF·ARR·AF 기록 분류, Snapshot별 질환 증거의 명시적 상태화, 장시간 증거 누적, RTL/IP/FPGA 구현과 MATLAB–XMODEL–RTL 추적성을 함께 적용한 사례를 확인하지 못하였다.”
 
-MATLAB은 nominal pre-validation이고 SystemVerilog XMODEL은 model-based non-ideal verification이다. 둘 다 실제 electrode-to-PCB measurement, transistor-level sign-off, ADC silicon 또는 fabricated chip의 증거가 아니다. 보고서 제목과 diagram에서도 `model-based AFE/XMODEL verification`과 `digital accelerator IP prototype`을 분리한다.
-
-## Benchmark 경계
-
-Accelerator-benefit package는 digital `main` commit `09e4d840...`에서 반입하였다. 보고 가능한 대표 비교는 measured Exact C++ 1,777.699800 ms와 cycle-derived FPGA core 54.012600 ms의 32.912687배 비율이다. Physical board timing·power·energy는 `PENDING_BOARD`이며 zero로 해석하지 않는다.
+이는 체계적 문헌고찰이나 세계 최초 주장으로 확대하지 않는다.

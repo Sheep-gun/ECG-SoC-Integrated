@@ -1,0 +1,9 @@
+source_repository,source_commit,integrated_path,claim_scope,status
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/results/board_timing_summary.json,"36-case active-cycle and FPGA equivalence",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/results/cpu_cpp_kernel_summary.csv,"Exact C++ single-thread median",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/results/accelerator_benefit_summary.csv,"active-time ratio",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/results/wearable_power_budget.csv,"continuous allocated FPGA estimate",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/results/power_energy_summary.csv,"burst energy and ideal power-gating average",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/results/activity_power_summary.json,"Vivado activity provenance and confidence",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/reports/BENCHMARK_LIMITATIONS.md,"benchmark claim limits",IMPORTED
+https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier,d44e67517650f1f95ca67b93c2788f41e99f1a5e,models/digital_equivalence/reports/POWER_ENERGY_METHODOLOGY.md,"power and energy equations",IMPORTED

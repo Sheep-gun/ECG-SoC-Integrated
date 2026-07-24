@@ -1,0 +1,20 @@
+scenario,component,evidence_class,power_w,status,basis
+fpga_streaming_always_clocked,ECG AFE/ADC,EXTERNAL_DATASHEET,8.5e-05,REFERENCE_ONLY,MAX30001 ECG channel typical power; verify exact configuration
+fpga_streaming_always_clocked,Pure RTL FPGA on-chip,ESTIMATED,0.14200000000000002,AVAILABLE,Median post-route literal-1-kS/s ECG SAIF Total On-Chip Power
+fpga_streaming_always_clocked,Pure RTL FPGA dynamic subset,ESTIMATED,0.045,AVAILABLE,"Median post-route literal-1-kS/s ECG SAIF Dynamic Power; subset, not additive"
+fpga_preloaded_burst_30min,Pure RTL FPGA without power gating,DERIVED,0.09700105037625001,AVAILABLE,FPGA static plus active dynamic scaled by 36.0129 ms / 1800 s; assumes global clock gating while idle
+fpga_preloaded_burst_30min,Pure RTL dynamic subset,DERIVED,1.05037625e-06,AVAILABLE,"Active FPGA dynamic scaled by 36.0129 ms / 1800 s; subset, not additive"
+idealized_power_gated_ip,Pure RTL FPGA-equivalent IP,DERIVED,2.9910714166666663e-06,UPPER_BOUND_ASSUMPTION,"Active total energy / 1800 s; excludes retention, isolation, wake, switch and off leakage"
+fpga_streaming_always_clocked,sample memory,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_streaming_always_clocked,MCU/control,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_streaming_always_clocked,BLE radio,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_streaming_always_clocked,PMIC/regulator loss,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_preloaded_burst_30min,sample memory,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_preloaded_burst_30min,MCU/control,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_preloaded_burst_30min,BLE radio,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+fpga_preloaded_burst_30min,PMIC/regulator loss,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+asic_wearable_target,sample memory,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+asic_wearable_target,MCU/control,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+asic_wearable_target,BLE radio,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+asic_wearable_target,PMIC/regulator loss,MEASUREMENT_REQUIRED,,BLOCKED_COMPONENT_AND_DUTY_CYCLE_UNSPECIFIED,"Select the device and workload, then measure or use the matching vendor operating point"
+asic_wearable_target,SNN accelerator IP,ESTIMATION_REQUIRED,,BLOCKED_NO_PDK_POST_LAYOUT,Requires target-node post-layout leakage/dynamic power with real-ECG SAIF and low-power intent

@@ -1,0 +1,108 @@
+{
+  "evidence_class": "MEASURED_COUNTERS_AND_DERIVED_ACTIVE_CYCLES",
+  "board": "Nexys A7-100T",
+  "uart_port": "COM8",
+  "uart_baud": 230400,
+  "cases_completed": 36,
+  "samples_per_case": 1800000,
+  "snapshots_per_case": 30,
+  "decisions_per_case": 1,
+  "board_golden_final_pred": "36/36",
+  "board_golden_final_membrane_values": "144/144",
+  "classification_accuracy": "29/36 (80.56%)",
+  "core_active_formula": "profile_total_cycles - profile_input_wait_cycles",
+  "core_active_cycles": {
+    "median": 3601290.0,
+    "mean": 3601290,
+    "std": 0.0,
+    "min": 3601290,
+    "max": 3601290
+  },
+  "core_active_latency_ms": {
+    "median": 36.0129,
+    "mean": 36.0129,
+    "std": 0.0,
+    "min": 36.0129,
+    "max": 36.0129
+  },
+  "core_run_active_cycles": {
+    "median": 3599970.0,
+    "mean": 3599970,
+    "std": 0.0,
+    "min": 3599970,
+    "max": 3599970
+  },
+  "core_run_active_latency_ms": {
+    "median": 35.9997,
+    "mean": 35.9997,
+    "std": 0.0,
+    "min": 35.9997,
+    "max": 35.9997
+  },
+  "non_run_overhead_cycles": {
+    "median": 1320.0,
+    "mean": 1320,
+    "std": 0.0,
+    "min": 1320,
+    "max": 1320
+  },
+  "core_active_throughput_samples_per_s": {
+    "median": 49982089.751172,
+    "mean": 49982089.751172,
+    "std": 0.0,
+    "min": 49982089.751172,
+    "max": 49982089.751172
+  },
+  "core_active_realtime_margin_vs_1ksps": {
+    "median": 49982.089751171996,
+    "mean": 49982.089751171996,
+    "std": 0.0,
+    "min": 49982.089751171996,
+    "max": 49982.089751171996
+  },
+  "uart_paced_core_counter_interval_ms": {
+    "median": 187144.75092000002,
+    "mean": 188068.19989,
+    "std": 1864.9647442247372,
+    "min": 186492.78174,
+    "max": 191686.15098
+  },
+  "uart_paced_transaction_counter_interval_ms": {
+    "median": 187144.75092000002,
+    "mean": 188068.19989,
+    "std": 1864.9647442247372,
+    "min": 186492.78174,
+    "max": 191686.15098
+  },
+  "uart_paced_throughput_samples_per_s": {
+    "median": 9618.22328,
+    "mean": 9571.925659416667,
+    "std": 93.74406160171712,
+    "min": 9390.34975,
+    "max": 9651.848094
+  },
+  "uart_paced_realtime_margin_vs_1ksps": {
+    "median": 9.61822328,
+    "mean": 9.571925659416667,
+    "std": 0.09374406160171712,
+    "min": 9.390349749999999,
+    "max": 9.651848094
+  },
+  "core_system_equal_cases": 36,
+  "input_wait_latency_ms": {
+    "median": 187108.73802,
+    "mean": 188032.18699,
+    "std": 1864.9647442247383,
+    "min": 186456.76884,
+    "max": 191650.13808
+  },
+  "active_cycle_unique_values": [
+    3601290
+  ],
+  "xsim_active_cycle_unique_values": [
+    3601290
+  ],
+  "xsim_active_cycle_crosscheck": "36/36",
+  "system_compute_latency_status": "NOT_MEASURED_REQUIRES_PRELOAD_AND_INDEPENDENT_TIMER",
+  "counter_scope_note": "active core latency subtracts only RUN-state sample-valid starvation; raw core/system intervals remain UART-paced transport diagnostics"
+}

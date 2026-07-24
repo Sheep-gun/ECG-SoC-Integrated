@@ -1,0 +1,63 @@
+schema_version: 2
+project:
+  name_kr: 장시간 ECG 4-클래스 SNN 스트리밍 가속기 IP
+  classes_public: [NSR, CHF, ARR, AF]
+  legacy_class_identifier: AFF
+  locked_model_id: structural_guarded_silent_aff_1008710
+  evaluation_window_s: 1800
+  sample_rate_hz: 1000
+  sample_format: signed 12-bit two's-complement
+metrics:
+  final_test:
+    protocol: fully_blind_strict_recordwise_locked_final_holdout
+    evaluated_once_after_lock: true
+    chunks_correct: 29
+    chunks_total: 36
+    accuracy_percent: 80.56
+    macro_f1_percent: 80.44
+    balanced_accuracy_percent: 80.56
+    source_records_correct: 16
+    source_records_total: 19
+    source_record_majority_accuracy_percent: 84.21
+    evidence: design/digital/reports/final/final_metrics.json
+  analog_model_alignment:
+    comparison_samples: 10000
+    mean_error_lsb: 0.0221
+    mean_absolute_error_lsb: 0.6445
+    rms_error_lsb: 1.3020
+    correlation: 0.999518
+    lag_samples: 0
+    clipping_count: 0
+    evidence: tables/integration_evidence.csv
+  pure_rtl_fixed_implementation:
+    lut: 9719
+    ff: 5038
+    bram: 0
+    dsp: 0
+    wns_ns: 8.184
+    evidence: design/digital/reports/final/final_metrics.json
+  microblaze_full_replay:
+    lut: 12494
+    ff: 8494
+    bram: 16
+    dsp: 3
+    setup_wns_ns: 0.097
+    final_class_match: 36/36
+    final_membrane_match: 144/144
+    evidence: design/digital/reports/final/board_replay_36_batch_summary.json
+  accelerator_benchmark:
+    exact_cpp_median_ms: 1777.6998
+    fpga_active_cycles: 3601290
+    fpga_active_ms: 36.0129
+    active_time_ratio_vs_exact_cpp: 49.362862
+    continuous_1ksps_allocated_power_mw: 142.0
+    burst_allocated_power_mw: 149.5
+    active_energy_mj: 5.38392855
+    ideal_power_gated_average_uw: 2.991
+    evidence: models/digital_equivalence/results/accelerator_benefit_summary.csv
+claim_boundaries:
+  validated_input_duration: 30 minutes
+  holter_direction: 24 hours or longer
+  unvalidated: [24-hour accuracy, 24-hour latency, physical AFE PCB, ADC silicon, ASIC post-layout, clinical validation, measured FPGA-board power]
+  power_note: 2.991 uW is a conditional derived estimate under complete power-gating, not measured FPGA power.
+  dataset_note: strict record-wise splitting prevents source-record leakage but does not remove database-class confounding.

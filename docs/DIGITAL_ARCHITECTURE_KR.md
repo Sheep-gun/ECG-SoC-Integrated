@@ -1,60 +1,46 @@
-# Digital architecture
+# SNN 기반 디지털 분류 구조
 
-## 입력과 state update
+## Top hierarchy
 
-Digital top은 1 kSPS signed 12-bit sample, valid/segment control을 받아 sample-by-sample state를 갱신한다. 전체 30분 raw waveform을 저장하지 않고 다음과 같은 fixed-size event/state를 유지한다.
+최상위 `snn_ecg_30min_final_top`은 `u_snapshot : snn_ecg_3feat_top`과 `u_final : final_membrane_layer`를 연결한다. Snapshot timer와 제어 FSM은 top 내부 logic이며 가상의 별도 module로 표현하지 않는다.
 
-- delta/slope와 up/down/strong event
-- beat/QRS timing state
-- RR variability와 rhythm-related counters
-- R-peak amplitude accumulation
-- ectopic-like pair evidence
-- QRS morphology/width-related evidence
-- class score/membrane state
+- `u_snapshot`: 표본 사건, QRS, 리듬·파형 evidence, 60초 class membrane
+- `u_final`: 30개 Snapshot 누적, margin/readout, WTA와 최종 class
+- 입력: signed 12-bit ECG, sample_valid/ready, start/reset
+- 출력: final_valid, final_pred_class, four Final Membrane values
 
-연산은 정수 counter, comparator, shift/add, signed accumulator와 deterministic control로 구성된다. Floating-point, inference-time learning memory와 전체-window buffer를 요구하지 않는다.
+## 사건과 QRS
 
-## Dense model의 하드웨어 부담과 본 구조의 대응
+현재 표본과 직전 표본의 차이 ΔECG를 계산하고, 변화량이 threshold를 넘으면 부호에 따라 상승·하강 Strong Event를 만든다. threshold는 각 Snapshot 초기에 관찰한 변화량 분포를 반영해 자동 설정된다.
 
-본 구조는 generic dense CNN/RNN/MLP를 FPGA에 그대로 옮긴 것이 아니라 ECG domain knowledge를 사건·박동·리듬·파형 형태 증거로 바꾸고 고정 폭 정수 상태에 누적하는 domain-specific streaming accelerator다.
+Strong Event는 QRS LIF Neuron의 막전위에 누적된다. 발화 후 reset과 refractory period를 적용해 한 QRS가 여러 박동으로 중복 검출되는 것을 막는다.
 
-| 일반적인 dense 구현 부담 | 본 설계의 대응 |
-|---|---|
-| multiplier와 대규모 MAC | comparator, counter, shift/add, signed accumulator |
-| DSP 의존 가능성 | 고정 Pure RTL 구현 DSP 0 |
-| weight·activation buffer와 BRAM 요구 가능성 | 추론 시 가중치 메모리 없음, 고정 Pure RTL 구현 BRAM 0 |
-| 전체 window 또는 대규모 feature tensor | 고정 크기 상태를 표본값 단위로 갱신 |
-| 짧은 구간과 장시간 판정의 연결 | 60초 Snapshot 30개를 Final Membrane에 누적 |
+## 리듬 evidence
 
-이는 구조 대응표이지 실제 dense 기준선과의 측정 비교가 아니다. 정확도·속도·전력·면적 우월성, sparse event rate 또는 전력 절감률을 주장하지 않는다. 2.7 MB는 측정 절감량이 아니라 회피한 30분 raw-input window storage다 [CLM-008, CLM-023].
+- **RR Counter**: 연속 QRS 사이의 sample 수로 RR 간격을 계산한다.
+- **PNN**: 현재 RR과 가장 가까운 46개 고정 기준 중 하나를 선택하고 다음 RR 예상 범위를 만든다. 실제 다음 RR과 비교해 연속 심박 간격의 규칙성을 본다.
+- **RDM**: 현재와 직전 RR의 차이를 15개 수준과 비교해 4-bit 변화 코드로 만든다. PNN이 예상 적합 여부를 보는 것과 달리 RDM은 박동마다 리듬이 얼마나 크게 변했는지를 본다.
+- **Ectopic Evidence**: 짧은 RR 뒤 긴 RR이 이어지는 early–late pair를 부정맥 관련 리듬 증거로 사용한다.
 
-이 architecture claim은 `CLM-023`으로 등록돼 있으며, direct RTL signal/group inventory는 `tables/streaming_state_inventory.csv`, 상세 해석은 `docs/STREAMING_STATE_MEMORY_KR.md`에 있다. 회피한 full raw-input window는 `1,800,000×12=21,600,000 bit=2,700,000 byte≈2.7 MB decimal`이다. 이는 MicroBlaze runtime memory나 정확한 synthesized memory 절감량이 아니다. 보고서용 흐름도는 `figures/final/FIG-12_digital_processing_flow.svg`이며 conceptual grouping임을 caption에 명시한다.
+## 파형 evidence
 
-## 60-second Snapshot Readout
+네 경로는 직렬 연산이 아니라 conceptual parallel evidence group이다.
 
-1 kSPS 조건에서 60,000 samples가 한 Snapshot interval을 이룬다. Interval 동안 누적된 rhythm/morphology evidence가 네 class의 local score/readout으로 변환된다. Snapshot은 일시적인 local evidence를 보존하지만 단독으로 최종 long-window decision을 확정하지 않는다.
+- **DSCR**: ΔECG 방향 전환 횟수로 파형 굴곡을 나타낸다.
+- **RAM**: 예상 QRS 시점 주변의 짧은 관찰창에서 가장 큰 양의 표본값을 순차 비교해 peak 진폭 code를 만든다.
+- **QRS MAF**: 박동 전 120 samples와 후 100 samples에서 Strong Event의 최초·최종 위치, 방향 변화와 에너지를 이용해 QRS 활동 폭과 복잡도를 만든다.
+- **RBBB-like**: 예상 QRS 종료 뒤에도 Strong Event가 반복되는지를 세어 심실 내 전도 지연성 파형 대리지표를 만든다.
 
-## 30-minute Final Membrane Readout
+## 두 시간 척도 누적
 
-Final Membrane layer는 30개의 Snapshot readout을 signed class state에 누적한다. Positive/negative evidence와 guarded update가 class별 persistence를 반영하며, 30번째 Snapshot 이후 WTA가 NSR/CHF/ARR/AFF 중 하나를 선택한다. Locked model ID는 `structural_guarded_silent_aff_1008710`이고 parameter hash는 digital fixed snapshot에 기록돼 있다.
+각 evidence는 클래스별 signed synaptic weight에 따라 60초 Snapshot Membrane에 더해지거나 차감된다. 확정된 30개 Snapshot의 class evidence는 강도, 빈도, 반복성과 지속성을 반영해 Final Membrane에 합산된다. 입력 종료 후 four membranes를 비교해 한 class를 출력한다.
 
-## SNN-inspired라는 표현의 경계
+Snapshot winner의 단순 다수결이 아니다. membrane 값 자체를 장시간 누적하므로 일부 구간의 강한 evidence와 여러 구간의 반복 evidence가 함께 반영된다.
 
-Event occurrence가 sparse state update를 유발하고 membrane-like state가 시간에 따라 누적되므로 neuromorphic/SNN-inspired라고 부른다. 그러나 repository evidence는 backpropagation으로 학습된 deep spiking network, STDP, neuron biophysics 또는 biological equivalence를 지원하지 않는다.
+## SNN 기반이라고 부르는 이유
 
-## Determinism and cadence
+설계는 threshold firing, LIF membrane, refractory behavior, signed synaptic update와 multi-layer membrane accumulation을 사용한다. 따라서 본 프로젝트에서는 SNN 기반 구조로 정의한다. 다만 dense trainable SNN 전체를 학습한 모델이나 생물학적 신경계를 그대로 재현한 구조라고 주장하지 않는다.
 
-RTL output은 accepted sample sequence와 control timing에 대해 deterministic하다. Integrated AFE-to-RTL result의 canonical board-facing condition은 `sample_gap_cycles=2`다. Noncanonical fast harness에서 관찰된 cadence-specific debug 결과를 final claim에 사용하지 않는다.
+## 하드웨어 형태
 
-## Timing을 위한 pipeline 경계
-
-고정 RTL의 pipeline은 단순 처리량 증가가 아니라 긴 조합 경로를 끊으면서 마지막 사건과 상태 확정 순서를 보존하도록 설계됐다. C24/global readout과 WTA, Snapshot update–adjust–commit, RDM·RAM lookup, QRS MAF timestamp FIFO, PNN predictor center, Final Membrane pairwise WTA와 post-segment flush가 그 경계다. 개발 이력과 최종 기능 등가성은 `docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md`와 CLM-048에 기록한다.
-
-## Architecture evidence
-
-- Top/final layer: `components/digital_accelerator/rtl/snn_ecg_30min_final_top.v`, `rtl/final_membrane_layer.v`
-- Locked parameters: `components/digital_accelerator/configs/final_submission_locked_model.json`
-- Architecture narrative: `components/digital_accelerator/FINAL_REPORT_KR.md`
-- Final equivalence: `components/digital_accelerator/reports/final/final_metrics.json`
-- Persistent-state inventory: `tables/streaming_state_inventory.csv`
-- Digital signal flow: `figures/final/FIG-12_digital_processing_flow.svg`
+대규모 MAC array나 inference-time weight memory 없이 comparator, counter, shift/add, signed accumulator와 작은 exact lookup을 사용한다. Pure RTL 결과에서 BRAM 0, DSP 0을 달성했지만 이 수치만으로 모든 CNN/RNN보다 전력·면적이 우수하다고 일반화하지 않는다.

@@ -1,0 +1,42 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/snn_ecg_input_normalizer.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_input_normalizer
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/ecg_event_encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module ecg_event_encoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/ecg_event_encoder_adaptive.v" into library work
+INFO: [VRFC 10-311] analyzing module ecg_event_encoder_adaptive
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/qrs_lif_detector.v" into library work
+INFO: [VRFC 10-311] analyzing module qrs_lif_detector
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/pnn_rhythm_predictor.v" into library work
+INFO: [VRFC 10-311] analyzing module pnn_rhythm_predictor
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/dscr_spike_counter.v" into library work
+INFO: [VRFC 10-311] analyzing module dscr_spike_counter
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/ram_peak_accumulator.v" into library work
+INFO: [VRFC 10-311] analyzing module ram_peak_accumulator
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/rdm_variability_neuron.v" into library work
+INFO: [VRFC 10-311] analyzing module rdm_variability_neuron
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/ectopic_pair_neuron.v" into library work
+INFO: [VRFC 10-311] analyzing module ectopic_pair_neuron
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/qrs_maf_neuron.v" into library work
+INFO: [VRFC 10-311] analyzing module qrs_maf_neuron
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/rbbb_qrs_delay_bank.v" into library work
+INFO: [VRFC 10-311] analyzing module rbbb_qrs_delay_bank
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/abandoned_feature_stubs.v" into library work
+INFO: [VRFC 10-311] analyzing module rcd_feature
+INFO: [VRFC 10-311] analyzing module rcd2_feature
+INFO: [VRFC 10-311] analyzing module ipb_feature
+INFO: [VRFC 10-311] analyzing module nsr_normality_gate
+INFO: [VRFC 10-311] analyzing module rbbb_lateslope_gate
+INFO: [VRFC 10-311] analyzing module etmc_feature
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/class_score_neurons.v" into library work
+INFO: [VRFC 10-311] analyzing module class_score_neurons
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/core/snn_ecg_3feat_top.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_3feat_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/final_membrane_layer.v" into library work
+INFO: [VRFC 10-311] analyzing module final_membrane_layer
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/rtl/snn_ecg_30min_final_top.v" into library work
+INFO: [VRFC 10-311] analyzing module snn_ecg_30min_final_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/design/digital/sim/tb_snn_ecg_30min_chunk_dataset.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_snn_ecg_30min_chunk_dataset
+INFO: [VRFC 10-2263] Analyzing Verilog file "<REPOSITORY_ROOT>/verification/xmodel_rtl_e2e/xsim_work/tb_xmodel_adc_replay.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_xmodel_adc_replay
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat --nolog -i <REPOSITORY_ROOT>/design/digital/rtl -prj <REPOSITORY_ROOT>/verification/xmodel_rtl_e2e/xsim_work/sources.prj

@@ -1,0 +1,17 @@
+manifest_id,base_case,src_case_id,expected_class,perturb,mem
+1000,ARR_mitdb_105_chunk00,37,2,off+5,chunks_pert/ARR_mitdb_105_chunk00__off+5.mem
+1001,ARR_mitdb_105_chunk00,37,2,gain+1%,chunks_pert/ARR_mitdb_105_chunk00__gain+1%.mem
+1002,ARR_mitdb_105_chunk00,37,2,noise2,chunks_pert/ARR_mitdb_105_chunk00__noise2.mem
+1003,ARR_mitdb_105_chunk00,37,2,jit100u,chunks_pert/ARR_mitdb_105_chunk00__jit100u.mem
+1004,NSR_nsrdb_16483_chunk10,110,0,off+5,chunks_pert/NSR_nsrdb_16483_chunk10__off+5.mem
+1005,NSR_nsrdb_16483_chunk10,110,0,gain+1%,chunks_pert/NSR_nsrdb_16483_chunk10__gain+1%.mem
+1006,NSR_nsrdb_16483_chunk10,110,0,noise2,chunks_pert/NSR_nsrdb_16483_chunk10__noise2.mem
+1007,NSR_nsrdb_16483_chunk10,110,0,jit100u,chunks_pert/NSR_nsrdb_16483_chunk10__jit100u.mem
+1008,CHF_chfdb_chf09_chunk29,91,1,off+5,chunks_pert/CHF_chfdb_chf09_chunk29__off+5.mem
+1009,CHF_chfdb_chf09_chunk29,91,1,gain+1%,chunks_pert/CHF_chfdb_chf09_chunk29__gain+1%.mem
+1010,CHF_chfdb_chf09_chunk29,91,1,noise2,chunks_pert/CHF_chfdb_chf09_chunk29__noise2.mem
+1011,CHF_chfdb_chf09_chunk29,91,1,jit100u,chunks_pert/CHF_chfdb_chf09_chunk29__jit100u.mem
+1012,AFF_afdb_06995_chunk16,16,3,off+5,chunks_pert/AFF_afdb_06995_chunk16__off+5.mem
+1013,AFF_afdb_06995_chunk16,16,3,gain+1%,chunks_pert/AFF_afdb_06995_chunk16__gain+1%.mem
+1014,AFF_afdb_06995_chunk16,16,3,noise2,chunks_pert/AFF_afdb_06995_chunk16__noise2.mem
+1015,AFF_afdb_06995_chunk16,16,3,jit100u,chunks_pert/AFF_afdb_06995_chunk16__jit100u.mem

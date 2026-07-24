@@ -13,12 +13,12 @@
 
 set script_dir [file dirname [file normalize [info script]]]
 set repo_dir [file normalize [file join $script_dir ".." ".."]]
-set artifact_dir [file normalize [file join $repo_dir "artifacts" "rtl_elaborated_schematic"]]
-set project_dir [file normalize [file join $artifact_dir "vivado_project"]]
+set artifact_dir [file normalize [file join $repo_dir "vivado" "pure_rtl" "evidence"]]
+set project_dir [file normalize [file join $repo_dir "vivado" "pure_rtl" "project"]]
 set project_name "SNN_ECG_PURE_RTL_VISUALIZATION"
 set part_name "xc7a100tcsg324-1"
 set top_name "snn_ecg_30min_final_top"
-set rtl_dir [file normalize [file join $repo_dir "components" "digital_accelerator" "rtl"]]
+set rtl_dir [file normalize [file join $repo_dir "design" "digital" "rtl"]]
 set core_dir [file normalize [file join $rtl_dir "core"]]
 
 file mkdir $artifact_dir
@@ -145,21 +145,21 @@ proc append_pin_port_pair {pair_variable pin_name port_name} {
 }
 
 set source_relpaths [list \
-    "components/digital_accelerator/rtl/snn_ecg_30min_final_top.v" \
-    "components/digital_accelerator/rtl/final_membrane_layer.v" \
-    "components/digital_accelerator/rtl/core/snn_ecg_3feat_top.v" \
-    "components/digital_accelerator/rtl/core/snn_ecg_input_normalizer.v" \
-    "components/digital_accelerator/rtl/core/ecg_event_encoder_adaptive.v" \
-    "components/digital_accelerator/rtl/core/qrs_lif_detector.v" \
-    "components/digital_accelerator/rtl/core/pnn_rhythm_predictor.v" \
-    "components/digital_accelerator/rtl/core/dscr_spike_counter.v" \
-    "components/digital_accelerator/rtl/core/ram_peak_accumulator.v" \
-    "components/digital_accelerator/rtl/core/rdm_variability_neuron.v" \
-    "components/digital_accelerator/rtl/core/ectopic_pair_neuron.v" \
-    "components/digital_accelerator/rtl/core/qrs_maf_neuron.v" \
-    "components/digital_accelerator/rtl/core/rbbb_qrs_delay_bank.v" \
-    "components/digital_accelerator/rtl/core/class_score_neurons.v" \
-    "components/digital_accelerator/rtl/core/abandoned_feature_stubs.v" \
+    "design/digital/rtl/snn_ecg_30min_final_top.v" \
+    "design/digital/rtl/final_membrane_layer.v" \
+    "design/digital/rtl/core/snn_ecg_3feat_top.v" \
+    "design/digital/rtl/core/snn_ecg_input_normalizer.v" \
+    "design/digital/rtl/core/ecg_event_encoder_adaptive.v" \
+    "design/digital/rtl/core/qrs_lif_detector.v" \
+    "design/digital/rtl/core/pnn_rhythm_predictor.v" \
+    "design/digital/rtl/core/dscr_spike_counter.v" \
+    "design/digital/rtl/core/ram_peak_accumulator.v" \
+    "design/digital/rtl/core/rdm_variability_neuron.v" \
+    "design/digital/rtl/core/ectopic_pair_neuron.v" \
+    "design/digital/rtl/core/qrs_maf_neuron.v" \
+    "design/digital/rtl/core/rbbb_qrs_delay_bank.v" \
+    "design/digital/rtl/core/class_score_neurons.v" \
+    "design/digital/rtl/core/abandoned_feature_stubs.v" \
 ]
 
 set source_files {}
@@ -171,9 +171,9 @@ foreach relative_path $source_relpaths {
     lappend source_files $source_file
 }
 
-set include_file [repo_path $repo_dir "components/digital_accelerator/rtl/strict_recordwise_locked_params.vh"]
+set include_file [repo_path $repo_dir "design/digital/rtl/strict_recordwise_locked_params.vh"]
 if {![file exists $include_file]} {
-    error "Missing required include: components/digital_accelerator/rtl/strict_recordwise_locked_params.vh"
+    error "Missing required include: design/digital/rtl/strict_recordwise_locked_params.vh"
 }
 
 # Optional check for the committed, repository-relative disposable project.
@@ -207,7 +207,7 @@ if {[lsearch -exact $argv "--verify-existing-project"] >= 0} {
 
 # The project is disposable. Refuse to recursively delete any directory that
 # is not the exact repository-local artifact path selected above.
-set expected_project_dir [file normalize [file join $repo_dir "artifacts" "rtl_elaborated_schematic" "vivado_project"]]
+set expected_project_dir [file normalize [file join $repo_dir "vivado" "pure_rtl" "project"]]
 if {$project_dir ne $expected_project_dir} {
     error "Refusing to recreate unexpected project directory"
 }

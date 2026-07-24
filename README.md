@@ -1,102 +1,82 @@
-# ECG-SoC Integrated Technical Repository
+# 장시간 ECG 4-클래스 SNN 스트리밍 가속기 IP
 
-## 최종 통합 기술보고서
+이 저장소는 장시간 ECG를 순차 처리하여 입력 기록을 **NSR, CHF, ARR, AF** 중 하나로 분류하는 다중 시간 척도 SNN 기반 가속기 IP의 설계, 모델, RTL, Vivado project와 검증 근거를 한곳에 보존한다.
 
-본 저장소의 전체 연구 내용, 설계 구조, 검증 결과, 수치, 한계 및 evidence mapping은 아래 최종 통합 기술보고서에 정리되어 있습니다.
+> 현재 검증 입력은 공개 데이터베이스 조건에 맞춘 **30분**이다. 24시간 이상 Holter ECG는 설계 지향점이며, 실제 24시간 정확도, 처리시간과 전력은 아직 검증하지 않았다.
 
-**[최종 통합 기술보고서 핵심 원고 보기](reports/INTEGRATED_TECHNICAL_REPORT_KR.md)**
+## 핵심 아이디어
 
-[기준 논문 서술 구조 분석 및 적용 기록](reports/BASELINE_PAPER_STRUCTURE_REVIEW_KR.md)
+연속 ECG를 60초 Window로 나누어 간헐적으로 나타나는 질환 관련 구간을 포착하고, 각 Window에서 얻은 박동, 리듬, 파형 증거를 Snapshot Membrane에 요약한다. 이후 30개 Snapshot의 증거 강도, 출현 빈도, 반복성과 지속성을 Final Membrane에 누적하여 30분 입력의 클래스를 결정한다.
 
-대회 제출용 HWP는 본 원고를 기반으로 별도 편집합니다. 공식 신청서·개인정보·서명과 최종 HWP/PDF는 이 공개 Git에 포함하지 않습니다.
+이 구조는 전체 원시 ECG를 메모리에 보관한 뒤 일괄 처리하지 않는다. 표본마다 사건을 검출하고 필요한 뉴런 상태와 정수형 증거만 갱신하는 스트리밍 방식이다.
 
-## 1. 프로젝트 정체성
+![다중 시간 척도 ECG 분류 구조](figures/final_submission/알고리즘%20구성%20및%20예상결과/알고리즘%20구조도.svg)
 
-본 프로젝트는 공개 ECG로부터 Holter형 장시간 분석을 수행하기 위해 60초 Snapshot Readout과 30분 Final Membrane Readout을 결합한 다중 시간축 SNN-inspired 분류 구조를 제안하고, 이를 1 kSPS signed 12-bit streaming RTL accelerator IP로 구현·검증한 반도체 IP 공학 연구이다. 출력은 NSR·CHF·ARR·AFF 네 public-dataset class이며, 임상 진단이나 상용 wearable과의 성능 비교를 주장하지 않는다.
-
-소비자 ECG 배경은 특정 제품 문서의 사례이며 모든 wearable의 공통 기능으로 일반화하지 않는다.
-
-## 2. 아키텍처 개요
-
-`public ECG → MATLAB nominal AFE+ADC pre-validation → SystemVerilog XMODEL verification → signed 12-bit stream → integer event/state → 60초 Snapshot → 30개 Snapshot의 Final Membrane → RTL/XSim → Vivado/IP-XACT → Vitis/MicroBlaze → FPGA replay`
-
-![전체 연구·검증 workflow](figures/final/FIG-02_research_workflow.svg)
-
-Digital core는 beat timing, RR variability, slope/morphology, R-peak amplitude, ectopic-like pair와 QRS-related evidence를 sample-by-sample 정수 상태로 갱신한다. 60,000 samples마다 국소 증거를 Snapshot으로 요약하고, 30개 Snapshot의 signed evidence를 Final Membrane에 누적한 뒤 승자독식 방식(WTA)으로 30분 class를 결정한다.
-
-![Digital signal flow](figures/final/FIG-12_digital_processing_flow.svg)
-
-Direct RTL audit에 따르면 pure accelerator는 1,800,000-sample raw input window를 저장하지 않고 고정 크기 event/state와 Final Membrane을 갱신한다 [CLM-023]. 전체 raw window에 해당하는 21,600,000 bit=2,700,000 byte≈2.7 MB decimal은 **회피한 raw-input window storage**이며 측정된 runtime memory 절감량이 아니다. `SNN-inspired`는 event와 membrane-like state를 뜻하며 trained deep SNN 또는 생물학적 등가를 뜻하지 않는다.
-
-## 3. 핵심 결과
-
-| 범주 | 결과 | 해석 범위 |
-|---|---:|---|
-| Locked final-test 30분 chunk | 29/36=80.56%, macro F1 80.44% | primary public-dataset engineering result |
-| Final-test record-majority | 16/19=84.21%, macro F1 80.80% | 같은 final partition의 record별 집계 |
-| Pure RTL | LUT 9,719, FF 5,038, BRAM 0, DSP 0, WNS 8.184 ns | device/tool/configuration-specific; WNS는 latency가 아님 |
-| MicroBlaze full-replay system | LUT 12,494, register 8,494, BRAM 16, DSP 3, setup WNS 0.097 ns | accelerator가 아닌 whole-system 범위 |
-| MATLAB nominal | 대표 네 class clipping 0%, 최소 headroom 약 1.0196 V | selected model-based records |
-| Emulator↔XMODEL | 36 segments 평균 RMS 1.95 LSB, lag 0 | model-to-model waveform agreement |
-| AFE input identity | SHA256 36/36 | byte identity |
-| Canonical AFE→RTL | final_pred/final_mem 36/36, `sample_gap_cycles=2` | 기능 등가성, 정확도 아님 |
-| FPGA replay | final_pred/final_mem 36/36 | 기능 등가성; label accuracy는 29/36 |
-
-Train은 61/68=89.71%, validation은 32/32=100.00%였으나 validation은 model selection에만 사용했다. Final test는 selection에 사용하지 않았고 lock 후 평가 횟수는 1회이다. 세 component의 ownership은 서민우(MATLAB nominal), 이수환(XMODEL/integration), 양건(digital/총괄)으로 고정되어 있다.
-
-Validation 100%는 final generalization claim이 아니다.
-
-## 4. 저장소 구조
+## 구현 범위
 
 ```text
-components/             three curated fixed-commit component snapshots
-datasets/               fixed versions, hashes, licenses and fetch policy; no raw waveforms
-source_of_truth/        commits, metrics, claims, owners, terms and references
-docs/                   research positioning and technical integration narratives
-integration_evidence/   upstream status and intentional exclusions
-figures/                12 evidence-scoped report figures
-tables/                 result, integration and streaming-state tables
-benchmarks/             verified NO_BOARD benchmark summary and claim boundaries
-reports/                definitive manuscript, evidence map and audits
-tools/                  import, generation and fail-closed integrity checks
-private_submission/     Git-blocked private-report area
+공개 digitized ECG
+  → PWL 전압 자극 재구성
+  → MATLAB 공칭 설계
+  → LTspice AFE, S/H, ADC
+  → SystemVerilog XMODEL
+  → 1 kSPS signed 12-bit stream
+  → SNN Pure RTL
+  → AXI IP, MicroBlaze
+  → Vivado implementation, Nexys A7-100T replay
 ```
 
-PhysioNet raw waveform은 public Git에 번들하지 않는다. 고정 version 1.0.0, DOI, records, expected SHA256, license와 외부 fetch 절차는 [`dataset_manifest.yaml`](datasets/dataset_manifest.yaml), [`DATASET_LICENSES.md`](datasets/DATASET_LICENSES.md), [`datasets/README.md`](datasets/README.md)에 있다.
+- 아날로그 모델: HPF, 3-op-amp IA, Active Twin-T 60 Hz notch, 150 Hz LPF, buffer, S/H, 12-bit ADC
+- 디지털 코어: Strong Event, QRS LIF, PNN, RDM, Ectopic Evidence, DSCR, RAM, QRS MAF, RBBB-like, Snapshot/Final Membrane
+- 인터페이스: AXI-Lite control/result, AXI-Stream signed 12-bit input, done/IRQ, UART result
+- Vivado project: Pure RTL hierarchy용 1개, MicroBlaze 구현·replay용 1개
 
-## 5. 한계와 claim 경계
+## 최종 결과
 
-- NSR·CHF·ARR·AFF가 서로 다른 source DB와 결합되어 database–class confounding이 남는다. Strict source-record-wise split은 직접 record leakage를 막지만 이 confounding을 해소하지 않는다.
-- MATLAB/XMODEL은 모델 기반 AFE/ADC 검증이며 physical AFE PCB, ADC silicon, transistor/post-layout, live-electrode 또는 fabricated SoC의 증거가 아니다.
-- Board 36/36은 XSim 기준 출력에 대한 기능 등가성이고 classification accuracy는 29/36이다.
-- 본 결과는 임상적으로 검증된 진단, 네 질환의 확진, 또는 상용 wearable 대비 우월성을 뜻하지 않는다.
-- Pure RTL의 0 BRAM/0 DSP와 timing closure만으로 저전력·고속·에너지 우월성을 주장하지 않는다.
+| 항목 | 결과 | 주장 범위 |
+|---|---:|---|
+| 잠금 최종 시험 | 29/36, 정확도 80.56%, Macro-F1 80.44% | 30분 public-dataset engineering result |
+| 원천 record별 집계 | 16/19, 정확도 84.21% | 같은 final partition의 집계이며 별도 시험이 아님 |
+| Pure RTL 구현 | 9,719 LUT, 5,038 FF, BRAM 0, DSP 0 | Artix-7 XC7A100T, Vivado 2020.2 |
+| Pure RTL timing | WNS 8.184 ns | post-route timing closure |
+| MicroBlaze 통합 | 12,494 LUT, 8,494 FF, 16 BRAM, 3 DSP, WNS 0.097 ns | 전체 시스템 자원 |
+| FPGA 기능 정합 | class 36/36, Final Membrane 144/144 | XSim 대비 기능 등가성, 분류 정확도와 다름 |
+| Exact C++ 대비 활성시간 | 1,777.6998 ms 대 36.0129 ms, 49.36배 | 단일 thread kernel 대 profiler counter 기반 FPGA core |
+| 1 kSPS 연속 할당전력 | 142.0 mW | post-route activity 기반 추정, 보드 실측 아님 |
+| 이상적 평균전력 | 2.991 µW | 30분마다 36.0129 ms 동작 후 완전 power-gating을 가정한 산출값 |
 
-본 prototype은 clinically validated diagnostic device가 아니다. 또한 fabricated silicon이 아니다.
+LTspice와 XMODEL의 동일 10초 ECG 비교에서는 MAE 0.6445 LSB, RMS 1.3020 LSB, 상관계수 0.999518, 지연 0표본을 기록했다. 이는 모델 간 정합이며 물리 AFE 또는 ADC 실측이 아니다.
 
-허용·주의·금지 문구는 [`claim_registry.csv`](source_of_truth/claim_registry.csv), 과학적 해석은 [`DATASET_DOMAIN_CONFOUNDING_KR.md`](docs/DATASET_DOMAIN_CONFOUNDING_KR.md), memory 범위는 [`STREAMING_STATE_MEMORY_KR.md`](docs/STREAMING_STATE_MEMORY_KR.md)를 따른다.
+## 평가 원칙
 
-## 6. 재현성과 무결성
+- 한 원천 ECG record에서 파생한 모든 30분 구간은 train, validation, final test 중 하나에만 속한다.
+- 구조, 가중치와 임계값은 train/validation으로 결정한 뒤 고정했다.
+- final test는 모델 선택에 사용하지 않았으며 설계 고정 후 한 번만 평가했다.
+- 클래스는 서로 다른 공개 DB와 결합되어 있으므로 database–class confounding이 남는다.
+- 공개 문서에서는 `AF`를 사용한다. 고정 model ID, RTL port와 과거 파일명의 `AFF`는 재현성을 위해 변경하지 않는다.
 
-세 component는 아래 고정 commit의 Git object에서 curated export되었으며 retained imported file의 SHA256은 `artifact_manifest.csv`에 기록된다.
+자세한 내용은 [통합 기술보고서](reports/INTEGRATED_TECHNICAL_REPORT_KR.md), [claim registry](project_registry/claim_registry.csv), [evidence map](reports/INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv)에서 확인할 수 있다.
 
-- MATLAB nominal: `907f7e1f081a9d6a5703a32095d962143315a192`
-- XMODEL/integration: `4756a5086023547328ef44fd5fd87da3c250dc39`
-- Digital RTL/IP/FPGA: `c6b80de19cdcad5b7e43fe7835588b629d847f75`
+## 저장소 안내
 
-```powershell
-python tools/build_global_metrics.py
-python tools/generate_integrated_figures.py
-python tools/check_integrated_technical_report.py
-python tools/check_integrated_repository.py
-```
+| 목적 | 경로 |
+|---|---|
+| 빠른 파일 찾기 | [START_HERE_KR.md](START_HERE_KR.md) |
+| 데이터와 평가 | [docs/DATASET_AND_EVALUATION_KR.md](docs/DATASET_AND_EVALUATION_KR.md) |
+| 사전 분석과 annotation | [docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md](docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md) |
+| SNN/RTL 구조 | [docs/DIGITAL_ARCHITECTURE_KR.md](docs/DIGITAL_ARCHITECTURE_KR.md) |
+| timing 병목 개선 | [verification/timing_optimization/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md](verification/timing_optimization/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md) |
+| 하드웨어와 전력 | [docs/HARDWARE_IMPLEMENTATION_KR.md](docs/HARDWARE_IMPLEMENTATION_KR.md) |
+| 통합 검증 | [docs/INTEGRATION_VERIFICATION_KR.md](docs/INTEGRATION_VERIFICATION_KR.md) |
+| 최종 Figure | [figures/FIGURE_INDEX.md](figures/FIGURE_INDEX.md) |
+| 재현 명령 | [REPRODUCIBILITY_KR.md](REPRODUCIBILITY_KR.md) |
 
-의도적으로 제외한 upstream path와 raw dataset path는 exclusion registry에 남는다. Fixed commits가 component source의 authority이고, `source_of_truth/`가 integrated report claim의 authority다.
+## 중요한 검증 범위 구분
 
-## 7. Accelerator benchmark 상태
+`verification/xmodel_rtl_acceptance_36case/`는 과거 고정 AFE 생성 36개 chunk와 digital replay 입력의 SHA-256 동일성, canonical cadence에서 class 36/36 및 membrane 144/144를 기록한 **compact acceptance evidence**다.
 
-Status: `IMPORTED_VERIFIED_NO_BOARD`
+`verification/xmodel_rtl_e2e/`는 실제 full-30분 raw XMODEL accepted dump를 저장소 단독으로 다시 replay한 감사 자료다. 현재 raw dump는 4개만 보존되어 4개는 bit-exact PASS이고 나머지 32개는 재생성 환경이 필요하다. 두 근거의 범위를 혼합하지 않는다.
 
-Summary: [`benchmarks/accelerator_benefit/README.md`](benchmarks/accelerator_benefit/README.md)
+## 한계
 
-Digital `main` commit `09e4d840827ad20856f5e23be4743ddd01565e30`의 완료된 NO_BOARD package를 반영했다. 저장 데이터 기준 Exact C++ kernel 중앙값은 1,777.699800 ms, cycle-derived FPGA core는 54.012600 ms이며 처리시간 비율은 32.912687배다. 이는 측정 board speedup이 아니고 live 최종 판정은 현재 30분 관찰 창을 필요로 한다. 0.099 W와 0.005347247400 J/decision은 추정값이며 physical board timing·power·energy는 `PENDING_BOARD`다. 속도는 본 연구의 주 기여가 아니라 장시간 네 class 분류 구조를 보조하는 구현 평가 항목이다.
+물리 AFE PCB, ADC silicon, ASIC post-layout, fabricated silicon, 임상 검증과 실제 24시간 입력 검증은 수행하지 않았다. FPGA 전력은 추정치이고 2.991 µW는 이상적 power-gating 가정값이다. 본 결과는 임상 진단이나 상용 의료기기 대비 우월성을 뜻하지 않는다.

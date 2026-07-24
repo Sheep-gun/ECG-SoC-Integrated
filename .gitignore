@@ -12,6 +12,7 @@ __pycache__/
 # Generated integration scratch files
 .integration-tmp/
 .local/
+tmp/
 
 # Fixed-version PhysioNet downloads are kept outside Git.
 _ecg_soc_physionet/
@@ -23,14 +24,15 @@ datasets/raw/
 private_submission/*
 !private_submission/.gitignore
 
-# Vivado visualization scratch state (the reproducible .xpr and scripts remain tracked)
+# Vivado scratch state (the two reproducible .xpr files and source scripts remain tracked)
 .Xil/
 vivado*.jou
 vivado*.log
 vivado*.str
-artifacts/rtl_elaborated_schematic/vivado_project/*.cache/
-artifacts/rtl_elaborated_schematic/vivado_project/*.hw/
-artifacts/rtl_elaborated_schematic/vivado_project/*.ip_user_files/
-artifacts/rtl_elaborated_schematic/vivado_project/*.sim/
-artifacts/rtl_elaborated_schematic/vivado_project/*.runs/
-artifacts/rtl_elaborated_schematic/vivado_project/*.gen/
+vivado/**/*.cache/
+vivado/**/*.hw/
+vivado/**/*.ip_user_files/
+vivado/**/*.sim/
+vivado/**/*.runs/
+vivado/**/*.gen/
+artifacts/vivado_figure_rebuild/

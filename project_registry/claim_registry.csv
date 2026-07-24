@@ -1,0 +1,23 @@
+claim_id,category,claim_kr,status,evidence_path,scope,limitations
+CLM-001,identity,"본 설계는 장시간 ECG에서 NSR, CHF, ARR, AF를 판정하는 다중 시간척도 SNN 기반 스트리밍 분류 가속기 IP이다",SAFE,docs/SYSTEM_OVERVIEW_KR.md,engineering architecture,임상 진단 또는 의료기기 인증 주장이 아님
+CLM-002,input,"입력 규약은 1 kSPS signed 12-bit two's-complement ECG stream이다",SAFE,design/digital/reports/final/digital_input_contract.md,digital handoff,처리속도 수치와 구분
+CLM-003,architecture,"60초 Snapshot의 증거를 30개 누적해 30분 Final Membrane을 형성한다",SAFE,docs/DIGITAL_ARCHITECTURE_KR.md,fixed RTL architecture,30분은 현재 공개 데이터 검증 조건
+CLM-004,evaluation,"잠금 최종 시험 정확도는 29/36인 80.56%이고 Macro-F1은 80.44%이다",SAFE,design/digital/reports/final/final_metrics.json,36 fully held-out 30-minute chunks,database-class confounding 존재
+CLM-005,evaluation,"원천 record 다수결 정확도는 16/19인 84.21%이다",CAREFUL,design/digital/reports/final/final_metrics.json,same locked final-test partition,독립된 두 번째 시험이 아님
+CLM-006,protocol,"동일 원천 record의 모든 chunk는 학습 검증 최종 시험 중 한 분할에만 포함된다",SAFE,design/digital/docs/STRICT_RECORDWISE_PROTOCOL_KR.md,source-record-wise split,database-class confounding을 제거하지 않음
+CLM-007,protocol,"최종 시험은 모델 선택에 사용하지 않고 설계 고정 후 한 번 평가했다",SAFE,design/digital/configs/final_submission_locked_model.json,repository-declared locked protocol,임상 prospective test가 아님
+CLM-008,implementation,"고정 Pure RTL 구현은 9719 LUT 5038 FF 0 BRAM 0 DSP와 WNS 8.184 ns를 기록했다",SAFE,design/digital/reports/final/final_metrics.json,Artix-7 Vivado 2020.2 implementation,benchmark profiler build의 9759 LUT 5049 FF와 구분
+CLM-009,implementation,"MicroBlaze 통합 시스템은 12494 LUT 8494 FF 16 BRAM 3 DSP와 setup WNS 0.097 ns를 기록했다",SAFE,design/digital/reports/final/final_metrics.json,whole FPGA system,Pure RTL 자원과 구분
+CLM-010,hardware_equivalence,"FPGA 재생의 최종 클래스는 36/36 네 Final Membrane은 144/144가 XSim과 일치했다",SAFE,design/digital/reports/final/board_replay_36_batch_summary.json,Nexys A7-100T functional equivalence,분류 정확도 100%를 뜻하지 않음
+CLM-011,integration,"compact acceptance에서 AFE 생성 입력과 RTL 입력 SHA-256 및 최종 출력이 36/36 일치했다",SAFE,verification/xmodel_rtl_acceptance_36case/output_equivalence_36case.csv,canonical sample_gap_cycles=2 acceptance,원시 ADC dump 36건이 모두 저장소에 있다는 뜻은 아님
+CLM-012,integration,"저장소가 보유한 실제 원시 XMODEL ADC dump 재실행 범위는 4/36이다",SAFE,verification/xmodel_rtl_e2e/overall_summary.csv,raw-dump reproducibility audit,나머지 32건 원시 dump 미포함
+CLM-013,analog,"10초 LTspice와 XMODEL ADC 출력은 MAE 0.6445 LSB 상관계수 0.999518 지연 0표본이었다",CAREFUL,tables/integration_evidence.csv,model-to-model comparison,물리 AFE 또는 ADC 실측이 아님
+CLM-014,timing_history,"RDM-to-prediction 병목은 pipeline 분할과 lookup 적용으로 제거되었고 기능 정합을 유지한 채 timing closure를 달성했다",CAREFUL,verification/timing_optimization/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md,development history,최적화 전 hotspot 수치와 최종 자원을 직접 비교하지 않음
+CLM-015,benchmark,"Exact C++ median 1777.6998 ms 대비 FPGA 활성시간 36.0129 ms로 활성시간 비율은 49.36배이다",CAREFUL,models/digital_equivalence/results/accelerator_benefit_summary.csv,preloaded compute kernel active-time comparison,end-to-end latency나 보드 전체 speedup이 아님
+CLM-016,power,"1 kSPS 연속 처리 할당전력은 142.0 mW로 추정되었다",CAREFUL,models/digital_equivalence/results/wearable_power_budget.csv,Vivado activity-based allocated FPGA estimate,실측 보드 전력이 아님
+CLM-017,power,"30분마다 36.0129 ms 동작하고 완전히 power-gating한다고 가정한 평균전력은 2.991 uW이다",CAREFUL,models/digital_equivalence/results/power_energy_summary.csv,conditional ideal average,현재 FPGA 소비전력으로 표현 금지
+CLM-018,streaming,"Pure RTL은 1800000개 원시 표본 전체를 저장하지 않고 사건과 뉴런 상태를 순차 갱신한다",SAFE,docs/STREAMING_STATE_MEMORY_KR.md,pure RTL architecture,회피한 raw window 2.7 MB는 측정된 memory saving이 아님
+CLM-019,holter,"24시간 이상 Holter streaming은 설계 지향점이다",CAREFUL,docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md,future direction,실제 24시간 정확도 처리시간 전력 미검증
+CLM-020,clinical,"임상적으로 검증된 진단 시스템이다",FORBIDDEN,project_registry/unresolved_artifacts.csv,all,clinical validation 미수행
+CLM-021,physical,"물리 AFE PCB ADC silicon 또는 ASIC post-layout을 검증했다",FORBIDDEN,project_registry/unresolved_artifacts.csv,all,모델 기반 AFE와 FPGA 구현만 완료
+CLM-022,novelty,"검토한 대표 선행연구 범위에서는 기록 단위 네 클래스 증거 상태화 장시간 누적 RTL FPGA 구현과 다단계 추적성을 함께 적용한 사례를 확인하지 못했다",CAREFUL,docs/RELATED_WORK_HOLTER_ECG_KR.md,reviewed representative literature,세계 최초 또는 동일 연구 부재로 확대 금지

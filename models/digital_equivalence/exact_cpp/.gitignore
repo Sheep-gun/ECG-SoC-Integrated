@@ -1,0 +1,6 @@
+build*/
+results/case_outputs/
+results/xsim_snapshot_logs/
+*.exe
+*.obj
+*.a

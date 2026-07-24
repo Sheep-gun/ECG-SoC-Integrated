@@ -1,0 +1,104 @@
+Reading pref.tcl
+
+# 2024.3
+
+# vsim -c -t 1ns -sv_lib <XMODEL_INSTALL_ROOT>/lib/x86_64/xmodel_msim -pli "<XMODEL_INSTALL_ROOT>/lib/x86_64/xmodel_msim.sl" -work work tb_snn_ecg_30min_mixed_e2e XMODEL_global "+pwl=<XMODEL_REPOSITORY_ROOT>/verification_e2e/pwl/ARR_mitdb_102_chunk00.pwl" "+dump=<XMODEL_REPOSITORY_ROOT>/verification_e2e/sim_out/rep4/accepted_ARR_mitdb_102_chunk00.mem" "+case=ARR_mitdb_102_chunk00" "+case_id=35" "+expected=2" -do "run -all; quit -f" -gSNAPSHOT_SAMPLES=60000 -gSNAPSHOTS_PER_CHUNK=30 -gEXPECTED_SAMPLES=1800000
+# Start time: 19:26:58 on Jul 22,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2024.3 linux_x86_64 Sep 10 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading sv_std.std
+# Loading work.tb_snn_ecg_30min_mixed_e2e(fast)
+# Loading work.xmodel_pkg(fast)
+# Loading work.ecg_afe_xmodel_sv_unit(fast)
+# Loading work.ecg_afe_xmodel(fast)
+# Loading work.xmodel_prims(fast)
+# Loading work.xmodel_checkpkg(fast)
+# Loading work.xmodel_mathpkg(fast)
+# Loading work.xmodel_sv_unit(fast)
+# Loading work.real_to_xreal(fast)
+# Loading work.capacitor(fast)
+# Loading work.resistor(fast)
+# Loading work.resistor(fast__1)
+# Loading work.resistor(fast__2)
+# Loading work.x_opamp(fast)
+# Loading work.vcvs(fast)
+# Loading work.vcvs(fast__1)
+# Loading work.resistor(fast__3)
+# Loading work.vlimit(fast)
+# Loading work.resistor(fast__4)
+# Loading work.resistor(fast__5)
+# Loading work.capacitor(fast__1)
+# Loading work.capacitor(fast__2)
+# Loading work.resistor(fast__6)
+# Loading work.resistor(fast__7)
+# Loading work.resistor(fast__8)
+# Loading work.capacitor(fast__3)
+# Loading work.xreal_to_real(fast)
+# Loading work.snn_ecg_30min_final_top(fast)
+# Loading work.snn_ecg_3feat_top(fast)
+# Loading work.snn_ecg_input_normalizer(fast)
+# Loading work.ecg_event_encoder_adaptive(fast)
+# Loading work.qrs_lif_detector(fast)
+# Loading work.pnn_rhythm_predictor(fast)
+# Loading work.dscr_spike_counter(fast)
+# Loading work.ram_peak_accumulator(fast)
+# Loading work.rdm_variability_neuron(fast)
+# Loading work.ectopic_pair_neuron(fast)
+# Loading work.qrs_maf_neuron(fast)
+# Loading work.rcd_feature(fast)
+# Loading work.rcd2_feature(fast)
+# Loading work.ipb_feature(fast)
+# Loading work.nsr_normality_gate(fast)
+# Loading work.rbbb_lateslope_gate(fast)
+# Loading work.rbbb_qrs_delay_bank(fast)
+# Loading work.etmc_feature(fast)
+# Loading work.class_score_neurons(fast)
+# Loading work.final_membrane_layer(fast)
+# Loading work.XMODEL_global(fast)
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (4) for port 'high_irreg_bin_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(120).
+#    Time: 0 ns  Iteration: 0  Instance: /tb_snn_ecg_30min_mixed_e2e/dut/u_snapshot/u_ipb File: rtl/core/snn_ecg_3feat_top.v Line: 1323
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (4) for port 'mid_irreg_bin_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(121).
+#    Time: 0 ns  Iteration: 0  Instance: /tb_snn_ecg_30min_mixed_e2e/dut/u_snapshot/u_ipb File: rtl/core/snn_ecg_3feat_top.v Line: 1323
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (4) for port 'low_irreg_bin_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(122).
+#    Time: 0 ns  Iteration: 0  Instance: /tb_snn_ecg_30min_mixed_e2e/dut/u_snapshot/u_ipb File: rtl/core/snn_ecg_3feat_top.v Line: 1323
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (4) for port 'burst_count'. The port definition is at: rtl/core/abandoned_feature_stubs.v(123).
+#    Time: 0 ns  Iteration: 0  Instance: /tb_snn_ecg_30min_mixed_e2e/dut/u_snapshot/u_ipb File: rtl/core/snn_ecg_3feat_top.v Line: 1323
+# Loading <XMODEL_INSTALL_ROOT>/lib/x86_64/xmodel_msim.so
+# Loading <XMODEL_INSTALL_ROOT>/lib/x86_64/xmodel_msim.sl
+# run -all
+#
+#     _  ____  _______  ___  ______
+#    | |/_/  |/  / __ \/ _ \/ __/ /  (TM)
+#   _|  |/ /|_/ / /_/ / // / _// /__
+#  /_/|_/_/  /_/\____/____/___/____/  ANALOG/MIXED-SIGNAL SIMULATOR
+#
+# XMODEL Release Unidentified
+# Copyright (c) 2012-2025 Scientific Analog, Inc.
+# All rights reserved and patents pending.
+#
+#FLEXlm: FEATURE 'XMODEL' has been successfully checked out.
+#FLEXlm: Version: 3.0 (full)
+#FLEXlm: Expiration: 31-dec-2026
+#FLEXlm: License type: network
+#FLEXlm: License server: 52.79.127.207
+#
+# E2E_RESULT case=ARR_mitdb_102_chunk00 case_id=35 expected=2 final_valid=1 pred=2 mem_nsr=0 mem_chf=3 mem_arr=27 mem_aff=0 accepted=1800000 dumped=1800000 windows=30 decisions=1
+# E2E_CADENCE case=ARR_mitdb_102_chunk00 prof_total_cycles=36000612 prof_run_cycles=35999292 prof_input_wait_cycles=32399322 accepted_samples=1800000 avg_cycles_per_accept=20 note=AFE_1kSPS_paced(golden_ref_gap=2)
+# E2E_TIMING case=ARR_mitdb_102_chunk00 first_accept_ns=2001050000 last_accept_ns=1802029075001
+# ** Note: $finish    : <XMODEL_REPOSITORY_ROOT>/verification_e2e/tb/tb_snn_ecg_30min_mixed_e2e.sv(214)
+#    Time: 1802031275 us  Iteration: 1  Instance: /tb_snn_ecg_30min_mixed_e2e
+# End time: 20:10:19 on Jul 22,2026, Elapsed time: 0:43:21
+# Errors: 0, Warnings: 4

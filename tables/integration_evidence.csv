@@ -1,6 +1,10 @@
-boundary,verified_result,evidence_path,owner,meaning,limitation
-MATLAB_nominal,representative clipping 0% and minimum headroom 1.019633440086 V,components/matlab_prevalidation/matlab_afe_validation/results_dataset/afe_dynamic_range_headroom_summary.csv,서민우,nominal dynamic-range evidence,selected model-based records only
-emulator_to_XMODEL,mean RMS 1.95 LSB and lag 0 over 36 segments,components/afe_xmodel/docs/afe_stress/AFE_xmodel_verification.md,이수환,model-to-model waveform agreement,not bit-exact and not physical measurement
-AFE_to_digital_input,SHA256 36/36,components/afe_xmodel/docs/integration_latest/afe36_sha256_bitidentity.csv,이수환,byte-identical input handoff,not label correctness
-AFE_to_locked_RTL,pred 36/36 and mem 36/36 at sample_gap_cycles=2,components/afe_xmodel/docs/integration_latest/afe_locked_rtl_integration_36case_compare.csv,이수환,canonical functional reproduction,noncanonical cadence excluded
-RTL_to_board,pred 36/36 and mem 36/36,components/digital_accelerator/reports/final/board_replay_36_batch_summary.json,양건,FPGA functional equivalence,classification accuracy remains 29/36
+boundary,verified_result,evidence_path,status,limitation
+MATLAB_to_LTspice,"HPF 0.481174 Hz; IA 200.594 V/V; 60 Hz attenuation -83.557 dB; LPF 150.211 Hz; clipping 0",design/analog/ltspice/tables/matlab_ltspice_comparison.csv,PASS,"model-based circuit verification"
+LTspice_to_XMODEL,"mean error +0.0221 LSB; MAE 0.6445 LSB; RMS 1.3020 LSB; correlation 0.999518; delay 0 sample",docs/INTEGRATION_VERIFICATION_KR.md,PASS,"fixed-report result; 10-second model comparison; not physical measurement"
+Python_to_RTL,"prediction 36/36; four Final Membranes 144/144",design/digital/reports/final/final_metrics.json,PASS,"functional equivalence; not 100 percent classification accuracy"
+Exact_CPP_to_RTL,"793595/793595 integer operations; 18/18 module traces; 240000/240000 states; 1080/1080 Snapshot boundaries",models/digital_equivalence/exact_cpp/results/equivalence_summary.json,PASS,"fixed locked design"
+Full_top_RTL,"36/36 cases; 1800000 accepted samples; 30 Snapshots; one final decision per case",design/digital/reports/final/fulltop_xsim_final_test_36/locked_class_cases_fulltop_xsim_metadata.json,PASS,"sample_gap_cycles fixed by the canonical harness"
+XMODEL_to_RTL_compact_acceptance,"input SHA-256 and final output 36/36",verification/xmodel_rtl_acceptance_36case/output_equivalence_36case.csv,PASS,"compact acceptance evidence; raw ADC dumps are not all retained"
+XMODEL_raw_dump_rerun,"4/36 raw XMODEL ADC files present and reproduced",verification/xmodel_rtl_e2e/overall_summary.csv,PARTIAL,"32 raw 30-minute ADC dumps are absent from the repository"
+AXI_IP,"AXI-Lite control/result and AXI-Stream wait/TLAST/done/IRQ testbenches 2/2",design/digital/reports/final/hardware_validation_result.md,PASS,"XSim interface verification"
+MicroBlaze_FPGA,"final class 36/36 and four Final Membranes 144/144 versus XSim",design/digital/reports/final/board_replay_36_batch_summary.json,PASS,"hardware equivalence; not classification accuracy"

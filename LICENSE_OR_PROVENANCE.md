@@ -1,38 +1,22 @@
-# License and provenance
+# 라이선스와 출처
 
-This repository is an integration and evidence index, not a relicensing of the
-three upstream projects. It is a **curated technical snapshot**, not a complete
-byte-for-byte mirror of every upstream tracked path. Every retained imported
-file under `components/` is a byte-for-byte export of a file tracked by the fixed upstream commit recorded in
-`source_of_truth/upstream_commits.yaml` and
-`source_of_truth/artifact_manifest.csv`.
+이 저장소는 세 설계 구성과 검증 산출물을 하나로 모은 기술 저장소이며, 원저작물의
+라이선스를 새로 부여하거나 변경하지 않는다. 각 구성의 고정 원본은 다음과 같다.
 
-Intentionally omitted upstream paths are enumerated in
-`integration_evidence/excluded_upstream_paths.csv`. Fixed-version third-party
-PhysioNet raw databases are additionally enumerated in
-`integration_evidence/excluded_large_dataset_paths.csv` and reconstructed using
-`datasets/dataset_manifest.yaml`, `datasets/SHA256SUMS_EXPECTED.txt`, and the
-fetch/verification tools. The fixed upstream commits remain the authoritative
-complete component snapshots.
+- MATLAB AFE–ADC: `ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation` commit `907f7e1f081a9d6a5703a32095d962143315a192`
+- AFE–ADC XMODEL: `Hwan-22/ECG-SoC` commit `4756a5086023547328ef44fd5fd87da3c250dc39`
+- Digital RTL: `Sheep-gun/SNN-ECG-4-Class-Classifier` commit `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
-The selected accelerator-benefit reports and result summaries under
-`benchmarks/accelerator_benefit/` are a curated integration of evidence from
-`Sheep-gun/SNN-ECG-4-Class-Classifier` commit
-`09e4d840827ad20856f5e23be4743ddd01565e30`. The full benchmark code, raw run
-tables, executables, and board package remain authoritative in that upstream
-commit. This benchmark evidence does not change the locked classifier/RTL
-authority at `c6b80de19cdcad5b7e43fe7835588b629d847f75`.
+상세 경로와 역할은 `project_registry/upstream_commits.yaml`, 현재 공개 파일의
+SHA-256은 `project_registry/artifact_manifest.csv`에 기록한다. 원본 파일에 포함된
+저작권과 라이선스 고지가 우선하며, 명시적인 라이선스가 없는 파일은 출처와 재현
+근거를 보존하기 위해 포함한 것이지 추가 이용 권한을 부여하기 위한 것이 아니다.
 
-The original copyright and license notices inside each component snapshot
-remain controlling for that component. If an upstream file has no explicit
-license, its presence here documents provenance only and grants no additional
-rights. Newly authored integration documents and tools are project-internal
-technical evidence unless the project owners publish a separate license.
+PhysioNet의 NSRDB, CHFDB, MIT-BIH Arrhythmia Database와 AFDB 원시 waveform은
+저장소에 포함하지 않는다. 버전, DOI, ODC-By 1.0 의무와 재구성 방법은
+`datasets/DATASET_LICENSES.md`, `datasets/dataset_manifest.yaml` 및
+`datasets/SHA256SUMS_EXPECTED.txt`에 기록한다. 프로젝트에서 만든 PWL, 고정 시험
+입력과 검증 결과는 원 데이터의 라이선스와 출처를 변경하지 않는다.
 
-Private contest forms, signatures, student identifiers, contact information,
-and the final HWP/PDF report are intentionally excluded.
-
-The four PhysioNet sources and their ODC-By 1.0 attribution/citation obligations
-are documented in `datasets/DATASET_LICENSES.md`. Raw waveform files are not
-bundled. Retained project-authored derived vectors and evaluation evidence do
-not change the original dataset license or provenance.
+개인 연락처, 학번, 서명과 직인이 포함된 신청서 원본 및 비공개 제출 자료는 Git에
+포함하지 않는다. 공개 Figure는 `figures/final_submission/`의 파일만을 기준으로 한다.

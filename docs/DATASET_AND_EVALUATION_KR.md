@@ -1,49 +1,51 @@
-# 데이터셋과 평가 방법
+# 데이터 구성과 평가 방법
 
-## Raw-source reconstruction policy
+## 클래스와 원천 데이터
 
-네 PhysioNet raw database는 public Git history에 번들하지 않는다. Version 1.0.0, DOI, records used, sample-rate metadata, official URL, ODC-By 1.0 attribution, expected SHA256와 preprocessing entry는 `datasets/dataset_manifest.yaml`, `datasets/DATASET_LICENSES.md`, `datasets/SHA256SUMS_EXPECTED.txt`에 고정한다. `tools/fetch_physionet_datasets.py`는 저장소 밖에 resume download하고 `verify_physionet_datasets.py`는 data를 변경하지 않고 missing/unexpected/hash mismatch를 JSON으로 보고한다. Locked derived `.mem`, split/evaluation 및 integration evidence는 유지한다.
-
-## Public-dataset classes
-
-| Class | Source DB | Engineering interpretation |
+| 공개 클래스 | 원천 DB | 의미 |
 |---|---|---|
-| NSR | nsrdb | Normal Sinus Rhythm-labelled ECG |
-| CHF | chfdb | Congestive Heart Failure-labelled ECG |
-| ARR | mitdb | Arrhythmia-labelled ECG |
-| AFF | afdb | Atrial Fibrillation-labelled ECG |
+| NSR | MIT-BIH Normal Sinus Rhythm Database | normal sinus rhythm-labelled record |
+| CHF | BIDMC Congestive Heart Failure Database | CHF-labelled record |
+| ARR | MIT-BIH Arrhythmia Database | arrhythmia-labelled record |
+| AF | MIT-BIH Atrial Fibrillation Database | atrial fibrillation-labelled record |
 
-이 label은 현재 engineering evaluation의 target이며 동일 acquisition cohort의 네 임상 진단을 의미하지 않는다.
+네 클래스는 동일 병원·장비·cohort에서 수집한 자료가 아니다. 따라서 분류 결과에는 질환 차이뿐 아니라 DB별 장비, 전처리, 환자군 차이가 반영될 수 있으며 database–class confounding이 남는다.
 
-## 30분 공통 평가 창의 선택
+고정 RTL의 model ID와 일부 파일명·port에는 과거 명칭 `AFF`가 남아 있다. 재현성을 위해 식별자는 보존하지만 공개 서술에서는 의학적으로 통상적인 `AF`를 사용한다.
 
-프로젝트의 원래 동기는 24/48시간 Holter형 장시간 관찰을 streaming state로 처리하는 것이다. 그러나 네 클래스는 길이가 같은 단일 cohort가 아니라 서로 다른 공개 데이터베이스에서 왔고, ARR 원천인 MIT-BIH Arrhythmia Database v1.0.0은 48개의 half-hour ambulatory ECG excerpt로 구성된다. 이 excerpt들은 원래 24시간 ambulatory ECG 집합에서 선택된 자료다. 근거는 `EXT-002`, `EXT-005`와 고정 PhysioNet 페이지다.
+## 30분 평가 조건
 
-특정 클래스에만 없는 시간을 0으로 채우거나 같은 신호를 반복하지 않고 모든 클래스에 동일한 실제 관찰 길이를 적용하기 위해 현재 공통 창은 30분으로 고정했다. 구현 조건은 `60초 Snapshot × 30개`, 1 kSPS 기준 1,800,000 samples이며 `components/digital_accelerator/configs/final_submission_locked_model.json`과 `components/digital_accelerator/reports/final/final_metrics.json`에 고정되어 있다. 이는 데이터셋 제약에 따른 공학적 비교 단위이며 30분이 임상적 24시간 Holter를 대체하거나 동등하다는 주장이 아니다. 24시간으로 확장할 때는 누적 counter 폭만 늘리는 것이 아니라 Final Membrane 문턱값과 간헐 사건의 시간 희석을 다시 검증해야 한다.
+MIT-BIH Arrhythmia Database의 제공 단위가 48개의 약 30분 기록이므로 반복이나 padding 없이 모든 클래스에 동일한 실제 길이를 적용하기 위해 30분을 공통 평가 단위로 정했다. 1 kSPS 기준 1,800,000 samples이며 60초 Snapshot 30개로 구성된다.
 
-## Split protocol
+30분은 하드웨어 처리 한계가 아니다. 동일한 순차 누적 원리를 더 긴 ECG에 적용할 수 있지만 24시간 입력에서는 threshold, state range, 장시간 희석 효과와 정확도를 다시 검증해야 한다.
 
-Split unit은 `source_record_id`이다. 한 physical source record에서 생성된 모든 chunk는 train, validation, final-test 중 하나에만 속한다. 이 strict source-record-wise 원칙은 같은 record의 waveform characteristics가 여러 partition에 직접 중복되는 leakage를 방지한다.
+## annotation 기반 데이터 구성
 
-Locked candidate `structural_guarded_silent_aff_1008710`은 train/validation만으로 선택됐다. Final-test는 selection과 parameter search에 사용하지 않았고 lock 이후 evaluation count는 1이다. Evidence는 `components/digital_accelerator/configs/final_submission_locked_model.json`과 `reports/final/final_metrics.json`이다.
+초기 분석에서는 원천 DB label과 beat/rhythm annotation을 함께 사용해 박동 위치, RR 간격, 조기·지연 박동, 리듬 불규칙성, 진폭, QRS 폭과 파형 굴곡 후보를 계산했다. 클래스별 분포와 분리 가능성을 비교해 PNN, RDM, Ectopic Evidence, DSCR, RAM, QRS MAF, RBBB-like에 대응하는 증거를 선정했다.
 
-## 결과
+annotation은 feature 후보 선정과 데이터 품질 확인을 위한 사전 분석에 사용했다. 최종 RTL은 annotation 파일을 입력으로 받지 않으며 signed 12-bit ECG stream만으로 사건과 증거를 생성한다.
 
-| Partition/aggregation | Correct / total | Accuracy | Macro F1 | Interpretation |
+사전 분석 원본은 `analysis/feature_selection/`에 보존한다. 자세한 설명은 `docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md`에 있다.
+
+## strict source-record-wise split
+
+한 원천 ECG record에서 여러 30분 구간을 만들 수 있다. 동일 record에서 파생한 모든 구간은 train, validation, final test 중 하나에만 포함한다. 이 원칙은 동일 환자·기록의 파형 특성이 여러 분할에 직접 중복되는 leakage를 방지한다.
+
+구조, 가중치와 임계값은 train/validation으로 결정했다. final test는 모델 선택에 사용하지 않았고 설계 고정 후 한 번만 평가했다.
+
+| 평가 단위 | 정답/전체 | 정확도 | Macro-F1 | 해석 |
 |---|---:|---:|---:|---|
-| Train | 61/68 | 89.71% | — | fitting evidence |
-| Validation | 32/32 | 100.00% | — | model selection only |
-| Final-test 30-minute chunk | 29/36 | 80.56% | 80.44% | primary held-out engineering result |
-| Final-test record-majority | 16/19 | 84.21% | 80.80% | same final partition aggregated by record |
+| Train chunks | 61/68 | 89.71% | — | fitting 결과 |
+| Validation chunks | 32/32 | 100.00% | — | model selection 전용 |
+| Locked final-test chunks | 29/36 | 80.56% | 80.44% | primary result |
+| Final-test source-record majority | 16/19 | 84.21% | 80.80% | 동일 final partition의 집계 |
 
-Chunk-level class recall은 NSR 100.00%, CHF 66.67%, ARR 77.78%, AFF 77.78%다. CHF recall이 가장 낮다는 사실을 숨기지 않는다. Validation 100%를 final generalization으로 사용하지 않는다.
+최종 시험 혼동행렬의 recall은 NSR 9/9, CHF 6/9, ARR 7/9, AF 7/9다. 36/36 FPGA 기능 일치는 29/36 label accuracy와 다른 지표다.
 
-## Digital and board evaluation distinction
+## digitized ECG의 아날로그 검증 사용
 
-Board replay 36건의 final_pred/final_mem 36/36은 board가 XSim expected output을 재현한 비율이다. 같은 board outputs를 ground-truth label과 비교하면 29/36=80.56%다. 따라서 다음 식은 금지된다.
+공개 ECG는 이미 ADC를 거친 디지털 기록이다. 이를 실제 환자 전극 전압을 다시 측정한 것으로 표현하지 않는다. 표본을 시간·전압축에 맞춘 PWL 자극으로 재구성해 MATLAB, LTspice와 XMODEL 사이의 전달 특성과 code 정합을 검증했다.
 
-`hardware equivalence 36/36 ≠ classification accuracy 36/36`
+## 재현
 
-## 평가 해석 한계
-
-Record-wise split이 database identity와 class identity의 결합을 해소하지는 않는다. Database name, filename, path, record ID와 split metadata는 classifier input feature로 사용하지 않았지만, waveform 자체에 남은 domain signature가 기여했을 수 있다. 자세한 내용은 `DATASET_DOMAIN_CONFOUNDING_KR.md`를 따른다.
+원본 PhysioNet waveform은 용량과 라이선스 때문에 Git에 포함하지 않는다. version, DOI, record 목록과 checksum은 `datasets/dataset_manifest.yaml`에 있으며 `tools/fetch_physionet_datasets.py`와 `tools/verify_physionet_datasets.py`로 저장소 밖에 재구성한다.

@@ -1,0 +1,3 @@
+C:\Xilinx\Vivado\2020.2\bin\xvlog.bat --nolog -i "<REPOSITORY_ROOT>\design\digital\rtl" -prj "<REPOSITORY_ROOT>\verification\xmodel_rtl_e2e\xsim_work\sources.prj"
+C:\Xilinx\Vivado\2020.2\bin\xelab.bat --nolog -debug typical tb_xmodel_adc_replay -s tb_xmodel_adc_replay
+C:\Xilinx\Vivado\2020.2\bin\xsim.bat tb_xmodel_adc_replay --nolog -tclbatch run.tcl

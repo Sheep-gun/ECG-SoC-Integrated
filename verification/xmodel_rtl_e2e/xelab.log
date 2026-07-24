@@ -1,0 +1,53 @@
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe --nolog -debug typical tb_xmodel_adc_replay -s tb_xmodel_adc_replay
+Multi-threading is on. Using 30 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'high_irreg_bin_count' [<REPOSITORY_ROOT>/design/digital/rtl/core/snn_ecg_3feat_top.v:1347]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'mid_irreg_bin_count' [<REPOSITORY_ROOT>/design/digital/rtl/core/snn_ecg_3feat_top.v:1349]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'low_irreg_bin_count' [<REPOSITORY_ROOT>/design/digital/rtl/core/snn_ecg_3feat_top.v:1351]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 8 for port 'burst_count' [<REPOSITORY_ROOT>/design/digital/rtl/core/snn_ecg_3feat_top.v:1353]
+WARNING: [VRFC 10-3645] port 'strong_event' remains unconnected for this instance [<REPOSITORY_ROOT>/design/digital/rtl/snn_ecg_30min_final_top.v:144]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.snn_ecg_input_normalizer(ENABLE_...
+Compiling module work.ecg_event_encoder_adaptive(T_EVE...
+Compiling module work.qrs_lif_detector(LEAK_QRS=0,T_QR...
+Compiling module work.pnn_rhythm_predictor
+Compiling module work.dscr_spike_counter(SLOPE_THRESHO...
+Compiling module work.ram_peak_accumulator(BANK_BASE=3...
+Compiling module work.rdm_variability_neuron
+Compiling module work.ectopic_pair_neuron_default
+Compiling module work.qrs_maf_neuron_default
+Compiling module work.rcd_feature
+Compiling module work.rcd2_feature
+Compiling module work.ipb_feature
+Compiling module work.nsr_normality_gate
+Compiling module work.rbbb_lateslope_gate
+Compiling module work.rbbb_qrs_delay_bank(ACTIVITY_MOD...
+Compiling module work.etmc_feature
+Compiling module work.class_score_neurons(BIAS_NSR=-52...
+Compiling module work.snn_ecg_3feat_top
+Compiling module work.final_membrane_layer
+Compiling module work.snn_ecg_30min_final_top
+Compiling module work.tb_snn_ecg_30min_chunk_dataset(M...
+Compiling module work.tb_xmodel_adc_replay
+Built simulation snapshot tb_xmodel_adc_replay
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source <LOCAL_HOME>/SNN -notrace
+invalid command name "Common"
+    while executing
+"Common 17-165"
+    invoked from within
+"ERROR: [Common 17-165] Too many positional options when parsing 'Classifier/.Xil/Vivado-3332-DESKTOP-F81OJT8/webtalk/labtool_webtalk.log', please type..."
+    (file "<LOCAL_HOME>/SNN" line 1)
+INFO: [Common 17-206] Exiting Webtalk at Fri Jul 24 01:10:55 2026...
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat --nolog -debug typical tb_xmodel_adc_replay -s tb_xmodel_adc_replay

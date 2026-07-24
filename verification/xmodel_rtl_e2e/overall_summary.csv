@@ -1,0 +1,9 @@
+﻿metric,pass_count,required_count,status,criterion
+actual_xmodel_adc_files_present_valid,4,36,FAIL,36/36
+input_adc_sha256_match,4,36,FAIL,36/36
+final_class_bitexact,4,36,FAIL,36/36
+final_membrane_bitexact,16,144,FAIL,144/144
+accepted_samples_1800000,4,36,FAIL,"each case 1,800,000"
+snapshots_30,4,36,FAIL,each case 30
+final_decision_1,4,36,FAIL,each case 1
+overall,4,36,FAIL,all criteria for all 36 cases

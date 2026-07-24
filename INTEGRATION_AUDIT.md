@@ -1,52 +1,50 @@
-# Integration and publication audit
+# 통합 저장소 감사 기록
 
-## Public baseline and local maintenance
+## 목적
 
-- Public repository: `https://github.com/Sheep-gun/ECG-SoC-Integrated`
-- Remote: `origin` → `https://github.com/Sheep-gun/ECG-SoC-Integrated.git`
-- Branch: `main`
-- Verified pre-maintenance public baseline: `32d2fbd582040f7de7ed54e4ecf5a8a4efd19268`
-- Baseline message: `Add integrated Korean technical report manuscript`
-- Technical manuscript: `reports/INTEGRATED_TECHNICAL_REPORT_KR.md` present and maintained
-- History rewrite: local publication-readiness rewrite performed; not pushed during this task
-- Post-rewrite content commit preceding final audit: `a64919be207f7131202a735bdc2def93d198ab56`
-- Actual final local HEAD: report with `git rev-parse HEAD`; a committed file does not claim its own SHA
+이 저장소는 장시간 ECG 네 클래스 분류 시스템의 공개 설계 원본, 재현 도구와
+검증 근거를 한곳에 정리한 최종 작업공간이다. 대회 참가신청서의 기술설명서
+본문을 현재 주장 범위의 기준으로 사용하되, 분량상 생략된 데이터 구성,
+사전 특징 분석, RTL timing 병목 개선과 단계별 정합 근거를 함께 보존한다.
 
-## Curated component provenance
+## 고정 설계 권한
 
-| Component | Fixed commit | Owner | Policy |
-|---|---|---|---|
-| MATLAB nominal pre-validation | `907f7e1f081a9d6a5703a32095d962143315a192` | 서민우 | retained files byte-identical to fixed Git objects |
-| AFE+ADC XMODEL | `4756a5086023547328ef44fd5fd87da3c250dc39` | 이수환 | retained files byte-identical; raw PhysioNet/submission/temp paths registered and omitted |
-| Digital accelerator | `c6b80de19cdcad5b7e43fe7835588b629d847f75` | 양건 | retained files byte-identical to fixed Git objects |
-| Digital benchmark evidence | `09e4d840827ad20856f5e23be4743ddd01565e30` | 양건 | curated NO_BOARD reports/results; locked digital authority remains `c6b80de` |
+| 구성 | 고정 commit | 보존 위치 |
+|---|---|---|
+| MATLAB AFE–ADC 사전 설계 | `907f7e1f081a9d6a5703a32095d962143315a192` | `design/analog/matlab/` |
+| AFE–ADC XMODEL | `4756a5086023547328ef44fd5fd87da3c250dc39` | `design/analog/xmodel/` |
+| Pure RTL 분류 가속기 | `c6b80de19cdcad5b7e43fe7835588b629d847f75` | `design/digital/` |
+| timing pipeline 변경 이력 | `c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa`, `5e2e5d0a46be47d8086b8642e055066079bfa4e6` | `verification/timing_optimization/` |
 
-The repository is a curated technical snapshot, not a complete mirror of every upstream tracked path. Fixed upstream commits remain the authoritative complete snapshots. `artifact_manifest.csv` covers all retained files; `excluded_upstream_paths.csv` covers every omission.
+두 번째 디지털 저장소의 commit 이력은 최종 저장소의 Git history에 병합하여
+소스 이동 뒤에도 설계 계보를 추적할 수 있게 한다. 경로별 세부 권한은
+`project_registry/upstream_commits.yaml`에 기록한다.
 
-## Raw-dataset publication policy
+## 공개 범위
 
-Four fixed-version PhysioNet trees (nsrdb, chfdb, mitdb, afdb version 1.0.0) are absent from the public working tree and reachable local publication history. They are reconstructed outside Git using `datasets/dataset_manifest.yaml`, 1,025 expected SHA256 entries, resume-capable fetch and read-only verification tools. Dataset DOI, ODC-By 1.0 and required citations are explicit. Locked `.mem`, split/evaluation data, XMODEL-to-RTL comparisons and board evidence remain retained.
+- 설계 원본: `design/`
+- 기준 모델과 benchmark: `models/`
+- 검증 근거: `verification/`
+- 두 Vivado project: `vivado/`
+- 공개 데이터 출처와 재구성 도구: `datasets/`, `tools/`
+- 실제 제출 Figure: `figures/final_submission/`
+- claim, 문헌과 artifact registry: `project_registry/`
 
-## Technical evidence added
+PhysioNet 원시 waveform, 개인 식별정보, 서명과 제출 원본 PDF/HWP는 공개 Git에
+포함하지 않는다. `project_registry/artifact_manifest.csv`는 현재 공개 작업공간의
+모든 파일을 SHA-256으로 열거하며 `tools/build_artifact_manifest.py`로 재생성한다.
 
-- Direct streaming-state inventory: `tables/streaming_state_inventory.csv`
-- Claim `CLM-023`: no complete 1,800,000-sample raw-window storage in pure RTL
-- Derived comparison: 21,600,000 bit = 2,700,000 byte ≈ 2.7 MB decimal, labelled `avoided full raw-input window storage`
-- Digital signal flow: `figures/final/FIG-12_digital_processing_flow.svg`
+## 핵심 경계
 
-## Claim and benchmark status
+- 실제 분류 검증 입력은 30분이며 24시간 이상 Holter 분석은 설계 지향점이다.
+- 최종 시험 성능은 29/36, 정확도 80.56%, Macro-F1 80.44%이다.
+- FPGA 36/36은 최종 클래스와 막전위의 기능 정합이며 분류 정확도 100%가 아니다.
+- Pure RTL 구현은 9,719 LUT, 5,038 FF, BRAM 0, DSP 0, WNS 8.184 ns이다.
+- 2.991 µW는 완전 power-gating을 가정한 산출값이며 FPGA 또는 ASIC 실측값이 아니다.
+- 물리 AFE PCB, ADC silicon, ASIC post-layout와 임상 검증은 수행하지 않았다.
 
-The report keeps public-dataset classification separate from product/clinical screening, board equivalence separate from label accuracy, and model-based analog evidence separate from physical silicon. The imported NO_BOARD benchmark records measured Exact C++ latency, cycle-derived FPGA-core latency, their scoped 32.912687x estimate, and estimated power/energy. Physical board timing, power and energy remain `PENDING_BOARD`.
+## 검사
 
-## Size and integrity
-
-Before/after measurements and blob verification are in `reports/REPOSITORY_SIZE_AUDIT.md` and `reports/HISTORY_REWRITE_RESULT.md`: working tree 2,307,174,104→140,346,925 bytes and `.git` 1,535,086,190→48,243,693 bytes. The final checker results are generated in `reports/integrated_repository_check.md` and the report-check output is recorded in the final response.
-
-## Phased maintenance commits
-
-1. Add reproducible dataset and licensing policy
-2. Add streaming-state evidence and detailed architecture
-3. Align integrated technical manuscript and claim registry
-4. Finalize publication-readiness audit
-
-History rewriting changes all affected commit IDs. No automatic push or force-push was performed.
+`REPRODUCIBILITY_KR.md`의 명령으로 workspace, 보고서와 저장소 checker를 실행한다.
+최신 결과는 `reports/clean_workspace_check.md`와
+`reports/integrated_repository_check.md`에 요약한다.

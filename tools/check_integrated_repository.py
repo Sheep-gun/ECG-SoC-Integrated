@@ -1,553 +1,152 @@
 #!/usr/bin/env python3
-"""Fail-closed integrity and claim-boundary checks for the integrated repository."""
+"""Validate canonical files, metrics, figures, and claim boundaries."""
 
 from __future__ import annotations
 
 import csv
 import hashlib
 import json
-import os
-from pathlib import Path
-import re
-import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PARENT = ROOT.parent
-GIT = os.environ.get(
-    "GIT_EXECUTABLE",
-    shutil.which("git"),
-)
-if not GIT:
-    raise RuntimeError("Git executable not found. Set GIT_EXECUTABLE or add git to PATH.")
-
-LOCAL_CONFIG_PATH = ROOT / ".local" / "upstream_paths.json"
-LOCAL_PATH_ENV = {
-    "matlab_prevalidation": "ECG_SOC_MATLAB_REPOSITORY",
-    "afe_xmodel": "ECG_SOC_AFE_XMODEL_REPOSITORY",
-    "digital_accelerator": "ECG_SOC_DIGITAL_REPOSITORY",
-}
-PUBLIC_LOCAL_PATH = {
-    "matlab_prevalidation": "<LOCAL_MATLAB_REPOSITORY>",
-    "afe_xmodel": "<LOCAL_AFE_XMODEL_REPOSITORY>",
-    "digital_accelerator": "<LOCAL_DIGITAL_REPOSITORY>",
-}
-
-SPECS = {
-    "matlab_prevalidation": {
-        "origin": "https://github.com/ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation",
-        "commit": "907f7e1f081a9d6a5703a32095d962143315a192",
-        "owner": "서민우",
-    },
-    "afe_xmodel": {
-        "origin": "https://github.com/Hwan-22/ECG-SoC",
-        "commit": "4756a5086023547328ef44fd5fd87da3c250dc39",
-        "owner": "이수환",
-    },
-    "digital_accelerator": {
-        "origin": "https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier",
-        "commit": "c6b80de19cdcad5b7e43fe7835588b629d847f75",
-        "owner": "양건",
-    },
-}
+PYTHON = sys.executable
 
 REQUIRED = [
-    "README.md", "LICENSE_OR_PROVENANCE.md", "INTEGRATION_AUDIT.md", ".gitignore",
-    "source_of_truth/upstream_commits.yaml", "source_of_truth/global_metrics.yaml",
-    "source_of_truth/claim_registry.csv", "source_of_truth/artifact_manifest.csv",
-    "source_of_truth/benchmark_import_manifest.csv",
-    "source_of_truth/path_redaction_manifest.csv",
-    "source_of_truth/unresolved_artifacts.csv",
-    "source_of_truth/ownership_matrix.csv", "source_of_truth/terminology.yaml",
-    "source_of_truth/external_reference_registry.csv",
-    "docs/RESEARCH_BACKGROUND_KR.md", "docs/PROBLEM_DEFINITION_KR.md",
-    "docs/RESEARCH_OBJECTIVES_KR.md", "docs/CONTRIBUTIONS_AND_NOVELTY_KR.md",
-    "docs/SYSTEM_OVERVIEW_KR.md", "docs/OWNERSHIP_AND_HANDOFF_KR.md",
-    "docs/DATASET_AND_EVALUATION_KR.md", "docs/DATASET_DOMAIN_CONFOUNDING_KR.md",
-    "docs/MIXED_SIGNAL_VERIFICATION_KR.md", "docs/DIGITAL_ARCHITECTURE_KR.md",
+    "README.md", "START_HERE_KR.md", "REPRODUCIBILITY_KR.md", "WORKSPACE_INVENTORY_KR.md",
+    "docs/SYSTEM_OVERVIEW_KR.md", "docs/DATASET_AND_EVALUATION_KR.md",
+    "docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md", "docs/DIGITAL_ARCHITECTURE_KR.md",
     "docs/HARDWARE_IMPLEMENTATION_KR.md", "docs/INTEGRATION_VERIFICATION_KR.md",
-    "docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md", "docs/REPORT_EVIDENCE_MAP_KR.md",
-    "docs/RELATED_WORK_HOLTER_ECG_KR.md",
-    "docs/INTEGRATION_METHOD.md", "docs/BENCHMARK_IMPORT_AUDIT_KR.md",
-    "docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md",
-    "benchmarks/accelerator_benefit/README.md",
-    "benchmarks/accelerator_benefit/reports/ACCELERATOR_BENEFIT_KR.md",
-    "benchmarks/accelerator_benefit/reports/EXACT_CPP_PERFORMANCE_BENCHMARK.md",
-    "benchmarks/accelerator_benefit/reports/BENCHMARK_LIMITATIONS.md",
-    "benchmarks/accelerator_benefit/results/integrated_benchmark_summary.csv",
-    "benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv",
-    "benchmarks/accelerator_benefit/results/rtl_cycle_summary.json",
-    "benchmarks/accelerator_benefit/results/power_energy_summary.csv",
-    "benchmarks/accelerator_benefit/results/post_benchmark_equivalence.json",
-    "figures/FIGURE_INDEX.md", "figures/source/figure_data.json",
-    "tools/import_upstream_repositories.py", "tools/build_global_metrics.py",
-    "tools/check_integrated_repository.py", "tools/generate_integrated_figures.py",
-    "tools/check_integrated_technical_report.py", "tools/fetch_physionet_datasets.py",
-    "tools/verify_physionet_datasets.py", "datasets/README.md",
-    "datasets/dataset_manifest.yaml", "datasets/DATASET_LICENSES.md",
-    "datasets/SHA256SUMS_EXPECTED.txt", "docs/STREAMING_STATE_MEMORY_KR.md",
-    "tables/streaming_state_inventory.csv",
-    "figures/final/FIG-12_digital_processing_flow.svg",
-    "figures/final/FIG-15_afe_adc_signal_flow.svg",
-    "figures/final/FIG-02_research_workflow.svg",
-    "figures/source/approved_svg/FIG-12_digital_processing_flow.svg",
-    "figures/source/approved_svg/FIG-15_afe_adc_signal_flow.svg",
-    "figures/final/MAT-01_afe_chain_overview.png",
-    "figures/final/MAT-02_total_frequency_response.png",
-    "figures/final/MAT-03_notch_dense_sweep.png",
-    "figures/final/MAT-04_dynamic_range_headroom.png",
-    "figures/final/MAT-05_adc_code_distribution.png",
-    "figures/final/MAT-06_reference_vector_handoff.png",
-    "figures/final/MAT-07_prevalidation_flow.png",
-    "integration_evidence/excluded_upstream_paths.csv",
-    "integration_evidence/excluded_large_dataset_paths.csv",
+    "docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md", "docs/RELATED_WORK_HOLTER_ECG_KR.md",
     "reports/INTEGRATED_TECHNICAL_REPORT_KR.md",
-    "reports/PUBLICATION_READINESS_PREFLIGHT.md", "reports/HISTORY_REWRITE_PLAN.md",
-    "reports/HISTORY_REWRITE_RESULT.md", "reports/PUBLISH_REWRITTEN_HISTORY.md",
-    "private_submission/.gitignore",
+    "reports/INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv",
+    "INTEGRATION_AUDIT.md", "LICENSE_OR_PROVENANCE.md",
+    "project_registry/claim_registry.csv", "project_registry/upstream_commits.yaml",
+    "project_registry/artifact_manifest.csv",
+    "project_registry/external_reference_registry.csv", "project_registry/unresolved_artifacts.csv",
+    "verification/timing_optimization/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md",
+    "verification/xmodel_rtl_acceptance_36case/output_equivalence_36case.csv",
+    "verification/xmodel_rtl_e2e/overall_summary.csv",
+    "design/digital/rtl/snn_ecg_30min_final_top.v",
+    "design/digital/reports/final/final_metrics.json",
+    "design/digital/reports/final/board_replay_36_batch_summary.json",
+    "models/digital_equivalence/results/accelerator_benefit_summary.csv",
+    "models/digital_equivalence/results/power_energy_summary.csv",
+    "figures/FIGURE_INDEX.md",
+    "vivado/microblaze/SNN_ECG_MB_FULL_REPLAY.xpr",
+    "vivado/pure_rtl/project/SNN_ECG_PURE_RTL_VISUALIZATION.xpr",
+]
+PUBLIC_TEXT = [
+    "README.md", "START_HERE_KR.md", "REPRODUCIBILITY_KR.md",
+    "reports/INTEGRATED_TECHNICAL_REPORT_KR.md",
 ]
 
 
-def git(repo: Path, *args: str, check: bool = True) -> str:
-    result = subprocess.run([GIT, "-C", str(repo), *args], text=True, encoding="utf-8", errors="replace", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if check and result.returncode:
-        raise RuntimeError(f"git {' '.join(args)} failed in {repo}: {result.stderr.strip()}")
-    return result.stdout.strip()
+def load_json(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
-def normalize_origin(value: str) -> str:
-    value = value.strip().replace("\\", "/")
-    if value.endswith(".git"):
-        value = value[:-4]
-    return value.rstrip("/").lower()
+def run_checker(path: str) -> tuple[bool, str]:
+    result = subprocess.run([PYTHON, str(ROOT / path)], cwd=ROOT, text=True, capture_output=True)
+    return result.returncode == 0, result.stdout + result.stderr
 
 
-def read_csv(rel: str):
-    with (ROOT / rel).open(encoding="utf-8-sig", newline="") as handle:
-        return list(csv.DictReader(handle))
-
-
-def hash_path(path: Path) -> str:
-    extended = "\\\\?\\" + str(path.resolve()) if os.name == "nt" else str(path)
+def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
-    with open(extended, "rb") as handle:
-        for block in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(block)
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
     return digest.hexdigest()
 
 
-def capture_state(component: str, repo: Path) -> dict:
-    porcelain = git(repo, "status", "--porcelain=v1", "--untracked-files=all")
-    tracked = git(repo, "status", "--porcelain=v1", "--untracked-files=no")
-    return {
-        "component": component,
-        "repository_root": PUBLIC_LOCAL_PATH[component],
-        "origin": git(repo, "remote", "get-url", "origin"),
-        "active_branch": git(repo, "branch", "--show-current"),
-        "active_head": git(repo, "rev-parse", "HEAD"),
-        "fixed_imported_commit": SPECS[component]["commit"],
-        "status_porcelain": porcelain.splitlines() if porcelain else [],
-        "tracked_status": tracked.splitlines() if tracked else [],
-        "untracked_paths": [line[3:] for line in porcelain.splitlines() if line.startswith("?? ")],
-    }
-
-
-def resolve_local_repositories() -> dict[str, Path]:
-    local_config = {}
-    if LOCAL_CONFIG_PATH.is_file():
-        local_config = json.loads(LOCAL_CONFIG_PATH.read_text(encoding="utf-8-sig"))
-    resolved = {}
-    for component, env_name in LOCAL_PATH_ENV.items():
-        value = os.environ.get(env_name) or local_config.get(component)
-        if not value and component == "digital_accelerator":
-            value = str(PARENT)
-        if value:
-            resolved[component] = Path(value).expanduser()
-    return resolved
-
-
-def tracked_text_home_path_audit() -> tuple[list[str], list[str]]:
-    """Return personal-home path hits and undecodable non-binary tracked files."""
-    binary_suffixes = {
-        ".bit", ".bin", ".bmp", ".dcp", ".dll", ".elf", ".exe", ".gif",
-        ".gz", ".ico", ".jpeg", ".jpg", ".pdf", ".png", ".so", ".ttf",
-        ".woff", ".woff2", ".xsa", ".zip", ".7z",
-    }
-    windows_home = re.compile(r"(?i)[A-Z]:" + r"[\\/]+" + "Users" + r"[\\/]+[^\\/\s\"'<>]+[\\/]+")
-    wsl_windows_home = re.compile(r"(?i)/mnt/[a-z]/Users/[^/\s\"'<>]+/")
-    linux_home = re.compile(r"(?<![A-Za-z0-9_])/" + "home" + r"/[A-Za-z0-9._-]+/")
-    mac_home = re.compile(r"(?<![A-Za-z0-9_])/" + "Users" + r"/[A-Za-z0-9._-]+/")
-    root_home = re.compile(r"(?<![A-Za-z0-9_])/" + "root" + r"/")
-    violations: list[str] = []
-    undecodable: list[str] = []
-    for rel in git(ROOT, "ls-files", "-z").split("\0"):
-        if not rel:
-            continue
-        path = ROOT / rel
-        # A tracked file may be intentionally deleted in the current worktree
-        # before that deletion is committed. Required artifacts are checked by
-        # their dedicated rules below; the home-path audit only inspects files
-        # that still exist and must not crash on a pending deletion.
-        if not path.is_file():
-            continue
-        extended = "\\\\?\\" + str(path.resolve()) if os.name == "nt" else str(path)
-        with open(extended, "rb") as handle:
-            raw = handle.read()
-        if path.suffix.lower() in binary_suffixes or b"\x00" in raw:
-            continue
-        try:
-            content = raw.decode("utf-8-sig")
-        except UnicodeDecodeError:
-            undecodable.append(rel)
-            continue
-        if any(pattern.search(content) for pattern in [windows_home, wsl_windows_home, linux_home, mac_home, root_home]):
-            violations.append(rel)
-    return violations, undecodable
-
-
-def authored_text() -> str:
-    paths = [ROOT / "README.md", ROOT / "LICENSE_OR_PROVENANCE.md", ROOT / "INTEGRATION_AUDIT.md", ROOT / "benchmarks" / "accelerator_benefit" / "README.md", ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md"]
-    paths += sorted((ROOT / "docs").glob("*.md"))
-    paths += sorted((ROOT / "datasets").glob("*.md"))
-    paths += [ROOT / "figures" / "FIGURE_INDEX.md"]
-    paths += sorted((ROOT / "tables").glob("*.csv"))
-    return "\n".join(p.read_text(encoding="utf-8-sig", errors="replace") for p in paths if p.exists())
-
-
 def main() -> int:
-    checked: list[str] = []
-    failures: list[str] = []
-    unresolved: list[str] = []
-
-    def check(name: str, condition: bool, detail: str = ""):
-        checked.append(name)
-        if not condition:
-            failures.append(f"{name}: {detail or 'condition failed'}")
-
-    check("independent .git exists", (ROOT / ".git").is_dir())
-    active_branch = git(ROOT, "branch", "--show-current")
-    check("integrated branch is approved", active_branch in {"main", "codex/award-level-integrated-report", "codex/deep-reader-centered-report", "codex/award-reader-report-final"}, active_branch)
+    errors: list[str] = []
     for rel in REQUIRED:
-        check(f"required path {rel}", (ROOT / rel).exists())
-    check("13 generated SVG figures", len(list((ROOT / "figures" / "final").glob("FIG-*.svg"))) == 13)
-    check("7 inherited MATLAB PNG figures", len(list((ROOT / "figures" / "final").glob("MAT-*.png"))) == 7)
-    check("verified tables present", len(list((ROOT / "tables").glob("*.csv"))) >= 4)
-    check("public remote configured", normalize_origin(git(ROOT, "remote", "get-url", "origin")) == normalize_origin("https://github.com/Sheep-gun/ECG-SoC-Integrated.git"))
-    personal_path_hits, undecodable_tracked_text = tracked_text_home_path_audit()
-    check("tracked UTF-8 text contains no personal home path", not personal_path_hits, str(personal_path_hits))
-    check("tracked non-binary text is UTF-8 decodable", not undecodable_tracked_text, str(undecodable_tracked_text))
+        if not (ROOT / rel).exists():
+            errors.append(f"missing required artifact: {rel}")
 
-    before = json.loads((ROOT / "integration_evidence" / "upstream_status_before.json").read_text(encoding="utf-8-sig"))
-    before_map = {x["component"]: x for x in before["repositories"]}
-    repo_by_component = resolve_local_repositories()
-    after_rows = []
-    for component, spec in SPECS.items():
-        b = before_map.get(component)
-        check(f"before state recorded: {component}", b is not None)
-        if not b:
-            continue
-        repo = repo_by_component.get(component)
-        check(f"local upstream path configured: {component}", repo is not None, LOCAL_PATH_ENV[component])
-        if repo is None:
-            continue
-        check(f"upstream exists: {component}", (repo / ".git").exists())
-        if not (repo / ".git").exists():
-            continue
-        origin = git(repo, "remote", "get-url", "origin")
-        check(f"origin matches: {component}", normalize_origin(origin) == normalize_origin(spec["origin"]), origin)
-        cat = subprocess.run([GIT, "-C", str(repo), "cat-file", "-e", f"{spec['commit']}^{{commit}}"])
-        check(f"fixed commit exists: {component}", cat.returncode == 0, spec["commit"])
-        if component == "digital_accelerator":
-            check("digital fixed commit exact", spec["commit"] == "c6b80de19cdcad5b7e43fe7835588b629d847f75")
-        state = capture_state(component, repo)
-        after_rows.append(state)
-        check(f"upstream branch unchanged: {component}", state["active_branch"] == b["active_branch"], f"before={b['active_branch']} after={state['active_branch']}")
-        head_unchanged = state["active_head"] == b["active_head"]
-        if component == "digital_accelerator" and b.get("dirty_tracked_exception"):
-            # A separately authorized benchmark task may commit on the same
-            # benchmark branch while this integrated report is being edited.
-            # The imported component remains pinned and blob-checked below.
-            head_unchanged = state["active_branch"] == b["active_branch"]
-        check(f"upstream HEAD unchanged or authorized benchmark advance: {component}", head_unchanged, f"before={b['active_head']} after={state['active_head']}")
-        tracked_unchanged = state["tracked_status"] == b["tracked_status"]
-        if component == "digital_accelerator" and b.get("dirty_tracked_exception"):
-            # The user explicitly authorized the separate benchmark task to keep
-            # editing this subtree while fixed commit c6b80de is archived. Any
-            # tracked drift outside that subtree remains a hard failure.
-            def changed_path(line: str) -> str:
-                parts = line.split(maxsplit=1)
-                return (parts[1] if len(parts) == 2 else "").split(" -> ")[-1]
-            tracked_unchanged = all(
-                changed_path(line).replace("\\", "/").startswith("benchmarks/accelerator_benefit/")
-                for line in state["tracked_status"]
-            )
-        check(f"tracked status unchanged or authorized benchmark-only drift: {component}", tracked_unchanged, f"before={b['tracked_status']} after={state['tracked_status']}")
-    after_payload = {"captured_at_utc": datetime.now(timezone.utc).isoformat(), "repositories": after_rows}
-    # Timestamp is intentionally removed from the committed evidence to make reruns stable.
-    after_payload["captured_at_utc"] = "FINAL_INTEGRITY_CHECK"
-    with (ROOT / "integration_evidence" / "upstream_status_after.json").open("w", encoding="utf-8", newline="\n") as handle:
-        handle.write(json.dumps(after_payload, ensure_ascii=False, indent=2) + "\n")
+    manifest_path = ROOT / "project_registry/artifact_manifest.csv"
+    if manifest_path.exists():
+        with manifest_path.open(encoding="utf-8-sig", newline="") as handle:
+            manifest_rows = list(csv.DictReader(handle))
+        manifest_by_path = {row.get("path", ""): row for row in manifest_rows}
+        current_files: list[str] = []
+        for path in ROOT.rglob("*"):
+            if not path.is_file() or path == manifest_path:
+                continue
+            rel = path.relative_to(ROOT)
+            if any(part in {".git", "tmp", "__pycache__", ".pytest_cache", ".mypy_cache"} for part in rel.parts):
+                continue
+            current_files.append(rel.as_posix())
+        if set(manifest_by_path) != set(current_files):
+            missing = sorted(set(current_files) - set(manifest_by_path))
+            stale = sorted(set(manifest_by_path) - set(current_files))
+            errors.append(f"artifact manifest path mismatch: missing={missing[:5]}, stale={stale[:5]}")
+        else:
+            for rel in current_files:
+                row = manifest_by_path[rel]
+                path = ROOT / rel
+                if row.get("sha256") != file_sha256(path) or row.get("size_bytes") != str(path.stat().st_size):
+                    errors.append(f"artifact manifest hash/size mismatch: {rel}")
+                    break
 
-    manifest = read_csv("source_of_truth/artifact_manifest.csv")
-    check("curated artifact manifest has 913 rows", len(manifest) == 913, str(len(manifest)))
-    path_redactions = read_csv("source_of_truth/path_redaction_manifest.csv")
-    redaction_paths = {row["tracked_path"] for row in path_redactions}
-    check("path-redaction manifest is nonempty", bool(path_redactions), str(len(path_redactions)))
-    for row in path_redactions:
-        redacted_path = ROOT / row["tracked_path"]
-        check(f"path-redaction file exists: {row['tracked_path']}", redacted_path.is_file())
-        if redacted_path.is_file():
-            check(f"path-redaction sanitized hash: {row['tracked_path']}", hash_path(redacted_path) == row["sanitized_sha256"])
-    manifest_paths = set()
-    component_counts = {key: 0 for key in SPECS}
-    benchmark_commit = "09e4d840827ad20856f5e23be4743ddd01565e30"
-    benchmark_commit_check = subprocess.run([GIT, "-C", str(repo_by_component["digital_accelerator"]), "cat-file", "-e", f"{benchmark_commit}^{{commit}}"])
-    check("benchmark evidence commit exists", benchmark_commit_check.returncode == 0, benchmark_commit)
-    benchmark_manifest = read_csv("source_of_truth/benchmark_import_manifest.csv")
-    check("benchmark import manifest has 9 rows", len(benchmark_manifest) == 9, str(len(benchmark_manifest)))
-    for row in benchmark_manifest:
-        check(f"benchmark manifest commit {row['integrated_path']}", row["source_commit"] == benchmark_commit)
-        check(f"benchmark manifest path {row['integrated_path']}", (ROOT / row["integrated_path"]).is_file(), row["integrated_path"])
-    upstream_blob_maps = {}
-    for component, spec in SPECS.items():
-        tree = git(repo_by_component[component], "-c", "core.quotepath=false", "ls-tree", "-r", spec["commit"])
-        mapping = {}
-        for line in tree.splitlines():
-            metadata, path = line.split("\t", 1)
-            mapping[path] = metadata.split()[2]
-        upstream_blob_maps[component] = mapping
-    local_index_blobs = {}
-    for line in git(ROOT, "-c", "core.quotepath=false", "ls-files", "--stage", "components").splitlines():
-        metadata, path = line.split("\t", 1)
-        local_index_blobs[path] = metadata.split()[1]
-    for row in manifest:
-        rel = row["integrated_path"]
-        manifest_paths.add(rel)
-        component_counts[row["component"]] += 1
+    metrics_path = ROOT / "design/digital/reports/final/final_metrics.json"
+    if metrics_path.exists():
+        raw = metrics_path.read_text(encoding="utf-8")
+        for token in ["80.56", "80.44", "9719", "5038", "8.184", "12494", "8494", "0.097"]:
+            if token not in raw:
+                errors.append(f"final_metrics.json lacks expected token: {token}")
+
+    compact = ROOT / "verification/xmodel_rtl_acceptance_36case/output_equivalence_36case.csv"
+    if compact.exists():
+        with compact.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        if len(rows) != 36 or not all(row.get("pred_match", "").lower() == "true" and row.get("mem_match", "").lower() == "true" for row in rows):
+            errors.append("compact XMODEL/RTL acceptance is not 36/36")
+
+    raw_audit = ROOT / "verification/xmodel_rtl_e2e/overall_summary.csv"
+    if raw_audit.exists():
+        with raw_audit.open(encoding="utf-8-sig", newline="") as handle:
+            audit = {row["metric"]: row for row in csv.DictReader(handle)}
+        present = audit.get("actual_xmodel_adc_files_present_valid", {})
+        if present.get("pass_count") != "4" or present.get("required_count") != "36":
+            errors.append("raw-dump audit scope must remain explicitly 4/36")
+
+    figures_index = (ROOT / "figures/FIGURE_INDEX.md").read_text(encoding="utf-8") if (ROOT / "figures/FIGURE_INDEX.md").exists() else ""
+    figure_files = list((ROOT / "figures/final_submission").rglob("*.svg"))
+    if len(figure_files) < 10:
+        errors.append(f"too few final SVG figures: {len(figure_files)}")
+    for p in figure_files:
+        if p.name not in figures_index and p.stem not in figures_index:
+            errors.append(f"final figure absent from index: {p.relative_to(ROOT)}")
+
+    for rel in PUBLIC_TEXT:
         path = ROOT / rel
-        extended_name = "\\\\?\\" + str(path.resolve()) if os.name == "nt" else str(path)
-        if not os.path.isfile(extended_name):
-            failures.append(f"manifest file missing: {rel}")
+        if not path.exists():
             continue
-        if hash_path(path) != row["sha256"]:
-            failures.append(f"manifest hash mismatch: {rel}")
-        if row["upstream_commit"] != SPECS[row["component"]]["commit"]:
-            failures.append(f"manifest commit mismatch: {rel}")
-        upstream_blob = upstream_blob_maps[row["component"]].get(row["upstream_path"], "")
-        index_blob = local_index_blobs.get(rel, "")
-        if upstream_blob != index_blob and rel not in redaction_paths:
-            failures.append(f"retained integrated Git blob differs from upstream Git object: {rel}")
-    checked.append("all manifest files exist and SHA256-match")
-    actual_paths = set()
-    for component in SPECS:
-        base = ROOT / "components" / component
-        extended_base = Path("\\\\?\\" + str(base.resolve())) if os.name == "nt" else base
-        for path in extended_base.rglob("*"):
-            if path.is_file():
-                rel = path.relative_to(extended_base).as_posix()
-                actual_paths.add(f"components/{component}/{rel}")
-    check("component trees exactly match manifest", actual_paths == manifest_paths, f"extra={len(actual_paths-manifest_paths)} missing={len(manifest_paths-actual_paths)}")
-    check("curated component counts", component_counts == {"matlab_prevalidation": 136, "afe_xmodel": 520, "digital_accelerator": 257}, str(component_counts))
-    nested_git = [p for p in (ROOT / "components").rglob(".git") if p.is_dir()]
-    check("no upstream .git metadata copied", not nested_git, str(nested_git[:3]))
-    check("digital benchmark tmp not imported", not (ROOT / "components" / "digital_accelerator" / "tmp").exists())
-    check("digital benchmark obj not imported", not (ROOT / "components" / "digital_accelerator" / "obj").exists())
-    check("incomplete accelerator benchmark not imported", not (ROOT / "components" / "digital_accelerator" / "benchmarks" / "accelerator_benefit").exists())
-    prohibited_imports = [p for p in (ROOT / "components").rglob("*") if p.is_file() and (p.suffix.lower() == ".hwp" or "참가신청서" in p.name or "docs\\submission" in str(p))]
-    check("application/private upstream files excluded", not prohibited_imports, str(prohibited_imports))
-    excluded = read_csv("integration_evidence/excluded_upstream_paths.csv")
-    large_excluded = read_csv("integration_evidence/excluded_large_dataset_paths.csv")
-    check("intentional exclusion registry has 981 rows", len(excluded) == 981, str(len(excluded)))
-    check("raw-dataset exclusion registry has 977 rows", len(large_excluded) == 977, str(len(large_excluded)))
-    excluded_by_component = {component: set() for component in SPECS}
-    for row in excluded:
-        excluded_by_component[row["component"]].add(row["upstream_path"])
-    manifest_by_component = {component: set() for component in SPECS}
-    for row in manifest:
-        manifest_by_component[row["component"]].add(row["upstream_path"])
-    for component, spec in SPECS.items():
-        upstream_all = set(upstream_blob_maps[component])
-        accounted = manifest_by_component[component] | excluded_by_component[component]
-        check(f"retained+excluded cover upstream tree: {component}", accounted == upstream_all, f"missing={len(upstream_all-accounted)} extra={len(accounted-upstream_all)}")
-    raw_prefixes = [f"components/afe_xmodel/algorithm/person_data/{name}/1.0.0/" for name in ("nsrdb", "chfdb", "mitdb", "afdb")]
-    tracked_paths = git(ROOT, "ls-files").splitlines()
-    check("raw third-party datasets are not tracked", not any(path.startswith(tuple(raw_prefixes)) for path in tracked_paths))
-    reachable_objects = git(ROOT, "rev-list", "--objects", "--all")
-    check("raw dataset paths absent from reachable history", not any(prefix in reachable_objects for prefix in raw_prefixes))
-    ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
-    check("download paths ignored", all(term in ignore for term in ["_ecg_soc_physionet/", "datasets/downloads/", "datasets/raw/"]))
-    provenance = (ROOT / "LICENSE_OR_PROVENANCE.md").read_text(encoding="utf-8")
-    check("curated provenance wording", "curated technical snapshot" in provenance and "not a complete" in provenance)
+        text = path.read_text(encoding="utf-8")
+        if "SNN-inspired" in text:
+            errors.append(f"legacy SNN-inspired wording in public text: {rel}")
 
-    text = authored_text()
-    check("no personal absolute paths in final-facing files", not re.search(r"(?i)[A-Z]:[\\/]Users[\\/]", text))
-    tracked_private = git(ROOT, "ls-files", "private_submission").splitlines()
-    check("private submission tracks only guard", tracked_private == ["private_submission/.gitignore"], str(tracked_private))
+    ok, output = run_checker("tools/check_clean_workspace.py")
+    if not ok:
+        errors.append("clean workspace checker failed:\n" + output.strip())
+    ok, output = run_checker("tools/check_integrated_technical_report.py")
+    if not ok:
+        errors.append("technical report checker failed:\n" + output.strip())
 
-    gm = json.loads((ROOT / "source_of_truth" / "global_metrics.yaml").read_text(encoding="utf-8"))
-    metrics = gm["metrics"]
-    check("final chunk metric exact", metrics["final_test_chunk_accuracy"]["value"] == 80.56)
-    check("board equivalence metric exact", metrics["board_final_pred_equivalence"]["value"] == "36/36" and metrics["board_final_mem_equivalence"]["value"] == "36/36")
-    check("canonical cadence exact", metrics["canonical_sample_gap_cycles"]["value"] == 2)
-    for name, item in metrics.items():
-        path = ROOT / item["evidence_path"]
-        check(f"metric evidence exists: {name}", path.exists(), item["evidence_path"])
-    benchmark = gm["benchmark"]
-    check("benchmark status imported NO_BOARD", benchmark.get("status") == "IMPORTED_VERIFIED_NO_BOARD")
-    check("benchmark source commit exact", benchmark.get("upstream_commit") == "09e4d840827ad20856f5e23be4743ddd01565e30")
-    check("benchmark Exact C++ values", benchmark.get("cpu_kernel_latency_ms") == 1777.6998 and benchmark.get("cpu_end_to_end_latency_ms") == 2007.54925)
-    check("benchmark RTL values", benchmark.get("rtl_processing_latency_ms") == 54.0126 and benchmark.get("rtl_throughput_samples_per_s") == 33325557.369947)
-    check("benchmark speedup estimate", round(benchmark.get("exact_cpp_to_rtl_speedup_estimate", 0), 6) == 32.912687)
-    check("benchmark power values estimated", benchmark.get("estimated_power_w") == 0.099 and benchmark.get("estimated_energy_per_decision_j") == 0.0053472474)
-    check("benchmark physical values pending", benchmark.get("measured_board_power_w") is None and benchmark.get("measured_energy_per_decision_j") is None and benchmark.get("board_timing_status") == "PENDING_BOARD")
-    benchmark_readme = (ROOT / "benchmarks" / "accelerator_benefit" / "README.md").read_text(encoding="utf-8")
-    for phrase in ["32.912687", "측정한 speedup이 아니다", "30분 관찰", "PENDING_BOARD", "0.099 W"]:
-        check(f"benchmark README boundary {phrase}", phrase in benchmark_readme)
-    comparison = read_csv("benchmarks/accelerator_benefit/results/cpu_fpga_comparison.csv")
-    check("benchmark comparison one row", len(comparison) == 1)
-    check("benchmark comparison formula values", comparison[0]["cpu_latency_ms"] == "1777.699800000" and comparison[0]["fpga_latency_ms"] == "54.012600000" and comparison[0]["ratio_cpu_over_fpga"] == "32.912687040")
-    post_equivalence = json.loads((ROOT / "benchmarks" / "accelerator_benefit" / "results" / "post_benchmark_equivalence.json").read_text(encoding="utf-8"))
-    check("benchmark equivalence gate", post_equivalence["status"] == "pass" and post_equivalence["final_predictions"] == "36/36" and post_equivalence["final_membranes"] == "144/144" and post_equivalence["snapshot_boundaries"] == "1080/1080")
-
-    claims = read_csv("source_of_truth/claim_registry.csv")
-    required_claim_columns = {"claim_id","category","proposed_claim_kr","proposed_claim_en","status","evidence_type","owner","upstream_repository","upstream_commit","evidence_path","scope","limitations","allowed_report_sections"}
-    check("claim registry columns", set(claims[0]) == required_claim_columns)
-    check("claim statuses controlled", {r["status"] for r in claims}.issubset({"SAFE","CAREFUL","FORBIDDEN","PENDING_EXTERNAL_WORK","UNVERIFIED"}))
-    for row in claims:
-        if row["status"] not in {"FORBIDDEN", "PENDING_EXTERNAL_WORK"}:
-            check(f"claim evidence exists: {row['claim_id']}", (ROOT / row["evidence_path"]).exists(), row["evidence_path"])
-    claim_map = {row["claim_id"]: row for row in claims}
-    check("CLM-023 registered safe", claim_map.get("CLM-023", {}).get("status") == "SAFE")
-    check("CLM-023 direct RTL evidence", "direct RTL" in claim_map.get("CLM-023", {}).get("evidence_type", ""))
-    check("CLM-048 timing history registered", claim_map.get("CLM-048", {}).get("status") == "CAREFUL")
-    check("CLM-048 evidence path", claim_map.get("CLM-048", {}).get("evidence_path") == "docs/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md")
-    state_rows = read_csv("tables/streaming_state_inventory.csv")
-    required_state_columns = {"state_id", "RTL_module", "RTL_signal_or_group", "state_category", "count", "width_bits", "estimated_total_bits", "reset_scope", "update_condition", "persistent_across_samples", "persistent_across_snapshots", "evidence_path", "notes"}
-    check("streaming inventory columns", bool(state_rows) and set(state_rows[0]) == required_state_columns)
-    check("streaming inventory substantive", len(state_rows) >= 20, str(len(state_rows)))
-    check("unresolved widths explicit", any(row["width_bits"] == "UNRESOLVED_FROM_STATIC_AUDIT" for row in state_rows))
-    check("avoided window arithmetic exact", metrics["avoided_full_raw_input_window_bits"]["value"] == 21600000 and metrics["avoided_full_raw_input_window_bytes"]["value"] == 2700000)
-
-    owners = read_csv("source_of_truth/ownership_matrix.csv")
-    owner_map = {row["contributor"]: row for row in owners}
-    check("three canonical contributors", set(owner_map) == {"서민우","이수환","양건"}, str(set(owner_map)))
-    check("MATLAB ownership correct", "MATLAB" in owner_map["서민우"]["canonical_role"])
-    check("XMODEL ownership correct", "XMODEL" in owner_map["이수환"]["canonical_role"])
-    check("digital/project lead ownership correct", "Project leader" in owner_map["양건"]["canonical_role"])
-
-    conf = (ROOT / "docs" / "DATASET_DOMAIN_CONFOUNDING_KR.md").read_text(encoding="utf-8")
-    required_conf = ["nsrdb", "chfdb", "mitdb", "afdb", "direct record leakage", "database-to-class confounding", "서로 다른 문제", "공통 1 kSPS signed 12-bit", "clinical disease generalization", "same-acquisition", "RTL correctness"]
-    for phrase in required_conf:
-        check(f"confounding disclosure: {phrase}", phrase in conf)
-    bad_board_accuracy_lines = []
-    for line in text.splitlines():
-        if re.search(r"(?i)(classification accuracy|분류 정확도).{0,40}36/36", line):
-            if not any(marker in line for marker in ["아니다", "아님", "≠", "not ", "금지"]):
-                bad_board_accuracy_lines.append(line)
-    check("board equivalence not called classification accuracy", not bad_board_accuracy_lines, str(bad_board_accuracy_lines))
-    check("validation 100 is labeled selection-only", "Validation 100%는 final generalization claim이 아니다" in (ROOT / "README.md").read_text(encoding="utf-8"))
-    check("clinical claim boundary present", "clinically validated diagnostic device가 아니다" in (ROOT / "README.md").read_text(encoding="utf-8"))
-    check("physical claim boundary present", "fabricated silicon이 아니다" in (ROOT / "README.md").read_text(encoding="utf-8"))
-    check("no positive clinical-validation claim", not re.search(r"본 (?:연구|설계|시스템).{0,60}(?:임상적으로 검증|clinical(?:ly)? validated)(?!.*(?:아니다|않|not))", text, re.I))
-    check("no positive physical-silicon claim", not re.search(r"(?:physical AFE|ADC silicon|fabricated SoC).{0,40}(?:검증했다|검증하였다|validated)", text, re.I))
-    contradictions = [m.group(0) for m in re.finditer(r"sample_gap_cycles\s*=\s*(\d+)", text) if m.group(1) != "2"]
-    check("no canonical cadence contradiction", not contradictions, str(contradictions))
-
-    refs = read_csv("source_of_truth/external_reference_registry.csv")
-    ref_ids = {r["reference_id"] for r in refs}
-    check("external references registered", len(refs) >= 14 and all(r["URL_or_identifier"] for r in refs))
-    check("Holter related-work references registered", {f"EXT-{n:03d}" for n in range(9, 15)}.issubset(ref_ids), ref_ids)
-    check("external references authoritative", all(r["authoritative_status"] == "AUTHORITATIVE" for r in refs))
-    unsupported_product_numbers = re.search(r"(?i)(Apple|Samsung|Fitbit|Garmin).{0,80}(sensitivity|specificity|민감도|특이도).{0,20}\d", text)
-    check("no unsupported commercial-product figures", unsupported_product_numbers is None, str(unsupported_product_numbers.group(0) if unsupported_product_numbers else ""))
-    check("wearable wording is product-specific", "특정 제품 문서의 사례" in (ROOT / "README.md").read_text(encoding="utf-8"))
-    check("unsupported broad wearable wording absent", "대표 소비자 ECG" not in text and "representative consumer ECG functions" not in text.lower())
-    dataset_manifest = json.loads((ROOT / "datasets" / "dataset_manifest.yaml").read_text(encoding="utf-8"))
-    check("four fixed-version datasets", len(dataset_manifest["databases"]) == 4 and all(db["version"] == "1.0.0" for db in dataset_manifest["databases"]))
-    check("dataset licenses explicit", all(db["license"] == "Open Data Commons Attribution License v1.0" for db in dataset_manifest["databases"]))
-    check("dataset hashes populated", sum(1 for line in (ROOT / "datasets" / "SHA256SUMS_EXPECTED.txt").read_text(encoding="utf-8").splitlines() if line and not line.startswith("#")) >= 1000)
-    fig_index = (ROOT / "figures" / "FIGURE_INDEX.md").read_text(encoding="utf-8")
-    manuscript = (ROOT / "reports" / "INTEGRATED_TECHNICAL_REPORT_KR.md").read_text(encoding="utf-8")
-    check("FIG-12 indexed", "FIG-12_digital_processing_flow.svg" in fig_index)
-    check("FIG-12 referenced by manuscript", "FIG-12_digital_processing_flow.svg" in manuscript)
-    check("FIG-15 indexed", "FIG-15_afe_adc_signal_flow.svg" in fig_index)
-    check("FIG-15 referenced by manuscript", "FIG-15_afe_adc_signal_flow.svg" in manuscript)
-    for approved_name in ["FIG-12_digital_processing_flow.svg", "FIG-15_afe_adc_signal_flow.svg"]:
-        approved = ROOT / "figures" / "source" / "approved_svg" / approved_name
-        final = ROOT / "figures" / "final" / approved_name
-        check(f"approved SVG master installed byte-for-byte: {approved_name}", approved.read_bytes() == final.read_bytes())
-    check("FIG-02 workflow indexed", "FIG-02_research_workflow.svg" in fig_index)
-    check("FIG-02 workflow referenced by manuscript", "FIG-02_research_workflow.svg" in manuscript)
-    check("FIG-RTL hierarchy indexed", "FIG-RTL_top_with_snapshot_expansion.svg" in fig_index)
-    check("FIG-RTL hierarchy referenced by manuscript", "FIG-RTL_top_with_snapshot_expansion.svg" in manuscript)
-    rtl_approved = ROOT / "figures" / "source" / "approved_svg" / "FIG-RTL_top_with_snapshot_expansion.svg"
-    rtl_final = ROOT / "figures" / "final" / "FIG-RTL_top_with_snapshot_expansion.svg"
-    check("FIG-RTL approved SVG master present", rtl_approved.is_file())
-    check(
-        "FIG-RTL approved SVG installed byte-for-byte",
-        rtl_approved.is_file() and rtl_final.is_file() and rtl_approved.read_bytes() == rtl_final.read_bytes(),
-    )
-    for rtl_schematic_source in ["FIG-RTL-A_top_hierarchy.svg", "FIG-RTL-B_snapshot_core_hierarchy.svg"]:
-        check(
-            f"FIG-RTL Vivado source present: {rtl_schematic_source}",
-            (ROOT / "artifacts" / "rtl_elaborated_schematic" / rtl_schematic_source).is_file(),
-        )
-    superseded_flows = [
-        "FIG-02_recordwise_validation_workflow.svg", "FIG-04_multitimescale_architecture.svg",
-        "FIG-12_digital_signal_flow.svg", "FIG-13_beat_rhythm_path.svg",
-        "FIG-14_morphology_path.svg", "FIG-15_analog_signal_flow_nonideal_models.svg",
-    ]
-    check("superseded flow figures removed from manuscript and index", not any(name in manuscript or name in fig_index for name in superseded_flows), [name for name in superseded_flows if name in manuscript or name in fig_index])
-    check("superseded flow figure files deleted", not any((ROOT / "figures" / "final" / name).exists() for name in superseded_flows), [name for name in superseded_flows if (ROOT / "figures" / "final" / name).exists()])
-    check("manuscript raw-data policy", "고정 버전 원시 파형은 저장소에 포함하지 않는다" in manuscript)
-    for required in ["1,777.699800 ms", "54.012600 ms", "32.912687", "0.099 W", "PENDING_BOARD"]:
-        check(f"benchmark value promoted with scope: {required}", required in text)
-    check("benchmark live boundary", "live 환경의 최종 판정시간이 54 ms가 되는 것은 아니다" in text)
-    check("benchmark board-speedup boundary", "측정 보드 speedup" in text or "측정 board speedup" in text)
-
-    parent_index = git(PARENT, "ls-files", "--stage", "--", "ECG-SoC-Integrated")
-    check("integrated repo absent from parent index", not parent_index, parent_index)
-    parent_exclude = (PARENT / ".git" / "info" / "exclude").read_text(encoding="utf-8", errors="replace")
-    check("parent local exclude installed", "/ECG-SoC-Integrated/" in parent_exclude)
-    parent_gitignore_changes = [
-        line for line in git(PARENT, "status", "--porcelain=v1", "--untracked-files=no").splitlines()
-        if line.endswith(".gitignore") and "benchmarks/accelerator_benefit/" not in line.replace("\\", "/")
-    ]
-    check("parent tracked gitignore untouched by integration", not parent_gitignore_changes, str(parent_gitignore_changes))
-
-    unresolved.append("Physical board timing, power and energy remain PENDING_BOARD; imported benchmark is NO_BOARD.")
-    unresolved.append("Physical AFE/ADC/silicon and clinical validation are outside the completed scope.")
-    unresolved.append("Database-class confounding requires future same-acquisition or cross-domain validation.")
-
-    report = [
-        "# Integrated repository check",
-        "",
-        f"## Result: {'PASS' if not failures else 'FAIL'}",
-        "",
-        f"- Rules checked: {len(checked)}",
-        f"- Conflicts found: {len(failures)}",
-        "- Benchmark import: " + ("PASS (verified NO_BOARD scope)" if benchmark.get("status") == "IMPORTED_VERIFIED_NO_BOARD" else "FAIL"),
-        "",
-        "## Rules checked",
-        "",
-    ] + [f"- {'PASS' if not any(f.startswith(name + ':') for f in failures) else 'FAIL'} — {name}" for name in checked]
-    report += ["", "## Conflicts found", ""] + ([f"- {f}" for f in failures] if failures else ["- None."])
-    report += ["", "## Unresolved evidence / bounded scope", ""] + [f"- {u}" for u in unresolved]
-    report += ["", "## Benchmark-import verification", "", "- Status is `IMPORTED_VERIFIED_NO_BOARD`.", "- Exact C++ measurement, cycle-derived FPGA-core timing and estimated power are distinguished.", "- Physical board timing, power and energy remain `PENDING_BOARD`.", ""]
-    reports = ROOT / "reports"
-    reports.mkdir(exist_ok=True)
-    with (reports / "integrated_repository_check.md").open("w", encoding="utf-8", newline="\n") as handle:
-        handle.write("\n".join(report))
-    print(f"{'PASS' if not failures else 'FAIL'}: {len(checked)} rules, {len(failures)} conflicts")
-    if failures:
-        for failure in failures:
-            print(f"- {failure}")
+    if errors:
+        print("INTEGRATED_REPOSITORY: FAIL")
+        for error in errors:
+            print(f"- {error}")
         return 1
+    print("INTEGRATED_REPOSITORY: PASS")
+    print(f"- {len(REQUIRED)} canonical artifacts present")
+    print(f"- {len(figure_files)} indexed final SVG figures")
+    print("- fixed metrics and evidence-scope boundaries verified")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

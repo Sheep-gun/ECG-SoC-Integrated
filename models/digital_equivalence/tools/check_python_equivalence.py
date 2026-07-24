@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""Run the untimed 36-case Python/RTL equivalence gate in parallel."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import os
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from pathlib import Path
+from typing import Any
+
+
+INTEGRATED_ROOT = Path(__file__).resolve().parents[3]
+DIGITAL_ROOT = INTEGRATED_ROOT / "design" / "digital"
+CASES = DIGITAL_ROOT / "reports" / "final" / "board_replay_36_cases.csv"
+OUT = INTEGRATED_ROOT / "models" / "digital_equivalence" / "results" / "python_equivalence_gate.csv"
+CLASSES = ("NSR", "CHF", "ARR", "AFF")
+
+
+def locked_data_root() -> Path:
+    configured = os.environ.get("ECG_SOC_LOCKED_MEM_ROOT")
+    return Path(configured).resolve() if configured else (INTEGRATED_ROOT.parent / "generated_rtl_fpga_test_inputs_36case").resolve()
+
+
+def read_cases() -> list[dict[str, str]]:
+    with CASES.open(newline="", encoding="utf-8-sig") as handle:
+        return list(csv.DictReader(handle))
+
+
+def run_case(case: dict[str, str]) -> dict[str, Any]:
+    for name in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
+        os.environ[name] = "1"
+    from locked_integer_inference import infer_file
+
+    result = infer_file(locked_data_root() / case["mem_path"], inter_sample_idle_cycles=2, post_done_ticks=37)
+    pred_match = result["final_pred"] == int(case["expected_final_pred"])
+    mem_match = all(result[f"final_mem_{cls}"] == int(case[f"expected_final_mem_{cls}"]) for cls in CLASSES)
+    return {
+        "case_id": case["case_id"], "sample_count": result["sample_count"],
+        "snapshot_count": result["snapshot_count"], "final_pred": result["final_pred"],
+        **{f"final_mem_{cls}": result[f"final_mem_{cls}"] for cls in CLASSES},
+        "pred_match": str(pred_match).lower(), "mem_match": str(mem_match).lower(),
+    }
+
+
+def write_rows(rows: list[dict[str, Any]]) -> None:
+    fields = ["case_id", "sample_count", "snapshot_count", "final_pred", *[f"final_mem_{cls}" for cls in CLASSES], "pred_match", "mem_match"]
+    with OUT.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(sorted(rows, key=lambda row: row["case_id"]))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument(
+        "--data-root",
+        type=Path,
+        help="Root containing fullrec_afe_30min_annotation_valid_balanced (default: ../generated_rtl_fpga_test_inputs_36case)",
+    )
+    args = parser.parse_args()
+    if args.data_root:
+        os.environ["ECG_SOC_LOCKED_MEM_ROOT"] = str(args.data_root.resolve())
+    rows: list[dict[str, Any]] = []
+    cases = read_cases()
+    missing = [str(locked_data_root() / case["mem_path"]) for case in cases if not (locked_data_root() / case["mem_path"]).is_file()]
+    if missing:
+        raise SystemExit(
+            "Locked digital inputs are missing. Run "
+            "tools/data/generate_locked_digital_36case.py first. "
+            f"missing={len(missing)}/{len(cases)} first={missing[0]}"
+        )
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = {pool.submit(run_case, case): case["case_id"] for case in cases}
+        for future in as_completed(futures):
+            row = future.result()
+            rows.append(row)
+            write_rows(rows)
+            print(f"PY_EQUIV completed={len(rows)} total={len(cases)} case_id={row['case_id']} pred_match={row['pred_match']} mem_match={row['mem_match']}", flush=True)
+            if row["pred_match"] != "true" or row["mem_match"] != "true":
+                raise SystemExit(f"Python equivalence failed: {row['case_id']}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

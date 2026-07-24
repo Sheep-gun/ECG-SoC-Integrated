@@ -18,7 +18,7 @@ from pypdf import PdfReader, PdfWriter
 
 
 REPOSITORY = Path(__file__).resolve().parents[2]
-ARTIFACT_DIR = REPOSITORY / "artifacts" / "rtl_elaborated_schematic"
+ARTIFACT_DIR = REPOSITORY / "vivado" / "pure_rtl" / "evidence"
 DEFAULT_PDFS = (
     ARTIFACT_DIR / "FIG-RTL-A_top_hierarchy.pdf",
     ARTIFACT_DIR / "FIG-RTL-B_snapshot_core_hierarchy.pdf",

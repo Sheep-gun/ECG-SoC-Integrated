@@ -1,8 +1,0 @@
-input_voltage_V,offset_binary_code_decimal,offset_binary_code_hex,signed_decimal,signed_twos_complement_hex,formula,signed_conversion_formula,note
--1.65,0,000,-2048,800,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",negative full-scale
--1,806,326,-1242,B26,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",
--0.000805860805860806,2046,7FE,-2,FFE,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",
-0,2047,7FF,-1,FFF,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",0 V maps to offset-binary 2047 and signed -1 because floor() is used
-0.000805860805860806,2048,800,0,000,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",
-1,3288,CD8,1240,4D8,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",
-1.65,4095,FFF,2047,7FF,"floor((V + 1.65)/3.3 * 4095), clipped to [0,4095]","signed_decimal = offset_binary - 2048; signed_twos_complement_hex = dec2hex(mod(signed_decimal,4096),3)",positive full-scale

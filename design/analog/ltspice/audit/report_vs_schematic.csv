@@ -1,0 +1,25 @@
+item,report_value,schematic_value,status,evidence_file,note
+top-level signal path,"ECG differential through HPF/IA/Twin-T/LPF/S&H/ADC",Same ordered blocks and named behavioral nodes,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Top-level schematic identified by PWL filename and required node labels
+patient PWL source,patient100_ecg_10s.txt,V3 PWL file=patient100_ecg_10s.txt AC 1,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,File is connected differentially from INP_RAW to INN_RAW
+input polarity,ECG+ minus ECG-,Positive file value is V(INP_RAW)-V(INN_RAW),MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,U3 preserves the HPF differential sign
+input DC return,finite floating-prevention path,R10=R11=1G to ground,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,
+op-amp supplies,+5 V and -5 V,U1-U6 V+=K_DIV=+5 V and V-=N003=-5 V,MISMATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Supply magnitudes match but positive rail reuses the bootstrap divider node K_DIV
+HPF,"R=10 Mohm; C=33 nF; fc about 0.4823 Hz",R1=R2=10Meg and C1=C2=33n,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Measured cutoff is separately reported
+IA gain,about 201 V/V,"R3=R4=100k; R9=1k; U3 ratios all 10k",MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Nominal ideal differential expression is 1+2*100k/1k=201
+IA U3 feedback,closed-loop difference amplifier,R8=10k from IA_OUT to U3 negative input,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,
+Twin-T branch ratios,"R=26.526k; R/2=13.263k; C=100n; 2C=200n",R12/R13=26.526k R14=13.263k C4/C5=100n C3=200n,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,The two T midpoints are distinct
+Twin-T center frequency,about 60 Hz,Component-calculated f0 about 59.9995 Hz,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Actual AC minimum depends on connected topology/model
+active bootstrap ratio,about 0.95 from 5k/95k,R15/R16 values exist but K_DIV is clamped by ideal +5 V V1,MISMATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,As implemented the divider does not provide 0.95 small-signal feedback and U5 sits near +rail
+notch and LPF node naming,NOTCH_OUT feeds LPF_IN,NOTCH_OUT and LPF_IN are labels on one physical net,MATCH,audit/node_map.csv,Generated netlist canonicalizes the net as LPF_IN
+LPF,"R=1k; C=1.06u; fc about 150.15 Hz",R17=1k and C6=1.06u,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Measured cutoff is separately reported
+S/H clock,"1 ms period; about 100 us track",PULSE(0 5 0 1u 1u 100u 1m),MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Switch hysteresis makes threshold-defined on/off phases differ from nominal edge labels
+S/H switch,"Ron=1; Roff=1G; Vt=2.5; Vh=0.1",Identical SW_ADC model parameters,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,
+ADC clipping range,+/-1.65 V,B1 limit(ADC_HOLD -1.65 1.65),MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,
+ADC endpoint scaling,0 to 4095 with 3.3/4095 V convention,B2 uses floor and scale 4095 then limits 0 to 4095,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Literal endpoint plateau test is reported separately
+ADC signed mapping,ADC_CODE-2048,B3 exactly V(ADC_CODE)-2048,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,ADC_SIGNED is a behavioral voltage not a 12-wire bus
+behavioral ADC scope,not a physical SAR ADC,B1/B2/B3 behavioral sources and no SAR transistor network,MATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,
+original transient duration,report describes short and full 10 s validation,.tran 0 20m 0 10u only,MISMATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,This package adds copied/generated 10 s testbenches; the original remains unchanged
+original AC directive,report describes AC validation procedure,No .ac directive in original schematic,MISMATCH,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,Independent differential AC testbenches were generated in validation directory
+UniversalOpamp2 explicit fidelity,UniversalOpamp2 behavioral op-amp,U1-U6 use installed model with default instance parameters,UNVERIFIED,schematics/nominal/FULL_AFE_ADC_SH_original_snapshot.net,"Avol/GBW/slew etc. are generated defaults; no device-specific op-amp is identified"
+physical/PCB/transistor evidence,not claimed,None present,NOT_APPLICABLE,source_manifest.csv,This is schematic-level model-based evidence only
+validated graphical schematic,"VPLUS supply separate from 0.95 K_DIV bootstrap","FULL_AFE_ADC_SH_validated.asc: VPLUS and K_DIV are separate generated-netlist nodes",MATCH,schematics/nominal/FULL_AFE_ADC_SH_validated.net,Validation deliverable only; read-only source still retains the documented mismatch

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="460" viewBox="0 0 1800 460" role="img" aria-label="Public ECG data to MATLAB, LTspice, and XMODEL analog verification flow">
+  <defs>
+    <marker id="paper-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#364152"/>
+    </marker>
+  </defs>
+
+  <rect width="1800" height="460" fill="#ffffff"/>
+  <title>아날로그 검증 흐름</title>
+  <desc>공개 디지털 ECG 표본을 PWL 전압으로 복원한 뒤 MATLAB, LTspice, XMODEL 순서로 검증하는 흐름</desc>
+
+  <text x="900" y="58" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="28" font-weight="700" fill="#182230">아날로그 검증 흐름</text>
+
+  <!-- Public ECG data -->
+  <rect x="45" y="175" width="300" height="130" rx="6"
+        fill="#f5f3ff" stroke="#7c5cba" stroke-width="2.2"/>
+  <text x="195" y="230" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="20" font-weight="700" fill="#182230">Public ECG Data</text>
+  <text x="195" y="258" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="17" font-weight="500" fill="#475467">(digitized samples)</text>
+
+  <!-- MATLAB -->
+  <rect x="525" y="175" width="270" height="130" rx="6"
+        fill="#eff6ff" stroke="#2563a8" stroke-width="2.2"/>
+  <text x="660" y="230" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="20" font-weight="700" fill="#182230">MATLAB</text>
+  <text x="660" y="258" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">사전 설계 모델</text>
+
+  <!-- LTspice -->
+  <rect x="1005" y="175" width="270" height="130" rx="6"
+        fill="#fff7e6" stroke="#b7791f" stroke-width="2.2"/>
+  <text x="1140" y="230" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="20" font-weight="700" fill="#182230">LTspice</text>
+  <text x="1140" y="258" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">회로 시뮬레이션</text>
+
+  <!-- XMODEL -->
+  <rect x="1485" y="175" width="270" height="130" rx="6"
+        fill="#ecfdf3" stroke="#2f855a" stroke-width="2.2"/>
+  <text x="1620" y="220" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="20" font-weight="700" fill="#182230">XMODEL</text>
+  <text x="1620" y="248" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">SystemVerilog 행위 모델</text>
+  <text x="1620" y="276" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="16" font-weight="500" fill="#475467">1 kSPS · signed 12-bit</text>
+
+  <!-- Flow arrows -->
+  <line x1="345" y1="240" x2="525" y2="240"
+        stroke="#364152" stroke-width="2.8" stroke-linecap="round"
+        marker-end="url(#paper-arrow)"/>
+  <line x1="795" y1="240" x2="1005" y2="240"
+        stroke="#364152" stroke-width="2.8" stroke-linecap="round"
+        marker-end="url(#paper-arrow)"/>
+  <line x1="1275" y1="240" x2="1485" y2="240"
+        stroke="#364152" stroke-width="2.8" stroke-linecap="round"
+        marker-end="url(#paper-arrow)"/>
+
+  <!-- Arrow labels -->
+  <text x="435" y="122" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">PWL Voltage</text>
+  <text x="435" y="146" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">Reconstruction</text>
+
+  <text x="900" y="122" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">주파수 응답 비교</text>
+  <text x="900" y="148" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="15" font-weight="400" fill="#475467">Overall AFE · 60 Hz Notch</text>
+
+  <text x="1380" y="122" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#182230">ADC 출력 비교</text>
+  <text x="1380" y="148" text-anchor="middle"
+        font-family="Malgun Gothic, Noto Sans KR, Arial, sans-serif"
+        font-size="15" font-weight="400" fill="#475467">Waveform · Error Statistics</text>
+</svg>

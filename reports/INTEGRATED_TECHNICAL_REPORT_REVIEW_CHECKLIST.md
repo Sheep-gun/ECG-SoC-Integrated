@@ -1,89 +1,18 @@
-# 통합 기술보고서 검토 체크리스트
+# 통합 기술보고서 검토 checklist
 
-검토 대상: `reports/INTEGRATED_TECHNICAL_REPORT_KR.md`
-
-## 독자가 처음 읽을 때의 이해 흐름
-
-- [x] 본문은 9개 장으로 구성하고, 연구 진행 순서가 MATLAB→AFE·ADC/XMODEL→디지털 IP→benchmark→통합 검증→결과→논의·한계로 이어진다.
-- [x] MATLAB 공칭 사전검증을 디지털 아키텍처보다 먼저 제시하고, 그 출력 파라미터와 기준 벡터가 AFE·ADC XMODEL의 입력 기준이 됨을 설명한다.
-- [x] AFE·ADC XMODEL 검증 뒤에 signed stream을 소비하는 디지털 가속기 IP를 배치하여 아날로그 앞단과 디지털 뒷단의 인과관계를 유지한다.
-- [x] 가속기 benchmark와 AFE·디지털 기능 등가성을 같은 장에서 서로 다른 질문으로 분리하고, NO_BOARD 수치와 physical board pending을 구분한다.
-- [x] 초록은 배경→문제→제안 구조→검증→결과→한계 순서로 전개한다.
-- [x] 디지털 Figure는 QRS 검출 뒤 rhythm·morphology 경로를 분기하고 class scoring에서 합친 뒤 Snapshot 30개를 Final Membrane으로 누적한다.
-- [x] AFE 설명은 필요성→구성→설계값→검증→다음 블록 연결 순서를 각 블록에 적용한다.
-- [x] `token age`와 같은 내부 신호명은 직관적인 한국어 기능 설명 뒤에 필요한 경우만 제시한다.
-- [x] benchmark는 분류기의 주 기여가 아니라 구현 효과를 보조하는 별도 결과이며, Exact C++ 측정·cycle-derived core·estimated power를 구분한다.
-
-## 장시간 ECG 관련 연구와 본 연구의 위치
-
-- [x] 선행연구 비교축을 세부 신경망·회로 차이가 아니라 “어느 범위의 ECG를 보고 최종적으로 어떤 질문에 답하는가”로 둔다.
-- [x] Amirshahi–Hashemi 연구를 “심박 하나의 종류”, 본 연구를 “장시간 기록 전체의 클래스”를 묻는 연구로 구분한다.
-- [x] 사건 구동형을 파형이 기준보다 크게 변한 순간만 사건으로 만들어 처리하는 방식으로 먼저 풀어 설명한다.
-- [x] Bauer 연구는 연속 ECG에서 병리 패턴이 나타났는지를 알리는 이진 검출 연구이며, 본 연구처럼 기록 전체의 네 질환 클래스를 정하는 연구가 아님을 명시한다.
-- [x] Chen 연구는 LC-ADC로 변화 순간을 만들지만 최종 출력은 N·SVEB·VEB·F 개별 심박 클래스임을 구분한다.
-- [x] Shanmugam 연구는 대부분 정상인 약 48시간 ECG에서 일부 고위험 구간을 모은다는 방향이 유사하지만, 최종 목적은 환자의 미래 심혈관 사망 위험 예측임을 설명한다.
-- [x] Zihlmann 연구의 9–61초 가변 길이 네 클래스 기록 분류와 CNN 특징의 평균/LSTM 통합을 반영하여 “4개 클래스” 자체를 최초 차별성으로 주장하지 않는다.
-- [x] DeepHHF의 24시간 ECG→30초 구간→구간별 요약→Transformer→5년 HF 위험 흐름을 단계별로 설명한다.
-- [x] DeepHHF가 본 연구와 구조적 흐름이 가장 유사함을 인정하되, 미래 심부전 위험 예측과 현재 NSR·CHF·ARR·AFF 기록 분류라는 연구 질문의 차이를 전면에 둔다.
-- [x] 비교표는 서로 다른 과업·데이터셋·판정 단위의 정확도를 직접 순위 비교하지 않는다.
-- [x] 본 연구의 핵심을 특정 60초·30분 수치나 세부 RTL 차이가 아니라, 간헐적 질환 구간을 포착하고 반복 증거를 모아 현재 기록의 네 클래스를 판정하는 연구 방향으로 설명한다.
-- [x] “세계 최초”와 문헌 전체에 동일 연구가 없다는 단정을 사용하지 않고, 검토한 대표 선행연구 범위의 제한된 비교로만 위치를 설명한다.
-- [x] 현재 검증 입력은 30분이고 24시간 정확도·처리시간·전력은 미검증이라는 경계를 유지한다.
-
-## AFE·ADC 설계와 MATLAB/XMODEL 근거
-
-- [x] ECG→HPF→3-op-amp IA→active Twin-T 60 Hz notch+buffer→150 Hz LPF→12-bit ADC→offset-binary→signed stream의 전체 흐름을 설명한다.
-- [x] HPF 10 MΩ/33 nF와 0.4823 Hz, IA 100 kΩ/1 kΩ와 gain 201, LPF 1 kΩ/1.06 µF와 150.15 Hz를 직접 근거에 연결한다.
-- [x] 수동 Twin-T의 넓은 저지대역과 loading 문제, active Twin-T와 buffer를 추가한 이유를 설명한다.
-- [x] active Twin-T의 26.526 kΩ/100 nF, 200 nF/13.263 kΩ, k=0.95, Q≈5를 제시한다.
-- [x] ADC ±1.65 V, 12 bit, 1 kSPS, 0.80586 mV/LSB와 0 V code mapping을 설명한다.
-- [x] MATLAB은 공칭 필터·이득·동적 범위·기준 벡터, XMODEL은 비이상성·간섭·mismatch·GBW/VOS·ADC stress·장시간 stream을 담당한다고 구분한다.
-- [x] IA 수렴, notch loading, LPF cutoff, CMRR margin, ADC log off-by-one, passive→active notch 변경을 실제 수정 이력으로 기록한다.
-- [x] 주파수응답, clipping/headroom, 50/60 Hz PLI, R/C mismatch, GBW/VOS, ADC 비이상성과 장시간 stream 결과를 수치로 제시한다.
-- [x] MATLAB 기준 벡터→XMODEL signed stream→SHA256→RTL handoff를 설명한다.
-- [x] 고정 component에 원본 LTspice `.asc`/회로 캡처가 없음을 확인하고, FIG-15를 원본이 아닌 설명용 재구성도로 표시한다.
-- [x] 누락 원본 schematic을 `source_of_truth/unresolved_artifacts.csv`에 unresolved artifact로 기록한다.
-- [x] 기존 MATLAB 그림 7개를 byte-for-byte 상속하고 각각 원본 파일 및 설명 문서로 연결한다.
-
-## 디지털 RTL 메커니즘
-
-- [x] Event encoder의 signed 차분, one-cycle pulse와 adaptive bank 선택을 설명한다.
-- [x] QRS의 이전 상태→누설→사건 가산→문턱 비교→reset/refractory 순서와 locked leak=0을 구분한다.
-- [x] PNN, RDM, ectopic, DSCR, RAM, QRS MAF와 RBBB-like 경로의 관찰 목적과 상태 갱신을 설명한다.
-- [x] Snapshot의 현재 `*_next` 저장과 Final base/guard/rescue/veto/silent-AFF/WTA를 설명한다.
-- [x] 디지털 기존 설명의 깊이와 고정 결과를 낮추거나 변경하지 않는다.
-
-## 결과와 claim 경계
-
-- [x] Final chunk 29/36=80.56%, record-majority 16/19=84.21%와 validation 100%의 model-selection 용도를 구분한다.
-- [x] Pure RTL 9,719 LUT, 5,038 FF, 0 BRAM, 0 DSP와 WNS 8.184 ns를 device/tool-specific 결과로 둔다.
-- [x] 입력 SHA, AFE→RTL과 FPGA의 36/36 scope를 분리하고 기능 등가성을 분류 정확도 100%로 표현하지 않는다.
-- [x] database–class confounding과 physical PCB/silicon/post-layout/clinical gap을 명시한다.
-- [x] `SNN-inspired`를 trained deep SNN, STDP, online learning 또는 생물학적 동일성과 구분한다.
-- [x] 24시간 Holter가 설계 동기이지만 MIT-BIH Arrhythmia의 30분 excerpt 때문에 현재 공통 평가 창을 30분으로 고정했다는 선택 근거를 설명한다.
-- [x] 30분 prototype 결과를 임상적 24시간 Holter의 대체·동등성으로 해석하지 않고, 24시간 확장 시 Final Membrane 재검증이 필요함을 명시한다.
-- [x] accelerator benchmark는 `09e4d840...`의 Exact C++ 1,777.699800 ms, cycle-derived core 54.012600 ms와 32.912687배 추정 비교를 사용한다.
-- [x] Exact C++ timing 전에 pred 36/36, membrane 144/144와 Snapshot 1,080/1,080 등가성을 확인한다.
-- [x] Python cycle model과 Verilator simulation runtime을 대표 CPU inference 기준선으로 사용하지 않는다.
-- [x] 54.012600 ms를 live 30분 판정시간으로 표현하지 않고, 32.912687배를 measured board speedup으로 표현하지 않는다.
-- [x] 0.099 W와 0.005347247400 J/decision을 estimated/derived로 표시하고 physical board 측정값과 구분한다.
-
-## Artifact와 자동 검증
-
-- [x] 전체 workflow 그림은 공개 ECG 직후 Record-wise Train·Validation·Locked Test 분할을 표시한다.
-- [x] Train·Validation만 MATLAB과 사전 잠금 설계·검증에 사용하고, Locked Test는 Design Lock 뒤 최초 1회 최종시험에만 사용함을 표시한다.
-- [x] XMODEL·RTL 병렬 분기, 두 경로가 입력되는 AFE–RTL 통합, RTL 전용 benchmark·FPGA board replay 분기를 교차 배선 없이 표시한다.
-- [x] 세 검증 결과를 단일 판단 gate로 모으고, 불충족 loop가 MATLAB이 아니라 XMODEL·RTL 단계로 돌아가도록 표시한다.
-- [x] MATLAB `907f7e1`, XMODEL `4756a508`, digital `c6b80de` provenance를 유지한다.
-- [x] evidence map의 모든 path와 claim ID가 유효하다.
-- [x] figure generator가 15개 SVG와 상속 MATLAB PNG 7개, index와 data를 생성한다.
-- [x] 본문은 16개 그림을 사용하고 AFE·ADC 관련 9개 그림 caption에 직접 evidence path를 둔다.
-- [x] `tools/check_integrated_technical_report.py` PASS
-- [x] `tools/check_integrated_repository.py` PASS
-- [x] `git diff --check` PASS
-
-## 공식 신청서에서만 사람이 편집할 부분
-
-- HWP page/field 제한에 맞춘 축약과 그림 배치
-- physical board timer·idle/active power 측정이 완료된 뒤의 supporting table
-- 지도교수·소속·개인정보·서명 등 private 제출 정보
+- [x] 공개 표기는 NSR, CHF, ARR, AF다.
+- [x] SNN 기반 event, LIF와 membrane state를 실제 RTL에 연결했다.
+- [x] 60초 Snapshot과 30분 Final Membrane을 연구 자체의 본질이 아니라 현재 구현과 검증 조건으로 설명했다.
+- [x] 24시간 이상 Holter는 지향점이고 실제 정확도, 처리시간과 전력은 미검증으로 표시했다.
+- [x] source-record-wise split과 fully held-out locked final test를 설명했다.
+- [x] annotation 기반 사전 분석과 final inference input을 구분했다.
+- [x] accuracy 80.56%, Macro-F1 80.44%와 database–class confounding을 함께 제시했다.
+- [x] Pure RTL과 MicroBlaze system 자원 및 timing을 구분했다.
+- [x] FPGA 36/36 equivalence를 100% classification accuracy로 표현하지 않았다.
+- [x] timing bottleneck 관측, pipeline 분할, timing 재검증과 기능 정합을 순서대로 기록했다.
+- [x] 49.36배를 active kernel time 비교로 제한했다.
+- [x] 142.0 mW를 allocated estimate, 2.991 µW를 ideal power-gating derived value로 제한했다.
+- [x] compact 36-case acceptance와 raw-dump rerun 4/36을 구분했다.
+- [x] physical AFE, ADC silicon, ASIC/post-layout와 clinical validation 부재를 유지했다.
+- [x] 대표 선행연구의 DOI 또는 공식 출판 경로를 등록했다.
+- [x] 세계 최초 또는 동일 연구 부재를 단정하지 않았다.

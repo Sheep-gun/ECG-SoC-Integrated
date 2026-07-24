@@ -14,6 +14,11 @@ MANIFEST = ROOT / "datasets" / "dataset_manifest.yaml"
 HASHES = ROOT / "datasets" / "SHA256SUMS_EXPECTED.txt"
 
 
+def distributable(rel: str) -> bool:
+    """Ignore official checksum entries no longer served by PhysioNet HTTP."""
+    return not Path(rel).name.endswith("-")
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -38,7 +43,7 @@ def main() -> int:
         db = next(item for item in manifest["databases"] if item["abbreviation"] == abbreviation)
         if version != db["version"]:
             raise RuntimeError(f"version mismatch for {abbreviation}")
-        if abbreviation in selected:
+        if abbreviation in selected and distributable(rel):
             expected[rel] = digest.lower()
     found = {
         path.relative_to(args.data_root).as_posix(): path
@@ -50,6 +55,13 @@ def main() -> int:
     summary = {
         "status": "PASS" if not (missing or unexpected or mismatched) else "FAIL",
         "data_root": str(args.data_root.resolve()), "databases": sorted(selected),
+        "excluded_unavailable_historical_checksum_entries": sum(
+            1
+            for line in HASHES.read_text(encoding="utf-8").splitlines()
+            if line and not line.startswith("#")
+            and line.split(maxsplit=1)[1].strip().split("/", 1)[0] in selected
+            and not distributable(line.split(maxsplit=1)[1].strip())
+        ),
         "expected_file_count": len(expected), "verified_file_count": len(expected) - len(missing) - len(mismatched),
         "missing": missing, "unexpected": unexpected, "hash_mismatch": mismatched,
     }

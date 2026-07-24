@@ -1,0 +1,8 @@
+artifact_id,topic,status,current_evidence,required_follow_up,claim_boundary
+UNR-001,24시간 이상 Holter 입력,OPEN,30분 입력 36건 검증,동일 규약의 실제 24시간 입력 정확도와 처리 검증,24시간은 설계 지향점
+UNR-002,물리 AFE와 ADC,OPEN,MATLAB LTspice XMODEL 기반 모델 검증,AFE PCB와 ADC silicon 제작 및 실측,물리 회로 검증 주장 금지
+UNR-003,ASIC 구현,OPEN,Artix-7 FPGA post-route 구현,ASIC synthesis post-layout signoff와 silicon 측정,FPGA 배치를 ASIC layout으로 표현 금지
+UNR-004,전력 실측,OPEN,Vivado activity 기반 추정과 조건부 평균 산출,보드 전력계와 ASIC silicon 전력 측정,2.991 uW는 이상적 power-gating 산출값
+UNR-005,임상 검증,OPEN,공개 데이터베이스 공학 검증,동일 측정환경의 임상 cohort와 의료기기 절차,진단 또는 임상 성능 주장 금지
+UNR-006,database-class confounding,OPEN,source-record-wise 분할,동일 획득환경 다중 클래스 또는 cross-database 검증,record leakage 방지와 domain confounding 해소를 구분
+UNR-007,원시 XMODEL ADC 36건 저장소 재실행,PARTIAL,4건 원시 덤프와 36건 compact acceptance,나머지 32건 원시 ADC 덤프 보관 또는 재생성,저장소 내 원시 재실행 가능 범위는 4/36
