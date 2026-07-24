@@ -7,10 +7,11 @@
 ## 분석 절차
 
 1. 원천 record와 공식 beat/rhythm annotation을 읽어 박동 위치와 구간 label을 정렬했다.
-2. 한 record에서 파생한 구간이 다른 데이터 분할로 넘어가지 않도록 source-record ID를 유지했다.
-3. RR 간격, pNN 계열 규칙성, 연속 RR 차이, early–late pair, ΔECG 방향 전환, R-peak 진폭, QRS 폭·복잡도와 말단 활동 후보를 계산했다.
-4. boxplot, class summary와 간단한 분류 실험으로 클래스별 분포와 결측률을 확인했다.
-5. 설명 가능성, 정수 연산 가능성, streaming state 크기와 분류 기여를 함께 고려해 최종 feature path를 정했다.
+2. 각 30분 구간이 원천 label을 뒷받침하는 박동 및 리듬 증거를 충분히 포함하는지 확인해 라벨 대표성을 점검했다.
+3. 한 record에서 파생한 구간이 다른 데이터 분할로 넘어가지 않도록 source-record ID를 유지했다.
+4. RR 간격, pNN 계열 규칙성, 연속 RR 차이, early–late pair, ΔECG 방향 전환, R-peak 진폭, QRS 폭·복잡도와 말단 활동 후보를 계산했다.
+5. boxplot, class summary와 간단한 분류 실험으로 클래스별 분포와 결측률을 확인했다.
+6. 설명 가능성, 정수 연산 가능성, streaming state 크기와 분류 기여를 함께 고려해 최종 feature path를 정했다.
 
 ## 최종 RTL과의 대응
 
@@ -24,7 +25,7 @@
 | QRS 활동 폭·복잡도 | QRS MAF | 넓이·에너지·변화 구조 |
 | QRS 후반 활동 | RBBB-like | 전도 지연성 파형 대리지표 |
 
-최종 분류기는 annotation을 사용하지 않는다. annotation은 후보 탐색과 평가용이며, RTL 입력은 1 kSPS signed 12-bit ECG뿐이다.
+최종 분류기는 annotation을 사용하지 않는다. annotation은 30분 구간의 라벨 대표성 및 데이터 품질 점검과 후보 탐색용이며, RTL 입력은 1 kSPS signed 12-bit ECG뿐이다.
 
 ## 해석 경계
 

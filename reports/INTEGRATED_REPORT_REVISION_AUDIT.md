@@ -21,6 +21,7 @@
 1. 공개 클래스명을 NSR, CHF, ARR, AF로 통일했다. legacy model ID, RTL port와 raw artifact의 `AFF`는 재현성을 위해 보존했다.
 2. `SNN-inspired`를 `SNN 기반`으로 교체하고 event, LIF firing과 membrane accumulation의 구현 근거를 연결했다.
 3. 사전 annotation 분석은 feature 선택에 사용되지만 최종 RTL 추론 입력에는 사용되지 않음을 명시했다.
+   - 30분 구간이 원천 label을 뒷받침하는 박동 및 리듬 증거를 충분히 포함하는지 annotation으로 점검한 데이터 구성 절차를 추가했다.
 4. 30분은 현재 검증 조건, 24시간 이상 Holter는 설계 지향점으로 분리했다.
 5. RDM-to-prediction critical path 관측, pipeline 분할, timing 재검증과 기능 정합의 개발 이력을 추가했다.
 6. 최종 구현 9,719 LUT와 5,038 FF를 profiler build 9,759 LUT와 5,049 FF에서 분리했다.

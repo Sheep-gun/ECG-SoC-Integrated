@@ -21,3 +21,4 @@ CLM-019,holter,"24시간 이상 Holter streaming은 설계 지향점이다",CARE
 CLM-020,clinical,"임상적으로 검증된 진단 시스템이다",FORBIDDEN,project_registry/unresolved_artifacts.csv,all,clinical validation 미수행
 CLM-021,physical,"물리 AFE PCB ADC silicon 또는 ASIC post-layout을 검증했다",FORBIDDEN,project_registry/unresolved_artifacts.csv,all,모델 기반 AFE와 FPGA 구현만 완료
 CLM-022,novelty,"검토한 대표 선행연구 범위에서는 기록 단위 네 클래스 증거 상태화 장시간 누적 RTL FPGA 구현과 다단계 추적성을 함께 적용한 사례를 확인하지 못했다",CAREFUL,docs/RELATED_WORK_HOLTER_ECG_KR.md,reviewed representative literature,세계 최초 또는 동일 연구 부재로 확대 금지
+CLM-023,data_quality,"30분 구간은 원천 DB label과 가용한 beat/rhythm annotation을 대조해 해당 클래스의 박동 및 리듬 증거가 충분히 포함되는지 점검했다",SAFE,docs/DATASET_AND_EVALUATION_KR.md,annotation-based segment label representativeness QC,"annotation은 데이터 구성과 품질 점검에만 사용하며 최종 RTL 입력이 아니고 database-class confounding을 제거하지 않음"

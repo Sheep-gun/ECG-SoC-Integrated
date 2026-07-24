@@ -5,7 +5,7 @@ I·2.1,RPT-002,CLM-019,"24시간 이상 Holter streaming은 설계 지향점",do
 I,RPT-004,CLM-006,"NSR CHF ARR AF 공개 데이터 구성",datasets/dataset_manifest.yaml,SAFE,"database-class confounding 존재"
 I·2.1,RPT-005,CLM-003,"공통 30분 검증 조건",docs/DATASET_AND_EVALUATION_KR.md,SAFE,"하드웨어 최대 처리 길이가 아님"
 I,RPT-006,CLM-006,"동일 원천 record chunk는 한 분할에만 포함",design/digital/docs/STRICT_RECORDWISE_PROTOCOL_KR.md,SAFE,"source record와 환자는 항상 동의어가 아님"
-1.2·2.2,RPT-007,CLM-007,"annotation 기반 사전 분석과 locked design",docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md,SAFE,"최종 RTL 입력은 annotation을 사용하지 않음"
+I·1.2,RPT-007,CLM-023,"30분 구간의 annotation 기반 라벨 대표성 및 데이터 품질 점검",docs/DATASET_AND_EVALUATION_KR.md,SAFE,"최종 RTL 입력은 annotation을 사용하지 않으며 database-class confounding이 남음"
 1.1·2.3,RPT-008,CLM-001,"AFE ADC와 SNN RTL의 streaming 구조",docs/SYSTEM_OVERVIEW_KR.md,SAFE,"임상 진단 장치 주장이 아님"
 2.1·2.3,RPT-009,CLM-002,"1 kSPS signed 12-bit 입력 규약",design/digital/reports/final/digital_input_contract.md,SAFE,"legacy raw 파일명의 AFF는 AF class를 의미"
 2.2,RPT-010,CLM-003,"event QRS rhythm morphology와 두 시간척도 누적",docs/DIGITAL_ARCHITECTURE_KR.md,SAFE,"reader-facing grouping은 literal netlist가 아님"

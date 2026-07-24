@@ -8,6 +8,7 @@
 - [x] 24시간 이상 Holter는 지향점이고 실제 정확도, 처리시간과 전력은 미검증으로 표시했다.
 - [x] source-record-wise split과 fully held-out locked final test를 설명했다.
 - [x] annotation 기반 사전 분석과 final inference input을 구분했다.
+- [x] 30분 구간의 annotation 기반 라벨 대표성 점검을 데이터 구성 절차로 명시했다.
 - [x] accuracy 80.56%, Macro-F1 80.44%와 database–class confounding을 함께 제시했다.
 - [x] Pure RTL과 MicroBlaze system 자원 및 timing을 구분했다.
 - [x] FPGA 36/36 equivalence를 100% classification accuracy로 표현하지 않았다.

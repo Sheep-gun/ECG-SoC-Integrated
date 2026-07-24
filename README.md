@@ -52,6 +52,7 @@ LTspice와 XMODEL의 동일 10초 ECG 비교에서는 MAE 0.6445 LSB, RMS 1.3020
 ## 평가 원칙
 
 - 한 원천 ECG record에서 파생한 모든 30분 구간은 train, validation, final test 중 하나에만 속한다.
+- 각 30분 구간은 원천 DB label과 가용한 beat/rhythm annotation을 대조하여 해당 클래스의 박동 및 리듬 증거가 충분히 포함되는지 점검했다. annotation은 데이터 구성과 품질 확인에만 사용하며 최종 RTL 입력에는 포함하지 않는다.
 - 구조, 가중치와 임계값은 train/validation으로 결정한 뒤 고정했다.
 - final test는 모델 선택에 사용하지 않았으며 설계 고정 후 한 번만 평가했다.
 - 클래스는 서로 다른 공개 DB와 결합되어 있으므로 database–class confounding이 남는다.
