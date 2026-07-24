@@ -1,7 +1,7 @@
 # 통합 기술보고서 검토 checklist
 
-- [x] 기준 본문은 제출 PDF 3~17쪽의 문장과 표현을 그대로 보존한다.
-- [x] PDF 밖의 보충 기술기록은 원문 본문과 명시적으로 분리한다.
+- [x] 제출 기술내용과 근거 기반 보충 설명을 관련 본문 절에 통합했다.
+- [x] 불필요한 편집 안내와 분리된 추가 기술기록 절을 제거했다.
 - [x] 공개 표기는 NSR, CHF, ARR, AF다.
 - [x] SNN 기반 event, LIF와 membrane state를 실제 RTL에 연결했다.
 - [x] 60초 Snapshot과 30분 Final Membrane을 연구 자체의 본질이 아니라 현재 구현과 검증 조건으로 설명했다.
@@ -17,4 +17,5 @@
 - [x] compact 36-case acceptance와 raw-dump rerun 4/36을 구분했다.
 - [x] physical AFE, ADC silicon, ASIC/post-layout와 clinical validation 부재를 유지했다.
 - [x] 대표 선행연구의 DOI 또는 공식 출판 경로를 등록했다.
+- [x] 본문 선행연구와 참고문헌 `[1]`~`[8]`을 번호로 연결했다.
 - [x] 세계 최초 또는 동일 연구 부재를 단정하지 않았다.

@@ -22,13 +22,9 @@ REQUIRED_HEADINGS = [
     "### 2.3 설계회로 구성",
     "### 2.4 설계회로 검증",
     "### 2.5 설계회로 구현 결과",
+    "#### RTL timing 병목 분석과 파이프라인 최적화",
     "### 2.6 목표 대비 결과 비교",
     "# III. 제품 및 기술요약",
-    "# IV. 보고서 외 추가 기술기록",
-    "## A. annotation 기반 사전 특징 선정",
-    "## B. RTL timing 병목과 파이프라인 최적화",
-    "## C. 관련 연구의 확장 기록",
-    "## D. 재현성과 주장 범위",
     "# 참고문헌",
 ]
 REQUIRED_TEXT = [
@@ -72,11 +68,13 @@ def main() -> int:
     for item in FORBIDDEN:
         if item in text:
             errors.append(f"forbidden wording: {item}")
-    if "문장과 표현 그대로 옮긴 것이다" not in text:
-        errors.append("missing submission-source verbatim preservation notice")
-    if "PDF에 없는 설명은 본문과 섞지 않고" not in text:
-        errors.append("missing separation between submission text and supplemental record")
-    if "이는 세계 최초 또는 동일 연구가 없다는 단정이 아니다" not in text:
+    if "원문 보존 안내" in text or "보고서 외 추가 기술기록" in text:
+        errors.append("editorial preservation notice or detached supplemental section remains")
+    body = text.split("# 참고문헌", maxsplit=1)[0]
+    for number in range(1, 9):
+        if f"[{number}]" not in body:
+            errors.append(f"reference [{number}] is not cited in the report body")
+    if "이는 세계 최초이거나 동일 연구가 없다는 단정은 아니다" not in text:
         errors.append("missing explicit novelty limitation")
 
     with CLAIMS.open(encoding="utf-8", newline="") as handle:

@@ -1,7 +1,5 @@
 # 다중 시간 척도 SNN을 적용한 장시간 ECG 4-클래스 저전력 스트리밍 분류 가속기 IP
 
-> 원문 보존 안내: 아래의 **설계작품 요약서**, **설계결과물 설명서** 및 **제품 및 기술요약**은 2026년 7월 23일 제출한 「제27회 대한민국반도체설계대전 참가신청서」 3~17쪽의 기술 본문을 문장과 표현 그대로 옮긴 것이다. 줄바꿈만 Markdown 문단에 맞게 정리했으며 표와 그림은 동일한 내용의 저장소 파일로 연결했다. PDF에 없는 설명은 본문과 섞지 않고 마지막의 **보고서 외 추가 기술기록**에만 수록하였다. 개인정보, 서명, 신청 행정 정보와 권리보호 양식은 공개 문서에서 제외하였다.
-
 # I. 설계작품 요약서
 
 ECG는 심장의 전기적 활동을 시간에 따라 기록한 전압 파형이다. 짧은 구간에서는 개별 박동의 모양을 볼 수 있지만, 한 시점의 파형이 장시간 상태를 대표하기 어렵기 때문에 장시간 기록에서는 박동 간격의 반복과 불규칙성, 특정 파형 특징의 지속 시간이 중요하다. 대표적인 ECG 검사인 Holter 검사가 24~48시간 이상 심전도를 기록하는 것도 간헐적으로 나타나는 이상을 포착하기 위해서이다. 본 작품은 장시간 ECG 기록을 공개 데이터베이스 라벨에 따라 네 개의 리듬·질환 관련 범주인 NSR(normal sinus rhythm), CHF-labelled, ARR(arrhythmia-labelled), AF(atrial fibrillation-labelled)로 분류하기 위해 AFE–ADC와 SNN 기반 RTL 분류 가속기 IP를 결합한 통합 구조를 제시하며, 최종적으로 웨어러블 기기에 적용할 수 있는 저전력 반도체 IP 개발을 목표로 한다.
@@ -42,6 +40,8 @@ ECG 분류에는 개별 박동의 형태뿐 아니라 장시간에 걸친 박동
 
 2026년 4월부터 6월까지 공개 ECG를 원천 기록 단위로 분리하고 30분 평가 조건을 설정한 뒤, 사전 분석을 통해 클래스 구분에 유효한 박동·리듬·파형 증거를 선정하였다. 이후 아날로그부는 MATLAB, LTspice 및 XMODEL로 필터, 증폭, ADC 동작을 설계·검증하였다. 디지털부는 선정된 증거를 누적하는 SNN 기반 가속기를 RTL로 구현하고, 긴 조합 경로는 파이프라인 분할로 개선하였다.
 
+사전 분석에서는 원천 데이터베이스의 beat 및 rhythm annotation으로 RR 간격, PNN 계열 규칙성, 연속 RR 차이, early–late pair, ΔECG 방향 변화, R-peak 진폭, QRS 폭과 말단 활동 후보를 계산하였다. 클래스별 분포, 결측률, 단순 분류율과 하드웨어 구현 가능성을 함께 비교하여 최종 증거 경로를 선정하였다. annotation은 후보 특징 선정과 데이터 품질 점검에만 사용했으며, 최종 RTL은 annotation 없이 signed 12-bit ECG에서 사건과 증거를 자체 생성한다. 상세 근거는 [사전 특징 선정 기록](../docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md)과 [`analysis/feature_selection/`](../analysis/feature_selection/)에 보존한다.
+
 2026년 6월부터 7월까지 아날로그·디지털 각 파트의 정합성을 확인한 뒤, 단일 XMODEL 환경에서 AFE–ADC와 고정 Pure RTL 코어를 직접 연결해 36개의 30분 입력의 End-to-End 동작을 검증하였다. AFE–ADC에서 RTL로 전달된 signed 12-bit ECG 스트림은 디지털 검증 입력과 SHA-256 해시값이 36/36 일치했으며, 최종 클래스와 네 개의 Final Membrane도 독립 RTL/XSim 결과와 모든 사례에서 bit-exact하게 일치하였다. 이후 RTL을 AXI IP로 패키징해 MicroBlaze에 통합하고, FPGA 재생 결과가 XSim과 일치함을 확인하였다.
 
 2026년 7월 현재 데이터 분석, 알고리즘 개발, MATLAB, LTspice, XMODEL, Python, Exact C++, RTL 구현과 AXI IP 패키징, MicroBlaze 통합, End-to-End 및 FPGA 검증을 완료하였다. 현재 개발 범위는 모델 기반 AFE–ADC와 FPGA 디지털 IP의 통합 설계 및 검증 단계이며, ASIC 제작과 post-layout 검증은 후속 과제이다.
@@ -78,10 +78,12 @@ AFE는 0.5–150 Hz ECG 대역과 60 Hz 간섭 억제 기능을 갖는 1 kSPS si
 |---|---|---|---|
 | Apple Watch ECG App | 사용자가 30초 단일유도 ECG 측정 | 측정 시점의 동리듬 또는 심방세동 여부를 중심으로 분류 | 단일 30초 측정이 놓칠 수 있는 간헐적 이상을 장시간 누적해 4개 기록 범주로 판정 |
 | Zio Monitor | 최대 14일간 모든 박동을 저장한 뒤 분석 서비스에서 판독 | 부정맥 분석 보고서 | 원시 ECG 저장 부담과 외부 분석 서비스 의존도를 줄일 수 있음 |
-| Bauer et al. | ECG 변화 사건을 순환형 SNN으로 분석 | 이상 패턴 유무를 출력 | 단순 이상 검출이 아닌 NSR, CHF, ARR, AF 기록 클래스를 판정 |
-| Zihlmann et al. | CNN으로 ECG 구간 특징을 추출, 정보 결합 | Normal, Noise, Other rhythm, AF로 ECG 분류 | 대규모 MAC 연산 없는 SNN 기반 4-클래스 분류 |
+| Bauer et al. [3] | ECG 변화 사건을 순환형 SNN으로 분석 | 이상 패턴 유무를 출력 | 단순 이상 검출이 아닌 NSR, CHF, ARR, AF 기록 클래스를 판정 |
+| Zihlmann et al. [5] | CNN으로 ECG 구간 특징을 추출, 정보 결합 | Normal, Noise, Other rhythm, AF로 ECG 분류 | 대규모 MAC 연산 없는 SNN 기반 4-클래스 분류 |
 
-표 1은 관찰 범위, 판정 단위, 원시 데이터 저장 방식과 설명 가능성을 기준으로 기존 기술을 비교한 것이다. Apple Watch ECG App은 30초 측정 시점의 리듬을, Zio Monitor는 장기간 저장 후 외부 분석 결과를 제공한다. Bauer 등의 「Real-Time Ultra-Low Power ECG Anomaly Detection Using an Event-Driven Neuromorphic Processor」는 이상 유무를 검출하고, Zihlmann 등의 「Convolutional Recurrent Neural Networks for Electrocardiogram Classification」은 CNN으로 ECG를 네 클래스로 분류한다. 본 작품은 리듬/파형 증거를 누적하여 간헐적 이상을 포착하고, 30분 ECG 전체를 NSR, CHF, ARR, AF 중 하나로 낮은 하드웨어 복잡도에서 판정한다.
+표 1은 관찰 범위, 판정 단위, 원시 데이터 저장 방식과 설명 가능성을 기준으로 기존 기술을 비교한 것이다. Apple Watch ECG App은 30초 측정 시점의 리듬을, Zio Monitor는 장기간 저장 후 외부 분석 결과를 제공한다. Bauer 등의 「Real-Time Ultra-Low Power ECG Anomaly Detection Using an Event-Driven Neuromorphic Processor」는 이상 유무를 검출하고 [3], Zihlmann 등의 「Convolutional Recurrent Neural Networks for Electrocardiogram Classification」은 CNN으로 ECG를 네 클래스로 분류한다 [5]. 본 작품은 리듬/파형 증거를 누적하여 간헐적 이상을 포착하고, 30분 ECG 전체를 NSR, CHF, ARR, AF 중 하나로 낮은 하드웨어 복잡도에서 판정한다.
+
+사건 기반 ECG 연구에서 Amirshahi와 Hashemi는 R-peak 주변 개별 beat를 Poisson spike로 변환해 STDP/R-STDP로 분류했고 [1], Chen 등은 level-crossing ADC와 spiking CNN으로 선택된 beat를 N, SVEB, VEB, F로 분류하였다 [2]. 두 연구는 event/SNN ECG hardware의 가능성을 보여주지만 여러 Window의 증거를 장시간 입력의 클래스로 누적하지는 않는다. 장시간 ECG 연구에서는 Shanmugam 등이 약 48시간 기록의 위험 beat sequence를 집계해 patient-level cardiovascular-death risk를 예측했고 [4], DeepHHF는 24시간 Holter를 30초 Window로 나누어 5년 heart-failure risk를 예측하였다 [6]. 검토한 대표 선행연구 범위에서는 NSR, CHF, ARR, AF 분류, Snapshot별 질환 증거의 명시적 상태화, 장시간 증거 누적, RTL/IP/FPGA 구현과 MATLAB–XMODEL–RTL 추적성을 함께 적용한 사례를 확인하지 못하였다. 이는 세계 최초이거나 동일 연구가 없다는 단정은 아니다.
 
 ### 2.3 설계회로 구성
 
@@ -187,6 +189,8 @@ AFE–ADC XMODEL과 고정 Pure RTL 코어를 단일 XMODEL 환경에 직접 연
 
 표 5와 같이 단일 XMODEL 환경에서 AFE–ADC와 Pure RTL을 직접 연결한 36개 End-to-End 시험의 입력과 최종 출력이 모두 기준값과 일치하였다. AXI/IP의 제어, 표본 전송, 처리 완료 및 IRQ 동작도 정상적으로 확인되었으며, MicroBlaze 통합 FPGA 재생에서 최종 클래스와 네 개의 Final Membrane이 기준값과 일치하였다.
 
+고정 설계의 재현 절차와 실행 진입점은 [REPRODUCIBILITY_KR.md](../REPRODUCIBILITY_KR.md)에, 각 주장별 근거와 한계는 [claim registry](../project_registry/claim_registry.csv)와 [evidence map](INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv)에 기록하였다.
+
 ### 2.5 설계회로 구현 결과
 
 ![그림 12. XMODEL AFE–ADC 단계별 시간영역 파형](../figures/final_submission/설계회로%20구현결과/Xmodel%20구현%20결과.svg)
@@ -200,6 +204,21 @@ AFE–ADC XMODEL과 고정 Pure RTL 코어를 단일 XMODEL 환경에 직접 연
 **그림 13. Vivado post-route 기반 FPGA 구현 및 계층별 배치 결과**
 
 Pure RTL 분류기를 AXI IP로 패키징하여 MicroBlaze, Sample Feeder, Local Memory, AXI INTC 및 UARTLite와 통합하였다. Pure RTL은 9,719 LUT, 5,038 FF, BRAM 0, DSP 0 및 WNS 8.184 ns로 구현되었다. MicroBlaze 통합 시스템은 12,494 LUT, 8,494 FF, 16 BRAM, 3 DSP 및 WNS 0.097 ns를 확보했으며, 추가된 BRAM과 DSP는 프로세서와 주변장치 자원이다. 기능 정합 결과는 표 5에 제시하였다.
+
+#### RTL timing 병목 분석과 파이프라인 최적화
+
+초기 주요 병목은 `class_score_neurons` 내부의 `rdm_level_spike → pred_class` 조합 경로였다. 이 경로는 약 90 logic levels와 52개의 CARRY4를 포함한 긴 누산, 비교 및 WTA 경로였고, `class_score_neurons`는 주요 자원 및 timing hotspot이었다. 이를 clock 완화가 아니라 다음과 같은 구조적 파이프라인 분할로 해결하였다.
+
+- C24/global readout과 class WTA pipeline 분리
+- `segment_done`에서 마지막 사건을 보존하는 `*_next` counter capture와 C24 event/gate/score delta 등록
+- RDM·RAM 산술 경로의 exact lookup table 전환
+- Snapshot score의 update–adjust–commit 단계와 RBBB gate 평가 시점 정렬
+- QRS MAF combinational scan의 timestamp FIFO 기반 다중-cycle 처리
+- PNN predictor center 등록과 case lookup 적용
+- Final Membrane margin·WTA의 pairwise stage 분리
+- ARR scale/commit 경로와 post-segment flush timing 정렬
+
+개선은 **critical path 관측 → pipeline 분할 → timing 재검증 → 기능 등가성 확인** 순서로 수행하였다. 기존 RDM-to-prediction critical path를 제거하고 Python/RTL 및 FPGA 기능 등가성을 유지하면서 timing closure를 달성하였다. 최적화 전 약 17.5k LUT는 historical OOC hotspot 수치이므로 최종 Pure RTL 9,719 LUT와 직접 비교하지 않는다. 설계 이력 commit은 `c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa`와 `5e2e5d0a46be47d8086b8642e055066079bfa4e6`, 고정 최종 RTL은 `c6b80de19cdcad5b7e43fe7835588b629d847f75`이며, 상세 근거는 [RTL timing 최적화 이력](../verification/timing_optimization/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md)에 보존한다.
 
 **표 6. 고정 최종 시험의 NSR·CHF·ARR·AF 혼동 행렬**
 
@@ -243,9 +262,9 @@ Pure RTL 분류기를 AXI IP로 패키징하여 MicroBlaze, Sample Feeder, Local
 
 본 설계 범위의 모듈 구현과 통합 및 검증을 완료하였으며, 표 8과 같이 분류 성능, 스트리밍 입력, 하드웨어 자원, timing 및 FPGA 기능 정합 목표를 달성하였다. 다만 장시간 처리와 저전력 목표는 각각 30분 입력 검증과 이상적인 power-gating 조건의 산출값에 근거하므로 조건부 달성으로 평가하였다.
 
-본 작품은 웨어러블 기기에 적용 가능한 저전력 반도체 IP를 지향한다. 관련 ECG 전용 ASIC을 조사한 결과, Abubakar 등의 65 nm TNN 기반 프로세서는 13종 비정상 리듬 검출에서 746 nW의 실측 전력을 달성했으며, Zhang 등의 55 nm ANN 기반 프로세서는 개별 심박의 5-클래스 분류에서 12.88 µW를 보고하였다. 본 작품의 이상적 평균 전력 2.991 µW도 이들과 유사한 저전력 범위에 해당한다. 따라서 웨어러블용 저전력 분류 IP로서의 구조적 가능성을 확인하였다. 또한 선행연구가 주로 개별 심박이나 짧은 이상 리듬을 검출·분류하는 데 비해, 본 작품은 연속 ECG에서 박동·리듬·파형 증거를 장시간 누적하여 기록 전체를 NSR, CHF, ARR, AF 중 하나로 판정한다는 차별점이 있다.
+본 작품은 웨어러블 기기에 적용 가능한 저전력 반도체 IP를 지향한다. 관련 ECG 전용 ASIC을 조사한 결과, Abubakar 등의 65 nm TNN 기반 프로세서는 13종 비정상 리듬 검출에서 746 nW의 실측 전력을 달성했으며 [7], Zhang 등의 55 nm ANN 기반 프로세서는 개별 심박의 5-클래스 분류에서 12.88 µW를 보고하였다 [8]. 본 작품의 이상적 평균 전력 2.991 µW도 이들과 유사한 저전력 범위에 해당한다. 따라서 웨어러블용 저전력 분류 IP로서의 구조적 가능성을 확인하였다. 또한 선행연구가 주로 개별 심박이나 짧은 이상 리듬을 검출·분류하는 데 비해, 본 작품은 연속 ECG에서 박동·리듬·파형 증거를 장시간 누적하여 기록 전체를 NSR, CHF, ARR, AF 중 하나로 판정한다는 차별점이 있다.
 
-다만 이러한 저전력 가능성과 장시간 분류 구조의 실효성을 최종적으로 입증하려면, ASIC 구현과 power gating 적용, post-layout 분석 및 실리콘 전력 실측이 필요하다. 또한 동일한 측정 환경에서 수집한 장시간 다중 클래스 ECG를 확보하여 분류 성능과 실제 24시간 동작을 추가로 검증해야 한다.
+다만 이러한 저전력 가능성과 장시간 분류 구조의 실효성을 최종적으로 입증하려면, ASIC 구현과 power gating 적용, post-layout 분석 및 실리콘 전력 실측이 필요하다. 현재 실제 검증 입력은 30분이며, 24시간 정확도, 처리시간과 전력은 검증하지 않았다. 물리 AFE PCB, ADC silicon, fabricated silicon과 임상 검증도 수행하지 않았다. 또한 공개 데이터베이스별 클래스 결합에 따른 database–class confounding이 남아 있으므로, 동일한 측정 환경에서 수집한 장시간 다중 클래스 ECG로 분류 성능과 실제 24시간 동작을 추가 검증해야 한다. 2.991 µW는 완전 power-gating을 가정한 산출값이지 FPGA 또는 ASIC의 실측 소비전력이 아니다.
 
 ### 2.7 국내외 수상 실적
 
@@ -268,49 +287,6 @@ AFE–ADC는 LTspice 회로와 XMODEL로, SNN 분류 가속기는 Pure RTL과 AX
 ## 완성도
 
 MATLAB 설계부터 LTspice, XMODEL, 기준 모델, RTL/XSim, Vivado와 FPGA까지 단계별 검증을 완료하였다. 공개 디지털 ECG를 PWL 자극으로 재구성해 아날로그 모델 간 정합을 확인하고, 디지털부는 출력과 내부 상태를 기준 모델과 대조하였다. AFE–ADC와 Pure RTL을 직접 연결한 36개 XMODEL End-to-End 시험에서 입력 SHA-256 36/36, 클래스 36/36, Final Membrane 144/144가 정확히 일치했으며, AXI/IP와 MicroBlaze 통합 FPGA도 정상 동작하였다. 최종 시험은 학습, 검증에 쓰인 record와 겹치지 않고 설계 과정에서 한 번도 사용하지 않은 fully held-out 데이터로, 가중치, 임계값을 고정한 뒤 단 한 번만 수행하였다.
-
-# IV. 보고서 외 추가 기술기록
-
-이 절은 제출 PDF의 원문이 아니다. 제출 분량 때문에 본문에 싣지 못했지만 설계 선택과 재현성을 설명하는 데 필요한 기록을 별도로 정리한다.
-
-## A. annotation 기반 사전 특징 선정
-
-원천 데이터베이스의 beat 및 rhythm annotation을 사용하여 RR 간격, PNN 계열 규칙성, 연속 RR 차이, early–late pair, ΔECG 방향 변화, R-peak 진폭, QRS 폭과 말단 활동 후보를 계산하였다. 클래스별 분포, 결측률과 단순 분류율을 비교하고 하드웨어 구현 가능성을 함께 고려하여 최종 증거 경로를 선정하였다.
-
-annotation은 후보 특징 선정과 데이터 품질 점검에만 사용하였다. 최종 RTL 입력에는 annotation이 포함되지 않으며, RTL은 signed 12-bit ECG만 받아 사건과 증거를 자체 생성한다. 상세 근거는 [FEATURE_SELECTION_AND_ANNOTATION_KR.md](../docs/FEATURE_SELECTION_AND_ANNOTATION_KR.md)와 [`analysis/feature_selection/`](../analysis/feature_selection/)에 보존한다.
-
-## B. RTL timing 병목과 파이프라인 최적화
-
-초기 주요 병목은 `class_score_neurons` 내부의 `rdm_level_spike → pred_class` 조합 경로였다. 당시 경로는 약 90 logic levels와 52개의 CARRY4를 포함한 긴 누산, 비교 및 WTA 경로였으며, `class_score_neurons`가 주요 자원 및 timing hotspot이었다. 이를 단순한 clock 완화가 아니라 구조적 파이프라인 분할로 해결하였다.
-
-- C24/global readout과 class WTA pipeline 분리
-- `segment_done` 시 마지막 사건을 보존하도록 `*_next` counter capture
-- C24 event/gate/score delta 등록
-- RDM·RAM 산술 경로를 exact lookup table로 변경
-- Snapshot score의 update–adjust–commit 단계 분리
-- RBBB gate 평가 시점 pipeline 정렬
-- QRS MAF의 긴 combinational scan을 timestamp FIFO 기반 다중-cycle 처리로 변경
-- PNN predictor center 등록 및 case lookup 적용
-- Final Membrane margin·WTA를 pairwise stage로 분리
-- ARR scale/commit 경로와 post-segment flush timing 정렬
-
-검증 순서는 **critical path 관측 → pipeline 분할 → timing 재검증 → 기능 등가성 확인**이었다. 기존 RDM-to-prediction critical path를 제거하고 Python/RTL 및 FPGA 기능 등가성을 유지하면서 timing closure를 달성하였다. 최적화 전 약 17.5k LUT는 historical OOC hotspot 수치이며 최종 Pure RTL 9,719 LUT와 직접 비교하지 않는다.
-
-설계 이력 commit은 `c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa`와 `5e2e5d0a46be47d8086b8642e055066079bfa4e6`, 고정 최종 RTL은 `c6b80de19cdcad5b7e43fe7835588b629d847f75`이다. 상세 근거는 [RTL_TIMING_OPTIMIZATION_HISTORY_KR.md](../verification/timing_optimization/RTL_TIMING_OPTIMIZATION_HISTORY_KR.md)에 보존한다.
-
-## C. 관련 연구의 확장 기록
-
-Amirshahi와 Hashemi는 R-peak 주변 개별 beat를 Poisson spike로 변환하고 STDP/R-STDP로 분류하였다 [1]. Chen 등은 level-crossing ADC와 spiking CNN으로 선택한 beat를 N, SVEB, VEB, F로 분류하였다 [2]. 이들은 event/SNN ECG hardware 방향을 보여주지만 여러 Window를 장시간 입력의 클래스로 누적하지 않는다.
-
-Bauer 등은 ECG를 asynchronous binary event로 바꾸고 recurrent SNN reservoir에서 병리 pattern의 존재 여부를 binary trigger로 출력하였다 [3]. Shanmugam 등은 약 48시간 ECG에서 위험도가 높은 beat sequence를 집계해 patient-level cardiovascular-death risk를 예측하였다 [4]. Zihlmann 등은 9–61초 ECG의 CNN feature를 평균 또는 bidirectional LSTM으로 통합해 normal, AF, other, noisy 네 class를 출력하였다 [5]. DeepHHF는 24시간 Holter를 30초 Window로 나누고 encoder와 Transformer head로 5년 heart-failure risk를 예측한다 [6].
-
-검토한 대표 선행연구 범위에서는 NSR, CHF, ARR, AF 입력 분류, Snapshot별 질환 증거의 명시적 상태화, 장시간 증거 누적, RTL/IP/FPGA 구현과 MATLAB–XMODEL–RTL 추적성을 함께 적용한 사례를 확인하지 못하였다. 이는 세계 최초 또는 동일 연구가 없다는 단정이 아니다.
-
-## D. 재현성과 주장 범위
-
-고정 설계와 재현 진입점은 [REPRODUCIBILITY_KR.md](../REPRODUCIBILITY_KR.md), claim별 근거와 한계는 [claim_registry.csv](../project_registry/claim_registry.csv)와 [INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv](INTEGRATED_TECHNICAL_REPORT_EVIDENCE_MAP.csv)에 기록한다.
-
-현재 실제 검증 입력은 30분이다. 24시간 이상 Holter ECG는 설계 지향점이며 실제 24시간 정확도, 처리시간과 전력은 검증하지 않았다. 물리 AFE PCB, ADC silicon, ASIC post-layout, fabricated silicon과 임상 검증도 수행하지 않았다. 공개 데이터베이스별 클래스 결합에 따른 database–class confounding이 남으며, 2.991 µW는 완전 power-gating을 가정한 산출값이지 FPGA 또는 ASIC의 실측 소비전력이 아니다.
 
 # 참고문헌
 

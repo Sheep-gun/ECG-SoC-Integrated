@@ -2,7 +2,7 @@
 
 이 저장소는 AFE–ADC와 SNN 기반 RTL 분류 가속기 IP를 결합하여 장시간 ECG 기록을 **NSR, CHF, ARR, AF** 중 하나로 분류하는 통합 구조의 설계, 모델, RTL, Vivado project와 검증 근거를 한곳에 보존한다.
 
-제출 보고서의 문장과 표현을 그대로 옮긴 기준 본문은 [통합 기술보고서](reports/INTEGRATED_TECHNICAL_REPORT_KR.md)다. 보고서 분량 때문에 싣지 못한 사전 특징 분석, timing 병목 개선과 재현 근거는 기준 본문과 구분하여 별도 기술기록으로 보존한다.
+[통합 기술보고서](reports/INTEGRATED_TECHNICAL_REPORT_KR.md)는 제출 기술내용을 중심으로 사전 특징 분석, 선행연구, timing 병목 개선, 재현 근거와 claim 한계를 관련 절에 통합한 공개 기준 문서다.
 
 > 현재 검증 입력은 공개 데이터베이스 조건에 맞춘 **30분**이다. 24시간 이상 Holter ECG는 설계 지향점이며, 실제 24시간 정확도, 처리시간과 전력은 아직 검증하지 않았다.
 
