@@ -1,6 +1,6 @@
 # Python 및 Exact C++ 등가모델
 
-최종 디지털 분류기의 Python 정수 등가모델과 Exact C++ 등가모델을 보존한다. 원본은 upstream 저장소 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 benchmark 완료 커밋 `09e4d840827ad20856f5e23be4743ddd01565e30`에서 복구했다. 이 benchmark가 대상으로 한 고정 RTL은 커밋 `c6b80de19cdcad5b7e43fe7835588b629d847f75`이다.
+최종 디지털 분류기의 Python 정수 등가모델과 Exact C++ 등가모델을 보존한다. 원본 디지털 저장소의 전체 이력은 현재 통합 저장소 `Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier`에 merge-parent로 보존했으며, benchmark 완료 커밋 `09e4d840827ad20856f5e23be4743ddd01565e30`도 같은 이력에서 조회할 수 있다. 이 benchmark가 대상으로 한 고정 RTL은 커밋 `c6b80de19cdcad5b7e43fe7835588b629d847f75`이다.
 
 ## 보존 범위
 

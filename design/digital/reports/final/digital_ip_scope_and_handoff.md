@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This report defines the scope of `Sheep-gun/SNN-ECG-4-Class-Classifier` as the **digital SNN ECG 4-Class Classification Accelerator IP Core** repository. It keeps the merged-paper end-to-end skeleton, but separates ownership across the MATLAB AFE, SystemVerilog XMODEL, and digital RTL/IP/FPGA repositories.
+This report records the digital SNN ECG 4-Class Classification Accelerator IP Core history now preserved in `Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier`. It keeps the merged-paper end-to-end skeleton while retaining the original ownership boundary across the MATLAB AFE, SystemVerilog XMODEL, and digital RTL/IP/FPGA components.
 
 ## 2. What This Repo Owns
 

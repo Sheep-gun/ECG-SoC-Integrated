@@ -4,7 +4,7 @@ Recorded before design implementation on 2026-07-12 (Asia/Seoul).
 
 ## Repository isolation
 
-- Source repository: `https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier.git`
+- Source repository history: `https://github.com/Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier.git`
 - Source branch at isolation: `codex/accelerator-benefit-benchmark`
 - Source HEAD at isolation: `5b6f01192dd84cc02022a85449a917532c1b3dca`
 - Source worktree state: dirty; it was inspected only through Git metadata and was not modified.

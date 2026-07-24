@@ -5,7 +5,7 @@
 
 - MATLAB AFE–ADC: `ferocious-kiwi/ECG-SoC-MATLAB-AFE-ADC-Prevalidation` commit `907f7e1f081a9d6a5703a32095d962143315a192`
 - AFE–ADC XMODEL: `Hwan-22/ECG-SoC` commit `4756a5086023547328ef44fd5fd87da3c250dc39`
-- Digital RTL: `Sheep-gun/SNN-ECG-4-Class-Classifier` commit `c6b80de19cdcad5b7e43fe7835588b629d847f75`
+- Digital RTL history: `Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier` commit `c6b80de19cdcad5b7e43fe7835588b629d847f75`
 
 상세 경로와 역할은 `project_registry/upstream_commits.yaml`, 현재 공개 파일의
 SHA-256은 `project_registry/artifact_manifest.csv`에 기록한다. 원본 파일에 포함된

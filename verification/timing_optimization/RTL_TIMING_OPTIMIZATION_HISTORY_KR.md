@@ -2,7 +2,7 @@
 
 ## 근거 범위와 commit 관계
 
-최종 고정 RTL은 `Sheep-gun/SNN-ECG-4-Class-Classifier`의 `c6b80de19cdcad5b7e43fe7835588b629d847f75`이다. 다음 두 개발 commit은 `git merge-base --is-ancestor`로 각각 최종 고정 commit의 ancestor임을 확인했다.
+최종 고정 RTL은 현재 통합 저장소 `Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier`에 보존된 `c6b80de19cdcad5b7e43fe7835588b629d847f75`이다. 다음 두 개발 commit은 `git merge-base --is-ancestor`로 각각 최종 고정 commit의 ancestor임을 확인했다.
 
 | 단계 | Commit | 역할 | 직접 Git history 근거 |
 |---|---|---|---|
@@ -12,8 +12,8 @@
 
 원본 `docs/timing_bottlenecks.md`는 `c7c75cf...`에서 생성되고 `5e2e5d0...`에서 갱신됐지만, 최종 제출용 저장소 정리 과정에서 삭제됐다. 따라서 이 문서는 해당 파일이 현재 component에 존재한다고 주장하지 않고, 다음 Git history 원본을 통합 보고서에서 추적할 수 있도록 정리한다.
 
-- `https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier/blob/c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa/docs/timing_bottlenecks.md`
-- `https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier/blob/5e2e5d0a46be47d8086b8642e055066079bfa4e6/docs/timing_bottlenecks.md`
+- `https://github.com/Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier/blob/c7c75cfebf7add12bfcc32bb59d5edf38ac6e5aa/docs/timing_bottlenecks.md`
+- `https://github.com/Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier/blob/5e2e5d0a46be47d8086b8642e055066079bfa4e6/docs/timing_bottlenecks.md`
 
 ## Critical path 관측
 

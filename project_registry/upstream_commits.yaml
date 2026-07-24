@@ -9,7 +9,7 @@ components:
     fixed_commit: 4756a5086023547328ef44fd5fd87da3c250dc39
     integrated_path: design/analog/xmodel
   digital_rtl:
-    repository: https://github.com/Sheep-gun/SNN-ECG-4-Class-Classifier
+    repository: https://github.com/Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier
     fixed_commit: c6b80de19cdcad5b7e43fe7835588b629d847f75
     integrated_path: design/digital
     history_evidence:

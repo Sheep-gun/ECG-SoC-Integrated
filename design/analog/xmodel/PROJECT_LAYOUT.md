@@ -10,7 +10,7 @@
 ~/ECG-SoC/
 ├── analog/          AFE XModel 행동모델 (ecg_afe_xmodel.sv) — 소스 정본
 ├── digital/         SNN core RTL 13개 .v (AFE 통합 시뮬용 서브셋, 구버전)
-├── digital_block/   ★디지털 정본 스냅샷 (← 팀원 repo Sheep-gun/SNN-ECG-4-Class-Classifier)
+├── digital_block/   ★디지털 정본 스냅샷 (현재 통합 repo Sheep-gun/SNN-ECG-Streaming-4-Class-Classifier에 이력 보존)
 │   ├── rtl/               현재 RTL 21개 (core 15 + axi 2 + common 1 + top/final/params)
 │   ├── docs/              설계·검증 문서 5종(KR) + FINAL_REPORT_KR.md
 │   ├── configs/ constraints/ reports/ ip_repo/ sim/ tools/
