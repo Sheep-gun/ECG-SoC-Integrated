@@ -54,14 +54,14 @@
      id="metadata1">Source: FULL_AFE_ADC_SH_xmodel_aligned.asc; representation: editable vector conversion of the LTspice schematic.</metadata>
   <style
      id="style1">
-.wire,.symbol-line{fill:none;stroke:#1737b8;stroke-width:2.7;stroke-linecap:square;stroke-linejoin:miter;vector-effect:non-scaling-stroke}
+.wire,.symbol-line{fill:none;stroke:#1737b8;stroke-width:2.7;stroke-linecap:square;stroke-linejoin:miter}
 .component-text,.node-text,.directive-text{font-family:&quot;Arial&quot;,&quot;Malgun Gothic&quot;,sans-serif;fill:#050505}
 .component-text{font-weight:600}
 .node-text{font-weight:700}
 .directive-text{font-weight:500}
 .comment-text{font-family:&quot;Arial&quot;,&quot;Malgun Gothic&quot;,sans-serif;fill:#162cb6;font-weight:700}
 .junction{fill:#1737b8}
-.ground{fill:none;stroke:#1737b8;stroke-width:2.7;vector-effect:non-scaling-stroke}
+.ground{fill:none;stroke:#1737b8;stroke-width:2.7}
 </style>
   <g
      id="wires">
