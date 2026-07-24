@@ -1,5 +1,7 @@
 # 통합 기술보고서 검토 checklist
 
+- [x] 기준 본문은 제출 PDF 3~17쪽의 문장과 표현을 그대로 보존한다.
+- [x] PDF 밖의 보충 기술기록은 원문 본문과 명시적으로 분리한다.
 - [x] 공개 표기는 NSR, CHF, ARR, AF다.
 - [x] SNN 기반 event, LIF와 membrane state를 실제 RTL에 연결했다.
 - [x] 60초 Snapshot과 30분 Final Membrane을 연구 자체의 본질이 아니라 현재 구현과 검증 조건으로 설명했다.

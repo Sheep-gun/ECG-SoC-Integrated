@@ -3,7 +3,7 @@
 ## 1. 프로젝트 이해
 
 1. [README.md](README.md)
-2. [통합 기술보고서](reports/INTEGRATED_TECHNICAL_REPORT_KR.md)
+2. [통합 기술보고서](reports/INTEGRATED_TECHNICAL_REPORT_KR.md) — 제출 PDF 기술 본문의 문장과 표현을 그대로 보존한 기준 문서
 3. [한계와 claim 경계](docs/LIMITATIONS_AND_CLAIM_BOUNDARY_KR.md)
 
 ## 2. 파일 위치
